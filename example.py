@@ -1,7 +1,7 @@
 import Lolz_lib, time
 
 token = input('Enter your token:\n')
-api = Lolz_lib.lolzteam_api(token='')
+api = Lolz_lib.lolzteam_api(token=token)
 post_data = api.create_post(thread_id=5501317, post_body='Этот пост я отправил с помощью либы на 2к мусорных строк')
 print(post_data["post"]["post_id"])
 
