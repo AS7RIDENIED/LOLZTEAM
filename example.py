@@ -1,19 +1,30 @@
-import Lolz_lib, time
+from LolzteamApi import LolzteamApi
 
-token = input('Enter your token:\n')
-api = Lolz_lib.lolzteam_api(token=token)
-post_data = api.create_post(thread_id=5501317, post_body='Этот пост я отправил с помощью либы на 2к мусорных строк')
-print(post_data["post"]["post_id"])
+token = input('Enter your token:\n')                       # You need token with scopes read,post to run that example
+api = LolzteamApi(token=token)
 
-time.sleep(4.5) # Кд между запросами 3 секунды, а кд между возможностью писать сообщения в районе 4-5 секунд. Я недоволен
+#  Creating thread
+thread_data = api.forum.threads.create(forum_id=876, thread_title="Api library example", post_body="sample text",
+                                       thread_tags="Tag1,Tag2,Tag3")
+print(thread_data["thread"]["links"]["permalink"])
+thread_id = thread_data["thread"]["thread_id"]             # Save the ID to create a post here later
 
-post_comment_data = api.create_post_comment(post_id=post_data["post"]["post_id"],
-                                            comment_body='Этот коммент к посту я отправил с помощью либы на 2к мусорных строк \n[CLUB]Ну а это хайд[/CLUB]')
-print(post_comment_data)
+#  Getting user data
+user_data = api.forum.users.get(user_id=2410024)
+print(user_data["user"]["username"])                       # Printing username of user 2410024
+
+#  Creating post in thread we created before
+post_data = api.forum.posts.create(thread_id=thread_id, post_body="sample text but post")
+print(post_data["post"]["post_id"])                        # Printing post_id of created post
+
+#  Batch example
+#  job 1 - We get our profile data
+#  job 2 - We get list of ignored users by ourselves
+#  job 3 - We get list of our profile followers.
 data = [
     {
         "id": "1",
-        "uri": "https://api.zelenka.guru/users/2410024",
+        "uri": "https://api.zelenka.guru/users/me",
         "method": "GET",
         "params": {
         }
@@ -27,13 +38,13 @@ data = [
     },
     {
         "id": "3",
-        "uri": "https://api.zelenka.guru/users/2410024/followers",
+        "uri": "https://api.zelenka.guru/users/me/followers",
         "method": "POST",
         "params": {
         }
     },
 ]
-jobs_data = api.batch(request_body=data)
-print(jobs_data['jobs']['1']['user']['username'])
-print(jobs_data['jobs']['2']['users_total'])
-print(jobs_data['jobs']['3'])
+jobs_data = api.forum.batch(request_body=data)
+print(jobs_data['jobs']['1']['user']['user_like_count'])   # Number of user sympathies
+print(jobs_data['jobs']['2']['users_total'])               # The number of users you ignore
+print(jobs_data['jobs']['3'])                              # Try to follow ourselves. ( We will get an error because we can't follow yourself )
