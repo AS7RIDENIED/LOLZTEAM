@@ -50,20 +50,6 @@ class LolzteamApi:
         self.__token = new_token
         self.__headers = {'Authorization': f"bearer {self.__token}"}
 
-    class __Market:
-        def __init__(self, api_self):
-            self.__api = api_self
-
-        def test(self, params):
-            print(params)
-
-            LolzteamApi.send_request(self.__api, method="GET", url='https://api.zelenka.guru/market/me')
-            print(time.time())
-            LolzteamApi.send_request(self.__api, method="GET", url='https://api.zelenka.guru/market/me')
-            print(time.time())
-            LolzteamApi.send_request(self.__api, method="GET", url='https://api.zelenka.guru/market/me')
-            print(time.time())
-
     class __Forum:
         def __init__(self, api_self):
             self.__api = api_self  # Passing main self to sub all classes
@@ -1869,3 +1855,1552 @@ class LolzteamApi:
 
             url = f"https://api.zelenka.guru/batch"
             return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(request_body))
+
+    class __Market:
+        def __init__(self, api_self):
+            self.__api = api_self
+            self.profile = self.__Profile(self.__api)
+            self.payments = self.__Payments(self.__api)
+            self.accounts = self.__Accounts(self.__api)
+            self.list = self.__List(self.__api)
+            self.publishing = self.__Publishing(self.__api)
+            self.purchasing = self.__Purchasing(self.__api)
+            self.managing = self.__Managing(self.__api)
+
+        class __Profile:
+            def __init__(self, api_self):
+                self.__api = api_self
+
+            def get(self):
+                """
+                GET https://api.lzt.market/me
+
+                Displays info about your profile.
+
+                Required scopes: market
+
+                :return: json server response
+
+                """
+                url = "https://api.lzt.market/me"
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+
+            def edit(self, disable_steam_guard: bool = None, user_allow_ask_discount: bool = None,
+                     max_discount_percent: int = None, allow_accept_accounts: str = None,
+                     hide_favourites: bool = None, vk_ua: str = None):
+                """
+                PUT https://api.lzt.market/me
+
+                Change settings about your profile on the market.
+
+                Required scopes: market
+
+                :param disable_steam_guard: Disable Steam Guard on account purchase moment
+                :param user_allow_ask_discount: Allow users ask discount for your accounts
+                :param max_discount_percent: Maximum discount percents for your accounts
+                :param allow_accept_accounts: Usernames who can transfer market accounts to you. Separate values with a comma.
+                :param hide_favourites: Hide your profile info when you add an account to favorites
+                :param vk_ua: Your vk useragent to accounts
+                :return: json server response
+
+                """
+                url = "https://api.lzt.market/me"
+                params = {
+                    "disable_steam_guard": disable_steam_guard,
+                    "user_allow_ask_discount": user_allow_ask_discount,
+                    "max_discount_percent": max_discount_percent,
+                    "allow_accept_accounts": allow_accept_accounts,
+                    "hide_favourites": hide_favourites,
+                    "vk_ua": vk_ua
+                }
+                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
+
+            def owned(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+                      title: str = None):
+                """
+                GET https://api.lzt.market/user/user_id/items
+
+                Displays a list of owned accounts.
+
+                Category id-names list:
+
+                1 - steam - Steam
+
+                2 - vkontakte - VK
+
+                3 - origin - Origin
+
+                4 - warface - Warface
+
+                5 - uplay - Uplay
+
+                7 - socialclub - Social Club
+
+                9 - fortnite - Fortnite
+
+                10 - instagram - Instagram
+
+                11 - battlenet - Battle.net
+
+                12 - epicgames - Epic Games
+
+                13 - valorant - Valorant
+
+                14 - world-of-tanks - World Of Tanks
+
+                16 - wot-blitz - World Of Tanks Blitz
+
+                15 - supercell - Supercell
+
+                17 - genshin-impact - Genshin Impact
+
+                18 - escape-from-tarkov - Escape From Tarkov
+
+                19 - vpn - VPN
+
+                20 - tiktok - TikTok
+
+                22 - discord - Discord
+
+                23 - cinema - Online Cinema
+
+                24 - telegram - Telegram
+
+                25 - youtube - YouTube
+
+                26 - spotify - Spotify
+
+                27 - war-thunder - War Thunder
+
+                Required scopes: market
+
+                :param user_id: ID of user.
+                :param category_id: Accounts category
+                :param pmin: Minimal price of account (Inclusive)
+                :param pmax: Maximum price of account (Inclusive)
+                :param title: The word or words contained in the account title
+
+                :return: json server response
+
+                """
+                url = f"https://api.lzt.market/user/{user_id}/items"
+                params = {
+                    "user_id": user_id,
+                    "category_id": category_id,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "title": title
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def purchased(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+                          title: str = None):
+                """
+                GET https://api.lzt.market/user/user_id/orders
+
+                Displays a list of purchased accounts.
+
+                Category id-names list:
+
+                1 - steam - Steam
+
+                2 - vkontakte - VK
+
+                3 - origin - Origin
+
+                4 - warface - Warface
+
+                5 - uplay - Uplay
+
+                7 - socialclub - Social Club
+
+                9 - fortnite - Fortnite
+
+                10 - instagram - Instagram
+
+                11 - battlenet - Battle.net
+
+                12 - epicgames - Epic Games
+
+                13 - valorant - Valorant
+
+                14 - world-of-tanks - World Of Tanks
+
+                16 - wot-blitz - World Of Tanks Blitz
+
+                15 - supercell - Supercell
+
+                17 - genshin-impact - Genshin Impact
+
+                18 - escape-from-tarkov - Escape From Tarkov
+
+                19 - vpn - VPN
+
+                20 - tiktok - TikTok
+
+                22 - discord - Discord
+
+                23 - cinema - Online Cinema
+
+                24 - telegram - Telegram
+
+                25 - youtube - YouTube
+
+                26 - spotify - Spotify
+
+                27 - war-thunder - War Thunder
+
+                Required scopes: market
+
+                :param user_id: ID of user.
+                :param category_id: Accounts category
+                :param pmin: Minimal price of account (Inclusive)
+                :param pmax: Maximum price of account (Inclusive)
+                :param title: The word or words contained in the account title
+
+                :return: json server response
+
+                """
+                url = f"https://api.lzt.market/user/{user_id}/orders"
+                params = {
+                    "category_id": category_id,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "title": title
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def favorite(self, page: int = None):
+                """
+                GET https://api.lzt.market/fave
+
+                Displays a list of favourites accounts.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+
+                :return: json server response
+
+                """
+                url = "https://api.lzt.market/fave"
+                params = {
+                    "page": page
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def viewed(self, page: int = None):
+                """
+                GET https://api.lzt.market/viewed
+
+                Displays a list of viewed accounts.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+
+                :return: json server response
+
+                """
+                url = "https://api.lzt.market/viewed"
+                params = {
+                    "page": page
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+        class __List:
+            def __init__(self, api_self):
+                self.__api = api_self
+                self.categories = self.__Category_Market(self.__api)
+
+            class __Category_Market:  # лежит в List
+                def __init__(self, api_self):
+                    self.__api = api_self
+
+                def categories(self, top_queries: bool = None):
+                    """
+                    GET https://api.lzt.market/category
+
+                    Display category list.
+
+                    Required scopes: market
+
+                    :param top_queries: Display top queries for per category.
+
+                    :return: json server response
+                    """
+                    url = f"https://api.lzt.market/category"
+                    params = {
+                        "top_queries": top_queries
+                    }
+                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+                def get(self, category_name: str, pmin: int = None, pmax: int = None, title: str = None,
+                        parse_sticky_items: bool = None, parse_same_items: bool = None, games: list[int] or int = None,
+                        page: int = None):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Category id-names list:
+
+                    1 - steam - Steam
+
+                    2 - vkontakte - VK
+
+                    3 - origin - Origin
+
+                    4 - warface - Warface
+
+                    5 - uplay - Uplay
+
+                    7 - socialclub - Social Club
+
+                    9 - fortnite - Fortnite
+
+                    10 - instagram - Instagram
+
+                    11 - battlenet - Battle.net
+
+                    12 - epicgames - Epic Games
+
+                    13 - valorant - Valorant
+
+                    14 - world-of-tanks - World Of Tanks
+
+                    16 - wot-blitz - World Of Tanks Blitz
+
+                    15 - supercell - Supercell
+
+                    17 - genshin-impact - Genshin Impact
+
+                    18 - escape-from-tarkov - Escape From Tarkov
+
+                    19 - vpn - VPN
+
+                    20 - tiktok - TikTok
+
+                    22 - discord - Discord
+
+                    23 - cinema - Online Cinema
+
+                    24 - telegram - Telegram
+
+                    25 - youtube - YouTube
+
+                    26 - spotify - Spotify
+
+                    27 - war-thunder - War Thunder
+
+                    Required scopes: market
+
+                    :param category_name: Name of category.
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param title: The word or words contained in the account title
+                    :param parse_sticky_items: If true, API will return stickied accounts in results
+                    :param parse_same_items: If true, API will return account history in results
+                    :param games: The ID of a game found on the account
+                    :param page: The number of the page to display results from
+
+                    :return: json server response
+
+                    """
+                    url = f"https://api.lzt.market/{category_name}"
+                    params = {
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "title": title,
+                        "parse_sticky_items": parse_sticky_items,
+                        "parse_same_items": parse_same_items,
+                        "game[]": games,
+                        "page": page
+                    }
+                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+                def params(self, category_name: str):
+                    """
+                    GET https://api.lzt.market/category_name/params
+
+                    Displays search parameters for a category.
+
+                    Category id-names list:
+
+                    1 - steam - Steam
+
+                    2 - vkontakte - VK
+
+                    3 - origin - Origin
+
+                    4 - warface - Warface
+
+                    5 - uplay - Uplay
+
+                    7 - socialclub - Social Club
+
+                    9 - fortnite - Fortnite
+
+                    10 - instagram - Instagram
+
+                    11 - battlenet - Battle.net
+
+                    12 - epicgames - Epic Games
+
+                    13 - valorant - Valorant
+
+                    14 - world-of-tanks - World Of Tanks
+
+                    16 - wot-blitz - World Of Tanks Blitz
+
+                    15 - supercell - Supercell
+
+                    17 - genshin-impact - Genshin Impact
+
+                    18 - escape-from-tarkov - Escape From Tarkov
+
+                    19 - vpn - VPN
+
+                    20 - tiktok - TikTok
+
+                    22 - discord - Discord
+
+                    23 - cinema - Online Cinema
+
+                    24 - telegram - Telegram
+
+                    25 - youtube - YouTube
+
+                    26 - spotify - Spotify
+
+                    27 - war-thunder - War Thunder
+
+                    Required scopes: market
+
+                    :param category_name: Name of category.
+                    :return: json server response
+
+                    """
+                    url = f"https://api.lzt.market/{category_name}/params"
+                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+
+                def games(self, category_name: str):
+                    """
+                    GET https://api.lzt.market/category_name/games
+
+                    Displays a list of games in the category.
+
+                    Category id-names list:
+
+                    1 - steam - Steam
+
+                    2 - vkontakte - VK
+
+                    3 - origin - Origin
+
+                    4 - warface - Warface
+
+                    5 - uplay - Uplay
+
+                    7 - socialclub - Social Club
+
+                    9 - fortnite - Fortnite
+
+                    10 - instagram - Instagram
+
+                    11 - battlenet - Battle.net
+
+                    12 - epicgames - Epic Games
+
+                    13 - valorant - Valorant
+
+                    14 - world-of-tanks - World Of Tanks
+
+                    16 - wot-blitz - World Of Tanks Blitz
+
+                    15 - supercell - Supercell
+
+                    17 - genshin-impact - Genshin Impact
+
+                    18 - escape-from-tarkov - Escape From Tarkov
+
+                    19 - vpn - VPN
+
+                    20 - tiktok - TikTok
+
+                    22 - discord - Discord
+
+                    23 - cinema - Online Cinema
+
+                    24 - telegram - Telegram
+
+                    25 - youtube - YouTube
+
+                    26 - spotify - Spotify
+
+                    27 - war-thunder - War Thunder
+
+                    Required scopes: market
+
+                    :param category_name: Name of category.
+
+                    :return: json server response
+                    """
+                    url = f"https://api.lzt.market/{category_name}/games"
+                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+
+            def new(self, page: int = None):
+                """
+                GET https://api.lzt.market/
+
+                Displays a list of the latest accounts.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+
+                :return: json server response
+
+                """
+                url = "https://api.lzt.market/"
+                params = {
+                    "page": page
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def owned(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+                      title: str = None):
+                """
+                GET https://api.lzt.market/user/user_id/items
+
+                Displays a list of owned accounts.
+
+                Category id-names list:
+
+                1 - steam - Steam
+
+                2 - vkontakte - VK
+
+                3 - origin - Origin
+
+                4 - warface - Warface
+
+                5 - uplay - Uplay
+
+                7 - socialclub - Social Club
+
+                9 - fortnite - Fortnite
+
+                10 - instagram - Instagram
+
+                11 - battlenet - Battle.net
+
+                12 - epicgames - Epic Games
+
+                13 - valorant - Valorant
+
+                14 - world-of-tanks - World Of Tanks
+
+                16 - wot-blitz - World Of Tanks Blitz
+
+                15 - supercell - Supercell
+
+                17 - genshin-impact - Genshin Impact
+
+                18 - escape-from-tarkov - Escape From Tarkov
+
+                19 - vpn - VPN
+
+                20 - tiktok - TikTok
+
+                22 - discord - Discord
+
+                23 - cinema - Online Cinema
+
+                24 - telegram - Telegram
+
+                25 - youtube - YouTube
+
+                26 - spotify - Spotify
+
+                27 - war-thunder - War Thunder
+
+                Required scopes: market
+
+                :param user_id: ID of user.
+                :param category_id: Accounts category
+                :param pmin: Minimal price of account (Inclusive)
+                :param pmax: Maximum price of account (Inclusive)
+                :param title: The word or words contained in the account title
+
+                :return: json server response
+
+                """
+                url = f"https://api.lzt.market/user/{user_id}/items"
+                params = {
+                    "user_id": user_id,
+                    "category_id": category_id,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "title": title
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def purchased(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+                          title: str = None):
+                """
+                GET https://api.lzt.market/user/user_id/orders
+
+                Displays a list of purchased accounts.
+
+                Category id-names list:
+
+                1 - steam - Steam
+
+                2 - vkontakte - VK
+
+                3 - origin - Origin
+
+                4 - warface - Warface
+
+                5 - uplay - Uplay
+
+                7 - socialclub - Social Club
+
+                9 - fortnite - Fortnite
+
+                10 - instagram - Instagram
+
+                11 - battlenet - Battle.net
+
+                12 - epicgames - Epic Games
+
+                13 - valorant - Valorant
+
+                14 - world-of-tanks - World Of Tanks
+
+                16 - wot-blitz - World Of Tanks Blitz
+
+                15 - supercell - Supercell
+
+                17 - genshin-impact - Genshin Impact
+
+                18 - escape-from-tarkov - Escape From Tarkov
+
+                19 - vpn - VPN
+
+                20 - tiktok - TikTok
+
+                22 - discord - Discord
+
+                23 - cinema - Online Cinema
+
+                24 - telegram - Telegram
+
+                25 - youtube - YouTube
+
+                26 - spotify - Spotify
+
+                27 - war-thunder - War Thunder
+
+                Required scopes: market
+
+                :param user_id: ID of user.
+                :param category_id: Accounts category
+                :param pmin: Minimal price of account (Inclusive)
+                :param pmax: Maximum price of account (Inclusive)
+                :param title: The word or words contained in the account title
+
+                :return: json server response
+
+                """
+                url = f"https://api.lzt.market/user/{user_id}/orders"
+                params = {
+                    "category_id": category_id,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "title": title
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def favorite(self, page: int = None):
+                """
+                GET https://api.lzt.market/fave
+
+                Displays a list of favourites accounts.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+
+                :return: json server response
+
+                """
+                url = "https://api.lzt.market/fave"
+                params = {
+                    "page": page
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def viewed(self, page: int = None):
+                """
+                GET https://api.lzt.market/viewed
+
+                Displays a list of viewed accounts.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+
+                :return: json server response
+
+                """
+                url = "https://api.lzt.market/viewed"
+                params = {
+                    "page": page
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def get(self, item_id: int, steam_preview: bool = False, preview_type: str = None):
+                """
+                GET https://api.lzt.market/item_id
+                GET https://api.lzt.market/item_id/steam-preview
+
+                Displays account information or returns Steam account html code.
+
+                Required scopes: market
+
+                :param item_id: The number of the page to display results from
+                :param steam_preview: Set it True if you want to get steam html and False/None if you want to get account info
+                :param preview_type: Type of page - profile or games
+                :return: json server response
+
+                """
+                url = f"https://api.lzt.market/{item_id}"
+                if steam_preview:
+                    url = f"https://api.lzt.market/{item_id}/steam-preview"
+                params = {
+                    "type": preview_type
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+        class __Accounts:
+            def __init__(self, api_self):
+                self.__api = api_self
+                self.list = ''
+                self.managing = ''
+                self.purchasing = ''
+                self.publishing = ''
+
+        class __Payments:
+            def __init__(self, api_self):
+                self.__api = api_self
+
+            def history(self, user_id: int, operation_type: str = None, pmin: int = None, pmax: int = None,
+                        page: int = None,
+                        operation_id_lt: int = None, receiver: str = None, sender: str = None, start_date: str = None,
+                        end_date: str = None, wallet: str = None, comment: str = None, is_hold: bool = None,
+                        show_payments_stats: bool = None):
+                """
+                GET https://api.lzt.market/user/user_id/payments
+
+                Displays info about your profile.
+
+                Required scopes: market
+
+                :param user_id: ID of user.
+                :param operation_type: Type of operation. Allowed operation types: income, cost, refilled_balance, withdrawal_balance, paid_item, sold_item, money_transfer, receiving_money, internal_purchase, claim_hold
+                :param pmin: Minimal price of operation (Inclusive)
+                :param pmax: Maximum price of operation (Inclusive)
+                :param page: The number of the page to display results from
+                :param operation_id_lt: ID of the operation from which the result begins
+                :param receiver: Username of user, which receive money from you
+                :param sender: Username of user, which sent money to you
+                :param start_date: Start date of operation (RFC 3339 date format)
+                :param end_date: End date of operation (RFC 3339 date format)
+                :param wallet: Wallet, which used for money payots
+                :param comment: Comment for money transfers
+                :param is_hold: Display hold operations
+                :param show_payments_stats: Display payment stats for selected period (outgoing value, incoming value)
+
+                :return: json server response
+
+                """
+                url = f"https://api.lzt.market/user/{user_id}/payments"
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if is_hold:
+                        is_hold = 1
+                    else:
+                        is_hold = 0
+                    if show_payments_stats:
+                        show_payments_stats = 1
+                    else:
+                        show_payments_stats = 0
+                params = {
+                    "user_id": user_id,
+                    "operation_type": operation_type,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "page": page,
+                    "operation_id_lt": operation_id_lt,
+                    "receiver": receiver,
+                    "sender": sender,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "wallet": wallet,
+                    "comment": comment,
+                    "is_hold": is_hold,
+                    "show_payments_stats": show_payments_stats
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def transfer(self, amount: int, secret_answer: str, currency: str = "rub", user_id: int = None,
+                         username: str = None, comment: str = None, transfer_hold: bool = None,
+                         hold_length_option: str = None,
+                         hold_length_value: int = None):
+                """
+                POST https://api.lzt.market/balance/transfer
+
+                Send money to any user.
+
+                Required scopes: market
+
+                :param amount: Amount to send in your currency.
+                :param secret_answer: Secret answer of your account
+                :param currency: Using currency for amount. Allowed values: cny, usd, rub, eur, uah, kzt, byn, gbp ("rub" by default)
+                :param user_id: User id of receiver. If user_id specified, username is not required.
+                :param username: Username of receiver. If username specified, user_id is not required.
+                :param comment: Transfer comment
+                :param transfer_hold: Hold transfer or not
+                :param hold_length_option: Hold length option. Allowed values: hour, day, week, month, year
+                :param hold_length_value: Hold length value
+
+                :return: json server response
+                """
+                url = "https://api.lzt.market/balance/transfer"
+                params = {
+                    "amount": amount,
+                    "secret_answer": secret_answer,
+                    "user_id": user_id,
+                    "username": username,
+                    "currency": currency,
+                    "comment": comment,
+                    "transfer_hold": transfer_hold,
+                    "hold_length_value": hold_length_value,
+                    "hold_length_option": hold_length_option
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+        class __Managing:
+            def __init__(self, api_self):
+                self.__api = api_self
+                self.tag = self.__Tag(self.__api)
+
+            class __Tag:  # To Managing
+                def __init__(self, api_self):
+                    self.__api = api_self
+
+                def delete(self, item_id: int, tag_id: int):
+                    """
+                    DELETE https://api.lzt.market/item_id/tag
+
+                    Deletes tag for the account.
+
+                    Required scopes: market
+
+                    :param item_id: ID of item.
+                    :param tag_id: Tag id. Tag list is available via api.market.profile.get()
+
+                    :return: json server response
+                    """
+                    url = f"https://api.lzt.market/{item_id}/tag"
+                    params = {
+                        "tag_id": tag_id
+                    }
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+
+                def add(self, item_id: int, tag_id: int):
+                    """
+                    POST https://api.lzt.market/item_id/tag
+
+                    Adds tag for the account.
+
+                    Required scopes: market
+
+                    :param item_id: ID of item.
+                    :param tag_id: Tag id. Tag list is available via api.market.profile.get()
+
+                    :return: json server response
+                    """
+                    url = f"https://api.lzt.market/{item_id}/tag"
+                    params = {
+                        "tag_id": tag_id
+                    }
+                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def delete(self, item_id: int, reason: str):
+                """
+                DELETE https://api.lzt.market/item_id
+
+                Deletes your account from public search. Deletetion type is soft. You can restore account after deletetion if you want.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param reason: Delete reason.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}"
+                params = {
+                    "reason": reason
+                }
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+
+            def email(self, item_id: int, email: str):
+                """
+                GET https://api.lzt.market/item_id/email-code
+
+                Gets confirmation code or link.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param email: Account email.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/email-code"
+                params = {
+                    "email ": email
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def guard(self, item_id: int):
+                """
+                GET https://api.lzt.market/item_id/guard-code
+
+                Gets confirmation code from MaFile (Only for Steam accounts).
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/guard-code"
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+
+            def mafile(self, item_id: int):
+                """
+                GET https://api.lzt.market/item_id/mafile
+
+                Returns mafile in JSON.
+
+                Warning: this action is cancelling active account guarantee.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/mafile"
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+
+            def password_tm(self, item_id: int):
+                """
+                GET https://api.lzt.market/item_id/temp-email-password
+
+                Gets password from temp email of account.
+
+                After calling of this method, the warranty will be cancelled, and you cannot automatically resell account.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/temp-email-password"
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+
+            def refuse_guarantee(self, item_id: int):
+                """
+                POST https://api.lzt.market/item_id/refuse-guarantee
+
+                Cancel guarantee of account. It can be useful for account reselling.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/refuse-guarantee"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+
+            def change_password(self, item_id: int, _cancel: bool = None):
+                """
+                POST https://api.lzt.market/item_id/change-password
+
+                Changes password of account.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param _cancel: Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/change-password"
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if _cancel:
+                        _cancel = 1
+                    else:
+                        _cancel = 0
+                params = {
+                    "_cancel": _cancel
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def unstick(self, item_id: int):
+                """
+                DELETE https://api.lzt.market/item_id/stick
+
+                Unstick account of the top of search.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/stick"
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+
+            def stick(self, item_id: int):
+                """
+                POST https://api.lzt.market/item_id/stick
+
+                Stick account in the top of search.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/stick"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+
+            def unfavorite(self, item_id: int):
+                """
+                DELETE https://api.lzt.market/item_id/star
+
+                Deletes account from favourites.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/star"
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+
+            def favorite(self, item_id: int):
+                """
+                POST https://api.lzt.market/item_id/star
+
+                Adds account to favourites.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/star"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+
+            def bump(self, item_id: int):
+                """
+                POST https://api.lzt.market/item_id/bump
+
+                Bumps account in the search.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/bump"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+
+            def change_owner(self, item_id: int, username: str, secret_answer: str):
+                """
+                POST https://api.lzt.market/item_id/change-owner
+
+                Change of account owner.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param username: The username of the new account owner
+                :param secret_answer: Secret answer of your account
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/change-owner"
+                params = {
+                    "username": username,
+                    "secret_answer": secret_answer
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def edit(self, item_id: int, price: int = None, currency: str = None, item_origin: str = None,
+                     title: str = None, title_en: str = None, description: str = None, information: str = None,
+                     email_login_data: str = None, email_type: str = None, allow_ask_discount: bool = None,
+                     proxy_id: int = None):
+                """
+                POST https://api.lzt.market/item_id/edit
+
+                Edits any details of account.
+
+                Account origin:
+
+                brute - Account received using Bruteforce
+
+                fishing - Account received from fishing page
+
+                stealer - Account received from stealer logs
+
+                autoreg - Account is automatically registered by a tool
+
+                personal - Account is yours. You created it yourself
+
+                resale - Account received from another seller
+
+                retrive - Account is recovered by email or phone (only for VKontakte category)
+
+                Required scopes: market
+                :param price: Account price in your currency.
+                :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
+                :param item_origin: Account origin. Where did you get it from.
+                :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
+                :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
+                :param description: Account public description.
+                :param information: Account private information (visible for buyer only if purchased).
+                :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+                :param email_type: Email type. Allowed values: native, autoreg.
+                :param allow_ask_discount: Allow users to ask discount for this account.
+                :param proxy_id: Using proxy id for account checking.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/edit"
+                params = {
+                    "price": price,
+                    "currency": currency,
+                    "item_origin": item_origin,
+                    "title": title,
+                    "title_en": title_en,
+                    "description": description,
+                    "information": information,
+                    "email_login_data": email_login_data,
+                    "email_type": email_type,
+                    "allow_ask_discount": allow_ask_discount,
+                    "proxy_id": proxy_id
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+        class __Purchasing:
+            def __init__(self, api_self):
+                self.__api = api_self
+
+            def reserve(self, item_id: int, price: int):
+                """
+                POST https://api.lzt.market/item_id/reserve
+
+                Reserves account for you. Reserve time - 300 seconds.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param price: Currenct price of account in your currency
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/reserve"
+                params = {
+                    "price": price
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def reserve_cancel(self, item_id: int):
+                """
+                POST https://api.lzt.market/item_id/cancel-reseve
+
+                Cancels reserve.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/cancel-reseve"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+
+            def check(self, item_id: int):
+                """
+                POST https://api.lzt.market/item_id/check-account
+
+                Checking account for validity. If the account is invalid, the purchase will be canceled automatically
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/check-account"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+
+            def confirm(self, item_id: int, buy_without_validation: bool = None):
+                """
+                POST https://api.lzt.market/item_id/confirm-buy
+
+                Reserves account for you. Reserve time - 300 seconds.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe)
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/confirm-buy"
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if buy_without_validation:
+                        buy_without_validation = 1
+                    else:
+                        buy_without_validation = 0
+                params = {
+                    "buy_without_validation": buy_without_validation
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def fast_buy(self, item_id: int, price: int, buy_without_validation: bool = None):
+                """
+                POST https://api.lzt.market/item_id/fast-buy
+
+                Check and buy account.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param price: Currenct price of account in your currency
+                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe)
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/fast-buy"
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if buy_without_validation:
+                        buy_without_validation = 1
+                    else:
+                        buy_without_validation = 0
+                params = {
+                    "price": price,
+                    "buy_without_validation": buy_without_validation
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+        class __Publishing:
+            def __init__(self, api_self):
+                self.__api = api_self
+
+            def info(self, item_id: int, resell_item_id: int = None):
+                """
+                GET https://api.lzt.market/item_id/goods/add
+
+                Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param resell_item_id: Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/goods/add"
+                params = {
+                    "resell_item_id": resell_item_id
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
+            def check(self, item_id: int, login: str = None, password: str = None, login_password: str = None,
+                      close_item: bool = None, extra: dict = None, resell_item_id: int = None,
+                      random_proxy: bool = None):
+                """
+                POST https://api.lzt.market/item_id/goods/check
+
+                Check account on validity. If account is valid, account will be published on the market.
+
+                Required scopes: market
+                :param item_id: ID for item.
+                :param login: Account login (or email)
+                :param password: Account password
+                :param login_password: Account login data format login:password
+                :param close_item: If True, the item will be closed item_state = closed
+                :param extra: Extra params for account checking. E.g. you need to put cookies to extra[cookies] if you want to upload TikTok/Fortnite/Epic Games account
+                :param resell_item_id: Put item id, if you are trying to resell item.
+                :param random_proxy: Pass True, if you get captcha in previous response
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/goods/check"
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if random_proxy:
+                        random_proxy = 1
+                    else:
+                        random_proxy = 0
+                params = {
+                    "login": login,
+                    "password": password,
+                    "login_password": login_password,
+                    "close_item": close_item,
+                    "extra": extra,
+                    "resell_item_id": resell_item_id,
+                    "random_proxy": random_proxy
+                }
+                for key, value in extra:
+                    es = f"extra[{key}]"
+                    params[es] = value
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def add(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
+                    title: str = None, title_en: str = None, description: str = None, information: str = None,
+                    has_email_login_data: bool = None, email_login_data: str = None, email_type: str = None,
+                    allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None):
+                """
+                POST https://api.lzt.market/item/add
+
+                Adds account on the market.
+
+                Account origin:
+
+                brute - Account received using Bruteforce
+
+                fishing - Account received from fishing page
+
+                stealer - Account received from stealer logs
+
+                autoreg - Account is automatically registered by a tool
+
+                personal - Account is yours. You created it yourself
+
+                resale - Account received from another seller
+
+                retrive - Account is recovered by email or phone (only for VKontakte category)
+
+                Required email login data categories:
+
+                9 - Fortnite
+
+                12 - Epic games
+
+                18 - Escape from Tarkov
+
+
+                Required scopes: market
+                :param category_id: Accounts category.
+                :param price: Account price in your currency.
+                :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
+                :param item_origin: Account origin. Where did you get it from.
+                :param extended_guarantee: Guarantee type. Allowed values: -1 -> 12 hours, 0 -> 24 hours, 1 -> 3 days.
+                :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
+                :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
+                :param description: Account public description.
+                :param information: Account private information (visible for buyer only if purchased).
+                :param has_email_login_data: Required if a category is one of list of Required email login data categories.
+                :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+                :param email_type: Email type. Allowed values: native, autoreg.
+                :param allow_ask_discount: Allow users to ask discount for this account.
+                :param proxy_id: Using proxy id for account checking.
+                :param random_proxy: Pass True, if you get captcha in previous response
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/item/add"
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if random_proxy:
+                        random_proxy = 1
+                    else:
+                        random_proxy = 0
+                params = {
+                    "category_id": category_id,
+                    "price": price,
+                    "currency": currency,
+                    "item_origin": item_origin,
+                    "extended_guarantee": extended_guarantee,
+                    "title": title,
+                    "title_en": title_en,
+                    "description": description,
+                    "information": information,
+                    "has_email_login_data": has_email_login_data,
+                    "email_login_data": email_login_data,
+                    "email_type": email_type,
+                    "allow_ask_discount": allow_ask_discount,
+                    "proxy_id": proxy_id,
+                    "random_proxy": random_proxy
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def fast_sell(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
+                          title: str = None, title_en: str = None, description: str = None, information: str = None,
+                          has_email_login_data: bool = None, email_login_data: str = None, email_type: str = None,
+                          allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None,
+                          login: str = None,
+                          password: str = None, login_password: str = None, extra: dict = None, ):
+                """
+                POST https://api.lzt.market/item/fast-sell
+
+                Adds and check account on validity. If account is valid, account will be published on the market.
+
+                Account origin:
+
+                brute - Account received using Bruteforce
+
+                fishing - Account received from fishing page
+
+                stealer - Account received from stealer logs
+
+                autoreg - Account is automatically registered by a tool
+
+                personal - Account is yours. You created it yourself
+
+                resale - Account received from another seller
+
+                retrive - Account is recovered by email or phone (only for VKontakte category)
+
+                Required email login data categories:
+
+                9 - Fortnite
+
+                12 - Epic games
+
+                18 - Escape from Tarkov
+
+
+                Required scopes: market
+                :param category_id: Accounts category.
+                :param price: Account price in your currency.
+                :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
+                :param item_origin: Account origin. Where did you get it from.
+                :param extended_guarantee: Guarantee type. Allowed values: -1 -> 12 hours, 0 -> 24 hours, 1 -> 3 days.
+                :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
+                :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
+                :param description: Account public description.
+                :param information: Account private information (visible for buyer only if purchased).
+                :param has_email_login_data: Required if a category is one of list of Required email login data categories.
+                :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+                :param email_type: Email type. Allowed values: native, autoreg.
+                :param allow_ask_discount: Allow users to ask discount for this account.
+                :param proxy_id: Using proxy id for account checking.
+                :param random_proxy: Pass True, if you get captcha in previous response
+                :param login: Account login (or email)
+                :param password: Account password
+                :param login_password: Account login data format login:password
+                :param extra: Extra params for account checking. E.g. you need to put cookies to extra[cookies] if you want to upload TikTok/Fortnite/Epic Games account
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/item/fast-sell"
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if random_proxy:
+                        random_proxy = 1
+                    else:
+                        random_proxy = 0
+                params = {
+                    "category_id": category_id,
+                    "price": price,
+                    "currency": currency,
+                    "item_origin": item_origin,
+                    "extended_guarantee": extended_guarantee,
+                    "title": title,
+                    "title_en": title_en,
+                    "description": description,
+                    "information": information,
+                    "has_email_login_data": has_email_login_data,
+                    "email_login_data": email_login_data,
+                    "email_type": email_type,
+                    "allow_ask_discount": allow_ask_discount,
+                    "proxy_id": proxy_id,
+                    "random_proxy": random_proxy,
+                    "login": login,
+                    "password": password,
+                    "login_password": login_password
+                }
+                for key, value in extra:
+                    es = f"extra[{key}]"
+                    params[es] = value
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def edit(self, item_id: int, price: int = None, currency: str = None, item_origin: str = None,
+                     title: str = None, title_en: str = None, description: str = None, information: str = None,
+                     email_login_data: str = None, email_type: str = None, allow_ask_discount: bool = None,
+                     proxy_id: int = None):
+                """
+                POST https://api.lzt.market/item_id/edit
+
+                Edits any details of account.
+
+                Account origin:
+
+                brute - Account received using Bruteforce
+
+                fishing - Account received from fishing page
+
+                stealer - Account received from stealer logs
+
+                autoreg - Account is automatically registered by a tool
+
+                personal - Account is yours. You created it yourself
+
+                resale - Account received from another seller
+
+                retrive - Account is recovered by email or phone (only for VKontakte category)
+
+                Required scopes: market
+                :param price: Account price in your currency.
+                :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
+                :param item_origin: Account origin. Where did you get it from.
+                :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
+                :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
+                :param description: Account public description.
+                :param information: Account private information (visible for buyer only if purchased).
+                :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+                :param email_type: Email type. Allowed values: native, autoreg.
+                :param allow_ask_discount: Allow users to ask discount for this account.
+                :param proxy_id: Using proxy id for account checking.
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/{item_id}/edit"
+                params = {
+                    "price": price,
+                    "currency": currency,
+                    "item_origin": item_origin,
+                    "title": title,
+                    "title_en": title_en,
+                    "description": description,
+                    "information": information,
+                    "email_login_data": email_login_data,
+                    "email_type": email_type,
+                    "allow_ask_discount": allow_ask_discount,
+                    "proxy_id": proxy_id
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
