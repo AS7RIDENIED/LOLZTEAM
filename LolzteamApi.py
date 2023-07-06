@@ -500,7 +500,235 @@ class LolzteamApi:
         class __Threads:
             def __init__(self, __api_self):
                 self.__api = __api_self
+                self.contests = self.__Contests(self.__api)
 
+            class __Contests:
+                def __init__(self, api_self):
+                    self.__api = api_self
+                    self.money = self.__Money(self.__api)
+                    self.upgrade = self.__Upgrade(self.__api)
+
+                class __Money:
+                    def __init__(self, api_self):
+                        self.__api = api_self
+
+                    def create_by_time(self, thread_title: str, post_body: str, prize_data_money: int,
+                                       count_winners: int,
+                                       length_value: int, length_option: str, require_like_count: int,
+                                       require_total_like_count: int, secret_answer: str, thread_prefix_id: int = None,
+                                       thread_tags: str = None):
+                        """
+                        POST https://api.zelenka.guru/threads
+
+                        Create a new thread.
+
+                        Required scopes: post
+
+                        :param thread_title: Title of the new thread.
+                        :param post_body: Content of the new thread.
+                        :param prize_data_money: How much money will each winner receive.
+                        :param count_winners: Winner count (prize count). The maximum value is 100.
+                        :param length_value: Giveaway duration value. The maximum duration is 3 days.
+                        :param length_option: Giveaway duration type. Can be [minutes, hours, days]. The maximum duration is 3 days.
+                        :param require_like_count: Sympathies for this week.
+                        :param require_total_like_count: Symapthies for all time.
+                        :param secret_answer:Secret answer of your account.
+                        :param thread_prefix_id: ID of a prefix for the new thread.
+                        :param thread_tags: Thread tags for the new thread.
+
+                        :return: json server response
+                        """
+                        url = f"https://api.zelenka.guru/threads"
+                        contest_type = "by_finish_date"
+                        prize_type = "money"
+                        forum_id = 766
+                        params = {
+                            "forum_id": forum_id,
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "thread_prefix_id": thread_prefix_id,
+                            "thread_tags": thread_tags,
+                            "count_winners": count_winners,
+                            "length_value": length_value,
+                            "length_option": length_option,
+                            "require_like_count": require_like_count,
+                            "require_total_like_count": require_total_like_count,
+                            "secret_answer": secret_answer,
+                            "prize_type": prize_type,
+                            "contest_type": contest_type,
+                            "prize_data_money": prize_data_money
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+                    def create_by_count(self, thread_title: str, post_body: str, prize_data_money: int,
+                                        count_winners: int,
+                                        needed_members: int, require_like_count: int, require_total_like_count: int,
+                                        secret_answer: str, thread_prefix_id: int = None, thread_tags: str = None):
+                        """
+                        POST https://api.zelenka.guru/threads
+
+                        Create a new thread.
+
+                        Required scopes: post
+
+                        :param thread_title: Title of the new thread.
+                        :param post_body: Content of the new thread.
+                        :param prize_data_money: How much money will each winner receive.
+                        :param count_winners: Winner count (prize count). The maximum value is 100.
+                        :param needed_members: Max member count.
+                        :param require_like_count: Sympathies for this week.
+                        :param require_total_like_count: Symapthies for all time.
+                        :param secret_answer:Secret answer of your account.
+                        :param thread_prefix_id: ID of a prefix for the new thread.
+                        :param thread_tags: Thread tags for the new thread.
+
+                        :return: json server response
+                        """
+                        url = f"https://api.zelenka.guru/threads"
+                        contest_type = "by_needed_members"
+                        prize_type = "upgrades"
+                        forum_id = 766
+                        params = {
+                            "forum_id": forum_id,
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "thread_prefix_id": thread_prefix_id,
+                            "thread_tags": thread_tags,
+                            "prize_data_money": prize_data_money,
+                            "count_winners": count_winners,
+                            "require_like_count": require_like_count,
+                            "require_total_like_count": require_total_like_count,
+                            "secret_answer": secret_answer,
+                            "prize_type": prize_type,
+                            "contest_type": contest_type,
+                            "needed_members": needed_members
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+                class __Upgrade:
+                    def __init__(self, api_self):
+                        self.__api = api_self
+
+                    def create_by_time(self, thread_title: str, post_body: str, prize_data_upgrade: int,
+                                       count_winners: int,
+                                       length_value: int, length_option: str, require_like_count: int,
+                                       require_total_like_count: int, secret_answer: str, thread_prefix_id: int = None,
+                                       thread_tags: str = None):
+                        """
+                        POST https://api.zelenka.guru/threads
+
+                        Create a new thread.
+
+                        Contest prize upgrade type:
+
+                        1 - Supreme - 3 months.
+
+                        6 - Legend - 12 months.
+
+                        12 - AntiPublic.One Plus subscription - 1 month.
+
+                        14 - Uniq - lifetime.
+
+                        17 - 18+ Photo leaks - 6 months.
+
+                        19 - Auto giveaway participation - 1 month.
+
+                        Required scopes: post
+
+                        :param thread_title: Title of the new thread.
+                        :param post_body: Content of the new thread.
+                        :param prize_data_upgrade: Which upgrade will each winner receive. Check description above
+                        :param count_winners: Winner count (prize count). The maximum value is 100.
+                        :param length_value: Giveaway duration value. The maximum duration is 3 days.
+                        :param length_option: Giveaway duration type. Can be [minutes, hours, days]. The maximum duration is 3 days.
+                        :param require_like_count: Sympathies for this week.
+                        :param require_total_like_count: Symapthies for all time.
+                        :param secret_answer:Secret answer of your account.
+                        :param thread_prefix_id: ID of a prefix for the new thread.
+                        :param thread_tags: Thread tags for the new thread.
+
+                        :return: json server response
+                        """
+                        url = f"https://api.zelenka.guru/threads"
+                        contest_type = "by_finish_date"
+                        prize_type = "upgrades"
+                        forum_id = 766
+                        params = {
+                            "forum_id": forum_id,
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "thread_prefix_id": thread_prefix_id,
+                            "thread_tags": thread_tags,
+                            "prize_data_upgrade": prize_data_upgrade,
+                            "count_winners": count_winners,
+                            "length_value": length_value,
+                            "length_option": length_option,
+                            "require_like_count": require_like_count,
+                            "require_total_like_count": require_total_like_count,
+                            "secret_answer": secret_answer,
+                            "prize_type": prize_type,
+                            "contest_type": contest_type
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+                    def create_by_count(self, thread_title: str, post_body: str, prize_data_upgrade: int,
+                                        count_winners: int,
+                                        needed_members: int, require_like_count: int, require_total_like_count: int,
+                                        secret_answer: str, thread_prefix_id: int = None, thread_tags: str = None):
+                        """
+                        POST https://api.zelenka.guru/threads
+
+                        Create a new thread.
+
+                        Contest prize upgrade type:
+
+                        1 - Supreme - 3 months.
+
+                        6 - Legend - 12 months.
+
+                        12 - AntiPublic.One Plus subscription - 1 month.
+
+                        14 - Uniq - lifetime.
+
+                        17 - 18+ Photo leaks - 6 months.
+
+                        19 - Auto giveaway participation - 1 month.
+
+                        Required scopes: post
+
+                        :param thread_title: Title of the new thread.
+                        :param post_body: Content of the new thread.
+                        :param prize_data_upgrade: Which upgrade will each winner receive. Check description above
+                        :param count_winners: Winner count (prize count). The maximum value is 100.
+                        :param needed_members: Max member count.
+                        :param require_like_count: Sympathies for this week.
+                        :param require_total_like_count: Symapthies for all time.
+                        :param secret_answer:Secret answer of your account.
+                        :param thread_prefix_id: ID of a prefix for the new thread.
+                        :param thread_tags: Thread tags for the new thread.
+
+                        :return: json server response
+                        """
+                        url = f"https://api.zelenka.guru/threads"
+                        contest_type = "by_needed_members"
+                        prize_type = "upgrades"
+                        forum_id = 766
+                        params = {
+                            "forum_id": forum_id,
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "thread_prefix_id": thread_prefix_id,
+                            "thread_tags": thread_tags,
+                            "prize_data_upgrade": prize_data_upgrade,
+                            "count_winners": count_winners,
+                            "require_like_count": require_like_count,
+                            "require_total_like_count": require_total_like_count,
+                            "secret_answer": secret_answer,
+                            "prize_type": prize_type,
+                            "contest_type": contest_type,
+                            "needed_members": needed_members
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
             def get_threads(self, forum_id: int, thread_ids: str = None, creator_user_id: int = None,
                             sticky: bool = None,
                             thread_prefix_id: int = None, thread_tag_id: int = None, page: int = None,
