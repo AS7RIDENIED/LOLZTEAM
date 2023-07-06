@@ -1866,6 +1866,7 @@ class LolzteamApi:
             self.publishing = self.__Publishing(self.__api)
             self.purchasing = self.__Purchasing(self.__api)
             self.managing = self.__Managing(self.__api)
+            self.proxy = self.__Proxy(self.__api)
 
         def batch(self, request_body: list[dict]):
             """
@@ -2594,7 +2595,7 @@ class LolzteamApi:
 
                 Required scopes: market
 
-                :param item_id: The number of the page to display results from
+                :param item_id: ID of item.
                 :param steam_preview: Set it True if you want to get steam html and False/None if you want to get account info
                 :param preview_type: Type of page - profile or games
                 :return: json server response
@@ -3010,6 +3011,7 @@ class LolzteamApi:
                 retrive - Account is recovered by email or phone (only for VKontakte category)
 
                 Required scopes: market
+                :param item_id: ID of item
                 :param price: Account price in your currency.
                 :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
                 :param item_origin: Account origin. Where did you get it from.
@@ -3399,6 +3401,7 @@ class LolzteamApi:
                 retrive - Account is recovered by email or phone (only for VKontakte category)
 
                 Required scopes: market
+                :param item_id: ID of item.
                 :param price: Account price in your currency.
                 :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
                 :param item_origin: Account origin. Where did you get it from.
@@ -3426,5 +3429,69 @@ class LolzteamApi:
                     "email_type": email_type,
                     "allow_ask_discount": allow_ask_discount,
                     "proxy_id": proxy_id
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+        class __Proxy:
+            def __init__(self, api_self):
+                self.__api = api_self
+
+            def get(self):
+                """
+                GET https://api.lzt.market/proxy
+
+                Gets your proxy list.
+
+                Required scopes: market
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/proxy"
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+
+            def delete(self, proxy_id: int = None, delete_all: bool = None):
+                """
+                DELETE https://api.lzt.market/proxy
+
+                Delete single or all proxies.
+
+                Required scopes: market
+
+                :param proxy_id: ID of an existing proxy
+                :param delete_all: Use True if you want to delete all proxy
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/proxy"
+                params = {
+                    "proxy_id": proxy_id,
+                    "delete_all": delete_all
+                }
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+
+            def add(self, proxy_ip: str = None, proxy_port: int = None, proxy_user: str = None, proxy_pass: str = None,
+                    proxy_row: str = None):
+                """
+                POST https://api.lzt.market/proxy
+
+                Add single proxy or proxy list.
+
+                Required scopes: market
+
+                :param proxy_ip: Proxy ip or host.
+                :param proxy_port: Proxy port
+                :param proxy_user: Proxy username
+                :param proxy_pass: Proxy password
+                :param proxy_row: Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use separator)
+
+                :return: json server response
+                """
+                url = f"https://api.lzt.market/proxy"
+                params = {
+                    "proxy_ip": proxy_ip,
+                    "proxy_port": proxy_port,
+                    "proxy_user": proxy_user,
+                    "proxy_pass": proxy_pass,
+                    "proxy_row": proxy_row
                 }
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
