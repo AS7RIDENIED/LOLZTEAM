@@ -586,7 +586,7 @@ class LolzteamApi:
                         """
                         url = f"https://api.zelenka.guru/threads"
                         contest_type = "by_needed_members"
-                        prize_type = "upgrades"
+                        prize_type = "money"
                         forum_id = 766
                         params = {
                             "forum_id": forum_id,
