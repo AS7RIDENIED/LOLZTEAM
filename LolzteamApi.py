@@ -1867,6 +1867,30 @@ class LolzteamApi:
             self.purchasing = self.__Purchasing(self.__api)
             self.managing = self.__Managing(self.__api)
 
+        def batch(self, request_body: list[dict]):
+            """
+            POST https://api.lzt.market/batch
+
+            Execute multiple API requests at once.(10 max)
+
+            Example scheme:
+
+            [
+                {
+                "id": "1",
+                "uri": "https://api.lzt.market/me",
+                "method": "GET",
+                "params": {}
+                }
+            ]
+
+            :param request_body: Use scheme above
+            :return: json server response
+            """
+
+            url = f"https://api.lzt.market/batch"
+            return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(request_body))
+
         class __Profile:
             def __init__(self, api_self):
                 self.__api = api_self
