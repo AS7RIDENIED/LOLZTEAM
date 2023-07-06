@@ -20,7 +20,7 @@ print(post_data["post"]["post_id"])                        # Printing post_id of
 #  Batch example
 #  job 1 - We get our profile data
 #  job 2 - We get list of ignored users by ourselves
-#  job 3 - We get list of our profile followers.
+#  job 3 - Following ourselves
 data = [
     {
         "id": "1",
