@@ -2115,7 +2115,11 @@ class LolzteamApi:
                     "client_secret": client_secret,
                     "facebook_token": facebook_token
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                try:
+                    return response.json()
+                except:
+                    return response.text
 
             def twitter(self, client_id: int, client_secret: str, twitter_url: str, twitter_auth: str):
                 """
@@ -2139,7 +2143,11 @@ class LolzteamApi:
                     "twitter_uri": twitter_url,
                     "twitter_auth": twitter_auth
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                try:
+                    return response.json()
+                except:
+                    return response.text
 
             def google(self, client_id: int, client_secret: str, google_token: str):
                 """
@@ -2161,7 +2169,11 @@ class LolzteamApi:
                     "client_secret": client_secret,
                     "facebook_token": google_token
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                try:
+                    return response.json()
+                except:
+                    return response.text
 
             def admin(self, user_id: int):
                 """
@@ -2179,7 +2191,11 @@ class LolzteamApi:
                 params = {
                     "user_id": user_id
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                try:
+                    return response.json()
+                except:
+                    return response.text
 
             def associate(self, client_id: int, user_id: str, password: str, extra_data: str, extra_timestamp: int):
                 """
@@ -2205,7 +2221,11 @@ class LolzteamApi:
                     "extra_data": extra_data,
                     "extra_timestamp": extra_timestamp
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                try:
+                    return response.json()
+                except:
+                    return response.text
 
         def navigation(self, parent: int = None):
             """
@@ -2990,7 +3010,7 @@ class LolzteamApi:
                 :param item_id: ID of item.
                 :param steam_preview: Set it True if you want to get steam html and False/None if you want to get account info
                 :param preview_type: Type of page - profile or games
-                :return: json server response
+                :return: json server response or html code
 
                 """
                 url = f"https://api.lzt.market/{item_id}"
@@ -2999,7 +3019,11 @@ class LolzteamApi:
                 params = {
                     "type": preview_type
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                response = LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                try:
+                    return response.json()
+                except:
+                    return response.text
 
         class __Accounts:
             def __init__(self, api_self):
