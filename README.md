@@ -1,5 +1,6 @@
 
 # Lolzteam Python API
+
 <p align="center">
     <a href="https://zelenka.guru/members/2410024"><img width="800" src="https://zelenka.guru/styles/brand/download/logos/LolzTeam-Wordmark-Green.svg" alt="Material Bread logo"></a>
 </p>
@@ -30,15 +31,18 @@ api = LolzteamApi(token='your_token')
 <p align="left">
     <a href="https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Examples/example.py"><img width="150" src="https://zelenka.guru/styles/brand/download/logos/LolzTeam-Wordmark-Green.svg" alt="Material Bread logo"></a>
 </p>
+
 <p align="left">
     <a href="https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Examples/example_market.py"><img width="150" src="https://lzt.market/styles/market/logo_by_DaWeed_X_KASTE.svg" alt="Material Bread logo"></a>
 </p>
 
 
 ## Official Lolzteam documentation
+
 <p align="left">
     <a href="https://docs.api.zelenka.guru/?forum"><img width="150" src="https://zelenka.guru/styles/brand/download/logos/LolzTeam-Wordmark-Green.svg" alt="Material Bread logo"></a>
 </p>
+
 <p align="left">
     <a href="https://docs.api.zelenka.guru/?market"><img width="150" src="https://lzt.market/styles/market/logo_by_DaWeed_X_KASTE.svg" alt="Material Bread logo"></a>
 </p>
