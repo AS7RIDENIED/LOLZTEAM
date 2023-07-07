@@ -5,7 +5,7 @@
     <a href="https://zelenka.guru/members/2410024"><img width="800" src="https://zelenka.guru/styles/brand/download/logos/LolzTeam-Wordmark-Green.svg" alt="Material Bread logo"></a>
 </p>
 
-![Static Badge](https://img.shields.io/badge/DONATE-LOLZTEAM-darkgreen?style=flat-square&logo=qiwi&link=https%3A%2F%2Flzt.market%2Fbalance%2Ftransfer%3Fuser_id%3D2410024%26comment%3DThanks%2520for%2520creating%2520LolzteamApi%26amount%3D500)
+[![Static Badge](https://img.shields.io/badge/DONATE-LOLZTEAM-darkgreen?style=flat-square&logo=qiwi)](https://lzt.market/balance/transfer?user_id=2410024&comment=Thanks%20for%20creating%20LolzteamApi&amount=250)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/LICENSE)
 
 
