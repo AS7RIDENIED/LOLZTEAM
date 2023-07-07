@@ -6,7 +6,7 @@ requirements = ["requests"]
 
 setuptools.setup(
     name="LolzteamApi",
-    version="1.0.8",
+    version="1.0.9",
     author="AS7RID",
     author_email="as7ridwork@gmail.com",
     description="A library that contains all the methods of the Lolzteam API (Market/Forum)",
