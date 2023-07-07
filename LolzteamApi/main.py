@@ -3610,6 +3610,10 @@ class LolzteamApi:
                         random_proxy = 1
                     else:
                         random_proxy = 0
+                    if close_item:
+                        close_item = 1
+                    else:
+                        close_item = 0
                 params = {
                     "login": login,
                     "password": password,
