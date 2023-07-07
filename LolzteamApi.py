@@ -66,6 +66,7 @@ class LolzteamApi:
             self.conversations = self.__Conversations(self.__api)
             self.notifications = self.__Notifications(self.__api)
             self.search = self.__Search(self.__api)
+            self.oauth = self.__Oauth(self.__api)
 
         class __Categories:
             def __init__(self, __api_self):
@@ -148,7 +149,7 @@ class LolzteamApi:
 
             def follow(self, forum_id: int, post: bool = None, alert: bool = None, email: bool = None):
                 """
-                POST https://api.zelenka.guru/forums/{forum_id}/followers
+                POST https://api.zelenka.guru/forums/forum_id/followers
                 Follow a forum.
 
                 Required scopes: post
@@ -177,7 +178,7 @@ class LolzteamApi:
 
             def unfollow(self, forum_id: int):
                 """
-                DELETE https://api.zelenka.guru/forums/{forum_id}/followers
+                DELETE https://api.zelenka.guru/forums/forum_id/followers
                 Unfollow a forum.
 
                 Required scopes: post
@@ -191,7 +192,7 @@ class LolzteamApi:
 
             def followers(self, forum_id: int):
                 """
-                GET https://api.zelenka.guru/forums/{forum_id}/followers
+                GET https://api.zelenka.guru/forums/forum_id/followers
 
                 List of a forum's followers. For privacy reason, only the current user will be included in the list (if the user follows the specified forum).
 
@@ -252,7 +253,7 @@ class LolzteamApi:
 
             def get_page(self, page_id: int):
                 """
-                GET https://api.zelenka.guru/pages/{page_id}
+                GET https://api.zelenka.guru/pages/page_id
 
                 Detail information of a page.
 
@@ -357,7 +358,7 @@ class LolzteamApi:
 
             def create(self, post_body: str, thread_id: int = None, quote_post_id: int = None):
                 """
-                POST https://api.zelenka.guru/threads
+                POST https://api.zelenka.guru/posts
 
                 Create a new thread.
 
@@ -450,7 +451,7 @@ class LolzteamApi:
 
             def like(self, post_id: int):
                 """
-                POST https://api.zelenka.guru/posts/post_id
+                POST https://api.zelenka.guru/posts/post_id/likes
 
                 Like a post.
 
@@ -460,12 +461,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}"
+                url = f"https://api.zelenka.guru/posts/{post_id}/likes"
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
 
             def unlike(self, post_id: int):
                 """
-                DELETE https://api.zelenka.guru/posts/post_id
+                DELETE https://api.zelenka.guru/posts/post_id/likes
 
                 Unlike a post.
 
@@ -475,7 +476,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}"
+                url = f"https://api.zelenka.guru/posts/{post_id}/likes"
                 return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
 
             def report(self, post_id: int, message: str):
@@ -729,11 +730,10 @@ class LolzteamApi:
                             "needed_members": needed_members
                         }
                         return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
             def get_threads(self, forum_id: int, thread_ids: str = None, creator_user_id: int = None,
-                            sticky: bool = None,
-                            thread_prefix_id: int = None, thread_tag_id: int = None, page: int = None,
-                            limit: int = None,
-                            order: str = None):
+                            sticky: bool = None, thread_prefix_id: int = None, thread_tag_id: int = None,
+                            page: int = None, limit: int = None, order: str = None):
                 """
                 GET https://api.zelenka.guru/threads
 
@@ -772,7 +772,7 @@ class LolzteamApi:
 
             def get(self, thread_id: int):
                 """
-                GET https://api.zelenka.guru/threads/{thread_id}
+                GET https://api.zelenka.guru/threads/thread_id
 
                 Detail information of a thread.
 
@@ -814,7 +814,7 @@ class LolzteamApi:
 
             def delete(self, thread_id: int, reason: str = None):
                 """
-                DELETE https://api.zelenka.guru/threads/{thread_id}
+                DELETE https://api.zelenka.guru/threads/thread_id
 
                 Delete a thread.
 
@@ -871,7 +871,7 @@ class LolzteamApi:
 
             def follow(self, thread_id: int, email: bool = None):
                 """
-                POST https://api.zelenka.guru/threads/{thread_id}/followers
+                POST https://api.zelenka.guru/threads/thread_id/followers
 
                 Follow a thread.
 
@@ -893,7 +893,7 @@ class LolzteamApi:
 
             def unfollow(self, thread_id: int):
                 """
-                DELETE https://api.zelenka.guru/threads/{thread_id}/followers
+                DELETE https://api.zelenka.guru/threads/thread_id/followers
 
                 Unfollow a thread.
 
@@ -908,7 +908,7 @@ class LolzteamApi:
 
             def navigation(self, thread_id: int):
                 """
-                GET https://api.zelenka.guru/threads/{thread_id}/navigaion
+                GET https://api.zelenka.guru/threads/thread_id/navigaion
 
                 List of navigation elements to reach the specified thread.
 
@@ -923,7 +923,7 @@ class LolzteamApi:
 
             def votes(self, thread_id: int):
                 """
-                GET https://api.zelenka.guru/threads/{thread_id}/pool
+                GET https://api.zelenka.guru/threads/thread_id/pool
 
                 Detail information of a poll.
 
@@ -938,7 +938,7 @@ class LolzteamApi:
 
             def vote(self, thread_id: int, response_id: int = None, response_ids: list[int] = None):
                 """
-                GET https://api.zelenka.guru/threads/{thread_id}/pool
+                POST https://api.zelenka.guru/threads/thread_id/pool/votes
 
                 Vote on a thread poll.
 
@@ -964,10 +964,7 @@ class LolzteamApi:
                     params = {
                         "response_id": response_id
                     }
-                    response = requests.post(url=url, params=params, headers=self.__api.headers)
-                    self.__api.auto_delay_time = time.time()
-                    response_json = response.json()
-                    return response_json
+                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
             def new(self, forum_id: int = None, limit: int = None, data_limit: int = None):
                 """
@@ -1015,7 +1012,7 @@ class LolzteamApi:
 
             def bump(self, thread_id: int):
                 """
-                POST https://api.zelenka.guru/threads/{thread_id}/bump
+                POST https://api.zelenka.guru/threads/thread_id/bump
 
                 Bump a thread.
 
@@ -1153,6 +1150,28 @@ class LolzteamApi:
             def __init__(self, __api_self):
                 self.__api = __api_self
                 self.avatar = self.__Avatar(self.__api)
+
+            def lost_password(self, oauth_token: str, username: str = None, email: str = None):
+                """
+                POST https://api.zelenka.guru/lost-password
+
+                Request a password reset via email. Either username or email parameter must be provided. If both are provided, username will be used.
+
+                Required scopes: None
+
+                :param oauth_token: A valid one time token.
+                :param username: Username
+                :param email: Email
+
+                :return: json server response
+                """
+                url = f"https://api.zelenka.guru/lost-password"
+                params = {
+                    "oauth_token": oauth_token,
+                    "username": username,
+                    "email": email
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
             def users(self, page: int = None, limit: int = None):
                 """
@@ -1655,7 +1674,7 @@ class LolzteamApi:
 
             def report(self, profile_post_id: int, message: str):
                 """
-                POST https://api.zelenka.guru/profile-posts/profile_post_id
+                POST https://api.zelenka.guru/profile-posts/profile_post_id/report
 
                 Report a profile post.
 
@@ -1666,7 +1685,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}"
+                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/report"
                 params = {
                     "message": message
                 }
@@ -1787,11 +1806,41 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
+            def indexing(self, content_type: str, content_id: str, title: str, body: str, link: str,
+                         date: int = None):
+                """
+                POST https://api.zelenka.guru/search/indexing
+
+                Index external content data into search system to be searched later.
+
+                Required scopes: post
+
+                :param content_type:
+                :param content_id:
+                :param title:
+                :param body:
+                :param link:
+                :param date: Unix timestamp in second of the content. If missing, current time will be used.
+
+                :return: json server response
+                """
+                url = f"https://api.zelenka.guru/search/indexing"
+                data = {
+                    "content_type": content_type,
+                    "content_id": content_id,
+                    "title": title,
+                    "body": body,
+                    "link": link,
+                    "date": date
+                }
+
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(data))
+
         class __Notifications:
             def __init__(self, __api_self):
                 self.__api = __api_self
 
-            def get_notifications(self):
+            def get_all(self):
                 """
                 GET https://api.zelenka.guru/notifications
 
@@ -1804,9 +1853,9 @@ class LolzteamApi:
                 url = f"https://api.zelenka.guru/notifications"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
 
-            def get_notification(self, notification_id: int):
+            def get(self, notification_id: int):
                 """
-                GET https://api.zelenka.guru/notifications
+                GET https://api.zelenka.guru/notifications/{notification_id}/content
 
                 Get associated content of notification. The response depends on the content type.
 
@@ -1818,7 +1867,7 @@ class LolzteamApi:
                 url = f"https://api.zelenka.guru/notifications/{notification_id}/content"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
 
-            def read_notification(self, notification_id: int = None):
+            def read(self, notification_id: int = None):
                 """
                 POST https://api.zelenka.guru/notifications/read
 
@@ -1835,9 +1884,8 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
-            def send_custom_notification(self, user_id: int = None, username: str = None, message: str = None,
-                                         message_html: str = None, notification_type: str = None,
-                                         extra_data: str = None):
+            def custom(self, user_id: int = None, username: str = None, message: str = None, message_html: str = None,
+                       notification_type: str = None, extra_data: str = None):
                 """
                 POST https://api.zelenka.guru/notifications/custom
 
@@ -1871,7 +1919,7 @@ class LolzteamApi:
                 def __init__(self, __api_self):
                     self.__api = __api_self
 
-                def messages(self, conversation_id: int, page: int = None, limit: int = None, order: str = None,
+                def get_all(self, conversation_id: int, page: int = None, limit: int = None, order: str = None,
                              before: int = None, after: int = None):
                     """
                     GET https://api.zelenka.guru/conversation-messages
@@ -1993,7 +2041,7 @@ class LolzteamApi:
                 self.__api = __api_self
                 self.messages = self.__Conversations_messages(self.__api)
 
-            def conversations(self, page: int = None, limit: int = None):
+            def get_all(self, page: int = None, limit: int = None):
                 """
                 GET https://api.zelenka.guru/conversations
 
@@ -2042,6 +2090,122 @@ class LolzteamApi:
                 """
                 url = f"https://api.zelenka.guru/conversations/{conversation_id}"
                 return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+
+        class __Oauth:
+            def __init__(self, api_self):
+                self.__api = api_self
+
+            def facebook(self, client_id: int, client_secret: str, facebook_token: str):
+                """
+                GET https://api.zelenka.guru/oauth/token/facebook
+
+                Request API access token using Facebook access token. Please note that because Facebook uses app-scoped user_id, it is not possible to recognize user across different Facebook Applications.
+
+                Required scopes: None
+
+                :param client_id: ID of facebook client.
+                :param client_secret: Secret phrase of facebook client.
+                :param facebook_token: Facebook token.
+
+                :return: json server response or token string
+                """
+                url = f"https://api.zelenka.guru/oauth/token/facebook"
+                params = {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "facebook_token": facebook_token
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def twitter(self, client_id: int, client_secret: str, twitter_url: str, twitter_auth: str):
+                """
+                POST https://api.zelenka.guru/oauth/token/twitter
+
+                Request API access token using Twitter access token. The twitter_uri and twitter_auth parameters are similar to X-Auth-Service-Provider and X-Verify-Credentials-Authorization as specified in Twitter's OAuth Echo specification.
+
+                Required scopes: None
+
+                :param client_id: ID of twitter client.
+                :param client_secret: Secret phrase of twitter client.
+                :param twitter_url: "the full /account/verify_credentials.json uri that has been used to calculate OAuth signature. For security reason, the uri must use HTTPS protocol and the hostname must be either "twitter.com" or "api.twitter.com"."
+                :param twitter_auth: the complete authentication header that starts with "OAuth". Consult Twitter document for more information.
+
+                :return: json server response or token string
+                """
+                url = f"https://api.zelenka.guru/oauth/token/twitter"
+                params = {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "twitter_uri": twitter_url,
+                    "twitter_auth": twitter_auth
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def google(self, client_id: int, client_secret: str, google_token: str):
+                """
+                POST https://api.zelenka.guru/oauth/token/google
+
+                Request API access token using Google access token.
+
+                Required scopes: None
+
+                :param client_id: ID of facebook client.
+                :param client_secret: Secret phrase of facebook client.
+                :param google_token : Google token.
+
+                :return: json server response or token string
+                """
+                url = f"https://api.zelenka.guru/oauth/token/google"
+                params = {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "facebook_token": google_token
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def admin(self, user_id: int):
+                """
+                POST https://api.zelenka.guru/oauth/token/admin
+
+                Request API access token for another user. This requires admincp scope and the current user must have sufficient system permissions.
+
+                Required scopes: admincp
+
+                :param user_id: ID of the user that needs access token.
+
+                :return: json server response or token string
+                """
+                url = f"https://api.zelenka.guru/oauth/token/admin"
+                params = {
+                    "user_id": user_id
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def associate(self, client_id: int, user_id: str, password: str, extra_data: str, extra_timestamp: int):
+                """
+                POST https://api.zelenka.guru/oauth/token/associate
+
+                Request API access token and associate social account with an existing user account.
+
+                Required scopes: None
+
+                :param client_id: ID of associate client.
+                :param user_id: ID of user.
+                :param password: Can be used with password_algo for better security. See Encryption section for more information.
+                :param extra_data:
+                :param extra_timestamp:
+
+                :return: json server response or token string
+                """
+                url = f"https://api.zelenka.guru/oauth/token/associate"
+                params = {
+                    "client_id": client_id,
+                    "user_id": user_id,
+                    "password": password,
+                    "extra_data": extra_data,
+                    "extra_timestamp": extra_timestamp
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
         def navigation(self, parent: int = None):
             """
