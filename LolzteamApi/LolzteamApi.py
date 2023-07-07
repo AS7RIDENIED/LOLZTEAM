@@ -2,7 +2,7 @@ import requests
 import time
 import json
 
-# Lolzteam
+
 class LolzteamApi:
     def __init__(self, token: str, bypass_429: bool = True):
         """
@@ -1920,7 +1920,7 @@ class LolzteamApi:
                     self.__api = __api_self
 
                 def get_all(self, conversation_id: int, page: int = None, limit: int = None, order: str = None,
-                             before: int = None, after: int = None):
+                            before: int = None, after: int = None):
                     """
                     GET https://api.zelenka.guru/conversation-messages
 
