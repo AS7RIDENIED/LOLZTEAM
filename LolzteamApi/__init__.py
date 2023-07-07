@@ -1,0 +1,1 @@
+from .LolzteamApi import LolzteamApi

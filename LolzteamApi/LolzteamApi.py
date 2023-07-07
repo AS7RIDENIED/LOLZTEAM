@@ -2,7 +2,7 @@ import requests
 import time
 import json
 
-
+# Lolzteam
 class LolzteamApi:
     def __init__(self, token: str, bypass_429: bool = True):
         """
