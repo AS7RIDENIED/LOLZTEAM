@@ -1,12 +1,13 @@
 import setuptools
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-requirements = ["requests","beautifulsoup4"]
+requirements = ["requests", "beautifulsoup4"]
 
 setuptools.setup(
     name="LolzteamApi",
-    version="1.0.13",
+    version="1.0.14",
     author="AS7RID",
     author_email="as7ridwork@gmail.com",
     description="A library that contains all the methods of the Lolzteam API (Market/Forum)",
