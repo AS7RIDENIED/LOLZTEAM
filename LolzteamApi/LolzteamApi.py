@@ -33,7 +33,10 @@ class LolzteamApi:
             case _:
                 response = {"error": "Создатель либы где-то проебался. Отпиши @AS7RID в тг, он починит"}
         self.__auto_delay_time = time.time()
-        return response.json()
+        try:
+            return response.json()
+        except requests.exceptions.JSONDecodeError:
+            return response.text
 
     def __auto_delay(self):
         """
@@ -2115,11 +2118,7 @@ class LolzteamApi:
                     "client_secret": client_secret,
                     "facebook_token": facebook_token
                 }
-                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
-                try:
-                    return response.json()
-                except:
-                    return response.text
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
             def twitter(self, client_id: int, client_secret: str, twitter_url: str, twitter_auth: str):
                 """
@@ -2143,11 +2142,8 @@ class LolzteamApi:
                     "twitter_uri": twitter_url,
                     "twitter_auth": twitter_auth
                 }
-                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
-                try:
-                    return response.json()
-                except:
-                    return response.text
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
 
             def google(self, client_id: int, client_secret: str, google_token: str):
                 """
@@ -2169,11 +2165,7 @@ class LolzteamApi:
                     "client_secret": client_secret,
                     "facebook_token": google_token
                 }
-                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
-                try:
-                    return response.json()
-                except:
-                    return response.text
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
             def admin(self, user_id: int):
                 """
@@ -2191,11 +2183,7 @@ class LolzteamApi:
                 params = {
                     "user_id": user_id
                 }
-                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
-                try:
-                    return response.json()
-                except:
-                    return response.text
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
             def associate(self, client_id: int, user_id: str, password: str, extra_data: str, extra_timestamp: int):
                 """
@@ -2221,11 +2209,7 @@ class LolzteamApi:
                     "extra_data": extra_data,
                     "extra_timestamp": extra_timestamp
                 }
-                response = LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
-                try:
-                    return response.json()
-                except:
-                    return response.text
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
         def navigation(self, parent: int = None):
             """
@@ -3019,11 +3003,7 @@ class LolzteamApi:
                 params = {
                     "type": preview_type
                 }
-                response = LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
-                try:
-                    return response.json()
-                except:
-                    return response.text
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
         class __Accounts:
             def __init__(self, api_self):
