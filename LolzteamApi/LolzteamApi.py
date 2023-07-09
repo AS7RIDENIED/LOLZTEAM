@@ -4,23 +4,32 @@ import json
 
 
 class LolzteamApi:
-    def __init__(self, token: str, bypass_429: bool = True):
+    def __init__(self, token: str, bypass_429: bool = True, language: str = "RU"):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
         :param bypass_429: Bypass status code 429 by sleep
+        :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
         """
 
         self.__token = token
-        self.__bypass_429 = bypass_429
-        self.__auto_delay_time = time.time() - 3
         self.__headers = {'Authorization': f"bearer {self.__token}"}
 
-        self.market = self.__Market(self)
+        self.__bypass_429 = bypass_429
+        self.__auto_delay_time = time.time() - 3
+        self.__locale = language
+        self.__token_user_id = self.__set_user_id()
+
+        self.market = self.__Market(self, self.__token_user_id)
         self.forum = self.__Forum(self)
 
-    def send_request(self, method: str, url: str, params=None, data=None, files=None):
+    def send_request(self, method: str, url: str, params: dict = None, data=None, files=None):
         method = method.upper()
         LolzteamApi.__auto_delay(self)
+
+        if params is None:
+            params = {}
+        params["locale"] = self.__locale
+
         match method:
             case "GET":
                 response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers)
@@ -38,6 +47,14 @@ class LolzteamApi:
         except requests.exceptions.JSONDecodeError:
             return response.text
 
+    def __set_user_id(self):
+        url = "https://api.lzt.market/me"
+        response = LolzteamApi.send_request(self=self, method="GET", url=url)
+        try:
+            return response["user"]["user_id"]
+        except KeyError:
+            return None
+
     def __auto_delay(self):
         """
         Sleep for time difference between the last call and current call if it's less than 3 seconds
@@ -51,6 +68,7 @@ class LolzteamApi:
 
     def change_token(self, new_token: str):
         self.__token = new_token
+        self.__token_user_id = self.__set_user_id()
         self.__headers = {'Authorization': f"bearer {self.__token}"}
 
     class __Forum:
@@ -2144,7 +2162,6 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
-
             def google(self, client_id: int, client_secret: str, google_token: str):
                 """
                 POST https://api.zelenka.guru/oauth/token/google
@@ -2253,12 +2270,13 @@ class LolzteamApi:
             return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(request_body))
 
     class __Market:
-        def __init__(self, api_self):
+        def __init__(self, api_self, token_user_id):
             self.__api = api_self
-            self.profile = self.__Profile(self.__api)
-            self.payments = self.__Payments(self.__api)
-            self.accounts = self.__Accounts(self.__api)
-            self.list = self.__List(self.__api)
+            self.__token_user_id = token_user_id
+
+            self.profile = self.__Profile(self.__api, self.__token_user_id)
+            self.payments = self.__Payments(self.__api, self.__token_user_id)
+            self.list = self.__List(self.__api, self.__token_user_id)
             self.publishing = self.__Publishing(self.__api)
             self.purchasing = self.__Purchasing(self.__api)
             self.managing = self.__Managing(self.__api)
@@ -2289,8 +2307,9 @@ class LolzteamApi:
             return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(request_body))
 
         class __Profile:
-            def __init__(self, api_self):
+            def __init__(self, api_self, token_user_id):
                 self.__api = api_self
+                self.__token_user_id = token_user_id
 
             def get(self):
                 """
@@ -2336,7 +2355,8 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
 
-            def owned(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+            # Copy of __List.owned
+            def owned(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
                       title: str = None):
                 """
                 GET https://api.lzt.market/user/user_id/items
@@ -2404,6 +2424,8 @@ class LolzteamApi:
                 :return: json server response
 
                 """
+                if user_id is None:  # Tweak
+                    user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/items"
                 params = {
                     "user_id": user_id,
@@ -2414,7 +2436,8 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def purchased(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+            # Copy of __List.purchased
+            def purchased(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
                           title: str = None):
                 """
                 GET https://api.lzt.market/user/user_id/orders
@@ -2482,15 +2505,18 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = f"https://api.lzt.market/user/{user_id}/orders"
                 params = {
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
                     "title": title
                 }
+                if user_id is None:  # Tweak
+                    user_id = self.__token_user_id
+                url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
+            # Copy of __List.favorite
             def favorite(self, page: int = None):
                 """
                 GET https://api.lzt.market/fave
@@ -2510,6 +2536,7 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
+            # Copy of __List.viewed
             def viewed(self, page: int = None):
                 """
                 GET https://api.lzt.market/viewed
@@ -2530,8 +2557,10 @@ class LolzteamApi:
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
         class __List:
-            def __init__(self, api_self):
+            def __init__(self, api_self, token_user_id):
                 self.__api = api_self
+                self.__token_user_id = token_user_id
+
                 self.categories = self.__Category_Market(self.__api)
 
             class __Category_Market:  # лежит в List
@@ -2789,7 +2818,7 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def owned(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+            def owned(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
                       title: str = None):
                 """
                 GET https://api.lzt.market/user/user_id/items
@@ -2857,7 +2886,6 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = f"https://api.lzt.market/user/{user_id}/items"
                 params = {
                     "user_id": user_id,
                     "category_id": category_id,
@@ -2865,9 +2893,12 @@ class LolzteamApi:
                     "pmax": pmax,
                     "title": title
                 }
+                if user_id is None:  # Tweak
+                    user_id = self.__token_user_id
+                url = f"https://api.lzt.market/user/{user_id}/items"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def purchased(self, user_id: int, category_id: int = None, pmin: int = None, pmax: int = None,
+            def purchased(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
                           title: str = None):
                 """
                 GET https://api.lzt.market/user/user_id/orders
@@ -2935,13 +2966,15 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = f"https://api.lzt.market/user/{user_id}/orders"
                 params = {
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
                     "title": title
                 }
+                if user_id is None:  # Tweak
+                    user_id = self.__token_user_id
+                url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             def favorite(self, page: int = None):
@@ -3005,17 +3038,10 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-        class __Accounts:
-            def __init__(self, api_self):
-                self.__api = api_self
-                self.list = ''
-                self.managing = ''
-                self.purchasing = ''
-                self.publishing = ''
-
         class __Payments:
-            def __init__(self, api_self):
+            def __init__(self, api_self, token_user_id):
                 self.__api = api_self
+                self.__token_user_id = token_user_id
 
             def history(self, user_id: int, operation_type: str = None, pmin: int = None, pmax: int = None,
                         page: int = None,
@@ -3047,7 +3073,6 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = f"https://api.lzt.market/user/{user_id}/payments"
                 if True:  # Костыль, пока не пофиксят недочет #43
                     if is_hold:
                         is_hold = 1
@@ -3073,6 +3098,9 @@ class LolzteamApi:
                     "is_hold": is_hold,
                     "show_payments_stats": show_payments_stats
                 }
+                if user_id is None:  # Tweak
+                    user_id = self.__token_user_id
+                url = f"https://api.lzt.market/user/{user_id}/payments"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             def transfer(self, amount: int, secret_answer: str, currency: str = "rub", user_id: int = None,
@@ -3775,6 +3803,7 @@ class LolzteamApi:
                     params[es] = value
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
+            # Copy of __Managing.edit
             def edit(self, item_id: int, price: int = None, currency: str = None, item_origin: str = None,
                      title: str = None, title_en: str = None, description: str = None, information: str = None,
                      email_login_data: str = None, email_type: str = None, allow_ask_discount: bool = None,
@@ -3816,6 +3845,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
+
                 url = f"https://api.lzt.market/{item_id}/edit"
                 params = {
                     "price": price,
