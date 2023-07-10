@@ -48,7 +48,6 @@ class LolzteamApi:
             case _:
                 response = {"error": "Создатель либы где-то проебался. Отпиши @AS7RID в тг, он починит"}
         self.__auto_delay_time = time.time()
-        print(time.time())
         try:
             return response.json()
         except requests.exceptions.JSONDecodeError:
@@ -2533,16 +2532,17 @@ class LolzteamApi:
                 :return: json server response
 
                 """
+
+                if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
+                    user_id = self.__token_user_id
                 params = {
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
                     "title": title
                 }
-                if user_id is None:  # Tweak
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
@@ -2916,6 +2916,11 @@ class LolzteamApi:
                 :return: json server response
 
                 """
+
+                if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
+                    user_id = self.__token_user_id
                 params = {
                     "user_id": user_id,
                     "category_id": category_id,
@@ -2923,10 +2928,6 @@ class LolzteamApi:
                     "pmax": pmax,
                     "title": title
                 }
-                if user_id is None:  # Tweak
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/items"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
@@ -2998,16 +2999,17 @@ class LolzteamApi:
                 :return: json server response
 
                 """
+
+                if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
+                    user_id = self.__token_user_id
                 params = {
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
                     "title": title
                 }
-                if user_id is None:  # Tweak
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
@@ -3077,7 +3079,7 @@ class LolzteamApi:
                 self.__api = api_self
                 self.__token_user_id = token_user_id
 
-            def history(self, user_id: int, operation_type: str = None, pmin: int = None, pmax: int = None,
+            def history(self, user_id: int = None, operation_type: str = None, pmin: int = None, pmax: int = None,
                         page: int = None,
                         operation_id_lt: int = None, receiver: str = None, sender: str = None, start_date: str = None,
                         end_date: str = None, wallet: str = None, comment: str = None, is_hold: bool = None,
@@ -3116,6 +3118,10 @@ class LolzteamApi:
                         show_payments_stats = 1
                     else:
                         show_payments_stats = 0
+                if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
+                    user_id = self.__token_user_id
                 params = {
                     "user_id": user_id,
                     "operation_type": operation_type,
@@ -3132,10 +3138,6 @@ class LolzteamApi:
                     "is_hold": is_hold,
                     "show_payments_stats": show_payments_stats
                 }
-                if user_id is None:  # Tweak
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/payments"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
@@ -3170,11 +3172,48 @@ class LolzteamApi:
                     "username": username,
                     "currency": currency,
                     "comment": comment,
-                    "transfer_hold": transfer_hold,
+                    "hold": transfer_hold,
                     "hold_length_value": hold_length_value,
                     "hold_length_option": hold_length_option
                 }
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            @staticmethod
+            def generate_link(amount: int, user_id: int = None, username: str = None, comment: str = None,
+                              redirect_url: str = None, currency: str = None,hold:bool=None):
+                """
+                Generate payment link
+
+                Required scopes: None
+
+                :param amount: Amount to send in your currency.
+                :param user_id: ID of user to transfer money
+                :param username: Username to transfer money
+                :param comment: Payment comment.
+                :param redirect_url: Redirect url. User who paid on this link will be redirected to this url
+                :param currency: Using currency for amount. Allowed values: cny, usd, rub, eur, uah, kzt, byn, gbp
+                :param hold: Hold transfer or not
+
+                :return: string payment url
+                """
+                if True:  # Костыль, пока не пофиксят недочет #43
+                    if hold:
+                        hold = 1
+                    else:
+                        hold = 0
+                params = {
+                    "user_id": user_id,
+                    "username": username,
+                    "amount": amount,
+                    "comment": comment,
+                    "redirect": redirect_url,
+                    "currency": currency,
+                    "hold":hold
+                }
+                url = "https://lzt.market/balance/transfer"
+                req = requests.models.PreparedRequest()
+                req.prepare_url(url=url, params=params)
+                return req.url
 
         class __Managing:
             def __init__(self, api_self):
