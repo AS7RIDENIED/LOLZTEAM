@@ -2,14 +2,21 @@ import requests
 import time
 import json
 
+from importlib.metadata import version
+from bs4 import BeautifulSoup
+
 
 class LolzteamApi:
-    def __init__(self, token: str, bypass_429: bool = True, language: str = "RU"):
+    def __init__(self, token: str, bypass_429: bool = True, language: str = "RU", disable_update_check: bool = False):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
         :param bypass_429: Bypass status code 429 by sleep
         :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
+        :param disable_update_check: Pass True if you don't want to see annoying update message
         """
+
+        if not disable_update_check:
+            self.__check_for_new_version()
 
         self.__token = token
         self.__headers = {'Authorization': f"bearer {self.__token}"}
@@ -17,7 +24,7 @@ class LolzteamApi:
         self.__bypass_429 = bypass_429
         self.__auto_delay_time = time.time() - 3
         self.__locale = language
-        self.__token_user_id = self.__set_user_id()
+        self.__token_user_id = self.__set_user_id
 
         self.market = self.__Market(self, self.__token_user_id)
         self.forum = self.__Forum(self)
@@ -29,7 +36,6 @@ class LolzteamApi:
         if params is None:
             params = {}
         params["locale"] = self.__locale
-
         match method:
             case "GET":
                 response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers)
@@ -42,6 +48,7 @@ class LolzteamApi:
             case _:
                 response = {"error": "Создатель либы где-то проебался. Отпиши @AS7RID в тг, он починит"}
         self.__auto_delay_time = time.time()
+        print(time.time())
         try:
             return response.json()
         except requests.exceptions.JSONDecodeError:
@@ -65,6 +72,25 @@ class LolzteamApi:
             if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
 
                 time.sleep(3.003 - time_diff)
+
+    @staticmethod
+    def __check_for_new_version():
+        current_version = version('LolzteamApi')
+        response = requests.get("https://pypi.org/project/LolzteamApi/")
+        newest_version = BeautifulSoup(response.text, 'html.parser').select(
+            selector="#content > div.banner > div > div.package-header__left > h1")[0].text.replace("LolzteamApi",
+                                                                                                    "").replace(" ",
+                                                                                                                "").replace(
+            "\n", "")
+        if current_version != newest_version:
+            print(f"Your version of LolzteamApi is outdated.")
+            print(f"It has problems that have been solved in the new version")
+            print(f"Your version:   {current_version}")
+            print(f"Newest version: {newest_version}")
+            print()
+            print(f"You can update your package using the command below")
+            print(f"pip install LolzteamApi --upgrade")
+            print()
 
     def change_token(self, new_token: str):
         self.__token = new_token
@@ -2425,6 +2451,8 @@ class LolzteamApi:
 
                 """
                 if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/items"
                 params = {
@@ -2512,6 +2540,8 @@ class LolzteamApi:
                     "title": title
                 }
                 if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
@@ -2894,6 +2924,8 @@ class LolzteamApi:
                     "title": title
                 }
                 if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/items"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
@@ -2973,6 +3005,8 @@ class LolzteamApi:
                     "title": title
                 }
                 if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
@@ -3099,6 +3133,8 @@ class LolzteamApi:
                     "show_payments_stats": show_payments_stats
                 }
                 if user_id is None:  # Tweak
+                    if type(self.__token_user_id) is not int:
+                        self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
                 url = f"https://api.lzt.market/user/{user_id}/payments"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
