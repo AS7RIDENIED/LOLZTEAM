@@ -2,7 +2,7 @@
 # Lolzteam Python API
 
 <p align="center">
-    <a href="https://zelenka.guru/members/2410024"><img width="800" src="https://zelenka.guru/styles/brand/download/logos/LolzTeam-Wordmark-Green.svg" alt="Material Bread logo"></a>
+    <a href="https://zelenka.guru/threads/5523020/"><img width="800" src="https://zelenka.guru/styles/brand/download/logos/LolzTeam-Wordmark-Green.svg" alt="Material Bread logo"></a>
 </p>
 
 [![Static Badge](https://img.shields.io/badge/DONATE-LOLZTEAM-darkgreen?style=flat-square&logo=qiwi)](https://lzt.market/balance/transfer?user_id=2410024&comment=Thanks%20for%20creating%20LolzteamApi&amount=250)
