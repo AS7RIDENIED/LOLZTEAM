@@ -1,1 +1,1 @@
-from .LolzteamApi import LolzteamApi
+from .LolzteamApi import LolzteamApi, Types

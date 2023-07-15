@@ -6,17 +6,98 @@ from importlib.metadata import version
 from bs4 import BeautifulSoup
 
 
+class Types:
+    class Proxy:  # LolzteamApi init
+        socks5 = "SOCKS5"
+        socks4 = "SOCKS4"
+        http = "HTTP"
+        https = "HTTPS"
+
+    class Market:
+        class Operation_types:
+            income = "income"
+            cost = "cost"
+            refilled_balance = "refilled_balance"
+            withdrawal_balance = "withdrawal_balance"
+            paid_item = "paid_item"
+            sold_item = "sold_item"
+            money_transfer = "money_transfer"
+            receiving_money = "receiving_money"
+            internal_purchase = "internal_purchase"
+            claim_hold = "claim_hold"
+
+        class Length:
+            hour = "hour"
+            day = "day"
+            week = "week"
+            month = "month"
+            year = "year"
+
+        class Currency:
+            cny = "cny"
+            usd = "usd"
+            rub = "rub"
+            eur = "eur"
+            uah = "uah"
+            kzt = "kzt"
+            byn = "byn"
+            gbp = "gbp"
+
+        class Item_origin:
+            brute = "brute"
+            stealer = "stealer"
+            fishing = "fishing"
+            autoreg = "autoreg"
+            personal = "personal"
+            resale = "resale"
+            retrieve = "retrieve"
+
+        class Guarantee:
+            half_day = -1
+            day = 0
+            three_days = 1
+
+    class Forum:
+        class Contests:
+            class Length:
+                minutes = "minutes"
+                hours = "hours"
+                days = "days"
+
+            class Upgrade_prizes:
+                supreme = 1
+                legend = 6
+                antipublic = 12
+                uniq = 14
+                photo_leaks = 17
+                auto_participation = 19
+
+
 class LolzteamApi:
-    def __init__(self, token: str, bypass_429: bool = True, language: str = "RU", disable_update_check: bool = False):
+    def __init__(self, token: str, bypass_429: bool = True, language: str = "RU", disable_update_check: bool = False,
+                 proxy_type: str = None, proxy: str = None):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
         :param bypass_429: Bypass status code 429 by sleep
         :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
         :param disable_update_check: Pass True if you don't want to see annoying update message
+        :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
+        :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
 
         if not disable_update_check:
             self.__check_for_new_version()
+
+        if proxy_type is not None:
+            proxy_type = proxy_type.upper()
+            if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
+                self.__proxy_type = proxy_type
+                self.__proxy = proxy
+            else:
+                raise Exception(f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")
+        else:
+            self.__proxy = None
+            self.__proxy_type = None
 
         self.__token = token
         self.__headers = {'Authorization': f"bearer {self.__token}"}
@@ -36,23 +117,54 @@ class LolzteamApi:
         if params is None:
             params = {}
         params["locale"] = self.__locale
+        proxies = {}
+        if self.__proxy_type is not None:
+            match self.__proxy_type:
+                case "HTTP":
+                    proxies = {
+                        "http": f"http://{self.__proxy}",
+                        "https": f"http://{self.__proxy}"
+                    }
+                case "HTTPS":
+                    proxies = {
+                        "http": f"http://{self.__proxy}",
+                        "https": f"https://{self.__proxy}"
+                    }
+                case "SOCKS4":
+                    proxies = {
+                        "http": f"socks4://{self.__proxy}",
+                        "https": f"socks4://{self.__proxy}"
+                    }
+                case "SOCKS5":
+                    proxies = {
+                        "http": f"socks5://{self.__proxy}",
+                        "https": f"socks5://{self.__proxy}"
+                    }
+                case _:
+                    raise Exception(
+                        f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")  # How tf you get that error?
         match method:
             case "GET":
-                response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers)
+                response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers,
+                                        proxies=proxies)
             case "POST":
-                response = requests.post(url=url, params=params, data=data, files=files, headers=self.__headers)
+                response = requests.post(url=url, params=params, data=data, files=files, headers=self.__headers,
+                                         proxies=proxies)
             case "PUT":
-                response = requests.put(url=url, params=params, data=data, files=files, headers=self.__headers)
+                response = requests.put(url=url, params=params, data=data, files=files, headers=self.__headers,
+                                        proxies=proxies)
             case "DELETE":
-                response = requests.delete(url=url, params=params, data=data, files=files, headers=self.__headers)
+                response = requests.delete(url=url, params=params, data=data, files=files, headers=self.__headers,
+                                           proxies=proxies)
             case _:
-                response = {"error": "Создатель либы где-то проебался. Отпиши @AS7RID в тг, он починит"}
+                raise Exception(f"Invalid requests method. Contact @AS7RID")
         self.__auto_delay_time = time.time()
         try:
             return response.json()
         except requests.exceptions.JSONDecodeError:
             return response.text
 
+    # noinspection PyTypeChecker
     def __set_user_id(self):
         url = "https://api.lzt.market/me"
         response = LolzteamApi.send_request(self=self, method="GET", url=url)
@@ -95,6 +207,24 @@ class LolzteamApi:
         self.__token = new_token
         self.__token_user_id = self.__set_user_id()
         self.__headers = {'Authorization': f"bearer {self.__token}"}
+
+    def change_proxy(self, proxy_type: str = None, proxy: str = None):
+        """
+        Delete or change your proxy
+
+        Skip proxy_type and proxy if you want to delete it
+
+        :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
+        :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
+        """
+        if proxy_type is not None:
+            if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
+                self.__proxy_type = proxy_type
+            else:
+                raise Exception(f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")
+        else:
+            self.__proxy_type = None
+        self.__proxy = proxy
 
     class __Forum:
         def __init__(self, api_self):
@@ -2381,8 +2511,9 @@ class LolzteamApi:
                 return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
 
             # Copy of __List.owned
-            def owned(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
-                      title: str = None):
+            def owned(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
+                      pmax: int = None,
+                      title: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/user/user_id/items
 
@@ -2441,31 +2572,38 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param user_id: ID of user.
+                :param page: Page
                 :param category_id: Accounts category
                 :param pmin: Minimal price of account (Inclusive)
                 :param pmax: Maximum price of account (Inclusive)
                 :param title: The word or words contained in the account title
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
                 """
+
                 if user_id is None:  # Tweak
                     if type(self.__token_user_id) is not int:
                         self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
-                url = f"https://api.lzt.market/user/{user_id}/items"
                 params = {
                     "user_id": user_id,
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
-                    "title": title
+                    "title": title,
+                    "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
+                url = f"https://api.lzt.market/user/{user_id}/items"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             # Copy of __List.purchased
-            def purchased(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
-                          title: str = None):
+            def purchased(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
+                          pmax: int = None, title: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/user/user_id/orders
 
@@ -2524,10 +2662,12 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param user_id: ID of user.
+                :param page: Page
                 :param category_id: Accounts category
                 :param pmin: Minimal price of account (Inclusive)
                 :param pmax: Maximum price of account (Inclusive)
                 :param title: The word or words contained in the account title
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -2541,13 +2681,17 @@ class LolzteamApi:
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
-                    "title": title
+                    "title": title,
+                    "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             # Copy of __List.favorite
-            def favorite(self, page: int = None):
+            def favorite(self, page: int = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/fave
 
@@ -2556,6 +2700,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -2564,10 +2709,13 @@ class LolzteamApi:
                 params = {
                     "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             # Copy of __List.viewed
-            def viewed(self, page: int = None):
+            def viewed(self, page: int = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/viewed
 
@@ -2576,6 +2724,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -2584,6 +2733,9 @@ class LolzteamApi:
                 params = {
                     "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
         class __List:
@@ -2617,7 +2769,7 @@ class LolzteamApi:
 
                 def get(self, category_name: str, pmin: int = None, pmax: int = None, title: str = None,
                         parse_sticky_items: bool = None, parse_same_items: bool = None, games: list[int] or int = None,
-                        page: int = None):
+                        page: int = None, search_params: dict = None):
                     """
                     GET https://api.lzt.market/categoryName
 
@@ -2683,10 +2835,11 @@ class LolzteamApi:
                     :param parse_same_items: If true, API will return account history in results
                     :param games: The ID of a game found on the account
                     :param page: The number of the page to display results from
-
+                    :param search_params: Search params for your request. Example {"origin":"autoreg"} will return only "autoreg" accounts
                     :return: json server response
 
                     """
+                    category_name = category_name.lower()
                     url = f"https://api.lzt.market/{category_name}"
                     params = {
                         "pmin": pmin,
@@ -2697,6 +2850,9 @@ class LolzteamApi:
                         "game[]": games,
                         "page": page
                     }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
                     return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
                 def params(self, category_name: str):
@@ -2829,7 +2985,7 @@ class LolzteamApi:
                     url = f"https://api.lzt.market/{category_name}/games"
                     return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
 
-            def new(self, page: int = None):
+            def new(self, page: int = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/
 
@@ -2838,6 +2994,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -2846,10 +3003,13 @@ class LolzteamApi:
                 params = {
                     "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def owned(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
-                      title: str = None):
+            def owned(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
+                      pmax: int = None, title: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/user/user_id/items
 
@@ -2908,10 +3068,12 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param user_id: ID of user.
+                :param page: Page
                 :param category_id: Accounts category
                 :param pmin: Minimal price of account (Inclusive)
                 :param pmax: Maximum price of account (Inclusive)
                 :param title: The word or words contained in the account title
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -2926,13 +3088,17 @@ class LolzteamApi:
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
-                    "title": title
+                    "title": title,
+                    "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 url = f"https://api.lzt.market/user/{user_id}/items"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def purchased(self, user_id: int = None, category_id: int = None, pmin: int = None, pmax: int = None,
-                          title: str = None):
+            def purchased(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
+                          pmax: int = None, title: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/user/user_id/orders
 
@@ -2991,10 +3157,12 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param user_id: ID of user.
+                :param page: Page
                 :param category_id: Accounts category
                 :param pmin: Minimal price of account (Inclusive)
                 :param pmax: Maximum price of account (Inclusive)
                 :param title: The word or words contained in the account title
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -3008,12 +3176,16 @@ class LolzteamApi:
                     "category_id": category_id,
                     "pmin": pmin,
                     "pmax": pmax,
-                    "title": title
+                    "title": title,
+                    "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 url = f"https://api.lzt.market/user/{user_id}/orders"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def favorite(self, page: int = None):
+            def favorite(self, page: int = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/fave
 
@@ -3022,6 +3194,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -3030,9 +3203,12 @@ class LolzteamApi:
                 params = {
                     "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def viewed(self, page: int = None):
+            def viewed(self, page: int = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/viewed
 
@@ -3041,6 +3217,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
 
@@ -3049,6 +3226,9 @@ class LolzteamApi:
                 params = {
                     "page": page
                 }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             def get(self, item_id: int, steam_preview: bool = False, preview_type: str = None):
@@ -3141,7 +3321,8 @@ class LolzteamApi:
                 url = f"https://api.lzt.market/user/{user_id}/payments"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def transfer(self, amount: int, secret_answer: str, currency: str = "rub", user_id: int = None,
+            def transfer(self, amount: int, secret_answer: str, currency: str = Types.Market.Currency.rub,
+                         user_id: int = None,
                          username: str = None, comment: str = None, transfer_hold: bool = None,
                          hold_length_option: str = None,
                          hold_length_value: int = None):
@@ -3180,7 +3361,7 @@ class LolzteamApi:
 
             @staticmethod
             def generate_link(amount: int, user_id: int = None, username: str = None, comment: str = None,
-                              redirect_url: str = None, currency: str = None,hold:bool=None):
+                              redirect_url: str = None, currency: str = None, hold: bool = None):
                 """
                 Generate payment link
 
@@ -3208,7 +3389,7 @@ class LolzteamApi:
                     "comment": comment,
                     "redirect": redirect_url,
                     "currency": currency,
-                    "hold":hold
+                    "hold": hold
                 }
                 url = "https://lzt.market/balance/transfer"
                 req = requests.models.PreparedRequest()
@@ -3793,8 +3974,7 @@ class LolzteamApi:
                           title: str = None, title_en: str = None, description: str = None, information: str = None,
                           has_email_login_data: bool = None, email_login_data: str = None, email_type: str = None,
                           allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None,
-                          login: str = None,
-                          password: str = None, login_password: str = None, extra: dict = None, ):
+                          login: str = None, password: str = None, login_password: str = None, extra: dict = None, ):
                 """
                 POST https://api.lzt.market/item/fast-sell
 
