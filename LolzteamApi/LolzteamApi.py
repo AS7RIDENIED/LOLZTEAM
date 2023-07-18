@@ -26,7 +26,7 @@ class Types:
             internal_purchase = "internal_purchase"
             claim_hold = "claim_hold"
 
-        class Length:
+        class Hold_Options:
             hour = "hour"
             day = "day"
             week = "week"
@@ -74,7 +74,7 @@ class Types:
 
 
 class LolzteamApi:
-    def __init__(self, token: str, bypass_429: bool = True, language: str = "RU", disable_update_check: bool = False,
+    def __init__(self, token: str, bypass_429: bool = True, language: str = None, disable_update_check: bool = False,
                  proxy_type: str = None, proxy: str = None):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
@@ -113,7 +113,6 @@ class LolzteamApi:
     def send_request(self, method: str, url: str, params: dict = None, data=None, files=None):
         method = method.upper()
         LolzteamApi.__auto_delay(self)
-
         if params is None:
             params = {}
         params["locale"] = self.__locale
@@ -393,7 +392,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/forums/followed"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if total:
                         total = 1
                     else:
@@ -929,7 +928,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/threads"
-                if sticky:  # Костыль, пока не пофиксят недочет #43
+                if sticky:  # Tweak 0
                     sticky = 1
                 else:
                     sticky = 0
@@ -1035,7 +1034,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/forums/followed"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if total:
                         total = 1
                     else:
@@ -1560,7 +1559,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/users/ignored"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if total:
                         total = 1
                     else:
@@ -2267,6 +2266,94 @@ class LolzteamApi:
                 url = f"https://api.zelenka.guru/conversations/{conversation_id}"
                 return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
 
+            def create(self, recipient_id: int, message: str, open_invite: bool = False,
+                       conversation_locked: bool = False, allow_edit_messages: bool = True):
+                """
+                POST https://api.zelenka.guru/conversations
+
+                Create a new conversation.
+
+                Required scopes: conversate, post
+
+                :param recipient_id: ID of recipient.
+                :param message: First message in conversation.
+                :param open_invite: Allow invites in conversation.
+                :param conversation_locked: Is conversation locked.
+                :param allow_edit_messages: Allow edit messages.
+
+                :return: json server response
+                """
+                if True:  # Tweak 0
+                    if open_invite:
+                        open_invite = 1
+                    else:
+                        open_invite = 0
+
+                    if conversation_locked:
+                        conversation_locked = 1
+                    else:
+                        conversation_locked = 0
+
+                    if allow_edit_messages:
+                        allow_edit_messages = 1
+                    else:
+                        allow_edit_messages = 0
+                params = {
+                    "recipient_id": recipient_id,
+                    "message_body": message,
+                    "is_group": 0,
+                    "open_invite": open_invite,
+                    "conversation_locked": conversation_locked,
+                    "allow_edit_messages": allow_edit_messages
+                }
+                url = f"https://api.zelenka.guru/conversations"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
+            def create_group(self, recipients: str, title: str, message: str, open_invite: bool = True,
+                             conversation_locked: bool = False, allow_edit_messages: bool = True):
+                """
+                POST https://api.zelenka.guru/conversations
+
+                Create a new group conversation.
+
+                Required scopes: conversate, post
+
+                :param recipients: List of usernames (Separated by comma. Example -> "RaysMorgan,Thomas,Requeste")
+                :param title: The title of new conversation.
+                :param message: First message in conversation.
+                :param open_invite: Allow invites in conversation.
+                :param conversation_locked: Is conversation locked.
+                :param allow_edit_messages: Allow edit messages.
+
+                :return: json server response
+                """
+                if True:  # Tweak 0
+                    if open_invite:
+                        open_invite = 1
+                    else:
+                        open_invite = 0
+
+                    if conversation_locked:
+                        conversation_locked = 1
+                    else:
+                        conversation_locked = 0
+
+                    if allow_edit_messages:
+                        allow_edit_messages = 1
+                    else:
+                        allow_edit_messages = 0
+                params = {
+                    "recipients": recipients,
+                    "title": title,
+                    "message_body": message,
+                    "is_group": 1,
+                    "open_invite": open_invite,
+                    "conversation_locked": conversation_locked,
+                    "allow_edit_messages": allow_edit_messages
+                }
+                url = f"https://api.zelenka.guru/conversations"
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+
         class __Oauth:
             def __init__(self, api_self):
                 self.__api = api_self
@@ -2583,7 +2670,7 @@ class LolzteamApi:
 
                 """
 
-                if user_id is None:  # Tweak
+                if user_id is None:  # Tweak 1
                     if type(self.__token_user_id) is not int:
                         self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
@@ -2673,7 +2760,7 @@ class LolzteamApi:
 
                 """
 
-                if user_id is None:  # Tweak
+                if user_id is None:  # Tweak 1
                     if type(self.__token_user_id) is not int:
                         self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
@@ -2900,7 +2987,7 @@ class LolzteamApi:
                     20 - tiktok - TikTok
 
                     22 - discord - Discord
-
+1
                     23 - cinema - Online Cinema
 
                     24 - telegram - Telegram
@@ -3079,7 +3166,7 @@ class LolzteamApi:
 
                 """
 
-                if user_id is None:  # Tweak
+                if user_id is None:  # Tweak 1
                     if type(self.__token_user_id) is not int:
                         self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
@@ -3168,7 +3255,7 @@ class LolzteamApi:
 
                 """
 
-                if user_id is None:  # Tweak
+                if user_id is None:  # Tweak 1
                     if type(self.__token_user_id) is not int:
                         self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
@@ -3289,7 +3376,7 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if is_hold:
                         is_hold = 1
                     else:
@@ -3298,7 +3385,7 @@ class LolzteamApi:
                         show_payments_stats = 1
                     else:
                         show_payments_stats = 0
-                if user_id is None:  # Tweak
+                if user_id is None:  # Tweak 1
                     if type(self.__token_user_id) is not int:
                         self.__token_user_id = self.__token_user_id()
                     user_id = self.__token_user_id
@@ -3361,7 +3448,8 @@ class LolzteamApi:
 
             @staticmethod
             def generate_link(amount: int, user_id: int = None, username: str = None, comment: str = None,
-                              redirect_url: str = None, currency: str = None, hold: bool = None):
+                              redirect_url: str = None, currency: str = None, hold: bool = None,
+                              hold_length: int = None, hold_option: str = None):
                 """
                 Generate payment link
 
@@ -3374,14 +3462,19 @@ class LolzteamApi:
                 :param redirect_url: Redirect url. User who paid on this link will be redirected to this url
                 :param currency: Using currency for amount. Allowed values: cny, usd, rub, eur, uah, kzt, byn, gbp
                 :param hold: Hold transfer or not
-
+                :param hold_length: Hold length ( max 1 month )
+                :param hold_option: Hold option. Can be "hours","days","weeks","months"
                 :return: string payment url
                 """
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if hold:
                         hold = 1
                     else:
                         hold = 0
+                if hold_option in ["hour", "day", "week", "month"]:
+                    hold_option += "s"
+                if hold_option not in ["hours", "days", "weeks", "months"]:
+                    raise Exception("""Invalid hold_option. It can be only "hours","days","weeks" and "months" """)
                 params = {
                     "user_id": user_id,
                     "username": username,
@@ -3389,7 +3482,9 @@ class LolzteamApi:
                     "comment": comment,
                     "redirect": redirect_url,
                     "currency": currency,
-                    "hold": hold
+                    "hold": hold,
+                    "hold_length_value": hold_length,
+                    "hold_length_option": hold_option
                 }
                 url = "https://lzt.market/balance/transfer"
                 req = requests.models.PreparedRequest()
@@ -3559,7 +3654,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.lzt.market/{item_id}/change-password"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if _cancel:
                         _cancel = 1
                     else:
@@ -3789,7 +3884,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.lzt.market/{item_id}/confirm-buy"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if buy_without_validation:
                         buy_without_validation = 1
                     else:
@@ -3814,7 +3909,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.lzt.market/{item_id}/fast-buy"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if buy_without_validation:
                         buy_without_validation = 1
                     else:
@@ -3869,7 +3964,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.lzt.market/{item_id}/goods/check"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if random_proxy:
                         random_proxy = 1
                     else:
@@ -3946,7 +4041,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.lzt.market/item/add"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if random_proxy:
                         random_proxy = 1
                     else:
@@ -4028,7 +4123,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.lzt.market/item/fast-sell"
-                if True:  # Костыль, пока не пофиксят недочет #43
+                if True:  # Tweak 0
                     if random_proxy:
                         random_proxy = 1
                     else:
