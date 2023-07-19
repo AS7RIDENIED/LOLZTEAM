@@ -3982,7 +3982,7 @@ class LolzteamApi:
                     "resell_item_id": resell_item_id,
                     "random_proxy": random_proxy
                 }
-                for key, value in extra:
+                for key, value in extra.items():
                     es = f"extra[{key}]"
                     params[es] = value
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
@@ -4148,7 +4148,7 @@ class LolzteamApi:
                     "password": password,
                     "login_password": login_password
                 }
-                for key, value in extra:
+                for key, value in extra.items():
                     es = f"extra[{key}]"
                     params[es] = value
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
