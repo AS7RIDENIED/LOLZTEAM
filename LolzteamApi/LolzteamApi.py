@@ -2,9 +2,6 @@ import requests
 import time
 import json
 
-from importlib.metadata import version
-from bs4 import BeautifulSoup
-
 
 class Types:
     class Proxy:  # LolzteamApi init
@@ -74,19 +71,15 @@ class Types:
 
 
 class LolzteamApi:
-    def __init__(self, token: str, bypass_429: bool = True, language: str = None, disable_update_check: bool = False,
+    def __init__(self, token: str, bypass_429: bool = True, language: str = None,
                  proxy_type: str = None, proxy: str = None):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
         :param bypass_429: Bypass status code 429 by sleep
         :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
-        :param disable_update_check: Pass True if you don't want to see annoying update message
         :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
-
-        if not disable_update_check:
-            self.__check_for_new_version()
 
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
@@ -182,25 +175,6 @@ class LolzteamApi:
             if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
 
                 time.sleep(3.003 - time_diff)
-
-    @staticmethod
-    def __check_for_new_version():
-        current_version = version('LolzteamApi')
-        response = requests.get("https://pypi.org/project/LolzteamApi/")
-        newest_version = BeautifulSoup(response.text, 'html.parser').select(
-            selector="#content > div.banner > div > div.package-header__left > h1")[0].text.replace("LolzteamApi",
-                                                                                                    "").replace(" ",
-                                                                                                                "").replace(
-            "\n", "")
-        if current_version != newest_version:
-            print(f"Your version of LolzteamApi is outdated.")
-            print(f"It has problems that have been solved in the new version")
-            print(f"Your version:   {current_version}")
-            print(f"Newest version: {newest_version}")
-            print()
-            print(f"You can update your package using the command below")
-            print(f"pip install LolzteamApi --upgrade")
-            print()
 
     def change_token(self, new_token: str):
         self.__token = new_token
@@ -337,7 +311,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/forums/{forum_id}/followers"
-                if True:  # Костыль, пока не пофиксят недочет #63
+                if True:  # Tweak 0
                     if post:
                         post = 1
                     if alert:
@@ -479,10 +453,10 @@ class LolzteamApi:
                     :return: json server response
                     """
                     url = f"https://api.zelenka.guru/posts/{post_id}/comments"
-                    params = {
+                    data = {
                         "comment_body": comment_body
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
@@ -548,12 +522,14 @@ class LolzteamApi:
 
                 url = f"https://api.zelenka.guru/posts"
                 params = {
-                    "post_body": post_body,
                     "thread_id": thread_id,
                     "quote_post_id": quote_post_id,
 
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                data = {
+                    "post_body": post_body
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
 
             def edit(self, post_id: int, thread_title: str = None, thread_prefix_id: int = None,
                      thread_tags: str = None,
@@ -580,9 +556,11 @@ class LolzteamApi:
                     "thread_prefix_id": thread_prefix_id,
                     "thread_tags": thread_tags,
                     "thread_node_id": thread_node_id,
+                }
+                data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params, data=data)
 
             def delete(self, post_id: int, reason: str = None):
                 """
@@ -598,10 +576,10 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/posts/{post_id}"
-                params = {
+                data = {
                     "reason": reason
                 }
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, data=data)
 
             def likes(self, post_id: int, page: int = None, limit: int = None):
                 """
@@ -668,10 +646,10 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/posts/{post_id}/report"
-                params = {
+                data = {
                     "message": message
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
 
         class __Threads:
             def __init__(self, __api_self):
@@ -720,8 +698,6 @@ class LolzteamApi:
                         forum_id = 766
                         params = {
                             "forum_id": forum_id,
-                            "thread_title": thread_title,
-                            "post_body": post_body,
                             "thread_prefix_id": thread_prefix_id,
                             "thread_tags": thread_tags,
                             "count_winners": count_winners,
@@ -729,12 +705,17 @@ class LolzteamApi:
                             "length_option": length_option,
                             "require_like_count": require_like_count,
                             "require_total_like_count": require_total_like_count,
-                            "secret_answer": secret_answer,
                             "prize_type": prize_type,
                             "contest_type": contest_type,
                             "prize_data_money": prize_data_money
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                        data = {
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "secret_answer": secret_answer
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                                                        data=data)
 
                     def create_by_count(self, thread_title: str, post_body: str, prize_data_money: int,
                                         count_winners: int,
@@ -766,20 +747,23 @@ class LolzteamApi:
                         forum_id = 766
                         params = {
                             "forum_id": forum_id,
-                            "thread_title": thread_title,
-                            "post_body": post_body,
                             "thread_prefix_id": thread_prefix_id,
                             "thread_tags": thread_tags,
                             "prize_data_money": prize_data_money,
                             "count_winners": count_winners,
                             "require_like_count": require_like_count,
                             "require_total_like_count": require_total_like_count,
-                            "secret_answer": secret_answer,
                             "prize_type": prize_type,
                             "contest_type": contest_type,
                             "needed_members": needed_members
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                        data = {
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "secret_answer": secret_answer
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                                                        data=data)
 
                 class __Upgrade:
                     def __init__(self, api_self):
@@ -831,8 +815,6 @@ class LolzteamApi:
                         forum_id = 766
                         params = {
                             "forum_id": forum_id,
-                            "thread_title": thread_title,
-                            "post_body": post_body,
                             "thread_prefix_id": thread_prefix_id,
                             "thread_tags": thread_tags,
                             "prize_data_upgrade": prize_data_upgrade,
@@ -841,11 +823,16 @@ class LolzteamApi:
                             "length_option": length_option,
                             "require_like_count": require_like_count,
                             "require_total_like_count": require_total_like_count,
-                            "secret_answer": secret_answer,
                             "prize_type": prize_type,
                             "contest_type": contest_type
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                        data = {
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "secret_answer": secret_answer
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                                                        data=data)
 
                     def create_by_count(self, thread_title: str, post_body: str, prize_data_upgrade: int,
                                         count_winners: int,
@@ -891,20 +878,23 @@ class LolzteamApi:
                         forum_id = 766
                         params = {
                             "forum_id": forum_id,
-                            "thread_title": thread_title,
-                            "post_body": post_body,
                             "thread_prefix_id": thread_prefix_id,
                             "thread_tags": thread_tags,
                             "prize_data_upgrade": prize_data_upgrade,
                             "count_winners": count_winners,
                             "require_like_count": require_like_count,
                             "require_total_like_count": require_total_like_count,
-                            "secret_answer": secret_answer,
                             "prize_type": prize_type,
                             "contest_type": contest_type,
                             "needed_members": needed_members
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                        data = {
+                            "thread_title": thread_title,
+                            "post_body": post_body,
+                            "secret_answer": secret_answer
+                        }
+                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                                                        data=data)
 
             def get_threads(self, forum_id: int, thread_ids: str = None, creator_user_id: int = None,
                             sticky: bool = None, thread_prefix_id: int = None, thread_tag_id: int = None,
@@ -980,12 +970,14 @@ class LolzteamApi:
                 url = f"https://api.zelenka.guru/threads"
                 params = {
                     "forum_id": forum_id,
-                    "thread_title": thread_title,
-                    "post_body": post_body,
                     "thread_prefix_id": thread_prefix_id,
                     "thread_tags": thread_tags
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                data = {
+                    "thread_title": thread_title,
+                    "post_body": post_body
+                }
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
 
             def delete(self, thread_id: int, reason: str = None):
                 """
@@ -1058,7 +1050,7 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/threads/{thread_id}/followers"
-                if True:  # Костыль, пока не пофиксят недочет #63
+                if True:  # Tweak 0
                     if email:
                         email = 1
                 params = {
@@ -1419,6 +1411,27 @@ class LolzteamApi:
                 url = f"https://api.zelenka.guru/users/{user_id}"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
 
+            def get_timeline(self, user_id: int, page: int = None, limit: int = None):
+                """
+                GET https://api.zelenka.guru/users/user_id/timeline
+
+                List of contents created by user (with pagination).
+
+                Required scopes: read
+
+                :param user_id: ID of user
+                :param page: Page number of contents.
+                :param limit: Number of contents in a page.
+
+                :return: json server response
+                """
+                url = f"https://api.zelenka.guru/users/{user_id}/timeline"
+                params = {
+                    "page": page,
+                    "limit": limit
+                }
+                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+
             def edit(self, user_id: int, password: str = None, password_old: str = None, password_algo: str = None,
                      user_email: str = None, username: str = None, user_title: str = None, primary_group_id: int = None,
                      secondary_group_ids: list[int] = None, user_dob_day: int = None, user_dob_month: int = None,
@@ -1457,17 +1470,19 @@ class LolzteamApi:
                     "password_algo": password_algo,
                     "user_email": user_email,
                     "username": username,
-                    "user_title": user_title,
                     "primary_group_id": primary_group_id,
                     "secondary_group_ids[]": secondary_group_ids,
                     "user_dob_day": user_dob_day,
                     "user_dob_month": user_dob_month,
                     "user_dob_year": user_dob_year,
                 }
+                data = {
+                    "user_title": user_title,
+                }
                 for key, value in fields.items():
                     field = f"fields[{key}]"
-                    params[field] = value
-                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
+                    data[field] = value
+                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params, data=data)
 
             def follow(self, user_id: int):
                 """
@@ -1675,10 +1690,10 @@ class LolzteamApi:
                     :return: json server response
                     """
                     url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/comments"
-                    params = {
+                    data = {
                         "comment_body": comment_body,
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
 
                 def delete(self, profile_post_id: int, comment_id: int, reason: str = None):
                     """
@@ -1695,35 +1710,14 @@ class LolzteamApi:
                     :return: json server response
                     """
                     url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/comments/{comment_id}"
-                    params = {
+                    data = {
                         "reason": reason
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, data=data)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
                 self.comments = self.__Profile_posts_comments(self.__api)
-
-            def timeline(self, user_id: int, page: int = None, limit: int = None):
-                """
-                GET https://api.zelenka.guru/users/user_id/timeline
-
-                List of contents created by user (with pagination).
-
-                Required scopes: read
-
-                :param user_id: ID of user
-                :param page: Page number of contents.
-                :param limit: Number of contents in a page.
-
-                :return: json server response
-                """
-                url = f"https://api.zelenka.guru/users/{user_id}/timeline"
-                params = {
-                    "page": page,
-                    "limit": limit
-                }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             def get(self, profile_post_id: int):
                 """
@@ -1754,10 +1748,10 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/users/{user_id}/timeline"
-                params = {
+                data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
 
             def edit(self, profile_post_id: int, post_body: str):
                 """
@@ -1774,10 +1768,10 @@ class LolzteamApi:
                 """
 
                 url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}"
-                params = {
+                data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, data=data)
 
             def delete(self, profile_post_id: int, reason: str = None):
                 """
@@ -1794,10 +1788,10 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}"
-                params = {
+                data = {
                     "reason": reason
                 }
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, data=data)
 
             def likes(self, profile_post_id: int):
                 """
@@ -1861,10 +1855,10 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/report"
-                params = {
+                data = {
                     "message": message
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
 
         class __Search:
             def __init__(self, __api_self):
@@ -1990,11 +1984,11 @@ class LolzteamApi:
 
                 Required scopes: post
 
-                :param content_type:
-                :param content_id:
-                :param title:
-                :param body:
-                :param link:
+                :param content_type: The type of content being indexed.
+                :param content_id:  The unique id for the content.
+                :param title:  Content title.
+                :param body:  Content body.
+                :param link:  Link related to content.
                 :param date: Unix timestamp in second of the content. If missing, current time will be used.
 
                 :return: json server response
@@ -2082,12 +2076,14 @@ class LolzteamApi:
                 params = {
                     "user_id": user_id,
                     "username": username,
+                    "notification_type": notification_type
+                }
+                data = {
                     "message": message,
                     "message_html": message_html,
-                    "notification_type": notification_type,
                     "extra_data": extra_data
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
 
         class __Conversations:
             class __Conversations_messages:
@@ -2154,9 +2150,11 @@ class LolzteamApi:
                     url = f"https://api.zelenka.guru/conversation-messages"
                     params = {
                         "conversation_id": conversation_id,
+                    }
+                    data = {
                         "message_body": message_body
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
 
                 def edit(self, message_id: int, message_body: str):
                     """
@@ -2172,10 +2170,10 @@ class LolzteamApi:
                     :return: json server response
                     """
                     url = f"https://api.zelenka.guru/conversation-messages/{message_id}"
-                    params = {
+                    data = {
                         "message_body": message_body
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, data=data)
 
                 def delete(self, message_id: int):
                     """
@@ -2207,10 +2205,10 @@ class LolzteamApi:
                     """
 
                     url = f"https://api.zelenka.guru/conversation-messages/{message_id}/report"
-                    params = {
+                    data = {
                         "message": message
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
@@ -2300,14 +2298,16 @@ class LolzteamApi:
                         allow_edit_messages = 0
                 params = {
                     "recipient_id": recipient_id,
-                    "message_body": message,
                     "is_group": 0,
                     "open_invite": open_invite,
                     "conversation_locked": conversation_locked,
                     "allow_edit_messages": allow_edit_messages
                 }
+                data = {
+                    "message_body": message
+                }
                 url = f"https://api.zelenka.guru/conversations"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
 
             def create_group(self, recipients: str, title: str, message: str, open_invite: bool = True,
                              conversation_locked: bool = False, allow_edit_messages: bool = True):
@@ -2345,14 +2345,16 @@ class LolzteamApi:
                 params = {
                     "recipients": recipients,
                     "title": title,
-                    "message_body": message,
                     "is_group": 1,
                     "open_invite": open_invite,
                     "conversation_locked": conversation_locked,
                     "allow_edit_messages": allow_edit_messages
                 }
+                data = {
+                    "message_body": message
+                }
                 url = f"https://api.zelenka.guru/conversations"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
 
         class __Oauth:
             def __init__(self, api_self):
@@ -2492,19 +2494,22 @@ class LolzteamApi:
             """
             POST https://api.zelenka.guru/batch
 
-            Execute multiple API requests at once.(10 max)
+            Execute multiple API requests at once. Maximum batch jobs is 10.
 
             Example scheme:
 
             [
                 {
-                "id": "1",
+                "id": "job_1",
                 "uri": "https://api.zelenka.guru/users/2410024",
                 "method": "GET",
                 "params": {}
                 }
             ]
-            :param request_body: Use scheme above
+
+            Required scopes: Same as called API requests.
+
+            :param request_body: List of batch jobs. (Check example above)
             :return: json server response
             """
 
@@ -3329,7 +3334,7 @@ class LolzteamApi:
 
                 :param item_id: ID of item.
                 :param steam_preview: Set it True if you want to get steam html and False/None if you want to get account info
-                :param preview_type: Type of page - profile or games
+                :param preview_type: Type of page - profiles or games
                 :return: json server response or html code
 
                 """
@@ -3471,10 +3476,11 @@ class LolzteamApi:
                         hold = 1
                     else:
                         hold = 0
-                if hold_option in ["hour", "day", "week", "month"]:
-                    hold_option += "s"
-                if hold_option not in ["hours", "days", "weeks", "months"]:
-                    raise Exception("""Invalid hold_option. It can be only "hours","days","weeks" and "months" """)
+                if hold:
+                    if hold_option in ["hour", "day", "week", "month"]:
+                        hold_option += "s"
+                    if hold_option not in ["hours", "days", "weeks", "months"]:
+                        raise Exception("""Invalid hold_option. It can be only "hours","days","weeks" and "months" """)
                 params = {
                     "user_id": user_id,
                     "username": username,
