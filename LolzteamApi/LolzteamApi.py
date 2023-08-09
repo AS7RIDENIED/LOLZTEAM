@@ -4,7 +4,7 @@ import json
 
 
 class Types:
-    class Proxy:  # LolzteamApi init
+    class Proxy:
         socks5 = "SOCKS5"
         socks4 = "SOCKS4"
         http = "HTTP"
@@ -68,6 +68,17 @@ class Types:
                 uniq = 14
                 photo_leaks = 17
                 auto_participation = 19
+
+        class Order:
+            default = 'natural'
+            oldest = "thread_create_date"
+            newest = "thread_create_date_reverse"
+            newest_bumped = "thread_update_date"
+            oldest_bumped = "thread_update_date_reverse"
+            min_views = "thread_view_count"
+            max_views = "thread_view_count_reverse"
+            min_posts = "thread_post_count"
+            max_posts = "thread_post_count"
 
 
 class LolzteamApi:
@@ -155,6 +166,31 @@ class LolzteamApi:
             return response.json()
         except requests.exceptions.JSONDecodeError:
             return response.text
+
+    @staticmethod
+    def create_batch_job(job_name: str or int, method: str, url: str, params: dict = None, data=None, files=None):
+        """
+        Create batch job for forum.batch() or market.batch()
+
+
+        :param job_name: batch job name
+        :param method: request method
+        :param url: request url
+        :param params: request params
+        :param data: request body
+        :param files: request files
+        :return: batch job dict
+        """
+        method = method.upper()
+        job = {
+            "id": job_name,
+            "uri": url,
+            "method": method,
+            "params": params,
+            "data": data,
+            "files": files
+        }
+        return job
 
     # noinspection PyTypeChecker
     def __set_user_id(self):
@@ -1304,7 +1340,7 @@ class LolzteamApi:
 
                     Required scopes: post / admincp
 
-                    :param user_id: ID of user. If you do not specify the user_id, then you will change the avatar of the current user
+                    :param user_id: ID of user. If you do not specify the user_id, then you will delete the avatar of the current user
 
                     :return: json server response
                     """
@@ -1405,13 +1441,16 @@ class LolzteamApi:
 
                 Required scopes: read
 
-                :param user_id: ID of user
+                :param user_id: ID of user. If you do not specify the user_id, you will get info about current user
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}"
+                if user_id is None:
+                    url = f"https://api.zelenka.guru/users/me"
+                else:
+                    url = f"https://api.zelenka.guru/users/{user_id}"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
 
-            def get_timeline(self, user_id: int, page: int = None, limit: int = None):
+            def get_timeline(self, user_id: int = None, page: int = None, limit: int = None):
                 """
                 GET https://api.zelenka.guru/users/user_id/timeline
 
@@ -1419,20 +1458,24 @@ class LolzteamApi:
 
                 Required scopes: read
 
-                :param user_id: ID of user
+                :param user_id: ID of user. If you do not specify the user_id, you will get timeline of current user
                 :param page: Page number of contents.
                 :param limit: Number of contents in a page.
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}/timeline"
+                if user_id is None:
+                    url = f"https://api.zelenka.guru/users/me/timeline"
+                else:
+                    url = f"https://api.zelenka.guru/users/{user_id}/timeline"
                 params = {
                     "page": page,
                     "limit": limit
                 }
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def edit(self, user_id: int, password: str = None, password_old: str = None, password_algo: str = None,
+            def edit(self, user_id: int = None, password: str = None, password_old: str = None,
+                     password_algo: str = None,
                      user_email: str = None, username: str = None, user_title: str = None, primary_group_id: int = None,
                      secondary_group_ids: list[int] = None, user_dob_day: int = None, user_dob_month: int = None,
                      user_dob_year: int = None, fields: dict = None):
@@ -1447,7 +1490,7 @@ class LolzteamApi:
 
                 Required scopes: read / admincp
 
-                :param user_id: ID of user
+                :param user_id: ID of user. If you do not specify the user_id, you will edit current user
                 :param password: New password.
                 :param password_old: Data of the existing password, it is not required if (1) the current authenticated user has user admin permission, (2) the admincp scope is granted and (3) the user being edited is not the current authenticated user.
                 :param password_algo: Algorithm used to encrypt the password and password_old parameters. See Encryption section for more information.
@@ -1463,7 +1506,10 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}"
+                if user_id is None:
+                    url = f"https://api.zelenka.guru/users/me"
+                else:
+                    url = f"https://api.zelenka.guru/users/{user_id}"
                 params = {
                     "password": password,
                     "password_old": password_old,
@@ -1497,7 +1543,6 @@ class LolzteamApi:
                 :return: json server response
                 """
                 url = f"https://api.zelenka.guru/users/{user_id}/followers"
-
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
 
             def unfollow(self, user_id: int):
@@ -1515,7 +1560,7 @@ class LolzteamApi:
                 url = f"https://api.zelenka.guru/users/{user_id}/followers"
                 return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
 
-            def followers(self, user_id: int, order: str = None, page: int = None, limit: int = None):
+            def followers(self, user_id: int = None, order: str = None, page: int = None, limit: int = None):
                 """
                 GET https://api.zelenka.guru/users/user_id/followers
 
@@ -1523,14 +1568,17 @@ class LolzteamApi:
 
                 Required scopes: read
 
-                :param user_id: ID of user
+                :param user_id: ID of user. If you do not specify the user_id, you will get followers of current user
                 :param order: Ordering of followers. Support: natural, follow_date, follow_date_reverse
                 :param page: Page number of followers.
                 :param limit: Number of followers in a page.
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}/followers"
+                if user_id is None:
+                    url = f"https://api.zelenka.guru/users/me/followers"
+                else:
+                    url = f"https://api.zelenka.guru/users/{user_id}/followers"
                 params = {
                     "order": order,
                     "page": page,
@@ -1538,7 +1586,7 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
-            def followings(self, user_id: int, order: str = None, page: int = None, limit: int = None):
+            def followings(self, user_id: int = None, order: str = None, page: int = None, limit: int = None):
                 """
                 GET https://api.zelenka.guru/users/user_id/followings
 
@@ -1546,14 +1594,17 @@ class LolzteamApi:
 
                 Required scopes: read
 
-                :param user_id: ID of user
+                :param user_id: ID of user. If you do not specify the user_id, you will get followings users by current user
                 :param order: Ordering of users. Support: natural, follow_date, follow_date_reverse
                 :param page: Page number of users.
                 :param limit: Number of users in a page.
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}/followings"
+                if user_id is None:
+                    url = f"https://api.zelenka.guru/users/me/followings"
+                else:
+                    url = f"https://api.zelenka.guru/users/{user_id}/followings"
                 params = {
                     "order": order,
                     "page": page,
@@ -1604,7 +1655,7 @@ class LolzteamApi:
                 """
                 DELETE https://api.zelenka.guru/users/user_id/ignore
 
-                Ignore a user.
+                Unignore a user.
 
                 Required scopes: post
 
@@ -1628,8 +1679,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                if type(user_id) is None:
-                    url = f"https://api.zelenka.guru/users/groups"
+                if user_id is None:
+                    url = f"https://api.zelenka.guru/users/me/groups"
                 else:
                     url = f"https://api.zelenka.guru/users/{user_id}/groups"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
@@ -1734,7 +1785,7 @@ class LolzteamApi:
                 url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}"
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
 
-            def create(self, user_id: int, post_body: str):
+            def create(self, post_body: str, user_id: int = None):
                 """
                 POST https://api.zelenka.guru/users/user_id/timeline
 
@@ -1742,12 +1793,15 @@ class LolzteamApi:
 
                 Required scopes: post
 
-                :param user_id: ID of user
+                :param user_id: ID of user. If you do not specify the user_id, you will create profile post in current user's timeline
                 :param post_body: Content of the new profile post.
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}/timeline"
+                if user_id is None:
+                    url = f"https://api.zelenka.guru/users/me/timeline"
+                else:
+                    url = f"https://api.zelenka.guru/users/{user_id}/timeline"
                 data = {
                     "post_body": post_body
                 }
