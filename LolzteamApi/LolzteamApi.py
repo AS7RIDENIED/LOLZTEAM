@@ -146,21 +146,20 @@ class LolzteamApi:
                 case _:
                     raise Exception(
                         f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")  # How tf you get that error?
-        match method:
-            case "GET":
-                response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers,
+        if method == "GET":
+            response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers,
                                         proxies=proxies)
-            case "POST":
-                response = requests.post(url=url, params=params, data=data, files=files, headers=self.__headers,
+        elif method == "POST":
+            response = requests.post(url=url, params=params, data=data, files=files, headers=self.__headers,
                                          proxies=proxies)
-            case "PUT":
-                response = requests.put(url=url, params=params, data=data, files=files, headers=self.__headers,
+        elif method == "PUT":
+            response = requests.put(url=url, params=params, data=data, files=files, headers=self.__headers,
                                         proxies=proxies)
-            case "DELETE":
-                response = requests.delete(url=url, params=params, data=data, files=files, headers=self.__headers,
+        elif method == "DELETE":
+            response = requests.delete(url=url, params=params, data=data, files=files, headers=self.__headers,
                                            proxies=proxies)
-            case _:
-                raise Exception(f"Invalid requests method. Contact @AS7RID")
+        else:
+            raise Exception(f"Invalid requests method. Contact @AS7RID")
         self.__auto_delay_time = time.time()
         try:
             return response.json()
