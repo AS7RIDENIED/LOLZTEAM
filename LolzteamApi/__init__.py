@@ -19,6 +19,8 @@ def auto_update():
         importlib.reload(sys.modules["LolzteamApi"])
         print(f"LolzteamApi updated to {newest_version}")
 
-
-auto_update()
+try:
+    auto_update()
+except:
+    pass
 from .LolzteamApi import LolzteamApi, Types
