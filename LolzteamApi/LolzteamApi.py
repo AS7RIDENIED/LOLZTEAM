@@ -136,30 +136,29 @@ class LolzteamApi:
         params["locale"] = self.__locale
         proxies = {}
         if self.__proxy_type is not None:
-            match self.__proxy_type:
-                case "HTTP":
-                    proxies = {
-                        "http": f"http://{self.__proxy}",
-                        "https": f"http://{self.__proxy}"
-                    }
-                case "HTTPS":
-                    proxies = {
-                        "http": f"http://{self.__proxy}",
-                        "https": f"https://{self.__proxy}"
-                    }
-                case "SOCKS4":
-                    proxies = {
-                        "http": f"socks4://{self.__proxy}",
-                        "https": f"socks4://{self.__proxy}"
-                    }
-                case "SOCKS5":
-                    proxies = {
-                        "http": f"socks5://{self.__proxy}",
-                        "https": f"socks5://{self.__proxy}"
-                    }
-                case _:
-                    raise Exception(
-                        f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")  # How tf you get that error?
+            if self.__proxy_type == "HTTP":
+                proxies = {
+                    "http": f"http://{self.__proxy}",
+                    "https": f"http://{self.__proxy}"
+                }
+            elif self.__proxy_type == "HTTPS":
+                proxies = {
+                    "http": f"http://{self.__proxy}",
+                    "https": f"https://{self.__proxy}"
+                }
+            if self.__proxy_type == "SOCKS4":
+                proxies = {
+                    "http": f"socks4://{self.__proxy}",
+                    "https": f"socks4://{self.__proxy}"
+                }
+            if self.__proxy_type == "SOCKS5":
+                proxies = {
+                    "http": f"socks5://{self.__proxy}",
+                    "https": f"socks5://{self.__proxy}"
+                }
+            else:
+                raise Exception(
+                    f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")  # How tf you get that error?
         if method == "GET":
             response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers,
                                     proxies=proxies)
@@ -1441,9 +1440,10 @@ class LolzteamApi:
                     "username": username,
                     "user_email": user_email,
                 }
-                for key, value in custom_fields.items():
-                    cf = f"custom_fields[{key}]"
-                    params[cf] = value
+                if custom_fields is not None:
+                    for key, value in custom_fields.items():
+                        cf = f"custom_fields[{key}]"
+                        params[cf] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
 
             def get(self, user_id: int = None):
@@ -1538,9 +1538,10 @@ class LolzteamApi:
                 data = {
                     "user_title": user_title,
                 }
-                for key, value in fields.items():
-                    field = f"fields[{key}]"
-                    data[field] = value
+                if fields is not None:
+                    for key, value in fields.items():
+                        field = f"fields[{key}]"
+                        data[field] = value
                 return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params, data=data)
 
             def follow(self, user_id: int):
@@ -4108,9 +4109,10 @@ class LolzteamApi:
                     "resell_item_id": resell_item_id,
                     "random_proxy": random_proxy
                 }
-                for key, value in extra.items():
-                    es = f"extra[{key}]"
-                    params[es] = value
+                if extra is not None:
+                    for key, value in extra.items():
+                        es = f"extra[{key}]"
+                        params[es] = value
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
             def add(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
@@ -4274,9 +4276,10 @@ class LolzteamApi:
                     "password": password,
                     "login_password": login_password
                 }
-                for key, value in extra.items():
-                    es = f"extra[{key}]"
-                    params[es] = value
+                if extra is not None:
+                    for key, value in extra.items():
+                        es = f"extra[{key}]"
+                        params[es] = value
                 return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
 
             # Copy of __Managing.edit
