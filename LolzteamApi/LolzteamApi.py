@@ -68,6 +68,17 @@ class Types:
             date_to_down_upload = "pdate_to_down_upload"
             date_to_up_upload = "pdate_to_up_upload"
 
+        class App_Ids:
+            CSGO = 730
+            PUBG = 578080
+            Steam = 753
+            Dota = 570
+            TF2 = 440
+            Rust = 252490
+            Unturned = 304930
+            KF2 = 232090
+            DST = 322330  # Don't Starve Together
+
     class Forum:
         class Contests:
             class Length:
@@ -2620,6 +2631,48 @@ class LolzteamApi:
 
             url = f"https://api.lzt.market/batch"
             return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(request_body))
+
+        def steam_value(self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None):
+            """
+            GET https://api.lzt.market/steam-value
+
+            Gets steam value.
+
+            Application id list:
+
+            730 - CS:GO
+
+            578080 - PUBG
+
+            753 - Steam
+
+            570 - Dota 2
+
+            440 - Team Fortress 2
+
+            252490 - Rust
+
+            304930 - Unturned
+
+            232090 - Killing Floor 2
+
+            322330 - Don't Starve Together
+
+            :param url:
+            :param app_id:
+            :param currency:
+            :param ignore_cache:
+
+            :return: json server response
+            """
+            params = {
+                "link":url,
+                "app_id":app_id,
+                "currency":currency,
+                "ignore_cache":ignore_cache
+            }
+            url = f"https://api.lzt.market/steam-value"
+            return LolzteamApi.send_request(self=self.__api, method="GET", url=url,params=params)
 
         class __Profile:
             def __init__(self, api_self, token_user_id):
