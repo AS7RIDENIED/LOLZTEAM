@@ -1,109 +1,7 @@
 import requests
 import time
 import json
-
-
-class Types:
-    class Proxy:
-        socks5 = "SOCKS5"
-        socks4 = "SOCKS4"
-        http = "HTTP"
-        https = "HTTPS"
-
-    class Market:
-        class Operation_types:
-            income = "income"
-            cost = "cost"
-            refilled_balance = "refilled_balance"
-            withdrawal_balance = "withdrawal_balance"
-            paid_item = "paid_item"
-            sold_item = "sold_item"
-            money_transfer = "money_transfer"
-            receiving_money = "receiving_money"
-            internal_purchase = "internal_purchase"
-            claim_hold = "claim_hold"
-
-        class Hold_Options:
-            hour = "hour"
-            day = "day"
-            week = "week"
-            month = "month"
-            year = "year"
-
-        class Currency:
-            cny = "cny"
-            usd = "usd"
-            rub = "rub"
-            eur = "eur"
-            uah = "uah"
-            kzt = "kzt"
-            byn = "byn"
-            gbp = "gbp"
-
-        class Item_origin:
-            brute = "brute"
-            stealer = "stealer"
-            fishing = "fishing"
-            autoreg = "autoreg"
-            personal = "personal"
-            resale = "resale"
-            retrieve = "retrieve"
-
-        class Guarantee:
-            half_day = -1
-            day = 0
-            three_days = 1
-
-        class Item_status:
-            active = "active"
-            paid = "paid"
-            deleted = "deleted"
-            awaiting = "awaiting"
-
-        class Order:
-            price_to_up = "price_to_up"
-            price_to_down = "price_to_down"
-            date_to_down = "pdate_to_down"
-            date_to_up = "pdate_to_up"
-            date_to_down_upload = "pdate_to_down_upload"
-            date_to_up_upload = "pdate_to_up_upload"
-
-        class App_Ids:
-            CSGO = 730
-            PUBG = 578080
-            Steam = 753
-            Dota = 570
-            TF2 = 440
-            Rust = 252490
-            Unturned = 304930
-            KF2 = 232090
-            DST = 322330  # Don't Starve Together
-
-    class Forum:
-        class Contests:
-            class Length:
-                minutes = "minutes"
-                hours = "hours"
-                days = "days"
-
-            class Upgrade_prizes:
-                supreme = 1
-                legend = 6
-                antipublic = 12
-                uniq = 14
-                photo_leaks = 17
-                auto_participation = 19
-
-        class Order:
-            default = 'natural'
-            oldest = "thread_create_date"
-            newest = "thread_create_date_reverse"
-            newest_bumped = "thread_update_date"
-            oldest_bumped = "thread_update_date_reverse"
-            min_views = "thread_view_count"
-            max_views = "thread_view_count_reverse"
-            min_posts = "thread_post_count"
-            max_posts = "thread_post_count"
+# path_data = {"site":"Market","path":"asd/asd/asd"}
 
 
 class LolzteamApi:
@@ -116,7 +14,8 @@ class LolzteamApi:
         :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
-
+        self.base_url_forum = "https://api.zelenka.guru"
+        self.base_url_market = "https://api.lzt.market"
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
@@ -139,7 +38,13 @@ class LolzteamApi:
         self.market = self.__Market(self, self.__token_user_id)
         self.forum = self.__Forum(self)
 
-    def send_request(self, method: str, url: str, params: dict = None, data=None, files=None):
+    def send_request(self, method: str, path_data: dict, params: dict = None, data=None, files=None):
+        if path_data["site"].lower() == "forum":
+            url = self.base_url_forum + path_data["path"]
+        elif path_data["site"].lower() == "market":
+            url = self.base_url_market + path_data["path"]
+        else:
+            raise Exception(f"Invalid site in path data. Contact @AS7RID")
         method = method.upper()
         LolzteamApi.__auto_delay(self)
         if params is None:
@@ -217,8 +122,8 @@ class LolzteamApi:
 
     # noinspection PyTypeChecker
     def __set_user_id(self):
-        url = "https://api.lzt.market/me"
-        response = LolzteamApi.send_request(self=self, method="GET", url=url)
+        path_data = {"site": "Market", "path": "/me"}
+        response = LolzteamApi.send_request(self=self, method="GET", path_data=path_data)
         try:
             return response["user"]["user_id"]
         except KeyError:
@@ -293,13 +198,13 @@ class LolzteamApi:
                 :param order: Ordering of categories. Can be [natural, list]
                 :return: json server response
                 """
-                url = "https://api.zelenka.guru/categories"
+                path_data = {"site": "Forum", "path": f"/categories"}
                 params = {
                     "parent_category_id": parent_category_id,
                     "parent_forum_id": parent_forum_id,
                     "order": order
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get_category(self, category_id: int):
                 """
@@ -312,8 +217,8 @@ class LolzteamApi:
                 :param category_id: ID of category we want to get
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/categories/{category_id}"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/categories/{category_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
         class __Forums:
             def __init__(self, __api_self):
@@ -332,13 +237,13 @@ class LolzteamApi:
                 :param order: Ordering of categories. Can be [natural, list]
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/categories/forums"
+                path_data = {"site": "Forum", "path": f"/categories/forums"}
                 params = {
                     "parent_category_id": parent_category_id,
                     "parent_forum_id": parent_forum_id,
                     "order": order
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get_forum(self, forum_id: int):
                 """
@@ -351,9 +256,9 @@ class LolzteamApi:
                 :param forum_id: ID of forum we want to get
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/forums/{forum_id}"
+                path_data = {"site": "Forum", "path": f"/forums/{forum_id}"}
 
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def follow(self, forum_id: int, post: bool = None, alert: bool = None, email: bool = None):
                 """
@@ -369,7 +274,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/forums/{forum_id}/followers"
+                path_data = {"site": "Forum", "path": f"/forums/{forum_id}/followers"}
                 if True:  # Tweak 0
                     if post:
                         post = 1
@@ -382,7 +287,7 @@ class LolzteamApi:
                     "alert": alert,
                     "email": email
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def unfollow(self, forum_id: int):
                 """
@@ -395,8 +300,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/forums/{forum_id}/followers"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Forum", "path": f"/forums/{forum_id}/followers"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def followers(self, forum_id: int):
                 """
@@ -409,8 +314,8 @@ class LolzteamApi:
                 :param forum_id: ID of forum we want to get
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/forums/{forum_id}/followers"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/forums/{forum_id}/followers"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def followed(self, total: bool = None):
                 """
@@ -424,7 +329,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/forums/followed"
+                path_data = {"site": "Forum", "path": f"/forums/followed"}
                 if True:  # Tweak 0
                     if total:
                         total = 1
@@ -433,7 +338,7 @@ class LolzteamApi:
                 params = {
                     "total": total
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
         class __Pages:
             def __init__(self, __api_self):
@@ -452,12 +357,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/pages"
+                path_data = {"site": "Forum", "path": f"/pages"}
                 params = {
                     "parent_page_id": parent_page_id,
                     "order": order
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get_page(self, page_id: int):
                 """
@@ -471,8 +376,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/pages/{page_id}"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/pages/{page_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
         class __Posts:
             class __Posts_comments:
@@ -492,11 +397,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/posts/{post_id}/comments"
+                    path_data = {"site": "Forum", "path": f"/posts/{post_id}/comments"}
                     params = {
                         "before": before
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
                 def create(self, post_id: int, comment_body: str = None):
                     """
@@ -511,11 +416,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/posts/{post_id}/comments"
+                    path_data = {"site": "Forum", "path": f"/posts/{post_id}/comments"}
                     data = {
                         "comment_body": comment_body
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=data)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
@@ -538,7 +443,7 @@ class LolzteamApi:
                 :param order: Ordering of posts. Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts"
+                path_data = {"site": "Forum", "path": f"/posts"}
                 params = {
                     "thread_id": thread_id,
                     "page_of_post_id": page_of_post_id,
@@ -547,7 +452,7 @@ class LolzteamApi:
                     "limit": limit,
                     "order": order
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get(self, post_id: int):
                 """
@@ -561,8 +466,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/posts/{post_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def create(self, post_body: str, thread_id: int = None, quote_post_id: int = None):
                 """
@@ -579,7 +484,7 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.zelenka.guru/posts"
+                path_data = {"site": "Forum", "path": f"/posts"}
                 params = {
                     "thread_id": thread_id,
                     "quote_post_id": quote_post_id,
@@ -588,7 +493,7 @@ class LolzteamApi:
                 data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
 
             def edit(self, post_id: int, thread_title: str = None, thread_prefix_id: int = None,
                      thread_tags: str = None,
@@ -609,7 +514,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}"
+                path_data = {"site": "Forum", "path": f"/posts/{post_id}"}
                 params = {
                     "thread_title": thread_title,
                     "thread_prefix_id": thread_prefix_id,
@@ -619,7 +524,7 @@ class LolzteamApi:
                 data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params, data=data)
 
             def delete(self, post_id: int, reason: str = None):
                 """
@@ -634,11 +539,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}"
+                path_data = {"site": "Forum", "path": f"/posts/{post_id}"}
                 data = {
                     "reason": reason
                 }
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, data=data)
 
             def likes(self, post_id: int, page: int = None, limit: int = None):
                 """
@@ -654,12 +559,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}/likes"
+                path_data = {"site": "Forum", "path": f"/posts/{post_id}/likes"}
                 params = {
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def like(self, post_id: int):
                 """
@@ -673,8 +578,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}/likes"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Forum", "path": f"/posts/{post_id}/likes"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def unlike(self, post_id: int):
                 """
@@ -688,8 +593,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}/likes"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Forum", "path": f"/posts/{post_id}/likes"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def report(self, post_id: int, message: str):
                 """
@@ -704,11 +609,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/posts/{post_id}/report"
+                path_data = {"site": "Forum", "path": f"/posts/{post_id}/report"}
                 data = {
                     "message": message
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=data)
 
         class __Threads:
             def __init__(self, __api_self):
@@ -751,7 +656,7 @@ class LolzteamApi:
 
                         :return: json server response
                         """
-                        url = f"https://api.zelenka.guru/threads"
+                        path_data = {"site": "Forum", "path": f"/threads"}
                         contest_type = "by_finish_date"
                         prize_type = "money"
                         forum_id = 766
@@ -773,7 +678,7 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                         data=data)
 
                     def create_by_count(self, thread_title: str, post_body: str, prize_data_money: int,
@@ -800,7 +705,7 @@ class LolzteamApi:
 
                         :return: json server response
                         """
-                        url = f"https://api.zelenka.guru/threads"
+                        path_data = {"site": "Forum", "path": f"/threads"}
                         contest_type = "by_needed_members"
                         prize_type = "money"
                         forum_id = 766
@@ -821,7 +726,7 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                         data=data)
 
                 class __Upgrade:
@@ -868,7 +773,7 @@ class LolzteamApi:
 
                         :return: json server response
                         """
-                        url = f"https://api.zelenka.guru/threads"
+                        path_data = {"site": "Forum", "path": f"/threads"}
                         contest_type = "by_finish_date"
                         prize_type = "upgrades"
                         forum_id = 766
@@ -890,7 +795,7 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                         data=data)
 
                     def create_by_count(self, thread_title: str, post_body: str, prize_data_upgrade: int,
@@ -931,7 +836,7 @@ class LolzteamApi:
 
                         :return: json server response
                         """
-                        url = f"https://api.zelenka.guru/threads"
+                        path_data = {"site": "Forum", "path": f"/threads"}
                         contest_type = "by_needed_members"
                         prize_type = "upgrades"
                         forum_id = 766
@@ -952,7 +857,7 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                         data=data)
 
             def get_threads(self, forum_id: int, thread_ids: str = None, creator_user_id: int = None,
@@ -976,7 +881,7 @@ class LolzteamApi:
                 :param order: Can be [natural, thread_create_date, thread_create_date_reverse, thread_update_date, thread_update_date_reverse, thread_view_count, thread_view_count_reverse, thread_post_count, thread_post_count_reverse]
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads"
+                path_data = {"site": "Forum", "path": f"/threads"}
                 if sticky:  # Tweak 0
                     sticky = 1
                 else:
@@ -992,7 +897,7 @@ class LolzteamApi:
                     "limit": limit,
                     "order": order
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get(self, thread_id: int):
                 """
@@ -1006,8 +911,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def create(self, forum_id: int, thread_title: str, post_body: str, thread_prefix_id: int = None,
                        thread_tags: str = None):
@@ -1026,7 +931,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads"
+                path_data = {"site": "Forum", "path": f"/threads"}
                 params = {
                     "forum_id": forum_id,
                     "thread_prefix_id": thread_prefix_id,
@@ -1036,7 +941,7 @@ class LolzteamApi:
                     "thread_title": thread_title,
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
 
             def delete(self, thread_id: int, reason: str = None):
                 """
@@ -1051,11 +956,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}"
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}"}
                 params = {
                     "reason": reason
                 }
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, params=params)
 
             def followers(self, thread_id: int):
                 """
@@ -1069,12 +974,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}/followers"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/followers"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def followed(self, total: bool = None):
                 """
-                GET https://api.zelenka.guru/forums/followed
+                GET https://api.zelenka.guru/threads/followed
 
                 List of followed forums by current user.
 
@@ -1084,7 +989,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/forums/followed"
+                path_data = {"site": "Forum", "path": f"/threads/followed"}
                 if True:  # Tweak 0
                     if total:
                         total = 1
@@ -1093,7 +998,7 @@ class LolzteamApi:
                 params = {
                     "total": total
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def follow(self, thread_id: int, email: bool = None):
                 """
@@ -1108,14 +1013,14 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}/followers"
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/followers"}
                 if True:  # Tweak 0
                     if email:
                         email = 1
                 params = {
                     "email": email
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def unfollow(self, thread_id: int):
                 """
@@ -1129,12 +1034,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}/followers"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/followers"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def navigation(self, thread_id: int):
                 """
-                GET https://api.zelenka.guru/threads/thread_id/navigaion
+                GET https://api.zelenka.guru/threads/thread_id/navigation
 
                 List of navigation elements to reach the specified thread.
 
@@ -1144,8 +1049,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}/navigaion"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/navigation"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def votes(self, thread_id: int):
                 """
@@ -1159,8 +1064,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}/pool"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/pool"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def vote(self, thread_id: int, response_id: int = None, response_ids: list[int] = None):
                 """
@@ -1176,7 +1081,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}/poll/votes"
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/pool/votes"}
                 if type(response_ids) == list:
                     for element in response_ids:
                         if not isinstance(element, int):
@@ -1185,12 +1090,12 @@ class LolzteamApi:
                     params = {
                         "response_ids[]": response_ids
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
                 else:
                     params = {
                         "response_id": response_id
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def new(self, forum_id: int = None, limit: int = None, data_limit: int = None):
                 """
@@ -1205,13 +1110,13 @@ class LolzteamApi:
                 :param data_limit: Number of thread data to be returned. Default value is 20.
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/new"
+                path_data = {"site": "Forum", "path": f"/threads/new"}
                 params = {
                     "forum_id": forum_id,
                     "limit": limit,
                     "data_limit": data_limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def recent(self, days: int = None, forum_id: int = None, limit: int = None, data_limit: int = None):
                 """
@@ -1227,14 +1132,14 @@ class LolzteamApi:
                 :param data_limit: Number of thread data to be returned. Default value is 20.
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/recent"
+                path_data = {"site": "Forum", "path": f"/threads/recent"}
                 params = {
                     "days": days,
                     "forum_id": forum_id,
                     "limit": limit,
                     "data_limit": data_limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def bump(self, thread_id: int):
                 """
@@ -1248,8 +1153,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/threads/{thread_id}/bump"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/bump"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
         class __Tags:
             def __init__(self, __api_self):
@@ -1265,8 +1170,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/tags"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/tags"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def tags(self, page: int = None, limit: int = None):
                 """
@@ -1282,12 +1187,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/tags/list"
+                path_data = {"site": "Forum", "path": f"/tags/list"}
                 params = {
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def tagged(self, tag_id: int, page: int = None, limit: int = None):
                 """
@@ -1303,12 +1208,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/tags/{tag_id}"
+                path_data = {"site": "Forum", "path": f"/tags/{tag_id}"}
                 params = {
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def find(self, tag: str):
                 """
@@ -1322,11 +1227,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/tags/find"
+                path_data = {"site": "Forum", "path": f"/tags/find"}
                 params = {
                     "tag": tag
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
         class __Users:
             class __Avatar:
@@ -1347,13 +1252,13 @@ class LolzteamApi:
                     :return: json server response
                     """
                     if user_id is None:
-                        url = f"https://api.zelenka.guru/users/me/avatar"
+                        path_data = {"site": "Forum", "path": f"/users/me/avatar"}
                     else:
-                        url = f"https://api.zelenka.guru/users/{user_id}/avatar"
+                        path_data = {"site": "Forum", "path": f"/users/{user_id}/avatar"}
                     files = {
                         "avatar": avatar
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, files=files)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, files=files)
 
                 def delete(self, user_id: int = None):
                     """
@@ -1368,10 +1273,10 @@ class LolzteamApi:
                     :return: json server response
                     """
                     if user_id is None:
-                        url = f"https://api.zelenka.guru/users/me/avatar"
+                        path_data = {"site": "Forum", "path": f"/users/me/avatar"}
                     else:
-                        url = f"https://api.zelenka.guru/users/{user_id}/avatar"
-                    return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                        path_data = {"site": "Forum", "path": f"/users/{user_id}/avatar"}
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
@@ -1391,13 +1296,13 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/lost-password"
+                path_data = {"site": "Forum", "path": f"/lost-password"}
                 params = {
                     "oauth_token": oauth_token,
                     "username": username,
                     "email": email
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def users(self, page: int = None, limit: int = None):
                 """
@@ -1411,12 +1316,12 @@ class LolzteamApi:
                 :param limit: Number of users in a page.
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users"
+                path_data = {"site": "Forum", "path": f"/users"}
                 params = {
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def fields(self):
                 """
@@ -1429,8 +1334,8 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.zelenka.guru/users/fields"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/users/fields"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def search(self, username: str = None, user_email: str = None, custom_fields: dict = None):
                 """
@@ -1446,7 +1351,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/find"
+                path_data = {"site": "Forum", "path": f"/users/find"}
                 params = {
                     "username": username,
                     "user_email": user_email,
@@ -1455,7 +1360,7 @@ class LolzteamApi:
                     for key, value in custom_fields.items():
                         cf = f"custom_fields[{key}]"
                         params[cf] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get(self, user_id: int = None):
                 """
@@ -1469,10 +1374,10 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if user_id is None:
-                    url = f"https://api.zelenka.guru/users/me"
+                    path_data = {"site": "Forum", "path": f"/users/me"}
                 else:
-                    url = f"https://api.zelenka.guru/users/{user_id}"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                    path_data = {"site": "Forum", "path": f"/users/{user_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def get_timeline(self, user_id: int = None, page: int = None, limit: int = None):
                 """
@@ -1489,14 +1394,14 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if user_id is None:
-                    url = f"https://api.zelenka.guru/users/me/timeline"
+                    path_data = {"site": "Forum", "path": f"/users/me/timeline"}
                 else:
-                    url = f"https://api.zelenka.guru/users/{user_id}/timeline"
+                    path_data = {"site": "Forum", "path": f"/users/{user_id}/timeline"}
                 params = {
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def edit(self, user_id: int = None, password: str = None, password_old: str = None,
                      password_algo: str = None,
@@ -1531,9 +1436,9 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if user_id is None:
-                    url = f"https://api.zelenka.guru/users/me"
+                    path_data = {"site": "Forum", "path": f"/users/me"}
                 else:
-                    url = f"https://api.zelenka.guru/users/{user_id}"
+                    path_data = {"site": "Forum", "path": f"/users/{user_id}"}
                 params = {
                     "password": password,
                     "password_old": password_old,
@@ -1553,7 +1458,7 @@ class LolzteamApi:
                     for key, value in fields.items():
                         field = f"fields[{key}]"
                         data[field] = value
-                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params, data=data)
 
             def follow(self, user_id: int):
                 """
@@ -1567,8 +1472,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}/followers"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Forum", "path": f"/users/{user_id}/followers"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def unfollow(self, user_id: int):
                 """
@@ -1582,8 +1487,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/{user_id}/followers"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Forum", "path": f"/users/{user_id}/followers"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def followers(self, user_id: int = None, order: str = None, page: int = None, limit: int = None):
                 """
@@ -1601,15 +1506,15 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if user_id is None:
-                    url = f"https://api.zelenka.guru/users/me/followers"
+                    path_data = {"site": "Forum", "path": f"/users/me/followers"}
                 else:
-                    url = f"https://api.zelenka.guru/users/{user_id}/followers"
+                    path_data = {"site": "Forum", "path": f"/users/{user_id}/followers"}
                 params = {
                     "order": order,
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def followings(self, user_id: int = None, order: str = None, page: int = None, limit: int = None):
                 """
@@ -1627,15 +1532,15 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if user_id is None:
-                    url = f"https://api.zelenka.guru/users/me/followings"
+                    path_data = {"site": "Forum", "path": f"/users/me/followings"}
                 else:
-                    url = f"https://api.zelenka.guru/users/{user_id}/followings"
+                    path_data = {"site": "Forum", "path": f"/users/{user_id}/followings"}
                 params = {
                     "order": order,
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def ignored(self, total: bool = None):
                 """
@@ -1649,7 +1554,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/users/ignored"
+                path_data = {"site": "Forum", "path": f"/users/ignored"}
                 if True:  # Tweak 0
                     if total:
                         total = 1
@@ -1658,7 +1563,7 @@ class LolzteamApi:
                 params = {
                     "total": total
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def ignore(self, user_id: int):
                 """
@@ -1673,8 +1578,8 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.zelenka.guru/users/{user_id}/ignore"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Forum", "path": f"/users/{user_id}/ignore"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def unignore(self, user_id: int):
                 """
@@ -1689,8 +1594,8 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.zelenka.guru/users/{user_id}/ignore"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Forum", "path": f"/users/{user_id}/ignore"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def groups(self, user_id: int = None):
                 """
@@ -1705,10 +1610,10 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if user_id is None:
-                    url = f"https://api.zelenka.guru/users/me/groups"
+                    path_data = {"site": "Forum", "path": f"/users/me/groups"}
                 else:
-                    url = f"https://api.zelenka.guru/users/{user_id}/groups"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                    path_data = {"site": "Forum", "path": f"/users/{user_id}/groups"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
         class __Profile_posts:
             class __Profile_posts_comments:
@@ -1729,12 +1634,12 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/comments"
+                    path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/comments"}
                     params = {
                         "before": before,
                         "limit": limit
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
                 def get(self, profile_post_id: int, comment_id: int):
                     """
@@ -1749,8 +1654,8 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/comments/{comment_id}"
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                    path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/comments/{comment_id}"}
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
                 def create(self, profile_post_id: int, comment_body: str):
                     """
@@ -1765,11 +1670,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/comments"
+                    path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/comments"}
                     data = {
                         "comment_body": comment_body,
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=data)
 
                 def delete(self, profile_post_id: int, comment_id: int, reason: str = None):
                     """
@@ -1785,11 +1690,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/comments/{comment_id}"
+                    path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/comments/{comment_id}"}
                     data = {
                         "reason": reason
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, data=data)
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, data=data)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
@@ -1807,8 +1712,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def create(self, post_body: str, user_id: int = None):
                 """
@@ -1824,13 +1729,13 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if user_id is None:
-                    url = f"https://api.zelenka.guru/users/me/timeline"
+                    path_data = {"site": "Forum", "path": f"/users/me/timeline"}
                 else:
-                    url = f"https://api.zelenka.guru/users/{user_id}/timeline"
+                    path_data = {"site": "Forum", "path": f"/users/{user_id}/timeline"}
                 data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=data)
 
             def edit(self, profile_post_id: int, post_body: str):
                 """
@@ -1846,11 +1751,11 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}"
+                path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}"}
                 data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, data=data)
 
             def delete(self, profile_post_id: int, reason: str = None):
                 """
@@ -1866,11 +1771,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}"
+                path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}"}
                 data = {
                     "reason": reason
                 }
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, data=data)
 
             def likes(self, profile_post_id: int):
                 """
@@ -1885,8 +1790,8 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/likes"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/likes"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def like(self, profile_post_id: int):
                 """
@@ -1901,9 +1806,9 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/likes"
+                path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/likes"}
 
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def unlike(self, profile_post_id: int):
                 """
@@ -1917,8 +1822,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/likes"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/likes"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def report(self, profile_post_id: int, message: str):
                 """
@@ -1933,11 +1838,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/profile-posts/{profile_post_id}/report"
+                path_data = {"site": "Forum", "path": f"/profile-posts/{profile_post_id}/report"}
                 data = {
                     "message": message
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=data)
 
         class __Search:
             def __init__(self, __api_self):
@@ -1960,7 +1865,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/search"
+                path_data = {"site": "Forum", "path": f"/search"}
                 params = {
                     "q": q,
                     "tag": tag,
@@ -1969,7 +1874,7 @@ class LolzteamApi:
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def thread(self, q: str = None, tag: str = None, forum_id: int = None, user_id: int = None,
                        page: int = None,
@@ -1990,7 +1895,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/search/threads"
+                path_data = {"site": "Forum", "path": f"/search/threads"}
                 params = {
                     "q": q,
                     "tag": tag,
@@ -2000,7 +1905,7 @@ class LolzteamApi:
                     "limit": limit,
                     "data_limit": data_limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def post(self, q: str = None, tag: str = None, forum_id: int = None, user_id: int = None, page: int = None,
                      limit: int = None, data_limit: int = None):
@@ -2020,7 +1925,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/search/posts"
+                path_data = {"site": "Forum", "path": f"/search/posts"}
                 params = {
                     "q": q,
                     "tag": tag,
@@ -2030,7 +1935,7 @@ class LolzteamApi:
                     "limit": limit,
                     "data_limit": data_limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def tag(self, tag: str = None, tags: list[str] = None, page: int = None, limit: int = None):
                 """
@@ -2045,14 +1950,14 @@ class LolzteamApi:
                 :param limit: Number of results in a page.
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/search/tagged"
+                path_data = {"site": "Forum", "path": f"/search/tagged"}
                 params = {
                     "tag": tag,
                     "tags[]": tags,
                     "page": page,
                     "limit": limit,
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def indexing(self, content_type: str, content_id: str, title: str, body: str, link: str,
                          date: int = None):
@@ -2072,7 +1977,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/search/indexing"
+                path_data = {"site": "Forum", "path": f"/search/indexing"}
                 data = {
                     "content_type": content_type,
                     "content_id": content_id,
@@ -2082,7 +1987,7 @@ class LolzteamApi:
                     "date": date
                 }
 
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(data))
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=json.dumps(data))
 
         class __Notifications:
             def __init__(self, __api_self):
@@ -2098,8 +2003,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/notifications"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/notifications"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def get(self, notification_id: int):
                 """
@@ -2112,8 +2017,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/notifications/{notification_id}/content"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/notifications/{notification_id}/content"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def read(self, notification_id: int = None):
                 """
@@ -2126,11 +2031,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/notifications/read"
+                path_data = {"site": "Forum", "path": f"/notifications/read"}
                 params = {
                     "notification_id": notification_id
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def custom(self, user_id: int = None, username: str = None, message: str = None, message_html: str = None,
                        notification_type: str = None, extra_data: str = None):
@@ -2151,7 +2056,7 @@ class LolzteamApi:
                 """
                 # По приколу добавил получается. Шанс того, что это заюзает реквест, томас или григорий крайне мал
 
-                url = f"https://api.zelenka.guru/notifications/custom"
+                path_data = {"site": "Forum", "path": f"/notifications/custom"}
                 params = {
                     "user_id": user_id,
                     "username": username,
@@ -2162,7 +2067,7 @@ class LolzteamApi:
                     "message_html": message_html,
                     "extra_data": extra_data
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
 
         class __Conversations:
             class __Conversations_messages:
@@ -2187,7 +2092,7 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/conversation-messages"
+                    path_data = {"site": "Forum", "path": f"/conversation-messages"}
                     params = {
                         "conversation_id": conversation_id,
                         "page": page,
@@ -2196,7 +2101,7 @@ class LolzteamApi:
                         "before": before,
                         "after": after
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
                 def get(self, message_id: int):
                     """
@@ -2210,8 +2115,8 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/conversation-messages/{message_id}"
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                    path_data = {"site": "Forum", "path": f"/conversation-messages/{message_id}"}
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
                 def create(self, conversation_id: int, message_body: str):
                     """
@@ -2226,14 +2131,14 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/conversation-messages"
+                    path_data = {"site": "Forum", "path": f"/conversation-messages"}
                     params = {
                         "conversation_id": conversation_id,
                     }
                     data = {
                         "message_body": message_body
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
 
                 def edit(self, message_id: int, message_body: str):
                     """
@@ -2248,11 +2153,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/conversation-messages/{message_id}"
+                    path_data = {"site": "Forum", "path": f"/conversation-messages/{message_id}"}
                     data = {
                         "message_body": message_body
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, data=data)
+                    return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, data=data)
 
                 def delete(self, message_id: int):
                     """
@@ -2266,8 +2171,8 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.zelenka.guru/conversation-messages/{message_id}"
-                    return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                    path_data = {"site": "Forum", "path": f"/conversation-messages/{message_id}"}
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
                 def report(self, message_id: int, message: str = None):
                     """
@@ -2283,11 +2188,11 @@ class LolzteamApi:
                     :return: json server response
                     """
 
-                    url = f"https://api.zelenka.guru/conversation-messages/{message_id}/report"
+                    path_data = {"site": "Forum", "path": f"/conversation-messages/{message_id}/report"}
                     data = {
                         "message": message
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=data)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=data)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
@@ -2306,12 +2211,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/conversations"
+                path_data = {"site": "Forum", "path": f"/conversations"}
                 params = {
                     "page": page,
                     "limit": limit
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get(self, conversation_id: int):
                 """
@@ -2325,14 +2230,14 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/conversations/{conversation_id}"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Forum", "path": f"/conversations/{conversation_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
-            def delete(self, conversation_id: int):
+            def leave(self, conversation_id: int):
                 """
                 DELETE https://api.zelenka.guru/conversations/conversation_id
 
-                Delete a conversation.
+                Leave from conversation
 
                 Required scopes: conversate, post
 
@@ -2340,8 +2245,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.zelenka.guru/conversations/{conversation_id}"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Forum", "path": f"/conversations/{conversation_id}"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def create(self, recipient_id: int, message: str, open_invite: bool = False,
                        conversation_locked: bool = False, allow_edit_messages: bool = True):
@@ -2385,8 +2290,8 @@ class LolzteamApi:
                 data = {
                     "message_body": message
                 }
-                url = f"https://api.zelenka.guru/conversations"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
+                path_data = {"site": "Forum", "path": f"/conversations"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
 
             def create_group(self, recipients: str, title: str, message: str, open_invite: bool = True,
                              conversation_locked: bool = False, allow_edit_messages: bool = True):
@@ -2432,8 +2337,8 @@ class LolzteamApi:
                 data = {
                     "message_body": message
                 }
-                url = f"https://api.zelenka.guru/conversations"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params, data=data)
+                path_data = {"site": "Forum", "path": f"/conversations"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
 
         class __Oauth:
             def __init__(self, api_self):
@@ -2453,13 +2358,13 @@ class LolzteamApi:
 
                 :return: json server response or token string
                 """
-                url = f"https://api.zelenka.guru/oauth/token/facebook"
+                path_data = {"site": "Forum", "path": f"/oauth/token/facebook"}
                 params = {
                     "client_id": client_id,
                     "client_secret": client_secret,
                     "facebook_token": facebook_token
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def twitter(self, client_id: int, client_secret: str, twitter_url: str, twitter_auth: str):
                 """
@@ -2476,14 +2381,14 @@ class LolzteamApi:
 
                 :return: json server response or token string
                 """
-                url = f"https://api.zelenka.guru/oauth/token/twitter"
+                path_data = {"site": "Forum", "path": f"/oauth/token/twitter"}
                 params = {
                     "client_id": client_id,
                     "client_secret": client_secret,
                     "twitter_uri": twitter_url,
                     "twitter_auth": twitter_auth
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def google(self, client_id: int, client_secret: str, google_token: str):
                 """
@@ -2499,13 +2404,13 @@ class LolzteamApi:
 
                 :return: json server response or token string
                 """
-                url = f"https://api.zelenka.guru/oauth/token/google"
+                path_data = {"site": "Forum", "path": f"/oauth/token/google"}
                 params = {
                     "client_id": client_id,
                     "client_secret": client_secret,
                     "facebook_token": google_token
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def admin(self, user_id: int):
                 """
@@ -2519,11 +2424,11 @@ class LolzteamApi:
 
                 :return: json server response or token string
                 """
-                url = f"https://api.zelenka.guru/oauth/token/admin"
+                path_data = {"site": "Forum", "path": f"/oauth/token/admin"}
                 params = {
                     "user_id": user_id
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def associate(self, client_id: int, user_id: str, password: str, extra_data: str, extra_timestamp: int):
                 """
@@ -2541,7 +2446,7 @@ class LolzteamApi:
 
                 :return: json server response or token string
                 """
-                url = f"https://api.zelenka.guru/oauth/token/associate"
+                path_data = {"site": "Forum", "path": f"/oauth/token/associate"}
                 params = {
                     "client_id": client_id,
                     "user_id": user_id,
@@ -2549,7 +2454,7 @@ class LolzteamApi:
                     "extra_data": extra_data,
                     "extra_timestamp": extra_timestamp
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
         def navigation(self, parent: int = None):
             """
@@ -2563,11 +2468,11 @@ class LolzteamApi:
 
             :return: json server response
             """
-            url = f"https://api.zelenka.guru/navigation"
+            path_data = {"site": "Forum", "path": f"/navigation"}
             params = {
                 "parent": parent
             }
-            return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+            return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
         def batch(self, request_body: list[dict]):
             """
@@ -2592,8 +2497,8 @@ class LolzteamApi:
             :return: json server response
             """
 
-            url = f"https://api.zelenka.guru/batch"
-            return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(request_body))
+            path_data = {"site": "Forum", "path": f"/batch"}
+            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=json.dumps(request_body))
 
     class __Market:
         def __init__(self, api_self, token_user_id):
@@ -2629,8 +2534,8 @@ class LolzteamApi:
             :return: json server response
             """
 
-            url = f"https://api.lzt.market/batch"
-            return LolzteamApi.send_request(self=self.__api, method="POST", url=url, data=json.dumps(request_body))
+            path_data = {"site": "Market", "path": f"/batch"}
+            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=json.dumps(request_body))
 
         def steam_value(self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None):
             """
@@ -2666,13 +2571,13 @@ class LolzteamApi:
             :return: json server response
             """
             params = {
-                "link":url,
-                "app_id":app_id,
-                "currency":currency,
-                "ignore_cache":ignore_cache
+                "link": url,
+                "app_id": app_id,
+                "currency": currency,
+                "ignore_cache": ignore_cache
             }
-            url = f"https://api.lzt.market/steam-value"
-            return LolzteamApi.send_request(self=self.__api, method="GET", url=url,params=params)
+            path_data = {"site": "Market", "path": f"/steam-value"}
+            return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
         class __Profile:
             def __init__(self, api_self, token_user_id):
@@ -2690,8 +2595,8 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = "https://api.lzt.market/me"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Market", "path": f"/me"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def edit(self, disable_steam_guard: bool = None, user_allow_ask_discount: bool = None,
                      max_discount_percent: int = None, allow_accept_accounts: str = None,
@@ -2712,7 +2617,7 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = "https://api.lzt.market/me"
+                path_data = {"site": "Market", "path": f"/me"}
                 params = {
                     "disable_steam_guard": disable_steam_guard,
                     "user_allow_ask_discount": user_allow_ask_discount,
@@ -2721,7 +2626,7 @@ class LolzteamApi:
                     "hide_favourites": hide_favourites,
                     "vk_ua": vk_ua
                 }
-                return LolzteamApi.send_request(self=self.__api, method="PUT", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params)
 
             # Copy of __List.owned
             def owned(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
@@ -2815,8 +2720,8 @@ class LolzteamApi:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                url = f"https://api.lzt.market/user/{user_id}/items"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                path_data = {"site": "Market", "path": f"/user/{user_id}/items"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             # Copy of __List.purchased
             def purchased(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
@@ -2909,8 +2814,8 @@ class LolzteamApi:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                url = f"https://api.lzt.market/user/{user_id}/orders"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                path_data = {"site": "Market", "path": f"/user/{user_id}/orders"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             # Copy of __List.favorite
             def favorite(self, page: int = None, search_params: dict = None):
@@ -2927,14 +2832,14 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = "https://api.lzt.market/fave"
+                path_data = {"site": "Market", "path": f"/fave"}
                 params = {
                     "page": page
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             # Copy of __List.viewed
             def viewed(self, page: int = None, search_params: dict = None):
@@ -2951,14 +2856,14 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = "https://api.lzt.market/viewed"
+                path_data = {"site": "Market", "path": f"/viewed"}
                 params = {
                     "page": page
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
         class __List:
             def __init__(self, api_self, token_user_id):
@@ -2983,11 +2888,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.lzt.market/category"
+                    path_data = {"site": "Market", "path": f"/category"}
                     params = {
                         "top_queries": top_queries
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
                 def get(self, category_name: str, pmin: int = None, pmax: int = None, title: str = None,
                         parse_sticky_items: bool = None, parse_same_items: bool = None, games: list[int] or int = None,
@@ -3062,7 +2967,7 @@ class LolzteamApi:
 
                     """
                     category_name = category_name.lower()
-                    url = f"https://api.lzt.market/{category_name}"
+                    path_data = {"site": "Market", "path": f"/{category_name}"}
                     params = {
                         "pmin": pmin,
                         "pmax": pmax,
@@ -3075,7 +2980,7 @@ class LolzteamApi:
                     if search_params is not None:
                         for key, value in search_params.items():
                             params[str(key)] = value
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
                 def params(self, category_name: str):
                     """
@@ -3139,8 +3044,8 @@ class LolzteamApi:
                     :return: json server response
 
                     """
-                    url = f"https://api.lzt.market/{category_name}/params"
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                    path_data = {"site": "Market", "path": f"/{category_name}/params"}
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
                 def games(self, category_name: str):
                     """
@@ -3204,8 +3109,8 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.lzt.market/{category_name}/games"
-                    return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                    path_data = {"site": "Market", "path": f"/{category_name}/games"}
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def from_url(self, url: str):
                 """
@@ -3218,8 +3123,11 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if "https://lzt.market" in url:
-                    url = url.replace("https://lzt.market", "https://api.lzt.market")
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                    url = url.replace("https://lzt.market", "")
+                if "https://api.lzt.market" in url:
+                    url = url.replace("https://api.lzt.market", "")
+                path_data = {"site": "Market", "path": f"{url}"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def new(self, page: int = None, search_params: dict = None):
                 """
@@ -3235,14 +3143,14 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = "https://api.lzt.market/"
+                path_data = {"site": "Market", "path": f"/"}
                 params = {
                     "page": page
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def owned(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
                       pmax: int = None, title: str = None, search_params: dict = None):
@@ -3330,8 +3238,8 @@ class LolzteamApi:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                url = f"https://api.lzt.market/user/{user_id}/items"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                path_data = {"site": "Market", "path": f"/user/{user_id}/items"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def purchased(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
                           pmax: int = None, title: str = None, search_params: dict = None):
@@ -3418,8 +3326,8 @@ class LolzteamApi:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                url = f"https://api.lzt.market/user/{user_id}/orders"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                path_data = {"site": "Market", "path": f"/user/{user_id}/orders"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def favorite(self, page: int = None, search_params: dict = None):
                 """
@@ -3435,14 +3343,14 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = "https://api.lzt.market/fave"
+                path_data = {"site": "Market", "path": f"/user/{user_id}/fave"}
                 params = {
                     "page": page
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def viewed(self, page: int = None, search_params: dict = None):
                 """
@@ -3458,14 +3366,14 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                url = "https://api.lzt.market/viewed"
+                path_data = {"site": "Market", "path": f"/viewed"}
                 params = {
                     "page": page
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get(self, item_id: int, steam_preview: bool = False, preview_type: str = None):
                 """
@@ -3482,13 +3390,13 @@ class LolzteamApi:
                 :return: json server response or html code
 
                 """
-                url = f"https://api.lzt.market/{item_id}"
+                path_data = {"site": "Market", "path": f"/{item_id}"}
                 if steam_preview:
-                    url = f"https://api.lzt.market/{item_id}/steam-preview"
+                    path_data = {"site": "Market", "path": f"/{item_id}/steam-preview"}
                 params = {
                     "type": preview_type
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
         class __Payments:
             def __init__(self, api_self, token_user_id):
@@ -3554,10 +3462,10 @@ class LolzteamApi:
                     "is_hold": is_hold,
                     "show_payments_stats": show_payments_stats
                 }
-                url = f"https://api.lzt.market/user/{user_id}/payments"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                path_data = {"site": "Market", "path": f"/user/{user_id}/payments"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
-            def transfer(self, amount: int, secret_answer: str, currency: str = Types.Market.Currency.rub,
+            def transfer(self, amount: int, secret_answer: str, currency: str = "rub",
                          user_id: int = None,
                          username: str = None, comment: str = None, transfer_hold: bool = None,
                          hold_length_option: str = None,
@@ -3581,7 +3489,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = "https://api.lzt.market/balance/transfer"
+                path_data = {"site": "Market", "path": f"/balance/transfer"}
                 params = {
                     "amount": amount,
                     "secret_answer": secret_answer,
@@ -3593,7 +3501,7 @@ class LolzteamApi:
                     "hold_length_value": hold_length_value,
                     "hold_length_option": hold_length_option
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             @staticmethod
             def generate_link(amount: int, user_id: int = None, username: str = None, comment: str = None,
@@ -3663,11 +3571,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.lzt.market/{item_id}/tag"
+                    path_data = {"site": "Market", "path": f"/{item_id}/tag"}
                     params = {
                         "tag_id": tag_id
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, params=params)
 
                 def add(self, item_id: int, tag_id: int):
                     """
@@ -3682,11 +3590,11 @@ class LolzteamApi:
 
                     :return: json server response
                     """
-                    url = f"https://api.lzt.market/{item_id}/tag"
+                    path_data = {"site": "Market", "path": f"/{item_id}/tag"}
                     params = {
                         "tag_id": tag_id
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def delete(self, item_id: int, reason: str):
                 """
@@ -3701,11 +3609,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}"
+                path_data = {"site": "Market", "path": f"/{item_id}"}
                 params = {
                     "reason": reason
                 }
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, params=params)
 
             def email(self, item_id: int, email: str):
                 """
@@ -3720,11 +3628,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/email-code"
+                path_data = {"site": "Market", "path": f"/{item_id}/email-code"}
                 params = {
                     "email ": email
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def guard(self, item_id: int):
                 """
@@ -3738,8 +3646,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/guard-code"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/guard-code"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def mafile(self, item_id: int):
                 """
@@ -3755,8 +3663,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/mafile"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/mafile"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def password_tm(self, item_id: int):
                 """
@@ -3772,8 +3680,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/temp-email-password"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/temp-email-password"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def refuse_guarantee(self, item_id: int):
                 """
@@ -3787,8 +3695,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/refuse-guarantee"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/refuse-guarantee"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def change_password(self, item_id: int, _cancel: bool = None):
                 """
@@ -3803,7 +3711,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/change-password"
+                path_data = {"site": "Market", "path": f"/{item_id}/change-password"}
                 if True:  # Tweak 0
                     if _cancel:
                         _cancel = 1
@@ -3812,7 +3720,7 @@ class LolzteamApi:
                 params = {
                     "_cancel": _cancel
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def unstick(self, item_id: int):
                 """
@@ -3826,8 +3734,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/stick"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/stick"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def stick(self, item_id: int):
                 """
@@ -3841,8 +3749,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/stick"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/stick"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def unfavorite(self, item_id: int):
                 """
@@ -3856,8 +3764,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/star"
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/star"}
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
 
             def favorite(self, item_id: int):
                 """
@@ -3871,8 +3779,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/star"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/star"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def bump(self, item_id: int):
                 """
@@ -3886,8 +3794,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/bump"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/bump"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def change_owner(self, item_id: int, username: str, secret_answer: str):
                 """
@@ -3903,12 +3811,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/change-owner"
+                path_data = {"site": "Market", "path": f"/{item_id}/change-owner"}
                 params = {
                     "username": username,
                     "secret_answer": secret_answer
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def edit(self, item_id: int, price: int = None, currency: str = None, item_origin: str = None,
                      title: str = None, title_en: str = None, description: str = None, information: str = None,
@@ -3951,7 +3859,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/edit"
+                path_data = {"site": "Market", "path": f"/{item_id}/edit"}
                 params = {
                     "price": price,
                     "currency": currency,
@@ -3965,7 +3873,7 @@ class LolzteamApi:
                     "allow_ask_discount": allow_ask_discount,
                     "proxy_id": proxy_id
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def telegram(self, item_id: int):
                 """
@@ -3979,8 +3887,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/telegram-login-code"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/telegram-login-code"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def telegram_reset(self, item_id: int):
                 """
@@ -3994,8 +3902,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/telegram-reset-authorizations"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/telegram-reset-authorizations"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
         class __Purchasing:
             def __init__(self, api_self):
@@ -4014,15 +3922,15 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/reserve"
+                path_data = {"site": "Market", "path": f"/{item_id}/reserve"}
                 params = {
                     "price": price
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def reserve_cancel(self, item_id: int):
                 """
-                POST https://api.lzt.market/item_id/cancel-reseve
+                POST https://api.lzt.market/item_id/cancel-reserve
 
                 Cancels reserve.
 
@@ -4032,8 +3940,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/cancel-reseve"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/cancel-reserve"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def check(self, item_id: int):
                 """
@@ -4047,8 +3955,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/check-account"
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url)
+                path_data = {"site": "Market", "path": f"/{item_id}/check-account"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
             def confirm(self, item_id: int, buy_without_validation: bool = None):
                 """
@@ -4063,7 +3971,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/confirm-buy"
+                path_data = {"site": "Market", "path": f"/{item_id}/confirm-buy"}
                 if True:  # Tweak 0
                     if buy_without_validation:
                         buy_without_validation = 1
@@ -4072,7 +3980,7 @@ class LolzteamApi:
                 params = {
                     "buy_without_validation": buy_without_validation
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def fast_buy(self, item_id: int, price: int, buy_without_validation: bool = None):
                 """
@@ -4088,7 +3996,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/fast-buy"
+                path_data = {"site": "Market", "path": f"/{item_id}/fast-buy"}
                 if True:  # Tweak 0
                     if buy_without_validation:
                         buy_without_validation = 1
@@ -4098,7 +4006,7 @@ class LolzteamApi:
                     "price": price,
                     "buy_without_validation": buy_without_validation
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
         class __Publishing:
             def __init__(self, api_self):
@@ -4117,11 +4025,11 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/goods/add"
+                path_data = {"site": "Market", "path": f"/{item_id}/goods/add"}
                 params = {
                     "resell_item_id": resell_item_id
                 }
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def check(self, item_id: int, login: str = None, password: str = None, login_password: str = None,
                       close_item: bool = None, extra: dict = None, resell_item_id: int = None,
@@ -4143,7 +4051,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/{item_id}/goods/check"
+                path_data = {"site": "Market", "path": f"/{item_id}/goods/check"}
                 if True:  # Tweak 0
                     if random_proxy:
                         random_proxy = 1
@@ -4166,7 +4074,7 @@ class LolzteamApi:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
                         params[es] = value
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def add(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
                     title: str = None, title_en: str = None, description: str = None, information: str = None,
@@ -4221,7 +4129,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/item/add"
+                path_data = {"site": "Market", "path": f"/item/add"}
                 if True:  # Tweak 0
                     if random_proxy:
                         random_proxy = 1
@@ -4244,7 +4152,7 @@ class LolzteamApi:
                     "proxy_id": proxy_id,
                     "random_proxy": random_proxy
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def fast_sell(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
                           title: str = None, title_en: str = None, description: str = None, information: str = None,
@@ -4303,7 +4211,7 @@ class LolzteamApi:
                 :param extra: Extra params for account checking. E.g. you need to put cookies to extra[cookies] if you want to upload TikTok/Fortnite/Epic Games account
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/item/fast-sell"
+                path_data = {"site": "Market", "path": f"/item/fast-sell"}
                 if True:  # Tweak 0
                     if random_proxy:
                         random_proxy = 1
@@ -4333,7 +4241,7 @@ class LolzteamApi:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
                         params[es] = value
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             # Copy of __Managing.edit
             def edit(self, item_id: int, price: int = None, currency: str = None, item_origin: str = None,
@@ -4378,7 +4286,7 @@ class LolzteamApi:
                 :return: json server response
                 """
 
-                url = f"https://api.lzt.market/{item_id}/edit"
+                path_data = {"site": "Market", "path": f"/{item_id}/edit"}
                 params = {
                     "price": price,
                     "currency": currency,
@@ -4392,7 +4300,7 @@ class LolzteamApi:
                     "allow_ask_discount": allow_ask_discount,
                     "proxy_id": proxy_id
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
         class __Proxy:
             def __init__(self, api_self):
@@ -4408,8 +4316,8 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/proxy"
-                return LolzteamApi.send_request(self=self.__api, method="GET", url=url)
+                path_data = {"site": "Market", "path": f"/proxy"}
+                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def delete(self, proxy_id: int = None, delete_all: bool = None):
                 """
@@ -4424,12 +4332,12 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/proxy"
+                path_data = {"site": "Market", "path": f"/proxy"}
                 params = {
                     "proxy_id": proxy_id,
                     "delete_all": delete_all
                 }
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, params=params)
 
             def add(self, proxy_ip: str = None, proxy_port: int = None, proxy_user: str = None, proxy_pass: str = None,
                     proxy_row: str = None):
@@ -4448,7 +4356,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                url = f"https://api.lzt.market/proxy"
+                path_data = {"site": "Market", "path": f"/proxy"}
                 params = {
                     "proxy_ip": proxy_ip,
                     "proxy_port": proxy_port,
@@ -4456,4 +4364,4 @@ class LolzteamApi:
                     "proxy_pass": proxy_pass,
                     "proxy_row": proxy_row
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", url=url, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)

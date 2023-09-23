@@ -23,4 +23,6 @@ try:
     auto_update()
 except:
     pass
-from .LolzteamApi import LolzteamApi, Types
+from .LolzteamApi import LolzteamApi
+from .AntipublicApi import AntipublicApi
+from . import Types
