@@ -175,7 +175,7 @@ class AntipublicApi:
         :return: json server response
         """
         params = {
-            "email": login,
+            "email": login
         }
         path = f"/api/v2/emailSearch"
         return AntipublicApi.send_request(self=self, method="GET", path=path, params=params)

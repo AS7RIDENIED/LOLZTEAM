@@ -6,6 +6,64 @@ class Proxy:
 
 
 class Market:
+    class Categories:
+        steam = "steam"
+        fortnite = "fortnite"
+        vk = "vkontakte"
+        genshin = "genshin-impact"
+        valorant = "valorant"
+        lol = "league-of-legends"
+        telegram = "telegram"
+        diamondrp = "diamondrp"
+        supercell = "supercell"
+        origin = "origin"
+        wot = "world-of-tanks"  # World of Tanks
+        wot_blitz = "wot-blitz"
+        epicgames = "epicgames"
+        eft = "escape-from-tarkov"
+        twitter = "twitter"  # Not released yet
+        socialclub = "socialclub"
+        uplay = "uplay"
+        war_thunder = "war-thunder"
+        discord = "discord"
+        tiktok = "tiktok"
+        instagram = "instagram"
+        battlenet = "battlenet"
+        vpn = "vpn"
+        streaming_media = "cinema"
+        spotify = "spotify"
+        warface = "warface"
+        youtube = "youtube"
+        minecraft = "minecraft"
+    class Categories_ID:
+        steam = 1
+        fortnite = 9
+        vk = 2
+        genshin = 17
+        valorant = 13
+        lol = 29
+        telegram = 24
+        diamondrp = 6
+        supercell = 15
+        origin = 3
+        wot = 14
+        wot_blitz = 16
+        epicgames = 12
+        eft = 18
+        twitter = 21
+        socialclub = 7
+        uplay = 5
+        war_thunder = 27
+        discord = 22
+        tiktok =20
+        instagram = 10
+        battlenet = 11
+        vpn = 19
+        streaming_media = 23
+        spotify = 26
+        warface = 4
+        youtube = 25
+        minecraft = 28
     class Operation_types:
         income = "income"
         cost = "cost"

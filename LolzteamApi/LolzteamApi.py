@@ -1,7 +1,6 @@
 import requests
 import time
 import json
-# path_data = {"site":"Market","path":"asd/asd/asd"}
 
 
 class LolzteamApi:
@@ -493,7 +492,8 @@ class LolzteamApi:
                 data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                data=data)
 
             def edit(self, post_id: int, thread_title: str = None, thread_prefix_id: int = None,
                      thread_tags: str = None,
@@ -524,7 +524,8 @@ class LolzteamApi:
                 data = {
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params,
+                                                data=data)
 
             def delete(self, post_id: int, reason: str = None):
                 """
@@ -678,7 +679,8 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
+                                                        params=params,
                                                         data=data)
 
                     def create_by_count(self, thread_title: str, post_body: str, prize_data_money: int,
@@ -726,7 +728,8 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
+                                                        params=params,
                                                         data=data)
 
                 class __Upgrade:
@@ -795,7 +798,8 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
+                                                        params=params,
                                                         data=data)
 
                     def create_by_count(self, thread_title: str, post_body: str, prize_data_upgrade: int,
@@ -857,7 +861,8 @@ class LolzteamApi:
                             "post_body": post_body,
                             "secret_answer": secret_answer
                         }
-                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                        return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
+                                                        params=params,
                                                         data=data)
 
             def get_threads(self, forum_id: int, thread_ids: str = None, creator_user_id: int = None,
@@ -941,7 +946,8 @@ class LolzteamApi:
                     "thread_title": thread_title,
                     "post_body": post_body
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                data=data)
 
             def delete(self, thread_id: int, reason: str = None):
                 """
@@ -1458,7 +1464,8 @@ class LolzteamApi:
                     for key, value in fields.items():
                         field = f"fields[{key}]"
                         data[field] = value
-                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params,
+                                                data=data)
 
             def follow(self, user_id: int):
                 """
@@ -1987,7 +1994,8 @@ class LolzteamApi:
                     "date": date
                 }
 
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=json.dumps(data))
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
+                                                data=json.dumps(data))
 
         class __Notifications:
             def __init__(self, __api_self):
@@ -2067,7 +2075,8 @@ class LolzteamApi:
                     "message_html": message_html,
                     "extra_data": extra_data
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                data=data)
 
         class __Conversations:
             class __Conversations_messages:
@@ -2138,7 +2147,8 @@ class LolzteamApi:
                     data = {
                         "message_body": message_body
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                    data=data)
 
                 def edit(self, message_id: int, message_body: str):
                     """
@@ -2291,7 +2301,8 @@ class LolzteamApi:
                     "message_body": message
                 }
                 path_data = {"site": "Forum", "path": f"/conversations"}
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                data=data)
 
             def create_group(self, recipients: str, title: str, message: str, open_invite: bool = True,
                              conversation_locked: bool = False, allow_edit_messages: bool = True):
@@ -2338,7 +2349,8 @@ class LolzteamApi:
                     "message_body": message
                 }
                 path_data = {"site": "Forum", "path": f"/conversations"}
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params, data=data)
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                data=data)
 
         class __Oauth:
             def __init__(self, api_self):
@@ -2498,7 +2510,8 @@ class LolzteamApi:
             """
 
             path_data = {"site": "Forum", "path": f"/batch"}
-            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=json.dumps(request_body))
+            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
+                                            data=json.dumps(request_body))
 
     class __Market:
         def __init__(self, api_self, token_user_id):
@@ -2535,7 +2548,8 @@ class LolzteamApi:
             """
 
             path_data = {"site": "Market", "path": f"/batch"}
-            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=json.dumps(request_body))
+            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
+                                            data=json.dumps(request_body))
 
         def steam_value(self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None):
             """
@@ -2563,10 +2577,10 @@ class LolzteamApi:
 
             322330 - Don't Starve Together
 
-            :param url:
-            :param app_id:
-            :param currency:
-            :param ignore_cache:
+            :param url: Link or id of account. Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
+            :param app_id: Application id.
+            :param currency: Using currency for amount.
+            :param ignore_cache: Ignore cache.
 
             :return: json server response
             """
@@ -2628,242 +2642,6 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params)
 
-            # Copy of __List.owned
-            def owned(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
-                      pmax: int = None,
-                      title: str = None, search_params: dict = None, status: str = None, order: str = None):
-                """
-                GET https://api.lzt.market/user/user_id/items
-
-                Displays a list of owned accounts.
-
-                Category id-names list:
-
-                1 - steam - Steam
-
-                2 - vkontakte - VK
-
-                3 - origin - Origin
-
-                4 - warface - Warface
-
-                5 - uplay - Uplay
-
-                7 - socialclub - Social Club
-
-                9 - fortnite - Fortnite
-
-                10 - instagram - Instagram
-
-                11 - battlenet - Battle.net
-
-                12 - epicgames - Epic Games
-
-                13 - valorant - Valorant
-
-                14 - world-of-tanks - World Of Tanks
-
-                16 - wot-blitz - World Of Tanks Blitz
-
-                15 - supercell - Supercell
-
-                17 - genshin-impact - Genshin Impact
-
-                18 - escape-from-tarkov - Escape From Tarkov
-
-                19 - vpn - VPN
-
-                20 - tiktok - TikTok
-
-                22 - discord - Discord
-
-                23 - cinema - Online Cinema
-
-                24 - telegram - Telegram
-
-                25 - youtube - YouTube
-
-                26 - spotify - Spotify
-
-                27 - war-thunder - War Thunder
-
-                Required scopes: market
-
-                :param user_id: ID of user.
-                :param page: Page
-                :param category_id: Accounts category
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param title: The word or words contained in the account title
-                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-                :param order: Order type. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
-                :param status: Account status. Can be [active, paid, deleted or awaiting].
-
-                :return: json server response
-
-                """
-
-                if user_id is None:  # Tweak 1
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
-                params = {
-                    "user_id": user_id,
-                    "category_id": category_id,
-                    "pmin": pmin,
-                    "pmax": pmax,
-                    "title": title,
-                    "page": page,
-                    "show": status,
-                    "order_by": order
-                }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
-                path_data = {"site": "Market", "path": f"/user/{user_id}/items"}
-                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
-
-            # Copy of __List.purchased
-            def purchased(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
-                          pmax: int = None, title: str = None, search_params: dict = None, status: str = None,
-                          order: str = None):
-                """
-                GET https://api.lzt.market/user/user_id/orders
-
-                Displays a list of purchased accounts.
-
-                Category id-names list:
-
-                1 - steam - Steam
-
-                2 - vkontakte - VK
-
-                3 - origin - Origin
-
-                4 - warface - Warface
-
-                5 - uplay - Uplay
-
-                7 - socialclub - Social Club
-
-                9 - fortnite - Fortnite
-
-                10 - instagram - Instagram
-
-                11 - battlenet - Battle.net
-
-                12 - epicgames - Epic Games
-
-                13 - valorant - Valorant
-
-                14 - world-of-tanks - World Of Tanks
-
-                16 - wot-blitz - World Of Tanks Blitz
-
-                15 - supercell - Supercell
-
-                17 - genshin-impact - Genshin Impact
-
-                18 - escape-from-tarkov - Escape From Tarkov
-
-                19 - vpn - VPN
-
-                20 - tiktok - TikTok
-
-                22 - discord - Discord
-
-                23 - cinema - Online Cinema
-
-                24 - telegram - Telegram
-
-                25 - youtube - YouTube
-
-                26 - spotify - Spotify
-
-                27 - war-thunder - War Thunder
-
-                Required scopes: market
-
-                :param user_id: ID of user.
-                :param page: Page
-                :param category_id: Accounts category
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param title: The word or words contained in the account title
-                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-                :param status: Account status. Can be [active, paid, deleted or awaiting].
-                :param order: Order type. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
-
-                :return: json server response
-
-                """
-
-                if user_id is None:  # Tweak 1
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
-                params = {
-                    "category_id": category_id,
-                    "pmin": pmin,
-                    "pmax": pmax,
-                    "title": title,
-                    "page": page,
-                    "show": status,
-                    "order_by": order
-                }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
-                path_data = {"site": "Market", "path": f"/user/{user_id}/orders"}
-                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
-
-            # Copy of __List.favorite
-            def favorite(self, page: int = None, search_params: dict = None):
-                """
-                GET https://api.lzt.market/fave
-
-                Displays a list of favourites accounts.
-
-                Required scopes: market
-
-                :param page: The number of the page to display results from
-                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-
-                :return: json server response
-
-                """
-                path_data = {"site": "Market", "path": f"/fave"}
-                params = {
-                    "page": page
-                }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
-
-            # Copy of __List.viewed
-            def viewed(self, page: int = None, search_params: dict = None):
-                """
-                GET https://api.lzt.market/viewed
-
-                Displays a list of viewed accounts.
-
-                Required scopes: market
-
-                :param page: The number of the page to display results from
-                :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-
-                :return: json server response
-
-                """
-                path_data = {"site": "Market", "path": f"/viewed"}
-                params = {
-                    "page": page
-                }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
-                return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
         class __List:
             def __init__(self, api_self, token_user_id):
@@ -3575,7 +3353,8 @@ class LolzteamApi:
                     params = {
                         "tag_id": tag_id
                     }
-                    return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, params=params)
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data,
+                                                    params=params)
 
                 def add(self, item_id: int, tag_id: int):
                     """
@@ -3962,7 +3741,7 @@ class LolzteamApi:
                 """
                 POST https://api.lzt.market/item_id/confirm-buy
 
-                Reserves account for you. Reserve time - 300 seconds.
+                Confirm buy.
 
                 Required scopes: market
 
@@ -3991,7 +3770,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param item_id: ID of item.
-                :param price: Currenct price of account in your currency
+                :param price: Current price of account in your currency
                 :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe)
 
                 :return: json server response
@@ -4241,65 +4020,6 @@ class LolzteamApi:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
                         params[es] = value
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
-
-            # Copy of __Managing.edit
-            def edit(self, item_id: int, price: int = None, currency: str = None, item_origin: str = None,
-                     title: str = None, title_en: str = None, description: str = None, information: str = None,
-                     email_login_data: str = None, email_type: str = None, allow_ask_discount: bool = None,
-                     proxy_id: int = None):
-                """
-                POST https://api.lzt.market/item_id/edit
-
-                Edits any details of account.
-
-                Account origin:
-
-                brute - Account received using Bruteforce
-
-                fishing - Account received from fishing page
-
-                stealer - Account received from stealer logs
-
-                autoreg - Account is automatically registered by a tool
-
-                personal - Account is yours. You created it yourself
-
-                resale - Account received from another seller
-
-                retrive - Account is recovered by email or phone (only for VKontakte category)
-
-                Required scopes: market
-                :param item_id: ID of item.
-                :param price: Account price in your currency.
-                :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
-                :param item_origin: Account origin. Where did you get it from.
-                :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
-                :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
-                :param description: Account public description.
-                :param information: Account private information (visible for buyer only if purchased).
-                :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
-                :param email_type: Email type. Allowed values: native, autoreg.
-                :param allow_ask_discount: Allow users to ask discount for this account.
-                :param proxy_id: Using proxy id for account checking.
-
-                :return: json server response
-                """
-
-                path_data = {"site": "Market", "path": f"/{item_id}/edit"}
-                params = {
-                    "price": price,
-                    "currency": currency,
-                    "item_origin": item_origin,
-                    "title": title,
-                    "title_en": title_en,
-                    "description": description,
-                    "information": information,
-                    "email_login_data": email_login_data,
-                    "email_type": email_type,
-                    "allow_ask_discount": allow_ask_discount,
-                    "proxy_id": proxy_id
-                }
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
         class __Proxy:
