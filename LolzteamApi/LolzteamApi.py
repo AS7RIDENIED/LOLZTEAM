@@ -225,7 +225,7 @@ class LolzteamApi:
 
             def get_forums(self, parent_category_id: int = None, parent_forum_id: int = None, order: str = None):
                 """
-                GET https://api.zelenka.guru/categories/forums
+                GET https://api.zelenka.guru/forums
 
                 List of all forums in the system.
 
@@ -236,7 +236,7 @@ class LolzteamApi:
                 :param order: Ordering of categories. Can be [natural, list]
                 :return: json server response
                 """
-                path_data = {"site": "Forum", "path": f"/categories/forums"}
+                path_data = {"site": "Forum", "path": f"/forums"}
                 params = {
                     "parent_category_id": parent_category_id,
                     "parent_forum_id": parent_forum_id,
@@ -987,11 +987,11 @@ class LolzteamApi:
                 """
                 GET https://api.zelenka.guru/threads/followed
 
-                List of followed forums by current user.
+                List of followed threads by current user.
 
                 Required scopes: read
 
-                :param total: If included in the request, only the forum count is returned as forums_total.
+                :param total: If included in the request, only the thread count is returned as threads_total.
 
                 :return: json server response
                 """
@@ -1060,7 +1060,7 @@ class LolzteamApi:
 
             def votes(self, thread_id: int):
                 """
-                GET https://api.zelenka.guru/threads/thread_id/pool
+                GET https://api.zelenka.guru/threads/thread_id/poll
 
                 Detail information of a poll.
 
@@ -1070,7 +1070,7 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/pool"}
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/poll"}
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
             def vote(self, thread_id: int, response_id: int = None, response_ids: list[int] = None):
@@ -1208,9 +1208,9 @@ class LolzteamApi:
 
                 Required scopes: read
 
-                :param tag_id:
+                :param tag_id: Id of tag.
                 :param page: Page number of tags list.
-                :param limit:
+                :param limit: Number of tagged contents in a page.
 
                 :return: json server response
                 """
@@ -1347,7 +1347,7 @@ class LolzteamApi:
                 """
                 GET https://api.zelenka.guru/users/find
 
-                List of users (with pagination).
+                Filtered list of users by username, email or custom fields.
 
                 Required scopes: read / admincp
 
@@ -1501,7 +1501,8 @@ class LolzteamApi:
                 """
                 GET https://api.zelenka.guru/users/user_id/followers
 
-                List of users (with pagination).
+                List of a user's followers.
+
 
                 Required scopes: read
 
@@ -2453,8 +2454,8 @@ class LolzteamApi:
                 :param client_id: ID of associate client.
                 :param user_id: ID of user.
                 :param password: Can be used with password_algo for better security. See Encryption section for more information.
-                :param extra_data:
-                :param extra_timestamp:
+                :param extra_data: Extra data
+                :param extra_timestamp: Extra timestamp
 
                 :return: json server response or token string
                 """
