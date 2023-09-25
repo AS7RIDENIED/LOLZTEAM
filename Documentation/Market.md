@@ -3,7 +3,7 @@
 You need to create class instance to use library
 
 ```
-from LolzteamApi import LolzteamApi
+from LolzteamApi import LolzteamApi, Types
 api = LolzteamApi(token="Your_token", language="en")
 ```
 
