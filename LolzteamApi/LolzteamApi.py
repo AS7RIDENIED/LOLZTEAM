@@ -472,7 +472,7 @@ class LolzteamApi:
                 """
                 POST https://api.zelenka.guru/posts
 
-                Create a new thread.
+                Create a new post.
 
                 Required scopes: post
 
