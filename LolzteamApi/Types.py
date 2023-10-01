@@ -122,7 +122,7 @@ class Market:
         date_to_up_upload = "pdate_to_up_upload"
 
     class App_Ids:
-        CSGO = 730
+        CS2 = 730
         PUBG = 578080
         Steam = 753
         Dota = 570

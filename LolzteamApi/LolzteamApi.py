@@ -101,6 +101,8 @@ class LolzteamApi:
         for arg in arguments:
             if arg != "self":
                 exec(f"{arg} = None")
+        if True:  # Костыль для Tweak 1
+            user_id = None
         loc = locals()
         for arg, value in kwargs.items():
             if arg not in arguments:
@@ -116,8 +118,7 @@ class LolzteamApi:
                 lines.remove(line)
         return_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[1]
         func_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
-        if True:  # Костыль для Tweak 1
-            user_id = None
+
         exec(func_code, loc)
         path_data = loc["path_data"]
         try:
@@ -157,7 +158,6 @@ class LolzteamApi:
     def __get_var_from_code(code, var_name):
         for line in code.split("\n"):
             if var_name in line:
-                print(line.strip().split(" = ")[1])
                 var = eval(line.strip().split(" = ")[1])
         return var
 
@@ -2613,7 +2613,7 @@ class LolzteamApi:
 
             Application id list:
 
-            730 - CS:GO
+            730 - CS2
 
             578080 - PUBG
 
@@ -3053,11 +3053,14 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-
                 if user_id is None:  # Tweak 1
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
+                    try:
+                        if type(self.__token_user_id) is not int:
+                            self.__token_user_id = self.__token_user_id()
+                        user_id = self.__token_user_id
+                    except:
+                        if batch_mode:
+                            raise Exception("You can't use this method without user_id")
                 params = {
                     "user_id": user_id,
                     "category_id": category_id,
@@ -3142,11 +3145,14 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-
                 if user_id is None:  # Tweak 1
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
+                    try:
+                        if type(self.__token_user_id) is not int:
+                            self.__token_user_id = self.__token_user_id()
+                        user_id = self.__token_user_id
+                    except:
+                        if batch_mode:
+                            raise Exception("You can't use this method without user_id")
                 params = {
                     "category_id": category_id,
                     "pmin": pmin,
@@ -3174,7 +3180,7 @@ class LolzteamApi:
                 :return: json server response
 
                 """
-                path_data = {"site": "Market", "path": f"/user/{user_id}/fave"}
+                path_data = {"site": "Market", "path": f"/fave"}
                 params = {
                     "page": page
                 }
@@ -3274,9 +3280,13 @@ class LolzteamApi:
                     else:
                         show_payments_stats = 0
                 if user_id is None:  # Tweak 1
-                    if type(self.__token_user_id) is not int:
-                        self.__token_user_id = self.__token_user_id()
-                    user_id = self.__token_user_id
+                    try:
+                        if type(self.__token_user_id) is not int:
+                            self.__token_user_id = self.__token_user_id()
+                        user_id = self.__token_user_id
+                    except Exception as e:
+                        if batch_mode:
+                            raise Exception("You can't use this method without user_id")
                 params = {
                     "user_id": user_id,
                     "operation_type": operation_type,
