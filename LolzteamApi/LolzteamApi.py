@@ -2643,7 +2643,6 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params)
 
-
         class __List:
             def __init__(self, api_self, token_user_id):
                 self.__api = api_self
@@ -3846,15 +3845,16 @@ class LolzteamApi:
                     "password": password,
                     "login_password": login_password,
                     "close_item": close_item,
-                    "extra": extra,
                     "resell_item_id": resell_item_id,
                     "random_proxy": random_proxy
                 }
+                data = {}
                 if extra is not None:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
-                        params[es] = value
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
+                        data[es] = value
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                data=data)
 
             def add(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
                     title: str = None, title_en: str = None, description: str = None, information: str = None,
@@ -4017,11 +4017,13 @@ class LolzteamApi:
                     "password": password,
                     "login_password": login_password
                 }
+                data = {}
                 if extra is not None:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
-                        params[es] = value
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
+                        data[es] = value
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
+                                                data=data)
 
         class __Proxy:
             def __init__(self, api_self):
