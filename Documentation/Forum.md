@@ -1,3 +1,132 @@
+<font size=6 style="margin: auto"> <center>
+
+[Market docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Antipublic.md)
+
+</center></font>
+
+<details>
+
+<summary><font size="4">Method tree</font></summary>
+
+* [Threads](#threads)
+  * [Contests](#contests)
+    * [Create upgrade contest (time)](#create-upgrade-contest-time)
+    * [Create upgrade contest (count)](#create-upgrade-contest-count)
+    * [Create money contest (time)](#create-money-contest-time)
+    * [Create money contest (count)](#create-money-contest-count)
+  * [Get threads](#get-threads)
+  * [Create thread](#create-thread)
+  * [Get thread](#get-thread)
+  * [Delete thread](#delete-thread)
+  * [Get thread followers](#get-thread-followers)
+  * [Get followed threads](#get-followed-threads)
+  * [Follow thread](#follow-thread)
+  * [Unfollow thread](#unfollow-thread)
+  * [Get thread navigation](#get-thread-navigation)
+  * [Get thread votes](#get-thread-votes)
+  * [Thread vote](#thread-vote)
+  * [Get new threads](#get-new-threads)
+  * [Get recent threads](#get-recent-threads)
+  * [Bump thread](#bump-thread)
+* [Posts](#posts)
+  * [Post comments](#post-comments)
+    * [Get post comment](#get-post-comment)
+    * [Create post comment](#create-post-comment)
+  * [Get posts](#get-posts)
+  * [Get post](#get-post)
+  * [Create post](#create-post)
+  * [Edit post](#edit-post)
+  * [Delete post](#delete-post)
+  * [Get post likes](#get-post-likes)
+  * [Like post](#like-post)
+  * [Unlike post](#unlike-post)
+  * [Report post](#report-post)
+* [Forums](#forums)
+  * [Get forums](#get-forums)
+  * [Get forum](#get-forum)
+  * [Get forum followers](#get-forum-followers)
+  * [Get followed forums](#get-followed-forums)
+  * [Follow forum](#follow-forum)
+  * [Unfollow forum](#unfollow-forum)
+* [Users](#users)
+  * [Avatar](#avatar)
+    * [Upload avatar](#upload-avatar)
+    * [Delete avatar](#delete-avatar)
+  * [Get users](#get-users)
+  * [Get user](#get-user)
+  * [Edit user](#edit-user)
+  * [Get user fields](#get-user-fields)
+  * [Search users](#search-users)
+  * [Lost password](#lost-password)
+  * [Get user followings](#get-user-followings)
+  * [Get user followers](#get-user-followers)
+  * [Follow user](#follow-user)
+  * [Unfollow user](#unfollow-user)
+  * [Get ignored users](#get-ignored-users)
+  * [Ignore user](#ignore-user)
+  * [Unignore user](#unignore-user)
+  * [Get user groups](#get-user-groups)
+* [Profile posts](#profile-posts)
+  * [Profile post comments](#profile-post-comments)
+    * [Get profile post comments](#get-profile-post-comments)
+    * [Get profile post comment](#get-profile-post-comment)
+    * [Create profile post comment](#create-profile-post-comment)
+    * [Delete profile post comment](#delete-profile-post-comment)
+  * [Get profile post](#get-profile-post)
+  * [Create profile post](#create-profile-post)
+  * [Edit profile post](#edit-profile-post)
+  * [Delete profile post](#delete-profile-post)
+  * [Get profile post likes](#get-profile-post-likes)
+  * [Like profile post](#like-profile-post)
+  * [Unlike profile post](#unlike-profile-post)
+  * [Report profile post](#report-profile-post)
+* [Conversations](#conversations)
+  * [Conversation messages](#conversation-messages)
+    * [Get conversation messages](#get-conversation-messages)
+    * [Get conversation message](#get-conversation-message)
+    * [Send conversation message](#send-conversation-message)
+    * [Edit conversation message](#edit-conversation-message)
+    * [Delete conversation message](#delete-conversation-message)
+    * [Report conversation message](#report-conversation-message)
+  * [Get conversations](#get-conversations)
+  * [Get conversation](#get-conversation)
+  * [Create conversation](#create-conversation)
+  * [Create group conversation](#create-group-conversation)
+  * [Leave from conversation](#leave-from-conversation)
+* [Notifications](#notifications)
+  * [Get notifications](#get-notifications)
+  * [Get notification](#get-notification)
+  * [Read notification/s](#read-notifications)
+  * [Send custom notification](#send-custom-notificaton)
+* [Categories](#categories)
+  * [Get categories](#get-categories)
+  * [Get category](#get-category)
+* [Pages](#pages)
+  * [Get pages](#get-pages)
+  * [Get page](#get-page)
+* [Tags](#tags)
+  * [Get popular tags](#get-popular-tags)
+  * [Get tags](#get-tags)
+  * [Tagged contents](#tagged-contents)
+  * [Find tags](#find-tags)
+* [Search](#search)
+  * [Search for threads](#search-for-threads)
+  * [Search for posts](#search-for-posts)
+  * [Search for all types of content](#search-for-all-types-of-content)
+  * [Search for tagged](#search-for-tagged)
+  * [Search indexing](#search-indexing)
+* [Oauth](#oauth)
+  * [Facebook oauth](#facebook-oauth)
+  * [Twitter oauth](#twitter-oauth)
+  * [Google oauth](#google-oauth)
+  * [Associate oauth](#associate-oauth)
+  * [Admin oauth](#admin-oauth)
+* [Navigation](#navigation)
+* [Get batch job](#get-batch-job)
+* [Batch](#batch)
+
+</details>
+
 # Quickstart
 
 You need to create class instance to use library
@@ -30,7 +159,7 @@ api = LolzteamApi(token="Your_token", language="en")
 
 *Methods for creating contests*
 
-### Upgrade contest (time)
+### Create upgrade contest (time)
 
 *Create upgrade contest by time.*
 
@@ -67,7 +196,7 @@ print(data)
 {'thread': {'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': ['string'], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Upgrade contest (count)
+### Create upgrade contest (count)
 
 *Create upgrade contest by members count.*
 
@@ -99,7 +228,7 @@ print(data)
 {'thread': {'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': ['string'], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Money contest (time)
+### Create money contest (time)
 
 *Create money contest by time.*
 
@@ -262,7 +391,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### Thread followers
+### Get thread followers
 
 *List of a thread's followers. For privacy reason, only the current user will be included in the list.*
 
@@ -279,6 +408,25 @@ print(data)
 
 ```python
 {'users': [{'user_id': 0, 'username': 'string', 'follow': {'alert': True, 'email': True}}], 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Get followed threads
+
+*List of followed threads by current user.*
+
+**Parameters:**
+
+- **total** (bool): If included in the request, only the thread count is returned as threads_total.
+
+**Example:**
+
+```python
+data = api.forum.threads.followed()
+print(data)
+```
+
+```python
+{'status': 'ok', 'message': 'Changes Saved'}
 ```
 
 ### Follow thread
@@ -320,26 +468,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### Followed
-
-*List of followed threads by current user.*
-
-**Parameters:**
-
-- **total** (bool): If included in the request, only the thread count is returned as threads_total.
-
-**Example:**
-
-```python
-data = api.forum.threads.followed()
-print(data)
-```
-
-```python
-{'status': 'ok', 'message': 'Changes Saved'}
-```
-
-### Thread navigation
+### Get thread navigation
 
 *List of navigation elements to reach the specified thread.*
 
@@ -358,7 +487,7 @@ print(data)
 {'elements': [{'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'sub-elements': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'navigation_type': 'string', 'navigation_id': 0, 'navigation_depth': 0, 'navigation_parent_id': 0, 'has_sub_elements': True, 'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'forum_is_followed': True}], 'elements_count': 0, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Thread votes
+### Get thread votes
 
 *Detail information of a poll.*
 
@@ -399,7 +528,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### New threads
+### Get new threads
 
 *List of unread threads (must be logged in).*
 
@@ -423,7 +552,7 @@ print(data)
 {'threads': [{'thread_id': 0}], 'data': [{'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': ['string'], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}], 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Recent threads
+### Get recent threads
 
 *List of recent threads.*
 
@@ -473,7 +602,7 @@ print(data)
 
 ---
 
-## Comments
+## Post comments
 
 *Methods for getting and creating post comments*
 
@@ -528,7 +657,7 @@ print(data)
 - **thread_id** (int): ID of the containing thread.
 - **page_of_post_id** (int): ID of a post, posts that are in the same page with the specified post will be returned. 
   > thread_id may be skipped.
-- **post_ids** (str): ID's of needed posts (separated by comma). 
+- **post_ids** (list): ID's of needed posts. 
   > If this parameter is set, all other filtering parameters will be ignored.
 - **page** (int): Page number of posts.
 - **limit** (int): Number of posts in a page.
@@ -539,11 +668,31 @@ print(data)
 **Example:**
 
 ```python
-
+data = api.forum.posts.get_posts(thread_id=5523020)
+print(data)
 ```
 
 ```python
 {'posts': [{'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}], 'posts_total': 0, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Get post
+
+*Detail information of a post.*
+
+**Parameters:**
+
+- **post_id** (int): ID of post.
+
+**Example:**
+
+```python
+data = api.forum.posts.get(post_id=39769208)
+print(data)
+```
+
+```python
+{'post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Create post
@@ -561,25 +710,6 @@ print(data)
 
 ```python
 data = api.forum.posts.create(thread_id=5523020, post_body="Good library, awesome author")
-print(data)
-```
-
-```python
-{'post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get post
-
-*Detail information of a post.*
-
-**Parameters:**
-
-- **post_id** (int): ID of post.
-
-**Example:**
-
-```python
-data = api.forum.posts.get(post_id=39769208)
 print(data)
 ```
 
@@ -631,7 +761,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### Post likes
+### Get post likes
 
 *List of users who liked a post.*
 
@@ -691,7 +821,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### Report pos
+### Report post
 
 *Report a post.*
 
@@ -775,6 +905,26 @@ print(data)
 {'users': [{'user_id': 0, 'username': 'string', 'follow': {'post': True, 'alert': True, 'email': True}}], 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
+### Get followed forums
+
+*List of followed forums by current user.*
+
+**Parameters:**
+
+- **total** (bool): If included in the request, only the forum count is returned as forums_total.
+
+**Example:**
+
+```python
+data = api.forum.forums.followed(total=True)
+print(data)
+```
+
+```python
+{'forums': [{'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True, 'follow': {'post': True, 'alert': True, 'email': True}}], 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+
 ### Follow forum
 
 *Follow a forum.*
@@ -814,25 +964,6 @@ print(data)
 
 ```python
 {'status': 'ok', 'message': 'Изменения сохранены', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Followed forums
-
-*List of followed forums by current user.*
-
-**Parameters:**
-
-- **total** (bool): If included in the request, only the forum count is returned as forums_total.
-
-**Example:**
-
-```python
-data = api.forum.forums.followed(total=True)
-print(data)
-```
-
-```python
-{'forums': [{'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True, 'follow': {'post': True, 'alert': True, 'email': True}}], 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 # Users
@@ -955,7 +1086,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### User fields
+### Get user fields
 
 *List of user fields.*
 
@@ -1012,7 +1143,29 @@ print(data)
 {'status': 'ok', 'message': 'A password reset request has been emailed to you. Please follow the instructions in that email.'}
 ```
 
-### User followers
+### Get user followings
+
+*List of users whom are followed by a user.*
+
+**Parameters:**
+
+- **user_id** (int): ID of user. If you do not specify the user_id, you will get followings users by current user
+- **order** (str): Ordering of users. Support
+- **page** (int): Page number of users.
+- **limit** (int): Number of users in a page.
+
+**Example:**
+
+```python
+data = api.forum.users.followings(user_id=2410024)
+print(data)
+```
+
+```python
+{'users': [{'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_title': 'string', 'user_is_valid': True, 'user_is_verified': True, 'user_is_followed': True, 'user_last_seen_date': 0, 'links': {'permalink': 'string', 'detail': 'string', 'avatar': 'string', 'avatar_big': 'string', 'avatar_small': 'string', 'followers': 'string', 'followings': 'string', 'ignore': 'string', 'timeline': 'string'}, 'permissions': {'edit': True, 'follow': True, 'ignore': True, 'profile_post': True}, 'user_is_ignored': True, 'user_is_visitor': True, 'user_group_id': 0, 'custom_fields': {'discord': 'string', 'jabber': 'string', 'lztAwardUserTrophy': 'string', 'lztCuratorNodeTitle': 'string', 'lztCuratorNodeTitleEn': 'string', 'lztInnovation20Link': 'string', 'lztInnovation30Link': 'string', 'lztInnovationLink': 'string', 'lztSympathyIncreasing': 'string', 'lztSympathyZeroing': 'string', 'qiwi': 'string', 'scamURL': 'string', 'steam': 'string', 'telegram': 'string', 'vk': 'string'}}], 'users_total': 0, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Get user followers
 
 *List of a user's followers.*
 
@@ -1073,29 +1226,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### User followings
-
-*List of users whom are followed by a user.*
-
-**Parameters:**
-
-- **user_id** (int): ID of user. If you do not specify the user_id, you will get followings users by current user
-- **order** (str): Ordering of users. Support
-- **page** (int): Page number of users.
-- **limit** (int): Number of users in a page.
-
-**Example:**
-
-```python
-data = api.forum.users.followings(user_id=2410024)
-print(data)
-```
-
-```python
-{'users': [{'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_title': 'string', 'user_is_valid': True, 'user_is_verified': True, 'user_is_followed': True, 'user_last_seen_date': 0, 'links': {'permalink': 'string', 'detail': 'string', 'avatar': 'string', 'avatar_big': 'string', 'avatar_small': 'string', 'followers': 'string', 'followings': 'string', 'ignore': 'string', 'timeline': 'string'}, 'permissions': {'edit': True, 'follow': True, 'ignore': True, 'profile_post': True}, 'user_is_ignored': True, 'user_is_visitor': True, 'user_group_id': 0, 'custom_fields': {'discord': 'string', 'jabber': 'string', 'lztAwardUserTrophy': 'string', 'lztCuratorNodeTitle': 'string', 'lztCuratorNodeTitleEn': 'string', 'lztInnovation20Link': 'string', 'lztInnovation30Link': 'string', 'lztInnovationLink': 'string', 'lztSympathyIncreasing': 'string', 'lztSympathyZeroing': 'string', 'qiwi': 'string', 'scamURL': 'string', 'steam': 'string', 'telegram': 'string', 'vk': 'string'}}], 'users_total': 0, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Ignored users
+### Get ignored users
 
 *List of ignored users of current user.*
 
@@ -1152,9 +1283,14 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### User groups
+### Get user groups
 
 *List of a user's groups.*
+  > You can get groups only for current user. 
+  > 
+  > If you want to get another user groups you need scope admincp
+  >
+  > You can get main user group with "[Get user](#get-user)" method
 
 **Parameters:**
 
@@ -1175,9 +1311,31 @@ print(data)
 
 ---
 
-## Comments
+## Profile post comments
 
-### Get comment
+### Get profile post comments
+
+*List of comments of a profile post.*
+
+**Parameters:**
+
+- **profile_post_id** (int): ID of profile post.
+- **before** (int): Date to get older comments. 
+  > Please note that this entry point does not support the page parameter, but it still does support limit.
+- **limit** (int): Number of profile posts in a page.
+
+**Example:**
+
+```python
+data = api.forum.profile_posts.comments.comments(profile_post_id=3223590)
+print(data)
+```
+
+```python
+{'comments': [{'comment_id': 0, 'profile_post_id': 0, 'comment_user_id': 0, 'comment_username': 'string', 'comment_create_date': 0, 'comment_body': 'string', 'user_is_ignored': True, 'timeline_user_id': 0, 'links': {'detail': 'string', 'profile_post': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'delete': True}}], 'comments_total': 0, 'profile_post': {'profile_post_id': 0, 'timeline_user_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_like_count': 0, 'post_comment_count': 0, 'timeline_username': 'string', 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'links': {'permalink': 'string', 'detail': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'likes': 'string', 'comments': 'string', 'report': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'like': True, 'comment': True, 'report': True}}, 'timeline_user': {'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_title': 'string', 'user_is_valid': True, 'user_is_verified': True, 'user_is_followed': True, 'user_last_seen_date': 0, 'links': {'permalink': 'string', 'detail': 'string', 'avatar': 'string', 'avatar_big': 'string', 'avatar_small': 'string', 'followers': 'string', 'followings': 'string', 'ignore': 'string', 'timeline': 'string'}, 'permissions': {'edit': True, 'follow': True, 'ignore': True, 'profile_post': True}, 'user_is_ignored': True, 'user_is_visitor': True, 'user_group_id': 0, 'custom_fields': {'discord': 'string', 'jabber': 'string', 'lztAwardUserTrophy': 'string', 'lztCuratorNodeTitle': 'string', 'lztCuratorNodeTitleEn': 'string', 'lztInnovation20Link': 'string', 'lztInnovation30Link': 'string', 'lztInnovationLink': 'string', 'lztSympathyIncreasing': 'string', 'lztSympathyZeroing': 'string', 'qiwi': 'string', 'scamURL': 'string', 'steam': 'string', 'telegram': 'string', 'vk': 'string'}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Get profile post comment
 
 *Detail information of a profile post comment.*
 
@@ -1190,6 +1348,26 @@ print(data)
 
 ```python
 data = api.forum.profile_posts.comments.get(profile_post_id=3223590,comment_id=1780307)
+print(data)
+```
+
+```python
+{'comment': {'comment_id': 0, 'profile_post_id': 0, 'comment_user_id': 0, 'comment_username': 'string', 'comment_create_date': 0, 'comment_body': 'string', 'user_is_ignored': True, 'timeline_user_id': 0, 'links': {'detail': 'string', 'profile_post': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Create profile post comment
+
+*Create a new profile post comment.*
+
+**Parameters:**
+
+- **profile_post_id** (int): ID of profile post.
+- **comment_body** (str): Content of the new profile post comment.
+
+**Example:**
+
+```python
+data = api.forum.profile_posts.comments.create(profile_post_id=3223590,comment_body="Api example")
 print(data)
 ```
 
@@ -1218,49 +1396,26 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### Create profile post comment
-
-*Create a new profile post comment.*
-
-**Parameters:**
-
-- **profile_post_id** (int): ID of profile post.
-- **comment_body** (str): Content of the new profile post comment.
-
-**Example:**
-
-```python
-data = api.forum.profile_posts.comments.create(profile_post_id=3223590,comment_body="Api example")
-print(data)
-```
-
-```python
-{'comment': {'comment_id': 0, 'profile_post_id': 0, 'comment_user_id': 0, 'comment_username': 'string', 'comment_create_date': 0, 'comment_body': 'string', 'user_is_ignored': True, 'timeline_user_id': 0, 'links': {'detail': 'string', 'profile_post': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get profile post comments
-
-*List of comments of a profile post.*
-
-**Parameters:**
-
-- **profile_post_id** (int): ID of profile post.
-- **before** (int): Date to get older comments. 
-  > Please note that this entry point does not support the page parameter, but it still does support limit.
-- **limit** (int): Number of profile posts in a page.
-
-**Example:**
-
-```python
-data = api.forum.profile_posts.comments.comments(profile_post_id=3223590)
-print(data)
-```
-
-```python
-{'comments': [{'comment_id': 0, 'profile_post_id': 0, 'comment_user_id': 0, 'comment_username': 'string', 'comment_create_date': 0, 'comment_body': 'string', 'user_is_ignored': True, 'timeline_user_id': 0, 'links': {'detail': 'string', 'profile_post': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'delete': True}}], 'comments_total': 0, 'profile_post': {'profile_post_id': 0, 'timeline_user_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_like_count': 0, 'post_comment_count': 0, 'timeline_username': 'string', 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'links': {'permalink': 'string', 'detail': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'likes': 'string', 'comments': 'string', 'report': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'like': True, 'comment': True, 'report': True}}, 'timeline_user': {'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_title': 'string', 'user_is_valid': True, 'user_is_verified': True, 'user_is_followed': True, 'user_last_seen_date': 0, 'links': {'permalink': 'string', 'detail': 'string', 'avatar': 'string', 'avatar_big': 'string', 'avatar_small': 'string', 'followers': 'string', 'followings': 'string', 'ignore': 'string', 'timeline': 'string'}, 'permissions': {'edit': True, 'follow': True, 'ignore': True, 'profile_post': True}, 'user_is_ignored': True, 'user_is_visitor': True, 'user_group_id': 0, 'custom_fields': {'discord': 'string', 'jabber': 'string', 'lztAwardUserTrophy': 'string', 'lztCuratorNodeTitle': 'string', 'lztCuratorNodeTitleEn': 'string', 'lztInnovation20Link': 'string', 'lztInnovation30Link': 'string', 'lztInnovationLink': 'string', 'lztSympathyIncreasing': 'string', 'lztSympathyZeroing': 'string', 'qiwi': 'string', 'scamURL': 'string', 'steam': 'string', 'telegram': 'string', 'vk': 'string'}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
 ---
+
+### Get profile post
+
+*Detail information of a profile post.*
+
+**Parameters:**
+
+- **profile_post_id** (int): ID of profile post.
+
+**Example:**
+
+```python
+data = api.forum.profile_posts.get(profile_post_id=2667951)
+print(data)
+```
+
+```python
+{'profile_post': {'profile_post_id': 0, 'timeline_user_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_like_count': 0, 'post_comment_count': 0, 'timeline_username': 'string', 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'links': {'permalink': 'string', 'detail': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'likes': 'string', 'comments': 'string', 'report': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'like': True, 'comment': True, 'report': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
 
 ### Create profile post
 
@@ -1280,25 +1435,6 @@ print(data)
 
 ```python
 {'data': {'content_type': 'string', 'content_id': 0, 'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}, 'thread': {'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'thread_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}], 'thread_tags': {'3': 'string', '49306': 'string'}, 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True}}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get profile post
-
-*Detail information of a profile post.*
-
-**Parameters:**
-
-- **profile_post_id** (int): ID of profile post.
-
-**Example:**
-
-```python
-data = api.forum.profile_posts.get(profile_post_id=2667951)
-print(data)
-```
-
-```python
-{'profile_post': {'profile_post_id': 0, 'timeline_user_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_like_count': 0, 'post_comment_count': 0, 'timeline_username': 'string', 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'links': {'permalink': 'string', 'detail': 'string', 'timeline': 'string', 'timeline_user': 'string', 'poster': 'string', 'likes': 'string', 'comments': 'string', 'report': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'like': True, 'comment': True, 'report': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Edit profile post
@@ -1341,7 +1477,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-### Profile post likes
+### Get profile post likes
 
 *List of users who liked a profile post.*
 
@@ -1422,9 +1558,9 @@ print(data)
 
 ---
 
-# Conversation messages
+## Conversation messages
 
-### Get all messages
+### Get conversation messages
 
 *List of messages in a conversation (with pagination).*
 
@@ -1448,6 +1584,25 @@ print(data)
 {'message': {'message_id': 0, 'conversation_id': 0, 'creator_user_id': 0, 'creator_username': 'string', 'message_create_date': 0, 'message_body': 'string', 'message_body_html': 'string', 'message_body_plain_text': 'string', 'message_attachment_count': 0, 'user_is_ignored': True, 'links': {'detail': 'string', 'conversation': 'string', 'creator': 'string', 'creator_avatar': 'string', 'report': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'upload_attachment': True, 'report': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
+### Get conversation message
+
+*Detail information of a message.*
+
+**Parameters:**
+
+- **message_id** (int): ID of conversation message.
+
+**Example:**
+
+```python
+data = api.forum.conversations.messages.get(message_id=1731221)
+print(data)
+```
+
+```python
+{'message': {'message_id': 0, 'conversation_id': 0, 'creator_user_id': 0, 'creator_username': 'string', 'message_create_date': 0, 'message_body': 'string', 'message_body_html': 'string', 'message_body_plain_text': 'string', 'message_attachment_count': 0, 'user_is_ignored': True, 'links': {'detail': 'string', 'conversation': 'string', 'creator': 'string', 'creator_avatar': 'string', 'report': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'upload_attachment': True, 'report': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
 ### Send conversation message
 
 *Create a new conversation message.*
@@ -1461,25 +1616,6 @@ print(data)
 
 ```python
 data = api.forum.conversations.messages.create(conversation_id=17312,message_body="Api example")
-print(data)
-```
-
-```python
-{'message': {'message_id': 0, 'conversation_id': 0, 'creator_user_id': 0, 'creator_username': 'string', 'message_create_date': 0, 'message_body': 'string', 'message_body_html': 'string', 'message_body_plain_text': 'string', 'message_attachment_count': 0, 'user_is_ignored': True, 'links': {'detail': 'string', 'conversation': 'string', 'creator': 'string', 'creator_avatar': 'string', 'report': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'upload_attachment': True, 'report': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get conversation message
-
-*Detail information of a message.*
-
-**Parameters:**
-
-- **message_id** (int): ID of conversation message.
-
-**Example:**
-
-```python
-data = api.forum.conversations.messages.get(message_id=1731221)
 print(data)
 ```
 
@@ -1587,25 +1723,6 @@ print(data)
 {'conversation': {'conversation_id': 0, 'conversation_title': 'string', 'creator_user_id': 0, 'creator_username': 'string', 'creator_username_html': 'string', 'conversation_create_date': 0, 'conversation_update_date': 0, 'is_starred': 0, 'is_group': 0, 'user_is_ignored': True, 'conversation_message_count': 0, 'conversation_has_new_message': True, 'links': {'permalink': 'string', 'detail': 'string', 'messages': 'string'}, 'permissions': {'reply': True, 'delete': True, 'upload_attachment': True}, 'first_message': {'message_id': 0, 'conversation_id': 0, 'creator_user_id': 0, 'creator_username': 'string', 'creator_username_html': 'string', 'message_create_date': 0, 'message_body': 'string', 'message_body_html': 'string', 'message_body_plain_text': 'string', 'message_attachment_count': 0, 'user_is_ignored': True, 'links': {'detail': 'string', 'conversation': 'string', 'creator': 'string', 'creator_avatar': 'string', 'report': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'upload_attachment': True, 'report': True}}, 'recipients': [{'user_id': 0, 'username': 'string', 'username_html': 'string', 'avatar': 'string', 'avatar_big': 'string', 'avatar_small': 'string', 'last_activity': 0, 'is_online': True}]}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### leave
-
-*Leave from conversation*
-
-**Parameters:**
-
-- **conversation_id** (int): ID of conversation.
-
-**Example:**
-
-```python
-data = api.forum.conversations.leave(conversation_id=17312)
-print(data)
-```
-
-```python
-{'status': 'ok', 'message': 'Changes Saved'}
-```
-
 ### Create conversation
 
 *Create a new conversation.*
@@ -1653,6 +1770,25 @@ print(data)
 {'conversation': {'conversation_id': 0, 'conversation_title': 'string', 'creator_user_id': 0, 'creator_username': 'string', 'creator_username_html': 'string', 'conversation_create_date': 0, 'conversation_update_date': 0, 'is_starred': 0, 'is_group': 0, 'user_is_ignored': True, 'conversation_message_count': 0, 'conversation_has_new_message': True, 'links': {'permalink': 'string', 'detail': 'string', 'messages': 'string'}, 'permissions': {'reply': True, 'delete': True, 'upload_attachment': True}, 'first_message': {'message_id': 0, 'conversation_id': 0, 'creator_user_id': 0, 'creator_username': 'string', 'creator_username_html': 'string', 'message_create_date': 0, 'message_body': 'string', 'message_body_html': 'string', 'message_body_plain_text': 'string', 'message_attachment_count': 0, 'user_is_ignored': True, 'links': {'detail': 'string', 'conversation': 'string', 'creator': 'string', 'creator_avatar': 'string', 'report': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'upload_attachment': True, 'report': True}}, 'recipients': [{'user_id': 0, 'username': 'string', 'username_html': 'string', 'avatar': 'string', 'avatar_big': 'string', 'avatar_small': 'string', 'last_activity': 0, 'is_online': True}]}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
+### Leave from conversation
+
+*Leave from conversation*
+
+**Parameters:**
+
+- **conversation_id** (int): ID of conversation.
+
+**Example:**
+
+```python
+data = api.forum.conversations.leave(conversation_id=17312)
+print(data)
+```
+
+```python
+{'status': 'ok', 'message': 'Changes Saved'}
+```
+
 # Notifications
 
 ### Get notifications
@@ -1689,7 +1825,7 @@ print(data)
 {'notification': {'notification_id': 0, 'notification_create_date': 0, 'content_type': 'string', 'content_id': 0, 'content_action': 'string', 'notification_is_unread': True, 'creator_user_id': 0, 'creator_username': 'string', 'notification_type': 'string', 'links': {'content': 'string', 'creator_avatar': 'string'}, 'notification_html': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### read
+### Read notification/s
 
 *Mark single notification or all existing notifications read.*
 
@@ -2117,7 +2253,7 @@ string
 
 ### Admin oauth
 
-*Request API access token for another user. 
+*Request API access token for another user.*
   > This requires admincp scope and the current user must have sufficient system permissions.*
 
 **Parameters:**
@@ -2155,10 +2291,45 @@ print(data)
 {'elements': [{'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'sub-elements': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'navigation_type': 'string', 'navigation_id': 0, 'navigation_parent_id': 0, 'has_sub_elements': True, 'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': ['string'], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'forum_is_followed': True}]}
 ```
 
-### Batch
+# Get batch job
+
+*Creates batch job for Batch method*
+
+**Parameters:**
+
+- **func** (function): Needed method pointer
+- **job_name** (str): Job name
+- ****kwargs** (str): Arguments for needed method
+
+**Example:**
+
+```python
+jobs = [
+    api.get_batch_job(api.forum.users.search, job_name="1", custom_fields={"telegram": "AS7RID"}),
+    api.get_batch_job(api.forum.users.get, job_name="2", user_id=1),
+    api.get_batch_job(api.forum.threads.get, job_name="3", thread_id=5523020),
+    api.get_batch_job(api.forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LolzteamApi")
+]
+data = api.forum.batch(request_body=jobs)
+for job_name, job_data in data["jobs"].items():
+    print(job_data)
+```
+
+```python
+{'_job_result': 'ok', 'users': [{'user_id': 2410024, 'username': 'AS7RID', 'username_html': '<span  class="style22">AS7RID</span>', 'user_message_count': 1089, 'user_register_date': 1560282271, 'user_like_count': 2949, 'short_link': 'as7rid', ... }
+{'_job_result': 'ok', 'user': {'user_id': 1, 'username': 'RaysMorgan', 'username_html': '<span  class="style3">RaysMorgan</span>', 'user_message_count': 12104, 'user_register_date': 1362675475, 'user_like_count': 44351, 'short_link': 'rays',  ... }
+{'_job_result': 'ok', 'thread': {'thread_id': 5523020, 'forum_id': 976, 'thread_title': 'Библиотека для упрощения работы с API | LolzteamApi Forum/Market/Antipublic Python', 'thread_view_count': 715, 'creator_user_id': 2410024, 'creator_usern ... }
+{'_job_result': 'ok', 'thread': {'thread_id': 5907641, 'forum_id': 876, 'thread_title': 'Api batch example', 'thread_view_count': 1, 'creator_user_id': 2410024, 'creator_username': 'AS7RID', 'creator_username_html': '<span  class="style22">AS ... }
+
+```
+
+# Batch
 
 *Execute multiple API requests at once.*
+
   > Maximum batch jobs is 10.
+  >
+  > Forum batch can only proceed with forum url's. If you want to use batch with market url's try [this](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md#batch)
 
 **Parameters:**
 
@@ -2178,4 +2349,3 @@ print(data)
 ```python
 {'jobs': {'job_id': {}}}
 ```
-
