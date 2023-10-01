@@ -1,3 +1,27 @@
+<font size=6 style="margin: auto"> <center>
+
+[Forum docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md) - [Market Docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md)
+
+</center></font>
+
+<details>
+
+<summary><font size="4">Method tree</font></summary>
+
+* [Info](#info)
+  * [Lines count](#lines-count)
+  * [Lines count plain](#lines-count-plain)
+  * [Version](#version)
+* [Account info](#account-info)
+  * [Access](#access)
+  * [Queries](#queries)
+* [Data processing](#data-processing)
+  * [Check lines](#check-lines)
+  * [Get passwords](#get-passwords)
+  * [Get passwords plus](#get-passwords-plus)
+
+</details>
+
 # Quickstart
 
 You need to create class instance to use library
@@ -132,7 +156,7 @@ lines = ["admin@zelenka.guru:Lanskoy228",
 data = antipublic.check_lines(lines=lines,insert=False)
 print(data)
 
-///////////////////////////////////////////////////////
+#  Or 
 
 with open("Base.txt","r") as f:
     lines = f.readlines()

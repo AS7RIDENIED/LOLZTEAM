@@ -1,3 +1,76 @@
+<font size=6 style="margin: auto"> <center>
+
+[Forum docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Antipublic.md)
+
+</center></font>
+
+<details>
+
+<summary><font size="4">Method tree</font></summary>
+
+* [Profile](#profile)
+  * [Get profile](#get-profile)
+  * [Edit profile](#edit-profile)
+* [List](#list)
+  * [Categories](#categories)
+    * [Get accounts in category](#get-accounts-in-category)
+    * [Get categories](#get-categories)
+    * [Get search params](#get-search-params)
+    * [Get category games](#get-category-games)
+  * [Get item](#get-item)
+  * [New items](#new-items)
+  * [From url](#from-url)
+  * [Owned accounts](#owned-accounts)
+  * [Viewed accounts](#viewed-accounts)
+  * [Favorite accounts](#favorite-accounts)
+  * [Purchased accounts](#purchased-accounts)
+* [Purchasing](#purchasing)
+  * [Fast buy](#fast-buy)
+  * [Check](#check)
+  * [Confirm buy](#confirm-buy)
+  * [Reserve](#reserve)
+  * [Cancel reserve](#cancel-reserve)
+* [Publishing](#publishing)
+  * [Fast sell](#fast-sell)
+  * [Add](#add)
+  * [Check](#check-1)
+  * [Edit](#edit)
+  * [Info](#info)
+* [Managing](#managing)
+  * [Tag](#tag)
+    * [Add tag](#add-tag)
+    * [Delete tag](#delete-tag)
+  * [Edit](#edit-)
+  * [Delete](#delete)
+  * [Change owner](#change-owner)
+  * [Change password](#change-password)
+  * [Bump](#bump)
+  * [Get email code](#get-email-code)
+  * [Get steam guard](#get-steam-guard)
+  * [Get mafile](#get-mafile)
+  * [Get temp mail password](#get-temp-mail-password)
+  * [Get telegram confirmation code](#get-telegram-confirmation-code)
+  * [Reset telegram authorizations](#reset-telegram-authorizations)
+  * [Refuse guaranteee](#refuse-guarantee)
+  * [Favorite](#favorite)
+  * [Unfavorite](#unfavorite)
+  * [Stick](#stick)
+  * [Unstick](#unstick)
+* [Payments](#payments)
+  * [History](#history)
+  * [Transfer](#transfer)
+  * [Generate payment link](#generate-payment-link)
+* [Proxy](#proxy)
+  * [Get proxies](#get-proxies)
+  * [Add proxy](#add-proxy)
+  * [Delete proxy](#delete-proxy)
+* [Get batch job](#get-batch-job)
+* [Batch](#batch)
+* [Steam inventory value](#steam-inventory-value)
+
+</details>
+
+
 # Quickstart
 
 You need to create class instance to use library
@@ -24,7 +97,7 @@ api = LolzteamApi(token="Your_token", language="en")
 
 *Methods to get and edit profile info*
 
-### Get
+### Get profile
 
 *Displays info about your profile.*
 
@@ -36,10 +109,10 @@ print(data)
 ```
 
 ```python
-{'user': {'user_id': 2410024, 'username': 'AS7RID', 'username_html': '<span  class="style22">AS7RID</span>', 'user_message_count': 1067, 'user_register_date': 1560282271, 'user_like_count': 2932, ...}
+{'user': {'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_email': 'string', 'user_unread_notification_count': 0, 'user_dob_day': 0, 'user_dob_month': 0, 'user_dob_year': 0, 'user_title': 'string', 'user_last_seen_date': 0, 'balance': 0, 'hold': 0, 'system_info': {'visitor_id': 0, 'time': 0}}}
 ```
 
-### Edit
+### Edit profile
 
 *Change settings about your profile on the market.*
 
@@ -60,7 +133,7 @@ print(data)
 ```
 
 ```python
-{'status': 'ok', 'message': 'Changes Saved', 'system_info': {'visitor_id': 2410024, 'time': 1695564377}}
+{'status': 'ok', 'message': 'Changes Saved'}
 ```
 
 # List
@@ -71,7 +144,7 @@ print(data)
 
 ## Categories
 
-### Get
+### Get accounts in category
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
@@ -96,10 +169,10 @@ print(data)
 ```
 
 ```python
-{'items': [item1, item2, item3, ...], 'totalItems': 6479, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'cacheTTL': 1695568336, 'lastModified': 1695568306, 'searchUrl': '/vkontakte?pmax=10&locale=en', 'stickyItems': [], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695568306}}
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
 
-### Categories
+### Get categories
 
 *Display category list.*
 
@@ -115,10 +188,10 @@ print(data)
 ```
 
 ```python
-{'0': {'category_id': 1, 'sub_category_id': 1, 'category_order': 10, 'category_title': 'Steam', 'category_name': 'steam', 'category_url': 'steam', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты steam с %s, а так же у нас есть продажа аккаунтов стим с %s.', 'category_login_url': 'https://steamcommunity.com/login/home/', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 1, 'has_account_link': 1, 'require_temp_email': 1, 'recovery_link': 'https://help.steampowered.com/en/wizard/HelpWithLoginInfo?accountsearch=1', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 1, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '1': {'category_id': 9, 'sub_category_id': 1, 'category_order': 20, 'category_title': 'Fortnite', 'category_name': 'fortnite', 'category_url': 'fortnite', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести аккаунты фортнайт по низкой цене со скинами и pve', 'category_login_url': 'https://www.epicgames.com/id/login/epic?redirect_uri=https%3A%2F%2Fwww.epicgames.com%2Faccount%2Fpersonal%3FproductName%3Dfortnite%26lang%3Dru', 'add_item_available': 1, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': 'https://www.epicgames.com/id/login/forgot-password', 'check_button_enabled': 0, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 1, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 1, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 1, 'cookies': 'required', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 1, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '2': {'category_id': 2, 'sub_category_id': 1, 'category_order': 30, 'category_title': 'VKontakte', 'category_name': 'vk', 'category_url': 'vkontakte', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты VKontakte с подписчиками, друзьями, а так же у нас есть продажа аккаунтов ВК с голосами.', 'category_login_url': 'https://vk.com/login', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '2', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '3': {'category_id': 17, 'sub_category_id': 1, 'category_order': 40, 'category_title': 'Genshin Impact', 'category_name': 'genshin', 'category_url': 'genshin-impact', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты геншин импакт с легендарными персонажами, много созвездий и легендарных оружий', 'category_login_url': 'https://account.mihoyo.com/?lang=en#/account/safetySettings', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '4': {'category_id': 13, 'sub_category_id': 1, 'category_order': 50, 'category_title': 'Valorant', 'category_name': 'valorant', 'category_url': 'valorant', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести качественные аккаунты валорант бета без привязок по низким ценам', 'category_login_url': 'https://account.riotgames.com/', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '4', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'username', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '5': {'category_id': 29, 'sub_category_id': 1, 'category_order': 55, 'category_title': 'League of Legends', 'category_name': 'lol', 'category_url': 'league-of-legends', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести качественные аккаунты League of Legends без привязок по низким ценам', 'category_login_url': '', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': 'League of Legends', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '4', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'username', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '6': {'category_id': 24, 'sub_category_id': 1, 'category_order': 60, 'category_title': 'Telegram', 'category_name': 'telegram', 'category_url': 'telegram', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести аккаунт Telegram оптом, с отлежкой, в комплекте идет tdata, широкий выбор стран: Россия, Украина, США, а также авторег телеграм аккаунты', 'category_login_url': '', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': 'Telegram', 'category_h1_html_en': 'Telegram', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 90, 'buy_without_validation': 1}, '7': {'category_id': 6, 'sub_category_id': 1, 'category_order': 60, 'category_title': 'Diamond RP', 'category_name': 'diamondrp', 'category_url': 'diamondrp', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести аккаунты даймонд рп по низкой цене с деньгами и без привязки', 'category_login_url': 'https://diamondrp.ru/cabinet/login', 'add_item_available': 0, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 0, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 0, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '8': {'category_id': 15, 'sub_category_id': 1, 'category_order': 70, 'category_title': 'Supercell', 'category_name': 'supercell', 'category_url': 'supercell', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести аккаунт Brawl Stars, Clash of Clans или Clash Royale. Есть аккаунты с дорогими бравлерами, есть дешевые и прокаченные акки', 'category_login_url': '', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 1, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '9': {'category_id': 3, 'sub_category_id': 1, 'category_order': 80, 'category_title': 'Origin (EA)', 'category_name': 'ea', 'category_url': 'origin', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты origin с батлой 1, фифой 18, а так же у нас есть продажа аккаунтов origin с играми.', 'category_login_url': 'https://www.origin.com/rus/ru-ru/store', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 1, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'required', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '10': {'category_id': 14, 'sub_category_id': 1, 'category_order': 90, 'category_title': 'World of Tanks', 'category_name': 'wot', 'category_url': 'world-of-tanks', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты ворлд оф тэнкс с золотом, много боев, без привязок по очень низким ценам', 'category_login_url': 'https://ru.wargaming.net/id/signin/', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '4', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '11': {'category_id': 16, 'sub_category_id': 1, 'category_order': 95, 'category_title': 'World of Tanks Blitz', 'category_name': 'wot', 'category_url': 'wot-blitz', 'category_description_html': 'Аккаунты World of Tanks Blitz без привязки с золотом и техникой', 'category_login_url': 'https://ru.wargaming.net/id/signin/', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '4', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '12': {'category_id': 12, 'sub_category_id': 1, 'category_order': 100, 'category_title': 'Epic Games', 'category_name': 'eg', 'category_url': 'epicgames', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести качественные аккаунты epic games по низким ценам, а также с игрой Metro Exodus, RDR 2, World War Z, Borderlands 3', 'category_login_url': 'https://www.epicgames.com/id/login/epic?redirect_uri=https%3A%2F%2Fwww.epicgames.com%2Faccount%2Fpersonal%3FproductName%3Dfortnite%26lang%3Dru', 'add_item_available': 1, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': 'https://www.epicgames.com/id/login/forgot-password', 'check_button_enabled': 0, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 1, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 1, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 1, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '13': {'category_id': 18, 'sub_category_id': 1, 'category_order': 110, 'category_title': 'Escape from Tarkov', 'category_name': 'tarkov', 'category_url': 'escape-from-tarkov', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести качественные аккаунты Escape From Tarkov с валютой и прокаченным персонажем.', 'category_login_url': 'https://www.escapefromtarkov.com/login', 'add_item_available': 1, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 1, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 1, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1,2', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '14': {'category_id': 21, 'sub_category_id': 1, 'category_order': 120, 'category_title': 'Twitter', 'category_name': 'twitter', 'category_url': '', 'category_description_html': '', 'category_login_url': '', 'add_item_available': 0, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 0, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 0, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '15': {'category_id': 7, 'sub_category_id': 1, 'category_order': 120, 'category_title': 'Social Club', 'category_name': 'socialclub', 'category_url': 'socialclub', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты сошл клаб с гта 5 без бана и привязки.', 'category_login_url': 'https://ru.socialclub.rockstargames.com/profile/signin', 'add_item_available': 1, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 1, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 1, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 1, 'cookies': 'required', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '16': {'category_id': 5, 'sub_category_id': 1, 'category_order': 130, 'category_title': 'Uplay', 'category_name': 'uplay', 'category_url': 'uplay', 'category_description_html': "На нашем сайте предоставляется уникальная возможность купить аккаунты assassin's creed origins, с the crew а так же у нас есть продажа аккаунтов uplay с far cry", 'category_login_url': 'https://support.ubi.com/ru-RU/Cases/New', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '17': {'category_id': 27, 'sub_category_id': 1, 'category_order': 140, 'category_title': 'War Thunder', 'category_name': 'wt', 'category_url': 'war-thunder', 'category_description_html': '', 'category_login_url': 'https://login.gaijin.net/ru/', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '18': {'category_id': 22, 'sub_category_id': 1, 'category_order': 150, 'category_title': 'Discord', 'category_name': 'ds', 'category_url': 'discord', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести дискорд токены по низкой цене, проспам, чистые токены, с биллингом', 'category_login_url': '', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': 'Discord', 'category_h1_html_en': 'Discord', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 0, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '19': {'category_id': 20, 'sub_category_id': 1, 'category_order': 170, 'category_title': 'TikTok', 'category_name': 'tt', 'category_url': 'tiktok', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты тикток с подписчиками, лайками, а так же у нас есть продажа аккаунтов тикток для рекламы и с отлежкой.', 'category_login_url': 'https://www.tiktok.com/login', 'add_item_available': 1, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '123', 'account_price_min': 5, 'require_video_recording': 1, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'required', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '20': {'category_id': 10, 'sub_category_id': 1, 'category_order': 180, 'category_title': 'Instagram', 'category_name': 'instagram', 'category_url': 'instagram', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести качественные аккаунты instagram по низкой цене с подписчиками, а также пустые, автореги, брут, с большим количеством публикаций', 'category_login_url': 'https://www.instagram.com/accounts/login/?source=auth_switcher', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '5', 'support_temp_email': 0, 'cookies': 'available', 'login_type': 'username', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '21': {'category_id': 11, 'sub_category_id': 1, 'category_order': 190, 'category_title': 'Battle.net', 'category_name': 'battlenet', 'category_url': 'battlenet', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести качественные аккаунты батл нет за 10 рублей, а также с овервотчем', 'category_login_url': 'https://www.blizzard.com/login', 'add_item_available': 1, 'mass_upload_item_available': 0, 'has_guarantee': 1, 'has_account_link': 1, 'require_temp_email': 1, 'recovery_link': 'https://eu.battle.net/account/recovery/en-us/identify-account.html?requestType=PASSWORD_RESET', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 1, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 1, 'cookies': 'none', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '22': {'category_id': 19, 'sub_category_id': 1, 'category_order': 200, 'category_title': 'VPN', 'category_name': 'vpn', 'category_url': 'vpn', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты впн сервисов, такие как Vypr VPN, Surfshark VPN, IpVanish, Windscribe VPN Pro, а также vpn аккаунты ZenMate, TunnelBear VPN\r\n', 'category_login_url': '1', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 0, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '23': {'category_id': 23, 'sub_category_id': 1, 'category_order': 210, 'category_title': 'Streaming media services', 'category_name': 'cinema', 'category_url': 'cinema', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность приобрести аккаунт онлайн кинотеатра: окко, иви, кинопоиск, мегого и другие', 'category_login_url': '', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 1, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '24': {'category_id': 26, 'sub_category_id': 1, 'category_order': 220, 'category_title': 'Spotify', 'category_name': 'spotify', 'category_url': 'spotify', 'category_description_html': '', 'category_login_url': 'https://www.spotify.com/int/login/?continue=https%3A%2F%2Fopen.spotify.com%2F__noul__%3Fl2l%3D1%26nd%3D1', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': 'Spotify', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '25': {'category_id': 4, 'sub_category_id': 1, 'category_order': 230, 'category_title': 'Warface', 'category_name': 'wf', 'category_url': 'warface', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты warface без привязки, с донатом а так же у нас есть продажа аккаунтов варфейс альфа, чарли без обмана.', 'category_login_url': 'https://wf.mail.ru/', 'add_item_available': 4, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 0, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 5, 'require_video_recording': 1, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '4', 'support_temp_email': 0, 'cookies': 'required', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '26': {'category_id': 25, 'sub_category_id': 1, 'category_order': 240, 'category_title': 'YouTube', 'category_name': 'youtube', 'category_url': 'youtube', 'category_description_html': '', 'category_login_url': '', 'add_item_available': 1, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 1, 'require_video_recording': 1, 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'required', 'login_type': 'any', 'guest_hidden': 1, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, '27': {'category_id': 28, 'sub_category_id': 1, 'category_order': 260, 'category_title': 'Minecraft', 'category_name': 'minecraft', 'category_url': 'minecraft', 'category_description_html': 'minecraft', 'category_login_url': '', 'add_item_available': 0, 'mass_upload_item_available': 0, 'has_guarantee': 0, 'has_account_link': 0, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 0, 'checker_enabled': 0, 'support_personal_proxy': 0, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 0, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 1, 'require_video_recording': 0, 'require_eld_for_native_accs': 1, 'can_be_resold': 1, 'proxy_type': '1', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'email', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695568463}}
+{'0': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Params
+### Get search params
 
 *Displays search parameters for a category.*
 
@@ -134,10 +207,10 @@ print(data)
 ```
 
 ```python
-{'category': {'category_id': 2, 'sub_category_id': 1, 'category_order': 30, 'category_title': 'VKontakte', 'category_name': 'vk', 'category_url': 'vkontakte', 'category_description_html': 'На нашем сайте предоставляется уникальная возможность купить аккаунты VKontakte с подписчиками, друзьями, а так же у нас есть продажа аккаунтов ВК с голосами.', 'category_login_url': 'https://vk.com/login', 'add_item_available': 1, 'mass_upload_item_available': 1, 'has_guarantee': 0, 'has_account_link': 1, 'require_temp_email': 0, 'recovery_link': '', 'check_button_enabled': 1, 'checker_enabled': 1, 'support_personal_proxy': 1, 'support_email_login_data': 0, 'require_email_login_data': 0, 'display_in_list': 1, 'category_description_html_en': '', 'category_h1_html_en': '', 'account_price_min': 1, 'require_video_recording': 0, 'top_queries': '[{"category_id":2,"order_by":"price_to_up","tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?order_by=price_to_up"},{"category_id":2,"pmax":10,"tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?pmax=10"},{"category_id":2,"tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"sex":"woman","relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?sex=woman"},{"category_id":2,"order_by":"price_to_up","tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"tel":"yes","relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?tel=yes&order_by=price_to_up"},{"category_id":2,"pmax":15,"tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?pmax=15"},{"category_id":2,"pmax":7,"tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?pmax=7"},{"category_id":2,"pmax":8,"tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?pmax=8"},{"category_id":2,"pmax":10,"order_by":"price_to_up","tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"tel":"yes","relation":[],"admin_level":0,"reg":10,"reg_period":"day","mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte?oauth_token=a539e7f3ff17179e7a0eeb7c2c84dcc3071a4ef5&pmax=10&reg=10&reg_period=day&tel=yes&order_by=price_to_up"},{"category_id":2,"order_by":"pdate_to_down_upload","tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?order_by=pdate_to_down_upload"},{"category_id":2,"order_by":"price_to_down","tag_id":[],"not_tag_id":[],"origin":[],"not_origin":[],"user_id":0,"nsb_by_me":false,"sb_by_me":false,"hide_viewed":false,"email_login_data":false,"email_type":[],"search_id":0,"vk_country":[],"vk_city":[],"relation":[],"admin_level":0,"mcountry":[],"not_mcountry":[],"opened_profile":false,"userItems":false,"userOrders":false,"searchUrl":"\\/vkontakte\\/?order_by=price_to_down"}]', 'require_eld_for_native_accs': 0, 'can_be_resold': 1, 'proxy_type': '2', 'support_temp_email': 0, 'cookies': 'none', 'login_type': 'any', 'guest_hidden': 0, 'available_temp_email': 0, 'resale_duration_limit_days': 30, 'buy_without_validation': 1}, 'params': [{'name': 'vk_country', 'input': 'array', 'description': 'List of allowed countries'}, {'name': 'vk_city', 'input': 'array', 'description': 'List of allowed cities'}, {'name': 'vk_friend_min', 'input': 'number', 'description': 'Minimum number of friends'}, {'name': 'vk_friend_max', 'input': 'number', 'description': 'Maximum number of friends'}, {'name': 'vk_follower_min', 'input': 'number', 'description': 'Minimum number of followers'}, {'name': 'vk_follower_max', 'input': 'number', 'description': 'Maximum number of followers'}, {'name': 'vk_vote_min', 'input': 'number', 'description': 'Minimum number of votes'}, {'name': 'vk_vote_max', 'input': 'number', 'description': 'Maximum number of votes'}, {'name': 'sex', 'input': 'string', 'description': 'Sex of account', 'values': ['man', 'woman']}, {'name': 'tel', 'input': 'yesno', 'description': 'Has linked mobile', 'values': ['yes', 'no', 'nomatter']}, {'name': 'email', 'input': 'yesno', 'description': 'Has linked email', 'values': ['yes', 'no', 'nomatter']}, {'name': 'tfa', 'input': 'yesno', 'description': 'Has enabled 2FA', 'values': ['yes', 'no', 'nomatter']}, {'name': 'relation', 'input': 'array', 'description': 'Relationship', 'values': [0, 1, 2, 3, 4, 5, 6, 7, 8]}, {'name': 'group_follower_min', 'input': 'number', 'description': 'Minimum number of group followers'}, {'name': 'group_follower_max', 'input': 'number', 'description': 'Maximum number of group followers'}, {'name': 'groups_min', 'input': 'number', 'description': 'Minimum number of groups'}, {'name': 'groups_max', 'input': 'number', 'description': 'Maximum number of groups'}, {'name': 'admin_level', 'input': 'number', 'description': 'Admin group level', 'values': [4, 3, 2, 1]}, {'name': 'min_age', 'input': 'number', 'description': 'Minimum age'}, {'name': 'max_age', 'input': 'number', 'description': 'Maximum age'}, {'name': 'dig_min', 'input': 'number', 'description': 'Minimum number of digits in ID'}, {'name': 'dig_max', 'input': 'number', 'description': 'Maximum number of digits in ID'}, {'name': 'conversations_min', 'input': 'number', 'description': 'Minimum number of conversations'}, {'name': 'conversations_max', 'input': 'number', 'description': 'Maximum number of conversations'}, {'name': 'reg', 'input': 'number', 'description': 'How old is the account'}, {'name': 'reg_period', 'input': 'string', 'description': 'In what notation is time measured', 'values': ['day', 'month', 'year']}, {'name': 'mcountry', 'input': 'array', 'description': 'List of allowed countries of phone number'}, {'name': 'not_mcountry', 'input': 'array', 'description': 'List of excluded countries of phone number'}, {'name': 'opened_profile', 'input': 'boolean', 'description': 'Opened account profile'}, {'name': 'verified', 'input': 'yesno', 'description': 'Has verification', 'values': ['yes', 'no', 'nomatter']}], 'base_params': {'0': {'name': 'pmin', 'input': 'number', 'description': 'Minimum price'}, '1': {'name': 'pmax', 'input': 'number', 'description': 'Maximum price'}, '2': {'name': 'title', 'input': 'string', 'description': 'Title'}, '3': {'name': 'order_by', 'input': 'string', 'description': 'Order by', 'values': ['price_to_up', 'price_to_down', 'pdate_to_down', 'pdate_to_down_upload', 'pdate_to_up', 'pdate_to_up_upload']}, '4': {'name': 'show', 'input': 'string', 'description': 'Type of account', 'values': ['active', 'closed', 'awaiting', 'deleted']}, '5': {'name': 'tag_id', 'input': 'array', 'description': 'List of tag ids'}, '6': {'name': 'not_tag_id', 'input': 'array', 'description': "List of tag ids that won't be included"}, '7': {'name': 'origin', 'input': 'array', 'description': 'List of account origins', 'values': ['brute', 'fishing', 'stealer', 'personal', 'resale', 'autoreg']}, '8': {'name': 'not_origin', 'input': 'array', 'description': "List of account origins that won't be included"}, '9': {'name': 'user_id', 'input': 'number', 'description': 'Search accounts of user'}, '10': {'name': 'nsb', 'input': 'boolean', 'description': 'Not sold before'}, '11': {'name': 'sb', 'input': 'boolean', 'description': 'Sold before'}, '12': {'name': 'nsb_by_me', 'input': 'boolean', 'description': 'Not sold by me before'}, '13': {'name': 'sb_by_me', 'input': 'boolean', 'description': 'Sold by me before'}, '14': {'name': 'eg', 'input': 'string', 'description': 'Guarantee period. -1 = 12 hours, 0 = 24 hours, 1 = 72 hours', 'values': ['-1', '0', '1']}, '15': {'name': 'hide_viewed', 'input': 'boolean', 'description': 'Hide viewed accounts'}, '16': {'name': 'currency', 'input': 'string', 'description': 'Currency in which the cost of the account will be shown. ISO 3166'}, '17': {'name': 'email_login_data', 'input': 'boolean', 'description': 'Has email login data'}, '18': {'name': 'item_domain', 'input': 'boolean', 'description': 'Domain of native/autoreg email'}, '19': {'name': 'email_type', 'input': 'array', 'description': 'Email type', 'values': ['market', 'autoreg', 'native', 'no']}, '22': {'name': 'delete_reason', 'input': 'string', 'description': 'Delete reason of account (Works only for owned deleted accounts)'}}, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695568625}}
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Games
+### Get category games
 
 *Displays a list of games in the category.*
 
@@ -153,12 +226,11 @@ print(data)
 ```
 
 ```python
-{'games': [game1, game2, game3, ...], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695568884}}
-
+{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 ---
 
-### Get
+### Get item
 
 *Displays item information or returns Steam account html code.*
 
@@ -178,9 +250,9 @@ print(data)
 ```
 
 ```python
-{'item': {'item_id': 2410024, 'item_state': 'paid', 'category_id': 2, 'published_date': 1566068135, 'title': 'Вк по 10', 'description': '', 'price': 14, 'update_stat_date': 0, 'refreshed_date': 1566068135, 'view_count': 10, 'is_sticky': 0, 'item_origin': 'brute', 'extended_guarantee': 0, 'nsb': -1, 'allow_ask_discount': 1, 'title_en': '', 'description_en': '', 'email_type': '', 'is_reserved': 0, 'item_domain': '', 'active_auction': 0, 'note_text': None, 'user_allow_ask_discount': 1, 'max_discount_percent': 30, 'market_custom_title': '', 'buyer_avatar_date': 1658531718, 'buyer_user_group_id': 2, 'buyer_secondary_group_ids': '93', 'is_fave': None, 'in_cart': None, 'cart_price': None, 'vk_item_id': 2410024, 'vk_id_count': 9, 'vk_friend_count': 347, 'vk_follower_count': 65, 'vk_admin_groups': [], 'vk_max_group_follower_count': 0, 'vk_vote_count': 0, 'vk_country': 'Russia', 'vk_sex': '1', 'vk_mobile': '1', 'vk_register_date': 1484575264, 'vk_age': 0, 'vk_city': '', 'vk_email': -1, 'vk_mobile_country': 7, 'vk_tfa': -1, 'vk_is_closed': '-1', 'vk_relation': 0, 'vk_count_conversations': 0, 'vk_is_verified': 0, 'canResellItem': False, 'canViewLoginData': False, 'canUpdateItemStats': False, 'showGetEmailCodeButton': False, 'buyer': {'user_id': 500113, 'operation_date': 1566070679, 'visitorIsBuyer': False, 'username': 'Джон1234', 'is_banned': 0, 'display_style_group_id': 2, 'uniq_username_css': '', 'secondary_group_ids': '93', 'user_group_id': 2}, 'isPersonalAccount': False, 'rub_price': 14, 'price_currency': 'rub', 'canValidateAccount': False, 'canResellItemAfterPurchase': True, 'vkMobileCountry': 'Russia', 'vk_sex_phrase': 'Female', 'vk_relation_phrase': 'Not specified', 'canViewAccountLink': False, 'itemOriginPhrase': 'Bruteforce', 'visitorIsAuthor': False, 'canAskDiscount': False, 'canCheckGuarantee': False, 'tags': [], 'customFields': [], 'externalAuth': [], 'isTrusted': False, 'isIgnored': False, 'deposit': 0, 'extraPrices': [{'currency': 'usd', 'price': 0.15}, {'currency': 'eur', 'price': 0.14}], 'canViewAccountLoginAndTempEmail': False, 'bumpSettings': {'canBumpItem': False, 'canBumpItemGlobally': False, 'shortErrorPhrase': None, 'errorPhrase': None}, 'auction': None, 'reserve': {'reserve_user_id': 0, 'reserve_date': 0}, 'description_html': '', 'description_html_en': '', 'seller': {'user_id': 2510063, 'username': 'HamHD', 'avatar_date': 1658573040, 'is_banned': 0, 'display_style_group_id': 2, 'joined_date': 1564564116, 'sold_items_count': 47, 'active_items_count': 0, 'restore_data': '', 'effective_last_activity': 1584966749, 'restore_percents': None, 'isOnline': False}}, 'canStickItem': False, 'canUnstickItem': False, 'canBuyItem': False, 'cannotBuyItemError': 'This item is sold', 'canCloseItem': False, 'canOpenItem': False, 'canReportItem': True, 'canEditItem': False, 'canDeleteItem': False, 'canCancelConfirmedBuy': False, 'canViewItemHistory': False, 'faveCount': False, 'isVisibleItem': True, 'canViewLoginData': False, 'sameItems': {'2385292': {'item_id': 2385292, 'item_state': 'paid', 'category_id': 2, 'published_date': 1565601107, 'title': 'Вк (жён.муж,брут) по 25 рублей + свежие не проверенные аккаунты, нечего не чекал! разбирайте!', 'description': '', 'price': 25, 'update_stat_date': 0, 'refreshed_date': 1565601107, 'view_count': 12, 'is_sticky': 0, 'item_origin': 'brute', 'extended_guarantee': 0, 'nsb': -1, 'allow_ask_discount': 1, 'title_en': '', 'description_en': '', 'email_type': '', 'is_reserved': 0, 'item_domain': '', 'active_auction': 0, 'vk_item_id': 2385292, 'vk_id_count': 9, 'vk_friend_count': 338, 'vk_follower_count': 64, 'vk_admin_groups': 'a:0:{}', 'vk_max_group_follower_count': 0, 'vk_vote_count': 0, 'vk_country': 'Россия', 'vk_sex': '1', 'vk_mobile': '1', 'vk_register_date': 1484575264, 'vk_age': 0, 'vk_city': '', 'vk_email': -1, 'vk_mobile_country': 7, 'vk_tfa': -1, 'vk_is_closed': '-1', 'vk_relation': 0, 'vk_count_conversations': 0, 'vk_is_verified': 0, 'buyer_avatar_date': 1683398067, 'buyer_user_group_id': 2, 'buyer_secondary_group_ids': '21,22,23,38,93', 'isCurrent': False, 'buyer': {'user_id': 2536632, 'operation_date': 1565609166, 'visitorIsBuyer': False, 'username': 'zorononame', 'is_banned': 0, 'display_style_group_id': 23, 'uniq_username_css': '', 'secondary_group_ids': '21,22,23,38,93', 'user_group_id': 2}, 'rub_price': 25, 'reserve': {'reserve_user_id': 0, 'reserve_date': 0}, 'description_html': '', 'description_html_en': '', 'seller': {'user_id': 2463802, 'username': 'Linus28', 'avatar_date': 1658570843, 'is_banned': 1, 'display_style_group_id': 2}}, '2410024': {'item_id': 2410024, 'item_state': 'paid', 'category_id': 2, 'published_date': 1566068135, 'title': 'Вк по 10', 'description': '', 'price': 14, 'update_stat_date': 0, 'refreshed_date': 1566068135, 'view_count': 10, 'is_sticky': 0, 'item_origin': 'brute', 'extended_guarantee': 0, 'nsb': -1, 'allow_ask_discount': 1, 'title_en': '', 'description_en': '', 'email_type': '', 'is_reserved': 0, 'item_domain': '', 'active_auction': 0, 'vk_item_id': 2410024, 'vk_id_count': 9, 'vk_friend_count': 347, 'vk_follower_count': 65, 'vk_admin_groups': 'a:0:{}', 'vk_max_group_follower_count': 0, 'vk_vote_count': 0, 'vk_country': 'Россия', 'vk_sex': '1', 'vk_mobile': '1', 'vk_register_date': 1484575264, 'vk_age': 0, 'vk_city': '', 'vk_email': -1, 'vk_mobile_country': 7, 'vk_tfa': -1, 'vk_is_closed': '-1', 'vk_relation': 0, 'vk_count_conversations': 0, 'vk_is_verified': 0, 'buyer_avatar_date': 1658531718, 'buyer_user_group_id': 2, 'buyer_secondary_group_ids': '93', 'isCurrent': True, 'buyer': {'user_id': 500113, 'operation_date': 1566070679, 'visitorIsBuyer': False, 'username': 'Джон1234', 'is_banned': 0, 'display_style_group_id': 2, 'uniq_username_css': '', 'secondary_group_ids': '93', 'user_group_id': 2}, 'rub_price': 14, 'reserve': {'reserve_user_id': 0, 'reserve_date': 0}, 'description_html': '', 'description_html_en': '', 'seller': {'user_id': 2510063, 'username': 'HamHD', 'avatar_date': 1658573040, 'is_banned': 0, 'display_style_group_id': 2}}, '4315777': {'item_id': 4315777, 'item_state': 'paid', 'category_id': 2, 'published_date': 1583507005, 'title': 'Вк актив', 'description': '', 'price': 8, 'update_stat_date': 0, 'refreshed_date': 1583507005, 'view_count': 3, 'is_sticky': 0, 'item_origin': 'resale', 'extended_guarantee': 0, 'nsb': -1, 'allow_ask_discount': 1, 'title_en': '', 'description_en': '', 'email_type': '', 'is_reserved': 0, 'item_domain': '', 'active_auction': 0, 'vk_item_id': 4315777, 'vk_id_count': 9, 'vk_friend_count': 409, 'vk_follower_count': 0, 'vk_admin_groups': 'a:0:{}', 'vk_max_group_follower_count': 0, 'vk_vote_count': 0, 'vk_country': 'Россия', 'vk_sex': '1', 'vk_mobile': '1', 'vk_register_date': 1484575264, 'vk_age': 13, 'vk_city': '', 'vk_email': -1, 'vk_mobile_country': 7, 'vk_tfa': -1, 'vk_is_closed': '-1', 'vk_relation': 0, 'vk_count_conversations': 0, 'vk_is_verified': 0, 'buyer_avatar_date': 1658237012, 'buyer_user_group_id': 2, 'buyer_secondary_group_ids': '38,54', 'isCurrent': False, 'buyer': {'user_id': 2323269, 'operation_date': 1583507203, 'visitorIsBuyer': False, 'username': 'Quntum23', 'is_banned': 0, 'display_style_group_id': 2, 'uniq_username_css': '', 'secondary_group_ids': '38,54', 'user_group_id': 2}, 'rub_price': 8, 'reserve': {'reserve_user_id': 0, 'reserve_date': 0}, 'description_html': '', 'description_html_en': '', 'seller': {'user_id': 3013283, 'username': 'Moonbringer', 'avatar_date': 1658575938, 'is_banned': 0, 'display_style_group_id': 21}}, '5177318': {'item_id': 5177318, 'item_state': 'paid', 'category_id': 2, 'published_date': 1589537028, 'title': 'Vk с фишинга 5р', 'description': '', 'price': 5, 'update_stat_date': 0, 'refreshed_date': 1589537028, 'view_count': 2, 'is_sticky': 0, 'item_origin': 'fishing', 'extended_guarantee': 0, 'nsb': -1, 'allow_ask_discount': 1, 'title_en': '', 'description_en': '', 'email_type': '', 'is_reserved': 0, 'item_domain': '', 'active_auction': 0, 'vk_item_id': 5177318, 'vk_id_count': 9, 'vk_friend_count': 408, 'vk_follower_count': 75, 'vk_admin_groups': 'a:1:{i:186017783;a:5:{s:4:"name";s:25:"Компания arifleim";s:11:"screen_name";s:13:"club186017783";s:11:"admin_level";i:3;s:13:"members_count";i:21;s:9:"photo_100";s:45:"https://vk.com/images/community_100.png?ava=1";}}', 'vk_max_group_follower_count': 0, 'vk_vote_count': 0, 'vk_country': 'Россия', 'vk_sex': '1', 'vk_mobile': '1', 'vk_register_date': 1484575264, 'vk_age': 13, 'vk_city': '', 'vk_email': 0, 'vk_mobile_country': 7, 'vk_tfa': 0, 'vk_is_closed': '-1', 'vk_relation': 0, 'vk_count_conversations': 0, 'vk_is_verified': 0, 'buyer_avatar_date': 0, 'buyer_user_group_id': 2, 'buyer_secondary_group_ids': '', 'isCurrent': False, 'buyer': None, 'rub_price': 5, 'reserve': {'reserve_user_id': 0, 'reserve_date': 0}, 'description_html': '', 'description_html_en': '', 'seller': {'user_id': 172866, 'username': 'ProVanbI4', 'avatar_date': 1658531161, 'is_banned': 1, 'display_style_group_id': 18}}}, 'sameItemsCount': 3, 'showToFavouritesButton': True, 'itemLink': 'https://lzt.market/2410024/?_apiLanguageId=1695652294+NibCWoB%2BsjcAvSCzer3PJA%3D%3D', 'canChangeOwner': False, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695565894}}
+{'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}
 ```
-### New
+### New items
 
 *Displays a list of the latest accounts.*
 
@@ -198,7 +270,7 @@ print(data)
 ```
 
 ```python
-{"items": [item1, item2, item3, ...], "totalItems": 158625, "totalItemsPrice": null, "perPage": 40, "page": 1, "cacheTTL": 1695567089, "lastModified": 1695567059, "searchUrl": "/?locale=en", "stickyItems": [], "isIsolatedMarket": true, "isIsolatedMarketAlt": false, "system_info": {"visitor_id": 2410024, "time": 1695567059}}
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
 
 ### From url
@@ -208,7 +280,7 @@ print(data)
 **Parameters:**
 
 - **url** (str): Your market search url.
-  > It can be https://lzt.market/search_params or https://api.lzt.market/search_params
+  > It can be https://lzt.market or https://api.lzt.market
 
 **Example:**
 
@@ -218,10 +290,10 @@ print(data)
 ```
 
 ```python
-{'items': [item1, item2, item3, ...], 'totalItems': 29, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'cacheTTL': 1695566864, 'lastModified': 1695566812, 'searchUrl': '/steam/cs-go-prime?origin%5B%5D=fishing&eg=1&locale=en', 'stickyItems': [], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695566811}}
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
 
-### Owned
+### Owned accounts
 
 *Displays a list of owned accounts.*
 
@@ -255,9 +327,9 @@ print(data)
 ```
 
 ```python
-{'items': [], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 40, 'page': 1, 'userItemStates': {'stickied': {'item_state': 'stickied', 'item_count': 0, 'title': 'Highlighted'}, 'discount_request': {'item_state': 'active', 'item_count': 0, 'title': 'Discount requests'}, 'active': {'item_state': 'active', 'item_count': 0, 'title': 'Active'}, 'paid': {'item_state': 'paid', 'item_count': 0, 'title': 'Sold'}, 'closed': {'item_state': 'closed', 'item_count': 0, 'title': 'Closed'}, 'deleted': {'item_count': 1, 'item_state': 'deleted', 'title': 'Deleted'}, 'awaiting': {'item_state': 'awaiting', 'item_count': 0, 'title': 'Required action'}}, 'cacheTTL': 1695564784, 'lastModified': 1695564784, 'searchUrl': '/user/2410024/items?user_id=2410024&locale=en', 'stickyItems': [], 'user': {'user_id': 2410024, 'username': 'AS7RID', 'display_style_group_id': 22, 'avatar_date': 1693752388, 'is_banned': 0, 'uniq_username_css': ''}, 'periodLabel': '', 'periodLabelPhrase': '', 'filterDatesDefault': True, 'startDate': '2017-09-05T00:00:00+00:00', 'endDate': '2023-09-24T23:59:59+00:00', 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695564784}}
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
-### Viewed
+### Viewed accounts
 
 *Displays a list of viewed accounts.*
 
@@ -275,10 +347,10 @@ print(data)
 ```
 
 ```python
-{'items': [item1,item2,item3], 'totalItems': 149, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'cacheTTL': 1695564896, 'lastModified': 1695564896, 'searchUrl': '/viewed?locale=en', 'stickyItems': [], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695564896}}
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
 
-### Favorite
+### Favorite accounts
 
 *Displays a list of favorite accounts.*
 
@@ -295,11 +367,11 @@ print(data)
 ```
 
 ```python
-{'items': [], 'totalItems': 0, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'searchUrl': '/fave?locale=en', 'stickyItems': [], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695564985}}
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 
 ```
 
-### Purchased
+### Purchased accounts
 
 *Displays a list of purchased accounts.*
 
@@ -330,7 +402,7 @@ print(data)
 ```
 
 ```python
-{'items': [item1, item2, item3, ...], 'totalItems': 75, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'cacheTTL': 1695565203, 'lastModified': 1695565203, 'searchUrl': '/user/2410024/orders?locale=en', 'stickyItems': [], 'periodLabel': '', 'periodLabelPhrase': '', 'filterDatesDefault': True, 'startDate': '2017-09-05T00:00:00+00:00', 'endDate': '2023-09-24T23:59:59+00:00', 'user': {'user_id': 2410024, 'username': 'AS7RID', 'is_banned': 0, 'display_style_group_id': 22, 'uniq_username_css': '', 'avatar_date': 1693752388, 'balance': 500, 'hold': 0}, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695565203}}
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
 
 # Purchasing
@@ -356,7 +428,7 @@ print(data)
 ```
 
 ```python
-{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 2410024, 'time': 1695565203}}
+{'status': 'ok', 'reserve_end_date': 0, 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 ### Check
 
@@ -374,10 +446,10 @@ print(data)
 ```
 
 ```python
-{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 2410024, 'time': 1695565203}}
+{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Confirm
+### Confirm buy
 
 *Confirm buy.*
 
@@ -395,7 +467,7 @@ print(data)
 ```
 
 ```python
-{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 2410024, 'time': 1695565203}
+{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Reserve
@@ -524,12 +596,12 @@ print(data)
 ```
 
 ```python
-{'status': 'ok', 'item': {'title': 'Acc vk', 'price': 10, 'item_origin': 'autoreg', 'proxy_id': 0, 'extended_guarantee': 0, 'email_type': '', 'allow_ask_discount': 1, 'category_id': 2, 'description': '', 'description_en': '', 'title_en': 'Acc vk', 'item_domain': '', 'published_date': 1695571938, 'item_state': 'awaiting', 'update_stat_date': 0, 'refreshed_date': 1695571938, 'view_count': 0, 'is_sticky': 0, 'nsb': -1, 'is_reserved': 0, 'active_auction': 0, 'item_id': 74736369, 'reserve': {'reserve_user_id': 0, 'reserve_date': 0}, 'description_html': '', 'description_html_en': '', 'seller': {'user_id': 2410024}}, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695571938}}
+{'status': 'ok', 'item': {'item_id': 0, 'item_state': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Check
 
-*Adds account on the market.*
+*Check and put up to sale not published account OR update account information existing account.*
 
 **Parameters:**
 
@@ -619,6 +691,7 @@ print(data)
 *Methods for account managing*
 
 ---
+
 ## Tag
 
 *Methods for items tagging*
@@ -664,7 +737,7 @@ print(data)
 ```
 
 ---
-### Edit
+### Edit 
 
 *Edits any details of account.*
 
@@ -758,7 +831,7 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved', 'new_password': 'string'}
 ```
 
-### bump
+### Bump
 
 *Bumps account in the search.*
 
@@ -777,7 +850,7 @@ print(data)
 {'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Email
+### Get email code
 
 *Gets confirmation code or link.*
 
@@ -797,7 +870,7 @@ print(data)
 {'item': {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}, 'codeData': {'code': 'string', 'date': 0, 'textPlain': 'string'}}
 ```
 
-### Guard
+### Get steam guard
 
 *Gets confirmation code from MaFile (Only for Steam accounts).*
 
@@ -816,7 +889,7 @@ print(data)
 {'item': {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}, 'codeData': {'code': 'string', 'date': 0, 'textPlain': 'string'}}
 ```
 
-### Mafile
+### Get mafile
 
 *Returns mafile in JSON.*
 
@@ -835,7 +908,7 @@ print(data)
 {'maFile': {}}
 ```
 
-### Temp mail password
+### Get temp mail password
 
 *Gets password from temp email of account.*
 
@@ -854,7 +927,7 @@ print(data)
 {'item': {'account': 'string'}}
 ```
 
-### Telegram confirmation code
+### Get telegram confirmation code
 
 *Gets confirmation code from Telegram.*
 
@@ -873,7 +946,7 @@ print(data)
 {'item': {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}, 'codes': {'code': 'string', 'date': 0}}
 ```
 
-### Telegram reset authorizations
+### Reset telegram authorizations
 
 *Resets Telegram authorizations.*
 
@@ -993,7 +1066,7 @@ print(data)
 
 ### History
 
-*Displays info about your profile.*
+*Displays list of your payments.*
 
 **Parameters:**
 
@@ -1142,27 +1215,63 @@ print(data)
 {'status': 'ok', 'message': 'Changes Saved'}
 ```
 
-# Batch
+# Get batch job
 
-*Execute multiple API requests at once.(10 max)*
+*Creates batch job for Batch method*
 
 **Parameters:**
 
-- **request_body** (list[dict]):
+- **func** (function): Needed method pointer
+- **job_name** (str): Job name
+- ****kwargs** (str): Arguments for needed method
 
 **Example:**
 
 ```python
 jobs = [
-    api.create_batch_job(job_name="Example1", method="POST", url="https://api.lzt.market/proxy",params={"proxy_row": "192.168.1.1:5000:login:password"}),
-    api.create_batch_job(job_name="Example2", method="GET", url="https://api.lzt.market/proxy")
+    api.get_batch_job(api.market.list.favorite, job_name="1", page=1),
+    api.get_batch_job(api.market.payments.history, job_name="2", user_id=2410024, sender="root"),
+    api.get_batch_job(api.market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Types.Market.App_Ids.CS2, currency=Types.Market.Currency.usd)
 ]
-data = api.market.batch(request_body=jobs)
-print(data)
+for job in jobs:
+    print(job)
 ```
 
 ```python
-{'jobs': {'Example1': {'_job_result': 'message', '_job_message': 'Changes Saved'}, 'Example2': {'_job_result': 'ok', 'proxies': {'188900': {'proxy_id': 188900, 'user_id': 2410024, 'proxy_ip': '192.168.1.1', 'proxy_port': 5000, 'proxy_user': 'login', 'proxy_pass': 'password', 'proxyString': '192.168.1.1:5000@login:password'}}}}, 'system_info': {'visitor_id': 2410024, 'time': 1695587080}}
+{'id': '1', 'uri': 'https://api.lzt.market/fave', 'method': 'GET', 'params': {'page': 1, 'locale': 'en'}, 'data': {'page': 1}, 'files': None}
+{'id': '2', 'uri': 'https://api.lzt.market/user/2410024/payments', 'method': 'GET', 'params': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0, 'locale': 'en'}, 'data': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0}, 'files': None}
+{'id': '3', 'uri': 'https://api.lzt.market/steam-value', 'method': 'GET', 'params': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None, 'locale': 'en'}, 'data': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None}, 'files': None}
+```
+
+# Batch
+
+*Execute multiple API requests at once.*
+
+  > Maximum batch jobs is 10.
+  >
+  > Market batch can only proceed with market url's. If you want to use batch with forum url's try [this](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md#batch)
+
+**Parameters:**
+
+- **request_body** (list[dict]): List of batch jobs.
+
+**Example:**
+
+```python
+jobs = [
+    api.get_batch_job(api.market.list.favorite, job_name="1", page=1),
+    api.get_batch_job(api.market.payments.history, job_name="2", user_id=2410024, sender="root"),
+    api.get_batch_job(api.market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Types.Market.App_Ids.CS2, currency=Types.Market.Currency.usd)
+]
+data = api.market.batch(request_body=jobs)
+for job_name, job_data in data["jobs"].items():
+    print(job_data)
+```
+
+```python
+{'_job_result': 'ok', 'items': [], 'totalItems': 0, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'searchUrl': '/fave', 'stickyItems': []}
+{'_job_result': 'ok', 'payments': {'121540810': {'operation_id': 121540810, 'operation_date': 1694350167, 'operation_type': 'receiving_money', 'outgoing_sum': 0, 'incoming_sum': 777,  ... }
+{'_job_result': 'ok', 'query': 'https://steamcommunity.com/id/AS7RID', 'data': {'items': {'5189384637': {'classid': '5189384637', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dl ... }
 ```
 
 # Steam inventory value

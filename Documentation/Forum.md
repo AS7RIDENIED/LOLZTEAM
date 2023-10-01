@@ -2310,17 +2310,15 @@ jobs = [
     api.get_batch_job(api.forum.threads.get, job_name="3", thread_id=5523020),
     api.get_batch_job(api.forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LolzteamApi")
 ]
-data = api.forum.batch(request_body=jobs)
-for job_name, job_data in data["jobs"].items():
-    print(job_data)
+for job in jobs:
+    print(job)
 ```
 
 ```python
-{'_job_result': 'ok', 'users': [{'user_id': 2410024, 'username': 'AS7RID', 'username_html': '<span  class="style22">AS7RID</span>', 'user_message_count': 1089, 'user_register_date': 1560282271, 'user_like_count': 2949, 'short_link': 'as7rid', ... }
-{'_job_result': 'ok', 'user': {'user_id': 1, 'username': 'RaysMorgan', 'username_html': '<span  class="style3">RaysMorgan</span>', 'user_message_count': 12104, 'user_register_date': 1362675475, 'user_like_count': 44351, 'short_link': 'rays',  ... }
-{'_job_result': 'ok', 'thread': {'thread_id': 5523020, 'forum_id': 976, 'thread_title': 'Библиотека для упрощения работы с API | LolzteamApi Forum/Market/Antipublic Python', 'thread_view_count': 715, 'creator_user_id': 2410024, 'creator_usern ... }
-{'_job_result': 'ok', 'thread': {'thread_id': 5907641, 'forum_id': 876, 'thread_title': 'Api batch example', 'thread_view_count': 1, 'creator_user_id': 2410024, 'creator_username': 'AS7RID', 'creator_username_html': '<span  class="style22">AS ... }
-
+{'id': '1', 'uri': 'https://api.zelenka.guru/users/find', 'method': 'GET', 'params': {'username': None, 'user_email': None, 'custom_fields[telegram]': 'AS7RID', 'custom_fields': {'telegram': 'AS7RID'}, 'locale': 'en'}, 'data': {'username': None, 'user_email': None, 'custom_fields[telegram]': 'AS7RID', 'custom_fields': {'telegram': 'AS7RID'}}, 'files': None}
+{'id': '2', 'uri': 'https://api.zelenka.guru/users/1', 'method': 'GET', 'params': {'locale': 'en'}, 'data': {}, 'files': None}
+{'id': '3', 'uri': 'https://api.zelenka.guru/threads/5523020', 'method': 'GET', 'params': {'locale': 'en'}, 'data': {}, 'files': None}
+{'id': '4', 'uri': 'https://api.zelenka.guru/threads', 'method': 'POST', 'params': {'forum_id': 876, 'thread_prefix_id': None, 'thread_tags': 'LolzteamApi', 'thread_title': 'Api batch example', 'post_body': 'Api batch example body', 'locale': 'en'}, 'data': {'thread_title': 'Api batch example', 'post_body': 'Api batch example body', 'forum_id': 876, 'thread_prefix_id': None, 'thread_tags': 'LolzteamApi'}, 'files': None}
 ```
 
 # Batch
@@ -2339,13 +2337,19 @@ for job_name, job_data in data["jobs"].items():
 
 ```python
 jobs = [
-    api.create_batch_job(job_name="Api_example_1",method="GET",url="https://api.zelenka.guru/AS7RID"),
-    api.create_batch_job(job_name="Api_example_2",method="GET",url="https://api.zelenka.guru/RaysMorgan")
+    api.get_batch_job(api.forum.users.search, job_name="1", custom_fields={"telegram": "AS7RID"}),
+    api.get_batch_job(api.forum.users.get, job_name="2", user_id=1),
+    api.get_batch_job(api.forum.threads.get, job_name="3", thread_id=5523020),
+    api.get_batch_job(api.forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LolzteamApi")
 ]
-data = api.forum.batch(request_body=jobs)
-print(data)
+data = api.market.batch(request_body=jobs)
+for job_name, job_data in data["jobs"].items():
+    print(job_data)
 ```
 
 ```python
-{'jobs': {'job_id': {}}}
+{'_job_result': 'ok', 'users': [{'user_id': 2410024, 'username': 'AS7RID', 'username_html': '<span  class="style22">AS7RID</span>', 'user_message_count': 1089, 'user_register_date': 1560282271, 'user_like_count': 2949, 'short_link': 'as7rid', ... }
+{'_job_result': 'ok', 'user': {'user_id': 1, 'username': 'RaysMorgan', 'username_html': '<span  class="style3">RaysMorgan</span>', 'user_message_count': 12104, 'user_register_date': 1362675475, 'user_like_count': 44351, 'short_link': 'rays',  ... }
+{'_job_result': 'ok', 'thread': {'thread_id': 5523020, 'forum_id': 976, 'thread_title': 'Библиотека для упрощения работы с API | LolzteamApi Forum/Market/Antipublic Python', 'thread_view_count': 715, 'creator_user_id': 2410024, 'creator_usern ... }
+{'_job_result': 'ok', 'thread': {'thread_id': 5907641, 'forum_id': 876, 'thread_title': 'Api batch example', 'thread_view_count': 1, 'creator_user_id': 2410024, 'creator_username': 'AS7RID', 'creator_username_html': '<span  class="style22">AS ... }
 ```
