@@ -1,6 +1,7 @@
 import requests
 import time
 import json
+import inspect
 
 
 class LolzteamApi:
@@ -94,21 +95,55 @@ class LolzteamApi:
         except requests.exceptions.JSONDecodeError:
             return response.text
 
-    @staticmethod
-    def create_batch_job(job_name: str or int, method: str, url: str, params: dict = None, data=None, files=None):
-        """
-        Create batch job for forum.batch() or market.batch()
-
-
-        :param job_name: batch job name
-        :param method: request method
-        :param url: request url
-        :param params: request params
-        :param data: request body
-        :param files: request files
-        :return: batch job dict
-        """
-        method = method.upper()
+    def get_batch_job(self, func, job_name, **kwargs):
+        arguments = func.__code__.co_varnames
+        batch_mode = True
+        for arg in arguments:
+            if arg != "self":
+                exec(f"{arg} = None")
+        loc = locals()
+        for arg, value in kwargs.items():
+            if arg not in arguments:
+                raise Exception(f"""Function "{func.__name__}" don't have "{arg}" parameter""")
+            else:
+                loc[arg] = value
+        func_code = str(inspect.getsource(func))
+        func_code = func_code.split("):\n", 1)[1]
+        lines = func_code.split("\n")
+        spaces = lines[0].split('"""')[0]
+        for line in lines:
+            if " def " in line:
+                lines.remove(line)
+        return_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[1]
+        func_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
+        if True:  # Костыль для Tweak 1
+            user_id = None
+        exec(func_code, loc)
+        path_data = loc["path_data"]
+        try:
+            params = loc["params"]
+        except:
+            params = {}
+        try:
+            data = loc["data"]
+        except:
+            data = {}
+        try:
+            files = loc["files"]
+        except:
+            files = None
+        for key, value in params.items():
+            data[key] = value
+        for key, value in data.items():
+            params[key] = value
+        method = [eval(i.replace('method=', '')) for i in return_code.split(",") if "method=" in i][0]
+        if path_data["site"].lower() == "forum":
+            url = self.base_url_forum + path_data["path"]
+        elif path_data["site"].lower() == "market":
+            url = self.base_url_market + path_data["path"]
+        else:
+            raise Exception(f"Invalid site in path data. Contact @AS7RID")
+        params["locale"] = self.__locale
         job = {
             "id": job_name,
             "uri": url,
@@ -119,7 +154,13 @@ class LolzteamApi:
         }
         return job
 
-    # noinspection PyTypeChecker
+    def __get_var_from_code(code, var_name):
+        for line in code.split("\n"):
+            if var_name in line:
+                print(line.strip().split(" = ")[1])
+                var = eval(line.strip().split(" = ")[1])
+        return var
+
     def __set_user_id(self):
         path_data = {"site": "Market", "path": "/me"}
         response = LolzteamApi.send_request(self=self, method="GET", path_data=path_data)
@@ -425,7 +466,8 @@ class LolzteamApi:
                 self.__api = __api_self
                 self.comments = self.__Posts_comments(self.__api)
 
-            def get_posts(self, thread_id: int, page_of_post_id: int = None, post_ids: str = None, page: int = None,
+            def get_posts(self, thread_id: int = None, page_of_post_id: int = None, post_ids: list = None,
+                          page: int = None,
                           limit: int = None, order: int = None):
                 """
                 GET https://api.zelenka.guru/posts
@@ -436,13 +478,15 @@ class LolzteamApi:
 
                 :param thread_id: ID of the containing thread.
                 :param page_of_post_id: ID of a post, posts that are in the same page with the specified post will be returned. thread_id may be skipped.
-                :param post_ids: ID's of needed posts (separated by comma). If this parameter is set, all other filtering parameters will be ignored.
+                :param post_ids: ID's of needed posts. If this parameter is set, all other filtering parameters will be ignored.
                 :param page: Page number of posts.
                 :param limit: Number of posts in a page. Default value depends on the system configuration.
                 :param order: Ordering of posts. Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
                 :return: json server response
                 """
                 path_data = {"site": "Forum", "path": f"/posts"}
+                if type(post_ids) == list:
+                    post_ids = ",".join(str(i) for i in post_ids)
                 params = {
                     "thread_id": thread_id,
                     "page_of_post_id": page_of_post_id,
@@ -1366,6 +1410,11 @@ class LolzteamApi:
                     for key, value in custom_fields.items():
                         cf = f"custom_fields[{key}]"
                         params[cf] = value
+                    try:
+                        if batch_mode:
+                            params["custom_fields"] = custom_fields  # Костыль get_batch_job
+                    except:
+                        pass
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get(self, user_id: int = None):
@@ -1464,6 +1513,11 @@ class LolzteamApi:
                     for key, value in fields.items():
                         field = f"fields[{key}]"
                         data[field] = value
+                    try:
+                        if batch_mode:
+                            data["fields"] = fields  # Костыль get_batch_job
+                    except:
+                        pass
                 return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params,
                                                 data=data)
 
@@ -2063,7 +2117,6 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                # По приколу добавил получается. Шанс того, что это заюзает реквест, томас или григорий крайне мал
 
                 path_data = {"site": "Forum", "path": f"/notifications/custom"}
                 params = {
@@ -3853,6 +3906,11 @@ class LolzteamApi:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
                         data[es] = value
+                    try:
+                        if batch_mode:
+                            data["extra"] = extra  # Костыль get_batch_job
+                    except:
+                        pass
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                 data=data)
 
@@ -4022,6 +4080,11 @@ class LolzteamApi:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
                         data[es] = value
+                    try:
+                        if batch_mode:
+                            data["extra"] = extra  # Костыль get_batch_job
+                    except:
+                        pass
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                 data=data)
 
