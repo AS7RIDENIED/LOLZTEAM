@@ -3,7 +3,6 @@ import time
 import json
 import inspect
 
-
 class LolzteamApi:
     def __init__(self, token: str, bypass_429: bool = True, language: str = None,
                  proxy_type: str = None, proxy: str = None):
@@ -129,12 +128,6 @@ class LolzteamApi:
             data = loc["data"]
         except:
             data = {}
-        try:
-            files = loc["files"]
-        except:
-            files = None
-        for key, value in params.items():
-            data[key] = value
         for key, value in data.items():
             params[key] = value
         method = [eval(i.replace('method=', '')) for i in return_code.split(",") if "method=" in i][0]
@@ -149,9 +142,7 @@ class LolzteamApi:
             "id": job_name,
             "uri": url,
             "method": method,
-            "params": params,
-            "data": data,
-            "files": files
+            "params": params
         }
         return job
 
@@ -1301,6 +1292,12 @@ class LolzteamApi:
 
                     :return: json server response
                     """
+                    try:
+                        if batch_mode:
+                            from warnings import warn
+                            warn(message="You can't upload avatar using batch", category=FutureWarning,stacklevel=1)
+                    except:
+                        pass
                     if user_id is None:
                         path_data = {"site": "Forum", "path": f"/users/me/avatar"}
                     else:
@@ -1407,14 +1404,13 @@ class LolzteamApi:
                     "user_email": user_email,
                 }
                 if custom_fields is not None:
-                    for key, value in custom_fields.items():
-                        cf = f"custom_fields[{key}]"
-                        params[cf] = value
                     try:
                         if batch_mode:
                             params["custom_fields"] = custom_fields  # Костыль get_batch_job
                     except:
-                        pass
+                        for key, value in custom_fields.items():
+                            cf = f"custom_fields[{key}]"
+                            params[cf] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def get(self, user_id: int = None):
@@ -1510,14 +1506,13 @@ class LolzteamApi:
                     "user_title": user_title,
                 }
                 if fields is not None:
-                    for key, value in fields.items():
-                        field = f"fields[{key}]"
-                        data[field] = value
                     try:
                         if batch_mode:
                             data["fields"] = fields  # Костыль get_batch_job
                     except:
-                        pass
+                        for key, value in fields.items():
+                            field = f"fields[{key}]"
+                            data[field] = value
                 return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params,
                                                 data=data)
 
@@ -3913,14 +3908,13 @@ class LolzteamApi:
                 }
                 data = {}
                 if extra is not None:
-                    for key, value in extra.items():
-                        es = f"extra[{key}]"
-                        data[es] = value
                     try:
                         if batch_mode:
                             data["extra"] = extra  # Костыль get_batch_job
                     except:
-                        pass
+                        for key, value in extra.items():
+                            es = f"extra[{key}]"
+                            data[es] = value
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                 data=data)
 
@@ -4087,14 +4081,13 @@ class LolzteamApi:
                 }
                 data = {}
                 if extra is not None:
-                    for key, value in extra.items():
-                        es = f"extra[{key}]"
-                        data[es] = value
                     try:
                         if batch_mode:
                             data["extra"] = extra  # Костыль get_batch_job
                     except:
-                        pass
+                        for key, value in extra.items():
+                            es = f"extra[{key}]"
+                            data[es] = value
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                 data=data)
 
