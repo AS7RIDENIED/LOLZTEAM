@@ -3,6 +3,19 @@ import time
 import json
 import inspect
 
+
+class Tweaks:
+    @staticmethod
+    def market_variable_fix(var):
+        if var is None:
+            var = "nomatter"
+        elif var is True:
+            var = "yes"
+        elif var is False:
+            var = "no"
+        return var
+
+
 class LolzteamApi:
     def __init__(self, token: str, bypass_429: bool = True, language: str = None,
                  proxy_type: str = None, proxy: str = None):
@@ -45,49 +58,41 @@ class LolzteamApi:
         else:
             raise Exception(f"Invalid site in path data. Contact @AS7RID")
         method = method.upper()
-        LolzteamApi.__auto_delay(self)
+        self.__auto_delay()
         if params is None:
             params = {}
         params["locale"] = self.__locale
         proxies = {}
+
+        proxy_schemes = {
+            "HTTP": "http",
+            "HTTPS": "https",
+            "SOCKS4": "socks4",
+            "SOCKS5": "socks5"
+        }
+        request_methods = [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+        ]
+
         if self.__proxy_type is not None:
-            if self.__proxy_type == "HTTP":
+            if self.__proxy_type in proxy_schemes:
+                proxy_scheme = proxy_schemes[self.__proxy_type]
                 proxies = {
-                    "http": f"http://{self.__proxy}",
-                    "https": f"http://{self.__proxy}"
-                }
-            elif self.__proxy_type == "HTTPS":
-                proxies = {
-                    "http": f"http://{self.__proxy}",
-                    "https": f"https://{self.__proxy}"
-                }
-            if self.__proxy_type == "SOCKS4":
-                proxies = {
-                    "http": f"socks4://{self.__proxy}",
-                    "https": f"socks4://{self.__proxy}"
-                }
-            if self.__proxy_type == "SOCKS5":
-                proxies = {
-                    "http": f"socks5://{self.__proxy}",
-                    "https": f"socks5://{self.__proxy}"
+                    "http": f"{proxy_scheme}://{self.__proxy}",
+                    "https": f"{proxy_scheme}://{self.__proxy}"
                 }
             else:
-                raise Exception(
-                    f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")  # How tf you get that error?
-        if method == "GET":
-            response = requests.get(url=url, params=params, data=data, files=files, headers=self.__headers,
-                                    proxies=proxies)
-        elif method == "POST":
-            response = requests.post(url=url, params=params, data=data, files=files, headers=self.__headers,
-                                     proxies=proxies)
-        elif method == "PUT":
-            response = requests.put(url=url, params=params, data=data, files=files, headers=self.__headers,
-                                    proxies=proxies)
-        elif method == "DELETE":
-            response = requests.delete(url=url, params=params, data=data, files=files, headers=self.__headers,
-                                       proxies=proxies)
+                raise Exception("Proxy type has invalid value. It can be only https, http, socks4 or socks5")
+
+        if method in request_methods:
+            response = requests.request(method=method, url=url, params=params, data=data, files=files,
+                                        headers=self.__headers,
+                                        proxies=proxies)
         else:
-            raise Exception(f"Invalid requests method. Contact @AS7RID")
+            raise Exception("Invalid requests method. Contact @AS7RID")
         self.__auto_delay_time = time.time()
         try:
             return response.json()
@@ -97,12 +102,12 @@ class LolzteamApi:
     def get_batch_job(self, func, job_name, **kwargs):
         arguments = func.__code__.co_varnames
         batch_mode = True
+        loc = locals()
         for arg in arguments:
             if arg != "self":
-                exec(f"{arg} = None")
+                exec(f"{arg} = None", loc)
         if True:  # Костыль для Tweak 1
             user_id = None
-        loc = locals()
         for arg, value in kwargs.items():
             if arg not in arguments:
                 raise Exception(f"""Function "{func.__name__}" don't have "{arg}" parameter""")
@@ -119,17 +124,10 @@ class LolzteamApi:
         func_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
 
         exec(func_code, loc)
-        path_data = loc["path_data"]
-        try:
-            params = loc["params"]
-        except:
-            params = {}
-        try:
-            data = loc["data"]
-        except:
-            data = {}
-        for key, value in data.items():
-            params[key] = value
+        path_data = loc.get("path_data")
+        params = loc.get("params", {})
+        data = loc.get("data", {})
+        params.update(data)
         method = [eval(i.replace('method=', '')) for i in return_code.split(",") if "method=" in i][0]
         if path_data["site"].lower() == "forum":
             url = self.base_url_forum + path_data["path"]
@@ -146,8 +144,10 @@ class LolzteamApi:
         }
         return job
 
-    def __get_var_from_code(code, var_name):
-        for line in code.split("\n"):
+    @staticmethod
+    def __get_var_from_code(func_code, var_name):
+        var = None
+        for line in func_code.split("\n"):
             if var_name in line:
                 var = eval(line.strip().split(" = ")[1])
         return var
@@ -168,13 +168,7 @@ class LolzteamApi:
             current_time = time.time()
             time_diff = current_time - self.__auto_delay_time
             if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-
                 time.sleep(3.003 - time_diff)
-
-    def change_token(self, new_token: str):
-        self.__token = new_token
-        self.__token_user_id = self.__set_user_id()
-        self.__headers = {'Authorization': f"bearer {self.__token}"}
 
     def change_proxy(self, proxy_type: str = None, proxy: str = None):
         """
@@ -1128,15 +1122,14 @@ class LolzteamApi:
                         if not isinstance(element, int):
                             raise TypeError("All response_ids need to be integer")
 
-                    params = {
-                        "response_ids[]": response_ids
-                    }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
-                else:
-                    params = {
-                        "response_id": response_id
-                    }
-                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
+                params = {"response_id": response_id} if response_id else {"response_ids[]": response_ids}
+
+                if response_ids:
+                    for element in response_ids:
+                        if not isinstance(element, int):
+                            raise TypeError("All response_ids need to be integers")
+
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def new(self, forum_id: int = None, limit: int = None, data_limit: int = None):
                 """
@@ -1295,7 +1288,7 @@ class LolzteamApi:
                     try:
                         if batch_mode:
                             from warnings import warn
-                            warn(message="You can't upload avatar using batch", category=FutureWarning,stacklevel=1)
+                            warn(message="You can't upload avatar using batch", category=FutureWarning, stacklevel=1)
                     except:
                         pass
                     if user_id is None:
@@ -2698,7 +2691,7 @@ class LolzteamApi:
 
                 self.categories = self.__Category_Market(self.__api)
 
-            class __Category_Market:  # лежит в List
+            class __Category_Market:
                 def __init__(self, api_self):
                     self.__api = api_self
 
@@ -2722,7 +2715,7 @@ class LolzteamApi:
 
                 def get(self, category_name: str, pmin: int = None, pmax: int = None, title: str = None,
                         parse_sticky_items: bool = None, parse_same_items: bool = None, games: list[int] or int = None,
-                        page: int = None, search_params: dict = None):
+                        page: int = None, auction: str = None, order_by: str = None, search_params: dict = None):
                     """
                     GET https://api.lzt.market/categoryName
 
@@ -2788,12 +2781,17 @@ class LolzteamApi:
                     :param parse_same_items: If true, API will return account history in results
                     :param games: The ID of a game found on the account
                     :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
                     :param search_params: Search params for your request. Example {"origin":"autoreg"} will return only "autoreg" accounts
                     :return: json server response
 
                     """
                     category_name = category_name.lower()
                     path_data = {"site": "Market", "path": f"/{category_name}"}
+                    if True:  # Tweak market
+                        from LolzteamApi.LolzteamApi import Tweaks
+                        auction = Tweaks.market_variable_fix(auction)
                     params = {
                         "pmin": pmin,
                         "pmax": pmax,
@@ -2801,7 +2799,9 @@ class LolzteamApi:
                         "parse_sticky_items": parse_sticky_items,
                         "parse_same_items": parse_same_items,
                         "game[]": games,
-                        "page": page
+                        "page": page,
+                        "auction": auction,
+                        "order_by": order_by
                     }
                     if search_params is not None:
                         for key, value in search_params.items():
@@ -2950,8 +2950,10 @@ class LolzteamApi:
                 """
                 if "https://lzt.market" in url:
                     url = url.replace("https://lzt.market", "")
-                if "https://api.lzt.market" in url:
+                elif "https://api.lzt.market" in url:
                     url = url.replace("https://api.lzt.market", "")
+                else:
+                    raise Exception("Unknown link")
                 path_data = {"site": "Market", "path": f"{url}"}
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
@@ -2979,7 +2981,7 @@ class LolzteamApi:
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def owned(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
-                      pmax: int = None, title: str = None, search_params: dict = None):
+                      pmax: int = None, title: str = None, status: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/user/user_id/items
 
@@ -3043,10 +3045,10 @@ class LolzteamApi:
                 :param pmin: Minimal price of account (Inclusive)
                 :param pmax: Maximum price of account (Inclusive)
                 :param title: The word or words contained in the account title
+                :param status: Account status. Can be [active, paid, deleted or awaiting].
                 :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
-
                 """
                 if user_id is None:  # Tweak 1
                     try:
@@ -3071,7 +3073,7 @@ class LolzteamApi:
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
             def purchased(self, user_id: int = None, page: int = None, category_id: int = None, pmin: int = None,
-                          pmax: int = None, title: str = None, search_params: dict = None):
+                          pmax: int = None, title: str = None, status: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/user/user_id/orders
 
@@ -3135,6 +3137,7 @@ class LolzteamApi:
                 :param pmin: Minimal price of account (Inclusive)
                 :param pmax: Maximum price of account (Inclusive)
                 :param title: The word or words contained in the account title
+                :param status: Account status. Can be [active, paid, deleted or awaiting].
                 :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
@@ -3153,7 +3156,8 @@ class LolzteamApi:
                     "pmin": pmin,
                     "pmax": pmax,
                     "title": title,
-                    "page": page
+                    "page": page,
+                    "show": status
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
@@ -3161,7 +3165,7 @@ class LolzteamApi:
                 path_data = {"site": "Market", "path": f"/user/{user_id}/orders"}
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
-            def favorite(self, page: int = None, search_params: dict = None):
+            def favorite(self, page: int = None, status: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/fave
 
@@ -3170,6 +3174,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param status: Account status. Can be [active, paid, deleted or awaiting].
                 :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
@@ -3177,14 +3182,15 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/fave"}
                 params = {
-                    "page": page
+                    "page": page,
+                    "show": status
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
-            def viewed(self, page: int = None, search_params: dict = None):
+            def viewed(self, page: int = None, status: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/viewed
 
@@ -3193,6 +3199,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param status: Account status. Can be [active, paid, deleted or awaiting].
                 :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
@@ -3200,7 +3207,8 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/viewed"}
                 params = {
-                    "page": page
+                    "page": page,
+                    "show": status
                 }
                 if search_params is not None:
                     for key, value in search_params.items():

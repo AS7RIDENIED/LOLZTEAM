@@ -35,6 +35,7 @@ class Market:
         warface = "warface"
         youtube = "youtube"
         minecraft = "minecraft"
+
     class Categories_ID:
         steam = 1
         fortnite = 9
@@ -55,7 +56,7 @@ class Market:
         uplay = 5
         war_thunder = 27
         discord = 22
-        tiktok =20
+        tiktok = 20
         instagram = 10
         battlenet = 11
         vpn = 19
@@ -64,6 +65,7 @@ class Market:
         warface = 4
         youtube = 25
         minecraft = 28
+
     class Operation_types:
         income = "income"
         cost = "cost"
