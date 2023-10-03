@@ -158,6 +158,10 @@ print(data)
 - **parse_same_items** (bool): If true, API will return account history in results
 - **games** (list[int] or int): The ID of a game found on the account
 - **page** (int): The number of the page to display results from
+- **auction** (str): Auction. 
+  > Can be [yes, no, nomatter].
+- **order_by** (str): Order by. 
+  > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
 - **search_params** (dict): Search params for your request.
   > Example {"origin":"autoreg"} will return only "autoreg" accounts
 
@@ -297,8 +301,6 @@ print(data)
 
 *Displays a list of owned accounts.*
 
-*It's copy of*
-
 **Parameters:**
 
 - **user_id** (int): ID of user.
@@ -336,6 +338,10 @@ print(data)
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
+- **status** (str): Account status.
+  > Can be [active, paid, deleted or awaiting].
+
+  > You also can use types - Types.Market.Item_status
 - **search_params** (dict): Search params for your request. 
   > Example {"category_id":19} will return only VPN accounts
 
@@ -357,6 +363,10 @@ print(data)
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
+- **status** (str): Account status.
+  > Can be [active, paid, deleted or awaiting].
+
+  > You also can use types - Types.Market.Item_status
 - **search_params** (dict): Search params for your request.
   > Example {"category_id":19} will return only VPN accounts
 
