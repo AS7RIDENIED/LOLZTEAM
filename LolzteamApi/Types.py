@@ -122,6 +122,7 @@ class Market:
         date_to_up = "pdate_to_up"
         date_to_down_upload = "pdate_to_down_upload"
         date_to_up_upload = "pdate_to_up_upload"
+        auction_expiration = "exp_auctions"
 
     class App_Ids:
         CS2 = 730

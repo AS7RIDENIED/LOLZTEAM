@@ -3753,6 +3753,66 @@ class LolzteamApi:
         class __Purchasing:
             def __init__(self, api_self):
                 self.__api = api_self
+                self.auction = self.__Auction(self.__api)
+            class __Auction:
+                def __init__(self, api_self):
+                    self.__api = api_self
+
+                def get(self, item_id: int):
+                    """
+                    GET https://api.lzt.market/item_id/auction
+
+                    Display a list of bids in the auction.
+
+                    Required scopes: market
+
+                    :param item_id: ID of item.
+
+                    :return: json server response
+                    """
+                    path_data = {"site": "Market", "path": f"/{item_id}/auction"}
+                    return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
+
+                def place_bid(self, item_id: int, amount: int, currency: str):
+                    """
+                    GET https://api.lzt.market/item_id/auction/bid
+
+                    Create a new auction bid.
+
+                    Required scopes: market
+
+                    :param item_id: ID of item.
+                    :param amount: Amount bid.
+                    :param currency: Using currency. Can be [rub, uah, kzt, byn, usd, eur, gbp, cny, try].
+
+                    :return: json server response
+                    """
+                    params = {
+                        "amount": amount,
+                        "currency": currency
+                    }
+                    path_data = {"site": "Market", "path": f"/{item_id}/auction/bid"}
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
+
+                def delete_bid(self, item_id: int, bid_id: int):
+                    """
+                    GET https://api.lzt.market/item_id/auction/bid
+
+                    Delete your auction bid.
+
+                    Required scopes: market
+
+                    :param item_id: ID of item.
+                    :param bid_id: ID of bid.
+
+                    :return: json server response
+                    """
+                    params = {
+                        "bid_id": bid_id
+                    }
+                    path_data = {"site": "Market", "path": f"/{item_id}/auction/bid"}
+                    return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data,
+                                                    params=params)
 
             def reserve(self, item_id: int, price: int):
                 """
@@ -3812,7 +3872,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param item_id: ID of item.
-                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe)
+                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe). Does not work for steam category (category_id=1).
 
                 :return: json server response
                 """
@@ -3837,7 +3897,7 @@ class LolzteamApi:
 
                 :param item_id: ID of item.
                 :param price: Current price of account in your currency
-                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe)
+                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe). Does not work for steam category (category_id=1).
 
                 :return: json server response
                 """

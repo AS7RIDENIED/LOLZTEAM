@@ -25,6 +25,10 @@
   * [Favorite accounts](#favorite-accounts)
   * [Purchased accounts](#purchased-accounts)
 * [Purchasing](#purchasing)
+  * [Auction](#auction)
+    * [Get auction bids](#get-auction-bids) 
+    * [Place auction bid](#place-auction-bid)
+    * [Delete auction bid](#delete-auction-bid)
   * [Fast buy](#fast-buy)
   * [Check](#check)
   * [Confirm buy](#confirm-buy)
@@ -419,6 +423,73 @@ print(data)
 
 *Methods for item purchasing*
 
+## Auction
+
+---
+
+### Get auction bids
+
+*Display a list of bids in the auction.*
+
+**Parameters:**
+
+- **item_id** (int): ID of item.
+
+**Example:**
+
+```python
+response = api.market.purchasing.auction.get(item_id=2410024)
+print(response)
+```
+
+```python
+{'itemId': 0, 'bids': [{'bid_id': 0, 'bid_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'minAllowedBidValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'bid_previous_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'user': {'user_id': 0, 'avatar': 'string', 'usernameHtml': 'string'}, 'bid_date': 0, 'canCancelBid': False, 'endTimeAuction': 0}], 'is_finished': 0, 'endTime': 0, 'currencies': {'{currency}': {'title': 'string', 'symbol': 'string', 'rate': {'Value': 0, 'Nominal': 0}}}, 'userCurrency': 'string', 'minAllowedBidValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'startValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Place auction bid
+
+*Create a new auction bid.*
+
+**Parameters:**
+
+- **item_id** (int): ID of item.
+- **amount** (int): Amount bid.
+- **currency** (str): Using currency.
+  > Can be [rub, uah, kzt, byn, usd, eur, gbp, cny, try].
+
+**Example:**
+
+```python
+response = api.market.purchasing.auction.place_bid(item_id=2410024, amount=250, currency=Types.Market.Currency.rub)
+print(response)
+```
+
+```python
+{'status': 'ok', 'bid': {'bid_id': 0, 'bid_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'minAllowedBidValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'bid_previous_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'user': {'user_id': 0, 'avatar': 'string', 'usernameHtml': 'string'}, 'bid_date': 0, 'canCancelBid': False, 'endTimeAuction': 0}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Delete auction bid
+
+*Delete your auction bid.*
+
+**Parameters:**
+
+- **item_id** (int): ID of item.
+- **bid_id** (int): ID of bid.
+
+**Example:**
+
+```python
+response = api.market.purchasing.auction.delete_bid(item_id=2410024, bid_id=2410024)
+print(response)
+```
+
+```python
+{'status': 'ok', 'message': 'The bid success deleted', 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
 ### Fast buy
 
 *Check and buy account.*
@@ -429,6 +500,8 @@ print(data)
 - **price** (int): Current price of account in your currency
 - **buy_without_validation** (bool): Buy account without validation
   > Use TRUE if you want to buy account without account data validation (not safe)
+  >
+  > Does not work for steam category (category_id=1).
 
 **Example:**
 
@@ -468,6 +541,8 @@ print(data)
 - **item_id** (int): ID of item.
 - **buy_without_validation** (bool): Buy account without validation
   > Use TRUE if you want to buy account without account data validation (not safe)
+  >
+  > Does not work for steam category (category_id=1).
 
 **Example:**
 
