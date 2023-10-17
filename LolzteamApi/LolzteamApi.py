@@ -76,7 +76,6 @@ class LolzteamApi:
             "PUT",
             "DELETE",
         ]
-
         if self.__proxy_type is not None:
             if self.__proxy_type in proxy_schemes:
                 proxy_scheme = proxy_schemes[self.__proxy_type]
@@ -3872,7 +3871,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param item_id: ID of item.
-                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe). Does not work for steam category (category_id=1).
+                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
 
                 :return: json server response
                 """
@@ -3897,7 +3896,7 @@ class LolzteamApi:
 
                 :param item_id: ID of item.
                 :param price: Current price of account in your currency
-                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe). Does not work for steam category (category_id=1).
+                :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
 
                 :return: json server response
                 """

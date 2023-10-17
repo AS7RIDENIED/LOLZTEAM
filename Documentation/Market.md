@@ -500,8 +500,6 @@ print(response)
 - **price** (int): Current price of account in your currency
 - **buy_without_validation** (bool): Buy account without validation
   > Use TRUE if you want to buy account without account data validation (not safe)
-  >
-  > Does not work for steam category (category_id=1).
 
 **Example:**
 
@@ -541,8 +539,6 @@ print(data)
 - **item_id** (int): ID of item.
 - **buy_without_validation** (bool): Buy account without validation
   > Use TRUE if you want to buy account without account data validation (not safe)
-  >
-  > Does not work for steam category (category_id=1).
 
 **Example:**
 
