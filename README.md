@@ -28,7 +28,7 @@ api = LolzteamApi(token='your_token')
 
 ## Documentation
 
-### [Forum](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md) [Market](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md) [Antipublic](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Antipublic.md)
+### [Forum](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md) [Market](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md) [Antipublic](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Antipublic.md) [DelaySynchronizer](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/DelaySynchronizer.md)
 ## Official Lolzteam documentation
 
 ### [Forum](https://docs.api.zelenka.guru/?forum) [Market](https://docs.api.zelenka.guru/?market) [Antipublic](https://antipublic.one/docs/?antipublic)
