@@ -5,7 +5,6 @@ import json
 import inspect
 import asyncio
 
-
 class Tweaks:
     @staticmethod
     def market_variable_fix(var):
@@ -45,9 +44,10 @@ class LolzteamApi:
         self.__headers = {'Authorization': f"bearer {self.__token}"}
 
         self.__bypass_429 = bypass_429
-        self.__auto_delay_time = time.time() - 3
+        self._auto_delay_time = time.time() - 3
         self.__locale = language
         self.__token_user_id = self.__set_user_id
+        self.__delay_synchronizer = None
 
         self.market = self.__Market(self, self.__token_user_id)
         self.forum = self.__Forum(self)
@@ -99,7 +99,11 @@ class LolzteamApi:
                                         proxies=proxies)
         else:
             raise Exception("Invalid requests method. Contact @AS7RID")
-        self.__auto_delay_time = time.time()
+        if self.__delay_synchronizer:
+            self.__delay_synchronizer._synchronize(time.time())
+        else:
+            self._auto_delay_time = time.time()
+
         try:
             return response.json()
         except requests.exceptions.JSONDecodeError:
@@ -150,7 +154,10 @@ class LolzteamApi:
                                                  )
         else:
             raise Exception("Invalid requests method. Contact @AS7RID")
-        self.__auto_delay_time = time.time()
+        if self.__delay_synchronizer:
+            self.__delay_synchronizer._synchronize(time.time())
+        else:
+            self._auto_delay_time = time.time()
         try:
             return await response.json()
         except Exception:
@@ -270,7 +277,7 @@ class LolzteamApi:
         """
         if self.__bypass_429:
             current_time = time.time()
-            time_diff = current_time - self.__auto_delay_time
+            time_diff = current_time - self._auto_delay_time
             if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
                 time.sleep(3.003 - time_diff)
 
@@ -280,7 +287,7 @@ class LolzteamApi:
         """
         if self.__bypass_429:
             current_time = time.time()
-            time_diff = current_time - self.__auto_delay_time
+            time_diff = current_time - self._auto_delay_time
             if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
                 await asyncio.sleep(3.003 - time_diff)
 
@@ -301,7 +308,10 @@ class LolzteamApi:
         else:
             self.__proxy_type = None
         self.__proxy = proxy
-
+    def _add_delay_synchronizer(self, synchronizer):
+        self.__delay_synchronizer = synchronizer
+    def _remove_delay_synchronizer(self):
+        self.__delay_synchronizer = None
     class __Forum:
         def __init__(self, api_self):
             self.__api = api_self  # Passing main self to sub all classes

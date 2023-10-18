@@ -25,4 +25,5 @@ except:
     pass
 from .LolzteamApi import LolzteamApi
 from .AntipublicApi import AntipublicApi
+from .DelaySynchronizer import  DelaySynchronizer
 from . import Types
