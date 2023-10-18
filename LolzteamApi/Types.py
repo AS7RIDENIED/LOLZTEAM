@@ -77,6 +77,7 @@ class Market:
         receiving_money = "receiving_money"
         internal_purchase = "internal_purchase"
         claim_hold = "claim_hold"
+        bid = "bid"
 
     class Hold_Options:
         hour = "hour"
@@ -103,6 +104,7 @@ class Market:
         personal = "personal"
         resale = "resale"
         retrieve = "retrieve"
+        dummy = "dummy"  # Only for steam (Пустышки)
 
     class Guarantee:
         half_day = -1

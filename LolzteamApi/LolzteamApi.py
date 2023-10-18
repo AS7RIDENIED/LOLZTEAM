@@ -1,7 +1,9 @@
 import requests
+import aiohttp
 import time
 import json
 import inspect
+import asyncio
 
 
 class Tweaks:
@@ -62,8 +64,13 @@ class LolzteamApi:
         if params is None:
             params = {}
         params["locale"] = self.__locale
+        ptd = []
+        for key, value in params.items():
+            if params[key] is None:
+                ptd.append(key)
+        for key in ptd:
+            del params[key]
         proxies = {}
-
         proxy_schemes = {
             "HTTP": "http",
             "HTTPS": "https",
@@ -96,6 +103,57 @@ class LolzteamApi:
         try:
             return response.json()
         except requests.exceptions.JSONDecodeError:
+            return response.text
+
+    async def send_async_request(self, method: str, path_data: dict, params: dict = None, data=None):
+        if path_data["site"].lower() == "forum":
+            url = self.base_url_forum + path_data["path"]
+        elif path_data["site"].lower() == "market":
+            url = self.base_url_market + path_data["path"]
+        else:
+            raise Exception(f"Invalid site in path data. Contact @AS7RID")
+        method = method.upper()
+        await self.__auto_delay_async()
+        if params is None:
+            params = {}
+        params["locale"] = self.__locale
+        ptd = []
+        for key, value in params.items():
+            if params[key] is None:
+                ptd.append(key)
+        for key in ptd:
+            del params[key]
+        proxy_schemes = {
+            "HTTP": "http",
+            "HTTPS": "https",
+            "SOCKS4": "socks4",
+            "SOCKS5": "socks5"
+        }
+        request_methods = [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+        ]
+        proxy = None
+        if self.__proxy_type is not None:
+            if self.__proxy_type in proxy_schemes:
+                proxy_scheme = proxy_schemes[self.__proxy_type]
+                proxy = f"{proxy_scheme}://{self.__proxy}"
+            else:
+                raise Exception("Proxy type has invalid value. It can be only https, http, socks4 or socks5")
+
+        if method in request_methods:
+            async with aiohttp.ClientSession() as session:
+                response = await session.request(method=method, url=url, params=params, data=data,
+                                                 headers=self.__headers, proxy=proxy
+                                                 )
+        else:
+            raise Exception("Invalid requests method. Contact @AS7RID")
+        self.__auto_delay_time = time.time()
+        try:
+            return await response.json()
+        except Exception:
             return response.text
 
     def get_batch_job(self, func, job_name, **kwargs):
@@ -143,6 +201,53 @@ class LolzteamApi:
         }
         return job
 
+    async def send_as_async(self, func, **kwargs):
+        """
+        Send request as async
+
+        :param func: Target function
+        :param kwargs: Target function parameters
+
+        :return: json server response
+        """
+        im_async = True
+        arguments = func.__code__.co_varnames
+        loc = locals()
+        for arg in arguments:
+            if arg != "self":
+                exec(f"{arg} = None", loc)
+        if True:  # Костыль для Tweak 1
+            user_id = None
+        for arg, value in kwargs.items():
+            if arg not in arguments:
+                raise Exception(f"""Function "{func.__name__}" don't have "{arg}" parameter""")
+            else:
+                loc[arg] = value
+        func_code = str(inspect.getsource(func))
+        func_code = func_code.split("):\n", 1)[1]
+        lines = func_code.split("\n")
+        spaces = lines[0].split('"""')[0]
+        for line in lines:
+            if " def " in line:
+                lines.remove(line)
+        return_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[1]
+        func_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
+
+        exec(func_code, loc)
+        path_data = loc.get("path_data")
+        params = loc.get("params", {})
+        data = loc.get("data", {})
+        method = [eval(i.replace('method=', '')) for i in return_code.split(",") if "method=" in i][0]
+        if path_data["site"].lower() == "forum":
+            url = self.base_url_forum + path_data["path"]
+        elif path_data["site"].lower() == "market":
+            url = self.base_url_market + path_data["path"]
+        else:
+            raise Exception(f"Invalid site in path data. Contact @AS7RID")
+        params["locale"] = self.__locale
+        return await LolzteamApi.send_async_request(self=self, method=method, path_data=path_data, params=params,
+                                                    data=data)
+
     @staticmethod
     def __get_var_from_code(func_code, var_name):
         var = None
@@ -157,7 +262,7 @@ class LolzteamApi:
         try:
             return response["user"]["user_id"]
         except KeyError:
-            return None
+            return self.__set_user_id  # Fix for ultrarare errors
 
     def __auto_delay(self):
         """
@@ -168,6 +273,16 @@ class LolzteamApi:
             time_diff = current_time - self.__auto_delay_time
             if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
                 time.sleep(3.003 - time_diff)
+
+    async def __auto_delay_async(self):
+        """
+        Sleep for time difference between the last call and current call if it's less than 3 seconds
+        """
+        if self.__bypass_429:
+            current_time = time.time()
+            time_diff = current_time - self.__auto_delay_time
+            if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
+                await asyncio.sleep(3.003 - time_diff)
 
     def change_proxy(self, proxy_type: str = None, proxy: str = None):
         """
@@ -355,9 +470,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Forum", "path": f"/forums/followed"}
                 if True:  # Tweak 0
-                    if total:
+                    if total is True:
                         total = 1
-                    else:
+                    elif total is False:
                         total = 0
                 params = {
                     "total": total
@@ -915,9 +1030,9 @@ class LolzteamApi:
                 :return: json server response
                 """
                 path_data = {"site": "Forum", "path": f"/threads"}
-                if sticky:  # Tweak 0
+                if sticky is True:  # Tweak 0
                     sticky = 1
-                else:
+                elif sticky is False:
                     sticky = 0
                 params = {
                     "forum_id": forum_id,
@@ -1025,9 +1140,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Forum", "path": f"/threads/followed"}
                 if True:  # Tweak 0
-                    if total:
+                    if total is True:
                         total = 1
-                    else:
+                    elif total is False:
                         total = 0
                 params = {
                     "total": total
@@ -1605,9 +1720,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Forum", "path": f"/users/ignored"}
                 if True:  # Tweak 0
-                    if total:
+                    if total is True:
                         total = 1
-                    else:
+                    elif total is False:
                         total = 0
                 params = {
                     "total": total
@@ -2317,19 +2432,19 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if True:  # Tweak 0
-                    if open_invite:
+                    if open_invite is True:
                         open_invite = 1
-                    else:
+                    elif open_invite is False:
                         open_invite = 0
 
-                    if conversation_locked:
+                    if conversation_locked is True:
                         conversation_locked = 1
-                    else:
+                    elif conversation_locked is False:
                         conversation_locked = 0
 
-                    if allow_edit_messages:
+                    if allow_edit_messages is True:
                         allow_edit_messages = 1
-                    else:
+                    elif allow_edit_messages is False:
                         allow_edit_messages = 0
                 params = {
                     "recipient_id": recipient_id,
@@ -2364,19 +2479,19 @@ class LolzteamApi:
                 :return: json server response
                 """
                 if True:  # Tweak 0
-                    if open_invite:
+                    if open_invite is True:
                         open_invite = 1
-                    else:
+                    elif open_invite is False:
                         open_invite = 0
 
-                    if conversation_locked:
+                    if conversation_locked is True:
                         conversation_locked = 1
-                    else:
+                    elif conversation_locked is False:
                         conversation_locked = 0
 
-                    if allow_edit_messages:
+                    if allow_edit_messages is True:
                         allow_edit_messages = 1
-                    else:
+                    elif allow_edit_messages is False:
                         allow_edit_messages = 0
                 params = {
                     "recipients": recipients,
@@ -2527,7 +2642,7 @@ class LolzteamApi:
             }
             return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
-        def batch(self, request_body: list[dict]):
+        def batch(self, jobs: list[dict]):
             """
             POST https://api.zelenka.guru/batch
 
@@ -2546,13 +2661,14 @@ class LolzteamApi:
 
             Required scopes: Same as called API requests.
 
-            :param request_body: List of batch jobs. (Check example above)
+            :param jobs: List of batch jobs. (Check example above)
             :return: json server response
             """
-
+            import json
             path_data = {"site": "Forum", "path": f"/batch"}
+            data = json.dumps(jobs)
             return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
-                                            data=json.dumps(request_body))
+                                            data=data)
 
     class __Market:
         def __init__(self, api_self, token_user_id):
@@ -2567,7 +2683,7 @@ class LolzteamApi:
             self.managing = self.__Managing(self.__api)
             self.proxy = self.__Proxy(self.__api)
 
-        def batch(self, request_body: list[dict]):
+        def batch(self, jobs: list[dict]):
             """
             POST https://api.lzt.market/batch
 
@@ -2584,13 +2700,13 @@ class LolzteamApi:
                 }
             ]
 
-            :param request_body: Use scheme above
+            :param jobs: List of batch jobs. (Check example above)
             :return: json server response
             """
-
+            import json
             path_data = {"site": "Market", "path": f"/batch"}
-            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data,
-                                            data=json.dumps(request_body))
+            data = json.dumps(jobs)
+            return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, data=data)
 
         def steam_value(self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None):
             """
@@ -3273,13 +3389,13 @@ class LolzteamApi:
 
                 """
                 if True:  # Tweak 0
-                    if is_hold:
+                    if is_hold is True:
                         is_hold = 1
-                    else:
+                    elif is_hold is False:
                         is_hold = 0
-                    if show_payments_stats:
+                    if show_payments_stats is True:
                         show_payments_stats = 1
-                    else:
+                    elif show_payments_stats is False:
                         show_payments_stats = 0
                 if user_id is None:  # Tweak 1
                     try:
@@ -3287,8 +3403,12 @@ class LolzteamApi:
                             self.__token_user_id = self.__token_user_id()
                         user_id = self.__token_user_id
                     except Exception as e:
+                        pass
+                    try:
                         if batch_mode:
                             raise Exception("You can't use this method without user_id")
+                    except:
+                        pass
                 params = {
                     "user_id": user_id,
                     "operation_type": operation_type,
@@ -3367,9 +3487,9 @@ class LolzteamApi:
                 :return: string payment url
                 """
                 if True:  # Tweak 0
-                    if hold:
+                    if hold is True:
                         hold = 1
-                    else:
+                    elif hold is False:
                         hold = 0
                 if hold:
                     if hold_option in ["hour", "day", "week", "month"]:
@@ -3557,9 +3677,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/{item_id}/change-password"}
                 if True:  # Tweak 0
-                    if _cancel:
+                    if _cancel is True:
                         _cancel = 1
-                    else:
+                    elif _cancel is False:
                         _cancel = 0
                 params = {
                     "_cancel": _cancel
@@ -3753,6 +3873,7 @@ class LolzteamApi:
             def __init__(self, api_self):
                 self.__api = api_self
                 self.auction = self.__Auction(self.__api)
+
             class __Auction:
                 def __init__(self, api_self):
                     self.__api = api_self
@@ -3877,9 +3998,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/{item_id}/confirm-buy"}
                 if True:  # Tweak 0
-                    if buy_without_validation:
+                    if buy_without_validation is True:
                         buy_without_validation = 1
-                    else:
+                    elif buy_without_validation is False:
                         buy_without_validation = 0
                 params = {
                     "buy_without_validation": buy_without_validation
@@ -3902,9 +4023,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/{item_id}/fast-buy"}
                 if True:  # Tweak 0
-                    if buy_without_validation:
+                    if buy_without_validation is True:
                         buy_without_validation = 1
-                    else:
+                    elif buy_without_validation is False:
                         buy_without_validation = 0
                 params = {
                     "price": price,
@@ -3957,13 +4078,13 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/{item_id}/goods/check"}
                 if True:  # Tweak 0
-                    if random_proxy:
+                    if random_proxy is True:
                         random_proxy = 1
-                    else:
+                    elif random_proxy is False:
                         random_proxy = 0
-                    if close_item:
+                    if close_item is True:
                         close_item = 1
-                    else:
+                    elif close_item is False:
                         close_item = 0
                 params = {
                     "login": login,
@@ -4040,9 +4161,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/item/add"}
                 if True:  # Tweak 0
-                    if random_proxy:
+                    if random_proxy is True:
                         random_proxy = 1
-                    else:
+                    elif random_proxy is False:
                         random_proxy = 0
                 params = {
                     "category_id": category_id,
@@ -4122,9 +4243,9 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/item/fast-sell"}
                 if True:  # Tweak 0
-                    if random_proxy:
+                    if random_proxy is True:
                         random_proxy = 1
-                    else:
+                    elif random_proxy is False:
                         random_proxy = 0
                 params = {
                     "category_id": category_id,

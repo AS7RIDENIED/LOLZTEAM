@@ -124,6 +124,7 @@
 * [Navigation](#navigation)
 * [Get batch job](#get-batch-job)
 * [Batch](#batch)
+* [Send async](#send-async)
 
 </details>
 
@@ -2297,9 +2298,9 @@ print(data)
 
 **Parameters:**
 
-- **func** (function): Needed method pointer
-- **job_name** (str): Job name
-- ****kwargs** (str): Arguments for needed method
+- **func** (function): Target function.
+- **job_name** (str): Job name.
+- ****kwargs** (str): Target function parameters.
 
 **Example:**
 
@@ -2331,7 +2332,7 @@ for job in jobs:
 
 **Parameters:**
 
-- **request_body** (list[dict]): List of batch jobs.
+- **jobs** (list[dict]): List of batch jobs.
 
 **Example:**
 
@@ -2352,4 +2353,24 @@ for job_name, job_data in data["jobs"].items():
 {'_job_result': 'ok', 'user': {'user_id': 1, 'username': 'RaysMorgan', 'username_html': '<span  class="style3">RaysMorgan</span>', 'user_message_count': 12104, 'user_register_date': 1362675475, 'user_like_count': 44351, 'short_link': 'rays',  ... }
 {'_job_result': 'ok', 'thread': {'thread_id': 5523020, 'forum_id': 976, 'thread_title': 'Библиотека для упрощения работы с API | LolzteamApi Forum/Market/Antipublic Python', 'thread_view_count': 715, 'creator_user_id': 2410024, 'creator_usern ... }
 {'_job_result': 'ok', 'thread': {'thread_id': 5907641, 'forum_id': 876, 'thread_title': 'Api batch example', 'thread_view_count': 1, 'creator_user_id': 2410024, 'creator_username': 'AS7RID', 'creator_username_html': '<span  class="style22">AS ... }
+```
+
+# Send async
+
+*Send request as async*
+
+**Parameters:**
+
+- **func** (function): Target function.
+- ****kwargs** (any): Target function parameters.
+
+**Example:**
+
+```python
+response = await api.send_as_async(func=api.forum.users.get, user_id=2410024)
+print(response)
+```
+
+```python
+{'user': {'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_title': 'string', 'user_is_valid': True, 'user_is_verified': True, 'user_is_followed': True, 'user_last_seen_date': 0, 'links': {'permalink': 'string', 'detail': 'string', 'avatar': 'string', 'avatar_big': 'string', 'avatar_small': 'string', 'followers': 'string', 'followings': 'string', 'ignore': 'string', 'timeline': 'string'}, 'permissions': {'edit': True, 'follow': True, 'ignore': True, 'profile_post': True}, 'user_is_ignored': True, 'user_is_visitor': True, 'user_group_id': 0, 'custom_fields': {'discord': 'string', 'jabber': 'string', 'lztAwardUserTrophy': 'string', 'lztCuratorNodeTitle': 'string', 'lztCuratorNodeTitleEn': 'string', 'lztInnovation20Link': 'string', 'lztInnovation30Link': 'string', 'lztInnovationLink': 'string', 'lztSympathyIncreasing': 'string', 'lztSympathyZeroing': 'string', 'qiwi': 'string', 'scamURL': 'string', 'steam': 'string', 'telegram': 'string', 'vk': 'string'}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
