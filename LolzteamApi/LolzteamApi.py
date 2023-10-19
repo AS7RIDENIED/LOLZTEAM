@@ -5,6 +5,7 @@ import json
 import inspect
 import asyncio
 
+
 class Tweaks:
     @staticmethod
     def market_variable_fix(var):
@@ -97,17 +98,20 @@ class LolzteamApi:
             response = requests.request(method=method, url=url, params=params, data=data, files=files,
                                         headers=self.__headers,
                                         proxies=proxies)
+            if self.__delay_synchronizer:
+                self.__delay_synchronizer._synchronize(time.time())
+            else:
+                self._auto_delay_time = time.time()
+            try:
+                return response.json()
+            except requests.exceptions.JSONDecodeError:
+                url_exceptions = ["steam-preview","/oauth/token"]
+                if path_data["path"] in url_exceptions:  # Методы из url_exceptions возвращают строки, а не жсон
+                    return response.text
+                else:
+                    return response
         else:
             raise Exception("Invalid requests method. Contact @AS7RID")
-        if self.__delay_synchronizer:
-            self.__delay_synchronizer._synchronize(time.time())
-        else:
-            self._auto_delay_time = time.time()
-
-        try:
-            return response.json()
-        except requests.exceptions.JSONDecodeError:
-            return response.text
 
     async def send_async_request(self, method: str, path_data: dict, params: dict = None, data=None):
         if path_data["site"].lower() == "forum":
@@ -149,19 +153,20 @@ class LolzteamApi:
 
         if method in request_methods:
             async with aiohttp.ClientSession() as session:
-                response = await session.request(method=method, url=url, params=params, data=data,
-                                                 headers=self.__headers, proxy=proxy
-                                                 )
+                async with session.request(method=method, url=url, params=params, data=data, headers=self.__headers,
+                                           proxy=proxy) as response:
+                    # Иначе если делать не async with request as response и если запрос будет большим, то он не вернется. (бесконечно ждать будет)
+                    # Я хуй знает почему, проблема aiohttp
+                    if self.__delay_synchronizer:
+                        self.__delay_synchronizer._synchronize(time.time())
+                    else:
+                        self._auto_delay_time = time.time()
+                    try:
+                        return await response.json()
+                    except Exception:
+                        return response
         else:
             raise Exception("Invalid requests method. Contact @AS7RID")
-        if self.__delay_synchronizer:
-            self.__delay_synchronizer._synchronize(time.time())
-        else:
-            self._auto_delay_time = time.time()
-        try:
-            return await response.json()
-        except Exception:
-            return response.text
 
     def get_batch_job(self, func, job_name, **kwargs):
         arguments = func.__code__.co_varnames
@@ -245,12 +250,6 @@ class LolzteamApi:
         params = loc.get("params", {})
         data = loc.get("data", {})
         method = [eval(i.replace('method=', '')) for i in return_code.split(",") if "method=" in i][0]
-        if path_data["site"].lower() == "forum":
-            url = self.base_url_forum + path_data["path"]
-        elif path_data["site"].lower() == "market":
-            url = self.base_url_market + path_data["path"]
-        else:
-            raise Exception(f"Invalid site in path data. Contact @AS7RID")
         params["locale"] = self.__locale
         return await LolzteamApi.send_async_request(self=self, method=method, path_data=path_data, params=params,
                                                     data=data)
@@ -308,10 +307,13 @@ class LolzteamApi:
         else:
             self.__proxy_type = None
         self.__proxy = proxy
+
     def _add_delay_synchronizer(self, synchronizer):
         self.__delay_synchronizer = synchronizer
+
     def _remove_delay_synchronizer(self):
         self.__delay_synchronizer = None
+
     class __Forum:
         def __init__(self, api_self):
             self.__api = api_self  # Passing main self to sub all classes

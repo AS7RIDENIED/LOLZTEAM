@@ -41,3 +41,6 @@ class DelaySynchronizer:
             apis_td.append(api)
         for api in apis_td:
             self.remove(api)
+
+    def __del__(self):  # Удаляем линки на синхронайзеры из объектов LolzteamApi при удалении
+        self.clear()

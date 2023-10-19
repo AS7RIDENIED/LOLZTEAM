@@ -182,7 +182,7 @@ print(data)
 ```
 
 ```python
-{'success': True, 'availableQueries': 999, 'resultCount': 2, 'results': ['pisyapopa11@ya.ru:1234567890pflybwf', 'pisyapopa11@yandex.ru:1234567890pflybwf']}
+{"success":True,"availableQueries":0,"resultCount":1,"results":["example@gmail.com:password"]}
 ```
 
 ### Get passwords plus
@@ -201,5 +201,25 @@ print(data)
 ```
 
 ```python
-{'success': True, 'availableQueries': 0, 'resultCount': 1, 'results': ['pisyapopa11@ya.ru:1234567890pflybwf', 'pisyapopa95@mail.ru:qwe12345']}
+{'success': True, 'availableQueries': 0, 'resultCount': 2, 'results': ['pisyapopa11@ya.ru:1234567890pflybwf', 'pisyapopa95@mail.ru:qwe12345']}
+```
+
+# Send async
+
+*Send request as async*
+
+**Parameters:**
+
+- **func** (function): Target function.
+- ****kwargs** (any): Target function parameters.
+
+**Example:**
+
+```python
+response = await antipublic.send_as_async(antipublic.get_passwords, login="grishalanskoy228")
+print(response)
+```
+
+```python
+{"success":True,"availableQueries":0,"resultCount":1,"results":["example@gmail.com:password"]}
 ```

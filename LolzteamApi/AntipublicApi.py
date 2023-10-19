@@ -1,4 +1,6 @@
 import requests
+import aiohttp
+import inspect
 
 
 class AntipublicApi:
@@ -57,26 +59,101 @@ class AntipublicApi:
             else:
                 raise Exception(
                     f"Proxy type has invalid value. It can be only https,http,socks4 or socks5")  # How tf you get that error?
-        if method == "GET":
-            response = requests.get(url=url, params=params, data=data, files=files, proxies=proxies)
-        elif method == "POST":
-            response = requests.post(url=url, params=params, data=data, files=files, proxies=proxies)
-        elif method == "PUT":
-            response = requests.put(url=url, params=params, data=data, files=files, proxies=proxies)
-        elif method == "DELETE":
-            response = requests.delete(url=url, params=params, data=data, files=files, proxies=proxies)
-        else:
-            raise Exception(f"Invalid requests method. Contact @AS7RID")
+        response = requests.request(method=method, url=url, params=params, data=data, files=files, proxies=proxies)
         try:
             return response.json()
         except requests.exceptions.JSONDecodeError:
             return response.text
 
+    async def send_async_request(self, method: str, path: dict, params: dict = None, data=None):
+        url = self.base_url + path
+        method = method.upper()
+        if params is None:
+            params = {}
+        params["key"] = f"{self.__token}"
+        ptd = []
+        for key, value in params.items():
+            if params[key] is None:
+                ptd.append(key)
+        for key in ptd:
+            del params[key]
+        proxy_schemes = {
+            "HTTP": "http",
+            "HTTPS": "https",
+            "SOCKS4": "socks4",
+            "SOCKS5": "socks5"
+        }
+        request_methods = [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+        ]
+        proxy = None
+        if self.__proxy_type is not None:
+            if self.__proxy_type in proxy_schemes:
+                proxy_scheme = proxy_schemes[self.__proxy_type]
+                proxy = f"{proxy_scheme}://{self.__proxy}"
+            else:
+                raise Exception("Proxy type has invalid value. It can be only https, http, socks4 or socks5")
+
+        if method in request_methods:
+            async with aiohttp.ClientSession() as session:
+                async with session.request(method=method, url=url, params=params, data=data, proxy=proxy) as response:
+                    # Иначе если делать не async with request as response и если запрос будет большим, то он не вернется. (бесконечно ждать будет)
+                    # Я хуй знает почему, проблема aiohttp
+                    try:
+                        return await response.json()
+                    except Exception:
+                        return response
+        else:
+            raise Exception("Invalid requests method. Contact @AS7RID")
+
+    async def send_as_async(self, func, **kwargs):
+        """
+        Send request as async
+
+        :param func: Target function
+        :param kwargs: Target function parameters
+
+        :return: json server response
+        """
+        im_async = True
+        arguments = func.__code__.co_varnames
+        loc = locals()
+        for arg in arguments:
+            if arg != "self":
+                exec(f"{arg} = None", loc)
+        if True:  # Костыль для Tweak 1
+            user_id = None
+        for arg, value in kwargs.items():
+            if arg not in arguments:
+                raise Exception(f"""Function "{func.__name__}" don't have "{arg}" parameter""")
+            else:
+                loc[arg] = value
+        func_code = str(inspect.getsource(func))
+        func_code = func_code.split("):\n", 1)[1]
+        lines = func_code.split("\n")
+        spaces = lines[0].split('"""')[0]
+        for line in lines:
+            if " def " in line:
+                lines.remove(line)
+        return_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[1]
+        func_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
+
+        exec(func_code, loc)
+        path = loc.get("path")
+        params = loc.get("params", {})
+        data = loc.get("data", {})
+        method = [eval(i.replace('method=', '')) for i in return_code.split(",") if "method=" in i][0]
+        return await AntipublicApi.send_async_request(self=self, method=method, path=path, params=params,
+                                                      data=data)
+
     class __Info:
         def __init__(self, api_self):
             self.__api = api_self
 
-        def lines_count(self) -> dict:
+        def lines_count(self):
             """
             GET https://antipublic.one/api/v2/countLines
 
@@ -100,7 +177,7 @@ class AntipublicApi:
             path = f"/api/v2/countLinesPlain"
             return AntipublicApi.send_request(self=self.__api, method="GET", path=path)
 
-        def version(self) -> dict:
+        def version(self):
             """
             GET https://antipublic.one/api/v2/version
 
@@ -116,7 +193,7 @@ class AntipublicApi:
         def __init__(self, api_self):
             self.__api = api_self
 
-        def access(self) -> dict:
+        def access(self):
             """
             GET https://antipublic.one/api/v2/checkAccess
 
@@ -130,7 +207,7 @@ class AntipublicApi:
             path = f"/api/v2/checkAccess"
             return AntipublicApi.send_request(self=self.__api, method="GET", path=path)
 
-        def queries(self) -> dict:
+        def queries(self):
             """
             GET https://antipublic.one/api/v2/availableQueries
 
@@ -144,7 +221,7 @@ class AntipublicApi:
             path = f"/api/v2/availableQueries"
             return AntipublicApi.send_request(self=self.__api, method="GET", path=path)
 
-    def check_lines(self, lines: list[str], insert: bool = None) -> dict:
+    def check_lines(self, lines: list[str], insert: bool = None):
         """
         GET https://antipublic.one/api/v2/checkLines
 
@@ -163,7 +240,7 @@ class AntipublicApi:
         path = f"/api/v2/checkLines"
         return AntipublicApi.send_request(self=self, method="GET", path=path, params=params)
 
-    def get_passwords(self, login: str) -> dict:
+    def get_passwords(self, login: str):
         """
         GET https://antipublic.one/api/v2/emailSearch
 
@@ -180,7 +257,7 @@ class AntipublicApi:
         path = f"/api/v2/emailSearch"
         return AntipublicApi.send_request(self=self, method="GET", path=path, params=params)
 
-    def get_passwords_plus(self, logins: list[str], limit: int = None) -> dict:
+    def get_passwords_plus(self, logins: list[str], limit: int = None):
         """
         GET https://antipublic.one/api/v2/emailPasswords
 
