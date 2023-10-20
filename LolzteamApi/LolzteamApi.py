@@ -49,6 +49,8 @@ class LolzteamApi:
         self.__locale = language
         self.__token_user_id = self.__set_user_id
         self.__delay_synchronizer = None
+        self.__delay_exceptions = ["/item/add", "/item/fast-sell", "/item/goods/check"]
+        self.__json_url_exceptions = ["/steam-preview", "/oauth/token"]
 
         self.market = self.__Market(self, self.__token_user_id)
         self.forum = self.__Forum(self)
@@ -61,7 +63,8 @@ class LolzteamApi:
         else:
             raise Exception(f"Invalid site in path data. Contact @AS7RID")
         method = method.upper()
-        self.__auto_delay()
+        if path_data["path"] not in self.__delay_exceptions:
+            self.__auto_delay()
         if params is None:
             params = {}
         params["locale"] = self.__locale
@@ -95,9 +98,20 @@ class LolzteamApi:
                 raise Exception("Proxy type has invalid value. It can be only https, http, socks4 or socks5")
 
         if method in request_methods:
-            response = requests.request(method=method, url=url, params=params, data=data, files=files,
-                                        headers=self.__headers,
-                                        proxies=proxies)
+            tries = 0
+            while tries < 5:
+                tries += 1
+                try:
+                    response = requests.request(method=method, url=url, params=params, data=data, files=files,
+                                                headers=self.__headers,
+                                                proxies=proxies)
+                    break
+                except requests.ConnectionError as e:
+                    if tries == 15:
+                        raise e
+                    time.sleep(0.3)
+                    continue
+
             if self.__delay_synchronizer:
                 self.__delay_synchronizer._synchronize(time.time())
             else:
@@ -105,8 +119,8 @@ class LolzteamApi:
             try:
                 return response.json()
             except requests.exceptions.JSONDecodeError:
-                url_exceptions = ["steam-preview","/oauth/token"]
-                if path_data["path"] in url_exceptions:  # Методы из url_exceptions возвращают строки, а не жсон
+                if path_data[
+                    "path"] in self.__json_url_exceptions:  # Методы из url_exceptions возвращают строки, а не жсон
                     return response.text
                 else:
                     return response
@@ -121,7 +135,8 @@ class LolzteamApi:
         else:
             raise Exception(f"Invalid site in path data. Contact @AS7RID")
         method = method.upper()
-        await self.__auto_delay_async()
+        if path_data["path"] not in self.__delay_exceptions:
+            await self.__auto_delay_async()
         if params is None:
             params = {}
         params["locale"] = self.__locale
@@ -153,18 +168,32 @@ class LolzteamApi:
 
         if method in request_methods:
             async with aiohttp.ClientSession() as session:
-                async with session.request(method=method, url=url, params=params, data=data, headers=self.__headers,
-                                           proxy=proxy) as response:
-                    # Иначе если делать не async with request as response и если запрос будет большим, то он не вернется. (бесконечно ждать будет)
-                    # Я хуй знает почему, проблема aiohttp
-                    if self.__delay_synchronizer:
-                        self.__delay_synchronizer._synchronize(time.time())
-                    else:
-                        self._auto_delay_time = time.time()
+                tries = 0
+                while tries < 5:
+                    tries += 1
                     try:
-                        return await response.json()
-                    except Exception:
-                        return response
+                        async with session.request(method=method, url=url, params=params, data=data,
+                                                   headers=self.__headers,
+                                                   proxy=proxy) as response:
+                            # Иначе если делать не async with request as response и если запрос будет большим, то он не вернется. (бесконечно ждать будет)
+                            # Я хуй знает почему, проблема aiohttp
+                            if self.__delay_synchronizer:
+                                self.__delay_synchronizer._synchronize(time.time())
+                            else:
+                                self._auto_delay_time = time.time()
+                            try:
+                                return await response.json()
+                            except Exception:
+                                if path_data[
+                                    "path"] in self.__json_url_exceptions:  # Методы из url_exceptions возвращают строки, а не жсон
+                                    return response.text
+                                else:
+                                    return response
+                    except requests.ConnectionError as e:
+                        if tries == 15:
+                            raise e
+                        await asyncio.sleep(0.3)
+                        continue
         else:
             raise Exception("Invalid requests method. Contact @AS7RID")
 
@@ -1362,7 +1391,7 @@ class LolzteamApi:
 
                 Required scopes: read
 
-                :param tag_id: Id of tag.
+                :param tag_id: ID of tag.
                 :param page: Page number of tags list.
                 :param limit: Number of tagged contents in a page.
 
@@ -3191,7 +3220,8 @@ class LolzteamApi:
                     "pmin": pmin,
                     "pmax": pmax,
                     "title": title,
-                    "page": page
+                    "page": page,
+                    "show": status
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
@@ -3414,7 +3444,7 @@ class LolzteamApi:
                         if type(self.__token_user_id) is not int:
                             self.__token_user_id = self.__token_user_id()
                         user_id = self.__token_user_id
-                    except Exception as e:
+                    except Exception:
                         pass
                     try:
                         if batch_mode:
