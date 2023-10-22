@@ -49,13 +49,17 @@ class LolzteamApi:
         self.__locale = language
         self.__token_user_id = self.__set_user_id
         self.__delay_synchronizer = None
+        self._lock = None
         self.__delay_exceptions = ["/item/add", "/item/fast-sell", "/item/goods/check"]
         self.__json_url_exceptions = ["/steam-preview", "/oauth/token"]
 
         self.market = self.__Market(self, self.__token_user_id)
         self.forum = self.__Forum(self)
+        self.bbcode = self.__BBcodes()
 
     def send_request(self, method: str, path_data: dict, params: dict = None, data=None, files=None):
+        if self.__delay_synchronizer:
+            self._lock.acquire()
         if path_data["site"].lower() == "forum":
             url = self.base_url_forum + path_data["path"]
         elif path_data["site"].lower() == "market":
@@ -99,7 +103,7 @@ class LolzteamApi:
 
         if method in request_methods:
             tries = 0
-            while tries < 5:
+            while tries < 15:
                 tries += 1
                 try:
                     response = requests.request(method=method, url=url, params=params, data=data, files=files,
@@ -114,6 +118,7 @@ class LolzteamApi:
 
             if self.__delay_synchronizer:
                 self.__delay_synchronizer._synchronize(time.time())
+                self._lock.release()
             else:
                 self._auto_delay_time = time.time()
             try:
@@ -128,6 +133,8 @@ class LolzteamApi:
             raise Exception("Invalid requests method. Contact @AS7RID")
 
     async def send_async_request(self, method: str, path_data: dict, params: dict = None, data=None):
+        if self.__delay_synchronizer:
+            self._lock.acquire()
         if path_data["site"].lower() == "forum":
             url = self.base_url_forum + path_data["path"]
         elif path_data["site"].lower() == "market":
@@ -169,7 +176,7 @@ class LolzteamApi:
         if method in request_methods:
             async with aiohttp.ClientSession() as session:
                 tries = 0
-                while tries < 5:
+                while tries < 15:
                     tries += 1
                     try:
                         async with session.request(method=method, url=url, params=params, data=data,
@@ -179,6 +186,7 @@ class LolzteamApi:
                             # Я хуй знает почему, проблема aiohttp
                             if self.__delay_synchronizer:
                                 self.__delay_synchronizer._synchronize(time.time())
+                                self._lock.release()
                             else:
                                 self._auto_delay_time = time.time()
                             try:
@@ -304,10 +312,14 @@ class LolzteamApi:
         Sleep for time difference between the last call and current call if it's less than 3 seconds
         """
         if self.__bypass_429:
-            current_time = time.time()
-            time_diff = current_time - self._auto_delay_time
-            if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                time.sleep(3.003 - time_diff)
+            if self.__delay_synchronizer:
+                time_diff = time.time() - self._auto_delay_time.value
+                if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
+                    time.sleep(3.003 - time_diff)
+            else:
+                time_diff = time.time() - self._auto_delay_time
+                if time_diff < 3.0:  # if difference between current and last call > 3 seconds we will sleep the rest of the time
+                    time.sleep(3.003 - time_diff)
 
     async def __auto_delay_async(self):
         """
@@ -342,6 +354,200 @@ class LolzteamApi:
 
     def _remove_delay_synchronizer(self):
         self.__delay_synchronizer = None
+        self._auto_delay_time = self._auto_delay_time.value
+        self._lock = None
+
+    class __BBcodes:
+        def __init__(self):
+            self.color = self.__Color
+            self.alignment = self.__Alignment
+            self.hide = self.__Hide
+
+        class __Color:
+            @staticmethod
+            def black(text: str):
+                return f"[color=black]{text}[/color]"
+
+            @staticmethod
+            def white(text: str):
+                return f"[color=white]{text}[/color]"
+
+            @staticmethod
+            def red(text: str):
+                return f"[color=red]{text}[/color]"
+
+            @staticmethod
+            def green(text: str):
+                return f"[color=green]{text}[/color]"
+
+            @staticmethod
+            def blue(text: str):
+                return f"[color=blue]{text}[/color]"
+
+            @staticmethod
+            def yellow(text: str):
+                return f"[color=yellow]{text}[/color]"
+
+            @staticmethod
+            def purple(text: str):
+                return f"[color=purple]{text}[/color]"
+
+            @staticmethod
+            def cyan(text: str):
+                return f"[color=cyan]{text}[/color]"
+
+            @staticmethod
+            def magenta(text: str):
+                return f"[color=magenta]{text}[/color]"
+
+            @staticmethod
+            def custom(text: str, hex_color: str):
+                return f"[color={hex_color}]{text}[/color]"
+
+        class __Alignment:
+            @staticmethod
+            def left(text: str):
+                return f"[left]{text}[/left]"
+
+            @staticmethod
+            def center(text: str):
+                return f"[center]{text}[/center]"
+
+            @staticmethod
+            def right(text: str):
+                return f"[right]{text}[/right]"
+
+        class __Hide:
+            @staticmethod
+            def club(text: str):
+                return f"[club]{text}[/club]"
+
+            @staticmethod
+            def days(text: str, days: int):
+                return f"[days={days}]{text}[/days]"
+
+            @staticmethod
+            def sympathies(text: str, sympathies: int):
+                return f"[likes={sympathies}]{text}[/likes]"
+
+            @staticmethod
+            def from_users(text: str, user_ids: list):
+                user_ids = list(map(str, user_ids))
+                return f"[exceptids={','.join(user_ids)}]{text}[/exceptids]"
+
+            @staticmethod
+            def to_users(text: str, user_ids: list):
+                user_ids = list(map(str, user_ids))
+                return f"[userids={','.join(user_ids)}]{text}[/userids]"
+
+        @staticmethod
+        def unordered_list(text: str):
+            formated = [f'[*]{line}\n' for line in text.split('\n')]
+            return f"[LIST]\n{''.join(formated)}[/LIST]"
+
+        @staticmethod
+        def ordered_list(text: str):
+            formated = [f'[*]{line}\n' for line in text.split('\n')]
+            return f"[LIST=1]\n{''.join(formated)}[/LIST]"
+
+        @staticmethod
+        def text_size(text: str, size: int):
+            return f"[size={size}]{text}[/size]"
+
+        @staticmethod
+        def bold(text: str):
+            return f"[b]{text}[/b]"
+
+        @staticmethod
+        def italic(text: str):
+            return f"[i]{text}[/i]"
+
+        @staticmethod
+        def strike_through(text: str):
+            return f"[s]{text}[/s]"
+
+        @staticmethod
+        def underline(text: str):
+            return f"[u]{text}[/u]"
+
+        @staticmethod
+        def code(text: str, code_language: str = None):
+            if code_language:
+                return f"""[code="{code_language}"]{text}[/code]"""
+            else:
+                return f"[code]{text}[/code]"
+
+        @staticmethod
+        def source_code(text: str, code_language: str = None):
+            if code_language:
+                return f"""[src="{code_language}"]{text}[/src]"""
+            else:
+                return f"[src]{text}[/src]"
+
+        @staticmethod
+        def inline_code(text: str, code_language: str = None):
+            if code_language:
+                return f"""[srci="{code_language}"]{text}[/srci]"""
+            else:
+                return f"[srci]{text}[/srci]"
+
+        @staticmethod
+        def image(image_url: str):
+            return f"[img]{image_url}[/img]"
+
+        @staticmethod
+        def media(media: str, site: str = None):
+            if site:
+                return f"[media={site}]{media}[/media]"
+            else:
+                return f"[media]{media}[/media]"
+
+        @staticmethod
+        def url(url: str, text: str = None):
+            if text:
+                return f"[url={url}]{text}[/url]"
+            else:
+                return f"[url]{url}[/url]"
+
+        @staticmethod
+        def email(email: str, text: str = None):
+            if text:
+                return f"[email={email}]{text}[/email]"
+            else:
+                return f"[email]{email}[/email]"
+
+        @staticmethod
+        def user(user_id: int or str):
+            return f"[user={user_id}]{user_id}[/user]"
+
+        @staticmethod
+        def quote(text: str, author: str = None):
+            if author:
+                return f"[quote={author}]{text}[/quote]"
+            else:
+                return f"[quote]{text}[/quote]"
+
+        @staticmethod
+        def spoiler(text: str, spoiler_name: str = None):
+            if spoiler_name:
+                return f"[spoiler={spoiler_name}]{text}[/spoiler]"
+            else:
+                return f"[spoiler]{text}[/spoiler]"
+
+        @staticmethod
+        def visitor():
+            return f"[visitor][/visitor]"
+
+        @staticmethod
+        def plain(text: str):
+            return f"[plain]{text}[/plain]"
+
+        @staticmethod
+        def api(url: str, option: str = None):
+            if option:
+                return f"[api={option}]{url}[/api]"
+            else:
+                return f"[api]{url}[/api]"
 
     class __Forum:
         def __init__(self, api_self):
@@ -4148,7 +4354,7 @@ class LolzteamApi:
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                 data=data)
 
-            def add(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
+            def add(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int = None,
                     title: str = None, title_en: str = None, description: str = None, information: str = None,
                     has_email_login_data: bool = None, email_login_data: str = None, email_type: str = None,
                     allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None):
@@ -4226,7 +4432,8 @@ class LolzteamApi:
                 }
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
-            def fast_sell(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int,
+            def fast_sell(self, category_id: int, price: int, currency: str, item_origin: str,
+                          extended_guarantee: int = None,
                           title: str = None, title_en: str = None, description: str = None, information: str = None,
                           has_email_login_data: bool = None, email_login_data: str = None, email_type: str = None,
                           allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None,
