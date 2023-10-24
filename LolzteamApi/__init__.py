@@ -27,4 +27,5 @@ finally:
     from .LolzteamApi import LolzteamApi
     from .AntipublicApi import AntipublicApi
     from .DelaySynchronizer import  DelaySynchronizer
+    from .BBCODE import BBCODE
     from . import Types
