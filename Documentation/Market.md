@@ -20,10 +20,10 @@
   * [Get item](#get-item)
   * [New items](#new-items)
   * [From url](#from-url)
-  * [Owned accounts](#owned-accounts)
   * [Viewed accounts](#viewed-accounts)
   * [Favorite accounts](#favorite-accounts)
   * [Purchased accounts](#purchased-accounts)
+  * [Owned accounts](#owned-accounts)
 * [Purchasing](#purchasing)
   * [Auction](#auction)
     * [Get auction bids](#get-auction-bids) 
@@ -302,40 +302,6 @@ print(data)
 {'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
 
-### Owned accounts
-
-*Displays a list of owned accounts.*
-
-**Parameters:**
-
-- **user_id** (int): ID of user.
-  > It will set automatically if you didn't but take addictional 3 seconds
-- **page** (int): Page
-- **category_id** (int): Accounts category
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **title** (str): The word or words contained in the account title
-- **search_params** (dict): Search params for your request. 
-  > Example {"category_id":19} will return only VPN accounts
-- **status** (str): Account status. 
-  > Can be [active, paid, deleted or awaiting].
-
-  > You also can use types - Types.Market.Item_status
-- **order** (str): Order type.
-  > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
-
-  >You also can use types - Types.Market.Order
-
-**Example:**
-
-```python
-data = api.market.list.owned()
-print(data)
-```
-
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 ### Viewed accounts
 
 *Displays a list of viewed accounts.*
@@ -413,6 +379,41 @@ print(data)
 
 ```python
 data = api.market.list.purchased()
+print(data)
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+### Owned accounts
+
+*Displays a list of owned accounts.*
+
+**Parameters:**
+
+- **user_id** (int): ID of user.
+  > It will set automatically if you didn't but take addictional 3 seconds
+- **page** (int): Page
+- **category_id** (int): Accounts category
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **title** (str): The word or words contained in the account title
+- **search_params** (dict): Search params for your request. 
+  > Example {"category_id":19} will return only VPN accounts
+- **status** (str): Account status. 
+  > Can be [active, paid, deleted or awaiting].
+
+  > You also can use types - Types.Market.Item_status
+- **order** (str): Order type.
+  > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
+
+  >You also can use types - Types.Market.Order
+
+**Example:**
+
+```python
+data = api.market.list.owned()
 print(data)
 ```
 
@@ -1345,7 +1346,7 @@ jobs = [
     api.get_batch_job(api.market.payments.history, job_name="2", user_id=2410024, sender="root"),
     api.get_batch_job(api.market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Types.Market.App_Ids.CS2, currency=Types.Market.Currency.usd)
 ]
-data = api.market.batch(request_body=jobs)
+data = api.market.batch(jobs=jobs)
 for job_name, job_data in data["jobs"].items():
     print(job_data)
 ```

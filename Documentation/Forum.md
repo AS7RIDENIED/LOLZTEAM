@@ -2343,7 +2343,7 @@ jobs = [
     api.get_batch_job(api.forum.threads.get, job_name="3", thread_id=5523020),
     api.get_batch_job(api.forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LolzteamApi")
 ]
-data = api.forum.batch(request_body=jobs)
+data = api.forum.batch(jobs=jobs)
 for job_name, job_data in data["jobs"].items():
     print(job_data)
 ```
