@@ -268,6 +268,7 @@ print(data)
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
+- **title** (str): The word or words contained in the account title
 - **search_params** (dict): Search params for your request.
   > Example {"category_id":19} will return only VPN accounts
 
@@ -313,6 +314,7 @@ print(data)
   > Can be [active, paid, deleted or awaiting].
 
   > You also can use types - Types.Market.Item_status
+- **title** (str): The word or words contained in the account title
 - **search_params** (dict): Search params for your request. 
   > Example {"category_id":19} will return only VPN accounts
 
@@ -338,6 +340,7 @@ print(data)
   > Can be [active, paid, deleted or awaiting].
 
   > You also can use types - Types.Market.Item_status
+- **title** (str): The word or words contained in the account title
 - **search_params** (dict): Search params for your request.
   > Example {"category_id":19} will return only VPN accounts
 

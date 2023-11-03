@@ -335,7 +335,7 @@ print(text)
 **Parameters:**
 
 - **text** (str): Your text.
-- **url** (str): Your url.
+- **email** (str): Your email.
 
 **Example:**
 

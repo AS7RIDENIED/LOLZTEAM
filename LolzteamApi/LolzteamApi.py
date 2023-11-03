@@ -3128,7 +3128,7 @@ class LolzteamApi:
                 path_data = {"site": "Market", "path": f"{url}"}
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
-            def new(self, page: int = None, search_params: dict = None):
+            def new(self, page: int = None, title:str=None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/
 
@@ -3137,6 +3137,7 @@ class LolzteamApi:
                 Required scopes: market
 
                 :param page: The number of the page to display results from
+                :param title: The word or words contained in the account title
                 :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
                 :return: json server response
@@ -3144,7 +3145,8 @@ class LolzteamApi:
                 """
                 path_data = {"site": "Market", "path": f"/"}
                 params = {
-                    "page": page
+                    "page": page,
+                    "title": title
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
@@ -3337,7 +3339,7 @@ class LolzteamApi:
                 path_data = {"site": "Market", "path": f"/user/{user_id}/orders"}
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
-            def favorite(self, page: int = None, status: str = None, search_params: dict = None):
+            def favorite(self, page: int = None, status: str = None, search_params: dict = None, title: str = None):
                 """
                 GET https://api.lzt.market/fave
 
@@ -3348,6 +3350,7 @@ class LolzteamApi:
                 :param page: The number of the page to display results from
                 :param status: Account status. Can be [active, paid, deleted or awaiting].
                 :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
+                :param title: The word or words contained in the account title
 
                 :return: json server response
 
@@ -3355,14 +3358,15 @@ class LolzteamApi:
                 path_data = {"site": "Market", "path": f"/fave"}
                 params = {
                     "page": page,
-                    "show": status
+                    "show": status,
+                    "title": title
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
-            def viewed(self, page: int = None, status: str = None, search_params: dict = None):
+            def viewed(self, page: int = None, status: str = None, search_params: dict = None, title:str=None):
                 """
                 GET https://api.lzt.market/viewed
 
@@ -3373,6 +3377,7 @@ class LolzteamApi:
                 :param page: The number of the page to display results from
                 :param status: Account status. Can be [active, paid, deleted or awaiting].
                 :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
+                :param title: The word or words contained in the account title
 
                 :return: json server response
 
@@ -3380,7 +3385,8 @@ class LolzteamApi:
                 path_data = {"site": "Market", "path": f"/viewed"}
                 params = {
                     "page": page,
-                    "show": status
+                    "show": status,
+                    "title": title
                 }
                 if search_params is not None:
                     for key, value in search_params.items():
@@ -3844,7 +3850,7 @@ class LolzteamApi:
                      email_login_data: str = None, email_type: str = None, allow_ask_discount: bool = None,
                      proxy_id: int = None):
                 """
-                POST https://api.lzt.market/item_id/edit
+                PUT https://api.lzt.market/item_id/edit
 
                 Edits any details of account.
 
@@ -3894,7 +3900,7 @@ class LolzteamApi:
                     "allow_ask_discount": allow_ask_discount,
                     "proxy_id": proxy_id
                 }
-                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
+                return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params)
 
             def telegram(self, item_id: int):
                 """
