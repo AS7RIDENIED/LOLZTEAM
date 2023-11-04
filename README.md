@@ -1,11 +1,10 @@
-# Lolzteam Python API
-
-<p align="center">
-    <a href="https://zelenka.guru/threads/5523020/"><img width="800" src="https://zelenka.guru/styles/brand/download/logos/LolzTeam-Wordmark-Green.svg" alt="Material Bread logo"></a>
-</p>
-
+<div align="center">
+<a href="https://zelenka.guru/threads/5523020/"><img width="90%" src="https://i.imgur.com/evM3hjp.png" alt="Material Bread logo"></a>
+    
 [![Static Badge](https://img.shields.io/badge/DONATE-Lolzteam-darkgreen?logo=undertale&logoColor=red)](https://lzt.market/balance/transfer?user_id=2410024&comment=Thanks%20for%20creating%20LolzteamApi&amount=250)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/LICENSE)
+
+</div>
 
 ## Installation
 
@@ -32,3 +31,8 @@ api = LolzteamApi(token='your_token')
 
 ### [Forum](https://docs.api.zelenka.guru/?forum) [Market](https://docs.api.zelenka.guru/?market) [Antipublic](https://antipublic.one/docs/?antipublic)
 
+## Current ToDo
+
+- [ ] Add required token scopes for every method  (DOCS) | 0%
+- [ ] Add official doc reference for every method (DOCS) |  ~25%
+- [ ] Update main lolz thread and bugs thread
