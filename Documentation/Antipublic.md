@@ -66,6 +66,8 @@ antipublic = AntipublicApi(token="Your_token")
 
 *Get count of rows in the AntiPublic db*
 
+*[Official documentation reference](https://antipublic.readme.io/reference/antipubliccountlines)*
+
 **Example:**
 
 ```python
@@ -81,6 +83,8 @@ print(data)
 
 *Get count of rows in the AntiPublic db (raw format)*
 
+*[Official documentation reference](https://antipublic.readme.io/reference/antipubliccountlinesplain)*
+
 **Example:**
 
 ```python
@@ -95,6 +99,8 @@ print(data)
 ### Version
 
 *Get current antipublic version, change log and download url*
+
+*[Official documentation reference](https://antipublic.readme.io/reference/antipublicversion)*
 
 **Example:**
 
@@ -114,6 +120,8 @@ print(data)
 
 *Checks your license*
 
+*[Official documentation reference](https://antipublic.readme.io/reference/antipublicchecklicense)*
+
 ```python
 data = antipublic.account_info.access()
 print(data)
@@ -126,6 +134,8 @@ print(data)
 ### Queries
 
 *Get your available queries*
+
+*[Official documentation reference](https://antipublic.readme.io/reference/antipublicavailablequeries)*
 
 ```python
 data = antipublic.account_info.queries()
@@ -143,6 +153,8 @@ print(data)
 ### Check lines
 
 *Check your lines for private*
+
+*[Official documentation reference](https://antipublic.readme.io/reference/antipublicchecklines)*
 
 **Parameters:**
 
@@ -172,6 +184,8 @@ print(data)
 
 *Get passwords for login/email*
 
+*[Official documentation reference](https://antipublic.readme.io/reference/antipublicemailsearch)*
+
 **Parameters:**
 
 - **login** (str): Email or login for search.
@@ -188,6 +202,8 @@ print(data)
 ### Get passwords plus
 
 *Get passwords for logins/emails. AntiPublic Plus subscription required.*
+
+*[Official documentation reference](https://antipublic.readme.io/reference/antipublicemailpasswords)*
 
 **Parameters:**
 

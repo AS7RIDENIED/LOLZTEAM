@@ -38,7 +38,6 @@
   * [Fast sell](#fast-sell)
   * [Add](#add)
   * [Check](#check-1)
-  * [Edit](#edit)
   * [Info](#info)
 * [Managing](#managing)
   * [Tag](#tag)
@@ -106,6 +105,8 @@ api = LolzteamApi(token="Your_token", language="en")
 
 *Displays info about your profile.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/marketprofilesettingsgetinfo)*
+
 **Example:**
 
 ```python
@@ -120,6 +121,8 @@ print(data)
 ### Edit profile
 
 *Change settings about your profile on the market.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/marketprofilesettingsgetsettings)*
 
 **Parameters:**
 
@@ -185,6 +188,8 @@ print(data)
 
 *Display category list.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspublishinggetcategories)*
+
 **Parameters:**
 
 - **top_queries** (bool): Display top queries for per category.
@@ -203,6 +208,8 @@ print(data)
 ### Get search params
 
 *Displays search parameters for a category.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetsearchcategory)*
 
 **Parameters:**
 
@@ -223,6 +230,8 @@ print(data)
 
 *Displays a list of games in the category.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetgamescategory)*
+
 **Parameters:**
 
 - **category_name** (str): Name of category.
@@ -237,11 +246,15 @@ print(data)
 ```python
 {'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
+
 ---
 
 ### Get item
 
 *Displays item information or returns Steam account html code.*
+
+*[Official documentation reference (item info)](https://lzt-market.readme.io/reference/accountslistgetinformation)*
+*[Official documentation reference (steam html)](https://lzt-market.readme.io/reference/accountslistgetsteamhtml)*
 
 **Parameters:**
 
@@ -261,9 +274,12 @@ print(data)
 ```python
 {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}
 ```
+
 ### New items
 
 *Displays a list of the latest accounts.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetlatest)*
 
 **Parameters:**
 
@@ -307,6 +323,8 @@ print(data)
 
 *Displays a list of viewed accounts.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetviewed)*
+
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
@@ -333,6 +351,8 @@ print(data)
 
 *Displays a list of favorite accounts.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetfavorite)*
+
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
@@ -358,6 +378,8 @@ print(data)
 ### Purchased accounts
 
 *Displays a list of purchased accounts.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetpurchased)*
 
 **Parameters:**
 
@@ -392,6 +414,8 @@ print(data)
 ### Owned accounts
 
 *Displays a list of owned accounts.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetowned)*
 
 **Parameters:**
 
@@ -436,6 +460,8 @@ print(data)
 
 *Display a list of bids in the auction.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/auctionget)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -454,6 +480,8 @@ print(response)
 ### Place auction bid
 
 *Create a new auction bid.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/auctionpostbid)*
 
 **Parameters:**
 
@@ -477,6 +505,8 @@ print(response)
 
 *Delete your auction bid.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/auctiondeletebid)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -499,6 +529,8 @@ print(response)
 
 *Check and buy account.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspurchasingcheckbuy)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -516,9 +548,12 @@ print(data)
 ```python
 {'status': 'ok', 'reserve_end_date': 0, 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
+
 ### Check
 
 *Checking account for validity. If the account is invalid, the purchase will be canceled automatically.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspurchasingcheck)*
 
 **Parameters:**
 
@@ -538,6 +573,8 @@ print(data)
 ### Confirm buy
 
 *Confirm buy.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspurchasingconfirmbuy)*
 
 **Parameters:**
 
@@ -561,6 +598,8 @@ print(data)
 *Reserves account for you.*
   > Reserve time - 300 seconds.
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspurchasingsetreserve)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -580,6 +619,8 @@ print(data)
 ### Cancel reserve
 
 *Cancels reserve.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspurchasingcancelreserve)*
 
 **Parameters:**
 
@@ -603,6 +644,8 @@ print(data)
 ### Fast sell
 
 *Adds and check account on validity. If account is valid, account will be published on the market.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountpublishingfastsell)*
 
 **Parameters:**
 
@@ -650,6 +693,8 @@ print(data)
 
 *Adds account on the market.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountpublishingadditem)*
+
 **Parameters:**
 
 - **category_id** (int): Accounts category.
@@ -689,6 +734,8 @@ print(data)
 
 *Check and put up to sale not published account OR update account information existing account.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspublishingchecknotpublic)*
+
 **Parameters:**
 
 - **item_id** (int): ID for item.
@@ -716,48 +763,17 @@ print(data)
 {'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Edit
-
-*Edits any details of account.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **price** (int): Account price in your currency.
-- **currency** (str): Using currency. 
-- **item_origin** (str): Account origin. Where did you get it from.
-- **title** (str): Russian title of account. 
-  > If title specified and title_en is empty, title_en will be automatically translated to English language.
-- **title_en** (str): English title of account.
-  > If title_en specified and title is empty, title will be automatically translated to Russian language.
-- **description** (str): Account public description.
-- **information** (str): Account private information (visible for buyer only if purchased).
-- **email_login_data** (str): Required if a category is one of list of Required email login data categories. 
-  > Email login data (login:pass format).
-- **email_type** (str): Email type.
-- **allow_ask_discount** (bool): Allow users to ask discount for this account.
-- **proxy_id** (int): Using proxy id for account checking.
-
-**Example:**
-
-```python
-data = api.market.publishing.edit(item_id=2410024,price=777)
-print(data)
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
 ### Info
 
 *Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountspublishinggetinfonotpublic)*
 
 **Parameters:**
 
 - **item_id** (int): ID of item.
 - **resell_item_id** (int): Put item id, if you are trying to resell item.
-  >This is useful to pass temporary email from reselling item to new item. 
+  > This is useful to pass temporary email from reselling item to new item. 
   
   > You will get same temporary email from reselling account.
 
@@ -786,6 +802,8 @@ print(data)
 
 *Adds tag for the account.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingaddtag)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -806,6 +824,8 @@ print(data)
 
 *Deletes tag for the account.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingdeletetag)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -823,9 +843,12 @@ print(data)
 ```
 
 ---
+
 ### Edit 
 
 *Edits any details of account.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingedit)*
 
 **Parameters:**
 
@@ -860,6 +883,8 @@ print(data)
 
 *Deletes your account from public search. Deletion type is soft. You can restore account after deletion if you want.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingdelete)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -879,6 +904,8 @@ print(data)
 ### Change owner
 
 *Change of account owner.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingchangeowner)*
 
 **Parameters:**
 
@@ -901,6 +928,8 @@ print(data)
 
 *Changes password of account.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingchangepassword)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -921,6 +950,8 @@ print(data)
 
 *Bumps account in the search.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingbump)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -939,6 +970,8 @@ print(data)
 ### Get email code
 
 *Gets confirmation code or link.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggetemailcode)*
 
 **Parameters:**
 
@@ -960,6 +993,8 @@ print(data)
 
 *Gets confirmation code from MaFile (Only for Steam accounts).*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggetmafilecode)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -978,6 +1013,8 @@ print(data)
 ### Get mafile
 
 *Returns mafile in JSON.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggetmafilejson)*
 
 **Parameters:**
 
@@ -998,6 +1035,8 @@ print(data)
 
 *Gets password from temp email of account.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggetpasswordemail)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -1016,6 +1055,8 @@ print(data)
 ### Get telegram confirmation code
 
 *Gets confirmation code from Telegram.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggettelegramcode)*
 
 **Parameters:**
 
@@ -1036,6 +1077,8 @@ print(data)
 
 *Resets Telegram authorizations.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingtelegramresetauth)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -1054,6 +1097,8 @@ print(data)
 ### Refuse guarantee
 
 *Cancel guarantee of account. It can be useful for account reselling.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingcancelguarantee)*
 
 **Parameters:**
 
@@ -1074,6 +1119,8 @@ print(data)
 
 *Adds account to favourites.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingaddfavorite)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -1092,6 +1139,8 @@ print(data)
 ### Unfavorite
 
 *Deletes account from favourites.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingdeletefavorite)*
 
 **Parameters:**
 
@@ -1112,6 +1161,8 @@ print(data)
 
 *Stick account in the top of search.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingstick)*
+
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -1130,6 +1181,8 @@ print(data)
 ### Unstick
 
 *Unstick account of the top of search.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingunstick)*
 
 **Parameters:**
 
@@ -1153,6 +1206,8 @@ print(data)
 ### History
 
 *Displays list of your payments.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/paymentslisthistory)*
 
 **Parameters:**
 
@@ -1185,6 +1240,8 @@ print(data)
 ### Transfer
 
 *Send money to any user.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/paymentslistsendmoney)*
 
 **Parameters:**
 
@@ -1246,6 +1303,8 @@ https://lzt.market/balance/transfer?user_id=2410024&amount=250&comment=LolzteamA
 
 *Gets your proxy list.*
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/proxysettingsget)*
+
 **Example:**
 
 ```python
@@ -1260,6 +1319,8 @@ print(data)
 ### Add proxy
 
 *Add single proxy or proxy list.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/proxysettingsadd)*
 
 **Parameters:**
 
@@ -1284,6 +1345,8 @@ print(data)
 ### Delete proxy
 
 *Delete single or all proxies.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/proxysettingsdelete)*
 
 **Parameters:**
 
@@ -1337,6 +1400,8 @@ for job in jobs:
   >
   > Market batch can only proceed with market url's. If you want to use batch with forum url's try [this](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md#batch)
 
+*[Official documentation reference](https://lzt-market.readme.io/reference/batchrequestsexecute)*
+
 **Parameters:**
 
 - **jobs** (list[dict]): List of batch jobs.
@@ -1363,6 +1428,8 @@ for job_name, job_data in data["jobs"].items():
 # Steam inventory value
 
 *Gets steam value.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggetsteamvalue)*
 
 **Parameters:**
 

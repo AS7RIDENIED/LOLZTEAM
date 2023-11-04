@@ -164,6 +164,8 @@ api = LolzteamApi(token="Your_token", language="en")
 
 *Create upgrade contest by time.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadscreate)*
+
 **Parameters:**
 
 - **thread_title** (str): Title of the new thread.
@@ -201,6 +203,8 @@ print(data)
 
 *Create upgrade contest by members count.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadscreate)*
+
 **Parameters:**
 
 - **thread_title** (str): Title of the new thread.
@@ -232,6 +236,8 @@ print(data)
 ### Create money contest (time)
 
 *Create money contest by time.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadscreate)*
 
 **Parameters:**
 
@@ -270,6 +276,8 @@ print(data)
 
 *Create money contest by members count.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadscreate)*
+
 **Parameters:**
 
 - **thread_title** (str): Title of the new thread.
@@ -304,6 +312,8 @@ print(data)
 
 *List of threads in a forum (with pagination).*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetthreads)*
+
 **Parameters:**
 
 - **forum_id** (int): ID of the containing forum.
@@ -334,6 +344,8 @@ print(data)
 
 *Create a new thread.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadscreate)*
+
 **Parameters:**
 
 - **forum_id** (int): ID of the target forum.
@@ -357,6 +369,8 @@ print(data)
 
 *Detail information of a thread.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetthread)*
+
 **Parameters:**
 
 - **thread_id** (int): ID of thread.
@@ -375,6 +389,8 @@ print(data)
 ### Delete thread
 
 *Delete a thread.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsdelete)*
 
 **Parameters:**
 
@@ -396,6 +412,8 @@ print(data)
 
 *List of a thread's followers. For privacy reason, only the current user will be included in the list.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetfollowthread)*
+
 **Parameters:**
 
 - **thread_id** (int): ID of thread.
@@ -415,6 +433,8 @@ print(data)
 
 *List of followed threads by current user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetfollowedthreads)*
+
 **Parameters:**
 
 - **total** (bool): If included in the request, only the thread count is returned as threads_total.
@@ -433,6 +453,8 @@ print(data)
 ### Follow thread
 
 *Follow a thread.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsfollowthread)*
 
 **Parameters:**
 
@@ -454,6 +476,8 @@ print(data)
 
 *Unfollow a thread.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsunfollowthread)*
+
 **Parameters:**
 
 - **thread_id** (int): ID of thread.
@@ -472,6 +496,8 @@ print(data)
 ### Get thread navigation
 
 *List of navigation elements to reach the specified thread.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetnavigationelements)*
 
 **Parameters:**
 
@@ -492,6 +518,8 @@ print(data)
 
 *Detail information of a poll.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetpoll)*
+
 **Parameters:**
 
 - **thread_id** (int): ID of thread.
@@ -510,6 +538,8 @@ print(data)
 ### Thread vote
 
 *Vote on a thread poll.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsvotepoll)*
 
 **Parameters:**
 
@@ -532,6 +562,8 @@ print(data)
 ### Get new threads
 
 *List of unread threads (must be logged in).*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetunreadthreads)*
 
 **Parameters:**
 
@@ -556,6 +588,8 @@ print(data)
 ### Get recent threads
 
 *List of recent threads.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsgetrecentthreads)*
 
 **Parameters:**
 
@@ -582,6 +616,8 @@ print(data)
 
 *Bump a thread.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/threadsbumpthread)*
+
 **Parameters:**
 
 - **thread_id** (int): ID of thread.
@@ -607,9 +643,11 @@ print(data)
 
 *Methods for getting and creating post comments*
 
-### Get post comment
+### Get post comments
 
 *List of post comments in a thread (with pagination).*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/postcommentsget)*
 
 **Parameters:**
 
@@ -630,6 +668,8 @@ print(data)
 ### Create post comment
 
 *Create a new post comment.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/postcommentscreate)*
 
 **Parameters:**
 
@@ -652,6 +692,8 @@ print(data)
 ### Get posts
 
 *List of posts in a thread (with pagination).*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/postsgetposts)*
 
 **Parameters:**
 
@@ -681,6 +723,8 @@ print(data)
 
 *Detail information of a post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/postsgetpost)*
+
 **Parameters:**
 
 - **post_id** (int): ID of post.
@@ -699,6 +743,8 @@ print(data)
 ### Create post
 
 *Create a new post.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/postscreate)*
 
 **Parameters:**
 
@@ -721,6 +767,8 @@ print(data)
 ### Edit post
 
 *Edit a post.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/postsedit)*
 
 **Parameters:**
 
@@ -746,6 +794,8 @@ print(data)
 
 *Delete a post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/postsdelete)*
+
 **Parameters:**
 
 - **post_id** (int): ID of post.
@@ -765,6 +815,8 @@ print(data)
 ### Get post likes
 
 *List of users who liked a post.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/postsgetliked)*
 
 **Parameters:**
 
@@ -788,6 +840,8 @@ print(data)
 
 *Like a post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/postslike)*
+
 **Parameters:**
 
 - **post_id** (int): ID of post.
@@ -807,6 +861,8 @@ print(data)
 
 *Unlike a post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/postsunlike)*
+
 **Parameters:**
 
 - **post_id** (int): ID of post.
@@ -825,6 +881,8 @@ print(data)
 ### Report post
 
 *Report a post.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/postsreport)*
 
 **Parameters:**
 
@@ -850,6 +908,8 @@ print(data)
 
 *List of all forums in the system.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/forumsgetforums)*
+
 **Parameters:**
 
 - **parent_category_id** (int): ID of parent category.
@@ -872,6 +932,8 @@ print(data)
 
 *Detail information of a forum.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/forumsgetforum)*
+
 **Parameters:**
 
 - **forum_id** (int): ID of forum.    
@@ -890,6 +952,8 @@ print(data)
 ### Get forum followers
 
 *List of a forum's followers. For privacy reason, only the current user will be included in the list (if the user follows the specified forum).*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/forumsgetfollowers)*
 
 **Parameters:**
 
@@ -910,6 +974,8 @@ print(data)
 
 *List of followed forums by current user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/forumsgetfollowed)*
+
 **Parameters:**
 
 - **total** (bool): If included in the request, only the forum count is returned as forums_total.
@@ -925,10 +991,11 @@ print(data)
 {'forums': [{'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True, 'follow': {'post': True, 'alert': True, 'email': True}}], 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-
 ### Follow forum
 
 *Follow a forum.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/forumssetfollow)*
 
 **Parameters:**
 
@@ -951,6 +1018,8 @@ print(data)
 ### Unfollow forum
 
 *Unfollow a forum.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/forumssetunfollow)*
 
 **Parameters:**
 
@@ -977,6 +1046,8 @@ print(data)
 
 *Upload avatar for a user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersuploadavatar)*
+
 **Parameters:**
 
 - **avatar** (bytes): Binary data of the avatar.
@@ -999,6 +1070,8 @@ print(data)
 
 *Delete avatar for a user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersdeleteavatar)*
+
 **Parameters:**
 
 - **user_id** (int): ID of user. If you do not specify the user_id, then you will delete the avatar of the current user
@@ -1020,6 +1093,8 @@ print(data)
 
 *List of users (with pagination).*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersgetall)*
+
 **Parameters:**
 
 - **page** (int): Page number of users.
@@ -1040,6 +1115,8 @@ print(data)
 
 *Detail information of a user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersget)*
+
 **Parameters:**
 
 - **user_id** (int): ID of user. If you do not specify the user_id, you will get info about current user
@@ -1058,6 +1135,8 @@ print(data)
 ### Edit user
 
 *Edit a user.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersedit)*
 
 **Parameters:**
 
@@ -1091,6 +1170,8 @@ print(data)
 
 *List of user fields.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersgetfields)*
+
 **Example:**
 
 ```python
@@ -1105,6 +1186,8 @@ print(data)
 ### Search users
 
 *Filtered list of users by username, email or custom fields.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersgetfiltered)*
 
 **Parameters:**
 
@@ -1127,6 +1210,8 @@ print(data)
 
 *Request a password reset via email. Either username or email parameter must be provided. If both are provided, username will be used.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/userslostpassword)*
+
 **Parameters:**
 
 - **oauth_token** (str): A valid one time token.
@@ -1147,6 +1232,8 @@ print(data)
 ### Get user followings
 
 *List of users whom are followed by a user.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersgetfollowedbyuser)*
 
 **Parameters:**
 
@@ -1169,6 +1256,8 @@ print(data)
 ### Get user followers
 
 *List of a user's followers.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersgetuserfollowers)*
 
 **Parameters:**
 
@@ -1193,6 +1282,8 @@ print(data)
 
 *Follow a user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersfollow)*
+
 **Parameters:**
 
 - **user_id** (int): ID of user
@@ -1211,6 +1302,8 @@ print(data)
 ### Unfollow user
 
 *Unfollow a user.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersunfollow)*
 
 **Parameters:**
 
@@ -1231,6 +1324,8 @@ print(data)
 
 *List of ignored users of current user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersgetignored)*
+
 **Parameters:**
 
 - **total** (bool): If included in the request, only the user count is returned as users_total.
@@ -1250,6 +1345,8 @@ print(data)
 
 *Ignore a user.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersignore)*
+
 **Parameters:**
 
 - **user_id** (int): ID of user
@@ -1268,6 +1365,8 @@ print(data)
 ### Unignore user
 
 *Unignore a user.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersunignore)*
 
 **Parameters:**
 
@@ -1292,6 +1391,8 @@ print(data)
   > If you want to get another user groups you need scope admincp
   >
   > You can get main user group with "[Get user](#get-user)" method
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/usersgetusergroups)*
 
 **Parameters:**
 
@@ -1318,6 +1419,8 @@ print(data)
 
 *List of comments of a profile post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsgetcomments)*
+
 **Parameters:**
 
 - **profile_post_id** (int): ID of profile post.
@@ -1340,6 +1443,8 @@ print(data)
 
 *Detail information of a profile post comment.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsgetcomment)*
+
 **Parameters:**
 
 - **profile_post_id** (int): ID of profile post.
@@ -1360,6 +1465,8 @@ print(data)
 
 *Create a new profile post comment.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostscreatecomment)*
+
 **Parameters:**
 
 - **profile_post_id** (int): ID of profile post.
@@ -1379,6 +1486,8 @@ print(data)
 ### Delete profile post comment
 
 *Delete a profile post's comment.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsdeletecomment)*
 
 **Parameters:**
 
@@ -1403,6 +1512,8 @@ print(data)
 
 *Detail information of a profile post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsget)*
+
 **Parameters:**
 
 - **profile_post_id** (int): ID of profile post.
@@ -1421,6 +1532,8 @@ print(data)
 ### Create profile post
 
 *Create a new profile post on a user timeline.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostscreate)*
 
 **Parameters:**
 
@@ -1442,6 +1555,8 @@ print(data)
 
 *Edit a profile post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsedit)*
+
 **Parameters:**
 
 - **profile_post_id** (int): ID of profile post.
@@ -1461,6 +1576,8 @@ print(data)
 ### Delete profile post
 
 *Delete a profile post.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsdelete)*
 
 **Parameters:**
 
@@ -1482,6 +1599,8 @@ print(data)
 
 *List of users who liked a profile post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsgetlikedusers)*
+
 **Parameters:**
 
 - **profile_post_id** (int): ID of profile post.
@@ -1500,6 +1619,8 @@ print(data)
 ### Like profile post
 
 *Like a profile post.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostslike)*
 
 **Parameters:**
 
@@ -1520,6 +1641,8 @@ print(data)
 
 *Unlike a profile post.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsunlike)*
+
 **Parameters:**
 
 - **profile_post_id** (int): ID of profile post.
@@ -1538,6 +1661,8 @@ print(data)
 ### Report profile post
 
 *Report a profile post.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsreport)*
 
 **Parameters:**
 
@@ -1565,6 +1690,8 @@ print(data)
 
 *List of messages in a conversation (with pagination).*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationsgetmessages)*
+
 **Parameters:**
 
 - **conversation_id** (int): ID of conversation.
@@ -1589,6 +1716,8 @@ print(data)
 
 *Detail information of a message.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationsgetmessage)*
+
 **Parameters:**
 
 - **message_id** (int): ID of conversation message.
@@ -1607,6 +1736,8 @@ print(data)
 ### Send conversation message
 
 *Create a new conversation message.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationscreatemassage)*
 
 **Parameters:**
 
@@ -1628,6 +1759,8 @@ print(data)
 
 *Edit a message.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationseditmessage)*
+
 **Parameters:**
 
 - **message_id** (int): ID of conversation message.
@@ -1648,6 +1781,8 @@ print(data)
 
 *Delete a message.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationsdeletemessage)*
+
 **Parameters:**
 
 - **message_id** (int): ID of conversation message.
@@ -1665,7 +1800,9 @@ print(data)
 
 ### Report conversation message
 
-*Create a new conversation message.*
+*Report a message.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationsreportmessage)*
 
 **Parameters:**
 
@@ -1689,6 +1826,8 @@ print(data)
 
 *List of conversations (with pagination).*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationsgetall)*
+
 **Parameters:**
 
 - **page** (int): Page number of conversations.
@@ -1709,6 +1848,8 @@ print(data)
 
 *Detail information of a conversation.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationsget)*
+
 **Parameters:**
 
 - **conversation_id** (int): ID of conversation.
@@ -1727,6 +1868,8 @@ print(data)
 ### Create conversation
 
 *Create a new conversation.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationscreate)*
 
 **Parameters:**
 
@@ -1750,6 +1893,8 @@ print(data)
 ### Create group conversation
 
 *Create a new group conversation.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationscreate)*
 
 **Parameters:**
 
@@ -1775,6 +1920,8 @@ print(data)
 
 *Leave from conversation*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/conversationsdelete)*
+
 **Parameters:**
 
 - **conversation_id** (int): ID of conversation.
@@ -1796,6 +1943,8 @@ print(data)
 
 *List of notifications (both read and unread).*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/notificationsgetall)*
+
 **Example:**
 
 ```python
@@ -1810,6 +1959,8 @@ print(data)
 ### Get notification
 
 *Get associated content of notification. The response depends on the content type.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/notificationsget)*
 
 **Parameters:**
 
@@ -1829,6 +1980,8 @@ print(data)
 ### Read notification/s
 
 *Mark single notification or all existing notifications read.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/notificationsmarkread)*
 
 **Parameters:**
 
@@ -1851,6 +2004,8 @@ print(data)
   > The current user must have the [bd] API: Send custom alert permission
   > 
   > You can't use that method :c
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/notificationssendcustom)*
 
 **Parameters:**
 
@@ -1878,6 +2033,8 @@ string
 
 *List of all categories in the system.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/categoriesgetcategories)*
+
 **Parameters:**
 
 - **parent_category_id** (int): ID of parent category.
@@ -1898,6 +2055,8 @@ print(data)
 ### Get category
 
 *Detail information of a category.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/categoriesgetcategory)*
 
 **Parameters:**
 
@@ -1920,6 +2079,8 @@ print(data)
 
 *List of all pages in the system.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/pagesgetpages)*
+
 **Parameters:**
 
 - **parent_page_id** (int): ID of parent page. If exists, filter pages that are direct children of that page.
@@ -1939,6 +2100,8 @@ print(data)
 ### Get page
 
 *Detail information of a page.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/pagesgetpage)*
 
 **Parameters:**
 
@@ -1961,6 +2124,8 @@ print(data)
 
 *List of popular tags (no pagination).*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/contenttagginggetpopular)*
+
 **Parameters:**
 
 
@@ -1978,6 +2143,8 @@ print(data)
 ### Get tags
 
 *List of tags.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/contenttagginggetpopular)*
 
 **Parameters:**
 
@@ -1998,6 +2165,8 @@ print(data)
 ### Tagged contents
 
 *List of tagged contents.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/contenttagginggetcontents)*
 
 **Parameters:**
 
@@ -2020,6 +2189,8 @@ print(data)
 
 *Filtered list of tags.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/contenttagginggetfilteredcontent)*
+
 **Parameters:**
 
 - **tag** (str): tag to filter. Tags start with the query will be returned.
@@ -2040,6 +2211,8 @@ print(data)
 ### Search for threads
 
 *Search for threads.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/searchingthreads)*
 
 **Parameters:**
 
@@ -2068,6 +2241,8 @@ print(data)
 
 *Search for posts.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/searchingposts)*
+
 **Parameters:**
 
 - **q** (str): Search query. 
@@ -2093,7 +2268,9 @@ print(data)
 
 ### Search for all types of content
 
-*Search for threads.*
+*Search for all types of content.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/searchingallcontents)*
 
 **Parameters:**
 
@@ -2121,6 +2298,8 @@ print(data)
 
 *Search for tagged contents.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/searchingtagged)*
+
 **Parameters:**
 
 - **tag** (str): Tag to search for tagged contents.
@@ -2142,6 +2321,8 @@ print(data)
 ### Search indexing
 
 *Index external content data into search system to be searched later.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/batchrequestssearchindexing)*
 
 **Parameters:**
 
@@ -2169,6 +2350,8 @@ print(data)
 
 *Request API access token using Facebook access token. Please note that because Facebook uses app-scoped user_id, it is not possible to recognize user across different Facebook Applications.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/oauthfacebook)*
+
 **Parameters:**
 
 - **client_id** (int): ID of facebook client.
@@ -2189,6 +2372,8 @@ string
 ### Twitter oauth
 
 *Request API access token using Twitter access token. The twitter_uri and twitter_auth parameters are similar to X-Auth-Service-Provider and X-Verify-Credentials-Authorization as specified in Twitter's OAuth Echo specification.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/oauthtwitter)*
 
 **Parameters:**
 
@@ -2212,6 +2397,8 @@ string
 
 *Request API access token using Google access token.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/oauthgoogle)*
+
 **Parameters:**
 
 - **client_id** (int): ID of facebook client.
@@ -2232,6 +2419,8 @@ string
 ### Associate oauth
 
 *Request API access token and associate social account with an existing user account.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/oauthassociate)*
 
 **Parameters:**
 
@@ -2257,6 +2446,7 @@ string
 *Request API access token for another user.*
   > This requires admincp scope and the current user must have sufficient system permissions.*
 
+*[Official documentation reference](https://lolzteam.readme.io/reference/oauthadmin)*
 **Parameters:**
 
 - **user_id** (int): ID of the user that needs access token.
@@ -2275,6 +2465,8 @@ string
 # Navigation
 
 *List of navigation elements within the system.*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/navigationgetnavigation)*
 
 **Parameters:**
 
@@ -2329,6 +2521,8 @@ for job in jobs:
   > Maximum batch jobs is 10.
   >
   > Forum batch can only proceed with forum url's. If you want to use batch with market url's try [this](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md#batch)
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/batchrequestsexecute)*
 
 **Parameters:**
 
