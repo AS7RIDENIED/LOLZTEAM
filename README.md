@@ -34,5 +34,5 @@ api = LolzteamApi(token='your_token')
 ## Current ToDo
 
 - [ ] Add required token scopes for every method  (DOCS) | 0%
-- [ ] Add official doc reference for every method (DOCS) |  ~25%
+- [x] Add official doc reference for every method (DOCS) | 100%
 - [ ] Update main lolz thread and bugs thread
