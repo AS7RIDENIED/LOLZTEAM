@@ -30,9 +30,3 @@ api = LolzteamApi(token='your_token')
 ## Official Lolzteam documentation
 
 ### [Forum](https://docs.api.zelenka.guru/?forum) [Market](https://docs.api.zelenka.guru/?market) [Antipublic](https://antipublic.one/docs/?antipublic)
-
-## Current ToDo
-
-- [ ] Add required token scopes for every method  (DOCS) | 0%
-- [x] Add official doc reference for every method (DOCS) | 100%
-- [ ] Update main lolz thread and bugs thread
