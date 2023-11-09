@@ -356,8 +356,6 @@ class LolzteamApi:
         self._auto_delay_time = self._auto_delay_time.value
         self._lock = None
 
-
-
     class __Forum:
         def __init__(self, api_self):
             self.__api = api_self  # Passing main self to sub all classes
@@ -1487,6 +1485,32 @@ class LolzteamApi:
                     else:
                         path_data = {"site": "Forum", "path": f"/users/{user_id}/avatar"}
                     return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
+
+                def crop(self, user_id: int, size: int, x: int = None, y: int = None):
+                    """
+                    POST https://api.zelenka.guru/users/user_id/avatar-crop
+
+                    Crop avatar for a user.
+
+                    Required scopes: post / admincp
+
+                    :param user_id: ID of user.
+                    :param x: The starting point of the selection by width.
+                    :param y: The starting point of the selection by height
+                    :param size: Selection size. Minimum value - 16.
+
+                    :return: json server response
+                    """
+                    params = {
+                        "x": x,
+                        "y": y,
+                        "crop": size
+                    }
+                    if user_id is None:  # Пока такое не работает, но надеюсь пофиксят. Пусть лежит
+                        path_data = {"site": "Forum", "path": f"/users/me/avatar-crop"}
+                    else:
+                        path_data = {"site": "Forum", "path": f"/users/{user_id}/avatar-crop"}
+                    return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def __init__(self, __api_self):
                 self.__api = __api_self
@@ -3128,7 +3152,7 @@ class LolzteamApi:
                 path_data = {"site": "Market", "path": f"{url}"}
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
-            def new(self, page: int = None, title:str=None, search_params: dict = None):
+            def new(self, page: int = None, title: str = None, search_params: dict = None):
                 """
                 GET https://api.lzt.market/
 
@@ -3366,7 +3390,7 @@ class LolzteamApi:
                         params[str(key)] = value
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data, params=params)
 
-            def viewed(self, page: int = None, status: str = None, search_params: dict = None, title:str=None):
+            def viewed(self, page: int = None, status: str = None, search_params: dict = None, title: str = None):
                 """
                 GET https://api.lzt.market/viewed
 
@@ -4172,7 +4196,9 @@ class LolzteamApi:
             def add(self, category_id: int, price: int, currency: str, item_origin: str, extended_guarantee: int = None,
                     title: str = None, title_en: str = None, description: str = None, information: str = None,
                     has_email_login_data: bool = None, email_login_data: str = None, email_type: str = None,
-                    allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None):
+                    allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None,
+                    auction: bool = False, auction_duration_value: int = None, auction_duration_option: str = None,
+                    instabuy_price: int = None, not_bids_action: str = None):
                 """
                 POST https://api.lzt.market/item/add
 
@@ -4219,6 +4245,11 @@ class LolzteamApi:
                 :param allow_ask_discount: Allow users to ask discount for this account.
                 :param proxy_id: Using proxy id for account checking.
                 :param random_proxy: Pass True, if you get captcha in previous response
+                :param auction: Pass True if you want to create auction
+                :param auction_duration_value: Duration auction value.
+                :param auction_duration_option: Duration auction option. Can be [minutes, hours, days].
+                :param instabuy_price: The price for which you can instantly redeem your account.
+                :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
                 :return: json server response
                 """
@@ -4228,8 +4259,13 @@ class LolzteamApi:
                         random_proxy = 1
                     elif random_proxy is False:
                         random_proxy = 0
+                    if auction is True:
+                        type_sell = "auction"
+                    else:
+                        type_sell = "price"
                 params = {
                     "category_id": category_id,
+                    "type_sell": type_sell,
                     "price": price,
                     "currency": currency,
                     "item_origin": item_origin,
@@ -4245,6 +4281,12 @@ class LolzteamApi:
                     "proxy_id": proxy_id,
                     "random_proxy": random_proxy
                 }
+                if auction is True:
+                    params["duration_auction_value"] = auction_duration_value
+                    params["duration_auction_option"] = auction_duration_option
+                    params["instant_price"] = instabuy_price
+                    params["not_bids_action"] = not_bids_action
+
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
             def fast_sell(self, category_id: int, price: int, currency: str, item_origin: str,
@@ -4252,7 +4294,10 @@ class LolzteamApi:
                           title: str = None, title_en: str = None, description: str = None, information: str = None,
                           has_email_login_data: bool = None, email_login_data: str = None, email_type: str = None,
                           allow_ask_discount: bool = None, proxy_id: int = None, random_proxy: bool = None,
-                          login: str = None, password: str = None, login_password: str = None, extra: dict = None, ):
+                          login: str = None, password: str = None, login_password: str = None, extra: dict = None,
+                          auction: bool = False, auction_duration_value: int = None,
+                          auction_duration_option: str = None,
+                          instabuy_price: int = None, not_bids_action: str = None):
                 """
                 POST https://api.lzt.market/item/fast-sell
 
@@ -4303,6 +4348,12 @@ class LolzteamApi:
                 :param password: Account password
                 :param login_password: Account login data format login:password
                 :param extra: Extra params for account checking. E.g. you need to put cookies to extra[cookies] if you want to upload TikTok/Fortnite/Epic Games account
+                :param auction: Pass True if you want to create auction
+                :param auction_duration_value: Duration auction value.
+                :param auction_duration_option: Duration auction option. Can be [minutes, hours, days].
+                :param instabuy_price: The price for which you can instantly redeem your account.
+                :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
+
                 :return: json server response
                 """
                 path_data = {"site": "Market", "path": f"/item/fast-sell"}
@@ -4311,9 +4362,14 @@ class LolzteamApi:
                         random_proxy = 1
                     elif random_proxy is False:
                         random_proxy = 0
+                    if auction is True:
+                        type_sell = "auction"
+                    else:
+                        type_sell = "price"
                 params = {
                     "category_id": category_id,
                     "price": price,
+                    "type_sell": type_sell,
                     "currency": currency,
                     "item_origin": item_origin,
                     "extended_guarantee": extended_guarantee,
@@ -4331,6 +4387,11 @@ class LolzteamApi:
                     "password": password,
                     "login_password": login_password
                 }
+                if auction is True:
+                    params["duration_auction_value"] = auction_duration_value
+                    params["duration_auction_option"] = auction_duration_option
+                    params["instant_price"] = instabuy_price
+                    params["not_bids_action"] = not_bids_action
                 data = {}
                 if extra is not None:
                     try:

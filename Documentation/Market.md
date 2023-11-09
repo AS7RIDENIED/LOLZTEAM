@@ -674,6 +674,11 @@ print(data)
   > Format - login:password
 - **extra** (dict): Extra params for account checking.
   > E.g. you need to put cookies to extra (extra={"cookies": cookies}) if you want to upload TikTok/Fortnite/Epic Games account
+- **auction** (bool): Pass True if you want to create auction
+- **auction_duration_value** (int): Duration auction value.
+- **auction_duration_option** (str): Duration auction option. Can be [minutes, hours, days].
+- **instabuy_price** (int): The price for which you can instantly redeem your account.
+- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
 **Example:**
 
@@ -715,6 +720,11 @@ print(data)
 - **allow_ask_discount** (bool): Allow users to ask discount for this account.
 - **proxy_id** (int): Using proxy id for account checking.
 - **random_proxy** (bool): Pass True, if you get captcha in previous response
+- **auction** (bool): Pass True if you want to create auction
+- **auction_duration_value** (int): Duration auction value.
+- **auction_duration_option** (str): Duration auction option. Can be [minutes, hours, days].
+- **instabuy_price** (int): The price for which you can instantly redeem your account.
+- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
 **Example:**
 

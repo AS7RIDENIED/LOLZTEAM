@@ -52,6 +52,7 @@
   * [Avatar](#avatar)
     * [Upload avatar](#upload-avatar)
     * [Delete avatar](#delete-avatar)
+    * [Crop avatar](#crop-avatar)
   * [Get users](#get-users)
   * [Get user](#get-user)
   * [Edit user](#edit-user)
@@ -1085,6 +1086,28 @@ print(data)
 
 ```python
 {'status': 'ok', 'message': 'Changes Saved'}
+```
+
+### Crop avatar
+
+*Crop avatar for a user.*
+
+**Parameters:**
+
+- **user_id** (int): ID of user.
+- **size** (int): Selection size. Minimum value - 16.
+- **x** (int): The starting point of the selection by width.
+- **y** (int): The starting point of the selection by height
+
+**Example:**
+
+```python
+response = api.forum.users.avatar.crop(user_id=2410024,size=2000)
+print(response)
+```
+
+```python
+{'status': 'ok', 'message': 'Upload completed successfully', 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ---
@@ -2447,6 +2470,7 @@ string
   > This requires admincp scope and the current user must have sufficient system permissions.*
 
 *[Official documentation reference](https://lolzteam.readme.io/reference/oauthadmin)*
+
 **Parameters:**
 
 - **user_id** (int): ID of the user that needs access token.
