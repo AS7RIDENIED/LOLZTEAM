@@ -2,8 +2,8 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Lolzteam Public API: Market",
-    "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nYou can read about authorization, scopes and grant types here - [Forum API documents](https://github.com/grisha2217/Lolzteam-Public-API/blob/master/docs/api.markdown) **docs/api**.\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.0.57"
+    "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/Lolzteam_Python_Api/main/DocumentationOfficial/Market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
+    "version": "1.0.58"
   },
   "servers": [
     {
@@ -3084,14 +3084,14 @@
           {
             "name": "region[]",
             "in": "query",
-            "description": "List of allowed regions.",
+            "description": "Region. Can be [**eu**, **ap**, **kr**, **na**, **br**, **la**].",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Region",
               "type": "array",
-              "description": "List of allowed regions.",
+              "description": "Region. Can be [**eu**, **ap**, **kr**, **na**, **br**, **la**].",
               "items": {
                 "type": "string"
               }
@@ -3100,14 +3100,14 @@
           {
             "name": "not_region[]",
             "in": "query",
-            "description": "List of disallowed regions.",
+            "description": "Exclude region. Can be [**eu**, **ap**, **kr**, **na**, **br**, **la**].",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Not Region",
               "type": "array",
-              "description": "List of disallowed regions.",
+              "description": "Exclude region. Can be [**eu**, **ap**, **kr**, **na**, **br**, **la**].",
               "items": {
                 "type": "string"
               }
@@ -3579,14 +3579,14 @@
           {
             "name": "region[]",
             "in": "query",
-            "description": "List of allowed regions.",
+            "description": "Region. Can be [**la1**, **la2**, **br1**, **euw1**, **tr1**, **na1**, **eun1**, **ru**, **oc1**, **jp1**, **ph2**, **vn2**, **th2**, **sg2**].",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Region",
               "type": "array",
-              "description": "List of allowed regions.",
+              "description": "Region. Can be [**la1**, **la2**, **br1**, **euw1**, **tr1**, **na1**, **eun1**, **ru**, **oc1**, **jp1**, **ph2**, **vn2**, **th2**, **sg2**].",
               "items": {
                 "type": "string"
               }
@@ -5266,14 +5266,14 @@
           {
             "name": "not_region[]",
             "in": "query",
-            "description": "Exclude region. Can be [**ru**, **eu**, **na**, **asia**]",
+            "description": "Exclude region. Can be [**ru**, **eu**, **na**, **asia**].",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Not Region",
               "type": "array",
-              "description": "Exclude region. Can be [**ru**, **eu**, **na**, **asia**]",
+              "description": "Exclude region. Can be [**ru**, **eu**, **na**, **asia**].",
               "items": {
                 "type": "string"
               }
@@ -11250,7 +11250,7 @@
           "Accounts managing"
         ],
         "summary": "Soft Delete Account",
-        "description": "Deletes your account from public search. Deletetion type is soft. You can restore account after deletetion if you want.",
+        "description": "Deletes your account from public search. Deletion type is soft. You can restore account after deletion if you want.",
         "operationId": "accountsManaging.delete",
         "parameters": [
           {
@@ -11587,7 +11587,7 @@
             "name": "amount",
             "in": "query",
             "description": "Amount bid.",
-            "required": false,
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
@@ -11640,7 +11640,7 @@
           "Auction"
         ],
         "summary": "Delete Auction Bid",
-        "description": "Delete your auction bid.",
+        "description": "Delete your auction bid. You can delete your auction bid within 5 minutes.",
         "operationId": "auction.deleteBid",
         "parameters": [
           {
@@ -11660,7 +11660,7 @@
             "name": "bid_id",
             "in": "query",
             "description": "Bid id.",
-            "required": false,
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
