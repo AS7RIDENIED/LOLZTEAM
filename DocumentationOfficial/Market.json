@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.0.59"
+    "version": "1.0.60"
   },
   "servers": [
     {
@@ -12643,8 +12643,8 @@
           {
             "name": "type_sell",
             "in": "query",
-            "description": "Sales method. Can be [**price**, **auction**].",
-            "required": true,
+            "description": "Sales method. Can be [**price**, **auction**]. If this parameter is not set, **type_sell** will be **price**.",
+            "required": false,
             "style": "form",
             "explode": true,
             "schema": {
@@ -13304,8 +13304,8 @@
           {
             "name": "type_sell",
             "in": "query",
-            "description": "Sales method. Can be [**price**, **auction**].",
-            "required": true,
+            "description": "Sales method. Can be [**price**, **auction**]. If this parameter is not set, **type_sell** will be **price**.",
+            "required": false,
             "style": "form",
             "explode": true,
             "schema": {
@@ -17504,29 +17504,9 @@
       },
       "TelegramClientModel": {
         "title": "Telegram client",
-        "type": "object",
-        "properties": {
-          "telegram_api_id": {
-            "title": "Telegram api id",
-            "type":  "string"
-          },
-          "telegram_api_hash": {
-            "title": "Telegram api hash",
-            "type":  "string"
-          },
-          "telegram_device_model": {
-            "title": "Telegram device model",
-            "type":  "string"
-          },
-          "telegram_system_version": {
-            "title": "Telegram system version",
-            "type":  "string"
-          },
-          "telegram_app_version": {
-            "title": "Telegram app version",
-            "type":  "string"
-          }
-        }
+        "type": "string",
+        "example": "{\"telegram_api_id\": integer, \"telegram_api_hash\": string, \"telegram_device_model\": string, \"telegram_system_version\": string, \"telegram_app_version\": string}"
+
       }
     },
     "securitySchemes": {
