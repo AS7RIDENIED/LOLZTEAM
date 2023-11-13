@@ -2,13 +2,13 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Lolzteam Public API: Market",
-    "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/Lolzteam_Python_Api/main/DocumentationOfficial/Market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.0.58"
+    "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
+    "version": "1.0.59"
   },
   "servers": [
     {
       "url": "https://api.lzt.market",
-      "description": "Production"
+      "description": "Production."
     }
   ],
   "paths": {
@@ -23,7 +23,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -360,7 +360,7 @@
           {
             "name": "inv_game",
             "in": "query",
-            "description": "Game ID to check inventory price",
+            "description": "Game ID to check inventory price.",
             "required": false,
             "style": "form",
             "explode": true,
@@ -464,7 +464,7 @@
           {
             "name": "win_count_max",
             "in": "query",
-            "description": "Maximum number of wins",
+            "description": "Maximum number of wins.",
             "required": false,
             "style": "form",
             "explode": true,
@@ -1012,27 +1012,27 @@
           {
             "name": "pmin",
             "in": "query",
-            "description": "Minimal price of account (Inclusive)",
+            "description": "Minimal price of account (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmin",
               "type": "integer",
-              "description": "Minimal price of account (Inclusive)"
+              "description": "Minimal price of account (Inclusive)."
             }
           },
           {
             "name": "pmax",
             "in": "query",
-            "description": "Maximum price of account (Inclusive)",
+            "description": "Maximum price of account (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmax",
               "type": "integer",
-              "description": "Maximum price of account (Inclusive)"
+              "description": "Maximum price of account (Inclusive)."
             }
           },
           {
@@ -1164,14 +1164,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -1190,7 +1190,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1698,14 +1698,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -1724,7 +1724,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2323,14 +2323,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -2349,7 +2349,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2741,14 +2741,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -2767,7 +2767,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3320,14 +3320,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -3346,7 +3346,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3799,14 +3799,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -3825,7 +3825,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4259,14 +4259,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -4285,7 +4285,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4583,14 +4583,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -4609,7 +4609,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4971,14 +4971,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -4997,7 +4997,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5447,14 +5447,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -5473,7 +5473,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5923,14 +5923,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -5949,7 +5949,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6198,14 +6198,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -6224,7 +6224,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6515,14 +6515,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -6541,7 +6541,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6596,7 +6596,7 @@
           {
             "name": "daybreak",
             "in": "query",
-            "description": "Number of days the account has been offline",
+            "description": "Number of days the account has been offline.",
             "required": false,
             "style": "form",
             "explode": true,
@@ -6774,14 +6774,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -6800,7 +6800,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7081,14 +7081,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -7107,7 +7107,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7509,14 +7509,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -7535,7 +7535,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7910,14 +7910,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -7936,7 +7936,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8318,14 +8318,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -8344,7 +8344,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8687,14 +8687,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -8713,7 +8713,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9098,14 +9098,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -9124,7 +9124,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9373,14 +9373,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -9399,7 +9399,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9648,14 +9648,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -9674,7 +9674,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10020,14 +10020,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -10046,7 +10046,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10318,14 +10318,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -10344,7 +10344,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10558,14 +10558,14 @@
           {
             "name": "not_locale[]",
             "in": "query",
-            "description": "List of regions that won't be included",
+            "description": "List of regions that won't be included.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Not Locale",
               "type": "array",
-              "description": "List of regions that won't be included",
+              "description": "List of regions that won't be included.",
               "items": {
                 "type": "string"
               }
@@ -10739,14 +10739,14 @@
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -10765,7 +10765,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10794,66 +10794,66 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "User id",
+            "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Userid",
               "type": "integer",
-              "description": "User id"
+              "description": "User id."
             }
           },
           {
             "name": "category_id",
             "in": "query",
-            "description": "Accounts category",
+            "description": "Accounts category.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Category Id",
               "type": "integer",
-              "description": "Accounts category"
+              "description": "Accounts category."
             }
           },
           {
             "name": "pmin",
             "in": "query",
-            "description": "Minimal price of account (Inclusive)",
+            "description": "Minimal price of account (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmin",
               "type": "integer",
-              "description": "Minimal price of account (Inclusive)"
+              "description": "Minimal price of account (Inclusive)."
             }
           },
           {
             "name": "pmax",
             "in": "query",
-            "description": "Maximum price of account (Inclusive)",
+            "description": "Maximum price of account (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmax",
               "type": "integer",
-              "description": "Maximum price of account (Inclusive)"
+              "description": "Maximum price of account (Inclusive)."
             }
           },
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -10898,7 +10898,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10927,66 +10927,66 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "User id",
+            "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Userid",
               "type": "integer",
-              "description": "User id"
+              "description": "User id."
             }
           },
           {
             "name": "category_id",
             "in": "query",
-            "description": "Accounts category",
+            "description": "Accounts category.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Category Id",
               "type": "integer",
-              "description": "Accounts category"
+              "description": "Accounts category."
             }
           },
           {
             "name": "pmin",
             "in": "query",
-            "description": "Minimal price of account (Inclusive)",
+            "description": "Minimal price of account (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmin",
               "type": "integer",
-              "description": "Minimal price of account (Inclusive)"
+              "description": "Minimal price of account (Inclusive)."
             }
           },
           {
             "name": "pmax",
             "in": "query",
-            "description": "Maximum price of account (Inclusive)",
+            "description": "Maximum price of account (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmax",
               "type": "integer",
-              "description": "Maximum price of account (Inclusive)"
+              "description": "Maximum price of account (Inclusive)."
             }
           },
           {
             "name": "title",
             "in": "query",
-            "description": "The word or words contained in the account title",
+            "description": "The word or words contained in the account title.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Title",
               "type": "string",
-              "description": "The word or words contained in the account title"
+              "description": "The word or words contained in the account title."
             }
           },
           {
@@ -11018,20 +11018,20 @@
           {
             "name": "page",
             "in": "query",
-            "description": "The number of the page to display results from",
+            "description": "The number of the page to display results from.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Page",
               "type": "integer",
-              "description": "The number of the page to display results from"
+              "description": "The number of the page to display results from."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11041,7 +11041,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11070,14 +11070,14 @@
           {
             "name": "page",
             "in": "query",
-            "description": "The number of the page to display results from",
+            "description": "The number of the page to display results from.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Page",
               "type": "integer",
-              "description": "The number of the page to display results from"
+              "description": "The number of the page to display results from."
             }
           },
           {
@@ -11109,7 +11109,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11138,14 +11138,14 @@
           {
             "name": "page",
             "in": "query",
-            "description": "The number of the page to display results from",
+            "description": "The number of the page to display results from.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Page",
               "type": "integer",
-              "description": "The number of the page to display results from"
+              "description": "The number of the page to display results from."
             }
           },
           {
@@ -11177,7 +11177,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11206,20 +11206,20 @@
           {
             "name": "itemId",
             "in": "path",
-            "description": "Item id",
+            "description": "Item id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Itemid",
               "type": "integer",
-              "description": "Item id"
+              "description": "Item id."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11229,7 +11229,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11282,7 +11282,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11292,7 +11292,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11302,7 +11302,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11331,33 +11331,33 @@
           {
             "name": "itemId",
             "in": "path",
-            "description": "Item id",
+            "description": "Item id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Itemid",
               "type": "integer",
-              "description": "Item id"
+              "description": "Item id."
             }
           },
           {
             "name": "type",
             "in": "query",
-            "description": "Type of page - **profiles** or **games**",
+            "description": "Type of page - **profiles** or **games**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Type",
               "type": "string",
-              "description": "Type of page - **profiles** or **games**"
+              "description": "Type of page - **profiles** or **games**."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "text/html": {
                 "schema": {}
@@ -11365,7 +11365,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11375,7 +11375,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11417,7 +11417,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11427,7 +11427,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11469,7 +11469,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11479,7 +11479,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11521,7 +11521,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11531,7 +11531,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11599,7 +11599,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11609,7 +11609,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11619,7 +11619,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11672,7 +11672,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11682,7 +11682,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11692,7 +11692,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11715,7 +11715,7 @@
           "Steam Item Value Sorter"
         ],
         "summary": "Get Steam Value",
-        "description": "Gets steam value.\n\nApplication id list:\n+ **730** - CS2\n+ **578080** - PUBG\n+ **753** - Steam\n+ **570** - Dota 2\n+ **440** - Team Fortress 2\n+ **252490** - Rust\n+ **304930** - Unturned\n+ **304930** - Unturned\n+ **232090** - Killing Floor 2\n+ **322330** - Don't Starve Together",
+        "description": "Gets steam value.\n\nApplication id list:\n+ **730** - CS2\n+ **578080** - PUBG\n+ **753** - Steam\n+ **570** - Dota 2\n+ **440** - Team Fortress 2\n+ **252490** - Rust\n+ **304930** - Unturned\n+ **232090** - Killing Floor 2\n+ **322330** - Don't Starve Together",
         "operationId": "accountsManaging.getSteamValue",
         "parameters": [
           {
@@ -11773,7 +11773,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11815,14 +11815,14 @@
           {
             "name": "price",
             "in": "query",
-            "description": "Current price of account in your currency",
+            "description": "Current price of account in your currency.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Price",
               "type": "integer",
-              "description": "Current price of account in your currency"
+              "description": "Current price of account in your currency."
             }
           },
           {
@@ -11841,7 +11841,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11851,7 +11851,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11887,7 +11887,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11929,20 +11929,20 @@
           {
             "name": "price",
             "in": "query",
-            "description": "Current price of account in your currency",
+            "description": "Current price of account in your currency.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Price",
               "type": "integer",
-              "description": "Current price of account in your currency"
+              "description": "Current price of account in your currency."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11952,7 +11952,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11962,7 +11962,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12004,7 +12004,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12014,7 +12014,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12024,7 +12024,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12066,7 +12066,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12076,7 +12076,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12112,7 +12112,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12167,7 +12167,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12177,7 +12177,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12187,7 +12187,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12255,33 +12255,33 @@
           {
             "name": "currency",
             "in": "query",
-            "description": "Using currency for amount. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**",
+            "description": "Using currency for amount. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Currency",
               "type": "string",
-              "description": "Using currency for amount. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**"
+              "description": "Using currency for amount. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**."
             }
           },
           {
             "name": "secret_answer",
             "in": "query",
-            "description": "Secret answer of your account",
+            "description": "Secret answer of your account.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Secret Answer",
               "type": "string",
-              "description": "Secret answer of your account"
+              "description": "Secret answer of your account."
             }
           },
           {
             "name": "comment",
             "in": "query",
-            "description": "Transfer comment",
+            "description": "Transfer comment.",
             "required": false,
             "style": "form",
             "explode": true,
@@ -12289,52 +12289,52 @@
               "title": "Comment",
               "maxLength": 255,
               "type": "string",
-              "description": "Transfer comment"
+              "description": "Transfer comment."
             }
           },
           {
             "name": "transfer_hold",
             "in": "query",
-            "description": "Hold transfer or not",
+            "description": "Hold transfer or not.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Transfer Hold",
               "type": "boolean",
-              "description": "Hold transfer or not"
+              "description": "Hold transfer or not."
             }
           },
           {
             "name": "hold_length_value",
             "in": "query",
-            "description": "Hold length value",
+            "description": "Hold length value.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Hold Length Value",
               "type": "integer",
-              "description": "Hold length value"
+              "description": "Hold length value."
             }
           },
           {
             "name": "hold_length_option",
             "in": "query",
-            "description": "Hold length option. Allowed values: **hour**, **day**, **week**, **month**, **year**",
+            "description": "Hold length option. Allowed values: **hour**, **day**, **week**, **month**, **year**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Hold Length Option",
               "type": "string",
-              "description": "Hold length option. Allowed values: **hour**, **day**, **week**, **month**, **year**"
+              "description": "Hold length option. Allowed values: **hour**, **day**, **week**, **month**, **year**."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12344,7 +12344,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12354,7 +12354,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12383,131 +12383,131 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "User id",
+            "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Userid",
               "type": "integer",
-              "description": "User id"
+              "description": "User id."
             }
           },
           {
             "name": "type",
             "in": "query",
-            "description": "Type of operation. Allowed operation types: **income**, **cost**, **refilled_balance**, **withdrawal_balance**, **paid_item**, **sold_item**, **money_transfer**, **receiving_money**, **internal_purchase**, **claim_hold**",
+            "description": "Type of operation. Allowed operation types: **income**, **cost**, **refilled_balance**, **withdrawal_balance**, **paid_item**, **sold_item**, **money_transfer**, **receiving_money**, **internal_purchase**, **claim_hold**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Type",
               "type": "string",
-              "description": "Type of operation. Allowed operation types: **income**, **cost**, **refilled_balance**, **withdrawal_balance**, **paid_item**, **sold_item**, **money_transfer**, **receiving_money**, **internal_purchase**, **claim_hold**"
+              "description": "Type of operation. Allowed operation types: **income**, **cost**, **refilled_balance**, **withdrawal_balance**, **paid_item**, **sold_item**, **money_transfer**, **receiving_money**, **internal_purchase**, **claim_hold**."
             }
           },
           {
             "name": "pmin",
             "in": "query",
-            "description": "Minimal price of operation (Inclusive)",
+            "description": "Minimal price of operation (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmin",
               "type": "integer",
-              "description": "Minimal price of operation (Inclusive)"
+              "description": "Minimal price of operation (Inclusive)."
             }
           },
           {
             "name": "pmax",
             "in": "query",
-            "description": "Maximum price of operation (Inclusive)",
+            "description": "Maximum price of operation (Inclusive).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Pmax",
               "type": "integer",
-              "description": "Maximum price of operation (Inclusive)"
+              "description": "Maximum price of operation (Inclusive)."
             }
           },
           {
             "name": "page",
             "in": "query",
-            "description": "The number of the page to display results from",
+            "description": "The number of the page to display results from.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "page",
               "type": "integer",
-              "description": "The number of the page to display results from"
+              "description": "The number of the page to display results from."
             }
           },
           {
             "name": "operation_id_lt",
             "in": "query",
-            "description": "Id of the operation from which the result begins",
+            "description": "Id of the operation from which the result begins.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Operation Id lt",
               "type": "integer",
-              "description": "Id of the operation from which the result begins"
+              "description": "Id of the operation from which the result begins."
             }
           },
           {
             "name": "receiver",
             "in": "query",
-            "description": "Username of user, which receive money from you",
+            "description": "Username of user, which receive money from you.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Receiver",
               "type": "string",
-              "description": "Username of user, which receive money from you"
+              "description": "Username of user, which receive money from you."
             }
           },
           {
             "name": "sender",
             "in": "query",
-            "description": "Username of user, which sent money to you",
+            "description": "Username of user, which sent money to you.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Sender",
               "type": "string",
-              "description": "Username of user, which sent money to you"
+              "description": "Username of user, which sent money to you."
             }
           },
           {
             "name": "startDate",
             "in": "query",
-            "description": "Start date of operation (RFC 3339 date format)",
+            "description": "Start date of operation (RFC 3339 date format).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Startdate",
               "type": "string",
-              "description": "Start date of operation (RFC 3339 date format)"
+              "description": "Start date of operation (RFC 3339 date format)."
             }
           },
           {
             "name": "endDate",
             "in": "query",
-            "description": "End date of operation (RFC 3339 date format)",
+            "description": "End date of operation (RFC 3339 date format).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Enddate",
               "type": "string",
-              "description": "End date of operation (RFC 3339 date format)"
+              "description": "End date of operation (RFC 3339 date format)."
             }
           },
           {
@@ -12526,46 +12526,46 @@
           {
             "name": "comment",
             "in": "query",
-            "description": "Comment for money transfers",
+            "description": "Comment for money transfers.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Comment",
               "type": "string",
-              "description": "Comment for money transfers"
+              "description": "Comment for money transfers."
             }
           },
           {
             "name": "is_hold",
             "in": "query",
-            "description": "Display hold operations",
+            "description": "Display hold operations.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Is Hold",
               "type": "integer",
-              "description": "Display hold operations"
+              "description": "Display hold operations."
             }
           },
           {
             "name": "show_payment_stats",
             "in": "query",
-            "description": "Display payment stats for selected period (outgoing value, incoming value)",
+            "description": "Display payment stats for selected period (outgoing value, incoming value).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Show Payment Stats",
               "type": "integer",
-              "description": "Display payment stats for selected period (outgoing value, incoming value)"
+              "description": "Display payment stats for selected period (outgoing value, incoming value)."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12575,7 +12575,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12786,40 +12786,40 @@
           {
             "name": "login",
             "in": "query",
-            "description": "Account login (or email)",
+            "description": "Account login (or email).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Login",
               "type": "string",
-              "description": "Account login (or email)"
+              "description": "Account login (or email)."
             }
           },
           {
             "name": "password",
             "in": "query",
-            "description": "Account password",
+            "description": "Account password.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Password",
               "type": "string",
-              "description": "Account password"
+              "description": "Account password."
             }
           },
           {
             "name": "login_password",
             "in": "query",
-            "description": "Account login data format login:password",
+            "description": "Account login data format login:password.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Login Password",
               "type": "string",
-              "description": "Account login data format login:password"
+              "description": "Account login data format login:password."
             }
           },
           {
@@ -12864,14 +12864,14 @@
           {
             "name": "close_item",
             "in": "query",
-            "description": "If set, the item will be closed **item_state = closed**",
+            "description": "If set, the item will be closed **item_state = closed**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Close Item",
               "type": "string",
-              "description": "If set, the item will be closed **item_state = closed**"
+              "description": "If set, the item will be closed **item_state = closed**."
             }
           },
           {
@@ -13168,9 +13168,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Telegram Client",
-              "type": "string",
-              "description": "Telegram client. Used only if you want to upload Telegram account."
+              "$ref" : "#/components/schemas/TelegramClientModel"
             }
           },
           {
@@ -13228,7 +13226,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13238,7 +13236,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13527,7 +13525,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13556,66 +13554,66 @@
           {
             "name": "itemId",
             "in": "path",
-            "description": "Item id",
+            "description": "Item id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Itemid",
               "type": "integer",
-              "description": "Item id"
+              "description": "Item id."
             }
           },
           {
             "name": "login",
             "in": "query",
-            "description": "Account login (or email)",
+            "description": "Account login (or email).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Login",
               "type": "string",
-              "description": "Account login (or email)"
+              "description": "Account login (or email)."
             }
           },
           {
             "name": "password",
             "in": "query",
-            "description": "Account password",
+            "description": "Account password.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Password",
               "type": "string",
-              "description": "Account password"
+              "description": "Account password."
             }
           },
           {
             "name": "login_password",
             "in": "query",
-            "description": "Account login data format login:password",
+            "description": "Account login data format login:password.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Login Password",
               "type": "string",
-              "description": "Account login data format login:password"
+              "description": "Account login data format login:password."
             }
           },
           {
             "name": "close_item",
             "in": "query",
-            "description": "If set, the item will be closed **item_state = closed**",
+            "description": "If set, the item will be closed **item_state = closed**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Close Item",
               "type": "integer",
-              "description": "If set, the item will be closed **item_state = closed**"
+              "description": "If set, the item will be closed **item_state = closed**."
             }
           },
           {
@@ -13912,9 +13910,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Telegram Client",
-              "type": "string",
-              "description": "Telegram client. Used only if you want to upload Telegram account."
+              "$ref" : "#/components/schemas/TelegramClientModel"
             }
           },
           {
@@ -13946,20 +13942,20 @@
           {
             "name": "random_proxy",
             "in": "query",
-            "description": "Pass 1, if you get **captcha** in previous response",
+            "description": "Pass 1, if you get **captcha** in previous response.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Random Proxy",
               "type": "integer",
-              "description": "Pass 1, if you get **captcha** in previous response"
+              "description": "Pass 1, if you get **captcha** in previous response."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13969,7 +13965,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14024,7 +14020,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14034,7 +14030,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14076,7 +14072,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14118,7 +14114,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14128,7 +14124,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14138,7 +14134,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14167,33 +14163,33 @@
           {
             "name": "itemId",
             "in": "path",
-            "description": "Item id",
+            "description": "Item id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Itemid",
               "type": "integer",
-              "description": "Item id"
+              "description": "Item id."
             }
           },
           {
             "name": "email",
             "in": "query",
-            "description": "Account email",
+            "description": "Account email.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Email",
               "type": "string",
-              "description": "Account email"
+              "description": "Account email."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14203,7 +14199,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14213,7 +14209,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14255,7 +14251,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14265,7 +14261,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14275,7 +14271,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14317,7 +14313,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14327,7 +14323,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14337,7 +14333,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14379,7 +14375,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14389,7 +14385,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14399,7 +14395,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14441,7 +14437,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14451,7 +14447,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14461,7 +14457,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14503,20 +14499,20 @@
           {
             "name": "_cancel",
             "in": "query",
-            "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data",
+            "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": " Cancel",
               "type": "integer",
-              "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data"
+              "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14526,7 +14522,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14536,7 +14532,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14578,7 +14574,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14588,7 +14584,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14598,7 +14594,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14679,14 +14675,14 @@
           {
             "name": "currency",
             "in": "query",
-            "description": "Using currency for amount. Required if you are trying to change price field. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**",
+            "description": "Using currency for amount. Required if you are trying to change price field. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Currency",
               "type": "string",
-              "description": "Using currency for amount. Required if you are trying to change price field. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**"
+              "description": "Using currency for amount. Required if you are trying to change price field. Allowed values: **cny**, **usd**, **rub**, **eur**, **uah**, **kzt**, **byn**, **gbp**."
             }
           },
           {
@@ -14783,7 +14779,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14793,7 +14789,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14803,7 +14799,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14858,7 +14854,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14868,7 +14864,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14878,7 +14874,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14931,7 +14927,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14941,7 +14937,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14951,7 +14947,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14993,7 +14989,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15003,7 +14999,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15013,7 +15009,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15055,7 +15051,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15065,7 +15061,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15105,7 +15101,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15115,7 +15111,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15157,7 +15153,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15167,7 +15163,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15177,7 +15173,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15217,7 +15213,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15227,7 +15223,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15237,7 +15233,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15266,46 +15262,46 @@
           {
             "name": "itemId",
             "in": "path",
-            "description": "Item id",
+            "description": "Item id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "title": "Itemid",
               "type": "integer",
-              "description": "Item id"
+              "description": "Item id."
             }
           },
           {
             "name": "username",
             "in": "query",
-            "description": "The username of the new account owner",
+            "description": "The username of the new account owner.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Username",
               "type": "string",
-              "description": "The username of the new account owner"
+              "description": "The username of the new account owner."
             }
           },
           {
             "name": "secret_answer",
             "in": "query",
-            "description": "Secret answer of your account",
+            "description": "Secret answer of your account.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Secret Answer",
               "type": "string",
-              "description": "Secret answer of your account"
+              "description": "Secret answer of your account."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15315,7 +15311,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15325,7 +15321,7 @@
             }
           },
           "404": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15352,7 +15348,7 @@
         "operationId": "marketProfileSettings.getInfo",
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15379,40 +15375,40 @@
           {
             "name": "disable_steam_guard",
             "in": "query",
-            "description": "Disable Steam Guard on account purchase moment",
+            "description": "Disable Steam Guard on account purchase moment.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Disable Steam Guard",
               "type": "boolean",
-              "description": "Disable Steam Guard on account purchase moment"
+              "description": "Disable Steam Guard on account purchase moment."
             }
           },
           {
             "name": "user_allow_ask_discount",
             "in": "query",
-            "description": "Allow users ask discount for your accounts",
+            "description": "Allow users ask discount for your accounts.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "User Allow Ask Discount",
               "type": "boolean",
-              "description": "Allow users ask discount for your accounts"
+              "description": "Allow users ask discount for your accounts."
             }
           },
           {
             "name": "max_discount_percent",
             "in": "query",
-            "description": "Maximum discount percents for your accounts",
+            "description": "Maximum discount percents for your accounts.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Max Discount Percent",
               "type": "integer",
-              "description": "Maximum discount percents for your accounts"
+              "description": "Maximum discount percents for your accounts."
             }
           },
           {
@@ -15431,14 +15427,14 @@
           {
             "name": "hide_favourites",
             "in": "query",
-            "description": "Hide your profile info when you add an account to favorites",
+            "description": "Hide your profile info when you add an account to favorites.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Hide Favourites",
               "type": "boolean",
-              "description": "Hide your profile info when you add an account to favorites"
+              "description": "Hide your profile info when you add an account to favorites."
             }
           },
           {
@@ -15457,7 +15453,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15484,7 +15480,7 @@
         "operationId": "proxySettings.get",
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15505,7 +15501,7 @@
           "Proxy settings"
         ],
         "summary": "Add Proxy",
-        "description": "Add single proxy or proxy list.\n\n\nTo add single proxy use this parameters:\n\n\n+ **proxy_ip** (required) - proxy ip or host\n+ **proxy_port** (required) - proxy port\n+ **proxy_user** (optional) - proxy username\n+ **proxy_pass** (optional) - proxy password\n\nTo add proxy list use this parameters:\n\n\n+ **proxy_row** (required) - proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \r\n separator)",
+        "description": "Add single proxy or proxy list.\n\n\nTo add single proxy use this parameters:\n\n\n+ **proxy_ip** (required) - proxy ip or host\n+ **proxy_port** (required) - proxy port\n+ **proxy_user** (optional) - proxy username\n+ **proxy_pass** (optional) - proxy password\n\nTo add proxy list use this parameters:\n\n\n+ **proxy_row** (required) - proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\r\\n separator)",
         "operationId": "proxySettings.add",
         "parameters": [
           {
@@ -15563,20 +15559,20 @@
           {
             "name": "proxy_row",
             "in": "query",
-            "description": "Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \r\n separator)",
+            "description": "Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\r\\n separator)",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Proxy Row",
               "type": "string",
-              "description": "Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \r\n separator)"
+              "description": "Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\r\\n separator)"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15586,7 +15582,7 @@
             }
           },
           "400": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15613,33 +15609,33 @@
           {
             "name": "proxy_id",
             "in": "query",
-            "description": "Id of an existing proxy",
+            "description": "Id of an existing proxy.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Proxy Id",
               "type": "integer",
-              "description": "Id of an existing proxy"
+              "description": "Id of an existing proxy."
             }
           },
           {
             "name": "delete_all",
             "in": "query",
-            "description": "True. If you want to delete all proxy",
+            "description": "True. If you want to delete all proxy.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Delete All",
               "type": "boolean",
-              "description": "True. If you want to delete all proxy"
+              "description": "True. If you want to delete all proxy."
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15649,7 +15645,7 @@
             }
           },
           "403": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15686,7 +15682,7 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Successful Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15696,7 +15692,7 @@
             }
           },
           "400": {
-            "description": "Error Response",
+            "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -17503,6 +17499,32 @@
           "time": {
             "title": "Time",
             "type": "integer"
+          }
+        }
+      },
+      "TelegramClientModel": {
+        "title": "Telegram client",
+        "type": "object",
+        "properties": {
+          "telegram_api_id": {
+            "title": "Telegram api id",
+            "type":  "string"
+          },
+          "telegram_api_hash": {
+            "title": "Telegram api hash",
+            "type":  "string"
+          },
+          "telegram_device_model": {
+            "title": "Telegram device model",
+            "type":  "string"
+          },
+          "telegram_system_version": {
+            "title": "Telegram system version",
+            "type":  "string"
+          },
+          "telegram_app_version": {
+            "title": "Telegram app version",
+            "type":  "string"
           }
         }
       }
