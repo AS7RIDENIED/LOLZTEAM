@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "AntiPublic.One API",
-    "description": "Official API documentation for AntiPublic MYRZ.\n\nLinks:\n+ Download [AntiPublic](https://antipublic.one/AntiPublic.zip?1).\n+ AntiPublic [Management](https://zelenka.guru/account/antipublic).",
-    "version": "1.0.3"
+    "description": "Official API documentation for AntiPublic MYRZ.\n\nLinks:\n+ Download [AntiPublic](https://antipublic.one/dl/AntiPublic.zip).\n+ AntiPublic [Management](https://zelenka.guru/account/antipublic).",
+    "version": "1.0.4"
   },
   "servers": [
     {
@@ -30,12 +30,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "AntiPublic": []
-          }
-        ]
+        }
       }
     },
     "/api/v2/countLinesPlain": {
@@ -57,12 +52,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "AntiPublic": []
-          }
-        ]
+        }
       }
     },
     "/api/v2/version": {
@@ -84,12 +74,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "AntiPublic": []
-          }
-        ]
+        }
       }
     },
     "/api/v2/checkAccess": {
