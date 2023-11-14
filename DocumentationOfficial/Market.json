@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.0.60"
+    "version": "1.0.61"
   },
   "servers": [
     {
@@ -98,7 +98,7 @@
             }
           },
           {
-            "name": "vac",
+            "name": "vac[]",
             "in": "query",
             "description": "List of VAC bans by game.",
             "required": false,
@@ -106,8 +106,11 @@
             "explode": true,
             "schema": {
               "title": "Vac",
-              "type": "integer",
-              "description": "List of VAC bans by game."
+              "type": "array",
+              "description": "List of VAC bans by game.",
+              "items": {
+                "type": "integer"
+              }
             }
           },
           {
