@@ -1,5 +1,5 @@
 <div align="center">
-<a href="https://zelenka.guru/threads/5523020/"><img width="90%" src="https://i.imgur.com/evM3hjp.png" alt="Material Bread logo"></a>
+<a href="https://zelenka.guru/threads/5523020/"><img width="90%" src="https://i.imgur.com/xaQ92lu.png" alt="Material Bread logo"></a>
     
 [![Static Badge](https://img.shields.io/badge/DONATE-Lolzteam-darkgreen?logo=undertale&logoColor=red)](https://lzt.market/balance/transfer?user_id=2410024&comment=Thanks%20for%20creating%20LolzteamApi&amount=250)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/LICENSE)
