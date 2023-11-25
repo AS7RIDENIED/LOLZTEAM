@@ -317,7 +317,7 @@ print(data)
 
 **Parameters:**
 
-- **forum_id** (int): ID of the containing forum.
+- **forum_id** (int): ID of the containing forum. Can be skipped if thread_ids set.
 - **thread_ids** (str): ID's of needed threads (separated by comma).
   > If this parameter is set, all other filtering parameters will be ignored.
 - **creator_user_id** (int): Filter to get only threads created by the specified user.
@@ -1001,6 +1001,8 @@ print(data)
 **Parameters:**
 
 - **forum_id** (int): ID of forum we want to get
+- **prefix_ids** (list[int]): List of prefix id's.
+- **minimal_contest_amount** (int): Minimal contest amount. (For forum_id=766)
 - **post** (bool): Whether to receive notification for post.
 - **alert** (bool): Whether to receive notification as alert.
 - **email** (bool): Whether to receive notification as email.
@@ -1948,6 +1950,7 @@ print(data)
 **Parameters:**
 
 - **conversation_id** (int): ID of conversation.
+- **leave_type** (str): Leave type. Can be ["delete","delete_ignore"].
 
 **Example:**
 
@@ -2470,7 +2473,6 @@ string
   > This requires admincp scope and the current user must have sufficient system permissions.*
 
 *[Official documentation reference](https://lolzteam.readme.io/reference/oauthadmin)*
-
 **Parameters:**
 
 - **user_id** (int): ID of the user that needs access token.

@@ -162,4 +162,16 @@ class Forum:
         min_views = "thread_view_count"
         max_views = "thread_view_count_reverse"
         min_posts = "thread_post_count"
-        max_posts = "thread_post_count"
+        max_posts = "thread_post_count_reverse"
+        min_likes = "first_post_likes"
+        max_likes = "first_post_likes_reverse"
+
+    class PostOrder:
+        default = 'natural'
+        default_reverse = "natural_reverse"
+        oldest = "post_create_date"
+        newest = "post_create_date_reverse"
+        newest_bumped = "post_update_date"
+        oldest_bumped = "post_update_date_reverse"
+        min_likes = "post_likes"
+        max_likes = "post_likes_reverse"

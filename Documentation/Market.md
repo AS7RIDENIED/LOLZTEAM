@@ -131,7 +131,9 @@ print(data)
 - **max_discount_percent** (int): Maximum discount percents for your accounts
 - **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
 - **hide_favourites** (bool): Hide your profile info when you add an account to favorites
-- **vk_ua** (str): Your vk useragent to accounts
+- **vk_ua** (str): Your vk useragent to accounts.
+- **title** (str): Market title.
+- **telegram_client** (dict): Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}
 
 **Example:**
 
@@ -487,13 +489,13 @@ print(response)
 
 - **item_id** (int): ID of item.
 - **amount** (int): Amount bid.
-- **currency** (str): Using currency.
+- **currency** (str): Bid currency.
   > Can be [rub, uah, kzt, byn, usd, eur, gbp, cny, try].
 
 **Example:**
 
 ```python
-response = api.market.purchasing.auction.place_bid(item_id=2410024, amount=250, currency=Types.Market.Currency.rub)
+response = api.market.purchasing.auction.place_bid(item_id=2410024, amount=250)
 print(response)
 ```
 
@@ -1209,6 +1211,28 @@ print(data)
 {'status': 'ok', 'message': 'string'}
 ```
 
+### Update inventory value
+
+*Update inventory value.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanagingupdateinventoryvalue)*
+
+**Parameters:**
+
+- **item_id** (int): Item id.
+- **app_id** (int): App id.
+
+**Example:**
+
+```python
+data = api.market.managing.update_inventory(item_id=2410024, app_id=730)
+print(data)
+```
+
+```python
+{'status': 'ok', 'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
 # Payments
 
 *Methods to transfer market balance and check payments history*
@@ -1339,7 +1363,7 @@ print(data)
 - **proxy_user** (str): Proxy username
 - **proxy_pass** (str): Proxy password
 - **proxy_row** (str): Proxy list in String format ip:port:user:pass. 
-  > Each proxy must be start with new line (use separator)
+  > Each proxy must be start with new line (use \n separator)
 
 **Example:**
 

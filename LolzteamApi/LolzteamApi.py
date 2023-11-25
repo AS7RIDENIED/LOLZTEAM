@@ -453,7 +453,8 @@ class LolzteamApi:
 
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
-            def follow(self, forum_id: int, post: bool = None, alert: bool = None, email: bool = None):
+            def follow(self, forum_id: int, prefix_ids: list = None, minimal_contest_amount: int = None,
+                       post: bool = None, alert: bool = None, email: bool = None):
                 """
                 POST https://api.zelenka.guru/forums/forum_id/followers
                 Follow a forum.
@@ -461,6 +462,8 @@ class LolzteamApi:
                 Required scopes: post
 
                 :param forum_id: ID of forum we want to get
+                :param prefix_ids: List with prefix id's.
+                :param minimal_contest_amount: Minimal contest amount.( for forumid 766 )
                 :param post: Whether to receive notification for post.
                 :param alert: Whether to receive notification as alert.
                 :param email: Whether to receive notification as email.
@@ -478,7 +481,9 @@ class LolzteamApi:
                 params = {
                     "post": post,
                     "alert": alert,
-                    "email": email
+                    "email": email,
+                    "minimal_contest_amount": minimal_contest_amount,
+                    "prefix_ids[]": prefix_ids
                 }
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
 
@@ -1062,7 +1067,7 @@ class LolzteamApi:
                                                         params=params,
                                                         data=data)
 
-            def get_threads(self, forum_id: int, thread_ids: str = None, creator_user_id: int = None,
+            def get_threads(self, forum_id: int = None, thread_ids: str = None, creator_user_id: int = None,
                             sticky: bool = None, thread_prefix_id: int = None, thread_tag_id: int = None,
                             page: int = None, limit: int = None, order: str = None):
                 """
@@ -1072,7 +1077,7 @@ class LolzteamApi:
 
                 Required scopes: read
 
-                :param forum_id: ID of the containing forum.
+                :param forum_id: ID of the containing forum. Can be skipped if thread_ids set.
                 :param thread_ids: ID's of needed threads (separated by comma). If this parameter is set, all other filtering parameters will be ignored.
                 :param creator_user_id: Filter to get only threads created by the specified user.
                 :param sticky: Filter to get only sticky <sticky=1> or non-sticky <sticky=0> threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards threads_total and does not affect pagination.
@@ -2479,7 +2484,7 @@ class LolzteamApi:
                 path_data = {"site": "Forum", "path": f"/conversations/{conversation_id}"}
                 return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
-            def leave(self, conversation_id: int):
+            def leave(self, conversation_id: int, leave_type: str = "delete"):
                 """
                 DELETE https://api.zelenka.guru/conversations/conversation_id
 
@@ -2488,11 +2493,15 @@ class LolzteamApi:
                 Required scopes: conversate, post
 
                 :param conversation_id: ID of conversation.
+                :param leave_type: Leave type. Can be [delete,delete_ignore].
 
                 :return: json server response
                 """
+                params = {
+                    "delete_type": leave_type
+                }
                 path_data = {"site": "Forum", "path": f"/conversations/{conversation_id}"}
-                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data)
+                return LolzteamApi.send_request(self=self.__api, method="DELETE", path_data=path_data, params=params)
 
             def create(self, recipient_id: int, message: str, open_invite: bool = False,
                        conversation_locked: bool = False, allow_edit_messages: bool = True):
@@ -2540,7 +2549,7 @@ class LolzteamApi:
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params,
                                                 data=data)
 
-            def create_group(self, recipients: str, title: str, message: str, open_invite: bool = True,
+            def create_group(self, recipients: list, title: str, message: str = None, open_invite: bool = True,
                              conversation_locked: bool = False, allow_edit_messages: bool = True):
                 """
                 POST https://api.zelenka.guru/conversations
@@ -2549,7 +2558,7 @@ class LolzteamApi:
 
                 Required scopes: conversate, post
 
-                :param recipients: List of usernames (Separated by comma. Example -> "RaysMorgan,Thomas,Requeste")
+                :param recipients: List of usernames. Max recipients count is 10
                 :param title: The title of new conversation.
                 :param message: First message in conversation.
                 :param open_invite: Allow invites in conversation.
@@ -2574,7 +2583,7 @@ class LolzteamApi:
                     elif allow_edit_messages is False:
                         allow_edit_messages = 0
                 params = {
-                    "recipients": recipients,
+                    "recipients": ",".join(recipients),
                     "title": title,
                     "is_group": 1,
                     "open_invite": open_invite,
@@ -2851,7 +2860,7 @@ class LolzteamApi:
 
             def edit(self, disable_steam_guard: bool = None, user_allow_ask_discount: bool = None,
                      max_discount_percent: int = None, allow_accept_accounts: str = None,
-                     hide_favourites: bool = None, vk_ua: str = None):
+                     hide_favourites: bool = None, vk_ua: str = None, title: str = None, telegram_client: dict = None):
                 """
                 PUT https://api.lzt.market/me
 
@@ -2865,6 +2874,8 @@ class LolzteamApi:
                 :param allow_accept_accounts: Usernames who can transfer market accounts to you. Separate values with a comma.
                 :param hide_favourites: Hide your profile info when you add an account to favorites
                 :param vk_ua: Your vk useragent to accounts
+                :param title: Market title.
+                :param telegram_client: Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}
                 :return: json server response
 
                 """
@@ -2875,8 +2886,16 @@ class LolzteamApi:
                     "max_discount_percent": max_discount_percent,
                     "allow_accept_accounts": allow_accept_accounts,
                     "hide_favourites": hide_favourites,
-                    "vk_ua": vk_ua
+                    "vk_ua": vk_ua,
+                    "market_custom_title": title
                 }
+                if telegram_client:
+                    for key, value in telegram_client.items():
+                        if key not in ["telegram_api_id", "telegram_api_hash", "telegram_device_model",
+                                       "telegram_system_version", "telegram_app_version"]:
+                            raise Exception(f"Unknown param in telegram_client - \"{key}\"")
+                        else:
+                            params[key] = value
                 return LolzteamApi.send_request(self=self.__api, method="PUT", path_data=path_data, params=params)
 
         class __List:
@@ -3956,6 +3975,25 @@ class LolzteamApi:
                 path_data = {"site": "Market", "path": f"/{item_id}/telegram-reset-authorizations"}
                 return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data)
 
+            def update_inventory(self, item_id: int, app_id: int):
+                """
+                POST https://api.lzt.market/item_id/update-inventory
+
+                Update inventory value.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param app_id: App id.
+
+                :return: json server response
+                """
+                params = {
+                    "app_id": app_id
+                }
+                path_data = {"site": "Market", "path": f"/{item_id}/update-inventory"}
+                return LolzteamApi.send_request(self=self.__api, method="POST", path_data=path_data, params=params)
+
         class __Purchasing:
             def __init__(self, api_self):
                 self.__api = api_self
@@ -3980,9 +4018,9 @@ class LolzteamApi:
                     path_data = {"site": "Market", "path": f"/{item_id}/auction"}
                     return LolzteamApi.send_request(self=self.__api, method="GET", path_data=path_data)
 
-                def place_bid(self, item_id: int, amount: int, currency: str):
+                def place_bid(self, item_id: int, amount: int, currency: str = None):
                     """
-                    GET https://api.lzt.market/item_id/auction/bid
+                    POST https://api.lzt.market/item_id/auction/bid
 
                     Create a new auction bid.
 
@@ -4454,7 +4492,7 @@ class LolzteamApi:
                 :param proxy_port: Proxy port
                 :param proxy_user: Proxy username
                 :param proxy_pass: Proxy password
-                :param proxy_row: Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use separator)
+                :param proxy_row: Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \n separator)
 
                 :return: json server response
                 """

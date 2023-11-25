@@ -33,7 +33,8 @@ class AntipublicApi:
         # AntipublicApi.__auto_delay(self)
         if params is None:
             params = {}
-        params["key"] = f"{self.__token}"
+        if self.__token is not None:
+            params["key"] = f"{self.__token}"
         proxies = {}
         if self.__proxy_type is not None:
             if self.__proxy_type == "HTTP":
