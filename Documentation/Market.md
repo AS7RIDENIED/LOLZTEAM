@@ -127,10 +127,12 @@ print(data)
 **Parameters:**
 
 - **disable_steam_guard** (bool): Disable Steam Guard on account purchase moment
+- **deauthorize_steam** (bool): Finish all Steam sessions after purchase
 - **user_allow_ask_discount** (bool): Allow users ask discount for your accounts
 - **max_discount_percent** (int): Maximum discount percents for your accounts
 - **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
 - **hide_favourites** (bool): Hide your profile info when you add an account to favorites
+- **hide_bids** (bool): Hide your profile when bid on the auction
 - **vk_ua** (str): Your vk useragent to accounts.
 - **title** (str): Market title.
 - **telegram_client** (dict): Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}

@@ -2860,7 +2860,8 @@ class LolzteamApi:
 
             def edit(self, disable_steam_guard: bool = None, user_allow_ask_discount: bool = None,
                      max_discount_percent: int = None, allow_accept_accounts: str = None,
-                     hide_favourites: bool = None, vk_ua: str = None, title: str = None, telegram_client: dict = None):
+                     hide_favourites: bool = None, vk_ua: str = None, title: str = None, telegram_client: dict = None,
+                     deauthorize_steam: bool = None, hide_bids: bool = None):
                 """
                 PUT https://api.lzt.market/me
 
@@ -2876,6 +2877,9 @@ class LolzteamApi:
                 :param vk_ua: Your vk useragent to accounts
                 :param title: Market title.
                 :param telegram_client: Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}
+                :param deauthorize_steam: Finish all Steam sessions after purchase.
+                :param hide_bids: Hide your profile when bid on the auction.
+
                 :return: json server response
 
                 """
@@ -2887,7 +2891,9 @@ class LolzteamApi:
                     "allow_accept_accounts": allow_accept_accounts,
                     "hide_favourites": hide_favourites,
                     "vk_ua": vk_ua,
-                    "market_custom_title": title
+                    "market_custom_title": title,
+                    "deauthorize_steam": deauthorize_steam,
+                    "hide_bids": hide_bids
                 }
                 if telegram_client:
                     for key, value in telegram_client.items():

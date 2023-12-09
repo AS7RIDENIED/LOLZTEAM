@@ -169,9 +169,5 @@ class Forum:
     class PostOrder:
         default = 'natural'
         default_reverse = "natural_reverse"
-        oldest = "post_create_date"
-        newest = "post_create_date_reverse"
-        newest_bumped = "post_update_date"
-        oldest_bumped = "post_update_date_reverse"
         min_likes = "post_likes"
         max_likes = "post_likes_reverse"
