@@ -177,3 +177,9 @@ class BBCODE:
             return f"[api={option}]{url}[/api]"
         else:
             return f"[api]{url}[/api]"
+    @staticmethod
+    def custom(bbcode:str,text:str="",value:str=None):
+        if value:
+            return f"[{bbcode}={value}]{text}[/{bbcode}]"
+        else:
+            return f"[{bbcode}]{text}[/{bbcode}]"

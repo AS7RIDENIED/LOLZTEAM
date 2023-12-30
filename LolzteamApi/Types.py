@@ -154,7 +154,7 @@ class Forum:
             auto_participation = 19
 
     class Order:
-        default = 'natural'
+        default = "natural"
         oldest = "thread_create_date"
         newest = "thread_create_date_reverse"
         newest_bumped = "thread_update_date"
@@ -167,7 +167,16 @@ class Forum:
         max_likes = "first_post_likes_reverse"
 
     class PostOrder:
-        default = 'natural'
+        default = "natural"
         default_reverse = "natural_reverse"
-        min_likes = "post_likes"
-        max_likes = "post_likes_reverse"
+        max_likes = "post_likes"
+        min_likes = "post_likes_reverse"
+
+    class ReplyGroups:
+        staff = 0  # КФ + кураторы
+        everyone = 2  # Все
+        local = 21  # Местный и выше
+        resident = 22  # Постоялец и выше
+        expert = 23  # Эксперт и выше
+        guru = 60  # Гуру и выше
+        ai = 61  # ИИ и выше
