@@ -3,6 +3,8 @@ import aiohttp
 import inspect
 
 from . import LolzteamExceptions
+
+
 class AntipublicApi:
     def __init__(self, token: str = None, proxy_type: str = None, proxy: str = None):
         """
