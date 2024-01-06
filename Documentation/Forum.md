@@ -16,6 +16,7 @@
     * [Create money contest (count)](#create-money-contest-count)
   * [Get threads](#get-threads)
   * [Create thread](#create-thread)
+  * [Edit thread](#edit-thread)
   * [Get thread](#get-thread)
   * [Delete thread](#delete-thread)
   * [Get thread followers](#get-thread-followers)
@@ -360,6 +361,39 @@ print(data)
 ```python
 data = api.forum.threads.create(forum_id=876, thread_title="Api example", post_body="Api example", )
 print(data)
+```
+
+```python
+{'thread': {'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': ['string'], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Edit thread
+
+*Edit a thread.*
+
+**Parameters:**
+
+- **thread_id** (int): Id of thread.
+- **title** (str): Thread title.
+- **title_en** (str): Thread title in english.
+- **prefix_ids** (list): Thread prefixes.
+- **tags** (list): Thread tags.
+- **discussion_open** (bool): Discussion state.
+- **hide_contacts** (bool): Hide contacts.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+
+**Example:**
+
+```python
+response = api.forum.threads.edit(
+    thread_id=5974102,
+    title="Edited title",
+    discussion_open=False,
+    reply_group=Types.Forum.ReplyGroups.staff,
+)
+print(response)
 ```
 
 ```python
@@ -2290,6 +2324,28 @@ print(data)
 
 ```python
 {'posts': [{'thread_id': 0, 'post_id': 0}], 'data': [{'content_type': 'string', 'content_id': 0, 'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}], 'links': {'pages': 0, 'page': 0, 'next': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### profile_posts
+
+*Search for threads.*
+
+**Parameters:**
+
+- **q** (str): Search query. Can be skipped if user_id is set.
+- **user_id** (int): ID of the creator to search for contents.
+- **page** (int): Page number of results.
+- **limit** (int): Number of results in a page.
+
+**Example:**
+
+```python
+response = api.forum.search.profile_posts(user_id=2410024)
+print(response)
+```
+
+```python
+{'data': [{'content_type': 'string', 'content_id': 0, 'profile_post_id': 0, 'timeline_user_id': 0, 'poster_user_id': 'string', 'poster_username': 0, 'poster_username_html': 0, 'post_create_date': 'string', 'post_body': 0, 'post_like_count': 0}], 'data_total': 0, 'links': {'pages': 0, 'page': 0, 'next': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Search for all types of content

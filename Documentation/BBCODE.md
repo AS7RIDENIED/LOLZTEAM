@@ -42,6 +42,7 @@
   * [From users](#from-users)
 * [Source code](#source-code)
 * [Visitor](#visitor)
+* [Custom](#custom-1)
 
 </details>
 
@@ -682,4 +683,17 @@ print(text)
 
 ```python
 [visitor][/visitor]
+```
+
+# Custom
+
+**Example:**
+
+```python
+text = BBCODE.custom(bbcode="MyCustomBBCODE", value="CustomValue", text="Custom inner text")
+print(text)
+```
+
+```python
+[MyCustomBBCODE=CustomValue]Custom inner text[/MyCustomBBCODE]
 ```

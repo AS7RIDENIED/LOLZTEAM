@@ -1433,7 +1433,7 @@ class LolzteamApi:
                 comment_ignore_group: bool = None,
             ):
                 """
-                POST https://api.zelenka.guru/threads/thread_id
+                PUT https://api.zelenka.guru/threads/thread_id
 
                 Edit a thread.
 
@@ -1500,7 +1500,7 @@ class LolzteamApi:
                     "comment_ignore_group": comment_ignore_group,
                 }
                 return LolzteamApi.send_request(
-                    self=self.__api, method="POST", path_data=path_data, data=data
+                    self=self.__api, method="PUT", path_data=path_data, data=data
                 )
 
             def delete(self, thread_id: int, reason: str = None):
