@@ -1503,6 +1503,63 @@ class LolzteamApi:
                     self=self.__api, method="PUT", path_data=path_data, data=data
                 )
 
+            def move(
+                self,
+                thread_id: int,
+                forum_id: int,
+                title: str = None,
+                title_en: str = None,
+                prefix_ids: list = None,
+                send_alert: bool = None,
+                send_starter_alert: bool = None,
+                starter_alert_reason: str = None,
+            ):
+                """
+                POST https://api.zelenka.guru/threads/thread_id/move
+
+                Move a thread.
+
+                Required scopes: post
+
+                :param thread_id: Id of thread.
+                :param forum_id: Target forum id.
+                :param title: Thread title.
+                :param title_en: Thread title in english.
+                :param prefix_ids: Thread prefixes.
+                :param send_alert: Send a notification to users who are followed to target node.
+                :param send_starter_alert: Send alert to thread starter.
+                :param starter_alert_reason: Reason of moving thread which will sent to thread starter. (Required if **send_starter_alert** is set)
+
+                :return: json server response
+                """
+                path_data = {"site": "Forum", "path": f"/threads/{thread_id}/move"}
+                if True:  # Tweak 0
+                    if prefix_ids:
+                        apply_thread_prefix = 1
+                    else:
+                        apply_thread_prefix = None
+                    if send_alert is True:
+                        send_alert = 1
+                    elif send_alert is False:
+                        send_alert = 0
+                    if send_starter_alert is True:
+                        send_starter_alert = 1
+                    elif send_starter_alert is False:
+                        send_starter_alert = 0
+                data = {
+                    "node_id": forum_id,
+                    "title": title,
+                    "title_en": title_en,
+                    "prefix_id[]": prefix_ids,
+                    "apply_thread_prefix": apply_thread_prefix,
+                    "send_alert": send_alert,
+                    "send_starter_alert": send_starter_alert,
+                    "starter_alert_reason": starter_alert_reason,
+                }
+                return LolzteamApi.send_request(
+                    self=self.__api, method="POST", path_data=path_data, data=data
+                )
+
             def delete(self, thread_id: int, reason: str = None):
                 """
                 DELETE https://api.zelenka.guru/threads/thread_id
