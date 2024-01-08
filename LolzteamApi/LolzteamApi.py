@@ -1335,8 +1335,8 @@ class LolzteamApi:
             def create(
                 self,
                 forum_id: int,
-                reply_group: int,
                 post_body: str,
+                reply_group: int = 2,
                 title: str = None,
                 title_en: str = None,
                 prefix_ids: list = None,
