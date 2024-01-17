@@ -3955,17 +3955,21 @@ class LolzteamApi:
 
                 :return: json server response
                 """
-                if self.__api.base_url_market.replace("api.", "") in url:
+                if "batch_mode" in locals():
+                    base_api = self
+                else:
+                    base_api = self.__api
+                if base_api.base_url_market.replace("api.", "") in url:
                     url = url.replace("https://lzt.market", "")
-                elif self.__api.base_url_market in url:
+                elif base_api.base_url_market in url:
                     url = url.replace("https://api.lzt.market", "")
                 else:
                     raise LolzteamExceptions.URL_IS_DIFFERENT_FROM_BASE_MARKET(
-                        f"Unknown link. It should be \"{self.__api.base_url_market}\" or \"{self.__api.base_url_market.replace('api.','')}\""
+                        f"Unknown link. It should be \"{base_api.base_url_market}\" or \"{base_api.base_url_market.replace('api.','')}\""
                     )
                 path_data = {"site": "Market", "path": f"{url}"}
                 return LolzteamApi.send_request(
-                    self=self.__api, method="GET", path_data=path_data
+                    self=base_api, method="GET", path_data=path_data
                 )
 
             def new(
