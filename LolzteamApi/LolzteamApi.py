@@ -299,19 +299,18 @@ class LolzteamApi:
             if " def " in line:
                 lines.remove(line)
         return_code = (
-            "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[1]
+            "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[-1]
         )
         func_code = (
             "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
         )
-
         exec(func_code, globals(), loc)
         path_data = loc.get("path_data")
         params = loc.get("params", {})
         data = loc.get("data", {})
         params.update(data)
         method = [
-            eval(i.replace("method=", ""))
+            eval(i.replace("method=", "").strip())
             for i in return_code.split(",")
             if "method=" in i
         ][0]
