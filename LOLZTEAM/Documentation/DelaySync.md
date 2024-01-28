@@ -2,9 +2,9 @@
 
 * [Quick start](#quickstart)
 * [Delay Synchronizer](#delay-synchronizer)
-  * [Add](#add-api-to-delaysynchronizer)
-  * [Remove](#remove-api-from-delaysynchronizer)
-  * [Remove all](#remove-all-apis-from-delaysynchronizer)
+  * [Add](#add-api-to-DelaySync)
+  * [Remove](#remove-api-from-DelaySync)
+  * [Remove all](#remove-all-apis-from-DelaySync)
 
 </details>
 
@@ -12,18 +12,21 @@
 
 **Parameters:**
 
-- **apis** (list[LolzteamApi]): List with your api instances
+- **apis** (list[Forum or Market]): List with your api instances
 
 ```
-from LolzteamApi import LolzteamApi, DelaySynchronizer  #      <-----
-api_1 = LolzteamApi(token="token_1", language="en")
-api_2 = LolzteamApi(token="token_2", language="ru")
-apis = [api_1, api_2]
+from LOLZTEAM import AutoUpdate
+from LOLZTEAM import Constants
+from LOLZTEAM.API import Forum, Market, Antipublic
+from LOLZTEAM.Tweaks import DelaySync  #                <-----
+forum_1 = Forum(token="token_1", language="en")
+forum_2 = Forum(token="token_2", language="ru")
+apis = [forum_1, forum_2]
 
-DelaySynchronizer(apis=apis)  #                                 <-----
+DelaySync(apis=apis)  #                                 <-----
 
-for api in apis:
-    print(api.forum.users.get(user_id=2410024))
+for forum in apis:
+    print(forum.users.get(user_id=2410024))
 ```
 
 ```python
@@ -37,68 +40,62 @@ for api in apis:
 
 **Parameters:**
 
-- **apis** (list[LolzteamApi]): List with your api instances
+- **apis** (list[Forum or Market]): List with your api instances
 
 **Example:**
 
 ```python
-from LolzteamApi import DelaySynchronizer
-synchronizer = DelaySynchronizer()
+from LOLZTEAM.Tweaks import DelaySync
+synchronizer = DelaySync()
 ```
 
-### Add api to DelaySynchronizer
+### Add api to DelaySync
 
 *Adding api to the delay syncing list*
 
 **Parameters:**
 
-- **api** (LolzteamApi/list/dict): LolzteamApi instance/list/dict
+- **api** (Forum/Market/list/dict): Forum/Market/list/dict
 
 **Example:**
 
 ```python
-api_1 = LolzteamApi(token="token_1")
-api_2 = LolzteamApi(token="token_2")
+forum_1 = Forum(token="token_1")
+forum_2 = Forum(token="token_2")
 
-synchronizer.add(api_1)
-synchronizer.add(api_2)
+synchronizer.add(forum_1)
+synchronizer.add(forum_2)
 # or
-synchronizer.add([api_1,api_2])
+synchronizer.add([forum_1,forum_2])
 # or
-synchonizer.add({"AS7RID_api":api_1, "a911_api":api_2})
+synchonizer.add({"AS7RID_api":forum_1, "a911_api":forum_2})
 ```
 
-# Remove api from DelaySynchronizer
+# Remove api from DelaySync
 
 *Removing api from the delay syncing list*
 
 **Parameters:**
 
-- **api** (LolzteamApi/list/dict): LolzteamApi instance/list/dict
+- **api** (Forum/Market/list/dict): Forum/Market/list/dict
 
 **Example:**
 
 ```python
-api_1 = LolzteamApi(token="token_1")
-api_2 = LolzteamApi(token="token_2")
-
-synchronizer.remove(api_1)
-synchronizer.remove(api_2)
+synchronizer.remove(forum_1)
+synchronizer.remove(forum_2)
 # or
-synchronizer.remove([api_1,api_2])
+synchronizer.remove([forum_1, forum_2])
 # or
-synchonizer.remove({"AS7RID_api":api_1, "a911_api":api_2})
+synchonizer.remove({"AS7RID_api":forum_1, "a911_api":forum_2})
 ```
 
-### Remove all api's from DelaySynchronizer
+### Remove all api's from DelaySync
 
 *Removing all api's from the delay syncing list*
 
 **Example:**
 
 ```python
-api_1 = LolzteamApi(token="token_1")
-api_2 = LolzteamApi(token="token_2")
-
 synchronizer.clear()
 ```

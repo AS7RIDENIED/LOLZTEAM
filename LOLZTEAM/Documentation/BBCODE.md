@@ -51,7 +51,7 @@
 You need to import BBCODE to use it
 
 ```python
-from LolzteamApi import BBCODE
+from LOLZTEAM import BBCODE
 ```
 
 # Bold

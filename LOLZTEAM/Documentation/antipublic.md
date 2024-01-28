@@ -1,6 +1,6 @@
 <font size=6 style="margin: auto"> <center>
 
-[Forum docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md) - [Market Docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md)
+[Forum docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) - [Market Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)
 
 </center></font>
 
@@ -15,10 +15,8 @@
 * [Account info](#account-info)
   * [Access](#access)
   * [Queries](#queries)
-* [Data processing](#data-processing)
-  * [Check lines](#check-lines)
-  * [Get passwords](#get-passwords)
-  * [Get passwords plus](#get-passwords-plus)
+* [Check](#check)
+* [Search](#search)
 
 </details>
 
@@ -27,8 +25,14 @@
 You need to create class instance to use library
 
 ```python
-from LolzteamApi import AntipublicApi
-antipublic = AntipublicApi(token="Your_token")
+from LOLZTEAM import AutoUpdate
+from LOLZTEAM import Constants
+from LOLZTEAM.API import Antipublic
+from LOLZTEAM.Tweaks import SendAsAsync
+
+token = "your_token"
+
+antipublic = Antipublic(token=token)
 ```
 
 **Parameters:**
@@ -42,14 +46,14 @@ antipublic = AntipublicApi(token="Your_token")
   > You can use Types to set your proxy type
   >
   > ```python
-  > from LolzteamApi import AntipublicApi, Types
+  > from LOLZTEAM import Constants
   > 
-  > Types.Proxy.socks5  # "socks5"
-  > Types.Proxy.socks4  # "socks4"
-  > Types.Proxy.https   # "https"
-  > Types.Proxy.http    # "http"
+  > Constants.Proxy.socks5  # "socks5"
+  > Constants.Proxy.socks4  # "socks4"
+  > Constants.Proxy.https   # "https"
+  > Constants.Proxy.http    # "http"
   > 
-  > antipublic = AntipublicApi(token="Your_token", proxy_type=Types.Proxy.socks5)
+  > antipublic = AntipublicApi(token="Your_token", proxy_type=Constants.Proxy.socks5)
   > ```
 
 - proxy (str): Proxy string.
@@ -71,8 +75,8 @@ antipublic = AntipublicApi(token="Your_token")
 **Example:**
 
 ```python
-data = antipublic.info.lines_count()
-print(data)
+response = antipublic.info.lines_count()
+print(response.json())
 ```
 
 ```python
@@ -88,8 +92,8 @@ print(data)
 **Example:**
 
 ```python
-data = antipublic.info.lines_count_plain()
-print(data)
+response = antipublic.info.lines_count_plain()
+print(response.json())
 ```
 
 ```python
@@ -105,8 +109,8 @@ print(data)
 **Example:**
 
 ```python
-data = antipublic.info.version()
-print(data)
+response = antipublic.info.version()
+print(response.json())
 ```
 ```python
 {'filename': 'AntiPublic.exe', 'version': '1.0.18', 'changeLog': 'New feature for window title, provide custom password count input for per email/login', 'url': 'https://antipublic.one/dl/AntiPublic.zip'}
@@ -123,8 +127,8 @@ print(data)
 *[Official documentation reference](https://antipublic.readme.io/reference/antipublicchecklicense)*
 
 ```python
-data = antipublic.account_info.access()
-print(data)
+response = antipublic.account_info.access()
+print(response.json())
 ```
 
 ```python
@@ -138,8 +142,8 @@ print(data)
 *[Official documentation reference](https://antipublic.readme.io/reference/antipublicavailablequeries)*
 
 ```python
-data = antipublic.account_info.queries()
-print(data)
+response = antipublic.account_info.queries()
+print(response.json())
 ```
 
 ```python
@@ -165,75 +169,43 @@ print(data)
 ```python
 lines = ["admin@zelenka.guru:Lanskoy228",
          "truea911fan@a911.com:Animeshka228"]
-data = antipublic.check_lines(lines=lines,insert=False)
-print(data)
+response = antipublic.check(lines=lines,insert=False)
+print(response.json())
 
 #  Or 
 
 with open("Base.txt","r") as f:
     lines = f.readlines()
-data = antipublic.check_lines(lines=lines,insert=False)
-print(data)
+response = antipublic.check(lines=lines,insert=False)
+print(response.json())
 ```
 
 ```python
 {'success': True, 'result': [{'is_private': True, 'line': 'admin@zelenka.guru:Lanskoy228'}, {'is_private': True, 'line': 'truea911fan@a911.com:Animeshka228'}]}
 ```
 
-### Get passwords
+### Search
 
-*Get passwords for login/email*
+*Get passwords for login's/email's*
 
-*[Official documentation reference](https://antipublic.readme.io/reference/antipublicemailsearch)*
+*[Official documentation reference 1](https://antipublic.readme.io/reference/antipublicemailsearch)*
+*[Official documentation reference 2](https://antipublic.one/api/v2/emailPasswords)*
 
 **Parameters:**
 
 - **login** (str): Email or login for search.
+- **logins** (list[str]): Emails or logins for search.
+  >  You need Antupublic Plus subscription to use this param
+- **limit** (int): Result limit (per email).
 
 ```python
-data = antipublic.get_passwords(login="pisyapopa11")
-print(data)
-```
+response = antipublic.search(login="example")
+print(response.json())
 
-```python
-{"success":True,"availableQueries":0,"resultCount":1,"results":["example@gmail.com:password"]}
-```
+# or
 
-### Get passwords plus
-
-*Get passwords for logins/emails. AntiPublic Plus subscription required.*
-
-*[Official documentation reference](https://antipublic.readme.io/reference/antipublicemailpasswords)*
-
-**Parameters:**
-
-- **logins** (list\[str\]): Email or login for search.
-- **limit** (int): Result limit (per email)
-
-```python
-logins = ["pisyapopa11","pisyapopa95"]
-data = antipublic.get_passwords_plus(logins=logins,limit=1)
-print(data)
-```
-
-```python
-{'success': True, 'availableQueries': 0, 'resultCount': 2, 'results': ['pisyapopa11@ya.ru:1234567890pflybwf', 'pisyapopa95@mail.ru:qwe12345']}
-```
-
-# Send async
-
-*Send request as async*
-
-**Parameters:**
-
-- **func** (function): Target function.
-- ****kwargs** (any): Target function parameters.
-
-**Example:**
-
-```python
-response = await antipublic.send_as_async(antipublic.get_passwords, login="grishalanskoy228")
-print(response)
+response = antipublic.search(logins=["example@gmail.com", "example1@gmail.com"], limit=1)
+print(response.json())
 ```
 
 ```python

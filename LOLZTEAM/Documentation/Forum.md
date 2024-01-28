@@ -1,6 +1,6 @@
 <font size=6 style="margin: auto"> <center>
 
-[Market docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Antipublic.md)
+[Market docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md)
 
 </center></font>
 
@@ -74,6 +74,7 @@
     * [Get profile post comment](#get-profile-post-comment)
     * [Create profile post comment](#create-profile-post-comment)
     * [Delete profile post comment](#delete-profile-post-comment)
+  * [Get profile posts](#get-profile-posts)
   * [Get profile post](#get-profile-post)
   * [Create profile post](#create-profile-post)
   * [Edit profile post](#edit-profile-post)
@@ -135,8 +136,15 @@
 You need to create class instance to use library
 
 ```
-from LolzteamApi import LolzteamApi
-api = LolzteamApi(token="Your_token", language="en")
+from LOLZTEAM import AutoUpdate
+from LOLZTEAM import Constants
+from LOLZTEAM.API import Forum, Market
+from LOLZTEAM.Tweaks import DelaySync, SendAsAsync, CreateJob
+
+token = "your_token"
+
+market = Market(token=token, language="en")
+forum = Forum(token=token, language="en")
 ```
 
 **Parameters:**
@@ -148,7 +156,7 @@ api = LolzteamApi(token="Your_token", language="en")
 - **language** (str): Language for your api responses. 
   > Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
 - **proxy_type** (str): Your proxy type. 
-  > You can use types ( Types.Proxy.socks5 or socks4,https,http )
+  > You can use types ( Constants.Proxy.socks5 or socks4,https,http )
 - **proxy** (str): Proxy string. 
   > Example -> ip:port or login:password@ip:port
 
@@ -188,13 +196,13 @@ api = LolzteamApi(token="Your_token", language="en")
 **Example:**
 
 ```python
-data = api.forum.threads.contests.upgrade.create_by_time(thread_title="Api example", post_body="Api example",
-                                                         prize_data_upgrade=Types.Forum.Contests.Upgrade_prizes.uniq,
+response = forum.threads.contests.upgrade.create_by_time(thread_title="Api example", post_body="Api example",
+                                                         prize_data_upgrade=Constants.Forum.Contests.UpgradePrize.uniq,
                                                          count_winners=1, length_value=3,
-                                                         length_option=Types.Forum.Contests.Length.days,
+                                                         length_option=Constants.Forum.Contests.Length.days,
                                                          require_like_count=1, require_total_like_count=1,
                                                          secret_answer="Secret answer")
-print(data)
+print(response.json())
 ```
 
 ```python
@@ -224,11 +232,11 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.contests.upgrade.create_by_count(thread_title="Api example", post_body="Api example",
-                                                          prize_data_upgrade=Types.Forum.Contests.Upgrade_prizes.uniq,
+response = forum.threads.contests.upgrade.create_by_count(thread_title="Api example", post_body="Api example",
+                                                          prize_data_upgrade=Constants.Forum.Contests.UpgradePrize.uniq,
                                                           count_winners=1, needed_members=300, require_like_count=1,
                                                           require_total_like_count=1, secret_answer="Secret answer")
-print(data)
+print(response.json())
 ```
 
 ```python
@@ -261,13 +269,13 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.contests.money.create_by_time(thread_title="Api example", post_body="Api example",
+response = forum.threads.contests.money.create_by_time(thread_title="Api example", post_body="Api example",
                                                        prize_data_money=500,
                                                        count_winners=1, length_value=3,
-                                                       length_option=Types.Forum.Contests.Length.days,
+                                                       length_option=Constants.Forum.Contests.Length.days,
                                                        require_like_count=1, require_total_like_count=1,
                                                        secret_answer="Secret answer")
-print(data)
+print(response.json())
 ```
 
 ```python
@@ -297,11 +305,11 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.contests.money.create_by_count(thread_title="Api example", post_body="Api example",
+response = forum.threads.contests.money.create_by_count(thread_title="Api example", post_body="Api example",
                                                         prize_data_money=500,
                                                         count_winners=1, needed_members=300, require_like_count=1,
                                                         require_total_like_count=1, secret_answer="Secret answer")
-print(data)
+print(response.json())
 ```
 
 ```python
@@ -334,8 +342,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.get_threads(forum_id=876)
-print(data)
+response = forum.threads.get_threads(forum_id=876)
+print(response.json())
 ```
 
 ```python
@@ -359,8 +367,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.create(forum_id=876, thread_title="Api example", post_body="Api example", )
-print(data)
+response = forum.threads.create(forum_id=876, thread_title="Api example", post_body="Api example", )
+print(response.json())
 ```
 
 ```python
@@ -387,13 +395,13 @@ print(data)
 **Example:**
 
 ```python
-response = api.forum.threads.edit(
+response = forum.threads.edit(
     thread_id=5974102,
     title="Edited title",
     discussion_open=False,
-    reply_group=Types.Forum.ReplyGroups.staff,
+    reply_group=Constants.Forum.ReplyGroups.staff,
 )
-print(response)
+print(response.json())
 ```
 
 ```python
@@ -418,8 +426,8 @@ print(response)
 **Example:**
 
 ```python
-response = api.forum.threads.move(thread_id=6301330, forum_id=976)
-print(response)
+response = forum.threads.move(thread_id=6301330, forum_id=976)
+print(response.json())
 ```
 
 ```python
@@ -439,8 +447,8 @@ print(response)
 **Example:**
 
 ```python
-data = api.forum.threads.get(thread_id=5523020)
-print(data)
+response = forum.threads.get(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -461,8 +469,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.delete(thread_id=5523020, reason="No reason :c")
-print(data)
+response = forum.threads.delete(thread_id=5523020, reason="No reason :c")
+print(response.json())
 ```
 
 ```python
@@ -482,8 +490,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.followers(thread_id=5523020)
-print(data)
+response = forum.threads.followers(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -503,8 +511,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.followed()
-print(data)
+response = forum.threads.followed()
+print(response.json())
 ```
 
 ```python
@@ -525,8 +533,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.follow(thread_id=5523020)
-print(data)
+response = forum.threads.follow(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -546,8 +554,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.unfollow(thread_id=5523020)
-print(data)
+response = forum.threads.unfollow(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -567,8 +575,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.navigation(thread_id=5523020)
-print(data)
+response = forum.threads.navigation(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -588,8 +596,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.votes(thread_id=5523020)
-print(data)
+response = forum.threads.votes(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -612,8 +620,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.vote(thread_id=5523020, response_id=264758)
-print(data)
+response = forum.threads.vote(thread_id=5523020, response_id=264758)
+print(response.json())
 ```
 
 ```python
@@ -638,8 +646,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.new()
-print(data)
+response = forum.threads.new()
+print(response.json())
 ```
 
 ```python
@@ -665,8 +673,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.recent()
-print(data)
+response = forum.threads.recent()
+print(response.json())
 ```
 
 ```python
@@ -686,8 +694,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.threads.bump(thread_id=5523020)
-print(data)
+response = forum.threads.bump(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -718,8 +726,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.comments.get(post_id=39769208)
-print(data)
+response = forum.posts.comments.get(post_id=39769208)
+print(response.json())
 ```
 
 ```python
@@ -740,8 +748,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.comments.create(post_id=39769208, comment_body="Api example")
-print(data)
+response = forum.posts.comments.create(post_id=39769208, comment_body="Api example")
+print(response.json())
 ```
 
 ```python
@@ -772,8 +780,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.get_posts(thread_id=5523020)
-print(data)
+response = forum.posts.get_posts(thread_id=5523020)
+print(response.json())
 ```
 
 ```python
@@ -793,8 +801,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.get(post_id=39769208)
-print(data)
+response = forum.posts.get(post_id=39769208)
+print(response.json())
 ```
 
 ```python
@@ -817,8 +825,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.create(thread_id=5523020, post_body="Good library, awesome author")
-print(data)
+response = forum.posts.create(thread_id=5523020, post_body="Good library, awesome author")
+print(response.json())
 ```
 
 ```python
@@ -843,8 +851,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.edit(post_id=39769208,thread_title="Библиотека для упрощения работы с API | LolzteamApi Forum/Market/Antipublic Python")
-print(data)
+response = forum.posts.edit(post_id=39769208,thread_title="Библиотека для упрощения работы с API | LOLZTEAM Forum/Market/Antipublic Python")
+print(response.json())
 ```
 
 ```python
@@ -865,8 +873,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.delete(post_id=39769208, reason="No reason :c")
-print(data)
+response = forum.posts.delete(post_id=39769208, reason="No reason :c")
+print(response.json())
 ```
 
 ```python
@@ -889,8 +897,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.likes(post_id=39769208, limit=10, page=2)
-print(data)
+response = forum.posts.likes(post_id=39769208, limit=10, page=2)
+print(response.json())
 ```
 
 ```python
@@ -910,8 +918,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.like(post_id=39769208)
-print(data)
+response = forum.posts.like(post_id=39769208)
+print(response.json())
 ```
 
 ```python
@@ -931,8 +939,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.unlike(post_id=39769208)
-print(data)
+response = forum.posts.unlike(post_id=39769208)
+print(response.json())
 ```
 
 ```python
@@ -953,8 +961,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.posts.report(post_id=39769208, message="No report message :c")
-print(data)
+response = forum.posts.report(post_id=39769208, message="No report message :c")
+print(response.json())
 ```
 
 ```python
@@ -981,8 +989,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.forums.get_forums()
-print(data)
+response = forum.forums.get_forums()
+print(response.json())
 ```
 
 ```python
@@ -1002,8 +1010,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.forums.get_forum(forum_id=969)
-print(data)
+response = forum.forums.get_forum(forum_id=969)
+print(response.json())
 ```
 
 ```python
@@ -1023,8 +1031,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.forums.followers(forum_id=969)
-print(data)
+response = forum.forums.followers(forum_id=969)
+print(response.json())
 ```
 
 ```python
@@ -1044,8 +1052,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.forums.followed(total=True)
-print(data)
+response = forum.forums.followed(total=True)
+print(response.json())
 ```
 
 ```python
@@ -1070,8 +1078,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.forums.follow(forum_id=969, post=True, alert=True)
-print(data)
+response = forum.forums.follow(forum_id=969, post=True, alert=True)
+print(response.json())
 ```
 
 ```python
@@ -1091,8 +1099,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.forums.unfollow(forum_id=969)
-print(data)
+response = forum.forums.unfollow(forum_id=969)
+print(response.json())
 ```
 
 ```python
@@ -1121,8 +1129,8 @@ print(data)
 ```python
 with open("avatar.png", 'rb') as f:
     avatar = f.read()
-data = api.forum.users.avatar.upload(user_id=2410024, avatar=avatar)
-print(data)
+response = forum.users.avatar.upload(user_id=2410024, avatar=avatar)
+print(response.json())
 ```
 
 ```python
@@ -1142,8 +1150,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.avatar.delete(user_id=2410024)
-print(data)
+response = forum.users.avatar.delete(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1164,8 +1172,8 @@ print(data)
 **Example:**
 
 ```python
-response = api.forum.users.avatar.crop(user_id=2410024,size=2000)
-print(response)
+response = forum.users.avatar.crop(user_id=2410024,size=2000)
+print(response.json())
 ```
 
 ```python
@@ -1188,8 +1196,8 @@ print(response)
 **Example:**
 
 ```python
-data = api.forum.users.users(page=1)
-print(data)
+response = forum.users.users(page=1)
+print(response.json())
 ```
 
 ```python
@@ -1209,8 +1217,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.get(user_id=2410024)
-print(data)
+response = forum.users.get(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1243,8 +1251,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.edit(user_id=2410024, user_title="LolzteamAPI python -> zelenka.guru/threads/5523020")
-print(data)
+response = forum.users.edit(user_id=2410024, user_title="LOLZTEAM python -> zelenka.guru/threads/5523020")
+print(response.json())
 ```
 
 ```python
@@ -1260,8 +1268,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.fields()
-print(data)
+response = forum.users.fields()
+print(response.json())
 ```
 
 ```python
@@ -1283,8 +1291,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.search(username=2410024)
-print(data)
+response = forum.users.search(username=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1306,8 +1314,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.lost_password(oauth_token=oauth, username="AS7RID")
-print(data)
+response = forum.users.lost_password(oauth_token=oauth, username="AS7RID")
+print(response.json())
 ```
 
 ```python
@@ -1330,8 +1338,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.followings(user_id=2410024)
-print(data)
+response = forum.users.followings(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1355,8 +1363,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.followers(user_id=2410024)
-print(data)
+response = forum.users.followers(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1376,8 +1384,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.follow(user_id=2410024)
-print(data)
+response = forum.users.follow(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1397,8 +1405,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.unfollow(user_id=2410024)
-print(data)
+response = forum.users.unfollow(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1418,8 +1426,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.ignored()
-print(data)
+response = forum.users.ignored()
+print(response.json())
 ```
 
 ```python
@@ -1439,8 +1447,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.ignore(user_id=2410024)
-print(data)
+response = forum.users.ignore(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1460,8 +1468,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.unignore(user_id=2410024)
-print(data)
+response = forum.users.unignore(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1486,8 +1494,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.users.groups(user_id=2410024)
-print(data)
+response = forum.users.groups(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1516,8 +1524,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.comments.comments(profile_post_id=3223590)
-print(data)
+response = forum.profile_posts.comments.comments(profile_post_id=3223590)
+print(response.json())
 ```
 
 ```python
@@ -1538,8 +1546,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.comments.get(profile_post_id=3223590,comment_id=1780307)
-print(data)
+response = forum.profile_posts.comments.get(profile_post_id=3223590,comment_id=1780307)
+print(response.json())
 ```
 
 ```python
@@ -1560,8 +1568,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.comments.create(profile_post_id=3223590,comment_body="Api example")
-print(data)
+response = forum.profile_posts.comments.create(profile_post_id=3223590,comment_body="Api example")
+print(response.json())
 ```
 
 ```python
@@ -1583,8 +1591,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.comments.delete(profile_post_id=3223590,comment_id=1780307,reason="No reason:c")
-print(data)
+response = forum.profile_posts.comments.delete(profile_post_id=3223590,comment_id=1780307,reason="No reason:c")
+print(response.json())
 ```
 
 ```python
@@ -1592,6 +1600,29 @@ print(data)
 ```
 
 ---
+
+### Get profile posts
+
+*List of profile posts (with pagination).*
+
+*[Official documentation reference](https://lolzteam.readme.io/reference/profilepostsgetprofileposts)*
+
+**Parameters:**
+
+- **user_id** (int): ID of user.
+- **page** (int): Page number of contents.
+- **limit** (int): Number of contents in a page.
+
+**Example:**
+
+```python
+response = forum.profile_posts.get_posts(user_id=2410024)
+print(response.json())
+```
+
+```python
+{'data':[{'content_type':'string','content_id':0,'post_id':0,'thread_id':0,'poster_user_id':0,'poster_username':'string','post_create_date':0,'post_body':'string','post_body_html':'string','post_body_plain_text':'string','signature':'string','signature_html':'string','signature_plain_text':'string','post_like_count':0,'post_attachment_count':0,'like_users':[{'user_id':0,'username':'string','display_style_group_id':0,'is_banned':0,'uniq_username_css':'string'}],'user_is_ignored':True,'post_is_published':True,'post_is_deleted':True,'post_update_date':0,'post_is_first_post':True,'links':{'permalink':'string','detail':'string','thread':'string','poster':'string','likes':'string','report':'string','attachments':'string','poster_avatar':'string'},'permissions':{'view':True,'edit':True,'delete':True,'reply':True,'like':True,'report':True,'upload_attachment':True},'thread':{'thread_id':0,'forum_id':0,'thread_title':'string','thread_view_count':0,'creator_user_id':0,'creator_username':'string','thread_create_date':0,'thread_update_date':0,'user_is_ignored':True,'thread_post_count':0,'thread_is_published':True,'thread_is_deleted':True,'thread_is_sticky':True,'thread_is_followed':True,'thread_prefixes':[{'prefix_id':0,'prefix_title':'string'}],'thread_tags':{'3':'string','49306':'string'},'links':{'permalink':'string','detail':'string','followers':'string','forum':'string','posts':'string','first_poster':'string','first_poster_avatar':'string','first_post':'string','last_poster':'string','last_post':'string'},'permissions':{'view':True,'delete':True,'follow':True,'post':True,'upload_attachment':True}}}],'data_total':0,'user':{'user_id':0,'username':'string','user_message_count':0,'user_register_date':0,'user_like_count':0,'short_link':'string','user_title':'string','user_is_valid':True,'user_is_verified':True,'user_is_followed':True,'user_last_seen_date':0,'links':{'permalink':'string','detail':'string','avatar':'string','avatar_big':'string','avatar_small':'string','followers':'string','followings':'string','ignore':'string','timeline':'string'},'permissions':{'edit':True,'follow':True,'ignore':True,'profile_post':True},'user_is_ignored':True,'user_is_visitor':True,'user_group_id':0,'custom_fields':{'discord':'string','jabber':'string','lztAwardUserTrophy':'string','lztCuratorNodeTitle':'string','lztCuratorNodeTitleEn':'string','lztInnovation20Link':'string','lztInnovation30Link':'string','lztInnovationLink':'string','lztSympathyIncreasing':'string','lztSympathyZeroing':'string','qiwi':'string','scamURL':'string','steam':'string','telegram':'string','vk':'string'}},'links':{'pages':0,'page':0,'next':'string'},'system_info':{'visitor_id':0,'time':0}}
+```
 
 ### Get profile post
 
@@ -1606,8 +1637,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.get(profile_post_id=2667951)
-print(data)
+response = forum.profile_posts.get(profile_post_id=2667951)
+print(response.json())
 ```
 
 ```python
@@ -1628,8 +1659,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.create(user_id=2410024,post_body="Api example")
-print(data)
+response = forum.profile_posts.create(user_id=2410024,post_body="Api example")
+print(response.json())
 ```
 
 ```python
@@ -1650,8 +1681,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.edit(profile_post_id=2667951,post_body="Api example")
-print(data)
+response = forum.profile_posts.edit(profile_post_id=2667951,post_body="Api example")
+print(response.json())
 ```
 
 ```python
@@ -1672,8 +1703,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.delete(profile_post_id=2667951,reason="No reason:c")
-print(data)
+response = forum.profile_posts.delete(profile_post_id=2667951,reason="No reason:c")
+print(response.json())
 ```
 
 ```python
@@ -1693,8 +1724,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.likes(profile_post_id=2667951)
-print(data)
+response = forum.profile_posts.likes(profile_post_id=2667951)
+print(response.json())
 ```
 
 ```python
@@ -1714,8 +1745,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.like(profile_post_id=2667951)
-print(data)
+response = forum.profile_posts.like(profile_post_id=2667951)
+print(response.json())
 ```
 
 ```python
@@ -1735,8 +1766,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.unlike(profile_post_id=2667951)
-print(data)
+response = forum.profile_posts.unlike(profile_post_id=2667951)
+print(response.json())
 ```
 
 ```python
@@ -1757,8 +1788,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.profile_posts.report(profile_post_id=2667951, message="No reason:c")
-print(data)
+response = forum.profile_posts.report(profile_post_id=2667951, message="No reason:c")
+print(response.json())
 ```
 
 ```python
@@ -1789,8 +1820,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.messages.get_all(conversation_id=17312)
-print(data)
+response = forum.conversations.messages.get_all(conversation_id=17312)
+print(response.json())
 ```
 
 ```python
@@ -1810,8 +1841,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.messages.get(message_id=1731221)
-print(data)
+response = forum.conversations.messages.get(message_id=1731221)
+print(response.json())
 ```
 
 ```python
@@ -1832,8 +1863,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.messages.create(conversation_id=17312,message_body="Api example")
-print(data)
+response = forum.conversations.messages.create(conversation_id=17312,message_body="Api example")
+print(response.json())
 ```
 
 ```python
@@ -1854,8 +1885,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.messages.edit(message_id=1731221, message_body="Api example1")
-print(data)
+response = forum.conversations.messages.edit(message_id=1731221, message_body="Api example1")
+print(response.json())
 ```
 
 ```python
@@ -1875,8 +1906,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.messages.delete(message_id=1731221)
-print(data)
+response = forum.conversations.messages.delete(message_id=1731221)
+print(response.json())
 ```
 
 ```python
@@ -1897,8 +1928,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.messages.report(message_id=1731221,message="No reason:c")
-print(data)
+response = forum.conversations.messages.report(message_id=1731221,message="No reason:c")
+print(response.json())
 ```
 
 ```python
@@ -1921,8 +1952,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.get_all()
-print(data)
+response = forum.conversations.get_all()
+print(response.json())
 ```
 
 ```python
@@ -1942,8 +1973,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.get(conversation_id=17312)
-print(data)
+response = forum.conversations.get(conversation_id=17312)
+print(response.json())
 ```
 
 ```python
@@ -1967,8 +1998,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.create(recipient_id=2410024, message="Api example")
-print(data)
+response = forum.conversations.create(recipient_id=2410024, message="Api example")
+print(response.json())
 ```
 
 ```python
@@ -1993,8 +2024,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.create_group(recipients="AS7RID", message="Api example")
-print(data)
+response = forum.conversations.create_group(recipients="AS7RID", message="Api example")
+print(response.json())
 ```
 
 ```python
@@ -2015,8 +2046,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.conversations.leave(conversation_id=17312)
-print(data)
+response = forum.conversations.leave(conversation_id=17312)
+print(response.json())
 ```
 
 ```python
@@ -2034,8 +2065,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.notifications.get_all()
-print(data)
+response = forum.notifications.get_all()
+print(response.json())
 ```
 
 ```python
@@ -2055,8 +2086,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.notifications.get(notification_id=1590600042)
-print(data)
+response = forum.notifications.get(notification_id=1590600042)
+print(response.json())
 ```
 
 ```python
@@ -2076,8 +2107,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.notifications.read(notification_id=1590600042)
-print(data)
+response = forum.notifications.read(notification_id=1590600042)
+print(response.json())
 ```
 
 ```python
@@ -2105,8 +2136,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.notifications.custom(user_id=1, message="Hello grisha", notification_type="user")
-print(data)
+response = forum.notifications.custom(user_id=1, message="Hello grisha", notification_type="user")
+print(response.json())
 ```
 
 ```python
@@ -2130,8 +2161,8 @@ string
 **Example:**
 
 ```python
-data = api.forum.categories.get_categories()
-print(data)
+response = forum.categories.get_categories()
+print(response.json())
 ```
 
 ```python
@@ -2151,8 +2182,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.categories.get_category(category_id=103)
-print(data)
+response = forum.categories.get_category(category_id=103)
+print(response.json())
 ```
 
 ```python
@@ -2175,8 +2206,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.pages.get_pages()
-print(data)
+response = forum.pages.get_pages()
+print(response.json())
 ```
 
 ```python
@@ -2196,8 +2227,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.pages.get_page(page_id=693)
-print(data)
+response = forum.pages.get_page(page_id=693)
+print(response.json())
 ```
 
 ```python
@@ -2218,8 +2249,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.tags.popular()
-print(data)
+response = forum.tags.popular()
+print(response.json())
 ```
 
 ```python
@@ -2240,8 +2271,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.tags.tags(page=7)
-print(data)
+response = forum.tags.tags(page=7)
+print(response.json())
 ```
 
 ```python
@@ -2263,8 +2294,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.tags.tagged(tag_id=20)
-print(data)
+response = forum.tags.tagged(tag_id=20)
+print(response.json())
 ```
 
 ```python
@@ -2284,8 +2315,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.tags.find(tag="LolzteamApi")
-print(data)
+response = forum.tags.find(tag="LOLZTEAM")
+print(response.json())
 ```
 
 ```python
@@ -2315,8 +2346,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.search.thread(q="LolzteamApi")
-print(data)
+response = forum.search.thread(q="LOLZTEAM")
+print(response.json())
 ```
 
 ```python
@@ -2344,8 +2375,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.search.post(q="LolzteamApi")
-print(data)
+response = forum.search.post(q="LOLZTEAM")
+print(response.json())
 ```
 
 ```python
@@ -2366,8 +2397,8 @@ print(data)
 **Example:**
 
 ```python
-response = api.forum.search.profile_posts(user_id=2410024)
-print(response)
+response = forum.search.profile_posts(user_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -2394,8 +2425,8 @@ print(response)
 **Example:**
 
 ```python
-data = api.forum.search.post(q="LolzteamApi")
-print(data)
+response = forum.search.post(q="LOLZTEAM")
+print(response.json())
 ```
 
 ```python
@@ -2418,8 +2449,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.search.tag(tag="LolzteamApi")
-print(data)
+response = forum.search.tag(tag="LOLZTEAM")
+print(response.json())
 ```
 
 ```python
@@ -2444,8 +2475,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.search.indexing(content_type="post",content_id=40767586,title="LolzteamApi Python",body="Body",link="https://zelenka.guru/threads/5523020/")
-print(data)
+response = forum.search.indexing(content_type="post",content_id=40767586,title="LOLZTEAM Python",body="Body",link="https://zelenka.guru/threads/5523020/")
+print(response.text)
 ```
 
 ```python
@@ -2469,8 +2500,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.forum.oauth.facebook(client_id="client_id",client_secret="client_secret",facebook_token="fb_token")
-print(data)
+response = forum.oauth.facebook(client_id="client_id",client_secret="client_secret",facebook_token="fb_token")
+print(response.text)
 ```
 
 ```python
@@ -2487,14 +2518,14 @@ string
 
 - **client_id** (int): ID of twitter client.
 - **client_secret** (str): Secret phrase of twitter client.
-- **twitter_url** (str): "the full /account/verify_credentials.json uri that has been used to calculate OAuth signature. For security reason, the uri must use HTTPS protocol and the hostname must be either "twitter.com" or "api.twitter.com"."
+- **twitter_url** (str): "the full /account/verify_credentials.json uri that has been used to calculate OAuth signature. For security reason, the uri must use HTTPS protocol and the hostname must be either "twitter.com" or "twitter.com"."
 - **twitter_auth** (str): the complete authentication header that starts with "OAuth". Consult Twitter document for more information.
 
 **Example:**
 
 ```python
-data = api.forum.oauth.twitter(client_id="client_id",client_secret="client_secret",twitter_url="https://twitter_url",twitter_auth="twitter_auth")
-print(data)
+response = forum.oauth.twitter(client_id="client_id",client_secret="client_secret",twitter_url="https://twitter_url",twitter_auth="twitter_auth")
+print(response.text)
 ```
 
 ```python
@@ -2516,8 +2547,8 @@ string
 **Example:**
 
 ```python
-data = api.forum.oauth.google(client_id="client_id",client_secret="client_secret",google_token="google_token")
-print(data)
+response = forum.oauth.google(client_id="client_id",client_secret="client_secret",google_token="google_token")
+print(response.text)
 ```
 
 ```python
@@ -2541,8 +2572,8 @@ string
 **Example:**
 
 ```python
-data = api.forum.oauth.associate(client_id="client_id",client_secret="client_secret",user_id="user_id",password="user_pass", extra_data="data",extra_timestamp="timestamp")
-print(data)
+response = forum.oauth.associate(client_id="client_id",client_secret="client_secret",user_id="user_id",password="user_pass", extra_data="data",extra_timestamp="timestamp")
+print(response.text)
 ```
 
 ```python
@@ -2562,8 +2593,8 @@ string
 **Example:**
 
 ```python
-data = api.forum.oauth.admin(user_id=1)
-print(data)
+response = forum.oauth.admin(user_id=1)
+print(response.json())
 ```
 
 ```python
@@ -2584,8 +2615,8 @@ string
 **Example:**
 
 ```python
-data = api.forum.navigation()
-print(data)
+response = forum.navigation()
+print(response.json())
 ```
 
 ```python
@@ -2606,20 +2637,20 @@ print(data)
 
 ```python
 jobs = [
-    api.get_batch_job(api.forum.users.search, job_name="1", custom_fields={"telegram": "AS7RID"}),
-    api.get_batch_job(api.forum.users.get, job_name="2", user_id=1),
-    api.get_batch_job(api.forum.threads.get, job_name="3", thread_id=5523020),
-    api.get_batch_job(api.forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LolzteamApi")
+    CreateJob(forum.users.search, job_name="1", custom_fields={"telegram": "AS7RID"}),
+    CreateJob(forum.users.get, job_name="2", user_id=1),
+    CreateJob(forum.threads.get, job_name="3", thread_id=5523020),
+    CreateJob(forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LOLZTEAM")
 ]
 for job in jobs:
     print(job)
 ```
 
 ```python
-{'id': '1', 'uri': 'https://api.zelenka.guru/users/find', 'method': 'GET', 'params': {'username': None, 'user_email': None, 'custom_fields[telegram]': 'AS7RID', 'custom_fields': {'telegram': 'AS7RID'}, 'locale': 'en'}, 'data': {'username': None, 'user_email': None, 'custom_fields[telegram]': 'AS7RID', 'custom_fields': {'telegram': 'AS7RID'}}, 'files': None}
-{'id': '2', 'uri': 'https://api.zelenka.guru/users/1', 'method': 'GET', 'params': {'locale': 'en'}, 'data': {}, 'files': None}
-{'id': '3', 'uri': 'https://api.zelenka.guru/threads/5523020', 'method': 'GET', 'params': {'locale': 'en'}, 'data': {}, 'files': None}
-{'id': '4', 'uri': 'https://api.zelenka.guru/threads', 'method': 'POST', 'params': {'forum_id': 876, 'thread_prefix_id': None, 'thread_tags': 'LolzteamApi', 'thread_title': 'Api batch example', 'post_body': 'Api batch example body', 'locale': 'en'}, 'data': {'thread_title': 'Api batch example', 'post_body': 'Api batch example body', 'forum_id': 876, 'thread_prefix_id': None, 'thread_tags': 'LolzteamApi'}, 'files': None}
+{'id': '1', 'uri': 'https://zelenka.guru/users/find', 'method': 'GET', 'params': {'username': None, 'user_email': None, 'custom_fields[telegram]': 'AS7RID', 'custom_fields': {'telegram': 'AS7RID'}, 'locale': 'en'}, 'data': {'username': None, 'user_email': None, 'custom_fields[telegram]': 'AS7RID', 'custom_fields': {'telegram': 'AS7RID'}}, 'files': None}
+{'id': '2', 'uri': 'https://zelenka.guru/users/1', 'method': 'GET', 'params': {'locale': 'en'}, 'data': {}, 'files': None}
+{'id': '3', 'uri': 'https://zelenka.guru/threads/5523020', 'method': 'GET', 'params': {'locale': 'en'}, 'data': {}, 'files': None}
+{'id': '4', 'uri': 'https://zelenka.guru/threads', 'method': 'POST', 'params': {'forum_id': 876, 'thread_prefix_id': None, 'thread_tags': 'LOLZTEAM', 'thread_title': 'Api batch example', 'post_body': 'Api batch example body', 'locale': 'en'}, 'data': {'thread_title': 'Api batch example', 'post_body': 'Api batch example body', 'forum_id': 876, 'thread_prefix_id': None, 'thread_tags': 'LOLZTEAM'}, 'files': None}
 ```
 
 # Batch
@@ -2628,7 +2659,7 @@ for job in jobs:
 
   > Maximum batch jobs is 10.
   >
-  > Forum batch can only proceed with forum url's. If you want to use batch with market url's try [this](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Market.md#batch)
+  > Forum batch can only proceed with forum url's. If you want to use batch with market url's try [this](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md#batch)
 
 *[Official documentation reference](https://lolzteam.readme.io/reference/batchrequestsexecute)*
 
@@ -2640,20 +2671,20 @@ for job in jobs:
 
 ```python
 jobs = [
-    api.get_batch_job(api.forum.users.search, job_name="1", custom_fields={"telegram": "AS7RID"}),
-    api.get_batch_job(api.forum.users.get, job_name="2", user_id=1),
-    api.get_batch_job(api.forum.threads.get, job_name="3", thread_id=5523020),
-    api.get_batch_job(api.forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LolzteamApi")
+    CreateJob(forum.users.search, job_name="1", custom_fields={"telegram": "AS7RID"}),
+    CreateJob(forum.users.get, job_name="2", user_id=1),
+    CreateJob(forum.threads.get, job_name="3", thread_id=5523020),
+    CreateJob(forum.threads.create, job_name="4", forum_id=876, thread_title="Api batch example",post_body="Api batch example body", thread_tags="LOLZTEAM")
 ]
-data = api.forum.batch(jobs=jobs)
-for job_name, job_data in data["jobs"].items():
+response = forum.batch(jobs=jobs)
+for job_name, job_data in response.json()["jobs"].items():
     print(job_data)
 ```
 
 ```python
 {'_job_result': 'ok', 'users': [{'user_id': 2410024, 'username': 'AS7RID', 'username_html': '<span  class="style22">AS7RID</span>', 'user_message_count': 1089, 'user_register_date': 1560282271, 'user_like_count': 2949, 'short_link': 'as7rid', ... }
 {'_job_result': 'ok', 'user': {'user_id': 1, 'username': 'RaysMorgan', 'username_html': '<span  class="style3">RaysMorgan</span>', 'user_message_count': 12104, 'user_register_date': 1362675475, 'user_like_count': 44351, 'short_link': 'rays',  ... }
-{'_job_result': 'ok', 'thread': {'thread_id': 5523020, 'forum_id': 976, 'thread_title': 'Библиотека для упрощения работы с API | LolzteamApi Forum/Market/Antipublic Python', 'thread_view_count': 715, 'creator_user_id': 2410024, 'creator_usern ... }
+{'_job_result': 'ok', 'thread': {'thread_id': 5523020, 'forum_id': 976, 'thread_title': 'Библиотека для упрощения работы с API | LOLZTEAM Forum/Market/Antipublic Python', 'thread_view_count': 715, 'creator_user_id': 2410024, 'creator_usern ... }
 {'_job_result': 'ok', 'thread': {'thread_id': 5907641, 'forum_id': 876, 'thread_title': 'Api batch example', 'thread_view_count': 1, 'creator_user_id': 2410024, 'creator_username': 'AS7RID', 'creator_username_html': '<span  class="style22">AS ... }
 ```
 
@@ -2669,8 +2700,8 @@ for job_name, job_data in data["jobs"].items():
 **Example:**
 
 ```python
-response = await api.send_as_async(func=api.forum.users.get, user_id=2410024)
-print(response)
+response = await SendAsAsync(func=forum.users.get, user_id=2410024)
+print(response.json())
 ```
 
 ```python

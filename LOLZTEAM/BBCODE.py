@@ -82,7 +82,7 @@ class BBCODE:
             ordered = "=1"
         else:
             ordered = ""
-        formated = [f'[*]{line}\n' for line in text.split('\n')]
+        formated = [f"[*]{line}\n" for line in text.split("\n")]
         return f"[LIST{ordered}]\n{''.join(formated)}[/LIST]"
 
     @staticmethod
@@ -165,7 +165,7 @@ class BBCODE:
 
     @staticmethod
     def visitor():
-        return f"[visitor][/visitor]"
+        return "[visitor][/visitor]"
 
     @staticmethod
     def plain(text: str):
@@ -177,8 +177,9 @@ class BBCODE:
             return f"[api={option}]{url}[/api]"
         else:
             return f"[api]{url}[/api]"
+
     @staticmethod
-    def custom(bbcode:str,text:str="",value:str=None):
+    def custom(bbcode: str, text: str = "", value: str = None):
         if value:
             return f"[{bbcode}={value}]{text}[/{bbcode}]"
         else:

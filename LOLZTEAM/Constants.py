@@ -6,7 +6,7 @@ class Proxy:
 
 
 class Market:
-    class Categories:
+    class Category:
         steam = "steam"
         fortnite = "fortnite"
         vk = "vkontakte"
@@ -14,14 +14,14 @@ class Market:
         valorant = "valorant"
         lol = "league-of-legends"
         telegram = "telegram"
-        diamondrp = "diamondrp"
+        # diamondrp = "diamondrp"
         supercell = "supercell"
         origin = "origin"
         wot = "world-of-tanks"  # World of Tanks
         wot_blitz = "wot-blitz"
         epicgames = "epicgames"
         eft = "escape-from-tarkov"
-        twitter = "twitter"  # Not released yet
+        # twitter = "twitter"
         socialclub = "socialclub"
         uplay = "uplay"
         war_thunder = "war-thunder"
@@ -34,9 +34,9 @@ class Market:
         spotify = "spotify"
         warface = "warface"
         youtube = "youtube"
-        minecraft = "minecraft"
+        # minecraft = "minecraft"
 
-    class Categories_ID:
+    class CategoryId:
         steam = 1
         fortnite = 9
         vk = 2
@@ -44,14 +44,14 @@ class Market:
         valorant = 13
         lol = 29
         telegram = 24
-        diamondrp = 6
+        # diamondrp = 6
         supercell = 15
         origin = 3
         wot = 14
         wot_blitz = 16
         epicgames = 12
         eft = 18
-        twitter = 21
+        # twitter = 21
         socialclub = 7
         uplay = 5
         war_thunder = 27
@@ -64,9 +64,9 @@ class Market:
         spotify = 26
         warface = 4
         youtube = 25
-        minecraft = 28
+        # minecraft = 28
 
-    class Operation_types:
+    class OperationTypes:
         income = "income"
         cost = "cost"
         refilled_balance = "refilled_balance"
@@ -79,7 +79,7 @@ class Market:
         claim_hold = "claim_hold"
         bid = "bid"
 
-    class Hold_Options:
+    class HoldPeriod:
         hour = "hour"
         day = "day"
         week = "week"
@@ -96,7 +96,7 @@ class Market:
         byn = "byn"
         gbp = "gbp"
 
-    class Item_origin:
+    class ItemOrigin:
         brute = "brute"
         stealer = "stealer"
         fishing = "fishing"
@@ -111,13 +111,13 @@ class Market:
         day = 0
         three_days = 1
 
-    class Item_status:
+    class ItemStatus:
         active = "active"
         paid = "paid"
         deleted = "deleted"
         awaiting = "awaiting"
 
-    class Order:
+    class ItemOrder:
         price_to_up = "price_to_up"
         price_to_down = "price_to_down"
         date_to_down = "pdate_to_down"
@@ -126,7 +126,7 @@ class Market:
         date_to_up_upload = "pdate_to_up_upload"
         auction_expiration = "exp_auctions"
 
-    class App_Ids:
+    class AppID:
         CS2 = 730
         PUBG = 578080
         Steam = 753
@@ -145,7 +145,7 @@ class Forum:
             hours = "hours"
             days = "days"
 
-        class Upgrade_prizes:
+        class UpgradePrize:
             supreme = 1
             legend = 6
             antipublic = 12
@@ -153,7 +153,7 @@ class Forum:
             photo_leaks = 17
             auto_participation = 19
 
-    class Order:
+    class ThreadOrder:
         default = "natural"
         oldest = "thread_create_date"
         newest = "thread_create_date_reverse"

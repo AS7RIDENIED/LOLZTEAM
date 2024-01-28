@@ -1,6 +1,6 @@
 <font size=6 style="margin: auto"> <center>
 
-[Forum docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Antipublic.md)
+[Forum docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md)
 
 </center></font>
 
@@ -80,8 +80,15 @@
 You need to create class instance to use library
 
 ```
-from LolzteamApi import LolzteamApi, Types
-api = LolzteamApi(token="Your_token", language="en")
+from LOLZTEAM import AutoUpdate
+from LOLZTEAM import Constants
+from LOLZTEAM.API import Forum, Market
+from LOLZTEAM.Tweaks import DelaySync, SendAsAsync, CreateJob
+
+token = "your_token"
+
+market = Market(token=token, language="en")
+forum = Forum(token=token, language="en")
 ```
 
 **Parameters:**
@@ -93,7 +100,7 @@ api = LolzteamApi(token="Your_token", language="en")
 - **language** (str): Language for your api responses. 
   > Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
 - **proxy_type** (str): Your proxy type. 
-  > You can use types ( Types.Proxy.socks5 or socks4,https,http )
+  > You can use types ( Constants.Proxy.socks5 or socks4,https,http )
 - **proxy** (str): Proxy string. 
   > Example -> ip:port or login:password@ip:port
 
@@ -110,8 +117,8 @@ api = LolzteamApi(token="Your_token", language="en")
 **Example:**
 
 ```python
-data = api.market.profile.get()
-print(data)
+response = market.profile.get()
+print(response.json())
 ```
 
 ```python
@@ -140,8 +147,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.profile.edit(user_allow_ask_discount=True)
-print(data)
+response = market.profile.edit(user_allow_ask_discount=True)
+print(response.json())
 ```
 
 ```python
@@ -180,8 +187,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.list.categories.get(category_name=Types.Market.Categories.vk,pmax=10)
-print(data)
+response = market.list.categories.get(category_name=Constants.Market.Category.vk,pmax=10)
+print(response.json())
 ```
 
 ```python
@@ -201,8 +208,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.list.categories.categories()
-print(data)
+response = market.list.categories.categories()
+print(response.json())
 ```
 
 ```python
@@ -222,8 +229,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.list.categories.params(category_name=Types.Market.Categories.vk)
-print(data)
+response = market.list.categories.params(category_name=Constants.Market.Category.vk)
+print(response.json())
 ```
 
 ```python
@@ -243,8 +250,8 @@ print(data)
 **Example**:
 
 ```python
-data = api.market.list.categories.games(category_name=Types.Market.Categories.steam)
-print(data)
+response = market.list.categories.games(category_name=Constants.Market.Category.steam)
+print(response.json())
 ```
 
 ```python
@@ -271,8 +278,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.list.get(item_id=2410024)
-print(data)
+response = market.list.get(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -295,8 +302,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.list.new()
-print(data)
+response = market.list.new()
+print(response.json())
 ```
 
 ```python
@@ -310,13 +317,13 @@ print(data)
 **Parameters:**
 
 - **url** (str): Your market search url.
-  > It can be https://lzt.market or https://api.lzt.market
+  > It can be https://lzt.market or https://lzt.market
 
 **Example:**
 
 ```python
-data = api.market.list.from_url(url="https://lzt.market/steam/cs-go-prime?origin[]=fishing&eg=1")
-print(data)
+response = market.list.from_url(url="https://lzt.market/steam/cs-go-prime?origin[]=fishing&eg=1")
+print(response.json())
 ```
 
 ```python
@@ -335,7 +342,7 @@ print(data)
 - **status** (str): Account status.
   > Can be [active, paid, deleted or awaiting].
 
-  > You also can use types - Types.Market.Item_status
+  > You also can use types - Constants.Market.ItemStatus
 - **title** (str): The word or words contained in the account title
 - **search_params** (dict): Search params for your request. 
   > Example {"category_id":19} will return only VPN accounts
@@ -343,8 +350,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.list.viewed()
-print(data)
+response = market.list.viewed()
+print(response.json())
 ```
 
 ```python
@@ -363,15 +370,15 @@ print(data)
 - **status** (str): Account status.
   > Can be [active, paid, deleted or awaiting].
 
-  > You also can use types - Types.Market.Item_status
+  > You also can use types - Constants.Market.ItemStatus
 - **title** (str): The word or words contained in the account title
 - **search_params** (dict): Search params for your request.
   > Example {"category_id":19} will return only VPN accounts
 
 **Example:**
 ```python
-data = api.market.list.favorite()
-print(data)
+response = market.list.favorite()
+print(response.json())
 ```
 
 ```python
@@ -398,17 +405,17 @@ print(data)
 - **status** (str): Account status.
   > Can be [active, paid, deleted or awaiting].
 
-  > You also can use types - Types.Market.Item_status
+  > You also can use types - Constants.Market.ItemStatus
 - **order** (str): Order type.
   > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
 
-  >You also can use types - Types.Market.Order
+  >You also can use types - Constants.Market.Order
 
 **Example:**
 
 ```python
-data = api.market.list.purchased()
-print(data)
+response = market.list.purchased()
+print(response.json())
 ```
 
 ```python
@@ -435,17 +442,17 @@ print(data)
 - **status** (str): Account status. 
   > Can be [active, paid, deleted or awaiting].
 
-  > You also can use types - Types.Market.Item_status
+  > You also can use types - Constants.Market.ItemStatus
 - **order** (str): Order type.
   > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
 
-  >You also can use types - Types.Market.Order
+  >You also can use types - Constants.Market.Order
 
 **Example:**
 
 ```python
-data = api.market.list.owned()
-print(data)
+response = market.list.owned()
+print(response.json())
 ```
 
 ```python
@@ -473,8 +480,8 @@ print(data)
 **Example:**
 
 ```python
-response = api.market.purchasing.auction.get(item_id=2410024)
-print(response)
+response = market.purchasing.auction.get(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -497,8 +504,8 @@ print(response)
 **Example:**
 
 ```python
-response = api.market.purchasing.auction.place_bid(item_id=2410024, amount=250)
-print(response)
+response = market.purchasing.auction.place_bid(item_id=2410024, amount=250)
+print(response.json())
 ```
 
 ```python
@@ -519,8 +526,8 @@ print(response)
 **Example:**
 
 ```python
-response = api.market.purchasing.auction.delete_bid(item_id=2410024, bid_id=2410024)
-print(response)
+response = market.purchasing.auction.delete_bid(item_id=2410024, bid_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -545,8 +552,8 @@ print(response)
 **Example:**
 
 ```python
-data = api.market.purchasing.fast_buy(item_id=2410024,price=10)
-print(data)
+response = market.purchasing.fast_buy(item_id=2410024,price=10)
+print(response.json())
 ```
 
 ```python
@@ -566,8 +573,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.purchasing.check(item_id=2410024)
-print(data)
+response = market.purchasing.check(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -589,8 +596,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.purchasing.confirm(item_id=2410024)
-print(data)
+response = market.purchasing.confirm(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -612,8 +619,8 @@ print(data)
 *Example:*
 
 ```python
-data = api.market.purchasing.reserve(item_id=2410024,price=10)
-print(data)
+response = market.purchasing.reserve(item_id=2410024,price=10)
+print(response.json())
 ```
 
 ```python
@@ -633,8 +640,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.purchasing.reserve_cancel(item_id=2410024)
-print(data)
+response = market.purchasing.reserve_cancel(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -668,7 +675,7 @@ print(data)
 - **email_login_data** (str): Required if a category is one of list of Required email login data categories. 
   > Email login data (login:pass format).
 - **email_type** (str): Email type.
-  > Use types -> Types.Market.Item_origin
+  > Use types -> Constants.Market.ItemOrigin
 - **allow_ask_discount** (bool): Allow users to ask discount for this account.
 - **proxy_id** (int): Using proxy id for account checking.
 - **random_proxy** (bool): Pass True, if you get captcha in previous response
@@ -687,11 +694,11 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.publishing.fast_sell(category_id=Types.Market.Categories_ID.vk, price=10,
-                                       currency=Types.Market.Currency.rub, item_origin=Types.Market.Item_origin.autoreg,
-                                       extended_guarantee=Types.Market.Guarantee.day, title="Acc vk",
+response = market.publishing.fast_sell(category_id=Constants.Market.CategoryID.vk, price=10,
+                                       currency=Constants.Market.Currency.rub, item_origin=Constants.Market.ItemOrigin.autoreg,
+                                       extended_guarantee=Constants.Market.Guarantee.day, title="Acc vk",
                                        allow_ask_discount=True, login_password="Login:password")
-print(data)
+print(response.json())
 ```
 
 ```python
@@ -733,11 +740,11 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.publishing.add(category_id=Types.Market.Categories_ID.vk, price=10,
-                                 currency=Types.Market.Currency.rub, item_origin=Types.Market.Item_origin.autoreg,
-                                 extended_guarantee=Types.Market.Guarantee.day, title="Acc vk",
+response = market.publishing.add(category_id=Constants.Market.CategoryID.vk, price=10,
+                                 currency=Constants.Market.Currency.rub, item_origin=Constants.Market.ItemOrigin.autoreg,
+                                 extended_guarantee=Constants.Market.Guarantee.day, title="Acc vk",
                                  allow_ask_discount=True)
-print(data)
+print(response.json())
 ```
 
 ```python
@@ -769,8 +776,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.publishing.check(item_id=2410024,login_password="Login:password")
-print(data)
+response = market.publishing.check(item_id=2410024,login_password="Login:password")
+print(response.json())
 ```
 
 ```python
@@ -794,8 +801,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.publishing.info(item_id=2410024)
-print(data)
+response = market.publishing.info(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -821,13 +828,13 @@ print(data)
 **Parameters:**
 
 - **item_id** (int): ID of item.
-- **tag_id** (int): Tag id. Tag list is available via api.market.profile.get()
+- **tag_id** (int): Tag id. Tag list is available via market.profile.get()
 
 **Example:**
 
 ```python
-data = api.market.managing.tag.add(item_id=2410024, tag_id=1)
-print(data)
+response = market.managing.tag.add(item_id=2410024, tag_id=1)
+print(response.json())
 ```
 
 ```python
@@ -843,13 +850,13 @@ print(data)
 **Parameters:**
 
 - **item_id** (int): ID of item.
-- **tag_id** (int): Tag id. Tag list is available via api.market.profile.get()
+- **tag_id** (int): Tag id. Tag list is available via market.profile.get()
 
 **Example:**
 
 ```python
-data = api.market.managing.tag.delete(item_id=2410024, tag_id=1)
-print(data)
+response = market.managing.tag.delete(item_id=2410024, tag_id=1)
+print(response.json())
 ```
 
 ```python
@@ -885,8 +892,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.edit(item_id=2410024,price=777)
-print(data)
+response = market.managing.edit(item_id=2410024,price=777)
+print(response.json())
 ```
 
 ```python
@@ -907,8 +914,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.delete(item_id=2410024,reason="Im gay")
-print(data)
+response = market.managing.delete(item_id=2410024,reason="Im gay")
+print(response.json())
 ```
 
 ```python
@@ -930,8 +937,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.change_owner(item_id=2410024,username="AS7RID",secret_answer="Denyak net")
-print(data)
+response = market.managing.change_owner(item_id=2410024,username="AS7RID",secret_answer="Denyak net")
+print(response.json())
 ```
 
 ```python
@@ -952,8 +959,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.change_password(item_id=2410024)
-print(data)
+response = market.managing.change_password(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -973,8 +980,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.bump(item_id=2410024)
-print(data)
+response = market.managing.bump(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -995,8 +1002,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.email(item_id=2410024,email="as7rid@zelenka.guru")
-print(data)
+response = market.managing.email(item_id=2410024,email="as7rid@zelenka.guru")
+print(response.json())
 ```
 
 ```python
@@ -1016,8 +1023,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.guard(item_id=2410024)
-print(data)
+response = market.managing.guard(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1037,8 +1044,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.mafile(item_id=2410024)
-print(data)
+response = market.managing.mafile(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1058,8 +1065,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.password_tm(item_id=2410024)
-print(data)
+response = market.managing.password_tm(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1079,8 +1086,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.telegram(item_id=2410024)
-print(data)
+response = market.managing.telegram(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1100,8 +1107,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.telegram_reset(item_id=2410024)
-print(data)
+response = market.managing.telegram_reset(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1121,8 +1128,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.refuse_guarantee(item_id=2410024)
-print(data)
+response = market.managing.refuse_guarantee(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1142,8 +1149,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.favorite(item_id=2410024)
-print(data)
+response = market.managing.favorite(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1163,8 +1170,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.unfavorite(item_id=2410024)
-print(data)
+response = market.managing.unfavorite(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1184,8 +1191,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.stick(item_id=2410024)
-print(data)
+response = market.managing.stick(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1205,8 +1212,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.unstick(item_id=2410024)
-print(data)
+response = market.managing.unstick(item_id=2410024)
+print(response.json())
 ```
 
 ```python
@@ -1227,8 +1234,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.managing.update_inventory(item_id=2410024, app_id=730)
-print(data)
+response = market.managing.update_inventory(item_id=2410024, app_id=730)
+print(response.json())
 ```
 
 ```python
@@ -1265,8 +1272,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.payments.history(user_id=2410024,sender="root")
-print(data)
+response = market.payments.history(user_id=2410024,sender="root")
+print(response.json())
 ```
 
 ```python
@@ -1296,8 +1303,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.payments.transfer(user_id=2410024, amount=250, currency=Types.Market.Currency.rub, secret_answer="Secret answer")
-print(data)
+response = market.payments.transfer(user_id=2410024, amount=250, currency=Constants.Market.Currency.rub, secret_answer="Secret answer")
+print(response.json())
 ```
 
 ```python
@@ -1323,12 +1330,12 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.payments.generate_link(user_id=2410024, comment="LolzteamApi example", currency=Types.Market.Currency.rub, amount=250)
-print(data)
+response = market.payments.generate_link(user_id=2410024, comment="LOLZTEAM example", currency=Constants.Market.Currency.rub, amount=250)
+print(response.json())
 ```
 
 ```python
-https://lzt.market/balance/transfer?user_id=2410024&amount=250&comment=LolzteamApi+example&currency=rub&hold=0
+https://lzt.market/balance/transfer?user_id=2410024&amount=250&comment=LOLZTEAM+example&currency=rub&hold=0
 ```
 
 # Proxy
@@ -1344,8 +1351,8 @@ https://lzt.market/balance/transfer?user_id=2410024&amount=250&comment=LolzteamA
 **Example:**
 
 ```python
-data = api.market.proxy.get()
-print(data)
+response = market.proxy.get()
+print(response.json())
 ```
 
 ```python
@@ -1370,8 +1377,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.proxy.add(proxy_ip="192.168.1.1",proxy_port="5000",proxy_user="Login",proxy_pass="Password")
-print(data)
+response = market.proxy.add(proxy_ip="192.168.1.1",proxy_port="5000",proxy_user="Login",proxy_pass="Password")
+print(response.json())
 ```
 
 ```python
@@ -1392,8 +1399,8 @@ print(data)
 **Example:**
 
 ```python
-data = api.market.proxy.delete(delete_all=True)
-print(data)
+response = market.proxy.delete(delete_all=True)
+print(response.json())
 ```
 
 ```python
@@ -1414,18 +1421,18 @@ print(data)
 
 ```python
 jobs = [
-    api.get_batch_job(api.market.list.favorite, job_name="1", page=1),
-    api.get_batch_job(api.market.payments.history, job_name="2", user_id=2410024, sender="root"),
-    api.get_batch_job(api.market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Types.Market.App_Ids.CS2, currency=Types.Market.Currency.usd)
+    get_batch_job(market.list.favorite, job_name="1", page=1),
+    get_batch_job(market.payments.history, job_name="2", user_id=2410024, sender="root"),
+    get_batch_job(market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
 ]
 for job in jobs:
     print(job)
 ```
 
 ```python
-{'id': '1', 'uri': 'https://api.lzt.market/fave', 'method': 'GET', 'params': {'page': 1, 'locale': 'en'}, 'data': {'page': 1}, 'files': None}
-{'id': '2', 'uri': 'https://api.lzt.market/user/2410024/payments', 'method': 'GET', 'params': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0, 'locale': 'en'}, 'data': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0}, 'files': None}
-{'id': '3', 'uri': 'https://api.lzt.market/steam-value', 'method': 'GET', 'params': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None, 'locale': 'en'}, 'data': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None}, 'files': None}
+{'id': '1', 'uri': 'https://lzt.market/fave', 'method': 'GET', 'params': {'page': 1, 'locale': 'en'}, 'data': {'page': 1}, 'files': None}
+{'id': '2', 'uri': 'https://lzt.market/user/2410024/payments', 'method': 'GET', 'params': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0, 'locale': 'en'}, 'data': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0}, 'files': None}
+{'id': '3', 'uri': 'https://lzt.market/steam-value', 'method': 'GET', 'params': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None, 'locale': 'en'}, 'data': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None}, 'files': None}
 ```
 
 # Batch
@@ -1434,7 +1441,7 @@ for job in jobs:
 
   > Maximum batch jobs is 10.
   >
-  > Market batch can only proceed with market url's. If you want to use batch with forum url's try [this](https://github.com/AS7RIDENIED/Lolzteam_Python_Api/blob/main/Documentation/Forum.md#batch)
+  > Market batch can only proceed with market url's. If you want to use batch with forum url's try [this](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md#batch)
 
 *[Official documentation reference](https://lzt-market.readme.io/reference/batchrequestsexecute)*
 
@@ -1446,11 +1453,11 @@ for job in jobs:
 
 ```python
 jobs = [
-    api.get_batch_job(api.market.list.favorite, job_name="1", page=1),
-    api.get_batch_job(api.market.payments.history, job_name="2", user_id=2410024, sender="root"),
-    api.get_batch_job(api.market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Types.Market.App_Ids.CS2, currency=Types.Market.Currency.usd)
+    get_batch_job(market.list.favorite, job_name="1", page=1),
+    get_batch_job(market.payments.history, job_name="2", user_id=2410024, sender="root"),
+    get_batch_job(market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
 ]
-data = api.market.batch(jobs=jobs)
+response = market.batch(jobs=jobs)
 for job_name, job_data in data["jobs"].items():
     print(job_data)
 ```
@@ -1481,8 +1488,8 @@ for job_name, job_data in data["jobs"].items():
 **Example:**
 
 ```python
-data = api.market.steam_value(url="https://steamcommunity.com/id/AS7RID",currency=Types.Market.Currency.rub,app_id=Types.Market.App_Ids.CSGO)
-print(data)
+response = market.steam_value(url="https://steamcommunity.com/id/AS7RID",currency=Constants.Market.Currency.rub,app_id=Constants.Market.AppID.CSGO)
+print(response.json())
 ```
 
 ```python
@@ -1501,8 +1508,8 @@ print(data)
 **Example:**
 
 ```python
-response = await api.send_as_async(func=api.market.profile.get, user_id=2410024)
-print(response)
+response = await send_as_async(func=market.profile.get, user_id=2410024)
+print(response.json())
 ```
 
 ```python
