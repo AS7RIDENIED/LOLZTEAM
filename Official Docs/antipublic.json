@@ -1,0 +1,495 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AntiPublic.One API",
+    "description": "Official API documentation for AntiPublic MYRZ.\n\nLinks:\n+ Download [AntiPublic](https://antipublic.one/dl/AntiPublic.zip).\n+ AntiPublic [Management](https://zelenka.guru/account/antipublic).",
+    "version": "1.0.6"
+  },
+  "servers": [
+    {
+      "url": "https://antipublic.one/api/v2"
+    }
+  ],
+  "paths": {
+    "/countLines": {
+      "get": {
+        "tags": [
+          "Info"
+        ],
+        "summary": "Count Lines",
+        "description": "Get count of rows in the AntiPublic db.",
+        "operationId": "antipublic.countLines",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountLines"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countLinesPlain": {
+      "get": {
+        "tags": [
+          "Info"
+        ],
+        "summary": "Count Lines Plain",
+        "description": "Get count of rows in the AntiPublic db (raw format).",
+        "operationId": "antipublic.countLinesPlain",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountLinesPlain"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/version": {
+      "get": {
+        "tags": [
+          "Info"
+        ],
+        "summary": "Check Updates",
+        "description": "Get current version etc.",
+        "operationId": "antipublic.version",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Version"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checkAccess": {
+      "get": {
+        "tags": [
+          "Check"
+        ],
+        "summary": "Check Access",
+        "description": "Checks your license.",
+        "operationId": "antipublic.checkLicense",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckAccess"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncorrectKey"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AntiPublic": []
+          }
+        ]
+      }
+    },
+    "/availableQueries": {
+      "get": {
+        "tags": [
+          "Check"
+        ],
+        "summary": "Available Queries",
+        "description": "Get your available queries.",
+        "operationId": "antipublic.availableQueries",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailableQueries"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncorrectKey"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AntiPublic": []
+          }
+        ]
+      }
+    },
+    "/checkLines": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Check Lines",
+        "description": "Check your lines. Maximum 1000 lines per request.",
+        "operationId": "antipublic.checkLines",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "lines"
+                ],
+                "properties": {
+                  "insert": {
+                    "description": "Upload private rows to AntiPublic db.",
+                    "title": "Insert",
+                    "type": "boolean"
+                  },
+                  "lines": {
+                    "description": "Lines for check, email:password.",
+                    "title": "Lines",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckLines"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncorrectKey"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AntiPublic": []
+          }
+        ]
+      }
+    },
+    "/emailSearch": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Email Search",
+        "description": "Get passwords for email.",
+        "operationId": "antipublic.emailSearch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "Email or login for search.",
+                    "title": "Email",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailSearch"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoAccess"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AntiPublic": []
+          }
+        ]
+      }
+    },
+    "/emailPasswords": {
+      "post": {
+        "tags": [
+          "Plus"
+        ],
+        "summary": "Email Passwords",
+        "description": "Get passwords for emails. AntiPublic Plus subscription required.",
+        "operationId": "antipublic.emailPasswords",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "emails"
+                ],
+                "properties": {
+                  "emails": {
+                    "description": "Emails for search.",
+                    "title": "Emails",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "limit": {
+                    "description": "Result limit (per email).",
+                    "title": "Limit",
+                    "type": "integer",
+                    "maximum": 1000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailSearch"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoAccess"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AntiPublic": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CountLines": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        }
+      },
+      "CountLinesPlain": {
+        "type": "string"
+      },
+      "Version": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string",
+            "default": "AntiPublic.exe"
+          },
+          "version": {
+            "type": "string"
+          },
+          "changeLog": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "CheckAccess": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "plus": {
+            "type": "boolean"
+          },
+          "trial": {
+            "type": "boolean",
+            "default": false
+          },
+          "plus_expires": {
+            "type": "string",
+            "default": "0"
+          },
+          "trial_expires": {
+            "type": "string",
+            "default": "0"
+          }
+        }
+      },
+      "IncorrectKey": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": false
+          },
+          "error": {
+            "type": "string",
+            "default": "Некорректный ключ"
+          }
+        }
+      },
+      "AvailableQueries": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "emailSearch": {
+            "type": "integer"
+          },
+          "passwordSearch": {
+            "type": "integer"
+          }
+        }
+      },
+      "NoAccess": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": false
+          },
+          "error": {
+            "type": "string",
+            "default": "Отсутствует доступ"
+          }
+        }
+      },
+      "CheckLines": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": true
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineResult"
+            }
+          }
+        }
+      },
+      "LineResult": {
+        "type": "object",
+        "properties": {
+          "is_private": {
+            "type": "boolean",
+            "default": false
+          },
+          "line": {
+            "type": "string",
+            "default": "example@gmail.com:password"
+          }
+        }
+      },
+      "EmailSearch": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "availableQueries": {
+            "type": "integer"
+          },
+          "resultCount": {
+            "type": "integer",
+            "default": 1
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "default": "example@gmail.com:password"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "AntiPublic": {
+        "type": "apiKey",
+        "name": "key",
+        "in": "query"
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true,
+    "samples-enabled": true
+  }
+}
