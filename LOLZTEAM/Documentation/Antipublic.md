@@ -1,6 +1,6 @@
 <font size=6 style="margin: auto"> <center>
 
-[Forum docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) - [Market Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)
+[Forum docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Forum.md) - [Market Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)
 
 </center></font>
 
@@ -12,8 +12,8 @@
   * [Lines count](#lines-count)
   * [Lines count plain](#lines-count-plain)
   * [Version](#version)
-* [Account info](#account-info)
-  * [Access](#access)
+* [Account](#account)
+  * [License](#license)
   * [Queries](#queries)
 * [Check](#check)
 * [Search](#search)
@@ -116,18 +116,18 @@ print(response.json())
 {'filename': 'AntiPublic.exe', 'version': '1.0.18', 'changeLog': 'New feature for window title, provide custom password count input for per email/login', 'url': 'https://antipublic.one/dl/AntiPublic.zip'}
 ```
 
-# Account info
+# Account
 
 *A category that contains methods that return information about account*
 
-### Access
+### License
 
 *Checks your license*
 
 *[Official documentation reference](https://antipublic.readme.io/reference/antipublicchecklicense)*
 
 ```python
-response = antipublic.account_info.access()
+response = antipublic.account.license()
 print(response.json())
 ```
 
@@ -142,7 +142,7 @@ print(response.json())
 *[Official documentation reference](https://antipublic.readme.io/reference/antipublicavailablequeries)*
 
 ```python
-response = antipublic.account_info.queries()
+response = antipublic.account.queries()
 print(response.json())
 ```
 
@@ -154,7 +154,7 @@ print(response.json())
 
 *Methods for data processing*
 
-### Check lines
+### Check
 
 *Check your lines for private*
 

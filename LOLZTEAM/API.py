@@ -1,4 +1,5 @@
 import requests
+import asyncio
 import aiohttp
 import time
 import json
@@ -234,7 +235,6 @@ class Forum:
         self.bypass_429 = bypass_429
         self._auto_delay_time = time.time() - 3
         self._locale = language
-        self.user_id = self.__set_user_id
         self._delay_synchronizer = None
         self._lock = None
         self._delay_exceptions = []
@@ -261,14 +261,6 @@ class Forum:
 
     async def send_as_async(self, func, **kwargs):
         return await _send_async_request(self, func, **kwargs)
-
-    def __set_user_id(self):
-        path = "/me"
-        response = _send_request(self=self, method="GET", path=path)
-        try:
-            return response["user"]["user_id"]
-        except KeyError:
-            return self.__set_user_id  # Fix for ultrarare errors
 
     def change_proxy(self, proxy_type: str = None, proxy: str = None):
         """
@@ -318,7 +310,7 @@ class Forum:
             :param parent_category_id: ID of parent category.
             :param parent_forum_id: ID of parent forum.
             :param order: Ordering of categories. Can be [natural, list]
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/categories"
             params = {
@@ -337,7 +329,7 @@ class Forum:
             Required scopes: read
 
             :param category_id: ID of category we want to get
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/categories/{category_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -362,7 +354,7 @@ class Forum:
             :param parent_category_id: ID of parent category.
             :param parent_forum_id: ID of parent forum.
             :param order: Ordering of categories. Can be [natural, list]
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/forums"
             params = {
@@ -381,7 +373,7 @@ class Forum:
             Required scopes: read
 
             :param forum_id: ID of forum we want to get
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/forums/{forum_id}"
 
@@ -409,7 +401,7 @@ class Forum:
             :param alert: Whether to receive notification as alert.
             :param email: Whether to receive notification as email.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/forums/{forum_id}/followers"
             if True:  # Tweak 0
@@ -439,7 +431,7 @@ class Forum:
 
             :param forum_id: ID of forum we want to get
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -453,7 +445,7 @@ class Forum:
             Required scopes: read
 
             :param forum_id: ID of forum we want to get
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
@@ -468,7 +460,7 @@ class Forum:
 
             :param total: If included in the request, only the forum count is returned as forums_total.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/forums/followed"
             if True:  # Tweak 0
@@ -494,7 +486,7 @@ class Forum:
             :param parent_page_id: ID of parent page. If exists, filter pages that are direct children of that page.
             :param order: Ordering of pages. Can be [natural, list]
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/pages"
             params = {"parent_page_id": parent_page_id, "order": order}
@@ -510,7 +502,7 @@ class Forum:
 
             :param page_id: ID of parent page. If exists, filter pages that are direct children of that page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/pages/{page_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -531,7 +523,7 @@ class Forum:
                 :param post_id: ID of post.
                 :param before: The time in milliseconds (e.g. 1652177794083) before last comment date
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = f"/posts/{post_id}/comments"
                 params = {"before": before}
@@ -553,7 +545,7 @@ class Forum:
                 :param post_id: ID of post.
                 :param comment_body: Content of the new post
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = f"/posts/{post_id}/comments"
                 data = {"comment_body": comment_body}
@@ -587,7 +579,7 @@ class Forum:
             :param page: Page number of posts.
             :param limit: Number of posts in a page. Default value depends on the system configuration.
             :param order: Ordering of posts. Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/posts"
             if type(post_ids) is list:
@@ -612,7 +604,7 @@ class Forum:
 
             :param post_id: ID of post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/posts/{post_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -631,7 +623,7 @@ class Forum:
             :param thread_id: ID of the target thread.
             :param quote_post_id: ID of the quote post. It's possible to skip thread_id if this parameter is provided. An extra check is performed if both parameters exist and does not match.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = "/posts"
@@ -660,7 +652,7 @@ class Forum:
             :param message_state: Message state. Can be [visible,deleted,moderated]
             :param post_body: New content of the post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/posts/{post_id}"
             params = {"message_state": message_state}
@@ -684,7 +676,7 @@ class Forum:
             :param post_id: ID of post.
             :param reason: Reason of the post removal.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/posts/{post_id}"
             data = {"reason": reason}
@@ -702,7 +694,7 @@ class Forum:
             :param page: Page number of users.
             :param limit: Number of users in a page. Default value depends on the system configuration.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/posts/{post_id}/likes"
             params = {"page": page, "limit": limit}
@@ -718,7 +710,7 @@ class Forum:
 
             :param post_id: ID of post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="POST", path=path)
@@ -733,7 +725,7 @@ class Forum:
 
             :param post_id: ID of post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -749,7 +741,7 @@ class Forum:
             :param post_id: ID of post.
             :param message: Reason of the report.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/posts/{post_id}/report"
             data = {"message": message}
@@ -803,7 +795,7 @@ class Forum:
                     :param thread_prefix_id: ID of a prefix for the new thread.
                     :param thread_tags: Thread tags for the new thread.
 
-                    :return: Response object (Even if you use sendasync request)
+                    :return: Response object (Even if you use SendAsAsync function)
                     """
                     path = "/threads"
                     contest_type = "by_finish_date"
@@ -866,7 +858,7 @@ class Forum:
                     :param thread_prefix_id: ID of a prefix for the new thread.
                     :param thread_tags: Thread tags for the new thread.
 
-                    :return: Response object (Even if you use sendasync request)
+                    :return: Response object (Even if you use SendAsAsync function)
                     """
                     path = "/threads"
                     contest_type = "by_needed_members"
@@ -948,7 +940,7 @@ class Forum:
                     :param thread_prefix_id: ID of a prefix for the new thread.
                     :param thread_tags: Thread tags for the new thread.
 
-                    :return: Response object (Even if you use sendasync request)
+                    :return: Response object (Even if you use SendAsAsync function)
                     """
                     path = "/threads"
                     contest_type = "by_finish_date"
@@ -1025,7 +1017,7 @@ class Forum:
                     :param thread_prefix_id: ID of a prefix for the new thread.
                     :param thread_tags: Thread tags for the new thread.
 
-                    :return: Response object (Even if you use sendasync request)
+                    :return: Response object (Even if you use SendAsAsync function)
                     """
                     path = "/threads"
                     contest_type = "by_needed_members"
@@ -1084,7 +1076,7 @@ class Forum:
             :param page: Page number of threads.
             :param limit: Number of threads in a page.
             :param order: Can be [natural, thread_create_date, thread_create_date_reverse, thread_update_date, thread_update_date_reverse, thread_view_count, thread_view_count_reverse, thread_post_count, thread_post_count_reverse]
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/threads"
             if sticky is True:  # Tweak 0
@@ -1114,7 +1106,7 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1166,7 +1158,7 @@ class Forum:
             :param reply_group: Allow to reply only users with chosen or higher group.
             :param comment_ignore_group: Allow commenting if user can't post in thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/threads"
             if True:  # Tweak 0
@@ -1253,7 +1245,7 @@ class Forum:
             :param reply_group: Allow to reply only users with chosen or higher group.
             :param comment_ignore_group: Allow commenting if user can't post in thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}"
             if True:  # Tweak 0
@@ -1315,7 +1307,7 @@ class Forum:
             :param send_starter_alert: Send alert to thread starter.
             :param starter_alert_reason: Reason of moving thread which will sent to thread starter. (Required if **send_starter_alert** is set)
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}/move"
             if True:  # Tweak 0
@@ -1354,7 +1346,7 @@ class Forum:
             :param thread_id: ID of thread.
             :param reason: Reason of the thread removal.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}"
             params = {"reason": reason}
@@ -1372,7 +1364,7 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1387,7 +1379,7 @@ class Forum:
 
             :param total: If included in the request, only the thread count is returned as threads_total.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/threads/followed"
             if True:  # Tweak 0
@@ -1409,7 +1401,7 @@ class Forum:
             :param thread_id: ID of thread.
             :param email: Whether to receive notification as email.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}/followers"
             if True:  # Tweak 0
@@ -1430,7 +1422,7 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -1445,7 +1437,7 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -1463,7 +1455,7 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}/poll"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1485,7 +1477,7 @@ class Forum:
             :param response_id: The id of the response to vote for. Can be skipped if response_ids set.
             :param response_ids: An array of ids of responses (if the poll allows multiple choices).
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -1522,7 +1514,7 @@ class Forum:
             :param forum_id: ID of the container forum to search for threads. Child forums of the specified forum will be included in the search.
             :param limit: Maximum number of result threads. The limit may get decreased if the value is too large (depending on the system configuration).
             :param data_limit: Number of thread data to be returned. Default value is 20.
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/threads/new"
             params = {
@@ -1550,7 +1542,7 @@ class Forum:
             :param forum_id: ID of the container forum to search for threads. Child forums of the specified forum will be included in the search.
             :param limit: Maximum number of result threads. The limit may get decreased if the value is too large (depending on the system configuration).
             :param data_limit: Number of thread data to be returned. Default value is 20.
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/threads/recent"
             params = {
@@ -1571,7 +1563,7 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/threads/{thread_id}/bump"
             return _send_request(self=self._api, method="POST", path=path)
@@ -1588,7 +1580,7 @@ class Forum:
 
             Required scopes: get
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/tags"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1605,7 +1597,7 @@ class Forum:
             :param page: Page number of tags list.
             :param limit: Limit of tags on a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/tags/list"
             params = {"page": page, "limit": limit}
@@ -1623,7 +1615,7 @@ class Forum:
             :param page: Page number of tags list.
             :param limit: Number of tagged contents in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/tags/{tag_id}"
             params = {"page": page, "limit": limit}
@@ -1639,7 +1631,7 @@ class Forum:
 
             :param tag: tag to filter. Tags start with the query will be returned.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/tags/find"
             params = {"tag": tag}
@@ -1661,7 +1653,7 @@ class Forum:
                 :param user_id: ID of user. If you do not specify the user_id, then you will change the avatar of the current user
                 :param avatar: Binary data of the avatar.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 try:
                     if "batch_mode" in locals():
@@ -1696,7 +1688,7 @@ class Forum:
 
                 :param user_id: ID of user. If you do not specify the user_id, then you will delete the avatar of the current user
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 if user_id is None:
                     path = "/users/me/avatar"
@@ -1720,7 +1712,7 @@ class Forum:
                 :param y: The starting point of the selection by height
                 :param size: Selection size. Minimum value - 16.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 params = {"x": x, "y": y, "crop": size}
                 if (
@@ -1757,7 +1749,7 @@ class Forum:
             :param username: Username
             :param email: Email
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/lost-password"
             params = {
@@ -1779,7 +1771,7 @@ class Forum:
 
             :param page: Page number of users.
             :param limit: Number of users in a page.
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/users"
             params = {"page": page, "limit": limit}
@@ -1793,7 +1785,7 @@ class Forum:
 
             Required scopes: read
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = "/users/fields"
@@ -1816,7 +1808,7 @@ class Forum:
             :param user_email: Email to filter. Requires admincp scope.
             :param custom_fields: Custom fields to filter. Example: {"telegram": "Telegram_Login"}
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/users/find"
             params = {
@@ -1841,7 +1833,7 @@ class Forum:
             Required scopes: read
 
             :param user_id: ID of user. If you do not specify the user_id, you will get info about current user
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:
                 path = "/users/me"
@@ -1863,7 +1855,7 @@ class Forum:
             :param page: Page number of contents.
             :param limit: Number of contents in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:
                 path = "/users/me/timeline"
@@ -1915,7 +1907,7 @@ class Forum:
             :param fields: Array of values for user fields.
             :param display_group_id: Id of group you want to display.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:
                 path = "/users/me"
@@ -1962,7 +1954,7 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/users/{user_id}/followers"
             return _send_request(self=self._api, method="POST", path=path)
@@ -1977,7 +1969,7 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/users/{user_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -2002,7 +1994,7 @@ class Forum:
             :param page: Page number of followers.
             :param limit: Number of followers in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:
                 path = "/users/me/followers"
@@ -2030,7 +2022,7 @@ class Forum:
             :param page: Page number of users.
             :param limit: Number of users in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:
                 path = "/users/me/followings"
@@ -2052,7 +2044,7 @@ class Forum:
 
             :param total: If included in the request, only the user count is returned as users_total.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/users/ignored"
             if True:  # Tweak 0
@@ -2073,7 +2065,7 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = f"/users/{user_id}/ignore"
@@ -2089,7 +2081,7 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = f"/users/{user_id}/ignore"
@@ -2105,7 +2097,7 @@ class Forum:
 
             :param user_id: ID of user. If user_id skipped, method will return current user groups
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:
                 path = "/users/me/groups"
@@ -2132,7 +2124,7 @@ class Forum:
                 :param before: Date to get older comments. Please note that this entry point does not support the page parameter, but it still does support limit.
                 :param limit: Number of profile posts in a page.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = {
                     "site": "Forum",
@@ -2157,7 +2149,7 @@ class Forum:
                 :param profile_post_id: ID of profile post.
                 :param comment_id: ID of profile post comment
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = {
                     "site": "Forum",
@@ -2176,7 +2168,7 @@ class Forum:
                 :param profile_post_id: ID of profile post.
                 :param comment_body: Content of the new profile post comment.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = {
                     "site": "Forum",
@@ -2205,7 +2197,7 @@ class Forum:
             :param page: Page number of contents.
             :param limit: Number of contents in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             params = {"page": page, "limit": limit}
             path = f"/users/{user_id}/profile-posts"
@@ -2221,7 +2213,7 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -2240,7 +2232,7 @@ class Forum:
             :param user_id: ID of user. If you do not specify the user_id, you will create profile post in current user's timeline
             :param post_body: Content of the new profile post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:
                 path = "/users/me/timeline"
@@ -2260,7 +2252,7 @@ class Forum:
             :param profile_post_id: ID of profile post.
             :param post_body: New content of the profile post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = {
@@ -2282,7 +2274,7 @@ class Forum:
             :param reason: Reason of the profile post removal.
 
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -2301,7 +2293,7 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = {
@@ -2320,7 +2312,7 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = {
@@ -2340,7 +2332,7 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -2359,7 +2351,7 @@ class Forum:
             :param profile_post_id: ID of profile post.
             :param message: Reason of the report.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -2394,7 +2386,7 @@ class Forum:
             :param page: Page number of results.
             :param limit: Number of results in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/search"
             params = {
@@ -2433,7 +2425,7 @@ class Forum:
             :param limit: Number of results in a page.
             :param data_limit: Number of thread data to be returned.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/search/threads"
             params = {
@@ -2473,7 +2465,7 @@ class Forum:
             :param limit: Number of results in a page.
             :param data_limit: Number of thread data to be returned.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/search/posts"
             params = {
@@ -2506,7 +2498,7 @@ class Forum:
             :param tags: Array of tags to search for tagged contents.
             :param page: Page number of results.
             :param limit: Number of results in a page.
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/search/tagged"
             params = {
@@ -2537,7 +2529,7 @@ class Forum:
             :param page: Page number of results.
             :param limit: Number of results in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/search/profile-posts"
             params = {"q": q, "user_id": user_id, "page": page, "limit": limit}
@@ -2568,7 +2560,7 @@ class Forum:
             :param link:  Link related to content.
             :param date: Unix timestamp in second of the content. If missing, current time will be used.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/search/indexing"
             data = {
@@ -2599,7 +2591,7 @@ class Forum:
 
             Required scopes: read
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/notifications"
             return _send_request(self=self._api, method="GET", path=path)
@@ -2613,7 +2605,7 @@ class Forum:
             Required scopes: read
             :param notification_id: ID of notification.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -2630,7 +2622,7 @@ class Forum:
             Required scopes: post
             :param notification_id: ID of notification. If notification_id is omitted, it's mark all existing notifications as read.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/notifications/read"
             params = {"notification_id": notification_id}
@@ -2660,7 +2652,7 @@ class Forum:
             :param notification_type: The notification type.
             :param extra_data: Extra data when sending alert. Предположительно это словарик, но я не уверен
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = "/notifications/custom"
@@ -2710,7 +2702,7 @@ class Forum:
                 :param before: Date to get older messages.
                 :param after: Date to get newer messages.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = "/conversation-messages"
                 params = {
@@ -2738,7 +2730,7 @@ class Forum:
 
                 :param message_id: ID of conversation message.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = {
                     "site": "Forum",
@@ -2757,7 +2749,7 @@ class Forum:
                 :param conversation_id: ID of conversation.
                 :param message_body: Content of the new message.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = "/conversation-messages"
                 params = {
@@ -2783,7 +2775,7 @@ class Forum:
                 :param message_id: ID of conversation message.
                 :param message_body: New content of the message.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = {
                     "site": "Forum",
@@ -2802,7 +2794,7 @@ class Forum:
 
                 :param message_id: ID of conversation message.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = {
                     "site": "Forum",
@@ -2821,7 +2813,7 @@ class Forum:
                 :param message_id: ID of conversation message.
                 :param message : Reason of the report.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
 
                 path = {
@@ -2848,7 +2840,7 @@ class Forum:
             :param page: Page number of conversations.
             :param limit: Number of conversations in a page.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/conversations"
             params = {"page": page, "limit": limit}
@@ -2864,7 +2856,7 @@ class Forum:
 
             :param conversation_id: ID of conversation.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Forum",
@@ -2883,7 +2875,7 @@ class Forum:
             :param conversation_id: ID of conversation.
             :param leave_type: Leave type. Can be [delete,delete_ignore].
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             params = {"delete_type": leave_type}
             path = {
@@ -2915,7 +2907,7 @@ class Forum:
             :param conversation_locked: Is conversation locked.
             :param allow_edit_messages: Allow edit messages.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if True:  # Tweak 0
                 if open_invite is True:
@@ -2972,7 +2964,7 @@ class Forum:
             :param conversation_locked: Is conversation locked.
             :param allow_edit_messages: Allow edit messages.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if True:  # Tweak 0
                 if open_invite is True:
@@ -3023,7 +3015,7 @@ class Forum:
             :param client_secret: Secret phrase of facebook client.
             :param facebook_token: Facebook token.
 
-            :return: Response object (Even if you use sendasync request) or token string
+            :return: Response object (Even if you use SendAsAsync function) or token string
             """
             path = "/oauth/token/facebook"
             params = {
@@ -3054,7 +3046,7 @@ class Forum:
             :param twitter_url: "the full /account/verify_credentials.json uri that has been used to calculate OAuth signature. For security reason, the uri must use HTTPS protocol and the hostname must be either "twitter.com" or "api.twitter.com"."
             :param twitter_auth: the complete authentication header that starts with "OAuth". Consult Twitter document for more information.
 
-            :return: Response object (Even if you use sendasync request) or token string
+            :return: Response object (Even if you use SendAsAsync function) or token string
             """
             path = "/oauth/token/twitter"
             params = {
@@ -3079,7 +3071,7 @@ class Forum:
             :param client_secret: Secret phrase of facebook client.
             :param google_token : Google token.
 
-            :return: Response object (Even if you use sendasync request) or token string
+            :return: Response object (Even if you use SendAsAsync function) or token string
             """
             path = "/oauth/token/google"
             params = {
@@ -3101,7 +3093,7 @@ class Forum:
 
             :param user_id: ID of the user that needs access token.
 
-            :return: Response object (Even if you use sendasync request) or token string
+            :return: Response object (Even if you use SendAsAsync function) or token string
             """
             path = "/oauth/token/admin"
             params = {"user_id": user_id}
@@ -3130,7 +3122,7 @@ class Forum:
             :param extra_data: Extra data
             :param extra_timestamp: Extra timestamp
 
-            :return: Response object (Even if you use sendasync request) or token string
+            :return: Response object (Even if you use SendAsAsync function) or token string
             """
             path = "/oauth/token/associate"
             params = {
@@ -3154,11 +3146,11 @@ class Forum:
 
         :param parent: ID of parent element. If exists, filter elements that are direct children of that element.
 
-        :return: Response object (Even if you use sendasync request)
+        :return: Response object (Even if you use SendAsAsync function)
         """
         path = "/navigation"
         params = {"parent": parent}
-        return _send_request(self=self._api, method="GET", path=path, params=params)
+        return _send_request(self=self, method="GET", path=path, params=params)
 
     def batch(self, jobs: list[dict]):
         """
@@ -3180,13 +3172,13 @@ class Forum:
         Required scopes: Same as called API requests.
 
         :param jobs: List of batch jobs. (Check example above)
-        :return: Response object (Even if you use sendasync request)
+        :return: Response object (Even if you use SendAsAsync function)
         """
         import json
 
         path = "/batch"
         data = json.dumps(jobs)
-        return _send_request(self=self._api, method="POST", path=path, data=data)
+        return _send_request(self=self, method="POST", path=path, data=data)
 
 
 class Market:
@@ -3228,7 +3220,7 @@ class Market:
         self._auto_delay_time = time.time() - 3
         self._locale = language
         if user_id is not None:
-            self.__set_user_id = user_id
+            self.user_id = user_id
         else:
             self.user_id = self.__set_user_id
         self._delay_synchronizer = None
@@ -3236,9 +3228,9 @@ class Market:
 
         self._delay_exceptions = ["/item/add", "/item/fast-sell", "/item/goods/check"]
 
-        self.profile = self.__Profile(self, self.user_id)
-        self.payments = self.__Payments(self, self.user_id)
-        self.list = self.__List(self, self.user_id)
+        self.profile = self.__Profile(self)
+        self.payments = self.__Payments(self)
+        self.list = self.__List(self)
         self.publishing = self.__Publishing(self)
         self.purchasing = self.__Purchasing(self)
         self.managing = self.__Managing(self)
@@ -3253,9 +3245,9 @@ class Market:
 
     def __set_user_id(self):
         path = "/me"
-        response = _send_request(self=self, method="GET", path=path)
+        response = asyncio.run(_send_async_request(self=self, method="GET", path=path))
         try:
-            return response["user"]["user_id"]
+            return response.json()["user"]["user_id"]
         except KeyError:
             return self.__set_user_id  # Fix for ultrarare errors
 
@@ -3305,62 +3297,17 @@ class Market:
         ]
 
         :param jobs: List of batch jobs. (Check example above)
-        :return: Response object (Even if you use sendasync request)
+        :return: Response object (Even if you use SendAsAsync function)
         """
         import json
 
         path = "/batch"
         data = json.dumps(jobs)
-        return _send_request(self=self._api, method="POST", path=path, data=data)
-
-    def steam_value(
-        self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None
-    ):
-        """
-        GET https://api.lzt.market/steam-value
-
-        Gets steam value.
-
-        Application id list:
-
-        730 - CS2
-
-        578080 - PUBG
-
-        753 - Steam
-
-        570 - Dota 2
-
-        440 - Team Fortress 2
-
-        252490 - Rust
-
-        304930 - Unturned
-
-        232090 - Killing Floor 2
-
-        322330 - Don't Starve Together
-
-        :param url: Link or id of account. Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
-        :param app_id: Application id.
-        :param currency: Using currency for amount.
-        :param ignore_cache: Ignore cache.
-
-        :return: Response object (Even if you use sendasync request)
-        """
-        params = {
-            "link": url,
-            "app_id": app_id,
-            "currency": currency,
-            "ignore_cache": ignore_cache,
-        }
-        path = "/steam-value"
-        return _send_request(self=self._api, method="GET", path=path, params=params)
+        return _send_request(self=self, method="POST", path=path, data=data)
 
     class __Profile:
-        def __init__(self, api_self, user_id):
+        def __init__(self, api_self):
             self._api = api_self
-            self.user_id = user_id
 
         def get(self):
             """
@@ -3370,7 +3317,7 @@ class Market:
 
             Required scopes: market
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             path = "/me"
@@ -3407,7 +3354,7 @@ class Market:
             :param deauthorize_steam: Finish all Steam sessions after purchase.
             :param hide_bids: Hide your profile when bid on the auction.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             path = "/me"
@@ -3439,17 +3386,2144 @@ class Market:
             return _send_request(self=self._api, method="PUT", path=path, params=params)
 
     class __List:
-        def __init__(self, api_self, user_id):
+        def __init__(self, api_self):
             self._api = api_self
-            self.user_id = user_id
 
-            self.categories = self.__Category_Market(self._api)
+            self.category = self.__Category(self._api)
 
-        class __Category_Market:
+        class __Category:
+            class __Steam:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/steam"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/steam/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/steam/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+                def games(self):
+                    """
+                    GET https://api.lzt.market/category_name/games
+
+                    Displays a list of games in the category.
+
+                    Required scopes: market
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/steam/games"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Fortnite:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/fortnite"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/fortnite/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __VK:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/vkontakte"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/steam/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/vkontakte/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __GenshinImpact:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/genshin-impact"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/genshin-impact/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Valorant:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/valorant"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/valorant/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __LeagueOfLegends:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/league-of-legends"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/league-of-legends/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Telegram:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/telegram"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/telegram/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Supercell:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/supercell"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/supercell/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Origin:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/origin"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/origin/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+                def games(self):
+                    """
+                    GET https://api.lzt.market/category_name/games
+
+                    Displays a list of games in the category.
+
+                    Required scopes: market
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/origin/games"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __WorldOfTanks:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/world-of-tanks"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/world-of-tanks/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __WorldOfTanksBlitz:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/wot-blitz"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/wot-blitz/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __EpicGames:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/epicgames"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/epicgames/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+                def games(self):
+                    """
+                    GET https://api.lzt.market/category_name/games
+
+                    Displays a list of games in the category.
+
+                    Required scopes: market
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/epicgames/games"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __EscapeFromTarkov:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/escape-from-tarkov"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/escape-from-tarkov/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __SocialClub:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/socialclub"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/socialclub/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+                def games(self):
+                    """
+                    GET https://api.lzt.market/category_name/games
+
+                    Displays a list of games in the category.
+
+                    Required scopes: market
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/socialclub/games"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Uplay:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/uplay"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/uplay/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+                def games(self):
+                    """
+                    GET https://api.lzt.market/category_name/games
+
+                    Displays a list of games in the category.
+
+                    Required scopes: market
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/steam/games"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __WarThunder:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/war-thunder"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/war-thunder/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Discord:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/discord"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/discord/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __TikTok:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/tiktok"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/tiktok/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Instagram:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/instagram"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/instagram/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __BattleNet:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/battlenet"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/battlenet/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+                def games(self):
+                    """
+                    GET https://api.lzt.market/category_name/games
+
+                    Displays a list of games in the category.
+
+                    Required scopes: market
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/battlenet/games"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __VPN:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/vpn"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/vpn/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Cinema:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/cinema"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/cinema/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Spotify:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/spotify"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/spotify/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Warface:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/warface"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/warface/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
+            class __Youtube:
+                def __init__(self, api_self):
+                    self._api = api_self
+
+                def get(
+                    self,
+                    page: int = None,
+                    auction: str = None,
+                    title: str = None,
+                    pmin: int = None,
+                    pmax: int = None,
+                    origin: str or list = None,
+                    not_origin: str or list = None,
+                    order_by: str = None,
+                    sold_before: bool = None,
+                    sold_before_by_me: bool = None,
+                    not_sold_before: bool = None,
+                    not_sold_before_by_me: bool = None,
+                    search_params: dict = None,
+                ):
+                    """
+                    GET https://api.lzt.market/categoryName
+
+                    Displays a list of accounts in a specific category according to your parameters.
+
+                    Required scopes: market
+
+                    :param page: The number of the page to display results from
+                    :param auction: Auction. Can be [yes, no, nomatter].
+                    :param title: The word or words contained in the account title
+                    :param pmin: Minimal price of account (Inclusive)
+                    :param pmax: Maximum price of account (Inclusive)
+                    :param origin: List of account origins.
+                    :param not_origin: List of account origins that won't be included.
+                    :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                    :param sold_before: Sold before.
+                    :param sold_before_by_me: Sold before by me.
+                    :param not_sold_before: Not sold before.
+                    :param not_sold_before_by_me: Not sold before by me.
+                    :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/youtube"
+                    if True:  # Tweak market
+                        auction = _MainTweaks.market_variable_fix(auction)
+                    params = {
+                        "page": page,
+                        "auction": auction,
+                        "title": title,
+                        "pmin": pmin,
+                        "pmax": pmax,
+                        "origin[]": origin,
+                        "not_origin[]": not_origin,
+                        "order_by": order_by,
+                        "sb": sold_before,
+                        "sb_by_me": sold_before_by_me,
+                        "nsb": not_sold_before,
+                        "nsb_by_me": not_sold_before_by_me,
+                    }
+                    if search_params is not None:
+                        for key, value in search_params.items():
+                            params[str(key)] = value
+                    return _send_request(
+                        self=self._api,
+                        method="GET",
+                        path=path,
+                        params=params,
+                    )
+
+                def params(self):
+                    """
+                    GET https://api.lzt.market/fortnite/params
+
+                    Displays search parameters for a category.
+
+                    :return: Response object (Even if you use SendAsAsync function)
+                    """
+                    path = "/youtube/params"
+                    return _send_request(self=self._api, method="GET", path=path)
+
             def __init__(self, api_self):
                 self._api = api_self
+                self.steam = self.__Steam(api_self)
+                self.fortnite = self.__Fortnite(api_self)
+                self.vk = self.__VK(api_self)
+                self.genshin = self.__GenshinImpact(api_self)
+                self.valorant = self.__Valorant(api_self)
+                self.lol = self.__LeagueOfLegends(api_self)
+                self.telegram = self.__Telegram(api_self)
+                self.supercell = self.__Supercell(api_self)
+                self.origin = self.__Origin(api_self)
+                self.wot = self.__WorldOfTanks(api_self)
+                self.wot_blitz = self.__WorldOfTanksBlitz(api_self)
+                self.epicgames = self.__EpicGames(api_self)
+                self.eft = self.__EscapeFromTarkov(api_self)
+                self.socialclub = self.__SocialClub(api_self)
+                self.uplay = self.__Uplay(api_self)
+                self.war_thunder = self.__WarThunder(api_self)
+                self.discord = self.__Discord(api_self)
+                self.tiktok = self.__TikTok(api_self)
+                self.instagram = self.__Instagram(api_self)
+                self.battlenet = self.__BattleNet(api_self)
+                self.vpn = self.__VPN(api_self)
+                self.cinema = self.__Cinema(api_self)
+                self.spotify = self.__Spotify(api_self)
+                self.warface = self.__Warface(api_self)
+                self.youtube = self.__Youtube(api_self)
 
-            def categories(self, top_queries: bool = None):
+            def list(self, top_queries: bool = None):
                 """
                 GET https://api.lzt.market/category
 
@@ -3459,7 +5533,7 @@ class Market:
 
                 :param top_queries: Display top queries for per category.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = "/category"
                 params = {"top_queries": top_queries}
@@ -3470,246 +5544,6 @@ class Market:
                     params=params,
                 )
 
-            def get(
-                self,
-                category_name: str,
-                pmin: int = None,
-                pmax: int = None,
-                title: str = None,
-                parse_sticky_items: bool = None,
-                parse_same_items: bool = None,
-                games: list[int] or int = None,
-                page: int = None,
-                auction: str = None,
-                order_by: str = None,
-                search_params: dict = None,
-            ):
-                """
-                GET https://api.lzt.market/categoryName
-
-                Displays a list of accounts in a specific category according to your parameters.
-
-                Category id-names list:
-
-                1 - steam - Steam
-
-                2 - vkontakte - VK
-
-                3 - origin - Origin
-
-                4 - warface - Warface
-
-                5 - uplay - Uplay
-
-                7 - socialclub - Social Club
-
-                9 - fortnite - Fortnite
-
-                10 - instagram - Instagram
-
-                11 - battlenet - Battle.net
-
-                12 - epicgames - Epic Games
-
-                13 - valorant - Valorant
-
-                14 - world-of-tanks - World Of Tanks
-
-                16 - wot-blitz - World Of Tanks Blitz
-
-                15 - supercell - Supercell
-
-                17 - genshin-impact - Genshin Impact
-
-                18 - escape-from-tarkov - Escape From Tarkov
-
-                19 - vpn - VPN
-
-                20 - tiktok - TikTok
-
-                22 - discord - Discord
-
-                23 - cinema - Online Cinema
-
-                24 - telegram - Telegram
-
-                25 - youtube - YouTube
-
-                26 - spotify - Spotify
-
-                27 - war-thunder - War Thunder
-
-                Required scopes: market
-
-                :param category_name: Name of category.
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param title: The word or words contained in the account title
-                :param parse_sticky_items: If true, API will return stickied accounts in results
-                :param parse_same_items: If true, API will return account history in results
-                :param games: The ID of a game found on the account
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param search_params: Search params for your request. Example {"origin":"autoreg"} will return only "autoreg" accounts
-                :return: Response object (Even if you use sendasync request)
-
-                """
-                category_name = category_name.lower()
-                path = f"/{category_name}"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
-                params = {
-                    "pmin": pmin,
-                    "pmax": pmax,
-                    "title": title,
-                    "parse_sticky_items": parse_sticky_items,
-                    "parse_same_items": parse_same_items,
-                    "game[]": games,
-                    "page": page,
-                    "auction": auction,
-                    "order_by": order_by,
-                }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
-                return _send_request(
-                    self=self._api,
-                    method="GET",
-                    path=path,
-                    params=params,
-                )
-
-            def params(self, category_name: str):
-                """
-                                    GET https://api.lzt.market/category_name/params
-
-                                    Displays search parameters for a category.
-
-                                    Category id-names list:
-
-                                    1 - steam - Steam
-
-                                    2 - vkontakte - VK
-
-                                    3 - origin - Origin
-
-                                    4 - warface - Warface
-
-                                    5 - uplay - Uplay
-
-                                    7 - socialclub - Social Club
-
-                                    9 - fortnite - Fortnite
-
-                                    10 - instagram - Instagram
-
-                                    11 - battlenet - Battle.net
-
-                                    12 - epicgames - Epic Games
-
-                                    13 - valorant - Valorant
-
-                                    14 - world-of-tanks - World Of Tanks
-
-                                    16 - wot-blitz - World Of Tanks Blitz
-
-                                    15 - supercell - Supercell
-
-                                    17 - genshin-impact - Genshin Impact
-
-                                    18 - escape-from-tarkov - Escape From Tarkov
-
-                                    19 - vpn - VPN
-
-                                    20 - tiktok - TikTok
-
-                                    22 - discord - Discord
-                1
-                                    23 - cinema - Online Cinema
-
-                                    24 - telegram - Telegram
-
-                                    25 - youtube - YouTube
-
-                                    26 - spotify - Spotify
-
-                                    27 - war-thunder - War Thunder
-
-                                    Required scopes: market
-
-                                    :param category_name: Name of category.
-                                    :return: Response object (Even if you use sendasync request)
-
-                """
-                path = f"/{category_name}/params"
-                return _send_request(self=self._api, method="GET", path=path)
-
-            def games(self, category_name: str):
-                """
-                GET https://api.lzt.market/category_name/games
-
-                Displays a list of games in the category.
-
-                Category id-names list:
-
-                1 - steam - Steam
-
-                2 - vkontakte - VK
-
-                3 - origin - Origin
-
-                4 - warface - Warface
-
-                5 - uplay - Uplay
-
-                7 - socialclub - Social Club
-
-                9 - fortnite - Fortnite
-
-                10 - instagram - Instagram
-
-                11 - battlenet - Battle.net
-
-                12 - epicgames - Epic Games
-
-                13 - valorant - Valorant
-
-                14 - world-of-tanks - World Of Tanks
-
-                16 - wot-blitz - World Of Tanks Blitz
-
-                15 - supercell - Supercell
-
-                17 - genshin-impact - Genshin Impact
-
-                18 - escape-from-tarkov - Escape From Tarkov
-
-                19 - vpn - VPN
-
-                20 - tiktok - TikTok
-
-                22 - discord - Discord
-
-                23 - cinema - Online Cinema
-
-                24 - telegram - Telegram
-
-                25 - youtube - YouTube
-
-                26 - spotify - Spotify
-
-                27 - war-thunder - War Thunder
-
-                Required scopes: market
-
-                :param category_name: Name of category.
-
-                :return: Response object (Even if you use sendasync request)
-                """
-                path = f"/{category_name}/games"
-                return _send_request(self=self._api, method="GET", path=path)
-
         def from_url(self, url: str):
             """
             Displays a list of the latest accounts from your market url with search params
@@ -3718,7 +5552,7 @@ class Market:
 
             :param url: Your market search url. It can be https://lzt.market/search_params or https://api.lzt.market/search_params
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if "batch_mode" in locals():
                 base_api = self
@@ -3735,7 +5569,9 @@ class Market:
             path = f"{url}"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def new(self, page: int = None, title: str = None, search_params: dict = None):
+        def latest(
+            self, page: int = None, title: str = None, search_params: dict = None
+        ):
             """
             GET https://api.lzt.market/
 
@@ -3747,7 +5583,7 @@ class Market:
             :param title: The word or words contained in the account title
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             path = "/"
@@ -3834,17 +5670,17 @@ class Market:
             :param status: Account status. Can be [active, paid, deleted or awaiting].
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:  # Tweak 1
                 if "batch_mode" in locals():
-                    raise Exceptions.USERID_REQUIRED_FOR_BATCH(
-                        "You can't use this method without user_id"
-                    )
-                else:
                     if type(self.user_id) is not int:
                         self.user_id = self.user_id()
                     user_id = self.user_id
+                else:
+                    if type(self._api.user_id) is not int:
+                        self._api.user_id = self._api.user_id()
+                    user_id = self._api.user_id
 
             params = {
                 "user_id": user_id,
@@ -3938,18 +5774,18 @@ class Market:
             :param status: Account status. Can be [active, paid, deleted or awaiting].
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             if user_id is None:  # Tweak 1
                 if "batch_mode" in locals():
-                    raise Exceptions.USERID_REQUIRED_FOR_BATCH(
-                        "You can't use this method without user_id"
-                    )
-                else:
                     if type(self.user_id) is not int:
                         self.user_id = self.user_id()
                     user_id = self.user_id
+                else:
+                    if type(self._api.user_id) is not int:
+                        self._api.user_id = self._api.user_id()
+                    user_id = self._api.user_id
             params = {
                 "category_id": category_id,
                 "pmin": pmin,
@@ -3983,7 +5819,7 @@ class Market:
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
             :param title: The word or words contained in the account title
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             path = "/fave"
@@ -4012,7 +5848,7 @@ class Market:
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
             :param title: The word or words contained in the account title
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             path = "/viewed"
@@ -4039,7 +5875,7 @@ class Market:
             :param item_id: ID of item.
             :param steam_preview: Set it True if you want to get steam html and False/None if you want to get account info
             :param preview_type: Type of page - profiles or games
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             path = f"/{item_id}"
@@ -4049,9 +5885,8 @@ class Market:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Payments:
-        def __init__(self, api_self, user_id):
+        def __init__(self, api_self):
             self._api = api_self
-            self.user_id = user_id
 
         def history(
             self,
@@ -4092,7 +5927,7 @@ class Market:
             :param is_hold: Display hold operations
             :param show_payments_stats: Display payment stats for selected period (outgoing value, incoming value)
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
 
             """
             # Tweak 0
@@ -4106,13 +5941,13 @@ class Market:
                 show_payments_stats = 0
             if user_id is None:  # Tweak 1
                 if "batch_mode" in locals():
-                    raise Exceptions.USERID_REQUIRED_FOR_BATCH(
-                        "You can't use this method without user_id"
-                    )
-                else:
                     if type(self.user_id) is not int:
                         self.user_id = self.user_id()
                     user_id = self.user_id
+                else:
+                    if type(self._api.user_id) is not int:
+                        self._api.user_id = self._api.user_id()
+                    user_id = self._api.user_id
             params = {
                 "user_id": user_id,
                 "operation_type": operation_type,
@@ -4161,7 +5996,7 @@ class Market:
             :param hold_length_option: Hold length option. Allowed values: hour, day, week, month, year
             :param hold_length_value: Hold length value
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/balance/transfer"
             params = {
@@ -4240,7 +6075,7 @@ class Market:
             self._api = api_self
             self.tag = self.__Tag(self._api)
 
-        class __Tag:  # To Managing
+        class __Tag:
             def __init__(self, api_self):
                 self._api = api_self
 
@@ -4255,7 +6090,7 @@ class Market:
                 :param item_id: ID of item.
                 :param tag_id: Tag id. Tag list is available via api.market.profile.get()
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = f"/{item_id}/tag"
                 params = {"tag_id": tag_id}
@@ -4277,7 +6112,7 @@ class Market:
                 :param item_id: ID of item.
                 :param tag_id: Tag id. Tag list is available via api.market.profile.get()
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = f"/{item_id}/tag"
                 params = {"tag_id": tag_id}
@@ -4299,7 +6134,7 @@ class Market:
             :param item_id: ID of item.
             :param reason: Delete reason.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}"
             params = {"reason": reason}
@@ -4318,7 +6153,7 @@ class Market:
             :param item_id: ID of item.
             :param email: Account email.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/email-code"
             params = {"email ": email}
@@ -4334,7 +6169,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/guard-code"
             return _send_request(self=self._api, method="GET", path=path)
@@ -4351,7 +6186,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/mafile"
             return _send_request(self=self._api, method="GET", path=path)
@@ -4368,7 +6203,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Market",
@@ -4386,7 +6221,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/refuse-guarantee"
             return _send_request(self=self._api, method="POST", path=path)
@@ -4402,7 +6237,7 @@ class Market:
             :param item_id: ID of item.
             :param _cancel: Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/change-password"
             # Tweak 0
@@ -4425,7 +6260,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -4440,7 +6275,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="POST", path=path)
@@ -4455,7 +6290,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/star"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -4470,7 +6305,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/star"
             return _send_request(self=self._api, method="POST", path=path)
@@ -4485,7 +6320,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/bump"
             return _send_request(self=self._api, method="POST", path=path)
@@ -4502,7 +6337,7 @@ class Market:
             :param username: The username of the new account owner
             :param secret_answer: Secret answer of your account
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/change-owner"
             params = {"username": username, "secret_answer": secret_answer}
@@ -4560,7 +6395,7 @@ class Market:
             :param allow_ask_discount: Allow users to ask discount for this account.
             :param proxy_id: Using proxy id for account checking.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/edit"
             params = {
@@ -4588,7 +6423,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Market",
@@ -4606,7 +6441,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = {
                 "site": "Market",
@@ -4625,13 +6460,57 @@ class Market:
             :param item_id: ID of item.
             :param app_id: App id.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             params = {"app_id": app_id}
             path = f"/{item_id}/update-inventory"
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
+
+        def steam_inventory_value(
+            self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None
+        ):
+            """
+            GET https://api.lzt.market/steam-value
+
+            Gets steam value.
+
+            Application id list:
+
+            730 - CS2
+
+            578080 - PUBG
+
+            753 - Steam
+
+            570 - Dota 2
+
+            440 - Team Fortress 2
+
+            252490 - Rust
+
+            304930 - Unturned
+
+            232090 - Killing Floor 2
+
+            322330 - Don't Starve Together
+
+            :param url: Link or id of account. Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
+            :param app_id: Application id.
+            :param currency: Using currency for amount.
+            :param ignore_cache: Ignore cache.
+
+            :return: Response object (Even if you use SendAsAsync function)
+            """
+            params = {
+                "link": url,
+                "app_id": app_id,
+                "currency": currency,
+                "ignore_cache": ignore_cache,
+            }
+            path = "/steam-value"
+            return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Purchasing:
         def __init__(self, api_self):
@@ -4652,7 +6531,7 @@ class Market:
 
                 :param item_id: ID of item.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = f"/{item_id}/auction"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4669,7 +6548,7 @@ class Market:
                 :param amount: Amount bid.
                 :param currency: Using currency. Can be [rub, uah, kzt, byn, usd, eur, gbp, cny, try].
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 params = {"amount": amount, "currency": currency}
                 path = f"/{item_id}/auction/bid"
@@ -4691,7 +6570,7 @@ class Market:
                 :param item_id: ID of item.
                 :param bid_id: ID of bid.
 
-                :return: Response object (Even if you use sendasync request)
+                :return: Response object (Even if you use SendAsAsync function)
                 """
                 params = {"bid_id": bid_id}
                 path = f"/{item_id}/auction/bid"
@@ -4713,7 +6592,7 @@ class Market:
             :param item_id: ID of item.
             :param price: Currenct price of account in your currency
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/reserve"
             params = {"price": price}
@@ -4731,7 +6610,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/cancel-reserve"
             return _send_request(self=self._api, method="POST", path=path)
@@ -4746,7 +6625,7 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/check-account"
             return _send_request(self=self._api, method="POST", path=path)
@@ -4762,7 +6641,7 @@ class Market:
             :param item_id: ID of item.
             :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/confirm-buy"
             # Tweak 0
@@ -4789,7 +6668,7 @@ class Market:
             :param price: Current price of account in your currency
             :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/fast-buy"
             if True:  # Tweak 0
@@ -4820,7 +6699,7 @@ class Market:
             :param item_id: ID of item.
             :param resell_item_id: Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/goods/add"
             params = {"resell_item_id": resell_item_id}
@@ -4852,7 +6731,7 @@ class Market:
             :param resell_item_id: Put item id, if you are trying to resell item.
             :param random_proxy: Pass True, if you get captcha in previous response
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = f"/{item_id}/goods/check"
             if True:  # Tweak 0
@@ -4963,7 +6842,7 @@ class Market:
             :param instabuy_price: The price for which you can instantly redeem your account.
             :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/item/add"
             if True:  # Tweak 0
@@ -5086,7 +6965,7 @@ class Market:
             :param instabuy_price: The price for which you can instantly redeem your account.
             :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/item/fast-sell"
             # Tweak 0
@@ -5152,7 +7031,7 @@ class Market:
 
             Required scopes: market
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/proxy"
             return _send_request(self=self._api, method="GET", path=path)
@@ -5168,7 +7047,7 @@ class Market:
             :param proxy_id: ID of an existing proxy
             :param delete_all: Use True if you want to delete all proxy
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/proxy"
             params = {"proxy_id": proxy_id, "delete_all": delete_all}
@@ -5197,7 +7076,7 @@ class Market:
             :param proxy_pass: Proxy password
             :param proxy_row: Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \n separator)
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/proxy"
             params = {
@@ -5213,7 +7092,13 @@ class Market:
 
 
 class Antipublic:
-    def __init__(self, token: str = None, proxy_type: str = None, proxy: str = None, reset_custom_variables: bool = True):
+    def __init__(
+        self,
+        token: str = None,
+        proxy_type: str = None,
+        proxy: str = None,
+        reset_custom_variables: bool = True,
+    ):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/antipublic or in antipublic app
         :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
@@ -5260,7 +7145,7 @@ class Antipublic:
 
             Get count of rows in the AntiPublic db
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
 
             path = "/api/v2/countLines"
@@ -5302,7 +7187,7 @@ class Antipublic:
 
             Token required
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/api/v2/checkAccess"
             return _send_request(self=self._api, method="GET", path=path)
@@ -5315,7 +7200,7 @@ class Antipublic:
 
             Token required
 
-            :return: Response object (Even if you use sendasync request)
+            :return: Response object (Even if you use SendAsAsync function)
             """
             path = "/api/v2/availableQueries"
             return _send_request(self=self._api, method="GET", path=path)
@@ -5330,7 +7215,7 @@ class Antipublic:
         :param lines: Lines for check, email:password or login:password
         :param insert: Upload private rows to AntiPublic db
 
-        :return: Response object (Even if you use sendasync request)
+        :return: Response object (Even if you use SendAsAsync function)
         """
         params = {"lines": lines, "insert": insert}
         path = "/api/v2/checkLines"
@@ -5353,7 +7238,7 @@ class Antipublic:
             !!! You need Antupublic Plus subscription to use this param !!!
         :param limit: Result limit (per email).
 
-        :return: Response object (Even if you use sendasync request)
+        :return: Response object (Even if you use SendAsAsync function)
         """
         if logins:
             data = {"emails": logins, "limit": limit}

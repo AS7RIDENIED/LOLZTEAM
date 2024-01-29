@@ -1,6 +1,6 @@
 <font size=6 style="margin: auto"> <center>
 
-[Forum docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md)
+[Forum docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Forum.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Antipublic.md)
 
 </center></font>
 
@@ -12,13 +12,89 @@
   * [Get profile](#get-profile)
   * [Edit profile](#edit-profile)
 * [List](#list)
-  * [Categories](#categories)
-    * [Get accounts in category](#get-accounts-in-category)
-    * [Get categories](#get-categories)
-    * [Get search params](#get-search-params)
-    * [Get category games](#get-category-games)
+  * [Category](#category)
+    * [Steam](#steam)
+      * [Get](#get)
+      * [Params](#params)
+      * [Games](#games)
+    * [Fortnite](#fortnite)
+      * [Get](#get-1)
+      * [Params](#params-1)
+    * [VK](#vk)
+      * [Get](#get-2)
+      * [Params](#params-2)
+    * [Genshin Impact](#genshin-impact)
+      * [Get](#get-3)
+      * [Params](#params-3)
+    * [Valorant](#valorant)
+      * [Get](#get-4)
+      * [Params](#params-4)
+    * [League of Legends](#league-of-legends)
+      * [Get](#get-5)
+      * [Params](#params-5)
+    * [Telegram](#telegram)
+      * [Get](#get-6)
+      * [Params](#params-6)
+    * [Supercell](#supercell)
+      * [Get](#get-7)
+      * [Params](#params-7)
+    * [Origin](#origin)
+      * [Get](#get-8)
+      * [Params](#params-8)
+      * [Games](#games-1)
+    * [World of Tanks](#world-of-tanks)
+      * [Get](#get-9)
+      * [Params](#params-9)
+    * [World of Tanks Blitz](#world-of-tanks-blitz)
+      * [Get](#get-10)
+      * [Params](#params-10)
+    * [Epicgames](#epicgames)
+      * [Get](#get-11)
+      * [Params](#params-11)
+      * [Games](#games-2)
+    * [Escape from Tarkov](#escape-from-tarkov)
+      * [Get](#get-12)
+      * [Params](#params-12)
+    * [Social Club](#social-club)
+      * [Get](#get-13)
+      * [Params](#params-13)
+    * [Uplay](#uplay)
+      * [Get](#get-14)
+      * [Params](#params-14)
+      * [Games](#games-3)
+    * [War Thunder](#war-thunder)
+      * [Get](#get-15)
+      * [Params](#params-15)
+    * [Discord](#discord)
+      * [Get](#get-16)
+      * [Params](#params-16)
+    * [Tiktok](#tiktok)
+      * [Get](#get-17)
+      * [Params](#params-17)
+    * [Instagram](#instagram)
+      * [Get](#get-18)
+      * [Params](#params-18)
+    * [Battle Net](#battle-net)
+      * [Get](#get-19)
+      * [Params](#params-19)
+      * [Games](#games-4)
+    * [VPN](#vpn)
+      * [Get](#get-20)
+      * [Params](#params-20)
+    * [Cinema](#cinema)
+      * [Get](#get-21)
+      * [Params](#params-21)
+    * [Spotify](#spotify)
+      * [Get](#get-22)
+      * [Params](#params-22)
+    * [Warface](#warface)
+      * [Get](#get-23)
+      * [Params](#params-23)
+    * [Youtube](#youtube)
+      * [Get](#get-24)
+      * [Params](#params-24)
   * [Get item](#get-item)
-  * [New items](#new-items)
+  * [Latest items](#latest-items)
   * [From url](#from-url)
   * [Viewed accounts](#viewed-accounts)
   * [Favorite accounts](#favorite-accounts)
@@ -45,6 +121,7 @@
     * [Delete tag](#delete-tag)
   * [Edit](#edit-)
   * [Delete](#delete)
+  * [Steam inventory value](#steam-inventory-value)
   * [Change owner](#change-owner)
   * [Change password](#change-password)
   * [Bump](#bump)
@@ -69,7 +146,6 @@
   * [Delete proxy](#delete-proxy)
 * [Get batch job](#get-batch-job)
 * [Batch](#batch)
-* [Steam inventory value](#steam-inventory-value)
 * [Send async](#send-async)
 
 </details>
@@ -161,39 +237,1350 @@ print(response.json())
 
 ---
 
-## Categories
+## Category
 
-### Get accounts in category
+---
+
+### Steam
+
+#### Get
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
 **Parameters:**
 
-- **category_name** (str): Name of category.
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
 - **pmin** (int): Minimal price of account (Inclusive)
 - **pmax** (int): Maximum price of account (Inclusive)
-- **title** (str): The word or words contained in the account title
-- **parse_sticky_items** (bool): If true, API will return stickied accounts in results
-- **parse_same_items** (bool): If true, API will return account history in results
-- **games** (list[int] or int): The ID of a game found on the account
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. 
-  > Can be [yes, no, nomatter].
-- **order_by** (str): Order by. 
-  > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **search_params** (dict): Search params for your request.
-  > Example {"origin":"autoreg"} will return only "autoreg" accounts
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
 **Example:**
 
 ```python
-response = market.list.categories.get(category_name=Constants.Market.Category.vk,pmax=10)
+response = market.list.category.steam.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
 ```python
 {'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.steam.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+#### Games
+
+*Displays a list of games in the category.*
+
+**Example:**
+
+```python
+response = market.list.category.steam.games()
+print(response.json())
+```
+
+```python
+{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+
+### Fortnite
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.fortnite.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.fortnite.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### VK
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.vk.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.vk.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Genshin impact
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.genshin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.genshin.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Valorant
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.valorant.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.valorant.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### League of Legends
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.lol.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.lol.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Telegram
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.telegram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.telegram.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Supercell
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.supercell.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.supercell.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Origin
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.origin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.origin.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+#### Games
+
+*Displays a list of games in the category.*
+
+**Example:**
+
+```python
+response = market.list.category.origin.games()
+print(response.json())
+```
+
+```python
+{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### World of Tanks
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.wot.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.wot.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### World of Tanks Blitz
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.wot_blitz.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.steam.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Epicgames
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.epicgames.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.epicgames.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+#### Games
+
+*Displays a list of games in the category.*
+
+**Example:**
+
+```python
+response = market.list.category.epicgames.games()
+print(response.json())
+```
+
+```python
+{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Escape from Tarkov
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.eft.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.eft.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Social Club
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.socialclub.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.socialclub.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+#### Games
+
+*Displays a list of games in the category.*
+
+**Example:**
+
+```python
+response = market.list.category.socialclub.games()
+print(response.json())
+```
+
+```python
+{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Uplay
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.uplay.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.uplay.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+#### Games
+
+*Displays a list of games in the category.*
+
+**Example:**
+
+```python
+response = market.list.category.uplay.games()
+print(response.json())
+```
+
+```python
+{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### War Thunder
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.war_thunder.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.war_thunder.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Discord
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.discord.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.discord.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### TikTok
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.tiktok.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.tiktok.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Instagram
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.instagram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.instagram.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Battle Net
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.battlenet.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.battlenet.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+#### Games
+
+*Displays a list of games in the category.*
+
+**Example:**
+
+```python
+response = market.list.category.battlenet.games()
+print(response.json())
+```
+
+```python
+{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### VPN
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.vpn.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.vpn.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Cinema
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.cinema.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.cinema.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Spotify
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.spotify.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.spotify.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Warface
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.warface.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.warface.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### YouTube
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.list.category.youtube.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.list.category.youtube.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
 
 ### Get categories
 
@@ -208,54 +1595,12 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.categories.categories()
+response = market.list.category.list()
 print(response.json())
 ```
 
 ```python
 {'0': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get search params
-
-*Displays search parameters for a category.*
-
-*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetsearchcategory)*
-
-**Parameters:**
-
-- **category_name** (str): Name of category.
-
-**Example:**
-
-```python
-response = market.list.categories.params(category_name=Constants.Market.Category.vk)
-print(response.json())
-```
-
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get category games
-
-*Displays a list of games in the category.*
-
-*[Official documentation reference](https://lzt-market.readme.io/reference/accountslistgetgamescategory)*
-
-**Parameters:**
-
-- **category_name** (str): Name of category.
-
-**Example**:
-
-```python
-response = market.list.categories.games(category_name=Constants.Market.Category.steam)
-print(response.json())
-```
-
-```python
-{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ---
@@ -286,7 +1631,7 @@ print(response.json())
 {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}
 ```
 
-### New items
+### Latest items
 
 *Displays a list of the latest accounts.*
 
@@ -922,6 +2267,34 @@ print(response.json())
 {'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
+# Steam inventory value
+
+*Gets steam value.*
+
+*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggetsteamvalue)*
+
+**Parameters:**
+
+- **url** (str): Link or id of account. 
+  > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
+- **app_id** (int): Application id.
+  > You can use Types. Check example below
+- **currency** (str): Using currency for amount.
+  > You can use Types. Check example below
+- **ignore_cache** (bool): Ignore cache.
+  > If you pass False (default) market api will take inventory from cache (Inventory can be outdated). If you pass True inventory will reparse and you get price at current moment
+
+**Example:**
+
+```python
+response = market.managing.steam_inventory_value(url="https://steamcommunity.com/id/AS7RID",currency=Constants.Market.Currency.rub,app_id=Constants.Market.AppID.CSGO)
+print(response.json())
+```
+
+```python
+{'query': 'https://steamcommunity.com/id/AS7RID', 'data': {'items': {'5189384637': {'classid': '5189384637', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQynaHMJT9B74-ywtjYxfOmMe_Vx28AucQj3brAoYrz3Fay_kY4MG_wdYeLMlhpLMaM-1U', 'title': 'Revolution Case', 'price': 112.3, 'count': '1', 'stickers': None, 'type': 'Base Grade Container', 'market_hash_name': 'Revolution%20Case', 'fraudwarnings': None}, '3946324730': {'classid': '3946324730', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFU2nfGaJG0btN2wwYHfxa-hY-uFxj4Dv50nj7uXpI7w3AewrhBpMWH6d9CLMlhpEbAe-Zk', 'title': 'Fracture Case', 'price': 59.05, 'count': '1', 'stickers': None, 'type': 'Base Grade Container', 'market_hash_name': 'Fracture%20Case', 'fraudwarnings': None}, '3220810394': {'classid': '3220810394', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou6ryFAR17P7YJgJQ7d-9kZSOkuXLPr7Vn35cppB0ievCp9322VKyrkVrN2z6dtOSdVQ8MAyD-QC6lb26gZe7tZrMmnF9-n51z91ErA0', 'title': 'StatTrak™ MP7 | Mischief (Field-Tested)', 'price': 46.47, 'count': '1', 'stickers': None, 'type': 'StatTrak™ Mil-Spec Grade SMG', 'market_hash_name': 'StatTrak%E2%84%A2%20MP7%20%7C%20Mischief%20%28Field-Tested%29', 'fraudwarnings': None}, '3591173339': {'classid': '3591173339', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposbaqKAxf0Ob3djFN79eJkIWKg__gPLfdqWZU7Mxkh6eToY2l3wy2rkFkNmj0JYaTcQY8YV-BqATrweu615-4u5zLnHVl6CJz-z-DyCIevZ0V', 'title': 'Glock-18 | Catacombs (Field-Tested)', 'price': 24.2, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Mil-Spec Grade Pistol', 'market_hash_name': 'Glock-18%20%7C%20Catacombs%20%28Field-Tested%29', 'fraudwarnings': None}, '3035569050': {'classid': '3035569050', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposLOzLhRlxfbGTjVb09ijl5SYqPDmNr7fqWdY781lxL-Zoo-hiVC1_BJsam37I4TAJ1Q7M1zYqQPol-2618fvupWYwSZk73Q8pSGKLd3ROFw', 'title': 'Five-SeveN | Coolant (Factory New)', 'price': 6.78, 'count': '1', 'stickers': None, 'type': 'Consumer Grade Pistol', 'market_hash_name': 'Five-SeveN%20%7C%20Coolant%20%28Factory%20New%29', 'fraudwarnings': None}, '3035569189': {'classid': '3035569189', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou6r8FA957ODYfTxW-Nmkx7-HnvD8J_XUzjwJupdw3-rA8I6jiQPl80I5Yzz7IoCTcwRtZl3VrFa2l-jp18O9ot2XnhWS9Knh', 'title': 'MP9 | Slide (Minimal Wear)', 'price': 4.84, 'count': '1', 'stickers': None, 'type': 'Consumer Grade SMG', 'market_hash_name': 'MP9%20%7C%20Slide%20%28Minimal%20Wear%29', 'fraudwarnings': None}, '3035580092': {'classid': '3035580092', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo7e1f1Jf2-r3czFX6cyknY6fqPX4Jr7Dk29u4MBwnPCP8d-iilGwqhVpYzzwLIeVcgNoY1zSq1bqlOm5hJ687ZzJmHVkvXN2tmGdwUIRV2k43w', 'title': 'UMP-45 | Facility Dark (Battle-Scarred)', 'price': 3.87, 'count': '1', 'stickers': None, 'type': 'Consumer Grade SMG', 'market_hash_name': 'UMP-45%20%7C%20Facility%20Dark%20%28Battle-Scarred%29', 'fraudwarnings': None}, '310777179': {'classid': '310777179', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpouLWzKjhz3MzbcDNG09GzkImemrnwYOOGwjIJ7JB1j-3D9Nms0FDh_0tqYjulLNCWdFNvZl7QrlPswOu6m9bi6_rlVdP1', 'title': 'Nova | Sand Dune (Field-Tested)', 'price': 3.87, 'count': '1', 'stickers': None, 'type': 'Consumer Grade Shotgun', 'market_hash_name': 'Nova%20%7C%20Sand%20Dune%20%28Field-Tested%29', 'fraudwarnings': None}, '1989297441': {'classid': '1989297441', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0su2fDm25bWCWeXKPT1sxTLBaYDrb-GX2t7_BQ2rOFbotEVhXLKoCpzBJNciBOQx9itAdqGq0mFZwCxo8e9VKaVLjnSBHZelHVPZFwA', 'title': 'Sealed Graffiti | Sorry (Brick Red)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Sorry%20%28Brick%20Red%29', 'fraudwarnings': None}, '1989279141': {'classid': '1989279141', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0suOBCG25Pm-Te3WBHg84T7ZdPT6N-WChtOqVE2vAEuglSwECf_cM9mIdbprYPgx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyaadCusA', 'title': 'Sealed Graffiti | NaCl (Shark White)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20NaCl%20%28Shark%20White%29', 'fraudwarnings': None}, '1989299897': {'classid': '1989299897', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0o_ePHnjyVzPBLiWXSgw9TrMMY2jbqGCm5OvCF27BF-4tRFtVfqoApzJNNc7YPRo60IQN8iuomUM7HRkkfddLZQOvw2QfKOAhnCJLcMkz1YlJgQ', 'title': 'Sealed Graffiti | Death Sentence (Tracer Yellow)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Death%20Sentence%20%28Tracer%20Yellow%29', 'fraudwarnings': None}, '1989288246': {'classid': '1989288246', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0rO2BBTqjOWGReHiLGV9uH7ZbY2ve9zKtsemWRG3BEuotQg9Ve6pX-m1IPMGNIVJjg5FYpGm3hUloEgIhYslfLVm-nnJKNxikjmox', 'title': 'Sealed Graffiti | Toasted (Monster Purple)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Toasted%20%28Monster%20Purple%29', 'fraudwarnings': None}, '1989276589': {'classid': '1989276589', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pO-CI3DyeyfFJjOXS1s9SOJZZ2rb9zXx5OrAFjDOE-1_R1pQKaNW8TUbOs-LPxJo1I8JqiuomUM7HRkkfddLZQOvw2QfKOAhnCJLcMm5ggoI_A', 'title': 'Sealed Graffiti | QQ (Tracer Yellow)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20QQ%20%28Tracer%20Yellow%29', 'fraudwarnings': None}, '4302203091': {'classid': '4302203091', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXQ9QVcJY8gulRPQV6CF7b9mNvbRRMjdgIO5ez2flZj0qTKI24TuNi1x9bexqakZe2JzjIIuMMh2rHEotqgxkS6rPdFh4ZR', 'title': 'Sticker | 100 Thieves | 2020 RMR', 'price': 2.9, 'count': 24, 'stickers': None, 'type': 'High Grade Sticker', 'market_hash_name': 'Sticker%20%7C%20100%20Thieves%20%7C%202020%20RMR', 'fraudwarnings': None}, '1989287941': {'classid': '1989287941', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVLtzyAVaLvjeQiSVQ', 'title': 'Sealed Graffiti | King Me (Monster Purple)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20King%20Me%20%28Monster%20Purple%29', 'fraudwarnings': None}, '3496846827': {'classid': '3496846827', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaO1U1g72Ycz4bvYzvxdLakfWnYuPQxWlTuZ133O_ArN6j0Qa3_BI9Z2rwJoaQbEZgNvzyEwH0', 'title': 'P250', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Pistol', 'market_hash_name': 'P250', 'fraudwarnings': None}, '3515046014': {'classid': '3515046014', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaOBRng6uGI2oT7YTjwobex_HwZbrSxzsAvJYi3rmYrY6kiQDnr0VtMT2ndo6ccBh-Pw_WKbm-EQ', 'title': 'SSG 08', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Sniper Rifle', 'market_hash_name': 'SSG%2008', 'fraudwarnings': None}, '3528419424': {'classid': '3528419424', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaLAZs2v_JY3NAtIjnwdPdwq_1Nb_TwW9SupNw07GUoYmg3gKyrxZvNTr3JtWXcFNofxiOrQoC97_e', 'title': 'Galil AR', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Rifle', 'market_hash_name': 'Galil%20AR', 'fraudwarnings': None}, '1989274499': {'classid': '1989274499', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyX6bcTBg', 'title': 'Graffiti | King Me (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20King%20Me%20%28Shark%20White%29', 'fraudwarnings': None}, '1989275289': {'classid': '1989275289', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0tuuDG2e5P2DBfnWMGg0_RLtbND6N-WDwse2VSmmdE74oEF0CdKUB-jcYbMuBagx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyY2Tc6Pw', 'title': 'Graffiti | Take Flight (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Take%20Flight%20%28Shark%20White%29', 'fraudwarnings': None}, '1989275676': {'classid': '1989275676', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pveDD3n4YzKKdieBTAhpH7ZbMD3R_Gfx5L6cFDrNQu8uEgFRe_NXoDAfPcuAPRM80ZlLpWL-lEtxEQQlZ8lSeR-30ykQYL50y3ClvG56Ng', 'title': 'Graffiti | Quickdraw (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Quickdraw%20%28Shark%20White%29', 'fraudwarnings': None}, '1989270691': {'classid': '1989270691', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pe2BEHXlJjadf3HcTQswSrJbPD6IrTak5O6dQDjPRbklQVpSf_BR9zAfPsiNPRIjlNlc7Wa3m0tvEwMkZsxWfBbmniVEMOkkivTsgr4', 'title': 'Graffiti | Keep the Change (Jungle Green)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Keep%20the%20Change%20%28Jungle%20Green%29', 'fraudwarnings': None}, '3653202725': {'classid': '3653202725', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXQ9Q1LO5kNoBhSQl-fVOG_wcbQVmJ5IABWuoX3e1Uw7P_efWwMudjnzNaJlKH3Zu2EkDMGv8ByjuiToI2tigbg-kplYj3xdY6cIFVtM0aQpAYy5bU4zQ', 'title': '2020 Service Medal', 'price': None, 'count': '1', 'stickers': None, 'type': 'Extraordinary Collectible', 'market_hash_name': '2020%20Service%20Medal', 'fraudwarnings': None}, '1989274048': {'classid': '1989274048', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pO-CI2P4eiXdYSKKHQw9TLNZNGvYrGL25-WTQTmfRu0rRgsDffRQp2BBPMGIPhY93Y8Vu2u_0UdyEhk6f9BKZAarxm1ONOkmyyVHBfEvLrw', 'title': 'Graffiti | Worry (War Pig Pink)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Worry%20%28War%20Pig%20Pink%29', 'fraudwarnings': None}, '1989271413': {'classid': '1989271413', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVLvzyMVMORPsBckkw', 'title': 'Graffiti | King Me (Monarch Blue)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20King%20Me%20%28Monarch%20Blue%29', 'fraudwarnings': None}, '3500707668': {'classid': '3500707668', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaKhBwnaGQKGRHvd_gx9TekvOkZr-HxGlV6sAg27vF99332QXjr0NuYTz3I4GLMlhpm0KUJjU', 'title': 'AWP', 'price': None, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Sniper Rifle', 'market_hash_name': 'AWP', 'fraudwarnings': None}, '3494936622': {'classid': '3494936622', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaPhRw7ODBfThM79mk2tbbz_KlY-OHxDMJvZUp3uvDpI_wiwHhr0trMTj2cYCcdlRoNV7S-wWggbC4gMgSD1s', 'title': 'USP-S', 'price': None, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Pistol', 'market_hash_name': 'USP-S', 'fraudwarnings': None}, '1989272030': {'classid': '1989272030', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0qe6yGX3wYCPGLi3VUgluTOVdNDvf_WH05ezFS2nIROp_Fg0CL_cE-jYdOJraPBQ5htQD_zL2h0p6WBUnfspUfRq33n0DPaR4zXURJs9XfaeMfrs', 'title': 'Graffiti | 8-Ball (War Pig Pink)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%208-Ball%20%28War%20Pig%20Pink%29', 'fraudwarnings': None}}, 'steamId': '76561198993773915', 'steam_id': '76561198993773915', 'appId': 730, 'appTitle': 'CS:GO', 'totalValue': 348.38, 'itemCount': 51, 'marketableItemCount': 38, 'currency': 'rub', 'currencyIcon': '₽', 'language': 'english', 'time': 1695207618, 'cache': True}, 'appId': 730, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695587503}}
+```
+
 ### Change owner
 
 *Change of account owner.*
@@ -1466,34 +2839,6 @@ for job_name, job_data in data["jobs"].items():
 {'_job_result': 'ok', 'items': [], 'totalItems': 0, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'searchUrl': '/fave', 'stickyItems': []}
 {'_job_result': 'ok', 'payments': {'121540810': {'operation_id': 121540810, 'operation_date': 1694350167, 'operation_type': 'receiving_money', 'outgoing_sum': 0, 'incoming_sum': 777,  ... }
 {'_job_result': 'ok', 'query': 'https://steamcommunity.com/id/AS7RID', 'data': {'items': {'5189384637': {'classid': '5189384637', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dl ... }
-```
-
-# Steam inventory value
-
-*Gets steam value.*
-
-*[Official documentation reference](https://lzt-market.readme.io/reference/accountsmanaginggetsteamvalue)*
-
-**Parameters:**
-
-- **url** (str): Link or id of account. 
-  > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
-- **app_id** (int): Application id.
-  > You can use Types. Check example below
-- **currency** (str): Using currency for amount.
-  > You can use Types. Check example below
-- **ignore_cache** (bool): Ignore cache.
-  > If you pass False (default) market api will take inventory from cache (Inventory can be outdated). If you pass True inventory will reparse and you get price at current moment
-
-**Example:**
-
-```python
-response = market.steam_value(url="https://steamcommunity.com/id/AS7RID",currency=Constants.Market.Currency.rub,app_id=Constants.Market.AppID.CSGO)
-print(response.json())
-```
-
-```python
-{'query': 'https://steamcommunity.com/id/AS7RID', 'data': {'items': {'5189384637': {'classid': '5189384637', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQynaHMJT9B74-ywtjYxfOmMe_Vx28AucQj3brAoYrz3Fay_kY4MG_wdYeLMlhpLMaM-1U', 'title': 'Revolution Case', 'price': 112.3, 'count': '1', 'stickers': None, 'type': 'Base Grade Container', 'market_hash_name': 'Revolution%20Case', 'fraudwarnings': None}, '3946324730': {'classid': '3946324730', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFU2nfGaJG0btN2wwYHfxa-hY-uFxj4Dv50nj7uXpI7w3AewrhBpMWH6d9CLMlhpEbAe-Zk', 'title': 'Fracture Case', 'price': 59.05, 'count': '1', 'stickers': None, 'type': 'Base Grade Container', 'market_hash_name': 'Fracture%20Case', 'fraudwarnings': None}, '3220810394': {'classid': '3220810394', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou6ryFAR17P7YJgJQ7d-9kZSOkuXLPr7Vn35cppB0ievCp9322VKyrkVrN2z6dtOSdVQ8MAyD-QC6lb26gZe7tZrMmnF9-n51z91ErA0', 'title': 'StatTrak™ MP7 | Mischief (Field-Tested)', 'price': 46.47, 'count': '1', 'stickers': None, 'type': 'StatTrak™ Mil-Spec Grade SMG', 'market_hash_name': 'StatTrak%E2%84%A2%20MP7%20%7C%20Mischief%20%28Field-Tested%29', 'fraudwarnings': None}, '3591173339': {'classid': '3591173339', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposbaqKAxf0Ob3djFN79eJkIWKg__gPLfdqWZU7Mxkh6eToY2l3wy2rkFkNmj0JYaTcQY8YV-BqATrweu615-4u5zLnHVl6CJz-z-DyCIevZ0V', 'title': 'Glock-18 | Catacombs (Field-Tested)', 'price': 24.2, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Mil-Spec Grade Pistol', 'market_hash_name': 'Glock-18%20%7C%20Catacombs%20%28Field-Tested%29', 'fraudwarnings': None}, '3035569050': {'classid': '3035569050', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposLOzLhRlxfbGTjVb09ijl5SYqPDmNr7fqWdY781lxL-Zoo-hiVC1_BJsam37I4TAJ1Q7M1zYqQPol-2618fvupWYwSZk73Q8pSGKLd3ROFw', 'title': 'Five-SeveN | Coolant (Factory New)', 'price': 6.78, 'count': '1', 'stickers': None, 'type': 'Consumer Grade Pistol', 'market_hash_name': 'Five-SeveN%20%7C%20Coolant%20%28Factory%20New%29', 'fraudwarnings': None}, '3035569189': {'classid': '3035569189', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou6r8FA957ODYfTxW-Nmkx7-HnvD8J_XUzjwJupdw3-rA8I6jiQPl80I5Yzz7IoCTcwRtZl3VrFa2l-jp18O9ot2XnhWS9Knh', 'title': 'MP9 | Slide (Minimal Wear)', 'price': 4.84, 'count': '1', 'stickers': None, 'type': 'Consumer Grade SMG', 'market_hash_name': 'MP9%20%7C%20Slide%20%28Minimal%20Wear%29', 'fraudwarnings': None}, '3035580092': {'classid': '3035580092', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo7e1f1Jf2-r3czFX6cyknY6fqPX4Jr7Dk29u4MBwnPCP8d-iilGwqhVpYzzwLIeVcgNoY1zSq1bqlOm5hJ687ZzJmHVkvXN2tmGdwUIRV2k43w', 'title': 'UMP-45 | Facility Dark (Battle-Scarred)', 'price': 3.87, 'count': '1', 'stickers': None, 'type': 'Consumer Grade SMG', 'market_hash_name': 'UMP-45%20%7C%20Facility%20Dark%20%28Battle-Scarred%29', 'fraudwarnings': None}, '310777179': {'classid': '310777179', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpouLWzKjhz3MzbcDNG09GzkImemrnwYOOGwjIJ7JB1j-3D9Nms0FDh_0tqYjulLNCWdFNvZl7QrlPswOu6m9bi6_rlVdP1', 'title': 'Nova | Sand Dune (Field-Tested)', 'price': 3.87, 'count': '1', 'stickers': None, 'type': 'Consumer Grade Shotgun', 'market_hash_name': 'Nova%20%7C%20Sand%20Dune%20%28Field-Tested%29', 'fraudwarnings': None}, '1989297441': {'classid': '1989297441', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0su2fDm25bWCWeXKPT1sxTLBaYDrb-GX2t7_BQ2rOFbotEVhXLKoCpzBJNciBOQx9itAdqGq0mFZwCxo8e9VKaVLjnSBHZelHVPZFwA', 'title': 'Sealed Graffiti | Sorry (Brick Red)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Sorry%20%28Brick%20Red%29', 'fraudwarnings': None}, '1989279141': {'classid': '1989279141', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0suOBCG25Pm-Te3WBHg84T7ZdPT6N-WChtOqVE2vAEuglSwECf_cM9mIdbprYPgx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyaadCusA', 'title': 'Sealed Graffiti | NaCl (Shark White)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20NaCl%20%28Shark%20White%29', 'fraudwarnings': None}, '1989299897': {'classid': '1989299897', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0o_ePHnjyVzPBLiWXSgw9TrMMY2jbqGCm5OvCF27BF-4tRFtVfqoApzJNNc7YPRo60IQN8iuomUM7HRkkfddLZQOvw2QfKOAhnCJLcMkz1YlJgQ', 'title': 'Sealed Graffiti | Death Sentence (Tracer Yellow)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Death%20Sentence%20%28Tracer%20Yellow%29', 'fraudwarnings': None}, '1989288246': {'classid': '1989288246', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0rO2BBTqjOWGReHiLGV9uH7ZbY2ve9zKtsemWRG3BEuotQg9Ve6pX-m1IPMGNIVJjg5FYpGm3hUloEgIhYslfLVm-nnJKNxikjmox', 'title': 'Sealed Graffiti | Toasted (Monster Purple)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Toasted%20%28Monster%20Purple%29', 'fraudwarnings': None}, '1989276589': {'classid': '1989276589', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pO-CI3DyeyfFJjOXS1s9SOJZZ2rb9zXx5OrAFjDOE-1_R1pQKaNW8TUbOs-LPxJo1I8JqiuomUM7HRkkfddLZQOvw2QfKOAhnCJLcMm5ggoI_A', 'title': 'Sealed Graffiti | QQ (Tracer Yellow)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20QQ%20%28Tracer%20Yellow%29', 'fraudwarnings': None}, '4302203091': {'classid': '4302203091', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXQ9QVcJY8gulRPQV6CF7b9mNvbRRMjdgIO5ez2flZj0qTKI24TuNi1x9bexqakZe2JzjIIuMMh2rHEotqgxkS6rPdFh4ZR', 'title': 'Sticker | 100 Thieves | 2020 RMR', 'price': 2.9, 'count': 24, 'stickers': None, 'type': 'High Grade Sticker', 'market_hash_name': 'Sticker%20%7C%20100%20Thieves%20%7C%202020%20RMR', 'fraudwarnings': None}, '1989287941': {'classid': '1989287941', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVLtzyAVaLvjeQiSVQ', 'title': 'Sealed Graffiti | King Me (Monster Purple)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20King%20Me%20%28Monster%20Purple%29', 'fraudwarnings': None}, '3496846827': {'classid': '3496846827', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaO1U1g72Ycz4bvYzvxdLakfWnYuPQxWlTuZ133O_ArN6j0Qa3_BI9Z2rwJoaQbEZgNvzyEwH0', 'title': 'P250', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Pistol', 'market_hash_name': 'P250', 'fraudwarnings': None}, '3515046014': {'classid': '3515046014', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaOBRng6uGI2oT7YTjwobex_HwZbrSxzsAvJYi3rmYrY6kiQDnr0VtMT2ndo6ccBh-Pw_WKbm-EQ', 'title': 'SSG 08', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Sniper Rifle', 'market_hash_name': 'SSG%2008', 'fraudwarnings': None}, '3528419424': {'classid': '3528419424', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaLAZs2v_JY3NAtIjnwdPdwq_1Nb_TwW9SupNw07GUoYmg3gKyrxZvNTr3JtWXcFNofxiOrQoC97_e', 'title': 'Galil AR', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Rifle', 'market_hash_name': 'Galil%20AR', 'fraudwarnings': None}, '1989274499': {'classid': '1989274499', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyX6bcTBg', 'title': 'Graffiti | King Me (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20King%20Me%20%28Shark%20White%29', 'fraudwarnings': None}, '1989275289': {'classid': '1989275289', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0tuuDG2e5P2DBfnWMGg0_RLtbND6N-WDwse2VSmmdE74oEF0CdKUB-jcYbMuBagx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyY2Tc6Pw', 'title': 'Graffiti | Take Flight (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Take%20Flight%20%28Shark%20White%29', 'fraudwarnings': None}, '1989275676': {'classid': '1989275676', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pveDD3n4YzKKdieBTAhpH7ZbMD3R_Gfx5L6cFDrNQu8uEgFRe_NXoDAfPcuAPRM80ZlLpWL-lEtxEQQlZ8lSeR-30ykQYL50y3ClvG56Ng', 'title': 'Graffiti | Quickdraw (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Quickdraw%20%28Shark%20White%29', 'fraudwarnings': None}, '1989270691': {'classid': '1989270691', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pe2BEHXlJjadf3HcTQswSrJbPD6IrTak5O6dQDjPRbklQVpSf_BR9zAfPsiNPRIjlNlc7Wa3m0tvEwMkZsxWfBbmniVEMOkkivTsgr4', 'title': 'Graffiti | Keep the Change (Jungle Green)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Keep%20the%20Change%20%28Jungle%20Green%29', 'fraudwarnings': None}, '3653202725': {'classid': '3653202725', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXQ9Q1LO5kNoBhSQl-fVOG_wcbQVmJ5IABWuoX3e1Uw7P_efWwMudjnzNaJlKH3Zu2EkDMGv8ByjuiToI2tigbg-kplYj3xdY6cIFVtM0aQpAYy5bU4zQ', 'title': '2020 Service Medal', 'price': None, 'count': '1', 'stickers': None, 'type': 'Extraordinary Collectible', 'market_hash_name': '2020%20Service%20Medal', 'fraudwarnings': None}, '1989274048': {'classid': '1989274048', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pO-CI2P4eiXdYSKKHQw9TLNZNGvYrGL25-WTQTmfRu0rRgsDffRQp2BBPMGIPhY93Y8Vu2u_0UdyEhk6f9BKZAarxm1ONOkmyyVHBfEvLrw', 'title': 'Graffiti | Worry (War Pig Pink)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Worry%20%28War%20Pig%20Pink%29', 'fraudwarnings': None}, '1989271413': {'classid': '1989271413', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVLvzyMVMORPsBckkw', 'title': 'Graffiti | King Me (Monarch Blue)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20King%20Me%20%28Monarch%20Blue%29', 'fraudwarnings': None}, '3500707668': {'classid': '3500707668', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaKhBwnaGQKGRHvd_gx9TekvOkZr-HxGlV6sAg27vF99332QXjr0NuYTz3I4GLMlhpm0KUJjU', 'title': 'AWP', 'price': None, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Sniper Rifle', 'market_hash_name': 'AWP', 'fraudwarnings': None}, '3494936622': {'classid': '3494936622', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaPhRw7ODBfThM79mk2tbbz_KlY-OHxDMJvZUp3uvDpI_wiwHhr0trMTj2cYCcdlRoNV7S-wWggbC4gMgSD1s', 'title': 'USP-S', 'price': None, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Pistol', 'market_hash_name': 'USP-S', 'fraudwarnings': None}, '1989272030': {'classid': '1989272030', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0qe6yGX3wYCPGLi3VUgluTOVdNDvf_WH05ezFS2nIROp_Fg0CL_cE-jYdOJraPBQ5htQD_zL2h0p6WBUnfspUfRq33n0DPaR4zXURJs9XfaeMfrs', 'title': 'Graffiti | 8-Ball (War Pig Pink)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%208-Ball%20%28War%20Pig%20Pink%29', 'fraudwarnings': None}}, 'steamId': '76561198993773915', 'steam_id': '76561198993773915', 'appId': 730, 'appTitle': 'CS:GO', 'totalValue': 348.38, 'itemCount': 51, 'marketableItemCount': 38, 'currency': 'rub', 'currencyIcon': '₽', 'language': 'english', 'time': 1695207618, 'cache': True}, 'appId': 730, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695587503}}
 ```
 
 # Send async

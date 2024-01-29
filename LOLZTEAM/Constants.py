@@ -30,7 +30,7 @@ class Market:
         instagram = "instagram"
         battlenet = "battlenet"
         vpn = "vpn"
-        streaming_media = "cinema"
+        cinema = "cinema"
         spotify = "spotify"
         warface = "warface"
         youtube = "youtube"
@@ -60,7 +60,7 @@ class Market:
         instagram = 10
         battlenet = 11
         vpn = 19
-        streaming_media = 23
+        cinema = 23
         spotify = 26
         warface = 4
         youtube = 25
@@ -118,12 +118,12 @@ class Market:
         awaiting = "awaiting"
 
     class ItemOrder:
-        price_to_up = "price_to_up"
-        price_to_down = "price_to_down"
-        date_to_down = "pdate_to_down"
-        date_to_up = "pdate_to_up"
-        date_to_down_upload = "pdate_to_down_upload"
-        date_to_up_upload = "pdate_to_up_upload"
+        cheap = "price_to_up"
+        expensive = "price_to_down"
+        newest = "pdate_to_down"
+        oldest = "pdate_to_up"
+        newest_upload = "pdate_to_down_upload"
+        oldest_upload = "pdate_to_up_upload"
         auction_expiration = "exp_auctions"
 
     class AppID:

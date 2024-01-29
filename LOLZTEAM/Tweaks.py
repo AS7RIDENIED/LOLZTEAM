@@ -141,14 +141,15 @@ def CreateJob(func, job_name, **kwargs):
     func_code = str(inspect.getsource(func))
     func_code = func_code.split("):\n", 1)[1]
     lines = func_code.split("\n")
-    spaces = lines[0].split('"""')[0]
+    indent = lines[0].split('"""')[0]
     for line in lines:
         if " def " in line:
             lines.remove(line)
+    lines = [line.replace(indent, "", 1) for line in lines]
     return_code = (
-        "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[-1]
+        "\n".join(lines).split('"""')[2].split("return ")[-1]
     )
-    func_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
+    func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
     exec(func_code, globals(), loc)
     path = loc.get("path")
     params = loc.get("params", {})
@@ -172,7 +173,7 @@ async def SendAsAsync(func, **kwargs):
     :param func: Target function
     :param kwargs: Target function parameters
 
-    :return: Response object (Even if you use sendasync request)
+    :return: Response object (Even if you use SendAsAsync function)
     """
     func = functools.partial(func)
     self = func.func.__self__
@@ -197,14 +198,15 @@ async def SendAsAsync(func, **kwargs):
     func_code = str(inspect.getsource(func))
     func_code = func_code.split("):\n", 1)[1]
     lines = func_code.split("\n")
-    spaces = lines[0].split('"""')[0]
+    indent = lines[0].split('"""')[0]
     for line in lines:
         if " def " in line:
             lines.remove(line)
+    lines = [line.replace(indent, "", 1) for line in lines]
     return_code = (
-        "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[-1]
+        "\n".join(lines).split('"""')[2].split("return ")[-1]
     )
-    func_code = "\n".join(lines).replace(spaces, "").split('"""')[2].split("return ")[0]
+    func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
     exec(func_code, globals(), loc)
     path = loc.get("path")
     params = loc.get("params", {})
