@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.11"
+    "version": "1.1.12"
   },
   "servers": [
     {
@@ -1266,6 +1266,12 @@
           },
           {
             "$ref": "#/components/parameters/telegram_dig_max"
+          },
+          {
+            "$ref": "#/components/parameters/telegram_min_contacts"
+          },
+          {
+            "$ref": "#/components/parameters/telegram_max_contacts"
           }
         ],
         "responses": {
@@ -3386,6 +3392,9 @@
             "$ref": "#/components/parameters/show"
           },
           {
+            "$ref": "#/components/parameters/delete_reason"
+          },
+          {
             "$ref": "#/components/parameters/auction"
           },
           {
@@ -4590,10 +4599,26 @@
             }
           },
           {
-            "$ref": "#/components/parameters/category_id"
+            "name": "category_id",
+            "in": "query",
+            "description": "Accounts category.\n+ 1 - Steam\n+ 2 - VK\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - Genshin Impact\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 25 - Youtube\n+ 26 - Spotify\n+ 27 - War Thunder",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CategoryIdModel"
+            }
           },
           {
-            "$ref": "#/components/parameters/currency"
+            "name": "currency",
+            "in": "query",
+            "description": "Using currency.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
           },
           {
             "name": "item_origin",
@@ -4619,19 +4644,18 @@
           {
             "name": "extended_guarantee",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
               "enum": [
                 -1,
                 0,
-                1,
-                2
+                1
               ]
             }
           },
@@ -5053,19 +5077,18 @@
           {
             "name": "extended_guarantee",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
               "enum": [
                 -1,
                 0,
-                1,
-                2
+                1
               ]
             }
           },
@@ -7229,6 +7252,19 @@
           "description": "Account Status."
         }
       },
+      "delete_reason": {
+        "name": "delete_reason",
+        "in": "query",
+        "description": "Delete reason. (Only if **show** is set to **deleted**)",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Delete reason",
+          "type": "string",
+          "description": "Delete reason. (Only if **show** is set to **deleted**)"
+        }
+      },
       "youtube_viewcount_min": {
         "name": "viewcount_min",
         "in": "query",
@@ -8743,6 +8779,34 @@
             "scroll",
             "magic"
           ]
+        }
+      },
+      "telegram_min_contacts": {
+        "name": "min_contacts",
+        "in": "query",
+        "description": "Minimum number of contacts.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Minimum number of contacts",
+          "type": "integer",
+          "description": "Minimum number of contacts.",
+          "minimum": 0
+        }
+      },
+      "telegram_max_contacts": {
+        "name": "max_contacts",
+        "in": "query",
+        "description": "Maximum number of contacts.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Maximum number of contacts",
+          "type": "integer",
+          "description": "Maximum number of contacts.",
+          "minimum": 0
         }
       },
       "telegram_min_admin": {
