@@ -72,14 +72,13 @@ def _send_request(
         if self._proxy_type in proxy_schemes:
             proxy_scheme = proxy_schemes[self._proxy_type]
             proxy = {
-                "http": f"{proxy_scheme}://{self.__proxy}",
-                "https": f"{proxy_scheme}://{self.__proxy}",
+                "http": f"{proxy_scheme}://{self._proxy}",
+                "https": f"{proxy_scheme}://{self._proxy}",
             }
         else:
             raise Exceptions.INVALID_PROXY_TYPE(
                 "Proxy type has invalid value. It can be only https, http, socks4 or socks5"
             )
-
     if method in request_methods:
         response = requests.request(
             method=method,
@@ -155,7 +154,7 @@ async def _send_async_request(
     if self._proxy_type is not None:
         if self._proxy_type in proxy_schemes:
             proxy_scheme = proxy_schemes[self._proxy_type]
-            proxy = f"{proxy_scheme}://{self.__proxy}"
+            proxy = f"{proxy_scheme}://{self._proxy}"
         else:
             raise Exceptions.INVALID_PROXY_TYPE(
                 "Proxy type has invalid value. It can be only https, http, socks4 or socks5"
@@ -220,13 +219,13 @@ class Forum:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
-                self.__proxy = proxy
+                self._proxy = proxy
             else:
                 raise Exceptions.INVALID_PROXY_TYPE(
                     "Proxy type has invalid value. It can be only https,http,socks4 or socks5"
                 )
         else:
-            self.__proxy = None
+            self._proxy = None
             self._proxy_type = None
 
         self.token = token
@@ -280,7 +279,7 @@ class Forum:
                 )
         else:
             self._proxy_type = None
-        self.__proxy = proxy
+        self._proxy = proxy
 
     def _add_delay_synchronizer(self, synchronizer):
         self._delay_synchronizer = synchronizer
@@ -3204,13 +3203,13 @@ class Market:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
-                self.__proxy = proxy
+                self._proxy = proxy
             else:
                 raise Exceptions.INVALID_PROXY_TYPE(
                     "Proxy type has invalid value. It can be only https,http,socks4 or socks5"
                 )
         else:
-            self.__proxy = None
+            self._proxy = None
             self._proxy_type = None
 
         self.token = token
@@ -3269,7 +3268,7 @@ class Market:
                 )
         else:
             self._proxy_type = None
-        self.__proxy = proxy
+        self._proxy = proxy
 
     def _add_delay_synchronizer(self, synchronizer):
         self._delay_synchronizer = synchronizer
@@ -7109,13 +7108,13 @@ class Antipublic:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
-                self.__proxy = proxy
+                self._proxy = proxy
             else:
                 raise Exceptions.INVALID_PROXY_TYPE(
                     "Proxy type has invalid value. It can be only https,http,socks4 or socks5"
                 )
         else:
-            self.__proxy = None
+            self._proxy = None
             self._proxy_type = None
 
         self.token = token
