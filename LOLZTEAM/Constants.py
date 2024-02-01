@@ -11,6 +11,7 @@ class Market:
         fortnite = "fortnite"
         vk = "vkontakte"
         genshin = "genshin-impact"
+        honkai = "honkai-star-rail"
         valorant = "valorant"
         lol = "league-of-legends"
         telegram = "telegram"
@@ -41,6 +42,7 @@ class Market:
         fortnite = 9
         vk = 2
         genshin = 17
+        honkai = 30
         valorant = 13
         lol = 29
         telegram = 24
