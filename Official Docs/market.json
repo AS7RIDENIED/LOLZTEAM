@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.13"
+    "version": "1.1.14"
   },
   "servers": [
     {
@@ -795,46 +795,176 @@
             "$ref": "#/components/parameters/tel"
           },
           {
-            "$ref": "#/components/parameters/genshin_character"
+            "$ref": "#/components/parameters/mihoyo_character"
           },
           {
-            "$ref": "#/components/parameters/genshin_weapon"
+            "$ref": "#/components/parameters/mihoyo_weapon"
           },
           {
             "$ref": "#/components/parameters/genshin_region"
           },
           {
-            "$ref": "#/components/parameters/genshin_ea"
+            "$ref": "#/components/parameters/mihoyo_ea"
           },
           {
-            "$ref": "#/components/parameters/genshin_legendary_min"
+            "$ref": "#/components/parameters/mihoyo_legendary_min"
           },
           {
-            "$ref": "#/components/parameters/genshin_legendary_max"
+            "$ref": "#/components/parameters/mihoyo_legendary_max"
           },
           {
-            "$ref": "#/components/parameters/genshin_constellation_min"
+            "$ref": "#/components/parameters/mihoyo_constellation_min"
           },
           {
-            "$ref": "#/components/parameters/genshin_constellation_max"
+            "$ref": "#/components/parameters/mihoyo_constellation_max"
           },
           {
-            "$ref": "#/components/parameters/genshin_legendary_weapon_min"
+            "$ref": "#/components/parameters/mihoyo_legendary_weapon_min"
           },
           {
-            "$ref": "#/components/parameters/genshin_legendary_weapon_max"
+            "$ref": "#/components/parameters/mihoyo_legendary_weapon_max"
           },
           {
-            "$ref": "#/components/parameters/genshin_char_min"
+            "$ref": "#/components/parameters/mihoyo_char_min"
           },
           {
-            "$ref": "#/components/parameters/genshin_char_max"
+            "$ref": "#/components/parameters/mihoyo_char_max"
           },
           {
-            "$ref": "#/components/parameters/genshin_level_min"
+            "$ref": "#/components/parameters/mihoyo_level_min"
           },
           {
-            "$ref": "#/components/parameters/genshin_level_max"
+            "$ref": "#/components/parameters/mihoyo_level_max"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/honkai-star-rail": {
+      "get": {
+        "tags": [
+          "Category Search"
+        ],
+        "summary": "Honkai Star Rail",
+        "description": "Displays a list of accounts in a specific category according to your parameters.",
+        "operationId": "accountsList.getListHonkaiStarRail",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/auction"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/pmin"
+          },
+          {
+            "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/origin"
+          },
+          {
+            "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/email_type",
+            "schema": {
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "autoreg",
+                  "native",
+                  "no"
+                ]
+              }
+            }
+          },
+          {
+            "$ref": "#/components/parameters/item_domain"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/email"
+          },
+          {
+            "$ref": "#/components/parameters/tel"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_character"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_weapon"
+          },
+          {
+            "$ref": "#/components/parameters/honkai_region"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_ea"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_legendary_min"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_legendary_max"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_char_min"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_char_max"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_level_min"
+          },
+          {
+            "$ref": "#/components/parameters/mihoyo_level_max"
+          },
+          {
+            "$ref": "#/components/parameters/honkai_achievement_min"
+          },
+          {
+            "$ref": "#/components/parameters/honkai_achievement_max"
+          },
+          {
+            "$ref": "#/components/parameters/honkai_chest_min"
+          },
+          {
+            "$ref": "#/components/parameters/honkai_chest_max"
           }
         ],
         "responses": {
@@ -9568,7 +9698,7 @@
           }
         }
       },
-      "genshin_char_min": {
+      "mihoyo_char_min": {
         "name": "char_min",
         "in": "query",
         "description": "Minimum number of characters.",
@@ -9582,7 +9712,7 @@
           "minimum": 1
         }
       },
-      "genshin_char_max": {
+      "mihoyo_char_max": {
         "name": "char_max",
         "in": "query",
         "description": "Maximum number of characters.",
@@ -9596,7 +9726,7 @@
           "minimum": 1
         }
       },
-      "genshin_level_min": {
+      "mihoyo_level_min": {
         "name": "level_min",
         "in": "query",
         "description": "Minimum level.",
@@ -9610,7 +9740,7 @@
           "minimum": 1
         }
       },
-      "genshin_level_max": {
+      "mihoyo_level_max": {
         "name": "level_max",
         "in": "query",
         "description": "Maximum level.",
@@ -9624,7 +9754,7 @@
           "minimum": 1
         }
       },
-      "genshin_character": {
+      "mihoyo_character": {
         "name": "character[]",
         "in": "query",
         "description": "List of characters.",
@@ -9640,7 +9770,7 @@
           }
         }
       },
-      "genshin_weapon": {
+      "mihoyo_weapon": {
         "name": "weapon[]",
         "in": "query",
         "description": "List of weapons.",
@@ -9675,7 +9805,83 @@
           ]
         }
       },
-      "genshin_ea": {
+      "honkai_region": {
+        "name": "region",
+        "in": "query",
+        "description": "Region.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Region",
+          "type": "string",
+          "description": "Region.",
+          "uniqueItems": true,
+          "enum": [
+            "prod_official_asia",
+            "prod_official_usa",
+            "prod_official_eur",
+            "prod_official_cht"
+          ]
+        }
+      },
+      "honkai_achievement_min": {
+        "name": "achievement_min",
+        "in": "query",
+        "description": "Minimum number of achievement.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Achievement min",
+          "type": "integer",
+          "description": "Minimum number of achievement.",
+          "minimum": 0
+        }
+      },
+      "honkai_achievement_max": {
+        "name": "achievement_max",
+        "in": "query",
+        "description": "Maximum number of achievement.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Achievement max",
+          "type": "integer",
+          "description": "Maximum number of achievement.",
+          "minimum": 0
+        }
+      },
+      "honkai_chest_min": {
+        "name": "chest_min",
+        "in": "query",
+        "description": "Minimum number of opened chest.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Chest min",
+          "type": "integer",
+          "description": "Minimum number of opened chest.",
+          "minimum": 0
+        }
+      },
+      "honkai_chest_max": {
+        "name": "chest_max",
+        "in": "query",
+        "description": "Maximum number of opened chest.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Chest max",
+          "type": "integer",
+          "description": "Maximum number of opened chest.",
+          "minimum": 0
+        }
+      },
+      "mihoyo_ea": {
         "name": "ea",
         "in": "query",
         "description": "Has linked external accounts.",
@@ -9688,7 +9894,7 @@
           "$ref": "#/components/schemas/YesNoNoMatterScheme"
         }
       },
-      "genshin_legendary_min": {
+      "mihoyo_legendary_min": {
         "name": "legendary_min",
         "in": "query",
         "description": "Minimum number of legendary characters.",
@@ -9702,7 +9908,7 @@
           "minimum": 0
         }
       },
-      "genshin_legendary_max": {
+      "mihoyo_legendary_max": {
         "name": "legendary_max",
         "in": "query",
         "description": "Maximum number of legendary characters.",
@@ -9716,7 +9922,7 @@
           "minimum": 0
         }
       },
-      "genshin_constellation_min": {
+      "mihoyo_constellation_min": {
         "name": "constellation_min",
         "in": "query",
         "description": "Minimum number of constellations on legendary characters.",
@@ -9730,7 +9936,7 @@
           "minimum": 0
         }
       },
-      "genshin_constellation_max": {
+      "mihoyo_constellation_max": {
         "name": "constellation_max",
         "in": "query",
         "description": "Maximum number of constellations on legendary characters.",
@@ -9744,7 +9950,7 @@
           "minimum": 0
         }
       },
-      "genshin_legendary_weapon_min": {
+      "mihoyo_legendary_weapon_min": {
         "name": "legendary_weapon_min",
         "in": "query",
         "description": "Minimum number of legendary weapon characters.",
@@ -9758,7 +9964,7 @@
           "minimum": 0
         }
       },
-      "genshin_legendary_weapon_max": {
+      "mihoyo_legendary_weapon_max": {
         "name": "legendary_weapon_max",
         "in": "query",
         "description": "Maximum number of legendary weapon characters.",
