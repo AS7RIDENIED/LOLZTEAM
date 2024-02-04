@@ -1654,17 +1654,14 @@ class Forum:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                try:
-                    if "batch_mode" in locals():
-                        from warnings import warn
+                if "batch_mode" in locals():
+                    from warnings import warn
 
-                        warn(
-                            message="You can't upload avatar using batch",
-                            category=FutureWarning,
-                            stacklevel=1,
-                        )
-                except NameError:
-                    pass
+                    warn(
+                        message="You can't upload avatar using batch",
+                        category=FutureWarning,
+                        stacklevel=1,
+                    )
                 if user_id is None:
                     path = "/users/me/avatar"
                 else:
@@ -3244,8 +3241,12 @@ class Market:
         self.debug = False
 
     def __set_user_id(self):
+        import concurrent.futures
+        pool = concurrent.futures.ThreadPoolExecutor()
         path = "/me"
-        response = asyncio.run(_send_async_request(self=self, method="GET", path=path))
+        response = pool.submit(
+            asyncio.run, _send_async_request(self=self, method="GET", path=path)
+        ).result()
         try:
             return response.json()["user"]["user_id"]
         except KeyError:
@@ -5600,25 +5601,25 @@ class Market:
             self.youtube = self.__Youtube(api_self)
 
         def list(self, top_queries: bool = None):
-                """
-                GET https://api.lzt.market/category
+            """
+            GET https://api.lzt.market/category
 
-                Display category list.
+            Display category list.
 
-                Required scopes: market
+            Required scopes: market
 
-                :param top_queries: Display top queries for per category.
+            :param top_queries: Display top queries for per category.
 
-                :return: Response object (Even if you use SendAsAsync function)
-                """
-                path = "/category"
-                params = {"top_queries": top_queries}
-                return _send_request(
-                    self=self._api,
-                    method="GET",
-                    path=path,
-                    params=params,
-                )
+            :return: Response object (Even if you use SendAsAsync function)
+            """
+            path = "/category"
+            params = {"top_queries": top_queries}
+            return _send_request(
+                self=self._api,
+                method="GET",
+                path=path,
+                params=params,
+            )
 
     class __List:
         def __init__(self, api_self):
@@ -5634,7 +5635,7 @@ class Market:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            if "batch_mode" in locals():
+            if "batch_mode" in locals() or "im_async" in locals():
                 base_api = self
             else:
                 base_api = self._api
@@ -5753,7 +5754,7 @@ class Market:
             :return: Response object (Even if you use SendAsAsync function)
             """
             if user_id is None:  # Tweak 1
-                if "batch_mode" in locals():
+                if "batch_mode" in locals() or "im_async" in locals():
                     if type(self.user_id) is not int:
                         self.user_id = self.user_id()
                     user_id = self.user_id
@@ -5858,7 +5859,7 @@ class Market:
 
             """
             if user_id is None:  # Tweak 1
-                if "batch_mode" in locals():
+                if "batch_mode" in locals() or "im_async" in locals():
                     if type(self.user_id) is not int:
                         self.user_id = self.user_id()
                     user_id = self.user_id
@@ -5994,7 +5995,7 @@ class Market:
             elif show_payments_stats is False:
                 show_payments_stats = 0
             if user_id is None:  # Tweak 1
-                if "batch_mode" in locals():
+                if "batch_mode" in locals() or "im_async" in locals():
                     if type(self.user_id) is not int:
                         self.user_id = self.user_id()
                     user_id = self.user_id
@@ -6128,7 +6129,7 @@ class Market:
         def __init__(self, api_self):
             self._api = api_self
             self.tag = self.__Tag(self._api)
-        
+
         class __Tag:
             def __init__(self, api_self):
                 self._api = api_self
