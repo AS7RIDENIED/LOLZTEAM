@@ -3237,7 +3237,7 @@ class Market:
         self._delay_synchronizer = None
         self._lock = None
 
-        self._delay_exceptions = ["/item/add", "/item/fast-sell", "/item/goods/check", r"\/\d+(?=\s|$)"]
+        self._delay_exceptions = ["/item/add", "/item/fast-sell", r"/\d+/goods/check", r"\/\d+(?=\s|$)"]
 
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
