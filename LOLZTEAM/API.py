@@ -3,6 +3,7 @@ import asyncio
 import aiohttp
 import time
 import json
+import re
 
 from . import Exceptions
 from .Tweaks import _MainTweaks
@@ -36,8 +37,15 @@ def _send_request(
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
-    if path not in self._delay_exceptions:
+
+    found_in_delay_exc = False
+    for pattern in self._delay_exceptions:
+        if re.search(pattern, path):
+            found_in_delay_exc = True
+            break
+    if not found_in_delay_exc:
         _MainTweaks._auto_delay(self=self)
+
     if params is None:
         params = {}
     params["locale"] = self._locale
@@ -120,8 +128,15 @@ async def _send_async_request(
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
-    if path not in self._delay_exceptions:
-        await _MainTweaks._auto_delay_async(self=self)
+
+    found_in_delay_exc = False
+    for pattern in self._delay_exceptions:
+        if re.search(pattern, path):
+            found_in_delay_exc = True
+            break
+    if not found_in_delay_exc:
+        _MainTweaks._auto_delay(self=self)
+
     if params is None:
         params = {}
     params["locale"] = self._locale
@@ -3222,7 +3237,7 @@ class Market:
         self._delay_synchronizer = None
         self._lock = None
 
-        self._delay_exceptions = ["/item/add", "/item/fast-sell", "/item/goods/check"]
+        self._delay_exceptions = ["/item/add", "/item/fast-sell", "/item/goods/check", r"\/\d+(?=\s|$)"]
 
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
