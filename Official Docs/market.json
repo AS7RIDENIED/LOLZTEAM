@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.14"
+    "version": "1.1.15"
   },
   "servers": [
     {
@@ -3796,7 +3796,7 @@
           "Accounts managing"
         ],
         "summary": "Get Account",
-        "description": "Displays account information.",
+        "description": "Displays account information.\n\n> Rate Limit (1 request / 3 seconds) does not apply to this method.",
         "operationId": "accountsList.getInformation",
         "parameters": [
           {
@@ -3855,7 +3855,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoneyTransferModel"
+                  "$ref": "#/components/schemas/OkModel"
                 }
               }
             }
@@ -4227,7 +4227,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoneyTransferModel"
+                  "$ref": "#/components/schemas/OkModel"
                 }
               }
             }
@@ -4626,7 +4626,7 @@
           "Account publishing"
         ],
         "summary": "Fast Sell Account",
-        "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"captcha\" error, that you should send same request again.**\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ retrive - Account is recovered by email or phone (only for VKontakte category)\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
+        "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"captcha\" error, that you should send same request again.**\n\n> Rate Limit (1 request / 3 seconds) does not apply to this method.\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ retrive - Account is recovered by email or phone (only for VKontakte category)\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
         "operationId": "accountPublishing.fastSell",
         "parameters": [
           {
@@ -5059,7 +5059,7 @@
           "Account publishing"
         ],
         "summary": "Add account",
-        "description": "Adds account on the market.\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ retrive - Account is recovered by email or phone (only for VKontakte category)\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
+        "description": "Adds account on the market.\n\nAccount origin. Where did you get it from.\n\n> Rate Limit (1 request / 3 seconds) does not apply to this method.\n\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ retrive - Account is recovered by email or phone (only for VKontakte category)\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
         "operationId": "accountPublishing.addItem",
         "parameters": [
           {
@@ -5359,7 +5359,7 @@
           "Account publishing"
         ],
         "summary": "Check Not Published Acc",
-        "description": "Check and put up to sale not published account OR update account information existing account.\n\n**If you receive a \"captcha\" error, that you should send same request again.**",
+        "description": "Check and put up to sale not published account OR update account information existing account.\n\n**If you receive a \"captcha\" error, that you should send same request again.**\n\n> Rate Limit (1 request / 3 seconds) does not apply to this method.",
         "operationId": "accountsPublishing.checkNotPublic",
         "parameters": [
           {
@@ -5591,7 +5591,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoneyTransferModel"
+                  "$ref": "#/components/schemas/GoodsCheck"
                 }
               }
             }
@@ -6181,7 +6181,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoneyTransferModel"
+                  "$ref": "#/components/schemas/OkModel"
                 }
               }
             }
@@ -6748,7 +6748,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoneyTransferModel"
+                  "$ref": "#/components/schemas/OkModel"
                 }
               }
             }
@@ -11930,7 +11930,7 @@
                   "$ref": "#/components/schemas/StatusOK"
                 },
                 "item": {
-                  "$ref": "#/components/schemas/market_api__schemas__account_list__Item"
+                  "$ref": "#/components/schemas/ItemModel"
                 },
                 "system_info": {
                   "$ref": "#/components/schemas/SystemInfoModel"
@@ -12466,21 +12466,13 @@
           "ignoreCookieUpload",
           "item",
           "sessionLoginData",
-          "status",
           "system_info",
           "temp_email"
         ],
         "type": "object",
         "properties": {
-          "status": {
-            "title": "Status",
-            "type": "string"
-          },
           "item": {
             "$ref": "#/components/schemas/GoodsItem"
-          },
-          "system_info": {
-            "$ref": "#/components/schemas/SystemInfoModel"
           },
           "temp_email": {
             "title": "Temp Email",
@@ -12494,6 +12486,9 @@
           "ignoreCookieUpload": {
             "title": "Ignorecookieupload",
             "type": "boolean"
+          },
+          "system_info": {
+            "$ref": "#/components/schemas/SystemInfoModel"
           }
         }
       },
@@ -12648,9 +12643,7 @@
         "type": "object",
         "properties": {
           "status": {
-            "title": "Status",
-            "type": "string",
-            "default": "ok"
+            "$ref": "#/components/schemas/StatusOK"
           },
           "message": {
             "title": "Message",
@@ -12752,17 +12745,12 @@
         ],
         "type": "object",
         "properties": {
-          "status": {
-            "title": "Status",
-            "type": "string",
-            "default": "ok"
-          },
-          "message": {
-            "title": "Message",
-            "type": "string"
-          },
           "item": {
-            "$ref": "#/components/schemas/GoodsItem"
+            "$ref": "#/components/schemas/ItemModel"
+          },
+          "itemLink":{
+            "title": "Item link",
+            "type": "string"
           },
           "system_info": {
             "$ref": "#/components/schemas/SystemInfoModel"
@@ -12961,6 +12949,32 @@
           }
         }
       },
+      "GoodsCheck": {
+        "title": "GoodsCheck",
+        "required": [
+          "item",
+          "message",
+          "status",
+          "system_info"
+        ],
+        "type": "object",
+        "properties": {
+          "status":{
+            "title": "Status",
+            "type": "string"
+          },
+          "message":{
+            "title": "Message",
+            "type": "string"
+          },
+          "item": {
+            "$ref": "#/components/schemas/ItemModel"
+          },
+          "system_info": {
+            "$ref": "#/components/schemas/SystemInfoModel"
+          }
+        }
+      },
       "HistoryPaymentsModel": {
         "title": "HistoryPaymentsModel",
         "required": [
@@ -13074,7 +13088,7 @@
         "type": "object",
         "properties": {
           "item": {
-            "$ref": "#/components/schemas/market_api__schemas__account_list__Item"
+            "$ref": "#/components/schemas/ItemModel"
           },
           "seller": {
             "$ref": "#/components/schemas/Seller"
@@ -13211,9 +13225,10 @@
           }
         }
       },
-      "MoneyTransferModel": {
-        "title": "MoneyTransferModel",
+      "OkModel": {
+        "title": "OkModel",
         "required": [
+          "status",
           "message",
           "system_info"
         ],
@@ -13718,7 +13733,7 @@
           }
         }
       },
-      "market_api__schemas__account_list__Item": {
+      "ItemModel": {
         "title": "Item",
         "required": [
           "description",
@@ -13733,7 +13748,8 @@
           "temp_email",
           "title",
           "update_stat_date",
-          "view_count"
+          "view_count",
+          "category_id"
         ],
         "type": "object",
         "properties": {
@@ -13744,6 +13760,10 @@
           "item_state": {
             "title": "Item State",
             "type": "string"
+          },
+          "category_id":{
+            "title": "Category id",
+            "type": "integer"
           },
           "published_date": {
             "title": "Published Date",
