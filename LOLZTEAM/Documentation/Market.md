@@ -93,7 +93,6 @@
     * [Youtube](#youtube)
       * [Get](#get-24)
       * [Params](#params-24)
-  * [Get item](#get-item)
   * [Latest items](#latest-items)
   * [From url](#from-url)
   * [Viewed accounts](#viewed-accounts)
@@ -119,8 +118,9 @@
   * [Tag](#tag)
     * [Add tag](#add-tag)
     * [Delete tag](#delete-tag)
-  * [Edit](#edit-)
-  * [Delete](#delete)
+  * [Get item](#get-item)
+  * [Edit item](#edit-item)
+  * [Delete item](#delete-item)
   * [Steam inventory value](#steam-inventory-value)
   * [Change owner](#change-owner)
   * [Change password](#change-password)
@@ -266,7 +266,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.steam.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.steam.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -281,7 +281,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.steam.params()
+response = market.category.steam.params()
 print(response.json())
 ```
 
@@ -296,7 +296,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.steam.games()
+response = market.category.steam.games()
 print(response.json())
 ```
 
@@ -332,7 +332,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.fortnite.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.fortnite.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -347,7 +347,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.fortnite.params()
+response = market.category.fortnite.params()
 print(response.json())
 ```
 
@@ -382,7 +382,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.vk.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.vk.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -397,7 +397,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.vk.params()
+response = market.categoryarams()
 print(response.json())
 ```
 
@@ -432,7 +432,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.genshin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.genshin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -447,7 +447,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.genshin.params()
+response = market.category.genshin.params()
 print(response.json())
 ```
 
@@ -482,7 +482,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.valorant.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.valorant.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -497,7 +497,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.valorant.params()
+response = market.category.valorant.params()
 print(response.json())
 ```
 
@@ -532,7 +532,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.lol.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.lol.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -547,7 +547,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.lol.params()
+response = market.category.lol.params()
 print(response.json())
 ```
 
@@ -582,7 +582,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.telegram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.telegram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -597,7 +597,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.telegram.params()
+response = market.category.telegram.params()
 print(response.json())
 ```
 
@@ -632,7 +632,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.supercell.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.supercell.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -647,7 +647,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.supercell.params()
+response = market.category.supercell.params()
 print(response.json())
 ```
 
@@ -682,7 +682,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.origin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.origin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -697,7 +697,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.origin.params()
+response = market.category.origin.params()
 print(response.json())
 ```
 
@@ -712,7 +712,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.origin.games()
+response = market.category.origin.games()
 print(response.json())
 ```
 
@@ -747,7 +747,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.wot.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.wot.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -762,7 +762,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.wot.params()
+response = market.category.wot.params()
 print(response.json())
 ```
 
@@ -797,7 +797,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.wot_blitz.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.wot_blitz.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -812,7 +812,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.steam.params()
+response = market.category.steam.params()
 print(response.json())
 ```
 
@@ -847,7 +847,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.epicgames.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.epicgames.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -862,7 +862,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.epicgames.params()
+response = market.category.epicgames.params()
 print(response.json())
 ```
 
@@ -877,7 +877,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.epicgames.games()
+response = market.category.epicgames.games()
 print(response.json())
 ```
 
@@ -912,7 +912,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.eft.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.eft.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -927,7 +927,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.eft.params()
+response = market.categoryparams()
 print(response.json())
 ```
 
@@ -962,7 +962,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.socialclub.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.socialclub.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -977,7 +977,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.socialclub.params()
+response = market.category.socialclub.params()
 print(response.json())
 ```
 
@@ -992,7 +992,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.socialclub.games()
+response = market.category.socialclub.games()
 print(response.json())
 ```
 
@@ -1027,7 +1027,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.uplay.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.uplay.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1042,7 +1042,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.uplay.params()
+response = market.category.uplay.params()
 print(response.json())
 ```
 
@@ -1057,7 +1057,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.uplay.games()
+response = market.category.uplay.games()
 print(response.json())
 ```
 
@@ -1092,7 +1092,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.war_thunder.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.war_thunder.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1107,7 +1107,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.war_thunder.params()
+response = market.category.war_thunder.params()
 print(response.json())
 ```
 
@@ -1142,7 +1142,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.discord.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.discord.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1157,7 +1157,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.discord.params()
+response = market.category.discord.params()
 print(response.json())
 ```
 
@@ -1192,7 +1192,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.tiktok.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.tiktok.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1207,7 +1207,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.tiktok.params()
+response = market.category.tiktok.params()
 print(response.json())
 ```
 
@@ -1242,7 +1242,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.instagram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.instagram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1257,7 +1257,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.instagram.params()
+response = market.category.instagram.params()
 print(response.json())
 ```
 
@@ -1292,7 +1292,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.battlenet.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.battlenet.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1307,7 +1307,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.battlenet.params()
+response = market.category.battlenet.params()
 print(response.json())
 ```
 
@@ -1322,7 +1322,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.battlenet.games()
+response = market.category.battlenet.games()
 print(response.json())
 ```
 
@@ -1357,7 +1357,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.vpn.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.vpn.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1372,7 +1372,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.vpn.params()
+response = market.category.vpn.params()
 print(response.json())
 ```
 
@@ -1407,7 +1407,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.cinema.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.cinema.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1422,7 +1422,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.cinema.params()
+response = market.category.cinema.params()
 print(response.json())
 ```
 
@@ -1457,7 +1457,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.spotify.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.spotify.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1472,7 +1472,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.spotify.params()
+response = market.category.spotify.params()
 print(response.json())
 ```
 
@@ -1507,7 +1507,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.warface.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.warface.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1522,7 +1522,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.warface.params()
+response = market.category.warface.params()
 print(response.json())
 ```
 
@@ -1557,7 +1557,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.youtube.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.youtube.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
@@ -1572,7 +1572,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.youtube.params()
+response = market.category.youtube.params()
 print(response.json())
 ```
 
@@ -1595,7 +1595,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.list.category.list()
+response = market.category.list()
 print(response.json())
 ```
 
@@ -1604,32 +1604,6 @@ print(response.json())
 ```
 
 ---
-
-### Get item
-
-*Displays item information or returns Steam account html code.*
-
-*[Official documentation reference (item info)](https://lzt-market.readme.io/reference/accountslistgetinformation)*
-*[Official documentation reference (steam html)](https://lzt-market.readme.io/reference/accountslistgetsteamhtml)*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **steam_preview** (bool): Steam preview
-  > Set it True if you want to get steam html and False/None if you want to get item info
-- **preview_type** (str): Type of page. 
-  > Can be "profiles" or "games"
-
-**Example:**
-
-```python
-response = market.list.get(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}
-```
 
 ### Latest items
 
@@ -2210,7 +2184,33 @@ print(response.json())
 
 ---
 
-### Edit 
+### Get item
+
+*Displays item information or returns Steam account html code.*
+
+*[Official documentation reference (item info)](https://lzt-market.readme.io/reference/accountslistgetinformation)*
+*[Official documentation reference (steam html)](https://lzt-market.readme.io/reference/accountslistgetsteamhtml)*
+
+**Parameters:**
+
+- **item_id** (int): ID of item.
+- **steam_preview** (bool): Steam preview
+  > Set it True if you want to get steam html and False/None if you want to get item info
+- **preview_type** (str): Type of page. 
+  > Can be "profiles" or "games"
+
+**Example:**
+
+```python
+response = market.managing.get(item_id=2410024)
+print(response.json())
+```
+
+```python
+{'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}
+```
+
+### Edit item
 
 *Edits any details of account.*
 
@@ -2245,7 +2245,7 @@ print(response.json())
 {'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
-### Delete
+### Delete item
 
 *Deletes your account from public search. Deletion type is soft. You can restore account after deletion if you want.*
 
