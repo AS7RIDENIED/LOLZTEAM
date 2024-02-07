@@ -1453,10 +1453,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/threads/{thread_id}/navigation",
-            }
+            path = f"/threads/{thread_id}/navigation"
             return _send_request(self=self._api, method="GET", path=path)
 
         def votes(self, thread_id: int):
@@ -1493,10 +1490,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/threads/{thread_id}/pool/votes",
-            }
+            path = f"/threads/{thread_id}/pool/votes"
             if type(response_ids) is list:
                 for element in response_ids:
                     if not isinstance(element, int):
@@ -1680,10 +1674,7 @@ class Forum:
                 if user_id is None:
                     path = "/users/me/avatar"
                 else:
-                    path = {
-                        "site": "Forum",
-                        "path": f"/users/{user_id}/avatar",
-                    }
+                    path = f"/users/{user_id}/avatar"
                 files = {"avatar": avatar}
                 return _send_request(
                     self=self._api, method="POST", path=path, files=files
@@ -1704,10 +1695,7 @@ class Forum:
                 if user_id is None:
                     path = "/users/me/avatar"
                 else:
-                    path = {
-                        "site": "Forum",
-                        "path": f"/users/{user_id}/avatar",
-                    }
+                    path = f"/users/{user_id}/avatar"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
             def crop(self, user_id: int, size: int, x: int = None, y: int = None):
@@ -1731,10 +1719,7 @@ class Forum:
                 ):  # Пока такое не работает, но надеюсь пофиксят. Пусть лежит
                     path = "/users/me/avatar-crop"
                 else:
-                    path = {
-                        "site": "Forum",
-                        "path": f"/users/{user_id}/avatar-crop",
-                    }
+                    path = f"/users/{user_id}/avatar-crop"
                 return _send_request(
                     self=self._api,
                     method="POST",
@@ -2038,10 +2023,7 @@ class Forum:
             if user_id is None:
                 path = "/users/me/followings"
             else:
-                path = {
-                    "site": "Forum",
-                    "path": f"/users/{user_id}/followings",
-                }
+                path = f"/users/{user_id}/followings"
             params = {"order": order, "page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
@@ -2137,10 +2119,7 @@ class Forum:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = {
-                    "site": "Forum",
-                    "path": f"/profile-posts/{profile_post_id}/comments",
-                }
+                path = f"/profile-posts/{profile_post_id}/comments"
                 params = {"before": before, "limit": limit}
                 return _send_request(
                     self=self._api,
@@ -2162,10 +2141,7 @@ class Forum:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = {
-                    "site": "Forum",
-                    "path": f"/profile-posts/{profile_post_id}/comments/{comment_id}",
-                }
+                path = f"/profile-posts/{profile_post_id}/comments/{comment_id}"
                 return _send_request(self=self._api, method="GET", path=path)
 
             def create(self, profile_post_id: int, comment_body: str):
@@ -2181,10 +2157,7 @@ class Forum:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = {
-                    "site": "Forum",
-                    "path": f"/profile-posts/{profile_post_id}/comments",
-                }
+                path = f"/profile-posts/{profile_post_id}/comments"
                 data = {
                     "comment_body": comment_body,
                 }
@@ -2226,10 +2199,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/profile-posts/{profile_post_id}",
-            }
+            path = f"/profile-posts/{profile_post_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
         def create(self, post_body: str, user_id: int = None):
@@ -2266,10 +2236,7 @@ class Forum:
             :return: Response object (Even if you use SendAsAsync function)
             """
 
-            path = {
-                "site": "Forum",
-                "path": f"/profile-posts/{profile_post_id}",
-            }
+            path = f"/profile-posts/{profile_post_id}"
             data = {"post_body": post_body}
             return _send_request(self=self._api, method="PUT", path=path, data=data)
 
@@ -2287,10 +2254,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/profile-posts/{profile_post_id}",
-            }
+            path = f"/profile-posts/{profile_post_id}"
             data = {"reason": reason}
             return _send_request(self=self._api, method="DELETE", path=path, data=data)
 
@@ -2307,10 +2271,7 @@ class Forum:
             :return: Response object (Even if you use SendAsAsync function)
             """
 
-            path = {
-                "site": "Forum",
-                "path": f"/profile-posts/{profile_post_id}/likes",
-            }
+            path = f"/profile-posts/{profile_post_id}/likes"
             return _send_request(self=self._api, method="GET", path=path)
 
         def like(self, profile_post_id: int):
@@ -2326,10 +2287,7 @@ class Forum:
             :return: Response object (Even if you use SendAsAsync function)
             """
 
-            path = {
-                "site": "Forum",
-                "path": f"/profile-posts/{profile_post_id}/likes",
-            }
+            path = f"/profile-posts/{profile_post_id}/likes"
 
             return _send_request(self=self._api, method="POST", path=path)
 
@@ -2345,10 +2303,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/profile-posts/{profile_post_id}/likes",
-            }
+            path = f"/profile-posts/{profile_post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
 
         def report(self, profile_post_id: int, message: str):
@@ -2364,10 +2319,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/profile-posts/{profile_post_id}/report",
-            }
+            path = f"/profile-posts/{profile_post_id}/report"
             data = {"message": message}
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
@@ -2618,10 +2570,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/notifications/{notification_id}/content",
-            }
+            path = f"/notifications/{notification_id}/content"
             return _send_request(self=self._api, method="GET", path=path)
 
         def read(self, notification_id: int = None):
@@ -2743,10 +2692,7 @@ class Forum:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = {
-                    "site": "Forum",
-                    "path": f"/conversation-messages/{message_id}",
-                }
+                path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="GET", path=path)
 
             def create(self, conversation_id: int, message_body: str):
@@ -2788,10 +2734,7 @@ class Forum:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = {
-                    "site": "Forum",
-                    "path": f"/conversation-messages/{message_id}",
-                }
+                path = f"/conversation-messages/{message_id}"
                 data = {"message_body": message_body}
                 return _send_request(self=self._api, method="PUT", path=path, data=data)
 
@@ -2807,10 +2750,7 @@ class Forum:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = {
-                    "site": "Forum",
-                    "path": f"/conversation-messages/{message_id}",
-                }
+                path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
             def report(self, message_id: int, message: str = None):
@@ -2827,10 +2767,7 @@ class Forum:
                 :return: Response object (Even if you use SendAsAsync function)
                 """
 
-                path = {
-                    "site": "Forum",
-                    "path": f"/conversation-messages/{message_id}/report",
-                }
+                path = f"/conversation-messages/{message_id}/report"
                 data = {"message": message}
                 return _send_request(
                     self=self._api, method="POST", path=path, data=data
@@ -2869,10 +2806,7 @@ class Forum:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Forum",
-                "path": f"/conversations/{conversation_id}",
-            }
+            path = f"/conversations/{conversation_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
         def leave(self, conversation_id: int, leave_type: str = "delete"):
@@ -2889,10 +2823,7 @@ class Forum:
             :return: Response object (Even if you use SendAsAsync function)
             """
             params = {"delete_type": leave_type}
-            path = {
-                "site": "Forum",
-                "path": f"/conversations/{conversation_id}",
-            }
+            path = f"/conversations/{conversation_id}"
             return _send_request(
                 self=self._api, method="DELETE", path=path, params=params
             )
@@ -6301,10 +6232,7 @@ class Market:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Market",
-                "path": f"/{item_id}/temp-email-password",
-            }
+            path = f"/{item_id}/temp-email-password"
             return _send_request(self=self._api, method="GET", path=path)
 
         def refuse_guarantee(self, item_id: int):
@@ -6521,10 +6449,7 @@ class Market:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Market",
-                "path": f"/{item_id}/telegram-login-code",
-            }
+            path = f"/{item_id}/telegram-login-code"
             return _send_request(self=self._api, method="GET", path=path)
 
         def telegram_reset(self, item_id: int):
@@ -6539,10 +6464,7 @@ class Market:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = {
-                "site": "Market",
-                "path": f"/{item_id}/telegram-reset-authorizations",
-            }
+            path = f"/{item_id}/telegram-reset-authorizations"
             return _send_request(self=self._api, method="POST", path=path)
 
         def update_inventory(self, item_id: int, app_id: int):
