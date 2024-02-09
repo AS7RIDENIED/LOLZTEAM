@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.15"
+    "version": "1.1.17"
   },
   "servers": [
     {
@@ -3500,7 +3500,7 @@
         ]
       }
     },
-    "/user/{userId}/items": {
+    "/user/items": {
       "get": {
         "tags": [
           "Accounts list"
@@ -3510,7 +3510,17 @@
         "operationId": "accountsList.getOwned",
         "parameters": [
           {
-            "$ref": "#/components/parameters/userId"
+            "name": "user_id",
+            "in": "query",
+            "description": "User id.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "User id",
+              "type": "integer",
+              "description": "User id."
+            }
           },
           {
             "$ref": "#/components/parameters/category_id"
@@ -3537,13 +3547,47 @@
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "name": "login",
+            "style": "form",
+            "required": false,
+            "in": "query",
+            "description": "Login.",
+            "explode": true,
+            "schema":{
+              "title": "Login",
+              "type": "string",
+              "description": "Login."
+            }
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
+            "name": "order_by",
+            "in": "query",
+            "description": "Order by.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Order By",
+              "description": "Order by.",
+              "type": "string",
+              "enum": [
+                "price_to_up",
+                "price_to_down",
+                "pdate_to_down",
+                "pdate_to_down_upload",
+                "pdate_to_up",
+                "pdate_to_up_upload",
+                "exp_auctions",
+                "ddate_to_up",
+                "ddate_to_down"
+              ]
+            }
           },
           {
             "$ref": "#/components/parameters/sb"
@@ -3577,7 +3621,7 @@
         ]
       }
     },
-    "/user/{userId}/orders": {
+    "/user/orders": {
       "get": {
         "tags": [
           "Accounts list"
@@ -3587,7 +3631,17 @@
         "operationId": "accountsList.getPurchased",
         "parameters": [
           {
-            "$ref": "#/components/parameters/userId"
+            "name": "user_id",
+            "in": "query",
+            "description": "User id.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "User id",
+              "type": "integer",
+              "description": "User id."
+            }
           },
           {
             "$ref": "#/components/parameters/category_id"
@@ -3609,6 +3663,19 @@
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "name": "login",
+            "style": "form",
+            "required": false,
+            "in": "query",
+            "description": "Login.",
+            "explode": true,
+            "schema":{
+              "title": "Login",
+              "type": "string",
+              "description": "Login."
+            }
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -5005,14 +5072,19 @@
                     "title": "Cookie login",
                     "type": "boolean"
                   },
+                  "extra[telegramClient]": {
+                    "description": "Telegram client. Used only if you want to upload Telegram account.",
+                    "$ref": "#/components/schemas/TelegramClientModel"
+                  },
+                  "extra[telegramJson]": {
+                    "description": "Contents of session.json file.",
+                    "title": "Telegram Json",
+                    "type": "string"
+                  },
                   "extra[checkChannels]": {
                     "description": "Check channels. Used only if you want to upload Telegram account.",
                     "title": "Check Channels",
                     "type": "boolean"
-                  },
-                  "extra[telegramClient]": {
-                    "description": "Telegram client. Used only if you want to upload Telegram account.",
-                    "$ref": "#/components/schemas/TelegramClientModel"
                   },
                   "extra[checkSpam]": {
                     "description": "Check spam. Used only if you want to upload Telegram account.",
@@ -5566,14 +5638,19 @@
                     "title": "Cookie login",
                     "type": "boolean"
                   },
+                  "extra[telegramClient]": {
+                    "description": "Telegram client. Used only if you want to upload Telegram account.",
+                    "$ref": "#/components/schemas/TelegramClientModel"
+                  },
+                  "extra[telegramJson]": {
+                    "description": "Contents of session.json file.",
+                    "title": "Telegram Json",
+                    "type": "string"
+                  },
                   "extra[checkChannels]": {
                     "description": "Check channels. Used only if you want to upload Telegram account.",
                     "title": "Check Channels",
                     "type": "boolean"
-                  },
-                  "extra[telegramClient]": {
-                    "description": "Telegram client. Used only if you want to upload Telegram account.",
-                    "$ref": "#/components/schemas/TelegramClientModel"
                   },
                   "extra[checkSpam]": {
                     "description": "Check spam. Used only if you want to upload Telegram account.",
@@ -5655,7 +5732,7 @@
         ]
       }
     },
-    "/{itemId}/email-code": {
+    "/email-code": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -5665,10 +5742,43 @@
         "operationId": "accountsManaging.getEmailCode",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "name": "item_id",
+            "in": "query",
+            "description": "Item id.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Itemid",
+              "type": "integer",
+              "description": "Item id."
+            }
           },
           {
-            "$ref": "#/components/parameters/email"
+            "name": "email",
+            "in": "query",
+            "description": "Email.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Email",
+              "type": "string",
+              "description": "Email."
+            }
+          },
+          {
+            "name": "login",
+            "in": "query",
+            "description": "Login.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Login.",
+              "type": "string",
+              "description": "Login."
+            }
           }
         ],
         "responses": {
@@ -12748,7 +12858,7 @@
           "item": {
             "$ref": "#/components/schemas/ItemModel"
           },
-          "itemLink":{
+          "itemLink": {
             "title": "Item link",
             "type": "string"
           },
@@ -12959,11 +13069,11 @@
         ],
         "type": "object",
         "properties": {
-          "status":{
+          "status": {
             "title": "Status",
             "type": "string"
           },
-          "message":{
+          "message": {
             "title": "Message",
             "type": "string"
           },
@@ -13761,7 +13871,7 @@
             "title": "Item State",
             "type": "string"
           },
-          "category_id":{
+          "category_id": {
             "title": "Category id",
             "type": "integer"
           },
