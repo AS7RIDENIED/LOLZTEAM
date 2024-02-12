@@ -178,25 +178,30 @@ forum = Forum(token=token, language="en")
 
 **Parameters:**
 
-- **thread_title** (str): Title of the new thread.
 - **post_body** (str): Content of the new thread.
 - **prize_data_upgrade** (int): Which upgrade will each winner receive.
-- **count_winners** (int): Winner count (prize count).
+- **count_winners** (int): Winner count (prize count). 
   > The maximum value is 100.
 - **length_value** (int): Giveaway duration value. 
   > The maximum duration is 3 days.
-- **length_option** (str): Giveaway duration type. 
-  > Can be [minutes, hours, days]. The maximum duration is 3 days.
+- **length_option** (str): Giveaway duration type. Can be [minutes, hours, days]. 
+  > The maximum duration is 3 days.
 - **require_like_count** (int): Sympathies for this week.
 - **require_total_like_count** (int): Symapthies for all time.
 - **secret_answer** (str): Secret answer of your account.
-- **thread_prefix_id** (int): ID of a prefix for the new thread.
-- **thread_tags** (str): Thread tags for the new thread.
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **title** (str): Thread title. Can be skipped if title_en set.
+- **title_en** (str): Thread title in english. Can be skipped if title set.
+- **prefix_ids** (list): Thread prefixes.
+- **tags** (list): Thread tags.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers
 
 **Example:**
 
 ```python
-response = forum.threads.contests.upgrade.create_by_time(thread_title="Api example", post_body="Api example",
+response = forum.threads.contests.upgrade.create_by_time(title="Api example", post_body="Api example",
                                                          prize_data_upgrade=Constants.Forum.Contests.UpgradePrize.uniq,
                                                          count_winners=1, length_value=3,
                                                          length_option=Constants.Forum.Contests.Length.days,
@@ -217,22 +222,27 @@ print(response.json())
 
 **Parameters:**
 
-- **thread_title** (str): Title of the new thread.
 - **post_body** (str): Content of the new thread.
 - **prize_data_upgrade** (int): Which upgrade will each winner receive.
-- **count_winners** (int): Winner count (prize count).
+- **count_winners** (int): Winner count (prize count). 
   > The maximum value is 100.
 - **needed_members** (int): Max member count.
 - **require_like_count** (int): Sympathies for this week.
 - **require_total_like_count** (int): Symapthies for all time.
 - **secret_answer** (str): Secret answer of your account.
-- **thread_prefix_id** (int): ID of a prefix for the new thread.
-- **thread_tags** (str): Thread tags for the new thread.
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **title** (str): Thread title. Can be skipped if title_en set.
+- **title_en** (str): Thread title in english. Can be skipped if title set.
+- **prefix_ids** (list): Thread prefixes.
+- **tags** (list): Thread tags.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers
 
 **Example:**
 
 ```python
-response = forum.threads.contests.upgrade.create_by_count(thread_title="Api example", post_body="Api example",
+response = forum.threads.contests.upgrade.create_by_count(title="Api example", post_body="Api example",
                                                           prize_data_upgrade=Constants.Forum.Contests.UpgradePrize.uniq,
                                                           count_winners=1, needed_members=300, require_like_count=1,
                                                           require_total_like_count=1, secret_answer="Secret answer")
@@ -251,25 +261,30 @@ print(response.json())
 
 **Parameters:**
 
-- **thread_title** (str): Title of the new thread.
 - **post_body** (str): Content of the new thread.
 - **prize_data_money** (int): How much money will each winner receive.
-- **count_winners** (int): Winner count (prize count). 
+- **count_winners** (int): Winner count (prize count).
   > The maximum value is 100.
-- **length_value** (int): Giveaway duration value.
+- **length_value** (int): Giveaway duration value. 
   > The maximum duration is 3 days.
 - **length_option** (str): Giveaway duration type. 
   > Can be [minutes, hours, days]. The maximum duration is 3 days.
 - **require_like_count** (int): Sympathies for this week.
 - **require_total_like_count** (int): Symapthies for all time.
 - **secret_answer** (str): Secret answer of your account.
-- **thread_prefix_id** (int): ID of a prefix for the new thread.
-- **thread_tags** (str): Thread tags for the new thread.
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **title** (str): Thread title. Can be skipped if title_en set.
+- **title_en** (str): Thread title in english. Can be skipped if title set.
+- **prefix_ids** (list): Thread prefixes.
+- **tags** (list): Thread tags.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers
 
 **Example:**
 
 ```python
-response = forum.threads.contests.money.create_by_time(thread_title="Api example", post_body="Api example",
+response = forum.threads.contests.money.create_by_time(title="Api example", post_body="Api example",
                                                        prize_data_money=500,
                                                        count_winners=1, length_value=3,
                                                        length_option=Constants.Forum.Contests.Length.days,
@@ -290,7 +305,6 @@ print(response.json())
 
 **Parameters:**
 
-- **thread_title** (str): Title of the new thread.
 - **post_body** (str): Content of the new thread.
 - **prize_data_money** (int): How much money will each winner receive.
 - **count_winners** (int): Winner count (prize count).
@@ -299,13 +313,19 @@ print(response.json())
 - **require_like_count** (int): Sympathies for this week.
 - **require_total_like_count** (int): Symapthies for all time.
 - **secret_answer** (str): Secret answer of your account.
-- **thread_prefix_id** (int): ID of a prefix for the new thread.
-- **thread_tags** (str): Thread tags for the new thread.
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **title** (str): Thread title. Can be skipped if title_en set.
+- **title_en** (str): Thread title in english. Can be skipped if title set.
+- **prefix_ids** (list): Thread prefixes.
+- **tags** (list): Thread tags.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers
 
 **Example:**
 
 ```python
-response = forum.threads.contests.money.create_by_count(thread_title="Api example", post_body="Api example",
+response = forum.threads.contests.money.create_by_count(title="Api example", post_body="Api example",
                                                         prize_data_money=500,
                                                         count_winners=1, needed_members=300, require_like_count=1,
                                                         require_total_like_count=1, secret_answer="Secret answer")
@@ -359,15 +379,22 @@ print(response.json())
 **Parameters:**
 
 - **forum_id** (int): ID of the target forum.
-- **thread_title** (str): Title of the new thread.
 - **post_body** (str): Content of the new thread.
-- **thread_prefix_id** (int): ID of a prefix for the new thread.
-- **thread_tags** (str): Thread tags for the new thread.
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **title** (str): Thread title. Can be skipped if title_en set.
+- **title_en** (str): Thread title in english. Can be skipped if title set.
+- **prefix_ids** (list): Thread prefixes.
+- **tags** (list): Thread tags.
+- **hide_contacts** (bool): Hide contacts.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers.
+- **kwargs** (any): Any another params
 
 **Example:**
 
 ```python
-response = forum.threads.create(forum_id=876, thread_title="Api example", post_body="Api example", )
+response = forum.threads.create(forum_id=876, title="Api example", post_body="Api example", )
 print(response.json())
 ```
 

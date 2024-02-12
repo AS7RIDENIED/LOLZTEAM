@@ -175,10 +175,10 @@ class Forum:
         min_likes = "post_likes_reverse"
 
     class ReplyGroups:
-        staff = 0  # КФ + кураторы
-        everyone = 2  # Все
-        local = 21  # Местный и выше
+        staff = 0      # КФ + кураторы
+        everyone = 2   # Все
+        local = 21     # Местный и выше
         resident = 22  # Постоялец и выше
-        expert = 23  # Эксперт и выше
-        guru = 60  # Гуру и выше
-        ai = 61  # ИИ и выше
+        expert = 23    # Эксперт и выше
+        guru = 60      # Гуру и выше
+        ai = 351       # ИИ и выше

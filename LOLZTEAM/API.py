@@ -5,6 +5,8 @@ import time
 import json
 import re
 
+from typing import Union
+
 from . import Exceptions
 from .Tweaks import _MainTweaks
 
@@ -778,7 +780,6 @@ class Forum:
 
                 def create_by_time(
                     self,
-                    thread_title: str,
                     post_body: str,
                     prize_data_money: int,
                     count_winners: int,
@@ -787,8 +788,14 @@ class Forum:
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    thread_prefix_id: int = None,
-                    thread_tags: str = None,
+                    reply_group: int = 2,
+                    title: str = None,
+                    title_en: str = None,
+                    prefix_ids: list = None,
+                    tags: list = None,
+                    allow_ask_hidden_content: bool = None,
+                    comment_ignore_group: bool = None,
+                    dont_alert_followers: bool = None,
                 ):
                     """
                     POST https://api.zelenka.guru/threads
@@ -797,8 +804,15 @@ class Forum:
 
                     Required scopes: post
 
-                    :param thread_title: Title of the new thread.
                     :param post_body: Content of the new thread.
+                    :param title: Thread title. Can be skipped if title_en set.
+                    :param title_en: Thread title in english. Can be skipped if title set.
+                    :param prefix_ids: Thread prefixes.
+                    :param tags: Thread tags.
+                    :param allow_ask_hidden_content: Allow ask hidden content.
+                    :param dont_alert_followers: Don't alert followers
+                    :param reply_group: Allow to reply only users with chosen or higher group.
+                    :param comment_ignore_group: Allow commenting if user can't post in thread.
                     :param prize_data_money: How much money will each winner receive.
                     :param count_winners: Winner count (prize count). The maximum value is 100.
                     :param length_value: Giveaway duration value. The maximum duration is 3 days.
@@ -806,19 +820,35 @@ class Forum:
                     :param require_like_count: Sympathies for this week.
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
-                    :param thread_prefix_id: ID of a prefix for the new thread.
-                    :param thread_tags: Thread tags for the new thread.
 
                     :return: Response object (Even if you use SendAsAsync function)
                     """
-                    path = "/threads"
                     contest_type = "by_finish_date"
                     prize_type = "money"
                     forum_id = 766
+                    if True:  # Tweak 0
+                        if allow_ask_hidden_content is True:
+                            allow_ask_hidden_content = 1
+                        elif allow_ask_hidden_content is False:
+                            allow_ask_hidden_content = 0
+                        if comment_ignore_group is True:
+                            comment_ignore_group = 1
+                        elif comment_ignore_group is False:
+                            comment_ignore_group = 0
+                        if dont_alert_followers is True:
+                            dont_alert_followers = 1
+                        elif dont_alert_followers is False:
+                            dont_alert_followers = 0
+                    if tags:
+                        tags = ",".join(tags)
                     params = {
-                        "forum_id": forum_id,
-                        "thread_prefix_id": thread_prefix_id,
-                        "thread_tags": thread_tags,
+                        "prefix_id[]": prefix_ids,
+                        "tags": tags,
+                        "hide_contacts": 0,
+                        "allow_ask_hidden_content": allow_ask_hidden_content,
+                        "dont_alert_followers": dont_alert_followers,
+                        "reply_group": reply_group,
+                        "comment_ignore_group": comment_ignore_group,
                         "count_winners": count_winners,
                         "length_value": length_value,
                         "length_option": length_option,
@@ -829,21 +859,26 @@ class Forum:
                         "prize_data_money": prize_data_money,
                     }
                     data = {
-                        "thread_title": thread_title,
-                        "post_body": post_body,
+                        "title": title,
+                        "title_en": title_en,
                         "secret_answer": secret_answer,
                     }
-                    return _send_request(
-                        self=self._api,
-                        method="POST",
-                        path=path,
+                    required = {
+                        "forum_id": forum_id,
+                        "post_body": post_body,
+                    }
+                    if "batch_mode" in locals() or "im_async" in locals():
+                        base_api = self
+                    else:
+                        base_api = self._api
+                    return base_api.threads.create(
+                        **required,
                         params=params,
                         data=data,
                     )
 
                 def create_by_count(
                     self,
-                    thread_title: str,
                     post_body: str,
                     prize_data_money: int,
                     count_winners: int,
@@ -851,8 +886,14 @@ class Forum:
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    thread_prefix_id: int = None,
-                    thread_tags: str = None,
+                    reply_group: int = 2,
+                    title: str = None,
+                    title_en: str = None,
+                    prefix_ids: list = None,
+                    tags: list = None,
+                    allow_ask_hidden_content: bool = None,
+                    comment_ignore_group: bool = None,
+                    dont_alert_followers: bool = None,
                 ):
                     """
                     POST https://api.zelenka.guru/threads
@@ -861,44 +902,73 @@ class Forum:
 
                     Required scopes: post
 
-                    :param thread_title: Title of the new thread.
                     :param post_body: Content of the new thread.
+                    :param title: Thread title. Can be skipped if title_en set.
+                    :param title_en: Thread title in english. Can be skipped if title set.
+                    :param prefix_ids: Thread prefixes.
+                    :param tags: Thread tags.
+                    :param allow_ask_hidden_content: Allow ask hidden content.
+                    :param dont_alert_followers: Don't alert followers
+                    :param reply_group: Allow to reply only users with chosen or higher group.
+                    :param comment_ignore_group: Allow commenting if user can't post in thread.
                     :param prize_data_money: How much money will each winner receive.
                     :param count_winners: Winner count (prize count). The maximum value is 100.
                     :param needed_members: Max member count.
                     :param require_like_count: Sympathies for this week.
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
-                    :param thread_prefix_id: ID of a prefix for the new thread.
-                    :param thread_tags: Thread tags for the new thread.
 
                     :return: Response object (Even if you use SendAsAsync function)
                     """
-                    path = "/threads"
                     contest_type = "by_needed_members"
                     prize_type = "money"
                     forum_id = 766
+                    if True:  # Tweak 0
+                        if allow_ask_hidden_content is True:
+                            allow_ask_hidden_content = 1
+                        elif allow_ask_hidden_content is False:
+                            allow_ask_hidden_content = 0
+                        if comment_ignore_group is True:
+                            comment_ignore_group = 1
+                        elif comment_ignore_group is False:
+                            comment_ignore_group = 0
+                        if dont_alert_followers is True:
+                            dont_alert_followers = 1
+                        elif dont_alert_followers is False:
+                            dont_alert_followers = 0
+                    if tags:
+                        tags = ",".join(tags)
                     params = {
-                        "forum_id": forum_id,
-                        "thread_prefix_id": thread_prefix_id,
-                        "thread_tags": thread_tags,
-                        "prize_data_money": prize_data_money,
+                        "prefix_id[]": prefix_ids,
+                        "tags": tags,
+                        "hide_contacts": 0,
+                        "allow_ask_hidden_content": allow_ask_hidden_content,
+                        "reply_group": reply_group,
+                        "comment_ignore_group": comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
                         "prize_type": prize_type,
                         "contest_type": contest_type,
                         "needed_members": needed_members,
+                        "prize_data_money": prize_data_money,
+                        "dont_alert_followers": dont_alert_followers,
                     }
                     data = {
-                        "thread_title": thread_title,
-                        "post_body": post_body,
+                        "title": title,
+                        "title_en": title_en,
                         "secret_answer": secret_answer,
                     }
-                    return _send_request(
-                        self=self._api,
-                        method="POST",
-                        path=path,
+                    required = {
+                        "forum_id": forum_id,
+                        "post_body": post_body,
+                    }
+                    if "batch_mode" in locals() or "im_async" in locals():
+                        base_api = self
+                    else:
+                        base_api = self._api
+                    return base_api.threads.create(
+                        **required,
                         params=params,
                         data=data,
                     )
@@ -909,7 +979,6 @@ class Forum:
 
                 def create_by_time(
                     self,
-                    thread_title: str,
                     post_body: str,
                     prize_data_upgrade: int,
                     count_winners: int,
@@ -918,8 +987,14 @@ class Forum:
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    thread_prefix_id: int = None,
-                    thread_tags: str = None,
+                    reply_group: int = 2,
+                    title: str = None,
+                    title_en: str = None,
+                    prefix_ids: list = None,
+                    tags: list = None,
+                    allow_ask_hidden_content: bool = None,
+                    comment_ignore_group: bool = None,
+                    dont_alert_followers: bool = None,
                 ):
                     """
                     POST https://api.zelenka.guru/threads
@@ -942,8 +1017,15 @@ class Forum:
 
                     Required scopes: post
 
-                    :param thread_title: Title of the new thread.
                     :param post_body: Content of the new thread.
+                    :param title: Thread title. Can be skipped if title_en set.
+                    :param title_en: Thread title in english. Can be skipped if title set.
+                    :param prefix_ids: Thread prefixes.
+                    :param tags: Thread tags.
+                    :param allow_ask_hidden_content: Allow ask hidden content.
+                    :param reply_group: Allow to reply only users with chosen or higher group.
+                    :param comment_ignore_group: Allow commenting if user can't post in thread.
+                    :param dont_alert_followers: Don't alert followers
                     :param prize_data_upgrade: Which upgrade will each winner receive. Check description above
                     :param count_winners: Winner count (prize count). The maximum value is 100.
                     :param length_value: Giveaway duration value. The maximum duration is 3 days.
@@ -951,44 +1033,67 @@ class Forum:
                     :param require_like_count: Sympathies for this week.
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
-                    :param thread_prefix_id: ID of a prefix for the new thread.
-                    :param thread_tags: Thread tags for the new thread.
 
                     :return: Response object (Even if you use SendAsAsync function)
                     """
-                    path = "/threads"
                     contest_type = "by_finish_date"
                     prize_type = "upgrades"
                     forum_id = 766
+
+                    if True:  # Tweak 0
+                        if allow_ask_hidden_content is True:
+                            allow_ask_hidden_content = 1
+                        elif allow_ask_hidden_content is False:
+                            allow_ask_hidden_content = 0
+                        if comment_ignore_group is True:
+                            comment_ignore_group = 1
+                        elif comment_ignore_group is False:
+                            comment_ignore_group = 0
+                        if dont_alert_followers is True:
+                            dont_alert_followers = 1
+                        elif dont_alert_followers is False:
+                            dont_alert_followers = 0
+                    if tags:
+                        tags = ",".join(tags)
                     params = {
-                        "forum_id": forum_id,
-                        "thread_prefix_id": thread_prefix_id,
-                        "thread_tags": thread_tags,
-                        "prize_data_upgrade": prize_data_upgrade,
+                        "prefix_id[]": prefix_ids,
+                        "tags": tags,
+                        "hide_contacts": 0,
+                        "allow_ask_hidden_content": allow_ask_hidden_content,
+                        "reply_group": reply_group,
+                        "comment_ignore_group": comment_ignore_group,
                         "count_winners": count_winners,
-                        "length_value": length_value,
-                        "length_option": length_option,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
                         "prize_type": prize_type,
                         "contest_type": contest_type,
+                        "dont_alert_followers": dont_alert_followers,
+                        "prize_data_upgrade": prize_data_upgrade,
+                        "count_winners": count_winners,
+                        "length_value": length_value,
+                        "length_option": length_option,
                     }
                     data = {
-                        "thread_title": thread_title,
-                        "post_body": post_body,
+                        "title": title,
+                        "title_en": title_en,
                         "secret_answer": secret_answer,
                     }
-                    return _send_request(
-                        self=self._api,
-                        method="POST",
-                        path=path,
+                    required = {
+                        "forum_id": forum_id,
+                        "post_body": post_body,
+                    }
+                    if "batch_mode" in locals() or "im_async" in locals():
+                        base_api = self
+                    else:
+                        base_api = self._api
+                    return base_api.threads.create(
+                        **required,
                         params=params,
                         data=data,
                     )
 
                 def create_by_count(
                     self,
-                    thread_title: str,
                     post_body: str,
                     prize_data_upgrade: int,
                     count_winners: int,
@@ -996,8 +1101,14 @@ class Forum:
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    thread_prefix_id: int = None,
-                    thread_tags: str = None,
+                    reply_group: int = 2,
+                    title: str = None,
+                    title_en: str = None,
+                    prefix_ids: list = None,
+                    tags: list = None,
+                    allow_ask_hidden_content: bool = None,
+                    comment_ignore_group: bool = None,
+                    dont_alert_followers: bool = None,
                 ):
                     """
                     POST https://api.zelenka.guru/threads
@@ -1020,44 +1131,78 @@ class Forum:
 
                     Required scopes: post
 
-                    :param thread_title: Title of the new thread.
                     :param post_body: Content of the new thread.
+                    :param title: Thread title. Can be skipped if title_en set.
+                    :param title_en: Thread title in english. Can be skipped if title set.
+                    :param prefix_ids: Thread prefixes.
+                    :param tags: Thread tags.
+                    :param allow_ask_hidden_content: Allow ask hidden content.
+                    :param reply_group: Allow to reply only users with chosen or higher group.
+                    :param comment_ignore_group: Allow commenting if user can't post in thread.
+                    :param dont_alert_followers: Don't alert followers
                     :param prize_data_upgrade: Which upgrade will each winner receive. Check description above
                     :param count_winners: Winner count (prize count). The maximum value is 100.
                     :param needed_members: Max member count.
                     :param require_like_count: Sympathies for this week.
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
-                    :param thread_prefix_id: ID of a prefix for the new thread.
-                    :param thread_tags: Thread tags for the new thread.
 
                     :return: Response object (Even if you use SendAsAsync function)
                     """
                     path = "/threads"
                     contest_type = "by_needed_members"
                     prize_type = "upgrades"
+
                     forum_id = 766
+                    if True:  # Tweak 0
+                        if allow_ask_hidden_content is True:
+                            allow_ask_hidden_content = 1
+                        elif allow_ask_hidden_content is False:
+                            allow_ask_hidden_content = 0
+                        if comment_ignore_group is True:
+                            comment_ignore_group = 1
+                        elif comment_ignore_group is False:
+                            comment_ignore_group = 0
+                        if dont_alert_followers is True:
+                            dont_alert_followers = 1
+                        elif dont_alert_followers is False:
+                            dont_alert_followers = 0
+                    if tags:
+                        tags = ",".join(tags)
                     params = {
-                        "forum_id": forum_id,
-                        "thread_prefix_id": thread_prefix_id,
-                        "thread_tags": thread_tags,
-                        "prize_data_upgrade": prize_data_upgrade,
+                        "prefix_id[]": prefix_ids,
+                        "tags": tags,
+                        "hide_contacts": 0,
+                        "allow_ask_hidden_content": allow_ask_hidden_content,
+                        "reply_group": reply_group,
+                        "comment_ignore_group": comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
                         "prize_type": prize_type,
                         "contest_type": contest_type,
                         "needed_members": needed_members,
+                        "prize_type": prize_type,
+                        "contest_type": contest_type,
+                        "needed_members": needed_members,
+                        "dont_alert_followers": dont_alert_followers,
+                        "prize_data_upgrade": prize_data_upgrade,
                     }
                     data = {
-                        "thread_title": thread_title,
-                        "post_body": post_body,
+                        "title": title,
+                        "title_en": title_en,
                         "secret_answer": secret_answer,
                     }
-                    return _send_request(
-                        self=self._api,
-                        method="POST",
-                        path=path,
+                    required = {
+                        "forum_id": forum_id,
+                        "post_body": post_body,
+                    }
+                    if "batch_mode" in locals() or "im_async" in locals():
+                        base_api = self
+                    else:
+                        base_api = self._api
+                    return base_api.threads.create(
+                        **required,
                         params=params,
                         data=data,
                     )
@@ -1137,6 +1282,8 @@ class Forum:
             hide_contacts: bool = None,
             allow_ask_hidden_content: bool = None,
             comment_ignore_group: bool = None,
+            dont_alert_followers: bool = None,
+            **kwargs,
         ):
             """
             POST https://api.zelenka.guru/threads
@@ -1171,6 +1318,7 @@ class Forum:
             :param allow_ask_hidden_content: Allow ask hidden content.
             :param reply_group: Allow to reply only users with chosen or higher group.
             :param comment_ignore_group: Allow commenting if user can't post in thread.
+            :param dont_alert_followers: Don't alert followers
 
             :return: Response object (Even if you use SendAsAsync function)
             """
@@ -1188,6 +1336,10 @@ class Forum:
                     comment_ignore_group = 1
                 elif comment_ignore_group is False:
                     comment_ignore_group = 0
+                if dont_alert_followers is True:
+                    dont_alert_followers = 1
+                elif dont_alert_followers is False:
+                    dont_alert_followers = 0
             if tags:
                 tags = ",".join(tags)
             params = {
@@ -1197,6 +1349,7 @@ class Forum:
                 "allow_ask_hidden_content": allow_ask_hidden_content,
                 "reply_group": reply_group,
                 "comment_ignore_group": comment_ignore_group,
+                "dont_alert_followers": dont_alert_followers,
             }
             data = {
                 "forum_id": forum_id,
@@ -1204,6 +1357,15 @@ class Forum:
                 "title_en": title_en,
                 "post_body": post_body,
             }
+            if kwargs:
+                for key, value in kwargs.items():
+                    print(key, value)
+                    if key == "params":
+                        params.update(value)
+                    elif key == "data":
+                        data.update(value)
+                    else:
+                        data[key] = value
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -3168,7 +3330,12 @@ class Market:
         self._delay_synchronizer = None
         self._lock = None
 
-        self._delay_exceptions = ["/item/add", "/item/fast-sell", r"/\d+/goods/check", r"\/\d+(?=\s|$)"]
+        self._delay_exceptions = [
+            "/item/add",
+            "/item/fast-sell",
+            r"/\d+/goods/check",
+            r"\/\d+(?=\s|$)",
+        ]
 
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
@@ -3188,6 +3355,7 @@ class Market:
 
     def __set_user_id(self):
         import concurrent.futures
+
         pool = concurrent.futures.ThreadPoolExecutor()
         path = "/me"
         response = pool.submit(
@@ -3344,8 +3512,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -3438,8 +3606,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -3519,8 +3687,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -3600,8 +3768,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -3681,8 +3849,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -3762,8 +3930,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -3843,8 +4011,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -3924,8 +4092,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4005,8 +4173,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4086,8 +4254,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4180,8 +4348,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4261,8 +4429,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4342,8 +4510,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4436,8 +4604,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4517,8 +4685,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4611,8 +4779,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4705,8 +4873,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4786,8 +4954,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4867,8 +5035,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -4948,8 +5116,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -5029,8 +5197,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -5123,8 +5291,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -5204,8 +5372,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -5285,8 +5453,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -5366,8 +5534,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -5447,8 +5615,8 @@ class Market:
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
-                origin: str or list = None,
-                not_origin: str or list = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
                 order_by: str = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
@@ -6169,9 +6337,9 @@ class Market:
                 self=self._api, method="DELETE", path=path, params=params
             )
 
-        def email(self, item_id: int, email: str):
+        def email(self, item_id: int, email: str, login: str):
             """
-            GET https://api.lzt.market/item_id/email-code
+            GET https://api.lzt.market/email-code
 
             Gets confirmation code or link.
 
@@ -6182,8 +6350,8 @@ class Market:
 
             :return: Response object (Even if you use SendAsAsync function)
             """
-            path = f"/{item_id}/email-code"
-            params = {"email ": email}
+            path = "/email-code"
+            params = {"email ": email, "login": login, "item_id": item_id}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         def guard(self, item_id: int):
