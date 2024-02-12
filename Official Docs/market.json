@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute (3 seconds delay between per request)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.17"
+    "version": "1.1.18"
   },
   "servers": [
     {
@@ -178,9 +178,6 @@
           },
           {
             "$ref": "#/components/parameters/steam_trade_limit"
-          },
-          {
-            "$ref": "#/components/parameters/steam_prime"
           },
           {
             "$ref": "#/components/parameters/daybreak"
@@ -376,6 +373,54 @@
           },
           {
             "$ref": "#/components/parameters/steam_map_rmax"
+          },
+          {
+            "name": "rust_deaths_min",
+            "in": "query",
+            "description": "Minimum number of Rust deaths",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "description": "Minimum number of Rust deaths"
+            }
+          },
+          {
+            "name": "rust_deaths_max",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "description": "Maximum number of Rust deaths",
+            "schema": {
+              "type": "integer",
+              "description": "Maximum number of Rust deaths"
+            }
+          },
+          {
+            "name": "rust_kills_min",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "description": "Minimum number of Rust kills",
+            "schema": {
+              "type": "integer",
+              "description": "Minimum number of Rust kills"
+            }
+          },
+          {
+            "name": "rust_kills_max",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "description": "Maximum number of Rust kills",
+            "schema": {
+              "type": "integer",
+              "description": "Maximum number of Rust kills"
+            }
           }
         ],
         "responses": {
@@ -2199,6 +2244,60 @@
           },
           {
             "$ref": "#/components/parameters/daybreak"
+          },
+          {
+            "name": "level_min",
+            "in": "query",
+            "description": "Minimum number of Social Club level.",
+            "schema": {
+              "type": "integer",
+              "description": "Minimum number of Social Club level."
+            }
+          },
+          {
+            "name": "level_max",
+            "in": "query",
+            "description": "Maximum number of Social Club level.",
+            "schema": {
+              "type": "integer",
+              "description": "Maximum number of Social Club level."
+            }
+          },
+          {
+            "name": "cash_min",
+            "in": "query",
+            "description": "Minimum number of GTA V cash",
+            "schema": {
+              "type": "integer",
+              "description": "inimum number of GTA V cash"
+            }
+          },
+          {
+            "name": "cash_max",
+            "in": "query",
+            "description": "Maximum number of GTA V cash",
+            "schema": {
+              "type": "integer",
+              "description": "Maximum number of GTA V cash"
+            }
+          },
+          {
+            "name": "bank_cash_min",
+            "in": "query",
+            "description": "Minimum number of GTA V bank cash",
+            "schema": {
+              "type": "integer",
+              "description": "Minimum number of GTA V bank cash"
+            }
+          },
+          {
+            "name": "bank_cash_max",
+            "in": "query",
+            "description": "Maximum number of GTA V bank cash",
+            "schema": {
+              "type": "integer",
+              "description": "Maximum number of GTA V bank cash"
+            }
           }
         ],
         "responses": {
@@ -3553,7 +3652,7 @@
             "in": "query",
             "description": "Login.",
             "explode": true,
-            "schema":{
+            "schema": {
               "title": "Login",
               "type": "string",
               "description": "Login."
@@ -3671,7 +3770,7 @@
             "in": "query",
             "description": "Login.",
             "explode": true,
-            "schema":{
+            "schema": {
               "title": "Login",
               "type": "string",
               "description": "Login."
@@ -4973,14 +5072,18 @@
                       "windscribeVPN",
                       "zenmateVPN",
                       "zenmateVPNUltimate",
-                      "moretv",
                       "start"
                     ]
                   },
                   "extra[system]": {
                     "description": "System. Required if you want to upload Supercell account.",
                     "title": "System",
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "laser",
+                      "scroll",
+                      "magic"
+                    ]
                   },
                   "extra[ds_token]": {
                     "description": "Discord token. Required if you want to upload Discord account.",
@@ -5000,7 +5103,18 @@
                   "extra[vk_token_auth_only]": {
                     "description": "Login into account by token only. Used only if you want to upload VK account.",
                     "title": "Vk Token Auth Only",
-                    "type": "boolean"
+                    "type": "integer",
+                    "enum": [
+                      1
+                    ]
+                  },
+                  "extra[parse_vote_count]": {
+                    "description": "Parse VK balance.",
+                    "title": "Parse VK balance",
+                    "type": "integer",
+                    "enum": [
+                      1
+                    ]
                   },
                   "extra[cookies]": {
                     "description": "Cookies. Required if you want to upload Youtube, Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
@@ -5010,12 +5124,29 @@
                   "extra[sc]": {
                     "description": "Required if you want to upload Epic Games account.",
                     "title": "sc",
-                    "type": "boolean"
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      0
+                    ]
                   },
                   "extra[ItTakesTwo]": {
                     "description": "Required if you want to upload Origin (EA) account.",
                     "title": "ItTakesTwo",
-                    "type": "boolean"
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      0
+                    ]
+                  },
+                  "extra[apex_legends]": {
+                    "description": "Required if you want to upload Origin (EA) account.",
+                    "title": "ApexLegends",
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      0
+                    ]
                   },
                   "extra[login_without_cookies]": {
                     "description": "Login without cookies. Required if you want to upload Instagram account.",
@@ -5539,14 +5670,18 @@
                       "windscribeVPN",
                       "zenmateVPN",
                       "zenmateVPNUltimate",
-                      "moretv",
                       "start"
                     ]
                   },
                   "extra[system]": {
                     "description": "System. Required if you want to upload Supercell account.",
                     "title": "System",
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "laser",
+                      "scroll",
+                      "magic"
+                    ]
                   },
                   "extra[ds_token]": {
                     "description": "Discord token. Required if you want to upload Discord account.",
@@ -5566,7 +5701,18 @@
                   "extra[vk_token_auth_only]": {
                     "description": "Login into account by token only. Used only if you want to upload VK account.",
                     "title": "Vk Token Auth Only",
-                    "type": "boolean"
+                    "type": "integer",
+                    "enum": [
+                      1
+                    ]
+                  },
+                  "extra[parse_vote_count]": {
+                    "description": "Parse VK balance.",
+                    "title": "Parse VK balance",
+                    "type": "integer",
+                    "enum": [
+                      1
+                    ]
                   },
                   "extra[cookies]": {
                     "description": "Cookies. Required if you want to upload Youtube, Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
@@ -5576,12 +5722,29 @@
                   "extra[sc]": {
                     "description": "Required if you want to upload Epic Games account.",
                     "title": "sc",
-                    "type": "boolean"
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      0
+                    ]
                   },
                   "extra[ItTakesTwo]": {
                     "description": "Required if you want to upload Origin (EA) account.",
                     "title": "ItTakesTwo",
-                    "type": "boolean"
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      0
+                    ]
+                  },
+                  "extra[apex_legends]": {
+                    "description": "Required if you want to upload Origin (EA) account.",
+                    "title": "ApexLegends",
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      0
+                    ]
                   },
                   "extra[login_without_cookies]": {
                     "description": "Login without cookies. Required if you want to upload Instagram account.",
@@ -7846,7 +8009,6 @@
           "items": {
             "type": "string",
             "enum": [
-              "moretv",
               "start"
             ]
           }
@@ -11944,19 +12106,6 @@
         "schema": {
           "title": "Mafile",
           "description": "Has .mafile (Steam Guard Authenticator).",
-          "$ref": "#/components/schemas/YesNoNoMatterScheme"
-        }
-      },
-      "steam_prime": {
-        "name": "prime",
-        "in": "query",
-        "description": "Has Prime in CS2.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Prime",
-          "description": "Has Prime in CS2.",
           "$ref": "#/components/schemas/YesNoNoMatterScheme"
         }
       },
