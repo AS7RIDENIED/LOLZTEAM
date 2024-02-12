@@ -873,8 +873,8 @@ class Forum:
                         base_api = self._api
                     return base_api.threads.create(
                         **required,
-                        params=params,
-                        data=data,
+                        **params,
+                        **data,
                     )
 
                 def create_by_count(
@@ -969,8 +969,8 @@ class Forum:
                         base_api = self._api
                     return base_api.threads.create(
                         **required,
-                        params=params,
-                        data=data,
+                        **params,
+                        **data,
                     )
 
             class __Upgrade:
@@ -1088,8 +1088,8 @@ class Forum:
                         base_api = self._api
                     return base_api.threads.create(
                         **required,
-                        params=params,
-                        data=data,
+                        **params,
+                        **data,
                     )
 
                 def create_by_count(
@@ -1203,8 +1203,8 @@ class Forum:
                         base_api = self._api
                     return base_api.threads.create(
                         **required,
-                        params=params,
-                        data=data,
+                        **params,
+                        **data,
                     )
 
         def get_threads(
@@ -1359,12 +1359,7 @@ class Forum:
             }
             if kwargs:
                 for key, value in kwargs.items():
-                    print(key, value)
-                    if key == "params":
-                        params.update(value)
-                    elif key == "data":
-                        data.update(value)
-                    else:
+                    if (key not in params) and (key not in data):
                         data[key] = value
             return _send_request(
                 self=self._api,
