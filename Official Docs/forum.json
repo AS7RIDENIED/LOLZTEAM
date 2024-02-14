@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "\n[Market API](https://lolzteam.readme.io)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n+ 20 requests per minute (3 seconds delay between per request) If you exceed the limit, the response code 429 will be returned to you.\n\n\n\nClients can subscribe to certain events to receive real time ping when data is changed within the system.\nThe subscription system uses the [WebSub protocol](https://github.com/w3c/websub) to communicate with hubs and subscribers.\n\n\n**One Time Token**\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n+ TTL of access token: 180 days\n+ TTL of authorization code: 30 seconds\n+ TTL of refresh token: 180 days\n+ Authorization URI: **/oauth/authorize** (Recommended)\n+ Access token exchange URI: **/oauth/token** (Disabled)\n+ Token param name: **oauth_token**\n+ Token bearer header name: **Bearer**\n\n**Discoverability**\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n**Common Parameters**\n\n\n**i18n**\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n**Fields filtering**\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n + **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (*****) to include all default fields before specifying additional ones.\n + **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n**Resource ordering**\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n**Encryption**\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n + **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n**Headers**\n\n + **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n + **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n**Subscriptions**\n\nList of supported topics:\n\n+ **user_x** (x is the user_id of the interested user): receives ping when user data is inserted, updated or deleted. The registered callback will be included in GET **/users/:userId** as parameter **subscription_callback**.\n+ **user_notification_x** (x is the user_id of the interested user): receives ping when user gets a new notification. Notification data will be included in the ping. The registered callback will be included in GET **/notifications** as parameter **subscription_callback**.\n+ **thread_post_x** (x is the thread_id of the interested thread): receives ping when a post in the thread is inserted, updated or deleted. The registered callback will be included in GET **/posts?thread_id=x** as parameter **subscription_callback**.\n\nFor supported resources, two **Link** HTTP headers will be included. It is recommended to check for these headers before issuing subscribe request because webmaster can disable some or all types of subscriptions.\n\n`Link: <topic url>; rel=\"self\"`\n\n`Link: <hub url>; rel=\"hub\"`\n\n**Example subscribe request**\n\n`curl -XPOST https://api.zelenka.guru/subscriptions     -d 'oauth_token=$token'     -d 'hub.callback=$callback_url'     -d 'hub.mode=subscribe'     -d 'hub.topic=$topic'`\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/forum.json) file.",
-    "version": "1.0.52"
+    "version": "1.0.53"
   },
   "servers": [
     {
@@ -888,27 +888,27 @@
           {
             "name": "title",
             "in": "query",
-            "description": "Thread title. Can be skipped if **title_en** set or if **forum_id** is 239.",
+            "description": "Thread title. Can be skipped if **title_en** set.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Thread Title",
               "type": "string",
-              "description": "Thread title. Can be skipped if **title_en** set or if **forum_id** is 239."
+              "description": "Thread title. Can be skipped if **title_en** set."
             }
           },
           {
             "name": "title_en",
             "in": "query",
-            "description": "Thread english title. Can be skipped if **title** set or if **forum_id** is 239.",
+            "description": "Thread english title. Can be skipped if **title** set.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Thread Title English",
               "type": "string",
-              "description": "Thread english title. Can be skipped if **title** set or if **forum_id** is 239."
+              "description": "Thread english title. Can be skipped if **title** set."
             }
           },
           {
@@ -1033,50 +1033,88 @@
                 1
               ]
             }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_get_threads_threads_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/contests": {
+      "post": {
+        "tags": [
+          "Threads"
+        ],
+        "summary": "Create Contest",
+        "description": "Create a new contest.\n\nRequired scopes:\n+ **post**",
+        "operationId": "threads.createContest",
+        "parameters": [
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Thread title. Can be skipped if **title_en** set.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Thread Title",
+              "type": "string",
+              "description": "Thread title. Can be skipped if **title_en** set."
+            }
+          },
+          {
+            "name": "title_en",
+            "in": "query",
+            "description": "Thread english title. Can be skipped if **title** set.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Thread Title English",
+              "type": "string",
+              "description": "Thread english title. Can be skipped if **title** set."
+            }
           },
           {
             "name": "contest_type",
             "in": "query",
-            "description": "Contest type. Required if **forum_id** is 766 (Contests).",
-            "required": false,
+            "description": "Contest type.",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Contest Type",
               "type": "string",
-              "description": "Contest type. Required if **forum_id** is 766 (Contests).",
+              "description": "Contest type.",
               "enum": [
                 "by_finish_date",
                 "by_needed_members"
-              ]
-            }
-          },
-          {
-            "name": "count_winners",
-            "in": "query",
-            "description": "Winner count (prize count). Required if **forum_id** is 766 (Contests).",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Count Winners",
-              "type": "integer",
-              "description": "Winner count (prize count). Required if **forum_id** is 766 (Contests).",
-              "minimum": 1,
-              "maximum": 100
-            }
-          },
-          {
-            "name": "needed_members",
-            "in": "query",
-            "description": "Max member count. Required if **contest_type** is **by_needed_members**.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Needed Members",
-              "type": "integer",
-              "description": "Max member count. Required if **contest_type** is **by_needed_members**."
+              ],
+              "default": "by_finish_date"
             }
           },
           {
@@ -1112,42 +1150,44 @@
             }
           },
           {
-            "name": "require_like_count",
+            "name": "needed_members",
             "in": "query",
-            "description": "Sympathies for this week. Required if **forum_id** is 766 (Contests).",
+            "description": "Max member count. Required if **contest_type** is **by_needed_members**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Require Like Count",
+              "title": "Needed Members",
               "type": "integer",
-              "description": "Sympathies for this week. Required if **forum_id** is 766 (Contests)."
+              "description": "Max member count. Required if **contest_type** is **by_needed_members**."
             }
           },
           {
-            "name": "require_total_like_count",
+            "name": "count_winners",
             "in": "query",
-            "description": "Symapthies for all time. Required if **forum_id** is 766 (Contests).",
-            "required": false,
+            "description": "Winner count (prize count).",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Require Total Like Count",
+              "title": "Count Winners",
               "type": "integer",
-              "description": "Symapthies for all time. Required if **forum_id** is 766 (Contests)."
+              "description": "Winner count (prize count).",
+              "minimum": 1,
+              "maximum": 100
             }
           },
           {
             "name": "prize_type",
             "in": "query",
-            "description": "Prize type. Required if **forum_id** is 766 (Contests).",
-            "required": false,
+            "description": "Prize type.",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Prize Type",
               "type": "string",
-              "description": "Prize type. Required if **forum_id** is 766 (Contests).",
+              "description": "Prize type.",
               "enum": [
                 "money",
                 "upgrades"
@@ -1190,95 +1230,281 @@
             }
           },
           {
+            "name": "require_like_count",
+            "in": "query",
+            "description": "Sympathies for this week.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Require Like Count",
+              "type": "integer",
+              "description": "Sympathies for this week."
+            }
+          },
+          {
+            "name": "require_total_like_count",
+            "in": "query",
+            "description": "Symapthies for all time.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Require Total Like Count",
+              "type": "integer",
+              "description": "Symapthies for all time."
+            }
+          },
+          {
             "name": "secret_answer",
             "in": "query",
-            "description": "Secret answer of your account. Required if **forum_id** is 766 (Contests).",
+            "description": "Secret answer of your account.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Secret Answer",
               "type": "string",
-              "description": "Secret answer of your account. Required if **forum_id** is 766 (Contests)."
+              "description": "Secret answer of your account."
             }
           },
           {
+            "name": "tags",
+            "in": "query",
+            "description": "Thread tags.",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "title": "Thread Tags",
+              "type": "array",
+              "description": "Thread tags.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "reply_group",
+            "in": "query",
+            "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Reply group",
+              "type": "integer",
+              "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+              "default": 2,
+              "enum": [
+                0,
+                2,
+                21,
+                22,
+                23,
+                60,
+                351
+              ]
+            }
+          },
+          {
+            "name": "comment_ignore_group",
+            "in": "query",
+            "description": "Allow commenting if user can't post in thread.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Comment ignore group",
+              "type": "integer",
+              "description": "Allow commenting if user can't post in thread.",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "dont_alert_followers",
+            "in": "query",
+            "description": "Don't alert followers about thread creation.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Don't alert followers",
+              "type": "string",
+              "description": "Don't alert followers about thread creation.",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "hide_contacts",
+            "in": "query",
+            "description": "Hide contacts.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Hide contacts",
+              "type": "integer",
+              "description": "Hide contacts.",
+              "enum": [
+                1,
+                0
+              ]
+            }
+          },
+          {
+            "name": "allow_ask_hidden_content",
+            "in": "query",
+            "description": "Allow ask hidden content.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow ask hidden content",
+              "type": "integer",
+              "description": "Allow ask hidden content.",
+              "enum": [
+                1,
+                0
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "title": "Body_get_threads_threads_post",
+                "required": [
+                  "post_body"
+                ],
+                "type": "object",
+                "properties": {
+                  "post_body": {
+                    "title": "Post Body",
+                    "type": "string",
+                    "description": "Content of the new contest."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/claims": {
+      "post": {
+        "tags": [
+          "Threads"
+        ],
+        "summary": "Create Arbitrage",
+        "description": "Create a Arbitrage.\n\nRequired scopes:\n+ **post**",
+        "operationId": "threads.createClaim",
+        "parameters": [
+          {
             "name": "as_responder",
             "in": "query",
-            "description": "To whom the complaint is filed. Specify a nickname or a link to the profile.\nRequired if **forum_id** is 239.",
-            "required": false,
+            "description": "To whom the complaint is filed. Specify a nickname or a link to the profile.",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Arbitrage Responder",
               "type": "string",
-              "description": "To whom the complaint is filed. Specify a nickname or a link to the profile.\nRequired if **forum_id** is 239."
+              "description": "To whom the complaint is filed. Specify a nickname or a link to the profile."
             }
           },
           {
             "name": "as_is_market_deal",
             "in": "query",
-            "description": "Did you buy account on the market?\nRequired if **forum_id** is 239.",
-            "required": false,
+            "description": "Did you buy account on the market?",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Arbitrage Is Market Deal",
               "type": "integer",
-              "description": "Did you buy account on the market?\nRequired if **forum_id** is 239.",
-              "enum": [0,1]
+              "description": "Did you buy account on the market?",
+              "enum": [
+                0,
+                1
+              ]
             }
           },
           {
             "name": "as_is_market_url",
             "in": "query",
-            "description": "Write account link on the market, you can get it by opening [\"My purchases\"](https://lzt.market/user/orders) page.\nRequired if **forum_id** is 239.",
+            "description": "Write account link on the market, you can get it by opening [\"My purchases\"](https://lzt.market/user/orders) page.\nRequired if **as_is_market_deal** is 1.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Arbitrage Market Url",
               "type": "string",
-              "description": "Write account link on the market, you can get it by opening [\"My purchases\"](https://lzt.market/user/orders) page.\nRequired if **forum_id** is 239."
+              "description": "Write account link on the market, you can get it by opening [\"My purchases\"](https://lzt.market/user/orders) page.\nRequired if **as_is_market_deal** is 1."
             }
           },
           {
             "name": "as_data",
             "in": "query",
-            "description": "Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.\nOptional if **forum_id** is 239 and **as_is_market_deal** is 0.",
+            "description": "Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.\nOptional if **as_is_market_deal** is 0.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Responder Contacts",
               "type": "string",
-              "description": "Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.\nOptional if **forum_id** is 239 and **as_is_market_deal** is 0."
+              "description": "Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.\nOptional if **as_is_market_deal** is 0."
             }
           },
           {
             "name": "as_amount",
             "in": "query",
-            "description": "Indicate the amount by which the responder deceived you.\nRequired if **forum_id** is 239.",
-            "required": false,
+            "description": "Indicate the amount by which the responder deceived you.",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Arbitrage Amount",
               "type": "integer",
-              "description": "Indicate the amount by which the responder deceived you.\nRequired if **forum_id** is 239."
+              "description": "Indicate the amount by which the responder deceived you."
             }
           },
           {
             "name": "currency",
             "in": "query",
-            "description": "Currency of Arbitrage.\nOptional if **forum_id** is 239.",
+            "description": "Currency of Arbitrage.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Arbitrage Amount",
               "type": "string",
-              "description": "Currency of Arbitrage.\nOptional if **forum_id** is 239.",
+              "description": "Currency of Arbitrage.",
               "enum": [
                 "rub",
                 "uah",
@@ -1295,41 +1521,151 @@
           {
             "name": "transfer_type",
             "in": "query",
-            "description": "The transaction took place through a guarantor or there was a transfer to the market with a hold?\nOptional if **forum_id** is 239.",
-            "required": false,
+            "description": "The transaction took place through a guarantor or there was a transfer to the market with a hold?\nRequired if **as_is_market_deal** is 0.",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Transfer Type",
               "type": "string",
-              "description": "The transaction took place through a guarantor or there was a transfer to the market with a hold?\nOptional if **forum_id** is 239.",
-              "enum": ["safe","notsafe"]
+              "description": "The transaction took place through a guarantor or there was a transfer to the market with a hold?\nRequired if **as_is_market_deal** is 0.",
+              "enum": [
+                "safe",
+                "notsafe"
+              ]
             }
           },
           {
             "name": "as_funds_receipt",
             "in": "query",
-            "description": "Funds transfer recipient.\nUpload a receipt for the transfer of funds, use the \"View receipt\" button in your wallet. Must be uploaded to [Imgur](https://imgur.com/upload). Write \"no\" if you have not paid.\nRequired if **forum_id** is 239 and **as_is_market_deal** is 0.",
+            "description": "Funds transfer recipient.\nUpload a receipt for the transfer of funds, use the \"View receipt\" button in your wallet. Must be uploaded to [Imgur](https://imgur.com/upload). Write \"no\" if you have not paid.\nRequired if **as_is_market_deal** is 0.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Arbitrage Funds Receipt",
               "type": "string",
-              "description": "Funds transfer recipient.\nUpload a receipt for the transfer of funds, use the \"View receipt\" button in your wallet. Must be uploaded to [Imgur](https://imgur.com/upload) Write \"no\" if you have not paid.\nRequired if **forum_id** is 239 and **as_is_market_deal** is 0."
+              "description": "Funds transfer recipient.\nUpload a receipt for the transfer of funds, use the \"View receipt\" button in your wallet. Must be uploaded to [Imgur](https://imgur.com/upload). Write \"no\" if you have not paid.\nRequired if **as_is_market_deal** is 0."
             }
           },
           {
             "name": "as_tg_login_screenshot",
             "in": "query",
-            "description": "Screenshot showing the respondent's Telegram login.\nIf the correspondence was conducted in Telegram, upload a screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to [Imgur](https://imgur.com/upload) If the correspondence was conducted elsewhere, write \"no\".\nRequired if **forum_id** is 239.",
+            "description": "Screenshot showing the respondent's Telegram login.\nIf the correspondence was conducted in Telegram, upload a screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to [Imgur](https://imgur.com/upload). If the correspondence was conducted elsewhere, write \"no\".",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Arbitrage Screenshot",
               "type": "string",
-              "description": "Screenshot showing the respondent's Telegram login.\nIf the correspondence was conducted in Telegram, upload a screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to [Imgur](https://imgur.com/upload) If the correspondence was conducted elsewhere, write \"no\".\nRequired if **forum_id** is 239."
+              "description": "Screenshot showing the respondent's Telegram login.\nIf the correspondence was conducted in Telegram, upload a screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to [Imgur](https://imgur.com/upload). If the correspondence was conducted elsewhere, write \"no\"."
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Thread tags.",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "title": "Thread Tags",
+              "type": "array",
+              "description": "Thread tags.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "hide_contacts",
+            "in": "query",
+            "description": "Hide contacts.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Hide contacts",
+              "type": "integer",
+              "description": "Hide contacts.",
+              "enum": [
+                1,
+                0
+              ]
+            }
+          },
+          {
+            "name": "allow_ask_hidden_content",
+            "in": "query",
+            "description": "Allow ask hidden content.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow ask hidden content",
+              "type": "integer",
+              "description": "Allow ask hidden content.",
+              "enum": [
+                1,
+                0
+              ]
+            }
+          },
+          {
+            "name": "reply_group",
+            "in": "query",
+            "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Reply group",
+              "type": "integer",
+              "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+              "default": 2,
+              "enum": [
+                0,
+                2,
+                21,
+                22,
+                23,
+                60,
+                351
+              ]
+            }
+          },
+          {
+            "name": "comment_ignore_group",
+            "in": "query",
+            "description": "Allow commenting if user can't post in thread.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Comment ignore group",
+              "type": "integer",
+              "description": "Allow commenting if user can't post in thread.",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "dont_alert_followers",
+            "in": "query",
+            "description": "Don't alert followers about thread creation.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Don't alert followers",
+              "type": "string",
+              "description": "Don't alert followers about thread creation.",
+              "enum": [
+                0,
+                1
+              ]
             }
           }
         ],
@@ -1337,7 +1673,18 @@
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Body_get_threads_threads_post"
+                "title": "Body_get_threads_threads_post",
+                "required": [
+                  "post_body"
+                ],
+                "type": "object",
+                "properties": {
+                  "post_body": {
+                    "title": "Post Body",
+                    "type": "string",
+                    "description": "You should describe what's happened.\n- describe the situation in a nutshell. If you wish, you can describe the situation in more detail using the \"Spoiler\" function.\n- attach screenshots of correspondence. You must upload to the site [Imgur](https://imgur.com/upload) - for convenience, use Ctrl + V when uploading screenshots to the album.\n- other evidence;\n- notify the respondent about the complaint you created, familiarize him with hidden content\n\nDescribe the situation in as much detail as possible."
+                  }
+                }
               }
             }
           },
@@ -1713,7 +2060,9 @@
               "title": "Apply thread prefix.",
               "type": "integer",
               "description": "Apply thread prefix. (Set **1** if you want to edit thread prefixes on move)",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -1758,7 +2107,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Alert reason",  
+              "title": "Alert reason",
               "type": "string",
               "description": "Reason of moving thread which will sent to thread starter. (Required if **send_starter_alert** is set)"
             }
@@ -3878,7 +4227,7 @@
     },
     "/users/{userId}/avatar-crop": {
       "post": {
-        "tags": [ 
+        "tags": [
           "Users"
         ],
         "summary": "Crop Avatar",
@@ -6841,8 +7190,7 @@
         }
       }
     },
-    "responses": {
-    },
+    "responses": {},
     "schemas": {
       "ThreadsOrderModel": {
         "title": "Order",
@@ -7064,7 +7412,7 @@
           "post_body": {
             "title": "Post Body",
             "type": "string",
-            "description": "Content of the new thread.\n\nIf **forum_id** is 239 you should describe what's happened.\n- describe the situation in a nutshell. If you wish, you can describe the situation in more detail using the \"Spoiler\" function.\n- attach screenshots of correspondence. You must upload to the site [Imgur](https://imgur.com/upload) - for convenience, use Ctrl + V when uploading screenshots to the album.\n- other evidence;\n- notify the respondent about the complaint you created, familiarize him with hidden content\n\nDescribe the situation in as much detail as possible."
+            "description": "Content of the new thread."
           }
         }
       },
