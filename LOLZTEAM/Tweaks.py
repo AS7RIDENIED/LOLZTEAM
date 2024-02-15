@@ -133,7 +133,7 @@ def CreateJob(func, job_name, **kwargs):
     user_id = None  # Костыль для Tweak 1
     for arg, value in kwargs.items():
         if arg not in arguments:
-            raise Exceptions.INVALID_ARG_IN_GET_BATCH_JOB(
+            raise Exceptions.INVALID_ARG_IN_CREATE_JOB(
                 f'Function "{func.__name__}" don\'t have "{arg}" parameter'
             )
         else:
@@ -190,7 +190,7 @@ async def SendAsAsync(func, **kwargs):
     user_id = None  # Костыль для Tweak 1
     for arg, value in kwargs.items():
         if arg not in arguments:
-            raise Exceptions.INVALID_ARG_IN_GET_BATCH_JOB(
+            raise Exceptions.INVALID_ARG_IN_CREATE_JOB(
                 f'Function "{func.__name__}" don\'t have "{arg}" parameter'
             )
         else:

@@ -182,3 +182,22 @@ class Forum:
         expert = 23    # Эксперт и выше
         guru = 60      # Гуру и выше
         ai = 351       # ИИ и выше
+
+    class Arbitrage:
+        class TransferType:
+            safe = "safe"
+            not_safe = "notsafe"
+
+        class PayClaim:
+            now = "now"
+            later = "later"
+
+        class Currency:
+            cny = "cny"
+            usd = "usd"
+            rub = "rub"
+            eur = "eur"
+            uah = "uah"
+            kzt = "kzt"
+            byn = "byn"
+            gbp = "gbp"

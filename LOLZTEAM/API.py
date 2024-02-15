@@ -228,7 +228,7 @@ class Forum:
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
         :param bypass_429: Bypass status code 429 by sleep
         :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
-        :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
+        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://api.zelenka.guru"
@@ -275,16 +275,13 @@ class Forum:
 
         self.debug = False
 
-    async def send_as_async(self, func, **kwargs):
-        return await _send_async_request(self, func, **kwargs)
-
     def change_proxy(self, proxy_type: str = None, proxy: str = None):
         """
         Delete or change your proxy
 
         Skip proxy_type and proxy if you want to delete it
 
-        :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
+        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         if proxy_type is not None:
@@ -767,16 +764,17 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
             self.contests = self.__Contests(self._api)
+            self.arbitrage = self.__Arbitrage(self._api)
 
         class __Contests:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
                 self.money = self.__Money(self._api)
                 self.upgrade = self.__Upgrade(self._api)
 
             class __Money:
-                def __init__(self, api_self):
-                    self._api = api_self
+                def __init__(self, _api_self):
+                    self._api = _api_self
 
                 def create_by_time(
                     self,
@@ -974,8 +972,8 @@ class Forum:
                     )
 
             class __Upgrade:
-                def __init__(self, api_self):
-                    self._api = api_self
+                def __init__(self, _api_self):
+                    self._api = _api_self
 
                 def create_by_time(
                     self,
@@ -1206,6 +1204,178 @@ class Forum:
                         **params,
                         **data,
                     )
+
+        class __Arbitrage:
+            def __init__(self, _api_self):
+                self._api = _api_self
+
+            def market(
+                self,
+                responder: str,
+                item_id,
+                amount: float,
+                post_body: str,
+                currency: str = None,
+                conversation_screenshot: str = None,
+                tags: list = None,
+                hide_contacts: bool = None,
+                allow_ask_hidden_content: bool = None,
+                comment_ignore_group: bool = None,
+                dont_alert_followers: bool = None,
+                reply_group: int = 2,
+            ):
+                """
+                POST https://api.zelenka.guru/claims
+
+                Create a Arbitrage.
+
+                Required scopes: post
+
+                :param responder: To whom the complaint is filed. Specify a nickname or a link to the profile.
+                :param item_id: Write account link or item_id.
+                :param amount: Amount by which the responder deceived you.
+                :param post_body: You should describe what's happened.
+                :param currency: Currency of Arbitrage.
+                :param conversation_screenshot: Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+                :param tags: Thread tags.
+                :param hide_contacts: Hide contacts.
+                :param allow_ask_hidden_content: Allow ask hidden content.
+                :param comment_ignore_group: Allow commenting if user can't post in thread.
+                :param dont_alert_followers: Don't alert followers
+                :param reply_group: Allow to reply only users with chosen or higher group.
+
+                :return: Response object (Even if you use SendAsAsync function)
+                """
+                path = "/claims"
+                if item_id.isdigit():
+                    if "batch_mode" in locals() or "im_async" in locals():
+                        base_api = self
+                    else:
+                        base_api = self._api
+                    item_id = f"{base_api.base_url}/market/{item_id}"
+                if True:  # Tweak 0
+                    if hide_contacts is True:
+                        hide_contacts = 1
+                    elif hide_contacts is False:
+                        hide_contacts = 0
+                    if allow_ask_hidden_content is True:
+                        allow_ask_hidden_content = 1
+                    elif allow_ask_hidden_content is False:
+                        allow_ask_hidden_content = 0
+                    if comment_ignore_group is True:
+                        comment_ignore_group = 1
+                    elif comment_ignore_group is False:
+                        comment_ignore_group = 0
+                    if dont_alert_followers is True:
+                        dont_alert_followers = 1
+                    elif dont_alert_followers is False:
+                        dont_alert_followers = 0
+                if tags:
+                    tags = ",".join(tags)
+                data = {
+                    "post_body": post_body,
+                    "as_responder": responder,
+                    "as_is_market_deal": 1,
+                    "as_is_market_url": item_id,
+                    "as_amount": amount,
+                    "currency": currency,
+                    "as_tg_login_screenshot": conversation_screenshot,
+                    "tags": tags,
+                    "hide_contacts": hide_contacts,
+                    "allow_ask_hidden_content": allow_ask_hidden_content,
+                    "comment_ignore_group": comment_ignore_group,
+                    "dont_alert_followers": dont_alert_followers,
+                    "reply_group": reply_group,
+                }
+                return _send_request(
+                    self=self._api, method="POST", path=path, data=data
+                )
+
+            def non_market(
+                self,
+                responder: str,
+                amount: float,
+                receipt: str,
+                post_body: str,
+                pay_claim: bool,
+                conversation_screenshot: str = "no",
+                responder_data: str = None,
+                currency: str = None,
+                transfer_type: str = "notsafe",
+                tags: list = None,
+                hide_contacts: bool = None,
+                allow_ask_hidden_content: bool = None,
+                comment_ignore_group: bool = None,
+                dont_alert_followers: bool = None,
+                reply_group: int = 2,
+            ):
+                """
+                POST https://api.zelenka.guru/claims
+
+                Create a Arbitrage.
+
+                Required scopes: post
+
+                :param responder: To whom the complaint is filed. Specify a nickname or a link to the profile.
+                :param amount: Amount by which the responder deceived you.
+                :param currency: Currency of Arbitrage.
+                :param receipt: Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
+                :param post_body: You should describe what's happened.
+                :param pay_claim: !!!  If you set this parameter to **True** forum will automatically calculate the amount and debit it from your account.  !!!\nFor filing claims, it is necessary to make a contribution in the amount of 5% of the amount of damage (but not less than 50 rubles and not more than 5000 rubles). For example, for an amount of damage of 300 rubles, you will need to pay 50 rubles, for 2,000 and 10,000 rubles - 100 and 500 rubles, respectively).
+                :param responder_data: Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
+                :param transfer_type: The transaction took place through a guarantor or there was a transfer to the market with a hold? Can be ["safe", "notsafe"]
+                :param conversation_screenshot: Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+                :param tags: Thread tags.
+                :param hide_contacts: Hide contacts.
+                :param allow_ask_hidden_content: Allow ask hidden content.
+                :param comment_ignore_group: Allow commenting if user can't post in thread.
+                :param dont_alert_followers: Don't alert followers
+                :param reply_group: Allow to reply only users with chosen or higher group.
+
+                :return: Response object (Even if you use SendAsAsync function)
+                """
+                path = "/claims"
+                if True:  # Tweak 0
+                    if hide_contacts is True:
+                        hide_contacts = 1
+                    elif hide_contacts is False:
+                        hide_contacts = 0
+                    if allow_ask_hidden_content is True:
+                        allow_ask_hidden_content = 1
+                    elif allow_ask_hidden_content is False:
+                        allow_ask_hidden_content = 0
+                    if comment_ignore_group is True:
+                        comment_ignore_group = 1
+                    elif comment_ignore_group is False:
+                        comment_ignore_group = 0
+                    if dont_alert_followers is True:
+                        dont_alert_followers = 1
+                    elif dont_alert_followers is False:
+                        dont_alert_followers = 0
+                if tags:
+                    tags = ",".join(tags)
+                data = {
+                    "post_body": post_body,
+                    "as_responder": responder,
+                    "as_is_market_deal": 0,
+                    "as_amount": amount,
+                    "currency": currency,
+                    "conversation_screenshot": conversation_screenshot,
+                    "as_data": responder_data,
+                    "pay_claim": pay_claim,
+                    "transfer_type": transfer_type,
+                    "as_funds_receipt": receipt,
+                    "as_tg_login_screenshot": conversation_screenshot,
+                    "tags": tags,
+                    "hide_contacts": hide_contacts,
+                    "allow_ask_hidden_content": allow_ask_hidden_content,
+                    "comment_ignore_group": comment_ignore_group,
+                    "dont_alert_followers": dont_alert_followers,
+                    "reply_group": reply_group,
+                }
+                return _send_request(
+                    self=self._api, method="POST", path=path, data=data
+                )
 
         def get_threads(
             self,
@@ -1970,7 +2140,7 @@ class Forum:
             }
             if custom_fields is not None:
                 if "batch_mode" in locals():
-                    params["custom_fields"] = custom_fields  # Костыль get_batch_job
+                    params["custom_fields"] = custom_fields  # Костыль CreateJob
                 else:
                     for key, value in custom_fields.items():
                         cf = f"custom_fields[{key}]"
@@ -2084,7 +2254,7 @@ class Forum:
             }
             if fields is not None:
                 if "batch_mode" in locals():
-                    data["fields"] = fields  # Костыль get_batch_job
+                    data["fields"] = fields  # Костыль CreateJob
                 else:
                     for key, value in fields.items():
                         field = f"fields[{key}]"
@@ -3099,8 +3269,8 @@ class Forum:
             )
 
     class __Oauth:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def facebook(self, client_id: int, client_secret: str, facebook_token: str):
             """
@@ -3295,7 +3465,7 @@ class Market:
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
         :param bypass_429: Bypass status code 429 by sleep
         :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
-        :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
+        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://api.lzt.market"
@@ -3367,7 +3537,7 @@ class Market:
 
         Skip proxy_type and proxy if you want to delete it
 
-        :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
+        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         if proxy_type is not None:
@@ -3416,8 +3586,8 @@ class Market:
         return _send_request(self=self, method="POST", path=path, data=data)
 
     class __Profile:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def get(self):
             """
@@ -3497,8 +3667,8 @@ class Market:
 
     class __Category:
         class __Steam:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -3591,8 +3761,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Fortnite:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -3672,8 +3842,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __VK:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -3753,8 +3923,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __GenshinImpact:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -3834,8 +4004,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __HonkaiStarRail:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -3915,8 +4085,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Valorant:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -3996,8 +4166,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __LeagueOfLegends:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4077,8 +4247,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Telegram:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4158,8 +4328,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Supercell:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4239,8 +4409,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Origin:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4333,8 +4503,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __WorldOfTanks:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4414,8 +4584,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __WorldOfTanksBlitz:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4495,8 +4665,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __EpicGames:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4589,8 +4759,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __EscapeFromTarkov:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4670,8 +4840,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __SocialClub:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4764,8 +4934,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Uplay:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4858,8 +5028,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __WarThunder:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -4939,8 +5109,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Discord:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5020,8 +5190,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __TikTok:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5101,8 +5271,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Instagram:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5182,8 +5352,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __BattleNet:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5276,8 +5446,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __VPN:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5357,8 +5527,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Cinema:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5438,8 +5608,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Spotify:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5519,8 +5689,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Warface:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5600,8 +5770,8 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Youtube:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def get(
                 self,
@@ -5680,34 +5850,34 @@ class Market:
                 path = "/youtube/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-        def __init__(self, api_self):
-            self._api = api_self
-            self.steam = self.__Steam(api_self)
-            self.fortnite = self.__Fortnite(api_self)
-            self.vk = self.__VK(api_self)
-            self.genshin = self.__GenshinImpact(api_self)
-            self.honkai = self.__HonkaiStarRail(api_self)
-            self.valorant = self.__Valorant(api_self)
-            self.lol = self.__LeagueOfLegends(api_self)
-            self.telegram = self.__Telegram(api_self)
-            self.supercell = self.__Supercell(api_self)
-            self.origin = self.__Origin(api_self)
-            self.wot = self.__WorldOfTanks(api_self)
-            self.wot_blitz = self.__WorldOfTanksBlitz(api_self)
-            self.epicgames = self.__EpicGames(api_self)
-            self.eft = self.__EscapeFromTarkov(api_self)
-            self.socialclub = self.__SocialClub(api_self)
-            self.uplay = self.__Uplay(api_self)
-            self.war_thunder = self.__WarThunder(api_self)
-            self.discord = self.__Discord(api_self)
-            self.tiktok = self.__TikTok(api_self)
-            self.instagram = self.__Instagram(api_self)
-            self.battlenet = self.__BattleNet(api_self)
-            self.vpn = self.__VPN(api_self)
-            self.cinema = self.__Cinema(api_self)
-            self.spotify = self.__Spotify(api_self)
-            self.warface = self.__Warface(api_self)
-            self.youtube = self.__Youtube(api_self)
+        def __init__(self, _api_self):
+            self._api = _api_self
+            self.steam = self.__Steam(_api_self)
+            self.fortnite = self.__Fortnite(_api_self)
+            self.vk = self.__VK(_api_self)
+            self.genshin = self.__GenshinImpact(_api_self)
+            self.honkai = self.__HonkaiStarRail(_api_self)
+            self.valorant = self.__Valorant(_api_self)
+            self.lol = self.__LeagueOfLegends(_api_self)
+            self.telegram = self.__Telegram(_api_self)
+            self.supercell = self.__Supercell(_api_self)
+            self.origin = self.__Origin(_api_self)
+            self.wot = self.__WorldOfTanks(_api_self)
+            self.wot_blitz = self.__WorldOfTanksBlitz(_api_self)
+            self.epicgames = self.__EpicGames(_api_self)
+            self.eft = self.__EscapeFromTarkov(_api_self)
+            self.socialclub = self.__SocialClub(_api_self)
+            self.uplay = self.__Uplay(_api_self)
+            self.war_thunder = self.__WarThunder(_api_self)
+            self.discord = self.__Discord(_api_self)
+            self.tiktok = self.__TikTok(_api_self)
+            self.instagram = self.__Instagram(_api_self)
+            self.battlenet = self.__BattleNet(_api_self)
+            self.vpn = self.__VPN(_api_self)
+            self.cinema = self.__Cinema(_api_self)
+            self.spotify = self.__Spotify(_api_self)
+            self.warface = self.__Warface(_api_self)
+            self.youtube = self.__Youtube(_api_self)
 
         def list(self, top_queries: bool = None):
             """
@@ -5731,8 +5901,8 @@ class Market:
             )
 
     class __List:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def from_url(self, url: str):
             """
@@ -6049,8 +6219,8 @@ class Market:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Payments:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def history(
             self,
@@ -6235,13 +6405,13 @@ class Market:
             return req.url
 
     class __Managing:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
             self.tag = self.__Tag(self._api)
 
         class __Tag:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
             def delete(self, item_id: int, tag_id: int):
                 """
@@ -6290,12 +6460,14 @@ class Market:
         def get(
             self,
             item_id: int,
+            auction: bool = False,
             steam_preview: bool = False,
             preview_type: str = None,
         ):
             """
             GET https://api.lzt.market/item_id
             GET https://api.lzt.market/item_id/steam-preview
+            GET https://api.lzt.market/item_id/auction
 
             Displays account information or returns Steam account html code.
 
@@ -6308,7 +6480,9 @@ class Market:
 
             """
             path = f"/{item_id}"
-            if steam_preview:
+            if auction:
+                path = f"/{item_id}/auction"
+            elif steam_preview:
                 path = f"/{item_id}/steam-preview"
             params = {"type": preview_type}
             return _send_request(self=self._api, method="GET", path=path, params=params)
@@ -6693,16 +6867,39 @@ class Market:
             path = "/steam-value"
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        def confirm_sda(self, item_id: int, id: int = None, nonce: int = None):
+            """
+            POST https://api.lzt.market/item_id/confirm-sda
+
+            Confirm steam action.
+
+            Don't set id and nonce parameters to get list of available confirmation requests.
+
+            Warning: this action is cancelling active account guarantee.
+
+            :param item_id: Item id.
+            :param id: Confirmation id. (Required along with nonce if you want to confirm action).
+            :param nonce: Confirmation nonce. (Required along with id if you want to confirm action).
+
+            :return: Response object (Even if you use SendAsAsync function)
+            """
+            params = {
+                "id": id,
+                "nonce": nonce,
+            }
+            path = f"/{item_id}/confirm-sda"
+            return _send_request(self=self._api, method="POST", path=path, params=params)
+
     class __Purchasing:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
             self.auction = self.__Auction(self._api)
 
         class __Auction:
-            def __init__(self, api_self):
-                self._api = api_self
+            def __init__(self, _api_self):
+                self._api = _api_self
 
-            def get(self, item_id: int):
+            def get(self, item_id: int):  # Deprecated
                 """
                 GET https://api.lzt.market/item_id/auction
 
@@ -6714,8 +6911,13 @@ class Market:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = f"/{item_id}/auction"
-                return _send_request(self=self._api, method="GET", path=path)
+                if "batch_mode" in locals() or "im_async" in locals():
+                    base_api = self
+                else:
+                    base_api = self._api
+                print("This method is deprecated and will be deleted in future")
+                print("Use \"market.managing.get(item_id=item_id, auction=True)\" instead of \"market.purchasing.auction.get(item_id=item_id)\"")
+                return base_api.managing.get(item_id=item_id, auction=True)
 
             def place_bid(self, item_id: int, amount: int, currency: str = None):
                 """
@@ -6866,8 +7068,8 @@ class Market:
             )
 
     class __Publishing:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def info(self, item_id: int, resell_item_id: int = None):
             """
@@ -6935,7 +7137,7 @@ class Market:
             data = {}
             if extra is not None:
                 if "batch_mode" in locals():
-                    data["extra"] = extra  # Костыль get_batch_job
+                    data["extra"] = extra  # Костыль CreateJob
                 else:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
@@ -7187,7 +7389,7 @@ class Market:
             data = {}
             if extra is not None:
                 if "batch_mode" in locals():
-                    data["extra"] = extra  # Костыль get_batch_job
+                    data["extra"] = extra  # Костыль CreateJob
                 else:
                     for key, value in extra.items():
                         es = f"extra[{key}]"
@@ -7201,8 +7403,8 @@ class Market:
             )
 
     class __Proxy:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def get(self):
             """
@@ -7282,7 +7484,7 @@ class Antipublic:
     ):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/antipublic or in antipublic app
-        :param proxy_type: Your proxy type. You can use types ( Types.Proxy.socks5 or socks4,https,http )
+        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://antipublic.one"
@@ -7317,8 +7519,8 @@ class Antipublic:
         self.account = self.__Account(self)
 
     class __Info:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def lines_count(self):
             """
@@ -7357,8 +7559,8 @@ class Antipublic:
             return _send_request(self=self._api, method="GET", path=path)
 
     class __Account:
-        def __init__(self, api_self):
-            self._api = api_self
+        def __init__(self, _api_self):
+            self._api = _api_self
 
         def license(self):
             """

@@ -14,6 +14,9 @@
     * [Create upgrade contest (count)](#create-upgrade-contest-count)
     * [Create money contest (time)](#create-money-contest-time)
     * [Create money contest (count)](#create-money-contest-count)
+  * [Arbitrage](#arbitrage)
+    * [Market](#market)
+    * [Non Market](#non-market)
   * [Get threads](#get-threads)
   * [Create thread](#create-thread)
   * [Edit thread](#edit-thread)
@@ -329,6 +332,92 @@ response = forum.threads.contests.money.create_by_count(title="Api example", pos
                                                         prize_data_money=500,
                                                         count_winners=1, needed_members=300, require_like_count=1,
                                                         require_total_like_count=1, secret_answer="Secret answer")
+print(response.json())
+```
+
+```python
+{'thread': {'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': ['string'], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+## Arbitrage
+
+---
+
+### Market
+
+*Create a Arbitrage.*
+
+**Parameters:**
+
+- **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+- **item_id** (any): Write account link or item_id.
+- **amount** (float): Amount by which the responder deceived you.
+- **post_body** (str): You should describe what's happened.
+- **currency** (str): Currency of Arbitrage.
+- **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+- **tags** (list): Thread tags.
+- **hide_contacts** (bool): Hide contacts.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+
+**Example:**
+
+```python
+response = forum.threads.arbitrage.market(
+    responder="AS7RID",
+    item_id=2410024,
+    amount=500,
+    post_body="Wrong account password. Give my money back",
+    conversation_screenshot="no",
+    currency="rub",
+)
+print(response.json())
+```
+
+```python
+{'thread': {'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': ['string'], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Non Market
+
+*Create a Arbitrage.*
+
+**Parameters:**
+
+- **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+- **amount** (float): Amount by which the responder deceived you.
+- **receipt** (str): Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
+- **post_body** (str): You should describe what's happened.
+- **pay_claim** (bool): !!!  If you set this parameter to **True** forum will automatically calculate the amount and debit it from your account.  !!!   
+- **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+- **responder_data** (str): Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
+- **currency** (str): Currency of Arbitrage.
+- **transfer_type** (str): The transaction took place through a guarantor or there was a transfer to the market with a hold? Can be ["safe", "notsafe"] 
+- **tags** (list): Thread tags.
+- **hide_contacts** (bool): Hide contacts.
+- **allow_ask_hidden_content** (bool): Allow ask hidden content.
+- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers
+- **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **** (any):
+
+**Example:**
+
+```python
+response = forum.threads.arbitrage.non_market(
+    responder="AS7RID",
+    amount=500,
+    currency="rub",
+    receipt="*screenshot*",
+    post_body="I got scammed. I buyed something but responder didn't give it to me. Check attached screenshots",
+    pay_claim=False,
+    conversation_screenshot="*screenshot*",
+)
+print(response)
 print(response.json())
 ```
 

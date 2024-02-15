@@ -10,7 +10,7 @@ class USERID_REQUIRED_FOR_BATCH(Exception):
     pass
 
 
-class INVALID_ARG_IN_GET_BATCH_JOB(Exception):
+class INVALID_ARG_IN_CREATE_JOB(Exception):
     pass
 
 

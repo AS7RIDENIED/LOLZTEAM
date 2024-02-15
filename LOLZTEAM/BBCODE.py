@@ -1,3 +1,6 @@
+from typing import Union
+
+
 class BBCODE:
     class Color:
         @staticmethod
@@ -146,7 +149,7 @@ class BBCODE:
             return f"[email]{email}[/email]"
 
     @staticmethod
-    def user(user_id: int or str):
+    def user(user_id: Union[int, str]):
         return f"[user={user_id}]{user_id}[/user]"
 
     @staticmethod

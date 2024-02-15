@@ -128,6 +128,7 @@
   * [Bump](#bump)
   * [Get email code](#get-email-code)
   * [Get steam guard](#get-steam-guard)
+  * [Confirm SDA](#confirm-sda)
   * [Get mafile](#get-mafile)
   * [Get temp mail password](#get-temp-mail-password)
   * [Get telegram confirmation code](#get-telegram-confirmation-code)
@@ -2190,10 +2191,12 @@ print(response.json())
 
 *[Official documentation reference (item info)](https://lzt-market.readme.io/reference/accountslistgetinformation)*
 *[Official documentation reference (steam html)](https://lzt-market.readme.io/reference/accountslistgetsteamhtml)*
+*[Official documentation reference (auction bids)](https://lzt-market.readme.io/reference/auctionget)*
 
 **Parameters:**
 
 - **item_id** (int): ID of item.
+- **auction** (bool): Parse auction bids
 - **steam_preview** (bool): Steam preview
   > Set it True if you want to get steam html and False/None if you want to get item info
 - **preview_type** (str): Type of page. 
@@ -2278,9 +2281,9 @@ print(response.json())
 - **url** (str): Link or id of account. 
   > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
 - **app_id** (int): Application id.
-  > You can use Types. Check example below
+  > You can use Constants. Check example below
 - **currency** (str): Using currency for amount.
-  > You can use Types. Check example below
+  > You can use Constants. Check example below
 - **ignore_cache** (bool): Ignore cache.
   > If you pass False (default) market api will take inventory from cache (Inventory can be outdated). If you pass True inventory will reparse and you get price at current moment
 
@@ -2403,6 +2406,27 @@ print(response.json())
 
 ```python
 {'item': {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}, 'codeData': {'code': 'string', 'date': 0, 'textPlain': 'string'}}
+```
+
+### Confirm SDA
+
+*Confirm steam action.*
+
+**Parameters:**
+
+- **item_id** (int): Item id.
+- **id** (int): Confirmation id. (Required along with nonce if you want to confirm action).
+- **nonce** (int): Confirmation nonce. (Required along with id if you want to confirm action).
+
+**Example:**
+
+```python
+response = market.managing.confirm_sda(item_id=2410024, id=1000, nonce=98765)
+print(response.json())
+```
+
+```python
+{'status': 'ok', 'message': 'The action is confirmed', 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Get mafile
@@ -2795,9 +2819,9 @@ print(response.json())
 
 ```python
 jobs = [
-    get_batch_job(market.list.favorite, job_name="1", page=1),
-    get_batch_job(market.payments.history, job_name="2", user_id=2410024, sender="root"),
-    get_batch_job(market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
+    CreateJob(market.list.favorite, job_name="1", page=1),
+    CreateJob(market.payments.history, job_name="2", user_id=2410024, sender="root"),
+    CreateJob(market.managing.steam_inventory_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
 ]
 for job in jobs:
     print(job)
@@ -2827,9 +2851,9 @@ for job in jobs:
 
 ```python
 jobs = [
-    get_batch_job(market.list.favorite, job_name="1", page=1),
-    get_batch_job(market.payments.history, job_name="2", user_id=2410024, sender="root"),
-    get_batch_job(market.steam_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
+    CreateJob(market.list.favorite, job_name="1", page=1),
+    CreateJob(market.payments.history, job_name="2", user_id=2410024, sender="root"),
+    CreateJob(market.managing.steam_inventory_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
 ]
 response = market.batch(jobs=jobs)
 for job_name, job_data in data["jobs"].items():
@@ -2854,7 +2878,7 @@ for job_name, job_data in data["jobs"].items():
 **Example:**
 
 ```python
-response = await send_as_async(func=market.profile.get, user_id=2410024)
+response = await SendAsAsync(func=market.profile.get, user_id=2410024)
 print(response.json())
 ```
 
