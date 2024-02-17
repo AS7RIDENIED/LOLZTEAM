@@ -3494,12 +3494,9 @@ class Market:
             self.user_id = self.__set_user_id
         self._delay_synchronizer = None
         self._lock = None
-
+        from . import Constants
         self._delay_exceptions = [
-            "/item/add",
-            "/item/fast-sell",
-            r"/\d+/goods/check",
-            r"\/\d+(?=\s|$)",
+            (r"^(?!.*(?:\/" + r"|".join([key for key in Constants.Market.Category.__dict__.keys() if not key.startswith("__")]) + r")).*$")
         ]
 
         self.profile = self.__Profile(self)
