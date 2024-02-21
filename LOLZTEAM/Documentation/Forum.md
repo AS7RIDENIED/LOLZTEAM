@@ -352,7 +352,7 @@ print(response.json())
 **Parameters:**
 
 - **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
-- **item_id** (any): Write account link or item_id.
+- **item_id** (int or str): Write account link or item_id.
 - **amount** (float): Amount by which the responder deceived you.
 - **post_body** (str): You should describe what's happened.
 - **currency** (str): Currency of Arbitrage.

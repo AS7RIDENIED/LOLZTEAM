@@ -1212,11 +1212,11 @@ class Forum:
             def market(
                 self,
                 responder: str,
-                item_id,
+                item_id: int,
                 amount: float,
                 post_body: str,
                 currency: str = None,
-                conversation_screenshot: str = None,
+                conversation_screenshot: str = "no",
                 tags: list = None,
                 hide_contacts: bool = None,
                 allow_ask_hidden_content: bool = None,
@@ -1247,7 +1247,7 @@ class Forum:
                 :return: Response object (Even if you use SendAsAsync function)
                 """
                 path = "/claims"
-                if item_id.isdigit():
+                if type(item_id) is int:
                     if "batch_mode" in locals() or "im_async" in locals():
                         base_api = self
                     else:
@@ -1276,9 +1276,10 @@ class Forum:
                     "post_body": post_body,
                     "as_responder": responder,
                     "as_is_market_deal": 1,
-                    "as_is_market_url": item_id,
+                    "as_market_item_link": item_id,
                     "as_amount": amount,
                     "currency": currency,
+                    "as_funds_receipt": "no",
                     "as_tg_login_screenshot": conversation_screenshot,
                     "tags": tags,
                     "hide_contacts": hide_contacts,
