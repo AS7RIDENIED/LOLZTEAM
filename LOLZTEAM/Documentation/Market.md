@@ -2856,6 +2856,7 @@ jobs = [
     CreateJob(market.managing.steam_inventory_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
 ]
 response = market.batch(jobs=jobs)
+data = response.json()
 for job_name, job_data in data["jobs"].items():
     print(job_data)
 ```
