@@ -10,19 +10,16 @@ class Market:
         steam = "steam"
         fortnite = "fortnite"
         vk = "vkontakte"
-        genshin = "genshin-impact"
-        honkai = "honkai-star-rail"
+        mihoyo = "mihoyo"
         valorant = "valorant"
         lol = "league-of-legends"
         telegram = "telegram"
-        # diamondrp = "diamondrp"
         supercell = "supercell"
         origin = "origin"
-        wot = "world-of-tanks"  # World of Tanks
+        wot = "world-of-tanks"
         wot_blitz = "wot-blitz"
         epicgames = "epicgames"
         eft = "escape-from-tarkov"
-        # twitter = "twitter"
         socialclub = "socialclub"
         uplay = "uplay"
         war_thunder = "war-thunder"
@@ -35,25 +32,21 @@ class Market:
         spotify = "spotify"
         warface = "warface"
         youtube = "youtube"
-        # minecraft = "minecraft"
 
     class CategoryId:
         steam = 1
         fortnite = 9
         vk = 2
-        genshin = 17
-        honkai = 30
+        mihoyo = 17
         valorant = 13
         lol = 29
         telegram = 24
-        # diamondrp = 6
         supercell = 15
         origin = 3
         wot = 14
         wot_blitz = 16
         epicgames = 12
         eft = 18
-        # twitter = 21
         socialclub = 7
         uplay = 5
         war_thunder = 27
@@ -66,7 +59,6 @@ class Market:
         spotify = 26
         warface = 4
         youtube = 25
-        # minecraft = 28
 
     class OperationTypes:
         income = "income"

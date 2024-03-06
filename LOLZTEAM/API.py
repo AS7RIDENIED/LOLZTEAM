@@ -32,7 +32,7 @@ def __RetryWrapper(func):
 @__RetryWrapper
 def _send_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
-):
+) -> Response:
     if self._delay_synchronizer:
         self._lock.acquire()
     url = self.base_url + path
@@ -123,7 +123,7 @@ def _send_request(
 @__RetryWrapper
 async def _send_async_request(
     self, method: str, path: dict, params: dict = None, data=None
-):
+) -> Response:
     if self._delay_synchronizer:
         self._lock.acquire()
     url = self.base_url + path
@@ -312,7 +312,7 @@ class Forum:
             parent_category_id: int = None,
             parent_forum_id: int = None,
             order: str = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/categories
 
@@ -333,7 +333,7 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get_category(self, category_id: int):
+        def get_category(self, category_id: int) -> Response:
             """
             GET https://api.zelenka.guru/categories/{category_id}
 
@@ -356,7 +356,7 @@ class Forum:
             parent_category_id: int = None,
             parent_forum_id: int = None,
             order: str = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/forums
 
@@ -377,7 +377,7 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get_forum(self, forum_id: int):
+        def get_forum(self, forum_id: int) -> Response:
             """
             GET https://api.zelenka.guru/forums/{forum_id}
 
@@ -400,7 +400,7 @@ class Forum:
             post: bool = None,
             alert: bool = None,
             email: bool = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/forums/forum_id/followers
             Follow a forum.
@@ -435,7 +435,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def unfollow(self, forum_id: int):
+        def unfollow(self, forum_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/forums/forum_id/followers
             Unfollow a forum.
@@ -449,7 +449,7 @@ class Forum:
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def followers(self, forum_id: int):
+        def followers(self, forum_id: int) -> Response:
             """
             GET https://api.zelenka.guru/forums/forum_id/followers
 
@@ -463,7 +463,7 @@ class Forum:
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def followed(self, total: bool = None):
+        def followed(self, total: bool = None) -> Response:
             """
             GET https://api.zelenka.guru/forums/followed
 
@@ -485,10 +485,10 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Pages:
-        def __init__(self, _api_self):
+        def __init__(self, _api_self) -> Response:
             self._api = _api_self
 
-        def get_pages(self, parent_page_id: int = None, order: str = None):
+        def get_pages(self, parent_page_id: int = None, order: str = None) -> Response:
             """
             GET https://api.zelenka.guru/pages
 
@@ -505,7 +505,7 @@ class Forum:
             params = {"parent_page_id": parent_page_id, "order": order}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get_page(self, page_id: int):
+        def get_page(self, page_id: int) -> Response:
             """
             GET https://api.zelenka.guru/pages/page_id
 
@@ -525,7 +525,7 @@ class Forum:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def get(self, post_id: int, before: int = None):
+            def get(self, post_id: int, before: int = None) -> Response:
                 """
                 GET https://api.zelenka.guru/posts/post_id/comments
 
@@ -547,7 +547,7 @@ class Forum:
                     params=params,
                 )
 
-            def create(self, post_id: int, comment_body: str = None):
+            def create(self, post_id: int, comment_body: str = None) -> Response:
                 """
                 POST https://api.zelenka.guru/posts/post_id/comments
 
@@ -578,7 +578,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             order: int = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/posts
 
@@ -607,7 +607,7 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, post_id: int):
+        def get(self, post_id: int) -> Response:
             """
             GET https://api.zelenka.guru/posts/post_id
 
@@ -624,7 +624,7 @@ class Forum:
 
         def create(
             self, post_body: str, thread_id: int = None, quote_post_id: int = None
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/posts
 
@@ -653,7 +653,9 @@ class Forum:
                 data=data,
             )
 
-        def edit(self, post_id: int, post_body: str = None, message_state: str = None):
+        def edit(
+            self, post_id: int, post_body: str = None, message_state: str = None
+        ) -> Response:
             """
             PUT https://api.zelenka.guru/posts/post_id
 
@@ -678,7 +680,7 @@ class Forum:
                 data=data,
             )
 
-        def delete(self, post_id: int, reason: str = None):
+        def delete(self, post_id: int, reason: str = None) -> Response:
             """
             DELETE https://api.zelenka.guru/posts/post_id
 
@@ -695,7 +697,7 @@ class Forum:
             data = {"reason": reason}
             return _send_request(self=self._api, method="DELETE", path=path, data=data)
 
-        def likes(self, post_id: int, page: int = None, limit: int = None):
+        def likes(self, post_id: int, page: int = None, limit: int = None) -> Response:
             """
             GET https://api.zelenka.guru/posts/post_id/likes
 
@@ -713,7 +715,7 @@ class Forum:
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def like(self, post_id: int):
+        def like(self, post_id: int) -> Response:
             """
             POST https://api.zelenka.guru/posts/post_id/likes
 
@@ -728,7 +730,7 @@ class Forum:
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unlike(self, post_id: int):
+        def unlike(self, post_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/posts/post_id/likes
 
@@ -743,7 +745,7 @@ class Forum:
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def report(self, post_id: int, message: str):
+        def report(self, post_id: int, message: str) -> Response:
             """
             POST https://api.zelenka.guru/posts/post_id/report
 
@@ -794,7 +796,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ):
+                ) -> Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -892,7 +894,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ):
+                ) -> Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -993,7 +995,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ):
+                ) -> Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -1107,7 +1109,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ):
+                ) -> Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -1223,7 +1225,7 @@ class Forum:
                 comment_ignore_group: bool = None,
                 dont_alert_followers: bool = None,
                 reply_group: int = 2,
-            ):
+            ) -> Response:
                 """
                 POST https://api.zelenka.guru/claims
 
@@ -1309,7 +1311,7 @@ class Forum:
                 comment_ignore_group: bool = None,
                 dont_alert_followers: bool = None,
                 reply_group: int = 2,
-            ):
+            ) -> Response:
                 """
                 POST https://api.zelenka.guru/claims
 
@@ -1389,7 +1391,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             order: str = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/threads
 
@@ -1426,7 +1428,7 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, thread_id: int):
+        def get(self, thread_id: int) -> Response:
             """
             GET https://api.zelenka.guru/threads/thread_id
 
@@ -1455,7 +1457,7 @@ class Forum:
             comment_ignore_group: bool = None,
             dont_alert_followers: bool = None,
             **kwargs,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/threads
 
@@ -1552,7 +1554,7 @@ class Forum:
             allow_ask_hidden_content: bool = None,
             reply_group: int = None,
             comment_ignore_group: bool = None,
-        ):
+        ) -> Response:
             """
             PUT https://api.zelenka.guru/threads/thread_id
 
@@ -1632,7 +1634,7 @@ class Forum:
             send_alert: bool = None,
             send_starter_alert: bool = None,
             starter_alert_reason: str = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/move
 
@@ -1677,7 +1679,7 @@ class Forum:
             }
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
-        def delete(self, thread_id: int, reason: str = None):
+        def delete(self, thread_id: int, reason: str = None) -> Response:
             """
             DELETE https://api.zelenka.guru/threads/thread_id
 
@@ -1696,7 +1698,7 @@ class Forum:
                 self=self._api, method="DELETE", path=path, params=params
             )
 
-        def followers(self, thread_id: int):
+        def followers(self, thread_id: int) -> Response:
             """
             GET https://api.zelenka.guru/threads/thread_id/followers
 
@@ -1711,7 +1713,7 @@ class Forum:
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def followed(self, total: bool = None):
+        def followed(self, total: bool = None) -> Response:
             """
             GET https://api.zelenka.guru/threads/followed
 
@@ -1732,7 +1734,7 @@ class Forum:
             params = {"total": total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def follow(self, thread_id: int, email: bool = None):
+        def follow(self, thread_id: int, email: bool = None) -> Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/followers
 
@@ -1754,7 +1756,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def unfollow(self, thread_id: int):
+        def unfollow(self, thread_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/threads/thread_id/followers
 
@@ -1769,7 +1771,7 @@ class Forum:
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def navigation(self, thread_id: int):
+        def navigation(self, thread_id: int) -> Response:
             """
             GET https://api.zelenka.guru/threads/thread_id/navigation
 
@@ -1784,7 +1786,7 @@ class Forum:
             path = f"/threads/{thread_id}/navigation"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def votes(self, thread_id: int):
+        def votes(self, thread_id: int) -> Response:
             """
             GET https://api.zelenka.guru/threads/thread_id/poll
 
@@ -1804,7 +1806,7 @@ class Forum:
             thread_id: int,
             response_id: int = None,
             response_ids: list[int] = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/pool/votes
 
@@ -1839,7 +1841,9 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def new(self, forum_id: int = None, limit: int = None, data_limit: int = None):
+        def new(
+            self, forum_id: int = None, limit: int = None, data_limit: int = None
+        ) -> Response:
             """
             GET https://api.zelenka.guru/threads/new
 
@@ -1866,7 +1870,7 @@ class Forum:
             forum_id: int = None,
             limit: int = None,
             data_limit: int = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/threads/recent
 
@@ -1889,7 +1893,7 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def bump(self, thread_id: int):
+        def bump(self, thread_id: int) -> Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/bump
 
@@ -1908,7 +1912,7 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def popular(self):
+        def popular(self) -> Response:
             """
             GET https://api.zelenka.guru/tags
 
@@ -1921,7 +1925,7 @@ class Forum:
             path = "/tags"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def tags(self, page: int = None, limit: int = None):
+        def tags(self, page: int = None, limit: int = None) -> Response:
             """
             GET https://api.zelenka.guru/tags/list
 
@@ -1939,7 +1943,7 @@ class Forum:
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def tagged(self, tag_id: int, page: int = None, limit: int = None):
+        def tagged(self, tag_id: int, page: int = None, limit: int = None) -> Response:
             """
             GET https://api.zelenka.guru/tags/tag_id
 
@@ -1957,7 +1961,7 @@ class Forum:
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def find(self, tag: str):
+        def find(self, tag: str) -> Response:
             """
             GET https://api.zelenka.guru/tags/find
 
@@ -1978,7 +1982,7 @@ class Forum:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def upload(self, avatar: bytes, user_id: int = None):
+            def upload(self, avatar: bytes, user_id: int = None) -> Response:
                 """
                 POST https://api.zelenka.guru/users/user_id/avatar
 
@@ -2008,7 +2012,7 @@ class Forum:
                     self=self._api, method="POST", path=path, files=files
                 )
 
-            def delete(self, user_id: int = None):
+            def delete(self, user_id: int = None) -> Response:
                 """
                 DELETE https://api.zelenka.guru/users/user_id/avatar
 
@@ -2026,7 +2030,9 @@ class Forum:
                     path = f"/users/{user_id}/avatar"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
-            def crop(self, user_id: int, size: int, x: int = None, y: int = None):
+            def crop(
+                self, user_id: int, size: int, x: int = None, y: int = None
+            ) -> Response:
                 """
                 POST https://api.zelenka.guru/users/user_id/avatar-crop
 
@@ -2061,7 +2067,7 @@ class Forum:
 
         def lost_password(
             self, oauth_token: str, username: str = None, email: str = None
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/lost-password
 
@@ -2085,7 +2091,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def users(self, page: int = None, limit: int = None):
+        def users(self, page: int = None, limit: int = None) -> Response:
             """
             GET https://api.zelenka.guru/users
 
@@ -2101,7 +2107,7 @@ class Forum:
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def fields(self):
+        def fields(self) -> Response:
             """
             GET https://api.zelenka.guru/users/fields
 
@@ -2120,7 +2126,7 @@ class Forum:
             username: str = None,
             user_email: str = None,
             custom_fields: dict = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/users/find
 
@@ -2148,7 +2154,7 @@ class Forum:
                         params[cf] = value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, user_id: int = None):
+        def get(self, user_id: int = None) -> Response:
             """
             GET https://api.zelenka.guru/users/user_id
 
@@ -2167,7 +2173,7 @@ class Forum:
 
         def get_timeline(
             self, user_id: int = None, page: int = None, limit: int = None
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/users/user_id/timeline
 
@@ -2204,7 +2210,7 @@ class Forum:
             user_dob_year: int = None,
             fields: dict = None,
             display_group_id: int = None,
-        ):
+        ) -> Response:
             """
             PUT https://api.zelenka.guru/users/user_id
 
@@ -2268,7 +2274,7 @@ class Forum:
                 data=data,
             )
 
-        def follow(self, user_id: int):
+        def follow(self, user_id: int) -> Response:
             """
             POST https://api.zelenka.guru/users/user_id/followers
 
@@ -2283,7 +2289,7 @@ class Forum:
             path = f"/users/{user_id}/followers"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unfollow(self, user_id: int):
+        def unfollow(self, user_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/users/user_id/followers
 
@@ -2304,7 +2310,7 @@ class Forum:
             order: str = None,
             page: int = None,
             limit: int = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/users/user_id/followers
 
@@ -2333,7 +2339,7 @@ class Forum:
             order: str = None,
             page: int = None,
             limit: int = None,
-        ):
+        ) -> Response:
             """
             GET https://api.zelenka.guru/users/user_id/followings
 
@@ -2355,7 +2361,7 @@ class Forum:
             params = {"order": order, "page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def ignored(self, total: bool = None):
+        def ignored(self, total: bool = None) -> Response:
             """
             GET https://api.zelenka.guru/users/ignored
 
@@ -2376,7 +2382,7 @@ class Forum:
             params = {"total": total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def ignore(self, user_id: int):
+        def ignore(self, user_id: int) -> Response:
             """
             POST https://api.zelenka.guru/users/user_id/ignore
 
@@ -2392,7 +2398,7 @@ class Forum:
             path = f"/users/{user_id}/ignore"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unignore(self, user_id: int):
+        def unignore(self, user_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/users/user_id/ignore
 
@@ -2408,7 +2414,7 @@ class Forum:
             path = f"/users/{user_id}/ignore"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def groups(self, user_id: int = None):
+        def groups(self, user_id: int = None) -> Response:
             """
             GET https://api.zelenka.guru/users/user_id/groups
 
@@ -2433,7 +2439,7 @@ class Forum:
 
             def comments(
                 self, profile_post_id: int, before: int = None, limit: int = None
-            ):
+            ) -> Response:
                 """
                 GET https://api.zelenka.guru/profile-posts/profile_post_id/comments
 
@@ -2456,7 +2462,7 @@ class Forum:
                     params=params,
                 )
 
-            def get(self, profile_post_id: int, comment_id: int):
+            def get(self, profile_post_id: int, comment_id: int) -> Response:
                 """
                 GET https://api.zelenka.guru/profile-posts/profile_post_id/comments/comment_id
 
@@ -2472,7 +2478,7 @@ class Forum:
                 path = f"/profile-posts/{profile_post_id}/comments/{comment_id}"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def create(self, profile_post_id: int, comment_body: str):
+            def create(self, profile_post_id: int, comment_body: str) -> Response:
                 """
                 POST https://api.zelenka.guru/profile-posts/profile_post_id/comments
 
@@ -2497,7 +2503,9 @@ class Forum:
             self._api = _api_self
             self.comments = self.__Profile_posts_comments(self._api)
 
-        def get_posts(self, user_id: int, page: int = None, limit: int = None):
+        def get_posts(
+            self, user_id: int, page: int = None, limit: int = None
+        ) -> Response:
             """
             GET https://api.zelenka.guru/users/user_id/profile-posts
 
@@ -2515,7 +2523,7 @@ class Forum:
             path = f"/users/{user_id}/profile-posts"
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, profile_post_id: int):
+        def get(self, profile_post_id: int) -> Response:
             """
             GET https://api.zelenka.guru/profile-posts/profile_post_id
 
@@ -2530,7 +2538,7 @@ class Forum:
             path = f"/profile-posts/{profile_post_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def create(self, post_body: str, user_id: int = None):
+        def create(self, post_body: str, user_id: int = None) -> Response:
             """
             POST https://api.zelenka.guru/users/user_id/timeline
 
@@ -2550,7 +2558,7 @@ class Forum:
             data = {"post_body": post_body}
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
-        def edit(self, profile_post_id: int, post_body: str):
+        def edit(self, profile_post_id: int, post_body: str) -> Response:
             """
             PUT https://api.zelenka.guru/profile-posts/profile_post_id
 
@@ -2568,7 +2576,7 @@ class Forum:
             data = {"post_body": post_body}
             return _send_request(self=self._api, method="PUT", path=path, data=data)
 
-        def delete(self, profile_post_id: int, reason: str = None):
+        def delete(self, profile_post_id: int, reason: str = None) -> Response:
             """
             DELETE https://api.zelenka.guru/profile-posts/profile_post_id
 
@@ -2586,7 +2594,7 @@ class Forum:
             data = {"reason": reason}
             return _send_request(self=self._api, method="DELETE", path=path, data=data)
 
-        def likes(self, profile_post_id: int):
+        def likes(self, profile_post_id: int) -> Response:
             """
             GET https://api.zelenka.guru/profile-posts/profile_post_id/likes
 
@@ -2602,7 +2610,7 @@ class Forum:
             path = f"/profile-posts/{profile_post_id}/likes"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def like(self, profile_post_id: int):
+        def like(self, profile_post_id: int) -> Response:
             """
             POST https://api.zelenka.guru/profile-posts/profile_post_id/likes
 
@@ -2619,7 +2627,7 @@ class Forum:
 
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unlike(self, profile_post_id: int):
+        def unlike(self, profile_post_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/profile-posts/profile_post_id/likes
 
@@ -2634,7 +2642,7 @@ class Forum:
             path = f"/profile-posts/{profile_post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def report(self, profile_post_id: int, message: str):
+        def report(self, profile_post_id: int, message: str) -> Response:
             """
             POST https://api.zelenka.guru/profile-posts/profile_post_id/report
 
@@ -2663,7 +2671,7 @@ class Forum:
             user_id: int = None,
             page: int = None,
             limit: int = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/search
 
@@ -2701,7 +2709,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             data_limit: int = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/search/threads
 
@@ -2741,7 +2749,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             data_limit: int = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/search/posts
 
@@ -2778,7 +2786,7 @@ class Forum:
             tags: list[str] = None,
             page: int = None,
             limit: int = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/search/tagged
 
@@ -2808,7 +2816,7 @@ class Forum:
             user_id: int = None,
             page: int = None,
             limit: int = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/search/profile-posts
 
@@ -2836,7 +2844,7 @@ class Forum:
             body: str,
             link: str,
             date: int = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/search/indexing
 
@@ -2874,7 +2882,7 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def get_all(self):
+        def get_all(self) -> Response:
             """
             GET https://api.zelenka.guru/notifications
 
@@ -2887,7 +2895,7 @@ class Forum:
             path = "/notifications"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def get(self, notification_id: int):
+        def get(self, notification_id: int) -> Response:
             """
             GET https://api.zelenka.guru/notifications/{notification_id}/content
 
@@ -2901,7 +2909,7 @@ class Forum:
             path = f"/notifications/{notification_id}/content"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def read(self, notification_id: int = None):
+        def read(self, notification_id: int = None) -> Response:
             """
             POST https://api.zelenka.guru/notifications/read
 
@@ -2926,7 +2934,7 @@ class Forum:
             message_html: str = None,
             notification_type: str = None,
             extra_data: str = None,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/notifications/custom
 
@@ -2975,7 +2983,7 @@ class Forum:
                 order: str = None,
                 before: int = None,
                 after: int = None,
-            ):
+            ) -> Response:
                 """
                 GET https://api.zelenka.guru/conversation-messages
 
@@ -3008,7 +3016,7 @@ class Forum:
                     params=params,
                 )
 
-            def get(self, message_id: int):
+            def get(self, message_id: int) -> Response:
                 """
                 GET https://api.zelenka.guru/conversation-messages/message_id
 
@@ -3023,7 +3031,7 @@ class Forum:
                 path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def create(self, conversation_id: int, message_body: str):
+            def create(self, conversation_id: int, message_body: str) -> Response:
                 """
                 POST https://api.zelenka.guru/conversation-messages
 
@@ -3049,7 +3057,7 @@ class Forum:
                     data=data,
                 )
 
-            def edit(self, message_id: int, message_body: str):
+            def edit(self, message_id: int, message_body: str) -> Response:
                 """
                 PUT https://api.zelenka.guru/conversation-messages/message_id
 
@@ -3066,7 +3074,7 @@ class Forum:
                 data = {"message_body": message_body}
                 return _send_request(self=self._api, method="PUT", path=path, data=data)
 
-            def delete(self, message_id: int):
+            def delete(self, message_id: int) -> Response:
                 """
                 DELETE https://api.zelenka.guru/conversation-messages/message_id
 
@@ -3081,7 +3089,7 @@ class Forum:
                 path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
-            def report(self, message_id: int, message: str = None):
+            def report(self, message_id: int, message: str = None) -> Response:
                 """
                 POST https://api.zelenka.guru/conversation-messages/message_id/report
 
@@ -3105,7 +3113,7 @@ class Forum:
             self._api = _api_self
             self.messages = self.__Conversations_messages(self._api)
 
-        def get_all(self, page: int = None, limit: int = None):
+        def get_all(self, page: int = None, limit: int = None) -> Response:
             """
             GET https://api.zelenka.guru/conversations
 
@@ -3122,7 +3130,7 @@ class Forum:
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, conversation_id: int):
+        def get(self, conversation_id: int) -> Response:
             """
             GET https://api.zelenka.guru/conversations/conversation_id
 
@@ -3137,7 +3145,7 @@ class Forum:
             path = f"/conversations/{conversation_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def leave(self, conversation_id: int, leave_type: str = "delete"):
+        def leave(self, conversation_id: int, leave_type: str = "delete") -> Response:
             """
             DELETE https://api.zelenka.guru/conversations/conversation_id
 
@@ -3163,7 +3171,7 @@ class Forum:
             open_invite: bool = False,
             conversation_locked: bool = False,
             allow_edit_messages: bool = True,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/conversations
 
@@ -3219,7 +3227,7 @@ class Forum:
             open_invite: bool = True,
             conversation_locked: bool = False,
             allow_edit_messages: bool = True,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/conversations
 
@@ -3273,7 +3281,9 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def facebook(self, client_id: int, client_secret: str, facebook_token: str):
+        def facebook(
+            self, client_id: int, client_secret: str, facebook_token: str
+        ) -> Response:
             """
             POST https://api.zelenka.guru/oauth/token/facebook
 
@@ -3303,7 +3313,7 @@ class Forum:
             client_secret: str,
             twitter_url: str,
             twitter_auth: str,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/oauth/token/twitter
 
@@ -3329,7 +3339,9 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def google(self, client_id: int, client_secret: str, google_token: str):
+        def google(
+            self, client_id: int, client_secret: str, google_token: str
+        ) -> Response:
             """
             POST https://api.zelenka.guru/oauth/token/google
 
@@ -3353,7 +3365,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def admin(self, user_id: int):
+        def admin(self, user_id: int) -> Response:
             """
             POST https://api.zelenka.guru/oauth/token/admin
 
@@ -3378,7 +3390,7 @@ class Forum:
             password: str,
             extra_data: str,
             extra_timestamp: int,
-        ):
+        ) -> Response:
             """
             POST https://api.zelenka.guru/oauth/token/associate
 
@@ -3406,7 +3418,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-    def navigation(self, parent: int = None):
+    def navigation(self, parent: int = None) -> Response:
         """
         GET https://api.zelenka.guru/navigation
 
@@ -3422,7 +3434,7 @@ class Forum:
         params = {"parent": parent}
         return _send_request(self=self, method="GET", path=path, params=params)
 
-    def batch(self, jobs: list[dict]):
+    def batch(self, jobs: list[dict]) -> Response:
         """
         POST https://api.zelenka.guru/batch
 
@@ -3496,8 +3508,11 @@ class Market:
         self._delay_synchronizer = None
         self._lock = None
         from . import Constants
+
         self._delay_exceptions = [
-            (r"^(?!.*(?:\/" + r"|".join([key for key in Constants.Market.Category.__dict__.keys() if not key.startswith("__")]) + r")).*$")
+            (
+                r"^(?!.*(?:\/" + r"|".join([key for key in Constants.Market.Category.__dict__.keys() if not key.startswith("__")]) + r")).*$"
+            )
         ]
 
         self.profile = self.__Profile(self)
@@ -3557,7 +3572,7 @@ class Market:
         self._auto_delay_time = self._auto_delay_time.value
         self._lock = None
 
-    def batch(self, jobs: list[dict]):
+    def batch(self, jobs: list[dict]) -> Response:
         """
         POST https://api.lzt.market/batch
 
@@ -3587,7 +3602,7 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def get(self):
+        def get(self) -> Response:
             """
             GET https://api.lzt.market/me
 
@@ -3609,11 +3624,12 @@ class Market:
             allow_accept_accounts: str = None,
             hide_favorites: bool = None,
             vk_ua: str = None,
+            vk_show_links: bool = None,
             title: str = None,
             telegram_client: dict = None,
             deauthorize_steam: bool = None,
             hide_bids: bool = None,
-        ):
+        ) -> Response:
             """
             PUT https://api.lzt.market/me
 
@@ -3636,6 +3652,31 @@ class Market:
 
             """
             path = "/me"
+            # Tweak 0
+            if disable_steam_guard is True:
+                disable_steam_guard = 1
+            elif disable_steam_guard is False:
+                disable_steam_guard = 0
+            if user_allow_ask_discount is True:
+                user_allow_ask_discount = 1
+            elif user_allow_ask_discount is False:
+                user_allow_ask_discount = 0
+            if hide_favorites is True:
+                hide_favorites = 1
+            elif hide_favorites is False:
+                hide_favorites = 0
+            if vk_show_links is True:
+                vk_show_links = 1
+            elif vk_show_links is False:
+                vk_show_links = 0
+            if deauthorize_steam is True:
+                deauthorize_steam = 1
+            elif deauthorize_steam is False:
+                deauthorize_steam = 0
+            if hide_bids is True:
+                hide_bids = 1
+            elif hide_bids is False:
+                hide_bids = 0
             params = {
                 "disable_steam_guard": disable_steam_guard,
                 "user_allow_ask_discount": user_allow_ask_discount,
@@ -3643,6 +3684,7 @@ class Market:
                 "allow_accept_accounts": allow_accept_accounts,
                 "hide_favourites": hide_favorites,
                 "vk_ua": vk_ua,
+                "show_account_links": vk_show_links,
                 "market_custom_title": title,
                 "deauthorize_steam": deauthorize_steam,
                 "hide_bids": hide_bids,
@@ -3683,7 +3725,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -3727,6 +3770,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -3734,7 +3780,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/steam/params
 
@@ -3745,7 +3791,7 @@ class Market:
                 path = "/steam/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self):
+            def games(self) -> Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -3777,7 +3823,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -3821,6 +3868,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -3828,7 +3878,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -3858,7 +3908,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -3902,6 +3953,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -3909,7 +3963,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/steam/params
 
@@ -3920,7 +3974,7 @@ class Market:
                 path = "/vkontakte/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-        class __GenshinImpact:
+        class __MiHoYo:
             def __init__(self, _api_self):
                 self._api = _api_self
 
@@ -3939,7 +3993,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -3963,7 +4018,7 @@ class Market:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = "/genshin-impact"
+                path = "/mihoyo"
                 if True:  # Tweak market
                     auction = _MainTweaks.market_variable_fix(auction)
                 params = {
@@ -3983,6 +4038,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -3990,7 +4048,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -3998,88 +4056,7 @@ class Market:
 
                 :return: Response object (Even if you use SendAsAsync function)
                 """
-                path = "/genshin-impact/params"
-                return _send_request(self=self._api, method="GET", path=path)
-
-        class __HonkaiStarRail:
-            def __init__(self, _api_self):
-                self._api = _api_self
-
-            def get(
-                self,
-                page: int = None,
-                auction: str = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: str = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
-                search_params: dict = None,
-            ):
-                """
-                GET https://api.lzt.market/categoryName
-
-                Displays a list of accounts in a specific category according to your parameters.
-
-                Required scopes: market
-
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
-
-                :return: Response object (Even if you use SendAsAsync function)
-                """
-                path = "/honkai-star-rail"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
-                params = {
-                    "page": page,
-                    "auction": auction,
-                    "title": title,
-                    "pmin": pmin,
-                    "pmax": pmax,
-                    "origin[]": origin,
-                    "not_origin[]": not_origin,
-                    "order_by": order_by,
-                    "sb": sold_before,
-                    "sb_by_me": sold_before_by_me,
-                    "nsb": not_sold_before,
-                    "nsb_by_me": not_sold_before_by_me,
-                }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
-                return _send_request(
-                    self=self._api,
-                    method="GET",
-                    path=path,
-                    params=params,
-                )
-
-            def params(self):
-                """
-                GET https://api.lzt.market/fortnite/params
-
-                Displays search parameters for a category.
-
-                :return: Response object (Even if you use SendAsAsync function)
-                """
-                path = "/honkai-star-rail/params"
+                path = "/mihoyo/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __Valorant:
@@ -4101,7 +4078,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4145,6 +4123,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4152,7 +4133,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4182,7 +4163,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4226,6 +4208,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4233,7 +4218,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4263,7 +4248,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4307,6 +4293,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4314,7 +4303,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4344,7 +4333,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4388,6 +4378,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4395,7 +4388,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4425,7 +4418,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4469,6 +4463,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4476,7 +4473,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4487,7 +4484,7 @@ class Market:
                 path = "/origin/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self):
+            def games(self) -> Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -4519,7 +4516,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4563,6 +4561,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4570,7 +4571,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4600,7 +4601,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4644,6 +4646,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4651,7 +4656,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4681,7 +4686,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4725,6 +4731,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4732,7 +4741,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4743,7 +4752,7 @@ class Market:
                 path = "/epicgames/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self):
+            def games(self) -> Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -4775,7 +4784,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4819,6 +4829,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4826,7 +4839,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4856,7 +4869,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4900,6 +4914,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -4907,7 +4924,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -4918,7 +4935,7 @@ class Market:
                 path = "/socialclub/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self):
+            def games(self) -> Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -4950,7 +4967,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4994,6 +5012,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5001,7 +5022,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5012,7 +5033,7 @@ class Market:
                 path = "/uplay/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self):
+            def games(self) -> Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -5044,7 +5065,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5088,6 +5110,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5095,7 +5120,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5125,7 +5150,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5169,6 +5195,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5176,7 +5205,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5206,7 +5235,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5250,6 +5280,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5257,7 +5290,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5287,7 +5320,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5331,6 +5365,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5338,7 +5375,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5368,7 +5405,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5412,6 +5450,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5419,7 +5460,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5430,7 +5471,7 @@ class Market:
                 path = "/battlenet/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self):
+            def games(self) -> Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -5462,7 +5503,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5506,6 +5548,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5513,7 +5558,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5543,7 +5588,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5587,6 +5633,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5594,7 +5643,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5624,7 +5673,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5668,6 +5718,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5675,7 +5728,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5705,7 +5758,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5749,6 +5803,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5756,7 +5813,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5786,7 +5843,8 @@ class Market:
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
-            ):
+                **kwargs,
+            ) -> Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5830,6 +5888,9 @@ class Market:
                 if search_params is not None:
                     for key, value in search_params.items():
                         params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
                 return _send_request(
                     self=self._api,
                     method="GET",
@@ -5837,7 +5898,7 @@ class Market:
                     params=params,
                 )
 
-            def params(self):
+            def params(self) -> Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
@@ -5853,8 +5914,7 @@ class Market:
             self.steam = self.__Steam(_api_self)
             self.fortnite = self.__Fortnite(_api_self)
             self.vk = self.__VK(_api_self)
-            self.genshin = self.__GenshinImpact(_api_self)
-            self.honkai = self.__HonkaiStarRail(_api_self)
+            self.mihoyo = self.__MiHoYo(_api_self)
             self.valorant = self.__Valorant(_api_self)
             self.lol = self.__LeagueOfLegends(_api_self)
             self.telegram = self.__Telegram(_api_self)
@@ -5877,7 +5937,7 @@ class Market:
             self.warface = self.__Warface(_api_self)
             self.youtube = self.__Youtube(_api_self)
 
-        def list(self, top_queries: bool = None):
+        def list(self, top_queries: bool = None) -> Response:
             """
             GET https://api.lzt.market/category
 
@@ -5902,7 +5962,7 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def from_url(self, url: str):
+        def from_url(self, url: str) -> Response:
             """
             Displays a list of the latest accounts from your market url with search params
 
@@ -5928,8 +5988,12 @@ class Market:
             return _send_request(self=self._api, method="GET", path=path)
 
         def latest(
-            self, page: int = None, title: str = None, search_params: dict = None
-        ):
+            self,
+            page: int = None,
+            title: str = None,
+            search_params: dict = None,
+            **kwargs,
+        ) -> Response:
             """
             GET https://api.lzt.market/
 
@@ -5949,6 +6013,9 @@ class Market:
             if search_params is not None:
                 for key, value in search_params.items():
                     params[str(key)] = value
+            if kwargs:
+                for kwarg_name, kwarg_value in kwargs.items():
+                    params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         def owned(
@@ -5961,7 +6028,8 @@ class Market:
             title: str = None,
             status: str = None,
             search_params: dict = None,
-        ):
+            **kwargs,
+        ) -> Response:
             """
             GET https://api.lzt.market/user/user_id/items
 
@@ -6053,6 +6121,9 @@ class Market:
                 for key, value in search_params.items():
                     params[str(key)] = value
             path = f"/user/{user_id}/items"
+            if kwargs:
+                for kwarg_name, kwarg_value in kwargs.items():
+                    params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         def purchased(
@@ -6065,7 +6136,8 @@ class Market:
             title: str = None,
             status: str = None,
             search_params: dict = None,
-        ):
+            **kwargs,
+        ) -> Response:
             """
             GET https://api.lzt.market/user/user_id/orders
 
@@ -6156,15 +6228,19 @@ class Market:
                 for key, value in search_params.items():
                     params[str(key)] = value
             path = f"/user/{user_id}/orders"
+            if kwargs:
+                for kwarg_name, kwarg_value in kwargs.items():
+                    params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         def favorite(
             self,
             page: int = None,
             status: str = None,
-            search_params: dict = None,
             title: str = None,
-        ):
+            search_params: dict = None,
+            **kwargs,
+        ) -> Response:
             """
             GET https://api.lzt.market/fave
 
@@ -6185,15 +6261,19 @@ class Market:
             if search_params is not None:
                 for key, value in search_params.items():
                     params[str(key)] = value
+            if kwargs:
+                for kwarg_name, kwarg_value in kwargs.items():
+                    params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         def viewed(
             self,
             page: int = None,
             status: str = None,
-            search_params: dict = None,
             title: str = None,
-        ):
+            search_params: dict = None,
+            **kwargs,
+        ) -> Response:
             """
             GET https://api.lzt.market/viewed
 
@@ -6214,6 +6294,9 @@ class Market:
             if search_params is not None:
                 for key, value in search_params.items():
                     params[str(key)] = value
+            if kwargs:
+                for kwarg_name, kwarg_value in kwargs.items():
+                    params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Payments:
@@ -6236,7 +6319,7 @@ class Market:
             comment: str = None,
             is_hold: bool = None,
             show_payments_stats: bool = None,
-        ):
+        ) -> Response:
             """
             GET https://api.lzt.market/user/user_id/payments
 
@@ -6310,7 +6393,7 @@ class Market:
             transfer_hold: bool = None,
             hold_length_option: str = None,
             hold_length_value: int = None,
-        ):
+        ) -> Response:
             """
             POST https://api.lzt.market/balance/transfer
 
@@ -6357,7 +6440,7 @@ class Market:
             hold: bool = None,
             hold_length: int = None,
             hold_option: str = None,
-        ):
+        ) -> str:
             """
             Generate payment link
 
@@ -6411,7 +6494,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def delete(self, item_id: int, tag_id: int):
+            def delete(self, item_id: int, tag_id: int) -> Response:
                 """
                 DELETE https://api.lzt.market/item_id/tag
 
@@ -6433,7 +6516,7 @@ class Market:
                     params=params,
                 )
 
-            def add(self, item_id: int, tag_id: int):
+            def add(self, item_id: int, tag_id: int) -> Response:
                 """
                 POST https://api.lzt.market/item_id/tag
 
@@ -6461,7 +6544,7 @@ class Market:
             auction: bool = False,
             steam_preview: bool = False,
             preview_type: str = None,
-        ):
+        ) -> Response:
             """
             GET https://api.lzt.market/item_id
             GET https://api.lzt.market/item_id/steam-preview
@@ -6485,7 +6568,7 @@ class Market:
             params = {"type": preview_type}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def delete(self, item_id: int, reason: str):
+        def delete(self, item_id: int, reason: str) -> Response:
             """
             DELETE https://api.lzt.market/item_id
 
@@ -6504,7 +6587,7 @@ class Market:
                 self=self._api, method="DELETE", path=path, params=params
             )
 
-        def email(self, item_id: int, email: str, login: str):
+        def email(self, item_id: int, email: str, login: str) -> Response:
             """
             GET https://api.lzt.market/email-code
 
@@ -6521,7 +6604,7 @@ class Market:
             params = {"email ": email, "login": login, "item_id": item_id}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def guard(self, item_id: int):
+        def guard(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/item_id/guard-code
 
@@ -6536,7 +6619,7 @@ class Market:
             path = f"/{item_id}/guard-code"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def mafile(self, item_id: int):
+        def mafile(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/item_id/mafile
 
@@ -6553,7 +6636,7 @@ class Market:
             path = f"/{item_id}/mafile"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def password_tm(self, item_id: int):
+        def password_tm(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/item_id/temp-email-password
 
@@ -6570,7 +6653,7 @@ class Market:
             path = f"/{item_id}/temp-email-password"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def refuse_guarantee(self, item_id: int):
+        def refuse_guarantee(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/refuse-guarantee
 
@@ -6585,7 +6668,7 @@ class Market:
             path = f"/{item_id}/refuse-guarantee"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def change_password(self, item_id: int, _cancel: bool = None):
+        def change_password(self, item_id: int, _cancel: bool = None) -> Response:
             """
             POST https://api.lzt.market/item_id/change-password
 
@@ -6609,7 +6692,7 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def unstick(self, item_id: int):
+        def unstick(self, item_id: int) -> Response:
             """
             DELETE https://api.lzt.market/item_id/stick
 
@@ -6624,7 +6707,7 @@ class Market:
             path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def stick(self, item_id: int):
+        def stick(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/stick
 
@@ -6639,7 +6722,7 @@ class Market:
             path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unfavorite(self, item_id: int):
+        def unfavorite(self, item_id: int) -> Response:
             """
             DELETE https://api.lzt.market/item_id/star
 
@@ -6654,7 +6737,7 @@ class Market:
             path = f"/{item_id}/star"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def favorite(self, item_id: int):
+        def favorite(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/star
 
@@ -6669,7 +6752,7 @@ class Market:
             path = f"/{item_id}/star"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def bump(self, item_id: int):
+        def bump(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/bump
 
@@ -6684,7 +6767,9 @@ class Market:
             path = f"/{item_id}/bump"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def change_owner(self, item_id: int, username: str, secret_answer: str):
+        def change_owner(
+            self, item_id: int, username: str, secret_answer: str
+        ) -> Response:
             """
             POST https://api.lzt.market/item_id/change-owner
 
@@ -6718,7 +6803,7 @@ class Market:
             email_type: str = None,
             allow_ask_discount: bool = None,
             proxy_id: int = None,
-        ):
+        ) -> Response:
             """
             PUT https://api.lzt.market/item_id/edit
 
@@ -6772,7 +6857,7 @@ class Market:
             }
             return _send_request(self=self._api, method="PUT", path=path, params=params)
 
-        def telegram(self, item_id: int):
+        def telegram(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/item_id/telegram-login-code
 
@@ -6787,7 +6872,7 @@ class Market:
             path = f"/{item_id}/telegram-login-code"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def telegram_reset(self, item_id: int):
+        def telegram_reset(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/telegram-reset-authorizations
 
@@ -6802,7 +6887,7 @@ class Market:
             path = f"/{item_id}/telegram-reset-authorizations"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def update_inventory(self, item_id: int, app_id: int):
+        def update_inventory(self, item_id: int, app_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/update-inventory
 
@@ -6823,7 +6908,7 @@ class Market:
 
         def steam_inventory_value(
             self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None
-        ):
+        ) -> Response:
             """
             GET https://api.lzt.market/steam-value
 
@@ -6865,7 +6950,9 @@ class Market:
             path = "/steam-value"
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def confirm_sda(self, item_id: int, id: int = None, nonce: int = None):
+        def confirm_sda(
+            self, item_id: int, id: int = None, nonce: int = None
+        ) -> Response:
             """
             POST https://api.lzt.market/item_id/confirm-sda
 
@@ -6886,7 +6973,9 @@ class Market:
                 "nonce": nonce,
             }
             path = f"/{item_id}/confirm-sda"
-            return _send_request(self=self._api, method="POST", path=path, params=params)
+            return _send_request(
+                self=self._api, method="POST", path=path, params=params
+            )
 
     class __Purchasing:
         def __init__(self, _api_self):
@@ -6897,7 +6986,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def get(self, item_id: int):  # Deprecated
+            def get(self, item_id: int) -> Response:  # Deprecated
                 """
                 GET https://api.lzt.market/item_id/auction
 
@@ -6914,10 +7003,14 @@ class Market:
                 else:
                     base_api = self._api
                 print("This method is deprecated and will be deleted in future")
-                print("Use \"market.managing.get(item_id=item_id, auction=True)\" instead of \"market.purchasing.auction.get(item_id=item_id)\"")
+                print(
+                    'Use "market.managing.get(item_id=item_id, auction=True)" instead of "market.purchasing.auction.get(item_id=item_id)"'
+                )
                 return base_api.managing.get(item_id=item_id, auction=True)
 
-            def place_bid(self, item_id: int, amount: int, currency: str = None):
+            def place_bid(
+                self, item_id: int, amount: int, currency: str = None
+            ) -> Response:
                 """
                 POST https://api.lzt.market/item_id/auction/bid
 
@@ -6940,7 +7033,7 @@ class Market:
                     params=params,
                 )
 
-            def delete_bid(self, item_id: int, bid_id: int):
+            def delete_bid(self, item_id: int, bid_id: int) -> Response:
                 """
                 GET https://api.lzt.market/item_id/auction/bid
 
@@ -6962,7 +7055,7 @@ class Market:
                     params=params,
                 )
 
-        def reserve(self, item_id: int, price: int):
+        def reserve(self, item_id: int, price: int) -> Response:
             """
             POST https://api.lzt.market/item_id/reserve
 
@@ -6981,7 +7074,7 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def reserve_cancel(self, item_id: int):
+        def reserve_cancel(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/cancel-reserve
 
@@ -6996,7 +7089,7 @@ class Market:
             path = f"/{item_id}/cancel-reserve"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def check(self, item_id: int):
+        def check(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/item_id/check-account
 
@@ -7011,7 +7104,9 @@ class Market:
             path = f"/{item_id}/check-account"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def confirm(self, item_id: int, buy_without_validation: bool = None):
+        def confirm(
+            self, item_id: int, buy_without_validation: bool = None
+        ) -> Response:
             """
             POST https://api.lzt.market/item_id/confirm-buy
 
@@ -7037,7 +7132,7 @@ class Market:
 
         def fast_buy(
             self, item_id: int, price: int, buy_without_validation: bool = None
-        ):
+        ) -> Response:
             """
             POST https://api.lzt.market/item_id/fast-buy
 
@@ -7069,7 +7164,7 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def info(self, item_id: int, resell_item_id: int = None):
+        def info(self, item_id: int, resell_item_id: int = None) -> Response:
             """
             GET https://api.lzt.market/item_id/goods/add
 
@@ -7096,7 +7191,7 @@ class Market:
             extra: dict = None,
             resell_item_id: int = None,
             random_proxy: bool = None,
-        ):
+        ) -> Response:
             """
             POST https://api.lzt.market/item_id/goods/check
 
@@ -7170,7 +7265,7 @@ class Market:
             auction_duration_option: str = None,
             instabuy_price: int = None,
             not_bids_action: str = None,
-        ):
+        ) -> Response:
             """
             POST https://api.lzt.market/item/add
 
@@ -7289,7 +7384,7 @@ class Market:
             auction_duration_option: str = None,
             instabuy_price: int = None,
             not_bids_action: str = None,
-        ):
+        ) -> Response:
             """
             POST https://api.lzt.market/item/fast-sell
 
@@ -7404,7 +7499,7 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def get(self):
+        def get(self) -> Response:
             """
             GET https://api.lzt.market/proxy
 
@@ -7417,7 +7512,7 @@ class Market:
             path = "/proxy"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def delete(self, proxy_id: int = None, delete_all: bool = None):
+        def delete(self, proxy_id: int = None, delete_all: bool = None) -> Response:
             """
             DELETE https://api.lzt.market/proxy
 
@@ -7443,7 +7538,7 @@ class Market:
             proxy_user: str = None,
             proxy_pass: str = None,
             proxy_row: str = None,
-        ):
+        ) -> Response:
             """
             POST https://api.lzt.market/proxy
 
@@ -7520,7 +7615,7 @@ class Antipublic:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def lines_count(self):
+        def lines_count(self) -> Response:
             """
             GET https://antipublic.one/api/v2/countLines
 
@@ -7544,7 +7639,7 @@ class Antipublic:
             path = "/api/v2/countLinesPlain"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def version(self):
+        def version(self) -> Response:
             """
             GET https://antipublic.one/api/v2/version
 
@@ -7560,7 +7655,7 @@ class Antipublic:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def license(self):
+        def license(self) -> Response:
             """
             GET https://antipublic.one/api/v2/checkAccess
 
@@ -7573,7 +7668,7 @@ class Antipublic:
             path = "/api/v2/checkAccess"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def queries(self):
+        def queries(self) -> Response:
             """
             GET https://antipublic.one/api/v2/availableQueries
 
@@ -7586,7 +7681,7 @@ class Antipublic:
             path = "/api/v2/availableQueries"
             return _send_request(self=self._api, method="GET", path=path)
 
-    def check(self, lines: list[str], insert: bool = None):
+    def check(self, lines: list[str], insert: bool = None) -> Response:
         """
         POST https://antipublic.one/api/v2/checkLines
 
@@ -7602,7 +7697,9 @@ class Antipublic:
         path = "/api/v2/checkLines"
         return _send_request(self=self, method="POST", path=path, params=params)
 
-    def search(self, login: str = None, logins: list[str] = None, limit: int = None):
+    def search(
+        self, login: str = None, logins: list[str] = None, limit: int = None
+    ) -> Response:
         """
         POST https://antipublic.one/api/v2/emailSearch
         POST https://antipublic.one/api/v2/emailPasswords

@@ -24,6 +24,7 @@ class _MainTweaks:
         Sleep for time difference between the last call and current call if it's less than 3 seconds
         """
         from .API import Antipublic
+
         if type(self) is not Antipublic:
             if self.bypass_429:
                 if self._delay_synchronizer:
@@ -44,6 +45,7 @@ class _MainTweaks:
         Sleep for time difference between the last call and current call if it's less than 3 seconds
         """
         from .API import Antipublic
+
         if type(self) is not Antipublic:
             if self.bypass_429:
                 if self._delay_synchronizer:
@@ -138,7 +140,7 @@ def CreateJob(func, job_name, **kwargs):
             )
         else:
             loc[arg] = value
-    func_code = str(inspect.getsource(func))
+    func_code = str(inspect.getsource(func)).replace(" -> Response", "")
     func_code = func_code.split("):\n", 1)[1]
     lines = func_code.split("\n")
     indent = lines[0].split('"""')[0]
@@ -146,9 +148,7 @@ def CreateJob(func, job_name, **kwargs):
         if " def " in line:
             lines.remove(line)
     lines = [line.replace(indent, "", 1) for line in lines]
-    return_code = (
-        "\n".join(lines).split('"""')[2].split("return ")[-1]
-    )
+    return_code = "\n".join(lines).split('"""')[2].split("return ")[-1]
     func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
     exec(func_code, globals(), loc)
     path = loc.get("path")
@@ -195,7 +195,7 @@ async def SendAsAsync(func, **kwargs):
             )
         else:
             loc[arg] = value
-    func_code = str(inspect.getsource(func))
+    func_code = str(inspect.getsource(func)).replace(" -> Response", "")
     func_code = func_code.split("):\n", 1)[1]
     lines = func_code.split("\n")
     indent = lines[0].split('"""')[0]
@@ -203,9 +203,7 @@ async def SendAsAsync(func, **kwargs):
         if " def " in line:
             lines.remove(line)
     lines = [line.replace(indent, "", 1) for line in lines]
-    return_code = (
-        "\n".join(lines).split('"""')[2].split("return ")[-1]
-    )
+    return_code = "\n".join(lines).split('"""')[2].split("return ")[-1]
     func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
     exec(func_code, globals(), loc)
     path = loc.get("path")
