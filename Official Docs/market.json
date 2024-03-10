@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.21"
+    "version": "1.1.22"
   },
   "servers": [
     {
@@ -1412,493 +1412,6 @@
           },
           {
             "$ref": "#/components/parameters/reg_period"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/ItemListResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
-    "/vkontakte": {
-      "get": {
-        "tags": [
-          "Category Search"
-        ],
-        "summary": "Vkontakte",
-        "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.VK",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/page"
-          },
-          {
-            "$ref": "#/components/parameters/auction"
-          },
-          {
-            "$ref": "#/components/parameters/title"
-          },
-          {
-            "$ref": "#/components/parameters/pmin"
-          },
-          {
-            "$ref": "#/components/parameters/pmax"
-          },
-          {
-            "$ref": "#/components/parameters/origin"
-          },
-          {
-            "$ref": "#/components/parameters/not_origin"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
-          },
-          {
-            "name": "vk_country[]",
-            "in": "query",
-            "description": "List of allowed countries.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Country",
-              "type": "array",
-              "description": "List of allowed countries.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "vk_city[]",
-            "in": "query",
-            "description": "List of allowed cities.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk City",
-              "type": "array",
-              "description": "List of allowed cities.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "vk_friend_min",
-            "in": "query",
-            "description": "Minimum number of friends.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Friend Min",
-              "description": "Minimum number of friends.",
-              "type": "integer",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "vk_friend_max",
-            "in": "query",
-            "description": "Maximum number of friends.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Friend Max",
-              "description": "Maximum number of friends.",
-              "type": "integer",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "vk_follower_min",
-            "in": "query",
-            "description": "Minimum number of followers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Follower Min",
-              "type": "integer",
-              "description": "Minimum number of followers.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "vk_follower_max",
-            "in": "query",
-            "description": "Maximum number of followers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Follower Max",
-              "type": "integer",
-              "description": "Maximum number of followers.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "vk_vote_min",
-            "in": "query",
-            "description": "Minimum number of votes.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Vote Min",
-              "type": "integer",
-              "description": "Minimum number of votes.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "vk_vote_max",
-            "in": "query",
-            "description": "Maximum number of votes.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Vote Max",
-              "type": "integer",
-              "description": "Maximum number of votes.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "sex",
-            "in": "query",
-            "description": "Sex of account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Sex",
-              "type": "string",
-              "description": "Sex of account.",
-              "enum": [
-                "man",
-                "woman"
-              ]
-            }
-          },
-          {
-            "name": "tel",
-            "in": "query",
-            "description": "Has linked mobile.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Tel",
-              "type": "string",
-              "description": "Has linked mobile.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/email"
-          },
-          {
-            "name": "tfa",
-            "in": "query",
-            "description": "Has enabled 2FA.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Tfa",
-              "type": "string",
-              "description": "Has enabled 2FA.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "relation[]",
-            "in": "query",
-            "description": "Relationship.\n+ 0 - Not specified\n+ 1 - Not married\n+ 2 - There is a friend/girlfriend\n+ 3 - Engaged\n+ 4 - Married\n+ 5 - Everything is complicated\n+ 6 - In active search\n+ 7 - In love\n+ 8 - In a civil marriage",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Relation",
-              "type": "array",
-              "description": "Relationship.",
-              "uniqueItems": true,
-              "items": {
-                "type": "integer",
-                "enum": [
-                  0,
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  7,
-                  8
-                ]
-              }
-            }
-          },
-          {
-            "name": "token_auth_only",
-            "in": "query",
-            "description": "Login into account by token only.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Token Auth Only",
-              "type": "string",
-              "description": "Login into account by token only.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "group_follower_min",
-            "in": "query",
-            "description": "Minimum number of group followers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Group Follower Min",
-              "type": "integer",
-              "description": "Minimum number of group followers.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "group_follower_max",
-            "in": "query",
-            "description": "Maximum number of group followers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Group Follower Max",
-              "type": "integer",
-              "description": "Maximum number of group followers.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "groups_min",
-            "in": "query",
-            "description": "Minimum number of groups.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Groups Min",
-              "type": "integer",
-              "description": "Minimum number of groups.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "groups_max",
-            "in": "query",
-            "description": "Maximum number of groups.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Groups Max",
-              "type": "integer",
-              "description": "Maximum number of groups.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "admin_level",
-            "in": "query",
-            "description": "Admin level.\n+ 1 - Moderator\n+ 2 - Editor\n+ 3 - Admin\n+ 4 - Owner",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Admin Level",
-              "type": "integer",
-              "description": "Admin level.",
-              "enum": [
-                1,
-                2,
-                3,
-                4
-              ]
-            }
-          },
-          {
-            "name": "min_age",
-            "in": "query",
-            "description": "Minimum age.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Min Age",
-              "type": "integer",
-              "description": "Minimum age.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "max_age",
-            "in": "query",
-            "description": "Maximum age.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Max Age",
-              "type": "integer",
-              "description": "Maximum age.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "dig_min",
-            "in": "query",
-            "description": "Minimum number of digits in ID.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Dig Min",
-              "type": "integer",
-              "description": "Minimum number of digits in ID.",
-              "minimum": 4,
-              "maximum": 13
-            }
-          },
-          {
-            "name": "dig_max",
-            "in": "query",
-            "description": "Maximum number of digits in ID.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Dig Max",
-              "type": "integer",
-              "description": "Maximum number of digits in ID.",
-              "minimum": 4,
-              "maximum": 14
-            }
-          },
-          {
-            "name": "conversations_min",
-            "in": "query",
-            "description": "Minimum number of conversations.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Conversations Min",
-              "type": "integer",
-              "description": "Minimum number of conversations.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "conversations_max",
-            "in": "query",
-            "description": "Maximum number of conversations.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Conversations Max",
-              "type": "integer",
-              "description": "Maximum number of conversations.",
-              "minimum": 0
-            }
-          },
-          {
-            "$ref": "#/components/parameters/reg"
-          },
-          {
-            "$ref": "#/components/parameters/reg_period"
-          },
-          {
-            "name": "mcountry[]",
-            "in": "query",
-            "description": "List of allowed countries of phone number.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "M Country",
-              "type": "array",
-              "description": "List of allowed countries of phone number.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "not_mcountry[]",
-            "in": "query",
-            "description": "List of excluded countries of phone number.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Not M Country",
-              "type": "array",
-              "description": "List of excluded countries of phone number.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "opened_profile",
-            "in": "query",
-            "description": "Opened account profile.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Opened Profile",
-              "type": "integer",
-              "description": "Opened account profile.",
-              "enum": [
-                1
-              ]
-            }
-          },
-          {
-            "$ref": "#/components/parameters/verified"
           }
         ],
         "responses": {
@@ -8294,7 +7807,7 @@
           "Accounts managing"
         ],
         "summary": "Edit Account",
-        "description": "Edits any details of account.\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ retrive - Account is recovered by email or phone (only for VKontakte category)\n+ dummy - Dummy (empty) account (only for Steam category)",
+        "description": "Edits any details of account.\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)",
         "operationId": "accountsManaging.edit",
         "parameters": [
           {
@@ -9377,7 +8890,7 @@
           "Account publishing"
         ],
         "summary": "Fast Sell Account",
-        "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"captcha\" error, that you should send same request again.**\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ retrive - Account is recovered by email or phone (only for VKontakte category)\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
+        "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"captcha\" error, that you should send same request again.**\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
         "operationId": "accountPublishing.fastSell",
         "parameters": [
           {
@@ -9667,32 +9180,6 @@
                     "title": "Discord Token",
                     "type": "string"
                   },
-                  "extra[vk_token]": {
-                    "description": "VK token. Required if you want to upload VK account.",
-                    "title": "VK Token",
-                    "type": "string"
-                  },
-                  "extra[vk_ua]": {
-                    "description": "VK User-agent. Optional. Used only if you want to upload VK account.",
-                    "title": "VK Token",
-                    "type": "string"
-                  },
-                  "extra[vk_token_auth_only]": {
-                    "description": "Login into account by token only. Used only if you want to upload VK account.",
-                    "title": "Vk Token Auth Only",
-                    "type": "integer",
-                    "enum": [
-                      1
-                    ]
-                  },
-                  "extra[parse_vote_count]": {
-                    "description": "Parse VK balance.",
-                    "title": "Parse VK balance",
-                    "type": "integer",
-                    "enum": [
-                      1
-                    ]
-                  },
                   "extra[cookies]": {
                     "description": "Cookies. Required if you want to upload Youtube, Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
                     "title": "Cookies",
@@ -9876,7 +9363,7 @@
           "Account publishing"
         ],
         "summary": "Add account",
-        "description": "Adds account on the market.\n\nAccount origin. Where did you get it from.\n\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ retrive - Account is recovered by email or phone (only for VKontakte category)\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
+        "description": "Adds account on the market.\n\nAccount origin. Where did you get it from.\n\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
         "operationId": "accountPublishing.addItem",
         "parameters": [
           {
@@ -10317,32 +9804,6 @@
                     "description": "Discord token. Required if you want to upload Discord account.",
                     "title": "Discord Token",
                     "type": "string"
-                  },
-                  "extra[vk_token]": {
-                    "description": "VK token. Required if you want to upload VK account.",
-                    "title": "VK Token",
-                    "type": "string"
-                  },
-                  "extra[vk_ua]": {
-                    "description": "VK User-agent. Optional. Used only if you want to upload VK account.",
-                    "title": "VK Token",
-                    "type": "string"
-                  },
-                  "extra[vk_token_auth_only]": {
-                    "description": "Login into account by token only. Used only if you want to upload VK account.",
-                    "title": "Vk Token Auth Only",
-                    "type": "integer",
-                    "enum": [
-                      1
-                    ]
-                  },
-                  "extra[parse_vote_count]": {
-                    "description": "Parse VK balance.",
-                    "title": "Parse VK balance",
-                    "type": "integer",
-                    "enum": [
-                      1
-                    ]
                   },
                   "extra[cookies]": {
                     "description": "Cookies. Required if you want to upload Youtube, Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
@@ -11574,20 +11035,6 @@
             }
           },
           {
-            "name": "show_account_links",
-            "in": "query",
-            "style": "form",
-            "required": false,
-            "explode": true,
-            "schema": {
-              "type": "integer",
-              "enum": [
-                1,
-                0
-              ]
-            }
-          },
-          {
             "name": "max_discount_percent",
             "in": "query",
             "description": "Maximum discount percents for your accounts.",
@@ -11666,19 +11113,6 @@
               "items": {
                 "type": "string"
               }
-            }
-          },
-          {
-            "name": "vk_ua",
-            "in": "query",
-            "description": "Vkontakte user agent.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vk Ua",
-              "type": "string",
-              "description": "Vkontakte user agent."
             }
           },
           {
@@ -14095,7 +13529,6 @@
           "enum": [
             "steam",
             "fortnite",
-            "vkontakte",
             "genshin-impact",
             "valorant",
             "league-of-legends",
@@ -14150,7 +13583,7 @@
       "category_id": {
         "name": "category_id",
         "in": "query",
-        "description": "Accounts category.\n+ 1 - Steam\n+ 2 - VK\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 25 - Youtube\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 29 - League of Legends",
+        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 25 - Youtube\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 29 - League of Legends",
         "required": false,
         "style": "form",
         "explode": true,
@@ -14160,7 +13593,6 @@
           "description": "Accounts category.",
           "enum": [
             1,
-            2,
             3,
             4,
             5,
