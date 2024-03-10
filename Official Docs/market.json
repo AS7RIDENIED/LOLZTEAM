@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.22"
+    "version": "1.1.23"
   },
   "servers": [
     {
@@ -6064,260 +6064,6 @@
         ]
       }
     },
-    "/youtube": {
-      "get": {
-        "tags": [
-          "Category Search"
-        ],
-        "summary": "Youtube",
-        "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.Youtube",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/page"
-          },
-          {
-            "$ref": "#/components/parameters/auction"
-          },
-          {
-            "$ref": "#/components/parameters/title"
-          },
-          {
-            "$ref": "#/components/parameters/pmin"
-          },
-          {
-            "$ref": "#/components/parameters/pmax"
-          },
-          {
-            "$ref": "#/components/parameters/origin"
-          },
-          {
-            "$ref": "#/components/parameters/not_origin"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
-          },
-          {
-            "name": "brand",
-            "in": "query",
-            "description": "Is brand account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Brand",
-              "description": "Is brand account.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "monetization",
-            "in": "query",
-            "description": "Has monetization.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Monetization",
-              "description": "Has monetization.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "artist",
-            "in": "query",
-            "description": "Has status artist.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Artist",
-              "description": "Has status artist.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/verified"
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "Has password.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Password",
-              "type": "string",
-              "description": "Has password.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "subscribes_min",
-            "in": "query",
-            "description": "Minimum subscribes.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Subscribes Min",
-              "type": "integer",
-              "description": "Minimum subscribes.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "subscribes_max",
-            "in": "query",
-            "description": "Maximum subscribes.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Subscribes Max",
-              "type": "integer",
-              "description": "Maximum subscribes.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "viewcount_min",
-            "in": "query",
-            "description": "Minimum views count.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "View Count Min",
-              "type": "integer",
-              "description": "Minimum views count.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "viewcount_max",
-            "in": "query",
-            "description": "Maximum views count.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "View Count Max",
-              "type": "integer",
-              "description": "Maximum views count.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "videocount_min",
-            "in": "query",
-            "description": "Minimum video count.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Video Count Min",
-              "type": "integer",
-              "description": "Minimum video count.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "videocount_max",
-            "in": "query",
-            "description": "Maximum video count.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Video Count Max",
-              "type": "integer",
-              "description": "Maximum video count.",
-              "minimum": 0
-            }
-          },
-          {
-            "$ref": "#/components/parameters/reg"
-          },
-          {
-            "$ref": "#/components/parameters/reg_period"
-          },
-          {
-            "name": "locale[]",
-            "in": "query",
-            "description": "List of regions.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Locale",
-              "type": "array",
-              "description": "List of regions.",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "BR",
-                  "IT",
-                  "RU",
-                  "US"
-                ]
-              }
-            }
-          },
-          {
-            "name": "not_locale[]",
-            "in": "query",
-            "description": "List of regions that won't be included.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Not Locale",
-              "type": "array",
-              "description": "List of regions that won't be included.",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "BR",
-                  "IT",
-                  "RU",
-                  "US"
-                ]
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/ItemListResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
     "/category": {
       "get": {
         "tags": [
@@ -9181,7 +8927,7 @@
                     "type": "string"
                   },
                   "extra[cookies]": {
-                    "description": "Cookies. Required if you want to upload Youtube, Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
+                    "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
                     "title": "Cookies",
                     "type": "string"
                   },
@@ -9806,7 +9552,7 @@
                     "type": "string"
                   },
                   "extra[cookies]": {
-                    "description": "Cookies. Required if you want to upload Youtube, Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
+                    "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
                     "title": "Cookies",
                     "type": "string"
                   },
@@ -13549,8 +13295,7 @@
             "vpn",
             "cinema",
             "spotify",
-            "warface",
-            "youtube"
+            "warface"
           ]
         }
       },
@@ -13583,7 +13328,7 @@
       "category_id": {
         "name": "category_id",
         "in": "query",
-        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 25 - Youtube\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 29 - League of Legends",
+        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 29 - League of Legends",
         "required": false,
         "style": "form",
         "explode": true,
@@ -13612,7 +13357,6 @@
             22,
             23,
             24,
-            25,
             26,
             27,
             29
