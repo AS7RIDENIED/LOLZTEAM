@@ -1,4 +1,4 @@
-<font size=6 style="margin: auto"> <center>
+<font size=6 style="margin: auto"><center>
 
 [Forum docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Forum.md) - [Antipublic Docs](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Antipublic.md)
 
@@ -19,79 +19,77 @@
   * [Fortnite](#fortnite)
     * [Get](#get-1)
     * [Params](#params-1)
-  * [VK](#vk)
+  * [Genshin Impact](#genshin-impact)
     * [Get](#get-2)
     * [Params](#params-2)
-  * [Genshin Impact](#genshin-impact)
+  * [Valorant](#valorant)
     * [Get](#get-3)
     * [Params](#params-3)
-  * [Valorant](#valorant)
+  * [League of Legends](#league-of-legends)
     * [Get](#get-4)
     * [Params](#params-4)
-  * [League of Legends](#league-of-legends)
+  * [Telegram](#telegram)
     * [Get](#get-5)
     * [Params](#params-5)
-  * [Telegram](#telegram)
+  * [Supercell](#supercell)
     * [Get](#get-6)
     * [Params](#params-6)
-  * [Supercell](#supercell)
+  * [Origin](#origin)
     * [Get](#get-7)
     * [Params](#params-7)
-  * [Origin](#origin)
+    * [Games](#games-0)
+  * [World of Tanks](#world-of-tanks)
     * [Get](#get-8)
     * [Params](#params-8)
-    * [Games](#games-1)
-  * [World of Tanks](#world-of-tanks)
+  * [World of Tanks Blitz](#world-of-tanks-blitz)
     * [Get](#get-9)
     * [Params](#params-9)
-  * [World of Tanks Blitz](#world-of-tanks-blitz)
+  * [Epicgames](#epicgames)
     * [Get](#get-10)
     * [Params](#params-10)
-  * [Epicgames](#epicgames)
+    * [Games](#games-1)
+  * [Escape from Tarkov](#escape-from-tarkov)
     * [Get](#get-11)
     * [Params](#params-11)
-    * [Games](#games-2)
-  * [Escape from Tarkov](#escape-from-tarkov)
+  * [Social Club](#social-club)
     * [Get](#get-12)
     * [Params](#params-12)
-  * [Social Club](#social-club)
+  * [Uplay](#uplay)
     * [Get](#get-13)
     * [Params](#params-13)
-  * [Uplay](#uplay)
+    * [Games](#games-2)
+  * [War Thunder](#war-thunder)
     * [Get](#get-14)
     * [Params](#params-14)
-    * [Games](#games-3)
-  * [War Thunder](#war-thunder)
+  * [Discord](#discord)
     * [Get](#get-15)
     * [Params](#params-15)
-  * [Discord](#discord)
+  * [Tiktok](#tiktok)
     * [Get](#get-16)
     * [Params](#params-16)
-  * [Tiktok](#tiktok)
+  * [Instagram](#instagram)
     * [Get](#get-17)
     * [Params](#params-17)
-  * [Instagram](#instagram)
+  * [Battle Net](#battle-net)
     * [Get](#get-18)
     * [Params](#params-18)
-  * [Battle Net](#battle-net)
+    * [Games](#games-3)
+  * [VPN](#vpn)
     * [Get](#get-19)
     * [Params](#params-19)
-    * [Games](#games-4)
-  * [VPN](#vpn)
+  * [Cinema](#cinema)
     * [Get](#get-20)
     * [Params](#params-20)
-  * [Cinema](#cinema)
+  * [Spotify](#spotify)
     * [Get](#get-21)
     * [Params](#params-21)
-  * [Spotify](#spotify)
+  * [Warface](#warface)
     * [Get](#get-22)
     * [Params](#params-22)
-  * [Warface](#warface)
+  * [Youtube](#youtube)
     * [Get](#get-23)
     * [Params](#params-23)
-  * [Youtube](#youtube)
-    * [Get](#get-24)
-    * [Params](#params-24)
+  * [Get](#get-24)
   * [Get categories](#get-categories)
 * [List](#list)
   * [Latest items](#latest-items)
@@ -214,8 +212,6 @@ print(response.json())
 - **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
 - **hide_favourites** (bool): Hide your profile info when you add an account to favorites
 - **hide_bids** (bool): Hide your profile when bid on the auction
-- **vk_ua** (str): Your vk useragent to accounts.
-- **vk_show_links** (str): Show links to Vkontakte accounts.
 - **title** (str): Market title.
 - **telegram_client** (dict): Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}
 
@@ -342,56 +338,6 @@ print(response.json())
 
 ```python
 response = market.category.fortnite.params()
-print(response.json())
-```
-
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
----
-
-### VK
-
-#### Get
-
-*Displays a list of accounts in a specific category according to your parameters.*
-
-**Parameters:**
-
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
-
-**Example:**
-
-```python
-response = market.category.vk.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
-print(response.json())
-```
-
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
-
-#### Params
-
-*Displays search parameters for a category.*
-
-**Example:**
-
-```python
-response = market.categoryarams()
 print(response.json())
 ```
 
@@ -1526,14 +1472,13 @@ print(response.json())
 
 ---
 
-### YouTube
-
-#### Get
+### Get
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
 **Parameters:**
 
+- **category_name** (str): Category name.
 - **page** (int): The number of the page to display results from
 - **auction** (str): Auction. Can be [yes, no, nomatter].
 - **title** (str): The word or words contained in the account title
@@ -1551,30 +1496,13 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.category.youtube.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.get(category_name="steam", pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
 print(response.json())
 ```
 
 ```python
 {'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
 ```
-
-#### Params
-
-*Displays search parameters for a category.*
-
-**Example:**
-
-```python
-response = market.category.youtube.params()
-print(response.json())
-```
-
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
----
 
 ### Get categories
 

@@ -9,7 +9,6 @@ class Market:
     class Category:
         steam = "steam"
         fortnite = "fortnite"
-        vk = "vkontakte"
         mihoyo = "mihoyo"
         valorant = "valorant"
         lol = "league-of-legends"
@@ -31,12 +30,10 @@ class Market:
         cinema = "cinema"
         spotify = "spotify"
         warface = "warface"
-        youtube = "youtube"
 
     class CategoryId:
         steam = 1
         fortnite = 9
-        vk = 2
         mihoyo = 17
         valorant = 13
         lol = 29
@@ -58,7 +55,6 @@ class Market:
         cinema = 23
         spotify = 26
         warface = 4
-        youtube = 25
 
     class OperationTypes:
         income = "income"
@@ -97,7 +93,6 @@ class Market:
         autoreg = "autoreg"
         personal = "personal"
         resale = "resale"
-        retrieve = "retrieve"
         dummy = "dummy"  # Only for steam (Пустышки)
 
     class Guarantee:

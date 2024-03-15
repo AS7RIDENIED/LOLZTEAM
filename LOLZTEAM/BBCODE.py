@@ -182,6 +182,10 @@ class BBCODE:
             return f"[api]{url}[/api]"
 
     @staticmethod
+    def censor(text: str):
+        return f"[censor]{text}[/censor]"
+
+    @staticmethod
     def custom(bbcode: str, text: str = "", value: str = None):
         if value:
             return f"[{bbcode}={value}]{text}[/{bbcode}]"
