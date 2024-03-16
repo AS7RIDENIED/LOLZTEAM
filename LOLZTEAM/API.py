@@ -39,15 +39,8 @@ def _send_request(
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
-
-    found_in_delay_exc = False
-    for pattern in self._delay_exceptions:
-        if re.search(pattern, path):
-            found_in_delay_exc = True
-            break
-    if not found_in_delay_exc:
+    if re.search(self._delay_pattern, path):
         _MainTweaks._auto_delay(self=self)
-
     if params is None:
         params = {}
     params["locale"] = self._locale
@@ -130,15 +123,8 @@ async def _send_async_request(
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
-
-    found_in_delay_exc = False
-    for pattern in self._delay_exceptions:
-        if re.search(pattern, path):
-            found_in_delay_exc = True
-            break
-    if not found_in_delay_exc:
+    if re.search(self._delay_pattern, path):
         _MainTweaks._auto_delay(self=self)
-
     if params is None:
         params = {}
     params["locale"] = self._locale
@@ -253,7 +239,7 @@ class Forum:
         self._locale = language
         self._delay_synchronizer = None
         self._lock = None
-        self._delay_exceptions = []
+        self._delay_pattern = ".*"
 
         self.reset_custom_variables = reset_custom_variables
         self.custom_params = {}
@@ -3507,21 +3493,19 @@ class Market:
             self.user_id = self.__set_user_id
         self._delay_synchronizer = None
         self._lock = None
+
         from . import Constants
 
-        self._delay_exceptions = [
-            (
-                r"^(?!.*(?:\/"
-                + r"|".join(
-                    [
-                        key
-                        for key in Constants.Market.Category.__dict__.keys()
-                        if not key.startswith("__")
-                    ]
-                )
-                + r")).*$"
-            )
-        ]
+        _categories = "|".join(
+            [
+                category
+                for category in Constants.Market.Category.__dict__.keys()
+                if not category.startswith("__")
+            ]
+        )
+        self._delay_pattern = (
+            f"/(?:{_categories})(?:/|$)" + "|" + r"/(\d+)(?:/|$)(?:\w+|$)(?:/|$)"
+        )
 
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
@@ -7498,7 +7482,7 @@ class Antipublic:
         self._locale = None
         self._delay_synchronizer = None
         self._lock = None
-        self._delay_exceptions = []
+        self._delay_pattern = "^$"
 
         self.reset_custom_variables = reset_custom_variables
         self.custom_params = {}
@@ -7620,8 +7604,9 @@ class Antipublic:
         if logins:
             data = {"emails": logins, "limit": limit}
             path = "/api/v2/emailPasswords"
-            return _send_request(self=self, method="POST", path=path, data=data)
-        else:
+        elif login:
             data = {"email": login}
             path = "/api/v2/emailSearch"
-            return _send_request(self=self, method="POST", path=path, data=data)
+        else:
+            raise KeyError("You need to specify login or logins param")
+        return _send_request(self=self, method="POST", path=path, data=data)

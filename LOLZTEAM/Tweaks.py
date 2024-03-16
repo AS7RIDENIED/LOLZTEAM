@@ -133,13 +133,14 @@ def CreateJob(func, job_name, **kwargs):
         if arg != "self":
             exec(f"{arg} = None", loc)
     user_id = None  # Костыль для Tweak 1
-    for arg, value in kwargs.items():
-        if arg not in arguments:
-            raise Exceptions.INVALID_ARG_IN_CREATE_JOB(
-                f'Function "{func.__name__}" don\'t have "{arg}" parameter'
-            )
-        else:
-            loc[arg] = value
+    if "kwargs" not in arguments:
+        for arg, value in kwargs.items():
+            if arg not in arguments:
+                raise Exceptions.INVALID_ARG(
+                    f'Function "{func.__name__}" don\'t have "{arg}" parameter'
+                )
+            else:
+                loc[arg] = value
     func_code = str(inspect.getsource(func)).replace(" -> Response", "")
     func_code = func_code.split("):\n", 1)[1]
     lines = func_code.split("\n")
@@ -188,13 +189,14 @@ async def SendAsAsync(func, **kwargs):
         if arg != "self":
             exec(f"{arg} = None", loc)
     user_id = None  # Костыль для Tweak 1
-    for arg, value in kwargs.items():
-        if arg not in arguments:
-            raise Exceptions.INVALID_ARG_IN_CREATE_JOB(
-                f'Function "{func.__name__}" don\'t have "{arg}" parameter'
-            )
-        else:
-            loc[arg] = value
+    if "kwargs" not in arguments:
+        for arg, value in kwargs.items():
+            if arg not in arguments:
+                raise Exceptions.INVALID_ARG(
+                    f'Function "{func.__name__}" don\'t have "{arg}" parameter'
+                )
+            else:
+                loc[arg] = value
     func_code = str(inspect.getsource(func)).replace(" -> Response", "")
     func_code = func_code.split("):\n", 1)[1]
     lines = func_code.split("\n")
@@ -218,7 +220,6 @@ async def SendAsAsync(func, **kwargs):
     ][0]
     params["locale"] = self._locale
     from .API import _send_async_request
-
     return await _send_async_request(
         self=self, method=method, path=path, params=params, data=data
     )
