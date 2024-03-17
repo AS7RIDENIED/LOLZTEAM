@@ -3504,7 +3504,7 @@ class Market:
             ]
         )
         self._delay_pattern = (
-            f"/(?:{_categories})(?:/|$)" + "|" + r"/(\d+)(?:/|$)(?:\w+|$)(?:/|$)"
+            f"/(?:{_categories})(?:/|$)" + "|" + r"/(\d+)(?:/.*|$)"
         )
 
         self.profile = self.__Profile(self)
