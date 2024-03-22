@@ -124,7 +124,7 @@ async def _send_async_request(
         url += f"?key={self.token}"
     method = method.upper()
     if re.search(self._delay_pattern, path):
-        _MainTweaks._auto_delay(self=self)
+        _MainTweaks._auto_delay_async(self=self)
     if params is None:
         params = {}
     params["locale"] = self._locale
