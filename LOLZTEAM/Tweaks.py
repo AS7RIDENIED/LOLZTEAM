@@ -124,7 +124,7 @@ class DelaySync:
         self.clear()
 
 
-def CreateJob(func, job_name, **kwargs):
+def CreateJob(func, job_name, **cur_kwargs):
     func = functools.partial(func)
     self = func.func.__self__
     if hasattr(self, "_api"):
@@ -136,13 +136,17 @@ def CreateJob(func, job_name, **kwargs):
     for arg in arguments:
         if arg != "self":
             exec(f"{arg} = None", loc)
+        if arg == "kwargs":
+            exec("kwargs = {}", loc)
     user_id = None  # Костыль для Tweak 1
-    if "kwargs" not in arguments:
-        for arg, value in kwargs.items():
+    for arg, value in cur_kwargs.items():
+        if "kwargs" not in arguments and arg not in arguments:
+            raise Exceptions.INVALID_ARG(
+                f'Function "{func.__name__}" don\'t have "{arg}" parameter'
+            )
+        else:
             if arg not in arguments:
-                raise Exceptions.INVALID_ARG(
-                    f'Function "{func.__name__}" don\'t have "{arg}" parameter'
-                )
+                loc["kwargs"][arg] = value
             else:
                 loc[arg] = value
     func_code = str(inspect.getsource(func)).replace(" -> Response", "")
@@ -171,7 +175,7 @@ def CreateJob(func, job_name, **kwargs):
     return job
 
 
-async def SendAsAsync(func, **kwargs):
+async def SendAsAsync(func, **cur_kwargs):
     """
     Send async request
 
@@ -192,13 +196,17 @@ async def SendAsAsync(func, **kwargs):
     for arg in arguments:
         if arg != "self":
             exec(f"{arg} = None", loc)
+        if arg == "kwargs":
+            exec("kwargs = {}", loc)
     user_id = None  # Костыль для Tweak 1
-    if "kwargs" not in arguments:
-        for arg, value in kwargs.items():
+    for arg, value in cur_kwargs.items():
+        if "kwargs" not in arguments and arg not in arguments:
+            raise Exceptions.INVALID_ARG(
+                f'Function "{func.__name__}" don\'t have "{arg}" parameter'
+            )
+        else:
             if arg not in arguments:
-                raise Exceptions.INVALID_ARG(
-                    f'Function "{func.__name__}" don\'t have "{arg}" parameter'
-                )
+                loc["kwargs"][arg] = value
             else:
                 loc[arg] = value
     func_code = str(inspect.getsource(func)).replace(" -> Response", "")

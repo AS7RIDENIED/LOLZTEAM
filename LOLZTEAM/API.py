@@ -137,6 +137,8 @@ async def _send_async_request(
     headers.update(self.custom_headers)
 
     for key, value in params.items():
+        if type(params[key]) is bool:
+            params[key] = str(value)
         if params[key] is None:
             ptd.append(key)
     for key in ptd:
