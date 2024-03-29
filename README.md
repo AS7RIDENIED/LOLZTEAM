@@ -1,7 +1,7 @@
 <div align="center">
 <a href="https://zelenka.guru/threads/5523020/"><img width="90%" src="https://i.imgur.com/xaQ92lu.png" alt="Material Bread logo"></a>
     
-[![Static Badge](https://img.shields.io/badge/DONATE-Lolzteam-darkgreen?logo=undertale&logoColor=red)](https://lzt.market/balance/transfer?user_id=2410024&comment=Thanks%20for%20creating%LOLZTEAM&amount=250)
+[![Static Badge](https://img.shields.io/badge/DONATE-Lolzteam-darkgreen?logo=undertale&logoColor=red)](https://lzt.market/balance/transfer?user_id=2410024&comment=Thanks%20for%20creating%20LOLZTEAM&amount=250)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LICENSE)
 
 </div>
