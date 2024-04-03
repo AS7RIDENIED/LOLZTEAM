@@ -2578,8 +2578,8 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.payments.generate_link(user_id=2410024, comment="LOLZTEAM example", currency=Constants.Market.Currency.rub, amount=250)
-print(response.json())
+payment_link = market.payments.generate_link(user_id=2410024, comment="LOLZTEAM example", currency=Constants.Market.Currency.rub, amount=250)
+print(payment_link)
 ```
 
 ```python
