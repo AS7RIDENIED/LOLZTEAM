@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.24"
+    "version": "1.1.25"
   },
   "servers": [
     {
@@ -244,7 +244,7 @@
             "schema": {
               "title": "Trade Ban",
               "description": "Has lifetime trade ban.",
-              "$ref": "#/components/schemas/YesNoNM"
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -257,7 +257,7 @@
             "schema": {
               "title": "Trade Limit",
               "description": "Has temporary trade limit.",
-              "$ref": "#/components/schemas/YesNoNM"
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -273,7 +273,7 @@
             "schema": {
               "title": "Limit",
               "description": "Has 5 $ limit.",
-              "$ref": "#/components/schemas/YesNoNM"
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -286,7 +286,7 @@
             "schema": {
               "title": "Mafile",
               "description": "Has .mafile (Steam Guard Authenticator).",
-              "$ref": "#/components/schemas/YesNoNM"
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -925,15 +925,112 @@
             }
           },
           {
+            "name": "gifts_purchase_min",
+            "in": "query",
+            "description": "Minimum amount spent on gifts.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "gifts_purchase_max",
+            "in": "query",
+            "description": "Maximum amount spent on gifts.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "refunds_purchase_min",
+            "in": "query",
+            "description": "Minimum amount of refunds.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "refunds_purchase_max",
+            "in": "query",
+            "description": "Minimum amount of refunds.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "ingame_purchase_min",
+            "in": "query",
+            "description": "Minimum spend amount on in-game purchases.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "ingame_purchase_max",
+            "in": "query",
+            "description": "Maximum spend amount on in-game purchases.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "games_purchase_min",
+            "in": "query",
+            "description": "Minimum spend amount on all purchases.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "games_purchase_max",
+            "in": "query",
+            "description": "Maximum spend amount on all purchases.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "purchase_min",
+            "in": "query",
+            "description": "Minimum spend amount on all purchases.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "purchase_max",
+            "in": "query",
+            "description": "Maximum spend amount on all purchases.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
             "name": "has_activated_keys",
             "in": "query",
             "description": "Has activated keys.",
             "required": false,
             "schema": {
-              "type": "integer",
-              "enum": [
-                1
-              ]
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -2956,7 +3053,7 @@
             "schema": {
               "title": "Mail",
               "description": "Has confirmed email.",
-              "$ref": "#/components/schemas/YesNoNM"
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
         ],
@@ -3688,10 +3785,7 @@
                   "Rookie",
                   "Bronze",
                   "Silver",
-                  "Gold",
-                  "Platinum",
-                  "Diamond",
-                  "Master"
+                  "Gold"
                 ]
               }
             }
@@ -3753,6 +3847,20 @@
             }
           },
           {
+            "name": "psn_connected",
+            "in": "query",
+            "description": "PSN connected to account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "PSN Connected",
+              "type": "string",
+              "description": "PSN connected to account.",
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
             "name": "subscription",
             "in": "query",
             "description": "Name of subscription.",
@@ -3774,9 +3882,6 @@
           },
           {
             "$ref": "#/components/parameters/subscription_period"
-          },
-          {
-            "$ref": "#/components/parameters/daybreak"
           }
         ],
         "responses": {
@@ -4213,6 +4318,32 @@
                 1
               ]
             }
+          },
+          {
+            "name": "rewards_balance_min",
+            "in": "query",
+            "description": "Minimum rewards balance.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "description": "Minimum rewards balance.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "rewards_balance_max",
+            "in": "query",
+            "description": "Maximum rewards balance.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "description": "Maximum rewards balance.",
+              "minimum": 0
+            }
           }
         ],
         "responses": {
@@ -4623,6 +4754,17 @@
               "description": "Maximum level in Tom Clancy's Rainbow Six Siege.",
               "minimum": 0
             }
+          },
+          {
+            "name": "r6_ban",
+            "in": "query",
+            "description": "Is account banned in Tom Clancy's Rainbow Six Siege",
+            "required": false,
+            "explode": true,
+            "style": "form",
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
           }
         ],
         "responses": {
@@ -4951,6 +5093,47 @@
             }
           },
           {
+            "name": "nitro_length",
+            "in": "query",
+            "description": "Length of nitro.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "description": "Length of nitro."
+            }
+          },
+          {
+            "name": "nitro_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "description": "In what notation is time measured.",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "available_boosts",
+            "in": "query",
+            "description": "Number of available boosts.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "description": "Number of available boosts."
+            }
+          },
+          {
             "name": "billing",
             "in": "query",
             "description": "Has billing.",
@@ -4977,16 +5160,30 @@
             }
           },
           {
-            "name": "quarantined",
+            "name": "badge[]",
             "in": "query",
-            "description": "Is quarantined.",
+            "description": "List of badges.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Quarantined",
-              "description": "Is quarantined.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+              "title": "Condition",
+              "type": "array",
+              "description": "List of badges.",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "staff",
+                  "partner",
+                  "hypesquad",
+                  "bug_hunter",
+                  "early_supporter",
+                  "bug_hunter_level_2",
+                  "verified_developer",
+                  "certificated_moderator"
+                ]
+              }
             }
           },
           {
@@ -12887,14 +13084,6 @@
             "default": 0
           }
         }
-      },
-      "YesNoNM": {
-        "type": "string",
-        "enum": [
-          "yes",
-          "no",
-          "nomatter"
-        ]
       }
     },
     "responses": {
@@ -13572,7 +13761,7 @@
         "schema": {
           "title": "Auction",
           "description": "Auction.",
-          "$ref": "#/components/schemas/YesNoNM"
+          "$ref": "#/components/schemas/YesNoNoMatterScheme"
         }
       },
       "item_domain": {
