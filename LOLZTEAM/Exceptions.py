@@ -1,4 +1,4 @@
-class AS7RID_FAIL(Exception):
+class AS7RID_FUCK_UP(Exception):
     pass
 
 
@@ -19,4 +19,8 @@ class UNEXPECTED_ARG(Exception):
 
 
 class URL_IS_DIFFERENT_FROM_BASE_MARKET(Exception):
+    pass
+
+
+class MISSING_SCOPE(Exception):
     pass

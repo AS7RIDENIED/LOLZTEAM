@@ -1,6 +1,7 @@
-import requests
+import logging
 import asyncio
-import aiohttp
+import base64
+import httpx
 import time
 import json
 import re
@@ -10,29 +11,13 @@ from typing import Union
 from . import Exceptions
 from .Tweaks import _MainTweaks
 
-from requests import Response
+logging.basicConfig(format="\033[93mWARNING:%(message)s\033[0m", level=logging.WARNING)
 
 
-def __RetryWrapper(func):
-    def _wrapper(*args, **kwargs):
-        tries = 0
-        while tries < 15:
-            tries += 1
-            try:
-                return func(*args, **kwargs)
-            except requests.ConnectionError as e:
-                if tries == 15:
-                    raise e
-                time.sleep(0.5)
-                return func(*args, **kwargs)
-
-    return _wrapper
-
-
-@__RetryWrapper
+@_MainTweaks._RetryWrapper
 def _send_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
-) -> Response:
+) -> httpx.Response:
     if self._delay_synchronizer:
         self._lock.acquire()
     url = self.base_url + path
@@ -44,14 +29,13 @@ def _send_request(
     if params is None:
         params = {}
     params["locale"] = self._locale
-    ptd = []
-
     params.update(self.custom_params)
     if type(data) is dict:
         data.update(self.custom_body)
     headers = self._main_headers.copy()
     headers.update(self.custom_headers)
 
+    ptd = []
     for key in params.keys():
         if params[key] is None:
             ptd.append(key)
@@ -83,7 +67,7 @@ def _send_request(
                 "Proxy type has invalid value. It can be only https, http, socks4 or socks5"
             )
     if method in request_methods:
-        response = requests.request(
+        response = httpx.request(
             method=method,
             url=url,
             params=params,
@@ -108,15 +92,15 @@ def _send_request(
             self._lock.release()
         else:
             self._auto_delay_time = time.time()
-        return response
+        return response 
     else:
-        raise Exceptions.AS7RID_FAIL("Invalid request method. Contact @AS7RID")
+        raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
 
 
-@__RetryWrapper
+@_MainTweaks._RetryWrapper
 async def _send_async_request(
     self, method: str, path: dict, params: dict = None, data=None
-) -> Response:
+) -> httpx.Response:
     if self._delay_synchronizer:
         self._lock.acquire()
     url = self.base_url + path
@@ -166,40 +150,29 @@ async def _send_async_request(
             )
 
     if method in request_methods:
-        async with aiohttp.ClientSession() as session:
-            async with session.request(
+        async with httpx.AsyncClient(proxies=proxy) as client:
+            response = await client.request(
                 method=method,
                 url=url,
                 params=params,
                 data=data,
                 headers=self._main_headers,
-                proxy=proxy,
-            ) as response:
-                # Иначе если делать не async with request as response и если запрос будет большим, то он не вернется. (бесконечно ждать будет)
-                # Я хуй знает почему, проблема aiohttp
-                if self.debug:
-                    print(response.request_info.method)
-                    print(response.json())
-                    print(response.request_info.headers)
-                    print(response.request_info.url)
-                    print(response._body)
-                    print(response.text)
-                if self._delay_synchronizer:
-                    self._delay_synchronizer._synchronize(time.time())
-                    self._lock.release()
-                else:
-                    self._auto_delay_time = time.time()
-                pussy_response = response
-                response = Response()
-
-                response._content = bytes(await pussy_response.text(), encoding="UTF-8")
-                response.url = str(pussy_response.url)
-                response.status_code = pussy_response.status
-                headers = {row[0]: row[1] for row in pussy_response.headers.items()}
-                response.headers = headers
-                return response
+            )
+            if self.debug:
+                print(response.request_info.method)
+                print(response.json())
+                print(response.request_info.headers)
+                print(response.request_info.url)
+                print(response._body)
+                print(response.text)
+            if self._delay_synchronizer:
+                self._delay_synchronizer._synchronize(time.time())
+                self._lock.release()
+            else:
+                self._auto_delay_time = time.time()
+            return response
     else:
-        raise Exceptions.AS7RID_FAIL("Invalid request method. Contact @AS7RID")
+        raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
 
 
 class Forum:
@@ -220,6 +193,7 @@ class Forum:
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://api.zelenka.guru"
+        self.debug = False
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
@@ -233,8 +207,12 @@ class Forum:
             self._proxy = None
             self._proxy_type = None
 
-        self.token = token
-        self._main_headers = {"Authorization": f"bearer {self.token}"}
+        self._token = token
+        self._scopes = None
+        _MainTweaks.setup_jwt(
+            self=self, token=token, user_id=locals().get("user_id", None)
+        )
+        self._main_headers = {"Authorization": f"bearer {self._token}"}
 
         self.bypass_429 = bypass_429
         self._auto_delay_time = time.time() - 3
@@ -261,7 +239,18 @@ class Forum:
         self.search = self.__Search(self)
         self.oauth = self.__Oauth(self)
 
-        self.debug = False
+    @property
+    def scopes(self):
+        return self._scopes
+
+    @property
+    def token(self):
+        return self._token
+
+    @token.setter
+    def token(self, value):
+        self._token = value
+        _MainTweaks.setup_jwt(self=self, token=value)
 
     def change_proxy(self, proxy_type: str = None, proxy: str = None):
         """
@@ -295,12 +284,13 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def get_categories(
             self,
             parent_category_id: int = None,
             parent_forum_id: int = None,
             order: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/categories
 
@@ -311,7 +301,7 @@ class Forum:
             :param parent_category_id: ID of parent category.
             :param parent_forum_id: ID of parent forum.
             :param order: Ordering of categories. Can be [natural, list]
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/categories"
             params = {
@@ -321,7 +311,8 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get_category(self, category_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get_category(self, category_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/categories/{category_id}
 
@@ -330,7 +321,7 @@ class Forum:
             Required scopes: read
 
             :param category_id: ID of category we want to get
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/categories/{category_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -339,12 +330,13 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def get_forums(
             self,
             parent_category_id: int = None,
             parent_forum_id: int = None,
             order: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums
 
@@ -355,7 +347,7 @@ class Forum:
             :param parent_category_id: ID of parent category.
             :param parent_forum_id: ID of parent forum.
             :param order: Ordering of categories. Can be [natural, list]
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/forums"
             params = {
@@ -365,7 +357,8 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get_forum(self, forum_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get_forum(self, forum_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums/{forum_id}
 
@@ -374,12 +367,13 @@ class Forum:
             Required scopes: read
 
             :param forum_id: ID of forum we want to get
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/forums/{forum_id}"
 
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def follow(
             self,
             forum_id: int,
@@ -388,7 +382,7 @@ class Forum:
             post: bool = None,
             alert: bool = None,
             email: bool = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/forums/forum_id/followers
             Follow a forum.
@@ -402,7 +396,7 @@ class Forum:
             :param alert: Whether to receive notification as alert.
             :param email: Whether to receive notification as email.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/forums/{forum_id}/followers"
             if True:  # Tweak 0
@@ -423,7 +417,8 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def unfollow(self, forum_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def unfollow(self, forum_id: int) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/forums/forum_id/followers
             Unfollow a forum.
@@ -432,12 +427,13 @@ class Forum:
 
             :param forum_id: ID of forum we want to get
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def followers(self, forum_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def followers(self, forum_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums/forum_id/followers
 
@@ -446,12 +442,13 @@ class Forum:
             Required scopes: read
 
             :param forum_id: ID of forum we want to get
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def followed(self, total: bool = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def followed(self, total: bool = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums/followed
 
@@ -461,7 +458,7 @@ class Forum:
 
             :param total: If included in the request, only the forum count is returned as forums_total.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/forums/followed"
             if True:  # Tweak 0
@@ -473,10 +470,13 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Pages:
-        def __init__(self, _api_self) -> Response:
+        def __init__(self, _api_self) -> httpx.Response:
             self._api = _api_self
 
-        def get_pages(self, parent_page_id: int = None, order: str = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get_pages(
+            self, parent_page_id: int = None, order: str = None
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/pages
 
@@ -487,13 +487,14 @@ class Forum:
             :param parent_page_id: ID of parent page. If exists, filter pages that are direct children of that page.
             :param order: Ordering of pages. Can be [natural, list]
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/pages"
             params = {"parent_page_id": parent_page_id, "order": order}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get_page(self, page_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get_page(self, page_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/pages/page_id
 
@@ -503,7 +504,7 @@ class Forum:
 
             :param page_id: ID of parent page. If exists, filter pages that are direct children of that page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/pages/{page_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -513,7 +514,8 @@ class Forum:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def get(self, post_id: int, before: int = None) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["read"])
+            def get(self, post_id: int, before: int = None) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/posts/post_id/comments
 
@@ -524,7 +526,7 @@ class Forum:
                 :param post_id: ID of post.
                 :param before: The time in milliseconds (e.g. 1652177794083) before last comment date
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/posts/{post_id}/comments"
                 params = {"before": before}
@@ -535,7 +537,8 @@ class Forum:
                     params=params,
                 )
 
-            def create(self, post_id: int, comment_body: str = None) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["post"])
+            def create(self, post_id: int, comment_body: str = None) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/posts/post_id/comments
 
@@ -546,7 +549,7 @@ class Forum:
                 :param post_id: ID of post.
                 :param comment_body: Content of the new post
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/posts/{post_id}/comments"
                 data = {"comment_body": comment_body}
@@ -558,6 +561,7 @@ class Forum:
             self._api = _api_self
             self.comments = self.__Posts_comments(self._api)
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def get_posts(
             self,
             thread_id: int = None,
@@ -566,7 +570,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             order: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/posts
 
@@ -580,7 +584,7 @@ class Forum:
             :param page: Page number of posts.
             :param limit: Number of posts in a page. Default value depends on the system configuration.
             :param order: Ordering of posts. Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/posts"
             if type(post_ids) is list:
@@ -595,7 +599,8 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, post_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get(self, post_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/posts/post_id
 
@@ -605,14 +610,15 @@ class Forum:
 
             :param post_id: ID of post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/posts/{post_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def create(
             self, post_body: str, thread_id: int = None, quote_post_id: int = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/posts
 
@@ -624,7 +630,7 @@ class Forum:
             :param thread_id: ID of the target thread.
             :param quote_post_id: ID of the quote post. It's possible to skip thread_id if this parameter is provided. An extra check is performed if both parameters exist and does not match.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = "/posts"
@@ -641,9 +647,10 @@ class Forum:
                 data=data,
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def edit(
             self, post_id: int, post_body: str = None, message_state: str = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/posts/post_id
 
@@ -655,7 +662,7 @@ class Forum:
             :param message_state: Message state. Can be [visible,deleted,moderated]
             :param post_body: New content of the post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/posts/{post_id}"
             params = {"message_state": message_state}
@@ -668,7 +675,8 @@ class Forum:
                 data=data,
             )
 
-        def delete(self, post_id: int, reason: str = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def delete(self, post_id: int, reason: str = None) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/posts/post_id
 
@@ -679,13 +687,16 @@ class Forum:
             :param post_id: ID of post.
             :param reason: Reason of the post removal.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/posts/{post_id}"
             data = {"reason": reason}
             return _send_request(self=self._api, method="DELETE", path=path, data=data)
 
-        def likes(self, post_id: int, page: int = None, limit: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def likes(
+            self, post_id: int, page: int = None, limit: int = None
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/posts/post_id/likes
 
@@ -697,13 +708,14 @@ class Forum:
             :param page: Page number of users.
             :param limit: Number of users in a page. Default value depends on the system configuration.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/posts/{post_id}/likes"
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def like(self, post_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def like(self, post_id: int) -> httpx.Response:
             """
             POST https://api.zelenka.guru/posts/post_id/likes
 
@@ -713,12 +725,13 @@ class Forum:
 
             :param post_id: ID of post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unlike(self, post_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def unlike(self, post_id: int) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/posts/post_id/likes
 
@@ -728,12 +741,13 @@ class Forum:
 
             :param post_id: ID of post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def report(self, post_id: int, message: str) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def report(self, post_id: int, message: str) -> httpx.Response:
             """
             POST https://api.zelenka.guru/posts/post_id/report
 
@@ -744,7 +758,7 @@ class Forum:
             :param post_id: ID of post.
             :param message: Reason of the report.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/posts/{post_id}/report"
             data = {"message": message}
@@ -766,6 +780,7 @@ class Forum:
                 def __init__(self, _api_self):
                     self._api = _api_self
 
+                @_MainTweaks._CheckScopes(scopes=["post"])
                 def create_by_time(
                     self,
                     post_body: str,
@@ -784,7 +799,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ) -> Response:
+                ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -809,7 +824,7 @@ class Forum:
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
 
-                    :return: Response object (Even if you use SendAsAsync function)
+                    :return: httpx Response object
                     """
                     contest_type = "by_finish_date"
                     prize_type = "money"
@@ -855,7 +870,7 @@ class Forum:
                         "forum_id": forum_id,
                         "post_body": post_body,
                     }
-                    if "batch_mode" in locals() or "im_async" in locals():
+                    if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
                         base_api = self
                     else:
                         base_api = self._api
@@ -865,6 +880,7 @@ class Forum:
                         **data,
                     )
 
+                @_MainTweaks._CheckScopes(scopes=["post"])
                 def create_by_count(
                     self,
                     post_body: str,
@@ -882,7 +898,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ) -> Response:
+                ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -906,7 +922,7 @@ class Forum:
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
 
-                    :return: Response object (Even if you use SendAsAsync function)
+                    :return: httpx Response object
                     """
                     contest_type = "by_needed_members"
                     prize_type = "money"
@@ -951,7 +967,7 @@ class Forum:
                         "forum_id": forum_id,
                         "post_body": post_body,
                     }
-                    if "batch_mode" in locals() or "im_async" in locals():
+                    if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
                         base_api = self
                     else:
                         base_api = self._api
@@ -965,6 +981,7 @@ class Forum:
                 def __init__(self, _api_self):
                     self._api = _api_self
 
+                @_MainTweaks._CheckScopes(scopes=["post"])
                 def create_by_time(
                     self,
                     post_body: str,
@@ -983,7 +1000,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ) -> Response:
+                ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -1022,7 +1039,7 @@ class Forum:
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
 
-                    :return: Response object (Even if you use SendAsAsync function)
+                    :return: httpx Response object
                     """
                     contest_type = "by_finish_date"
                     prize_type = "upgrades"
@@ -1070,7 +1087,7 @@ class Forum:
                         "forum_id": forum_id,
                         "post_body": post_body,
                     }
-                    if "batch_mode" in locals() or "im_async" in locals():
+                    if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
                         base_api = self
                     else:
                         base_api = self._api
@@ -1080,6 +1097,7 @@ class Forum:
                         **data,
                     )
 
+                @_MainTweaks._CheckScopes(scopes=["post"])
                 def create_by_count(
                     self,
                     post_body: str,
@@ -1097,7 +1115,7 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
-                ) -> Response:
+                ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
 
@@ -1135,7 +1153,7 @@ class Forum:
                     :param require_total_like_count: Symapthies for all time.
                     :param secret_answer:Secret answer of your account.
 
-                    :return: Response object (Even if you use SendAsAsync function)
+                    :return: httpx Response object
                     """
                     path = "/threads"
                     contest_type = "by_needed_members"
@@ -1185,7 +1203,7 @@ class Forum:
                         "forum_id": forum_id,
                         "post_body": post_body,
                     }
-                    if "batch_mode" in locals() or "im_async" in locals():
+                    if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
                         base_api = self
                     else:
                         base_api = self._api
@@ -1199,6 +1217,7 @@ class Forum:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["post"])
             def market(
                 self,
                 responder: str,
@@ -1213,7 +1232,7 @@ class Forum:
                 comment_ignore_group: bool = None,
                 dont_alert_followers: bool = None,
                 reply_group: int = 2,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/claims
 
@@ -1234,11 +1253,11 @@ class Forum:
                 :param dont_alert_followers: Don't alert followers
                 :param reply_group: Allow to reply only users with chosen or higher group.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/claims"
                 if type(item_id) is int:
-                    if "batch_mode" in locals() or "im_async" in locals():
+                    if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
                         base_api = self
                     else:
                         base_api = self._api
@@ -1282,6 +1301,7 @@ class Forum:
                     self=self._api, method="POST", path=path, data=data
                 )
 
+            @_MainTweaks._CheckScopes(scopes=["post"])
             def non_market(
                 self,
                 responder: str,
@@ -1299,7 +1319,7 @@ class Forum:
                 comment_ignore_group: bool = None,
                 dont_alert_followers: bool = None,
                 reply_group: int = 2,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/claims
 
@@ -1323,7 +1343,7 @@ class Forum:
                 :param dont_alert_followers: Don't alert followers
                 :param reply_group: Allow to reply only users with chosen or higher group.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/claims"
                 if True:  # Tweak 0
@@ -1368,6 +1388,7 @@ class Forum:
                     self=self._api, method="POST", path=path, data=data
                 )
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def get_threads(
             self,
             forum_id: int = None,
@@ -1379,7 +1400,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             order: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads
 
@@ -1396,7 +1417,7 @@ class Forum:
             :param page: Page number of threads.
             :param limit: Number of threads in a page.
             :param order: Can be [natural, thread_create_date, thread_create_date_reverse, thread_update_date, thread_update_date_reverse, thread_view_count, thread_view_count_reverse, thread_post_count, thread_post_count_reverse]
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/threads"
             if sticky is True:  # Tweak 0
@@ -1416,7 +1437,8 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, thread_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get(self, thread_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/thread_id
 
@@ -1426,11 +1448,12 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def create(
             self,
             forum_id: int,
@@ -1445,7 +1468,7 @@ class Forum:
             comment_ignore_group: bool = None,
             dont_alert_followers: bool = None,
             **kwargs,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads
 
@@ -1481,7 +1504,7 @@ class Forum:
             :param comment_ignore_group: Allow commenting if user can't post in thread.
             :param dont_alert_followers: Don't alert followers
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/threads"
             if True:  # Tweak 0
@@ -1530,6 +1553,7 @@ class Forum:
                 params=params,
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def edit(
             self,
             thread_id: int,
@@ -1542,7 +1566,7 @@ class Forum:
             allow_ask_hidden_content: bool = None,
             reply_group: int = None,
             comment_ignore_group: bool = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/threads/thread_id
 
@@ -1577,7 +1601,7 @@ class Forum:
             :param reply_group: Allow to reply only users with chosen or higher group.
             :param comment_ignore_group: Allow commenting if user can't post in thread.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}"
             if True:  # Tweak 0
@@ -1612,6 +1636,7 @@ class Forum:
             }
             return _send_request(self=self._api, method="PUT", path=path, data=data)
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def move(
             self,
             thread_id: int,
@@ -1622,7 +1647,7 @@ class Forum:
             send_alert: bool = None,
             send_starter_alert: bool = None,
             starter_alert_reason: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/move
 
@@ -1639,7 +1664,7 @@ class Forum:
             :param send_starter_alert: Send alert to thread starter.
             :param starter_alert_reason: Reason of moving thread which will sent to thread starter. (Required if **send_starter_alert** is set)
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/move"
             if True:  # Tweak 0
@@ -1667,7 +1692,8 @@ class Forum:
             }
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
-        def delete(self, thread_id: int, reason: str = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def delete(self, thread_id: int, reason: str = None) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/threads/thread_id
 
@@ -1678,7 +1704,7 @@ class Forum:
             :param thread_id: ID of thread.
             :param reason: Reason of the thread removal.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}"
             params = {"reason": reason}
@@ -1686,7 +1712,8 @@ class Forum:
                 self=self._api, method="DELETE", path=path, params=params
             )
 
-        def followers(self, thread_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def followers(self, thread_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/thread_id/followers
 
@@ -1696,12 +1723,13 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def followed(self, total: bool = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def followed(self, total: bool = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/followed
 
@@ -1711,7 +1739,7 @@ class Forum:
 
             :param total: If included in the request, only the thread count is returned as threads_total.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/threads/followed"
             if True:  # Tweak 0
@@ -1722,7 +1750,8 @@ class Forum:
             params = {"total": total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def follow(self, thread_id: int, email: bool = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def follow(self, thread_id: int, email: bool = None) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/followers
 
@@ -1733,7 +1762,7 @@ class Forum:
             :param thread_id: ID of thread.
             :param email: Whether to receive notification as email.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/followers"
             if True:  # Tweak 0
@@ -1744,7 +1773,8 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def unfollow(self, thread_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def unfollow(self, thread_id: int) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/threads/thread_id/followers
 
@@ -1754,12 +1784,13 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def navigation(self, thread_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def navigation(self, thread_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/thread_id/navigation
 
@@ -1769,12 +1800,13 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/navigation"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def votes(self, thread_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def votes(self, thread_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/thread_id/poll
 
@@ -1784,17 +1816,18 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/poll"
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def vote(
             self,
             thread_id: int,
             response_id: int = None,
             response_ids: list[int] = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/pool/votes
 
@@ -1806,7 +1839,7 @@ class Forum:
             :param response_id: The id of the response to vote for. Can be skipped if response_ids set.
             :param response_ids: An array of ids of responses (if the poll allows multiple choices).
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/pool/votes"
             if type(response_ids) is list:
@@ -1829,9 +1862,10 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def new(
             self, forum_id: int = None, limit: int = None, data_limit: int = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/new
 
@@ -1842,7 +1876,7 @@ class Forum:
             :param forum_id: ID of the container forum to search for threads. Child forums of the specified forum will be included in the search.
             :param limit: Maximum number of result threads. The limit may get decreased if the value is too large (depending on the system configuration).
             :param data_limit: Number of thread data to be returned. Default value is 20.
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/threads/new"
             params = {
@@ -1852,13 +1886,14 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def recent(
             self,
             days: int = None,
             forum_id: int = None,
             limit: int = None,
             data_limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/recent
 
@@ -1870,7 +1905,7 @@ class Forum:
             :param forum_id: ID of the container forum to search for threads. Child forums of the specified forum will be included in the search.
             :param limit: Maximum number of result threads. The limit may get decreased if the value is too large (depending on the system configuration).
             :param data_limit: Number of thread data to be returned. Default value is 20.
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/threads/recent"
             params = {
@@ -1881,7 +1916,8 @@ class Forum:
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def bump(self, thread_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def bump(self, thread_id: int) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/bump
 
@@ -1891,7 +1927,7 @@ class Forum:
 
             :param thread_id: ID of thread.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/threads/{thread_id}/bump"
             return _send_request(self=self._api, method="POST", path=path)
@@ -1900,38 +1936,43 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def popular(self) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def popular(self) -> httpx.Response:
             """
             GET https://api.zelenka.guru/tags
 
             List of popular tags (no pagination).
 
-            Required scopes: get
+            Required scopes: read
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/tags"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def tags(self, page: int = None, limit: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def tags(self, page: int = None, limit: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/tags/list
 
             List of tags.
 
-            Required scopes: post
+            Required scopes: read
 
 
             :param page: Page number of tags list.
             :param limit: Limit of tags on a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/tags/list"
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def tagged(self, tag_id: int, page: int = None, limit: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def tagged(
+            self, tag_id: int, page: int = None, limit: int = None
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/tags/tag_id
 
@@ -1943,13 +1984,14 @@ class Forum:
             :param page: Page number of tags list.
             :param limit: Number of tagged contents in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/tags/{tag_id}"
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def find(self, tag: str) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def find(self, tag: str) -> httpx.Response:
             """
             GET https://api.zelenka.guru/tags/find
 
@@ -1959,7 +2001,7 @@ class Forum:
 
             :param tag: tag to filter. Tags start with the query will be returned.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/tags/find"
             params = {"tag": tag}
@@ -1970,7 +2012,8 @@ class Forum:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def upload(self, avatar: bytes, user_id: int = None) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["post?admincp"])
+            def upload(self, avatar: bytes, user_id: int = None) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/user_id/avatar
 
@@ -1981,15 +2024,11 @@ class Forum:
                 :param user_id: ID of user. If you do not specify the user_id, then you will change the avatar of the current user
                 :param avatar: Binary data of the avatar.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
-                if "batch_mode" in locals():
-                    from warnings import warn
-
-                    warn(
-                        message="You can't upload avatar using batch",
-                        category=FutureWarning,
-                        stacklevel=1,
+                if "CREATE_JOB" in locals():
+                    logging.warn(
+                        message=f"{FutureWarning.__name__}:You can't upload avatar using batch"
                     )
                 if user_id is None:
                     path = "/users/me/avatar"
@@ -2000,7 +2039,8 @@ class Forum:
                     self=self._api, method="POST", path=path, files=files
                 )
 
-            def delete(self, user_id: int = None) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["post?admincp"])
+            def delete(self, user_id: int = None) -> httpx.Response:
                 """
                 DELETE https://api.zelenka.guru/users/user_id/avatar
 
@@ -2010,7 +2050,7 @@ class Forum:
 
                 :param user_id: ID of user. If you do not specify the user_id, then you will delete the avatar of the current user
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 if user_id is None:
                     path = "/users/me/avatar"
@@ -2018,9 +2058,10 @@ class Forum:
                     path = f"/users/{user_id}/avatar"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
+            @_MainTweaks._CheckScopes(scopes=["post?admincp"])
             def crop(
                 self, user_id: int, size: int, x: int = None, y: int = None
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/user_id/avatar-crop
 
@@ -2033,7 +2074,7 @@ class Forum:
                 :param y: The starting point of the selection by height
                 :param size: Selection size. Minimum value - 16.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 params = {"x": x, "y": y, "crop": size}
                 if (
@@ -2055,7 +2096,7 @@ class Forum:
 
         def lost_password(
             self, oauth_token: str, username: str = None, email: str = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/lost-password
 
@@ -2067,7 +2108,7 @@ class Forum:
             :param username: Username
             :param email: Email
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/lost-password"
             params = {
@@ -2079,7 +2120,8 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def users(self, page: int = None, limit: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def users(self, page: int = None, limit: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users
 
@@ -2089,13 +2131,14 @@ class Forum:
 
             :param page: Page number of users.
             :param limit: Number of users in a page.
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/users"
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def fields(self) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def fields(self) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/fields
 
@@ -2103,18 +2146,19 @@ class Forum:
 
             Required scopes: read
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = "/users/fields"
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["read?admincp"])
         def search(
             self,
             username: str = None,
             user_email: str = None,
             custom_fields: dict = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/find
 
@@ -2126,7 +2170,7 @@ class Forum:
             :param user_email: Email to filter. Requires admincp scope.
             :param custom_fields: Custom fields to filter. Example: {"telegram": "Telegram_Login"}
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/users/find"
             params = {
@@ -2134,7 +2178,7 @@ class Forum:
                 "user_email": user_email,
             }
             if custom_fields is not None:
-                if "batch_mode" in locals():
+                if "CREATE_JOB" in locals():
                     params["custom_fields"] = custom_fields  # Костыль CreateJob
                 else:
                     for key, value in custom_fields.items():
@@ -2142,16 +2186,17 @@ class Forum:
                         params[cf] = value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, user_id: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read?basic"])
+        def get(self, user_id: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/user_id
 
             Detail information of a user.
 
-            Required scopes: read
+            Required scopes: read, basic
 
             :param user_id: ID of user. If you do not specify the user_id, you will get info about current user
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if user_id is None:
                 path = "/users/me"
@@ -2159,9 +2204,10 @@ class Forum:
                 path = f"/users/{user_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def get_timeline(
             self, user_id: int = None, page: int = None, limit: int = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/user_id/timeline
 
@@ -2173,7 +2219,7 @@ class Forum:
             :param page: Page number of contents.
             :param limit: Number of contents in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if user_id is None:
                 path = "/users/me/timeline"
@@ -2182,6 +2228,7 @@ class Forum:
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["post?admincp"])
         def edit(
             self,
             user_id: int = None,
@@ -2198,7 +2245,7 @@ class Forum:
             user_dob_year: int = None,
             fields: dict = None,
             display_group_id: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/users/user_id
 
@@ -2208,7 +2255,7 @@ class Forum:
             For sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the client_secret will be used as the key. List of supported encryptions:
             aes128: AES 128-bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.
 
-            Required scopes: read / admincp
+            Required scopes: post / admincp
 
             :param user_id: ID of user. If you do not specify the user_id, you will edit current user
             :param password: New password.
@@ -2225,7 +2272,7 @@ class Forum:
             :param fields: Array of values for user fields.
             :param display_group_id: Id of group you want to display.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if user_id is None:
                 path = "/users/me"
@@ -2248,7 +2295,7 @@ class Forum:
                 "password_algo": password_algo,
             }
             if fields is not None:
-                if "batch_mode" in locals():
+                if "CREATE_JOB" in locals():
                     data["fields"] = fields  # Костыль CreateJob
                 else:
                     for key, value in fields.items():
@@ -2262,7 +2309,8 @@ class Forum:
                 data=data,
             )
 
-        def follow(self, user_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def follow(self, user_id: int) -> httpx.Response:
             """
             POST https://api.zelenka.guru/users/user_id/followers
 
@@ -2272,12 +2320,13 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/users/{user_id}/followers"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unfollow(self, user_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def unfollow(self, user_id: int) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/users/user_id/followers
 
@@ -2287,18 +2336,19 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/users/{user_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def followers(
             self,
             user_id: int = None,
             order: str = None,
             page: int = None,
             limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/user_id/followers
 
@@ -2312,7 +2362,7 @@ class Forum:
             :param page: Page number of followers.
             :param limit: Number of followers in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if user_id is None:
                 path = "/users/me/followers"
@@ -2321,13 +2371,14 @@ class Forum:
             params = {"order": order, "page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def followings(
             self,
             user_id: int = None,
             order: str = None,
             page: int = None,
             limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/user_id/followings
 
@@ -2340,7 +2391,7 @@ class Forum:
             :param page: Page number of users.
             :param limit: Number of users in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if user_id is None:
                 path = "/users/me/followings"
@@ -2349,7 +2400,8 @@ class Forum:
             params = {"order": order, "page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def ignored(self, total: bool = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def ignored(self, total: bool = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/ignored
 
@@ -2359,7 +2411,7 @@ class Forum:
 
             :param total: If included in the request, only the user count is returned as users_total.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/users/ignored"
             if True:  # Tweak 0
@@ -2370,7 +2422,8 @@ class Forum:
             params = {"total": total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def ignore(self, user_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def ignore(self, user_id: int) -> httpx.Response:
             """
             POST https://api.zelenka.guru/users/user_id/ignore
 
@@ -2380,13 +2433,14 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = f"/users/{user_id}/ignore"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unignore(self, user_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def unignore(self, user_id: int) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/users/user_id/ignore
 
@@ -2396,13 +2450,14 @@ class Forum:
 
             :param user_id: ID of user
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = f"/users/{user_id}/ignore"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def groups(self, user_id: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def groups(self, user_id: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/user_id/groups
 
@@ -2412,7 +2467,7 @@ class Forum:
 
             :param user_id: ID of user. If user_id skipped, method will return current user groups
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if user_id is None:
                 path = "/users/me/groups"
@@ -2425,9 +2480,10 @@ class Forum:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["read"])
             def comments(
                 self, profile_post_id: int, before: int = None, limit: int = None
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/profile-posts/profile_post_id/comments
 
@@ -2439,7 +2495,7 @@ class Forum:
                 :param before: Date to get older comments. Please note that this entry point does not support the page parameter, but it still does support limit.
                 :param limit: Number of profile posts in a page.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/profile-posts/{profile_post_id}/comments"
                 params = {"before": before, "limit": limit}
@@ -2450,7 +2506,8 @@ class Forum:
                     params=params,
                 )
 
-            def get(self, profile_post_id: int, comment_id: int) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["read"])
+            def get(self, profile_post_id: int, comment_id: int) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/profile-posts/profile_post_id/comments/comment_id
 
@@ -2461,12 +2518,13 @@ class Forum:
                 :param profile_post_id: ID of profile post.
                 :param comment_id: ID of profile post comment
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/profile-posts/{profile_post_id}/comments/{comment_id}"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def create(self, profile_post_id: int, comment_body: str) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["post"])
+            def create(self, profile_post_id: int, comment_body: str) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/profile-posts/profile_post_id/comments
 
@@ -2477,7 +2535,7 @@ class Forum:
                 :param profile_post_id: ID of profile post.
                 :param comment_body: Content of the new profile post comment.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/profile-posts/{profile_post_id}/comments"
                 data = {
@@ -2491,9 +2549,10 @@ class Forum:
             self._api = _api_self
             self.comments = self.__Profile_posts_comments(self._api)
 
+        @_MainTweaks._CheckScopes(scopes=["read"])
         def get_posts(
             self, user_id: int, page: int = None, limit: int = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/user_id/profile-posts
 
@@ -2505,13 +2564,14 @@ class Forum:
             :param page: Page number of contents.
             :param limit: Number of contents in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             params = {"page": page, "limit": limit}
             path = f"/users/{user_id}/profile-posts"
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, profile_post_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get(self, profile_post_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/profile-posts/profile_post_id
 
@@ -2521,12 +2581,13 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/profile-posts/{profile_post_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def create(self, post_body: str, user_id: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def create(self, post_body: str, user_id: int = None) -> httpx.Response:
             """
             POST https://api.zelenka.guru/users/user_id/timeline
 
@@ -2537,7 +2598,7 @@ class Forum:
             :param user_id: ID of user. If you do not specify the user_id, you will create profile post in current user's timeline
             :param post_body: Content of the new profile post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if user_id is None:
                 path = "/users/me/timeline"
@@ -2546,7 +2607,8 @@ class Forum:
             data = {"post_body": post_body}
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
-        def edit(self, profile_post_id: int, post_body: str) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def edit(self, profile_post_id: int, post_body: str) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/profile-posts/profile_post_id
 
@@ -2557,14 +2619,15 @@ class Forum:
             :param profile_post_id: ID of profile post.
             :param post_body: New content of the profile post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = f"/profile-posts/{profile_post_id}"
             data = {"post_body": post_body}
             return _send_request(self=self._api, method="PUT", path=path, data=data)
 
-        def delete(self, profile_post_id: int, reason: str = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def delete(self, profile_post_id: int, reason: str = None) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/profile-posts/profile_post_id
 
@@ -2576,13 +2639,14 @@ class Forum:
             :param reason: Reason of the profile post removal.
 
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/profile-posts/{profile_post_id}"
             data = {"reason": reason}
             return _send_request(self=self._api, method="DELETE", path=path, data=data)
 
-        def likes(self, profile_post_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def likes(self, profile_post_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/profile-posts/profile_post_id/likes
 
@@ -2592,13 +2656,14 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = f"/profile-posts/{profile_post_id}/likes"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def like(self, profile_post_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def like(self, profile_post_id: int) -> httpx.Response:
             """
             POST https://api.zelenka.guru/profile-posts/profile_post_id/likes
 
@@ -2608,14 +2673,15 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = f"/profile-posts/{profile_post_id}/likes"
 
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unlike(self, profile_post_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def unlike(self, profile_post_id: int) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/profile-posts/profile_post_id/likes
 
@@ -2625,12 +2691,13 @@ class Forum:
 
             :param profile_post_id: ID of profile post.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/profile-posts/{profile_post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def report(self, profile_post_id: int, message: str) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def report(self, profile_post_id: int, message: str) -> httpx.Response:
             """
             POST https://api.zelenka.guru/profile-posts/profile_post_id/report
 
@@ -2641,7 +2708,7 @@ class Forum:
             :param profile_post_id: ID of profile post.
             :param message: Reason of the report.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/profile-posts/{profile_post_id}/report"
             data = {"message": message}
@@ -2651,6 +2718,7 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def all(
             self,
             q: str = None,
@@ -2659,13 +2727,14 @@ class Forum:
             user_id: int = None,
             page: int = None,
             limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search
 
             Search for threads.
 
             Required scopes: post
+
             :param q: Search query. Can be skipped if user_id is set.
             :param tag: Tag to search for tagged contents.
             :param forum_id: ID of the container forum to search for contents. Child forums of the specified forum will be included in the search.
@@ -2673,7 +2742,7 @@ class Forum:
             :param page: Page number of results.
             :param limit: Number of results in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/search"
             params = {
@@ -2688,6 +2757,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def thread(
             self,
             q: str = None,
@@ -2697,7 +2767,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             data_limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/threads
 
@@ -2712,7 +2782,7 @@ class Forum:
             :param limit: Number of results in a page.
             :param data_limit: Number of thread data to be returned.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/search/threads"
             params = {
@@ -2728,6 +2798,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def post(
             self,
             q: str = None,
@@ -2737,7 +2808,7 @@ class Forum:
             page: int = None,
             limit: int = None,
             data_limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/posts
 
@@ -2752,7 +2823,7 @@ class Forum:
             :param limit: Number of results in a page.
             :param data_limit: Number of thread data to be returned.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/search/posts"
             params = {
@@ -2768,13 +2839,14 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def tag(
             self,
             tag: str = None,
             tags: list[str] = None,
             page: int = None,
             limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/tagged
 
@@ -2785,7 +2857,7 @@ class Forum:
             :param tags: Array of tags to search for tagged contents.
             :param page: Page number of results.
             :param limit: Number of results in a page.
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/search/tagged"
             params = {
@@ -2798,13 +2870,14 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def profile_posts(
             self,
             q: str = None,
             user_id: int = None,
             page: int = None,
             limit: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/profile-posts
 
@@ -2816,7 +2889,7 @@ class Forum:
             :param page: Page number of results.
             :param limit: Number of results in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/search/profile-posts"
             params = {"q": q, "user_id": user_id, "page": page, "limit": limit}
@@ -2824,6 +2897,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def indexing(
             self,
             content_type: str,
@@ -2832,7 +2906,7 @@ class Forum:
             body: str,
             link: str,
             date: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/indexing
 
@@ -2847,7 +2921,7 @@ class Forum:
             :param link:  Link related to content.
             :param date: Unix timestamp in second of the content. If missing, current time will be used.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/search/indexing"
             data = {
@@ -2870,7 +2944,8 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def get_all(self) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get_all(self) -> httpx.Response:
             """
             GET https://api.zelenka.guru/notifications
 
@@ -2878,12 +2953,13 @@ class Forum:
 
             Required scopes: read
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/notifications"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def get(self, notification_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["read"])
+        def get(self, notification_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/notifications/{notification_id}/content
 
@@ -2892,12 +2968,13 @@ class Forum:
             Required scopes: read
             :param notification_id: ID of notification.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/notifications/{notification_id}/content"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def read(self, notification_id: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def read(self, notification_id: int = None) -> httpx.Response:
             """
             POST https://api.zelenka.guru/notifications/read
 
@@ -2906,7 +2983,7 @@ class Forum:
             Required scopes: post
             :param notification_id: ID of notification. If notification_id is omitted, it's mark all existing notifications as read.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/notifications/read"
             params = {"notification_id": notification_id}
@@ -2914,6 +2991,7 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["post"])
         def custom(
             self,
             user_id: int = None,
@@ -2922,7 +3000,7 @@ class Forum:
             message_html: str = None,
             notification_type: str = None,
             extra_data: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/notifications/custom
 
@@ -2936,7 +3014,7 @@ class Forum:
             :param notification_type: The notification type.
             :param extra_data: Extra data when sending alert. Предположительно это словарик, но я не уверен
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = "/notifications/custom"
@@ -2963,6 +3041,7 @@ class Forum:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
             def get_all(
                 self,
                 conversation_id: int,
@@ -2971,7 +3050,7 @@ class Forum:
                 order: str = None,
                 before: int = None,
                 after: int = None,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/conversation-messages
 
@@ -2986,7 +3065,7 @@ class Forum:
                 :param before: Date to get older messages.
                 :param after: Date to get newer messages.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/conversation-messages"
                 params = {
@@ -3004,7 +3083,8 @@ class Forum:
                     params=params,
                 )
 
-            def get(self, message_id: int) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
+            def get(self, message_id: int) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/conversation-messages/message_id
 
@@ -3014,12 +3094,13 @@ class Forum:
 
                 :param message_id: ID of conversation message.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def create(self, conversation_id: int, message_body: str) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
+            def create(self, conversation_id: int, message_body: str) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/conversation-messages
 
@@ -3030,7 +3111,7 @@ class Forum:
                 :param conversation_id: ID of conversation.
                 :param message_body: Content of the new message.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/conversation-messages"
                 params = {
@@ -3045,7 +3126,8 @@ class Forum:
                     data=data,
                 )
 
-            def edit(self, message_id: int, message_body: str) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
+            def edit(self, message_id: int, message_body: str) -> httpx.Response:
                 """
                 PUT https://api.zelenka.guru/conversation-messages/message_id
 
@@ -3056,13 +3138,14 @@ class Forum:
                 :param message_id: ID of conversation message.
                 :param message_body: New content of the message.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/conversation-messages/{message_id}"
                 data = {"message_body": message_body}
                 return _send_request(self=self._api, method="PUT", path=path, data=data)
 
-            def delete(self, message_id: int) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
+            def delete(self, message_id: int) -> httpx.Response:
                 """
                 DELETE https://api.zelenka.guru/conversation-messages/message_id
 
@@ -3072,12 +3155,13 @@ class Forum:
 
                 :param message_id: ID of conversation message.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
-            def report(self, message_id: int, message: str = None) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
+            def report(self, message_id: int, message: str = None) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/conversation-messages/message_id/report
 
@@ -3088,7 +3172,7 @@ class Forum:
                 :param message_id: ID of conversation message.
                 :param message : Reason of the report.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
 
                 path = f"/conversation-messages/{message_id}/report"
@@ -3101,7 +3185,8 @@ class Forum:
             self._api = _api_self
             self.messages = self.__Conversations_messages(self._api)
 
-        def get_all(self, page: int = None, limit: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
+        def get_all(self, page: int = None, limit: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/conversations
 
@@ -3112,13 +3197,14 @@ class Forum:
             :param page: Page number of conversations.
             :param limit: Number of conversations in a page.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/conversations"
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def get(self, conversation_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
+        def get(self, conversation_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/conversations/conversation_id
 
@@ -3128,12 +3214,15 @@ class Forum:
 
             :param conversation_id: ID of conversation.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/conversations/{conversation_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def leave(self, conversation_id: int, leave_type: str = "delete") -> Response:
+        @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
+        def leave(
+            self, conversation_id: int, leave_type: str = "delete"
+        ) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/conversations/conversation_id
 
@@ -3144,7 +3233,7 @@ class Forum:
             :param conversation_id: ID of conversation.
             :param leave_type: Leave type. Can be [delete,delete_ignore].
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             params = {"delete_type": leave_type}
             path = f"/conversations/{conversation_id}"
@@ -3152,6 +3241,7 @@ class Forum:
                 self=self._api, method="DELETE", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
         def create(
             self,
             recipient_id: int,
@@ -3159,7 +3249,7 @@ class Forum:
             open_invite: bool = False,
             conversation_locked: bool = False,
             allow_edit_messages: bool = True,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/conversations
 
@@ -3173,7 +3263,7 @@ class Forum:
             :param conversation_locked: Is conversation locked.
             :param allow_edit_messages: Allow edit messages.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if True:  # Tweak 0
                 if open_invite is True:
@@ -3207,6 +3297,7 @@ class Forum:
                 data=data,
             )
 
+        @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
         def create_group(
             self,
             recipients: list,
@@ -3215,7 +3306,7 @@ class Forum:
             open_invite: bool = True,
             conversation_locked: bool = False,
             allow_edit_messages: bool = True,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/conversations
 
@@ -3230,7 +3321,7 @@ class Forum:
             :param conversation_locked: Is conversation locked.
             :param allow_edit_messages: Allow edit messages.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             if True:  # Tweak 0
                 if open_invite is True:
@@ -3271,7 +3362,7 @@ class Forum:
 
         def facebook(
             self, client_id: int, client_secret: str, facebook_token: str
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/oauth/token/facebook
 
@@ -3283,7 +3374,7 @@ class Forum:
             :param client_secret: Secret phrase of facebook client.
             :param facebook_token: Facebook token.
 
-            :return: Response object (Even if you use SendAsAsync function) or token string
+            :return: httpx Response object or token string
             """
             path = "/oauth/token/facebook"
             params = {
@@ -3301,7 +3392,7 @@ class Forum:
             client_secret: str,
             twitter_url: str,
             twitter_auth: str,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/oauth/token/twitter
 
@@ -3314,7 +3405,7 @@ class Forum:
             :param twitter_url: "the full /account/verify_credentials.json uri that has been used to calculate OAuth signature. For security reason, the uri must use HTTPS protocol and the hostname must be either "twitter.com" or "api.twitter.com"."
             :param twitter_auth: the complete authentication header that starts with "OAuth". Consult Twitter document for more information.
 
-            :return: Response object (Even if you use SendAsAsync function) or token string
+            :return: httpx Response object or token string
             """
             path = "/oauth/token/twitter"
             params = {
@@ -3329,7 +3420,7 @@ class Forum:
 
         def google(
             self, client_id: int, client_secret: str, google_token: str
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/oauth/token/google
 
@@ -3341,7 +3432,7 @@ class Forum:
             :param client_secret: Secret phrase of facebook client.
             :param google_token : Google token.
 
-            :return: Response object (Even if you use SendAsAsync function) or token string
+            :return: httpx Response object or token string
             """
             path = "/oauth/token/google"
             params = {
@@ -3353,7 +3444,8 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def admin(self, user_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["admincp"])
+        def admin(self, user_id: int) -> httpx.Response:
             """
             POST https://api.zelenka.guru/oauth/token/admin
 
@@ -3363,7 +3455,7 @@ class Forum:
 
             :param user_id: ID of the user that needs access token.
 
-            :return: Response object (Even if you use SendAsAsync function) or token string
+            :return: httpx Response object or token string
             """
             path = "/oauth/token/admin"
             params = {"user_id": user_id}
@@ -3378,7 +3470,7 @@ class Forum:
             password: str,
             extra_data: str,
             extra_timestamp: int,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/oauth/token/associate
 
@@ -3392,7 +3484,7 @@ class Forum:
             :param extra_data: Extra data
             :param extra_timestamp: Extra timestamp
 
-            :return: Response object (Even if you use SendAsAsync function) or token string
+            :return: httpx Response object or token string
             """
             path = "/oauth/token/associate"
             params = {
@@ -3406,7 +3498,8 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-    def navigation(self, parent: int = None) -> Response:
+    @_MainTweaks._CheckScopes(scopes=["read"])
+    def navigation(self, parent: int = None) -> httpx.Response:
         """
         GET https://api.zelenka.guru/navigation
 
@@ -3416,13 +3509,13 @@ class Forum:
 
         :param parent: ID of parent element. If exists, filter elements that are direct children of that element.
 
-        :return: Response object (Even if you use SendAsAsync function)
+        :return: httpx Response object
         """
         path = "/navigation"
         params = {"parent": parent}
         return _send_request(self=self, method="GET", path=path, params=params)
 
-    def batch(self, jobs: list[dict]) -> Response:
+    def batch(self, jobs: list[dict]) -> httpx.Response:
         """
         POST https://api.zelenka.guru/batch
 
@@ -3442,7 +3535,7 @@ class Forum:
         Required scopes: Same as called API requests.
 
         :param jobs: List of batch jobs. (Check example above)
-        :return: Response object (Even if you use SendAsAsync function)
+        :return: httpx Response object
         """
         import json
 
@@ -3460,7 +3553,6 @@ class Market:
         proxy_type: str = None,
         proxy: str = None,
         reset_custom_variables: bool = True,
-        user_id: int = None,
     ):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
@@ -3470,6 +3562,7 @@ class Market:
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://api.lzt.market"
+        self.debug = False
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
@@ -3483,16 +3576,16 @@ class Market:
             self._proxy = None
             self._proxy_type = None
 
-        self.token = token
-        self._main_headers = {"Authorization": f"bearer {self.token}"}
+        self._token = token
+        self._scopes = None
+        _MainTweaks.setup_jwt(
+            self=self, token=token, user_id=locals().get("user_id", None)
+        )
+        self._main_headers = {"Authorization": f"bearer {self._token}"}
 
         self.bypass_429 = bypass_429
         self._auto_delay_time = time.time() - 3
         self._locale = language
-        if user_id is not None:
-            self.user_id = user_id
-        else:
-            self.user_id = self.__set_user_id
         self._delay_synchronizer = None
         self._lock = None
 
@@ -3505,9 +3598,7 @@ class Market:
                 if not category.startswith("__")
             ]
         )
-        self._delay_pattern = (
-            f"/(?:{_categories})(?:/|$)" + "|" + r"/(\d+)(?:/.*|$)"
-        )
+        self._delay_pattern = f"/(?:{_categories})(?:/|$)" + "|" + r"/(\d+)(?:/.*|$)"
 
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
@@ -3523,20 +3614,18 @@ class Market:
         self.custom_body = {}
         self.custom_headers = {}
 
-        self.debug = False
+    @property
+    def scopes(self):
+        return self._scopes
 
-    def __set_user_id(self):
-        import concurrent.futures
+    @property
+    def token(self):
+        return self._token
 
-        pool = concurrent.futures.ThreadPoolExecutor()
-        path = "/me"
-        response = pool.submit(
-            asyncio.run, _send_async_request(self=self, method="GET", path=path)
-        ).result()
-        try:
-            return response.json()["user"]["user_id"]
-        except KeyError:
-            return self.__set_user_id  # Fix for ultrarare errors
+    @token.setter
+    def token(self, value):
+        self._token = value
+        _MainTweaks.setup_jwt(self=self, token=value)
 
     def change_proxy(self, proxy_type: str = None, proxy: str = None):
         """
@@ -3566,7 +3655,8 @@ class Market:
         self._auto_delay_time = self._auto_delay_time.value
         self._lock = None
 
-    def batch(self, jobs: list[dict]) -> Response:
+    @_MainTweaks._CheckScopes(scopes=["market"])
+    def batch(self, jobs: list[dict]) -> httpx.Response:
         """
         POST https://api.lzt.market/batch
 
@@ -3584,7 +3674,7 @@ class Market:
         ]
 
         :param jobs: List of batch jobs. (Check example above)
-        :return: Response object (Even if you use SendAsAsync function)
+        :return: httpx Response object
         """
         import json
 
@@ -3596,7 +3686,8 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def get(self) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def get(self) -> httpx.Response:
             """
             GET https://api.lzt.market/me
 
@@ -3604,12 +3695,13 @@ class Market:
 
             Required scopes: market
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
             path = "/me"
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def edit(
             self,
             disable_steam_guard: bool = None,
@@ -3623,7 +3715,7 @@ class Market:
             telegram_client: dict = None,
             deauthorize_steam: bool = None,
             hide_bids: bool = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             PUT https://api.lzt.market/me
 
@@ -3642,7 +3734,7 @@ class Market:
             :param deauthorize_steam: Finish all Steam sessions after purchase.
             :param hide_bids: Hide your profile when bid on the auction.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
             path = "/me"
@@ -3704,6 +3796,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -3720,7 +3813,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -3742,7 +3835,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/steam"
                 if True:  # Tweak market
@@ -3774,18 +3867,20 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/steam/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/steam/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def games(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -3793,7 +3888,7 @@ class Market:
 
                 Required scopes: market
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/steam/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3802,6 +3897,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -3818,7 +3914,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -3840,7 +3936,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/fortnite"
                 if True:  # Tweak market
@@ -3872,13 +3968,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/fortnite/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3887,6 +3984,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -3903,7 +4001,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -3925,7 +4023,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/mihoyo"
                 if True:  # Tweak market
@@ -3957,13 +4055,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/mihoyo/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3972,6 +4071,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -3988,7 +4088,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4010,7 +4110,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/valorant"
                 if True:  # Tweak market
@@ -4042,13 +4142,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/valorant/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4057,6 +4158,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4073,7 +4175,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4095,7 +4197,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/league-of-legends"
                 if True:  # Tweak market
@@ -4127,13 +4229,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/league-of-legends/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4142,6 +4245,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4158,7 +4262,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4180,7 +4284,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/telegram"
                 if True:  # Tweak market
@@ -4212,13 +4316,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/telegram/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4227,6 +4332,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4243,7 +4349,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4265,7 +4371,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/supercell"
                 if True:  # Tweak market
@@ -4297,13 +4403,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/supercell/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4312,6 +4419,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4328,7 +4436,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4350,7 +4458,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/origin"
                 if True:  # Tweak market
@@ -4382,18 +4490,20 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/origin/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def games(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -4401,7 +4511,7 @@ class Market:
 
                 Required scopes: market
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/origin/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4410,6 +4520,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4426,7 +4537,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4448,7 +4559,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/world-of-tanks"
                 if True:  # Tweak market
@@ -4480,13 +4591,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/world-of-tanks/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4495,6 +4607,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4511,7 +4624,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4533,7 +4646,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/wot-blitz"
                 if True:  # Tweak market
@@ -4565,13 +4678,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/wot-blitz/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4580,6 +4694,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4596,7 +4711,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4618,7 +4733,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/epicgames"
                 if True:  # Tweak market
@@ -4650,18 +4765,20 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/epicgames/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def games(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -4669,7 +4786,7 @@ class Market:
 
                 Required scopes: market
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/epicgames/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4678,6 +4795,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4694,7 +4812,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4716,7 +4834,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/escape-from-tarkov"
                 if True:  # Tweak market
@@ -4748,13 +4866,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/escape-from-tarkov/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4763,6 +4882,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4779,7 +4899,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4801,7 +4921,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/socialclub"
                 if True:  # Tweak market
@@ -4833,18 +4953,20 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/socialclub/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def games(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -4852,7 +4974,7 @@ class Market:
 
                 Required scopes: market
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/socialclub/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4861,6 +4983,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4877,7 +5000,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4899,7 +5022,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/uplay"
                 if True:  # Tweak market
@@ -4931,18 +5054,20 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/uplay/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def games(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -4950,7 +5075,7 @@ class Market:
 
                 Required scopes: market
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/steam/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4959,6 +5084,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -4975,7 +5101,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -4997,7 +5123,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/war-thunder"
                 if True:  # Tweak market
@@ -5029,13 +5155,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/war-thunder/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5044,6 +5171,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5060,7 +5188,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5082,7 +5210,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/discord"
                 if True:  # Tweak market
@@ -5114,13 +5242,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/discord/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5129,6 +5258,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5145,7 +5275,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5167,7 +5297,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/tiktok"
                 if True:  # Tweak market
@@ -5199,13 +5329,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/tiktok/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5214,6 +5345,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5230,7 +5362,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5252,7 +5384,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/instagram"
                 if True:  # Tweak market
@@ -5284,13 +5416,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/instagram/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5299,6 +5432,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5315,7 +5449,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5337,7 +5471,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/battlenet"
                 if True:  # Tweak market
@@ -5369,18 +5503,20 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/battlenet/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            def games(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def games(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/category_name/games
 
@@ -5388,7 +5524,7 @@ class Market:
 
                 Required scopes: market
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/battlenet/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5397,6 +5533,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5413,7 +5550,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5435,7 +5572,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/vpn"
                 if True:  # Tweak market
@@ -5467,13 +5604,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/vpn/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5482,6 +5620,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5498,7 +5637,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5520,7 +5659,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/cinema"
                 if True:  # Tweak market
@@ -5552,13 +5691,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/cinema/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5567,6 +5707,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5583,7 +5724,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5605,7 +5746,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/spotify"
                 if True:  # Tweak market
@@ -5637,13 +5778,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/spotify/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5652,6 +5794,7 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
                 page: int = None,
@@ -5668,7 +5811,7 @@ class Market:
                 not_sold_before_by_me: bool = None,
                 search_params: dict = None,
                 **kwargs,
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/categoryName
 
@@ -5690,7 +5833,7 @@ class Market:
                 :param not_sold_before_by_me: Not sold before by me.
                 :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/warface"
                 if True:  # Tweak market
@@ -5722,13 +5865,14 @@ class Market:
                     params=params,
                 )
 
-            def params(self) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/params
 
                 Displays search parameters for a category.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = "/warface/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5759,6 +5903,7 @@ class Market:
             self.spotify = self.__Spotify(_api_self)
             self.warface = self.__Warface(_api_self)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def get(
             self,
             category_name: str,
@@ -5776,7 +5921,7 @@ class Market:
             not_sold_before_by_me: bool = None,
             search_params: dict = None,
             **kwargs,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/categoryName
 
@@ -5798,7 +5943,7 @@ class Market:
             :param not_sold_before_by_me: Not sold before by me.
             :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{category_name}"
             if True:  # Tweak market
@@ -5830,7 +5975,8 @@ class Market:
                 params=params,
             )
 
-        def list(self, top_queries: bool = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def list(self, top_queries: bool = None) -> httpx.Response:
             """
             GET https://api.lzt.market/category
 
@@ -5840,7 +5986,7 @@ class Market:
 
             :param top_queries: Display top queries for per category.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/category"
             params = {"top_queries": top_queries}
@@ -5855,7 +6001,8 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def from_url(self, url: str) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def from_url(self, url: str) -> httpx.Response:
             """
             Displays a list of the latest accounts from your market url with search params
 
@@ -5863,9 +6010,9 @@ class Market:
 
             :param url: Your market search url. It can be https://lzt.market/search_params or https://api.lzt.market/search_params
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
-            if "batch_mode" in locals() or "im_async" in locals():
+            if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
                 base_api = self
             else:
                 base_api = self._api
@@ -5880,13 +6027,14 @@ class Market:
             path = f"{url}"
             return _send_request(self=self._api, method="GET", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def latest(
             self,
             page: int = None,
             title: str = None,
             search_params: dict = None,
             **kwargs,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/
 
@@ -5898,7 +6046,7 @@ class Market:
             :param title: The word or words contained in the account title
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
             path = "/"
@@ -5911,6 +6059,7 @@ class Market:
                     params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def owned(
             self,
             user_id: int = None,
@@ -5922,7 +6071,7 @@ class Market:
             status: str = None,
             search_params: dict = None,
             **kwargs,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/user/user_id/items
 
@@ -5985,18 +6134,8 @@ class Market:
             :param status: Account status. Can be [active, paid, deleted or awaiting].
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
-            if user_id is None:  # Tweak 1
-                if "batch_mode" in locals() or "im_async" in locals():
-                    if type(self.user_id) is not int:
-                        self.user_id = self.user_id()
-                    user_id = self.user_id
-                else:
-                    if type(self._api.user_id) is not int:
-                        self._api.user_id = self._api.user_id()
-                    user_id = self._api.user_id
-
             params = {
                 "user_id": user_id,
                 "category_id": category_id,
@@ -6006,15 +6145,16 @@ class Market:
                 "page": page,
                 "show": status,
             }
+            path = "/user/items"
             if search_params is not None:
                 for key, value in search_params.items():
                     params[str(key)] = value
-            path = f"/user/{user_id}/items"
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
                     params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def purchased(
             self,
             user_id: int = None,
@@ -6026,7 +6166,7 @@ class Market:
             status: str = None,
             search_params: dict = None,
             **kwargs,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/user/user_id/orders
 
@@ -6089,18 +6229,9 @@ class Market:
             :param status: Account status. Can be [active, paid, deleted or awaiting].
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
-            if user_id is None:  # Tweak 1
-                if "batch_mode" in locals() or "im_async" in locals():
-                    if type(self.user_id) is not int:
-                        self.user_id = self.user_id()
-                    user_id = self.user_id
-                else:
-                    if type(self._api.user_id) is not int:
-                        self._api.user_id = self._api.user_id()
-                    user_id = self._api.user_id
             params = {
                 "category_id": category_id,
                 "pmin": pmin,
@@ -6108,16 +6239,18 @@ class Market:
                 "title": title,
                 "page": page,
                 "show": status,
+                "user_id": user_id,
             }
             if search_params is not None:
                 for key, value in search_params.items():
                     params[str(key)] = value
-            path = f"/user/{user_id}/orders"
+            path = "/user/orders"
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
                     params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def favorite(
             self,
             page: int = None,
@@ -6125,7 +6258,7 @@ class Market:
             title: str = None,
             search_params: dict = None,
             **kwargs,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/fave
 
@@ -6138,7 +6271,7 @@ class Market:
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
             :param title: The word or words contained in the account title
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
             path = "/fave"
@@ -6151,6 +6284,7 @@ class Market:
                     params[str(kwarg_name)] = kwarg_value
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def viewed(
             self,
             page: int = None,
@@ -6158,7 +6292,7 @@ class Market:
             title: str = None,
             search_params: dict = None,
             **kwargs,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/viewed
 
@@ -6171,7 +6305,7 @@ class Market:
             :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
             :param title: The word or words contained in the account title
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
             path = "/viewed"
@@ -6188,6 +6322,7 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def history(
             self,
             user_id: int = None,
@@ -6204,7 +6339,7 @@ class Market:
             comment: str = None,
             is_hold: bool = None,
             show_payments_stats: bool = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/user/user_id/payments
 
@@ -6227,7 +6362,7 @@ class Market:
             :param is_hold: Display hold operations
             :param show_payments_stats: Display payment stats for selected period (outgoing value, incoming value)
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
             # Tweak 0
@@ -6239,15 +6374,6 @@ class Market:
                 show_payments_stats = 1
             elif show_payments_stats is False:
                 show_payments_stats = 0
-            if user_id is None:  # Tweak 1
-                if "batch_mode" in locals() or "im_async" in locals():
-                    if type(self.user_id) is not int:
-                        self.user_id = self.user_id()
-                    user_id = self.user_id
-                else:
-                    if type(self._api.user_id) is not int:
-                        self._api.user_id = self._api.user_id()
-                    user_id = self._api.user_id
             params = {
                 "user_id": user_id,
                 "operation_type": operation_type,
@@ -6264,9 +6390,10 @@ class Market:
                 "is_hold": is_hold,
                 "show_payments_stats": show_payments_stats,
             }
-            path = f"/user/{user_id}/payments"
+            path = "/user/payments"
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def transfer(
             self,
             amount: int,
@@ -6278,7 +6405,7 @@ class Market:
             transfer_hold: bool = None,
             hold_length_option: str = None,
             hold_length_value: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/balance/transfer
 
@@ -6296,7 +6423,7 @@ class Market:
             :param hold_length_option: Hold length option. Allowed values: hour, day, week, month, year
             :param hold_length_value: Hold length value
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/balance/transfer"
             params = {
@@ -6365,10 +6492,9 @@ class Market:
                 "hold_length_value": hold_length,
                 "hold_length_option": hold_option,
             }
-            url = "https://lzt.market/balance/transfer"
-            req = requests.models.PreparedRequest()
-            req.prepare_url(url=url, params=params)
-            return req.url
+            url = httpx.URL("https://lzt.market/balance/transfer")
+            url = url.copy_with(params=params)
+            return url
 
     class __Managing:
         def __init__(self, _api_self):
@@ -6379,7 +6505,8 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def delete(self, item_id: int, tag_id: int) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def delete(self, item_id: int, tag_id: int) -> httpx.Response:
                 """
                 DELETE https://api.lzt.market/item_id/tag
 
@@ -6390,7 +6517,7 @@ class Market:
                 :param item_id: ID of item.
                 :param tag_id: Tag id. Tag list is available via api.market.profile.get()
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/{item_id}/tag"
                 params = {"tag_id": tag_id}
@@ -6401,7 +6528,8 @@ class Market:
                     params=params,
                 )
 
-            def add(self, item_id: int, tag_id: int) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def add(self, item_id: int, tag_id: int) -> httpx.Response:
                 """
                 POST https://api.lzt.market/item_id/tag
 
@@ -6412,7 +6540,7 @@ class Market:
                 :param item_id: ID of item.
                 :param tag_id: Tag id. Tag list is available via api.market.profile.get()
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 path = f"/{item_id}/tag"
                 params = {"tag_id": tag_id}
@@ -6423,13 +6551,14 @@ class Market:
                     params=params,
                 )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def get(
             self,
             item_id: int,
             auction: bool = False,
             steam_preview: bool = False,
             preview_type: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/item_id
             GET https://api.lzt.market/item_id/steam-preview
@@ -6442,7 +6571,7 @@ class Market:
             :param item_id: ID of item.
             :param steam_preview: Set it True if you want to get steam html and False/None if you want to get account info
             :param preview_type: Type of page - profiles or games
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
 
             """
             path = f"/{item_id}"
@@ -6453,7 +6582,8 @@ class Market:
             params = {"type": preview_type}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def delete(self, item_id: int, reason: str) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def delete(self, item_id: int, reason: str) -> httpx.Response:
             """
             DELETE https://api.lzt.market/item_id
 
@@ -6464,7 +6594,7 @@ class Market:
             :param item_id: ID of item.
             :param reason: Delete reason.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}"
             params = {"reason": reason}
@@ -6472,7 +6602,8 @@ class Market:
                 self=self._api, method="DELETE", path=path, params=params
             )
 
-        def email(self, item_id: int, email: str, login: str) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def email(self, item_id: int, email: str, login: str) -> httpx.Response:
             """
             GET https://api.lzt.market/email-code
 
@@ -6483,13 +6614,14 @@ class Market:
             :param item_id: ID of item.
             :param email: Account email.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/email-code"
             params = {"email ": email, "login": login, "item_id": item_id}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
-        def guard(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def guard(self, item_id: int) -> httpx.Response:
             """
             GET https://api.lzt.market/item_id/guard-code
 
@@ -6499,12 +6631,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/guard-code"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def mafile(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def mafile(self, item_id: int) -> httpx.Response:
             """
             GET https://api.lzt.market/item_id/mafile
 
@@ -6516,12 +6649,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/mafile"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def password_tm(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def password_tm(self, item_id: int) -> httpx.Response:
             """
             GET https://api.lzt.market/item_id/temp-email-password
 
@@ -6533,12 +6667,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/temp-email-password"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def refuse_guarantee(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def refuse_guarantee(self, item_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/refuse-guarantee
 
@@ -6548,12 +6683,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/refuse-guarantee"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def change_password(self, item_id: int, _cancel: bool = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def change_password(self, item_id: int, _cancel: bool = None) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/change-password
 
@@ -6564,7 +6700,7 @@ class Market:
             :param item_id: ID of item.
             :param _cancel: Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/change-password"
             # Tweak 0
@@ -6577,7 +6713,8 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def unstick(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def unstick(self, item_id: int) -> httpx.Response:
             """
             DELETE https://api.lzt.market/item_id/stick
 
@@ -6587,12 +6724,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def stick(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def stick(self, item_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/stick
 
@@ -6602,12 +6740,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def unfavorite(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def unfavorite(self, item_id: int) -> httpx.Response:
             """
             DELETE https://api.lzt.market/item_id/star
 
@@ -6617,12 +6756,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/star"
             return _send_request(self=self._api, method="DELETE", path=path)
 
-        def favorite(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def favorite(self, item_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/star
 
@@ -6632,12 +6772,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/star"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def bump(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def bump(self, item_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/bump
 
@@ -6647,14 +6788,15 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/bump"
             return _send_request(self=self._api, method="POST", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def change_owner(
             self, item_id: int, username: str, secret_answer: str
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/change-owner
 
@@ -6666,7 +6808,7 @@ class Market:
             :param username: The username of the new account owner
             :param secret_answer: Secret answer of your account
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/change-owner"
             params = {"username": username, "secret_answer": secret_answer}
@@ -6674,6 +6816,7 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def edit(
             self,
             item_id: int,
@@ -6688,7 +6831,7 @@ class Market:
             email_type: str = None,
             allow_ask_discount: bool = None,
             proxy_id: int = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             PUT https://api.lzt.market/item_id/edit
 
@@ -6724,7 +6867,7 @@ class Market:
             :param allow_ask_discount: Allow users to ask discount for this account.
             :param proxy_id: Using proxy id for account checking.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/edit"
             params = {
@@ -6742,7 +6885,8 @@ class Market:
             }
             return _send_request(self=self._api, method="PUT", path=path, params=params)
 
-        def telegram(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def telegram(self, item_id: int) -> httpx.Response:
             """
             GET https://api.lzt.market/item_id/telegram-login-code
 
@@ -6752,12 +6896,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/telegram-login-code"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def telegram_reset(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def telegram_reset(self, item_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/telegram-reset-authorizations
 
@@ -6767,12 +6912,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/telegram-reset-authorizations"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def update_inventory(self, item_id: int, app_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def update_inventory(self, item_id: int, app_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/update-inventory
 
@@ -6783,7 +6929,7 @@ class Market:
             :param item_id: ID of item.
             :param app_id: App id.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             params = {"app_id": app_id}
             path = f"/{item_id}/update-inventory"
@@ -6791,9 +6937,10 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def steam_inventory_value(
             self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             GET https://api.lzt.market/steam-value
 
@@ -6824,7 +6971,7 @@ class Market:
             :param currency: Using currency for amount.
             :param ignore_cache: Ignore cache.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             params = {
                 "link": url,
@@ -6835,9 +6982,10 @@ class Market:
             path = "/steam-value"
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def confirm_sda(
             self, item_id: int, id: int = None, nonce: int = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/confirm-sda
 
@@ -6851,7 +6999,7 @@ class Market:
             :param id: Confirmation id. (Required along with nonce if you want to confirm action).
             :param nonce: Confirmation nonce. (Required along with id if you want to confirm action).
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             params = {
                 "id": id,
@@ -6871,31 +7019,10 @@ class Market:
             def __init__(self, _api_self):
                 self._api = _api_self
 
-            def get(self, item_id: int) -> Response:  # Deprecated
-                """
-                GET https://api.lzt.market/item_id/auction
-
-                Display a list of bids in the auction.
-
-                Required scopes: market
-
-                :param item_id: ID of item.
-
-                :return: Response object (Even if you use SendAsAsync function)
-                """
-                if "batch_mode" in locals() or "im_async" in locals():
-                    base_api = self
-                else:
-                    base_api = self._api
-                print("This method is deprecated and will be deleted in future")
-                print(
-                    'Use "market.managing.get(item_id=item_id, auction=True)" instead of "market.purchasing.auction.get(item_id=item_id)"'
-                )
-                return base_api.managing.get(item_id=item_id, auction=True)
-
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def place_bid(
                 self, item_id: int, amount: int, currency: str = None
-            ) -> Response:
+            ) -> httpx.Response:
                 """
                 POST https://api.lzt.market/item_id/auction/bid
 
@@ -6907,7 +7034,7 @@ class Market:
                 :param amount: Amount bid.
                 :param currency: Using currency. Can be [rub, uah, kzt, byn, usd, eur, gbp, cny, try].
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 params = {"amount": amount, "currency": currency}
                 path = f"/{item_id}/auction/bid"
@@ -6918,7 +7045,8 @@ class Market:
                     params=params,
                 )
 
-            def delete_bid(self, item_id: int, bid_id: int) -> Response:
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def delete_bid(self, item_id: int, bid_id: int) -> httpx.Response:
                 """
                 GET https://api.lzt.market/item_id/auction/bid
 
@@ -6929,7 +7057,7 @@ class Market:
                 :param item_id: ID of item.
                 :param bid_id: ID of bid.
 
-                :return: Response object (Even if you use SendAsAsync function)
+                :return: httpx Response object
                 """
                 params = {"bid_id": bid_id}
                 path = f"/{item_id}/auction/bid"
@@ -6940,7 +7068,8 @@ class Market:
                     params=params,
                 )
 
-        def reserve(self, item_id: int, price: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def reserve(self, item_id: int, price: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/reserve
 
@@ -6951,7 +7080,7 @@ class Market:
             :param item_id: ID of item.
             :param price: Currenct price of account in your currency
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/reserve"
             params = {"price": price}
@@ -6959,7 +7088,8 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        def reserve_cancel(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def reserve_cancel(self, item_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/cancel-reserve
 
@@ -6969,12 +7099,13 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/cancel-reserve"
             return _send_request(self=self._api, method="POST", path=path)
 
-        def check(self, item_id: int) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def check(self, item_id: int) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/check-account
 
@@ -6984,14 +7115,15 @@ class Market:
 
             :param item_id: ID of item.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/check-account"
             return _send_request(self=self._api, method="POST", path=path)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def confirm(
             self, item_id: int, buy_without_validation: bool = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/confirm-buy
 
@@ -7002,7 +7134,7 @@ class Market:
             :param item_id: ID of item.
             :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/confirm-buy"
             # Tweak 0
@@ -7015,9 +7147,10 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def fast_buy(
             self, item_id: int, price: int, buy_without_validation: bool = None
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/fast-buy
 
@@ -7029,7 +7162,7 @@ class Market:
             :param price: Current price of account in your currency
             :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/fast-buy"
             if True:  # Tweak 0
@@ -7049,7 +7182,8 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def info(self, item_id: int, resell_item_id: int = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def info(self, item_id: int, resell_item_id: int = None) -> httpx.Response:
             """
             GET https://api.lzt.market/item_id/goods/add
 
@@ -7060,12 +7194,13 @@ class Market:
             :param item_id: ID of item.
             :param resell_item_id: Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/goods/add"
             params = {"resell_item_id": resell_item_id}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def check(
             self,
             item_id: int,
@@ -7076,7 +7211,7 @@ class Market:
             extra: dict = None,
             resell_item_id: int = None,
             random_proxy: bool = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/goods/check
 
@@ -7092,7 +7227,7 @@ class Market:
             :param resell_item_id: Put item id, if you are trying to resell item.
             :param random_proxy: Pass True, if you get captcha in previous response
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = f"/{item_id}/goods/check"
             if True:  # Tweak 0
@@ -7114,7 +7249,7 @@ class Market:
             }
             data = {}
             if extra is not None:
-                if "batch_mode" in locals():
+                if "CREATE_JOB" in locals():
                     data["extra"] = extra  # Костыль CreateJob
                 else:
                     for key, value in extra.items():
@@ -7128,6 +7263,7 @@ class Market:
                 data=data,
             )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def add(
             self,
             category_id: int,
@@ -7150,7 +7286,7 @@ class Market:
             auction_duration_option: str = None,
             instabuy_price: int = None,
             not_bids_action: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/item/add
 
@@ -7203,7 +7339,7 @@ class Market:
             :param instabuy_price: The price for which you can instantly redeem your account.
             :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/item/add"
             if True:  # Tweak 0
@@ -7243,6 +7379,7 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def fast_sell(
             self,
             category_id: int,
@@ -7269,7 +7406,7 @@ class Market:
             auction_duration_option: str = None,
             instabuy_price: int = None,
             not_bids_action: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/item/fast-sell
 
@@ -7326,7 +7463,7 @@ class Market:
             :param instabuy_price: The price for which you can instantly redeem your account.
             :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/item/fast-sell"
             # Tweak 0
@@ -7366,7 +7503,7 @@ class Market:
                 params["not_bids_action"] = not_bids_action
             data = {}
             if extra is not None:
-                if "batch_mode" in locals():
+                if "CREATE_JOB" in locals():
                     data["extra"] = extra  # Костыль CreateJob
                 else:
                     for key, value in extra.items():
@@ -7384,7 +7521,8 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def get(self) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def get(self) -> httpx.Response:
             """
             GET https://api.lzt.market/proxy
 
@@ -7392,12 +7530,15 @@ class Market:
 
             Required scopes: market
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/proxy"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def delete(self, proxy_id: int = None, delete_all: bool = None) -> Response:
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def delete(
+            self, proxy_id: int = None, delete_all: bool = None
+        ) -> httpx.Response:
             """
             DELETE https://api.lzt.market/proxy
 
@@ -7408,7 +7549,7 @@ class Market:
             :param proxy_id: ID of an existing proxy
             :param delete_all: Use True if you want to delete all proxy
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/proxy"
             params = {"proxy_id": proxy_id, "delete_all": delete_all}
@@ -7416,6 +7557,7 @@ class Market:
                 self=self._api, method="DELETE", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def add(
             self,
             proxy_ip: str = None,
@@ -7423,7 +7565,7 @@ class Market:
             proxy_user: str = None,
             proxy_pass: str = None,
             proxy_row: str = None,
-        ) -> Response:
+        ) -> httpx.Response:
             """
             POST https://api.lzt.market/proxy
 
@@ -7437,7 +7579,7 @@ class Market:
             :param proxy_pass: Proxy password
             :param proxy_row: Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \n separator)
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/proxy"
             params = {
@@ -7466,6 +7608,7 @@ class Antipublic:
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://antipublic.one"
+        self.debug = False
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
@@ -7491,7 +7634,6 @@ class Antipublic:
         self.custom_body = {}
         self.custom_headers = {}
         self._main_headers = {}
-        self.debug = False
 
         self.info = self.__Info(self)
         self.account = self.__Account(self)
@@ -7500,13 +7642,13 @@ class Antipublic:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def lines_count(self) -> Response:
+        def lines_count(self) -> httpx.Response:
             """
             GET https://antipublic.one/api/v2/countLines
 
             Get count of rows in the AntiPublic db
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
 
             path = "/api/v2/countLines"
@@ -7524,7 +7666,7 @@ class Antipublic:
             path = "/api/v2/countLinesPlain"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def version(self) -> Response:
+        def version(self) -> httpx.Response:
             """
             GET https://antipublic.one/api/v2/version
 
@@ -7540,7 +7682,7 @@ class Antipublic:
         def __init__(self, _api_self):
             self._api = _api_self
 
-        def license(self) -> Response:
+        def license(self) -> httpx.Response:
             """
             GET https://antipublic.one/api/v2/checkAccess
 
@@ -7548,12 +7690,12 @@ class Antipublic:
 
             Token required
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/api/v2/checkAccess"
             return _send_request(self=self._api, method="GET", path=path)
 
-        def queries(self) -> Response:
+        def queries(self) -> httpx.Response:
             """
             GET https://antipublic.one/api/v2/availableQueries
 
@@ -7561,12 +7703,12 @@ class Antipublic:
 
             Token required
 
-            :return: Response object (Even if you use SendAsAsync function)
+            :return: httpx Response object
             """
             path = "/api/v2/availableQueries"
             return _send_request(self=self._api, method="GET", path=path)
 
-    def check(self, lines: list[str], insert: bool = None) -> Response:
+    def check(self, lines: list[str], insert: bool = None) -> httpx.Response:
         """
         POST https://antipublic.one/api/v2/checkLines
 
@@ -7576,7 +7718,7 @@ class Antipublic:
         :param lines: Lines for check, email:password or login:password
         :param insert: Upload private rows to AntiPublic db
 
-        :return: Response object (Even if you use SendAsAsync function)
+        :return: httpx Response object
         """
         params = {"lines": lines, "insert": insert}
         path = "/api/v2/checkLines"
@@ -7584,7 +7726,7 @@ class Antipublic:
 
     def search(
         self, login: str = None, logins: list[str] = None, limit: int = None
-    ) -> Response:
+    ) -> httpx.Response:
         """
         POST https://antipublic.one/api/v2/emailSearch
         POST https://antipublic.one/api/v2/emailPasswords
@@ -7601,7 +7743,7 @@ class Antipublic:
             !!! You need Antupublic Plus subscription to use this param !!!
         :param limit: Result limit (per email).
 
-        :return: Response object (Even if you use SendAsAsync function)
+        :return: httpx Response object
         """
         if logins:
             data = {"emails": logins, "limit": limit}
