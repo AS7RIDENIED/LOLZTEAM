@@ -75,6 +75,7 @@ def _send_request(
             files=files,
             headers=headers,
             proxies=proxy,
+            timeout=self.timeout,
         )
         if self.reset_custom_variables:
             self.custom_params = {}
@@ -92,14 +93,14 @@ def _send_request(
             self._lock.release()
         else:
             self._auto_delay_time = time.time()
-        return response 
+        return response
     else:
         raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
 
 
 @_MainTweaks._RetryWrapper
 async def _send_async_request(
-    self, method: str, path: dict, params: dict = None, data=None
+    self, method: str, path: dict, params: dict = None, data=None, files=None
 ) -> httpx.Response:
     if self._delay_synchronizer:
         self._lock.acquire()
@@ -156,7 +157,9 @@ async def _send_async_request(
                 url=url,
                 params=params,
                 data=data,
+                files=files,
                 headers=self._main_headers,
+                timeout=self.timeout,
             )
             if self.debug:
                 print(response.request_info.method)
@@ -184,6 +187,7 @@ class Forum:
         proxy_type: str = None,
         proxy: str = None,
         reset_custom_variables: bool = True,
+        timeout: int = 90,
     ):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
@@ -215,6 +219,7 @@ class Forum:
         self._main_headers = {"Authorization": f"bearer {self._token}"}
 
         self.bypass_429 = bypass_429
+        self.timeout = timeout
         self._auto_delay_time = time.time() - 3
         self._locale = language
         self._delay_synchronizer = None
@@ -3553,6 +3558,7 @@ class Market:
         proxy_type: str = None,
         proxy: str = None,
         reset_custom_variables: bool = True,
+        timeout: int = 90,
     ):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/api
@@ -3584,6 +3590,7 @@ class Market:
         self._main_headers = {"Authorization": f"bearer {self._token}"}
 
         self.bypass_429 = bypass_429
+        self.timeout = timeout
         self._auto_delay_time = time.time() - 3
         self._locale = language
         self._delay_synchronizer = None
@@ -7601,6 +7608,7 @@ class Antipublic:
         proxy_type: str = None,
         proxy: str = None,
         reset_custom_variables: bool = True,
+        timeout: int = 90,
     ):
         """
         :param token: Your token. You can get in there -> https://zelenka.guru/account/antipublic or in antipublic app
@@ -7623,7 +7631,7 @@ class Antipublic:
             self._proxy_type = None
 
         self.token = token
-
+        self.timeout = timeout
         self._locale = None
         self._delay_synchronizer = None
         self._lock = None

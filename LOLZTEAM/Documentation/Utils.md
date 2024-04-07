@@ -14,7 +14,7 @@
 
 ## Check payment
 
-*Displays a list of accounts in a specific category according to your parameters.*
+*Checks whether the payment has been paid.*
 
 **Parameters:**
 
