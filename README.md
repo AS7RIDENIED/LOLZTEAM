@@ -1,6 +1,6 @@
-<div align="center">
-<a href="https://zelenka.guru/threads/5523020/"><img width="90%" src="https://i.imgur.com/xaQ92lu.png" alt="Material Bread logo"></a>
-</div>
+<a href="https://zelenka.guru/threads/5523020/">
+<img src="https://i.imgur.com/Vm2tOZh.png"/>
+</a>
 
 ## Installation
 
@@ -12,11 +12,10 @@ pip install LOLZTEAM
 
 ## Usage
 
-*Import the `LOLZTEAM` modules and create an instance of the `forum`, `market` or `antipublic` class to start using the API:*
+*Import the `LOLZTEAM` modules and create an instance of the `Forum`, `Market` or `Antipublic` class to start using the API:*
 
 ```python
-from LOLZTEAM import AutoUpdate
-from LOLZTEAM import Constants
+from LOLZTEAM import AutoUpdate, Constants, Utils
 from LOLZTEAM.API import Forum, Market, Antipublic
 from LOLZTEAM.Tweaks import DelaySync, SendAsAsync, CreateJob
 
