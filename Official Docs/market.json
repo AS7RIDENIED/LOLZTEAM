@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.25"
+    "version": "1.1.26"
   },
   "servers": [
     {
@@ -8599,6 +8599,9 @@
             "$ref": "#/components/parameters/itemId"
           },
           {
+            "$ref": "#/components/parameters/price"
+          },
+          {
             "name": "buy_without_validation",
             "in": "query",
             "description": "Put **1** if you want to buy account without account data validation (not safe).",
@@ -8708,111 +8711,6 @@
           },
           "403": {
             "$ref": "#/components/responses/ErrorModel"
-          },
-          "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
-    "/{itemId}/reserve": {
-      "post": {
-        "tags": [
-          "Account purchasing"
-        ],
-        "summary": "Reserve Account",
-        "description": "Reserves account for you. Reserve time - 300 seconds.",
-        "operationId": "accountsPurchasing.setReserve",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/itemId"
-          },
-          {
-            "$ref": "#/components/parameters/price"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "ReserveBuyModel",
-                  "required": [
-                    "item",
-                    "reserve_end_date",
-                    "system_info"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "title": "Status",
-                      "type": "string",
-                      "default": "ok"
-                    },
-                    "reserve_end_date": {
-                      "title": "Reserve End Date",
-                      "type": "integer"
-                    },
-                    "item": {
-                      "$ref": "#/components/schemas/ItemModel"
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/SystemInfo"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ErrorModel"
-          },
-          "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
-    "/{itemId}/cancel-reserve": {
-      "post": {
-        "tags": [
-          "Account purchasing"
-        ],
-        "summary": "Unreserve Account",
-        "description": "Cancels reserve.",
-        "operationId": "accountsPurchasing.cancelReserve",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/itemId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/SaveChanges"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -13381,7 +13279,7 @@
         "explode": true,
         "schema": {
           "title": "Price",
-          "type": "integer",
+          "type": "number",
           "description": "Current price of account in your currency.",
           "minimum": 1
         }
