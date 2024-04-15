@@ -1261,12 +1261,6 @@ class Forum:
                 :return: httpx Response object
                 """
                 path = "/claims"
-                if type(item_id) is int:
-                    if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
-                        base_api = self
-                    else:
-                        base_api = self._api
-                    item_id = f"{base_api.base_url}/market/{item_id}"
                 if True:  # Tweak 0
                     if hide_contacts is True:
                         hide_contacts = 1
@@ -1290,7 +1284,7 @@ class Forum:
                     "post_body": post_body,
                     "as_responder": responder,
                     "as_is_market_deal": 1,
-                    "as_market_item_link": item_id,
+                    "as_market_item_id": item_id,
                     "as_amount": amount,
                     "currency": currency,
                     "as_funds_receipt": "no",
@@ -7074,42 +7068,6 @@ class Market:
                     path=path,
                     params=params,
                 )
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def reserve(self, item_id: int, price: int) -> httpx.Response:
-            """
-            POST https://api.lzt.market/item_id/reserve
-
-            Reserves account for you. Reserve time - 300 seconds.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-            :param price: Currenct price of account in your currency
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/reserve"
-            params = {"price": price}
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def reserve_cancel(self, item_id: int) -> httpx.Response:
-            """
-            POST https://api.lzt.market/item_id/cancel-reserve
-
-            Cancels reserve.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/cancel-reserve"
-            return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def check(self, item_id: int) -> httpx.Response:
