@@ -58,10 +58,7 @@ def _send_request(
     if self._proxy_type is not None:
         if self._proxy_type in proxy_schemes:
             proxy_scheme = proxy_schemes[self._proxy_type]
-            proxy = {
-                "http": f"{proxy_scheme}://{self._proxy}",
-                "https": f"{proxy_scheme}://{self._proxy}",
-            }
+            proxy = f"{proxy_scheme}://{self._proxy}"
         else:
             raise Exceptions.INVALID_PROXY_TYPE(
                 "Proxy type has invalid value. It can be only https, http, socks4 or socks5"
@@ -74,7 +71,7 @@ def _send_request(
             data=data,
             files=files,
             headers=headers,
-            proxies=proxy,
+            proxy=proxy,
             timeout=self.timeout,
         )
         if self.reset_custom_variables:
