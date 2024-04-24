@@ -55,6 +55,7 @@ class Market:
         cinema = 23
         spotify = 26
         warface = 4
+        gift = 30
 
     class OperationTypes:
         income = "income"
