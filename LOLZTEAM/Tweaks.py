@@ -192,16 +192,24 @@ class _MainTweaks:
     def _RetryWrapper(func):
         def _wrapper(*args, **kwargs):
             tries = 0
+            self = kwargs["self"]
+            if self._delay_synchronizer:
+                self._lock.acquire()
             while tries < 30:
                 tries += 1
                 try:
-                    return func(*args, **kwargs)
+                    response = func(*args, **kwargs)
+                    if self._delay_synchronizer:
+                        self._delay_synchronizer._synchronize(time.time())
+                        self._lock.release()  # Unlocking to prevent softlock
+                    else:
+                        self._auto_delay_time = time.time()
+                    return response
                 except ConnectError as e:
                     if tries == 30:
                         raise e
                     time.sleep(0.05)
-                    return func(*args, **kwargs)
-
+                    continue
         return _wrapper
 
 

@@ -6,7 +6,7 @@ import time
 import json
 import re
 
-from typing import Union
+from typing import Union, Literal
 
 from . import Exceptions
 from .Tweaks import _MainTweaks
@@ -18,8 +18,6 @@ logging.basicConfig(format="\033[93mWARNING:%(message)s\033[0m", level=logging.W
 def _send_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
 ) -> httpx.Response:
-    if self._delay_synchronizer:
-        self._lock.acquire()
     url = self.base_url + path
     if type(self) is Antipublic:
         url += f"?key={self.token}"
@@ -28,7 +26,8 @@ def _send_request(
         _MainTweaks._auto_delay(self=self)
     if params is None:
         params = {}
-    params["locale"] = self._locale
+    if not params.get("locale"):
+        params["locale"] = self._locale
     params.update(self.custom_params)
     if type(data) is dict:
         data.update(self.custom_body)
@@ -85,11 +84,6 @@ def _send_request(
             print(response.request.url)
             print(response.request.body)
             print(response.text)
-        if self._delay_synchronizer:
-            self._delay_synchronizer._synchronize(time.time())
-            self._lock.release()
-        else:
-            self._auto_delay_time = time.time()
         return response
     else:
         raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
@@ -99,8 +93,6 @@ def _send_request(
 async def _send_async_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
 ) -> httpx.Response:
-    if self._delay_synchronizer:
-        self._lock.acquire()
     url = self.base_url + path
     if type(self) is Antipublic:
         url += f"?key={self.token}"
@@ -109,7 +101,8 @@ async def _send_async_request(
         await _MainTweaks._auto_delay_async(self=self)
     if params is None:
         params = {}
-    params["locale"] = self._locale
+    if not params.get("locale"):
+        params["locale"] = self._locale
     ptd = []
 
     params.update(self.custom_params)
@@ -165,9 +158,6 @@ async def _send_async_request(
                 print(response.request_info.url)
                 print(response._body)
                 print(response.text)
-            if self._delay_synchronizer:
-                self._delay_synchronizer._synchronize(time.time())
-                self._lock.release()
             else:
                 self._auto_delay_time = time.time()
             return response
@@ -4151,6 +4141,22 @@ class Market:
                 """
                 path = "/valorant/params"
                 return _send_request(self=self._api, method="GET", path=path)
+            
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def data(self, data_type:str=Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
+                """
+                GET https://api.lzt.market/fortnite/data
+
+                Displays data for specified type in valorant category.
+
+                :return: httpx Response object
+                """
+                path = "/data/valorant"
+                params = {
+                    "type": data_type,
+                    "locale": language
+                }
+                return _send_request(self=self._api, method="GET", path=path, params=params)
 
         class __LeagueOfLegends:
             def __init__(self, _api_self):
@@ -4686,6 +4692,92 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/wot-blitz/params"
+                return _send_request(self=self._api, method="GET", path=path)
+        class __Gifts:
+            def __init__(self, _api_self):
+                self._api = _api_self
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def get(
+                self,
+                page: int = None,
+                auction: str = None,
+                title: str = None,
+                pmin: int = None,
+                pmax: int = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
+                order_by: str = None,
+                sold_before: bool = None,
+                sold_before_by_me: bool = None,
+                not_sold_before: bool = None,
+                not_sold_before_by_me: bool = None,
+                search_params: dict = None,
+                **kwargs,
+            ) -> httpx.Response:
+                """
+                GET https://api.lzt.market/categoryName
+
+                Displays a list of accounts in a specific category according to your parameters.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+                :param auction: Auction. Can be [yes, no, nomatter].
+                :param title: The word or words contained in the account title
+                :param pmin: Minimal price of account (Inclusive)
+                :param pmax: Maximum price of account (Inclusive)
+                :param origin: List of account origins.
+                :param not_origin: List of account origins that won't be included.
+                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                :param sold_before: Sold before.
+                :param sold_before_by_me: Sold before by me.
+                :param not_sold_before: Not sold before.
+                :param not_sold_before_by_me: Not sold before by me.
+                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                :return: httpx Response object
+                """
+                path = "/gifts"
+                if True:  # Tweak market
+                    auction = _MainTweaks.market_variable_fix(auction)
+                params = {
+                    "page": page,
+                    "auction": auction,
+                    "title": title,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "origin[]": origin,
+                    "not_origin[]": not_origin,
+                    "order_by": order_by,
+                    "sb": sold_before,
+                    "sb_by_me": sold_before_by_me,
+                    "nsb": not_sold_before,
+                    "nsb_by_me": not_sold_before_by_me,
+                }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
+                return _send_request(
+                    self=self._api,
+                    method="GET",
+                    path=path,
+                    params=params,
+                )
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
+                """
+                GET https://api.lzt.market/fortnite/params
+
+                Displays search parameters for a category.
+
+                :return: httpx Response object
+                """
+                path = "/gifts/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
         class __EpicGames:
@@ -5887,6 +5979,7 @@ class Market:
             self.origin = self.__Origin(_api_self)
             self.wot = self.__WorldOfTanks(_api_self)
             self.wot_blitz = self.__WorldOfTanksBlitz(_api_self)
+            self.gifts = self.__Gifts(_api_self)
             self.epicgames = self.__EpicGames(_api_self)
             self.eft = self.__EscapeFromTarkov(_api_self)
             self.socialclub = self.__SocialClub(_api_self)

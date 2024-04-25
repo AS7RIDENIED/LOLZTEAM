@@ -24,6 +24,7 @@
   * [Valorant](#valorant)
     * [Get](#get-3)
     * [Params](#params-3)
+    * [Data](#data)
   * [League of Legends](#league-of-legends)
     * [Get](#get-4)
     * [Params](#params-4)
@@ -42,50 +43,53 @@
     * [Params](#params-8)
   * [World of Tanks Blitz](#world-of-tanks-blitz)
     * [Get](#get-9)
-    * [Params](#params-9)
-  * [Epicgames](#epicgames)
+    * [Params](#params-9)\
+  * [Gifts](#gifts)
     * [Get](#get-10)
     * [Params](#params-10)
-    * [Games](#games-1)
-  * [Escape from Tarkov](#escape-from-tarkov)
+  * [Epicgames](#epicgames)
     * [Get](#get-11)
     * [Params](#params-11)
-  * [Social Club](#social-club)
+    * [Games](#games-1)
+  * [Escape from Tarkov](#escape-from-tarkov)
     * [Get](#get-12)
     * [Params](#params-12)
-  * [Uplay](#uplay)
+  * [Social Club](#social-club)
     * [Get](#get-13)
     * [Params](#params-13)
-    * [Games](#games-2)
-  * [War Thunder](#war-thunder)
+  * [Uplay](#uplay)
     * [Get](#get-14)
     * [Params](#params-14)
-  * [Discord](#discord)
+    * [Games](#games-2)
+  * [War Thunder](#war-thunder)
     * [Get](#get-15)
     * [Params](#params-15)
-  * [Tiktok](#tiktok)
+  * [Discord](#discord)
     * [Get](#get-16)
     * [Params](#params-16)
-  * [Instagram](#instagram)
+  * [Tiktok](#tiktok)
     * [Get](#get-17)
     * [Params](#params-17)
-  * [Battle Net](#battle-net)
+  * [Instagram](#instagram)
     * [Get](#get-18)
     * [Params](#params-18)
-    * [Games](#games-3)
-  * [VPN](#vpn)
+  * [Battle Net](#battle-net)
     * [Get](#get-19)
     * [Params](#params-19)
-  * [Cinema](#cinema)
+    * [Games](#games-3)
+  * [VPN](#vpn)
     * [Get](#get-20)
     * [Params](#params-20)
-  * [Spotify](#spotify)
+  * [Cinema](#cinema)
     * [Get](#get-21)
     * [Params](#params-21)
-  * [Warface](#warface)
+  * [Spotify](#spotify)
     * [Get](#get-22)
     * [Params](#params-22)
-  * [Get](#get-23)
+  * [Warface](#warface)
+    * [Get](#get-23)
+    * [Params](#params-23)
+  * [Get](#get-24)
   * [Get categories](#get-categories)
 * [List](#list)
   * [Latest items](#latest-items)
@@ -441,6 +445,26 @@ print(response.json())
 {'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
+### Data
+
+*Displays data for specified type in valorant category.*
+
+**Parameters:**
+
+- **data_type** (str): Data type. Can be ["Agent", "Buddy", "WeaponSkins"]
+- **language** (str): Response language. Can be ["ru-RU", "en-US"]
+
+**Example:**
+
+```python
+response = market.categoryvalorant.data(data_type="WeaponSkins", language="en-US")
+print(response.json())
+```
+
+```python
+{'ffffffff-ffff-ffff-ffff-ffffffffffff': {'uuid': 'string', 'displayName': 'string', 'themeUuid': 'string', 'contentTierUuid': 'string', 'displayIcon': 'string', 'assetPath': 'string', 'chromas': [{'uuid': 'string', 'displayName': 'string', 'fullRender': 'string', 'assetPath': 'string'}], 'levels': [{'uuid': 'string', 'displayName': 'string', 'displayIcon': 'string', 'assetPath': 'string'}], 'weapon': 'string', 'rank': 0}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
 ---
 
 ### League of Legends
@@ -749,6 +773,56 @@ print(response.json())
 
 ```python
 response = market.category.steam.params()
+print(response.json())
+```
+
+```python
+{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+---
+
+### Gifts
+
+#### Get
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **auction** (str): Auction. Can be [yes, no, nomatter].
+- **title** (str): The word or words contained in the account title
+- **pmin** (int): Minimal price of account (Inclusive)
+- **pmax** (int): Maximum price of account (Inclusive)
+- **origin** (strorlist): List of account origins.
+- **not_origin** (strorlist): List of account origins that won't be included.
+- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+**Example:**
+
+```python
+response = market.category.gifts.get(pmax=50)
+print(response.json())
+```
+
+```python
+{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+```
+
+#### Params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
+```python
+response = market.category.gifts.params()
 print(response.json())
 ```
 
