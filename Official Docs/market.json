@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.27"
+    "version": "1.1.28"
   },
   "servers": [
     {
@@ -213,6 +213,22 @@
               "items": {
                 "type": "integer"
               }
+            }
+          },
+          {
+            "name": "vac_skip_game_check",
+            "in": "query",
+            "description": "Don't check game existence while checking for vac.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Vac",
+              "type": "integer",
+              "description": "Don't check game existence while checking for vac.",
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -2097,6 +2113,34 @@
             }
           },
           {
+            "name": "genshin_currency_min",
+            "in": "query",
+            "description": "Minimum number of primogems.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Genshin Currency Min",
+              "type": "integer",
+              "description": "Minimum number of primogems.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "genshin_currency_max",
+            "in": "query",
+            "description": "Maximum number of primogems.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Genshin Currency Max",
+              "type": "integer",
+              "description": "Maximum number of primogems.",
+              "minimum": 0
+            }
+          },
+          {
             "name": "honkai_character[]",
             "in": "query",
             "description": "List of characters.",
@@ -2293,6 +2337,34 @@
               "title": "Achievements Max",
               "type": "integer",
               "description": "Maximum number of achievements.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "honkai_currency_min",
+            "in": "query",
+            "description": "Minimum number of Stellar Jade.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Honkai Stellar Jade Min",
+              "type": "integer",
+              "description": "Minimum number of Stellar Jade.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "honkai_currency_max",
+            "in": "query",
+            "description": "Maximum number of Stellar Jade.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Honkai Stellar Jade Max",
+              "type": "integer",
+              "description": "Maximum number of Stellar Jade.",
               "minimum": 0
             }
           }
@@ -2858,6 +2930,62 @@
             }
           },
           {
+            "name": "skin_min",
+            "in": "query",
+            "description": "Minimum number of skins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Skins Min",
+              "type": "integer",
+              "description": "Minimum number of skins.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "skin_max",
+            "in": "query",
+            "description": "Maximum number of skins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Skins Max",
+              "type": "integer",
+              "description": "Maximum number of skins.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "champion_min",
+            "in": "query",
+            "description": "Minimum number of champions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Champions Min",
+              "type": "integer",
+              "description": "Minimum number of champions.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "champion_max",
+            "in": "query",
+            "description": "Maximum number of champions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Champions Max",
+              "type": "integer",
+              "description": "Maximum number of champions.",
+              "minimum": 0
+            }
+          },
+          {
             "name": "wallet_blue_min",
             "in": "query",
             "description": "Minimum wallet blue balance.",
@@ -3150,35 +3278,10 @@
             "$ref": "#/components/parameters/premium"
           },
           {
-            "name": "premium_expiration",
-            "in": "query",
-            "description": "When premium subscription will be active",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Premium Expiration",
-              "type": "integer",
-              "description": "When premium subscription will be active"
-            }
+            "$ref": "#/components/parameters/premium_expiration"
           },
           {
-            "name": "premium_expiration_period",
-            "in": "query",
-            "description": "In what notation is time measured",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Premium Expiration",
-              "type": "string",
-              "description": "In what notation is time measured",
-              "enum": [
-                "day",
-                "month",
-                "year"
-              ]
-            }
+            "$ref": "#/components/parameters/premium_expiration_period"
           },
           {
             "$ref": "#/components/parameters/country"
@@ -3548,34 +3651,6 @@
             }
           },
           {
-            "name": "brawlers_min",
-            "in": "query",
-            "description": "Minimum number of brawlers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Brawlers Min",
-              "type": "integer",
-              "description": "Minimum number of brawlers.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "brawlers_max",
-            "in": "query",
-            "description": "Maximum number of brawlers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Brawlers Max",
-              "type": "integer",
-              "description": "Maximum number of brawlers.",
-              "minimum": 1
-            }
-          },
-          {
             "name": "brawler[]",
             "in": "query",
             "description": "List of brawlers.",
@@ -3668,6 +3743,62 @@
                   "SHELLY"
                 ]
               }
+            }
+          },
+          {
+            "name": "brawlers_min",
+            "in": "query",
+            "description": "Minimum number of brawlers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawlers Min",
+              "type": "integer",
+              "description": "Minimum number of brawlers.",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "brawlers_max",
+            "in": "query",
+            "description": "Maximum number of brawlers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawlers Max",
+              "type": "integer",
+              "description": "Maximum number of brawlers.",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "legendary_brawlers_min",
+            "in": "query",
+            "description": "Minimum number of legendary brawlers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Legendary Brawlers Min",
+              "type": "integer",
+              "description": "Minimum number of legendary brawlers.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "legendary_brawlers_max",
+            "in": "query",
+            "description": "Maximum number of legendary brawlers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Legendary Brawlers Max",
+              "type": "integer",
+              "description": "Maximum number of legendary brawlers.",
+              "minimum": 0
             }
           }
         ],
@@ -3785,7 +3916,12 @@
                   "Rookie",
                   "Bronze",
                   "Silver",
-                  "Gold"
+                  "Gold",
+                  "Platinum",
+                  "Diamond",
+                  "Master",
+                  "Apex",
+                  "Predator"
                 ]
               }
             }
@@ -3816,6 +3952,17 @@
               "type": "integer",
               "description": "Maximum level in Apex Legends.",
               "minimum": 1
+            }
+          },
+          {
+            "name": "has_ban",
+            "in": "query",
+            "description": "Has a ban in any game.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -4027,6 +4174,15 @@
           },
           {
             "$ref": "#/components/parameters/wargaming_not_region"
+          },
+          {
+            "$ref": "#/components/parameters/premium"
+          },
+          {
+            "$ref": "#/components/parameters/premium_expiration"
+          },
+          {
+            "$ref": "#/components/parameters/premium_expiration_period"
           }
         ],
         "responses": {
@@ -4172,6 +4328,15 @@
           },
           {
             "$ref": "#/components/parameters/wargaming_not_region"
+          },
+          {
+            "$ref": "#/components/parameters/premium"
+          },
+          {
+            "$ref": "#/components/parameters/premium_expiration"
+          },
+          {
+            "$ref": "#/components/parameters/premium_expiration_period"
           }
         ],
         "responses": {
@@ -4379,22 +4544,6 @@
             }
           },
           {
-            "name": "sc",
-            "in": "query",
-            "description": "Has login data for Social Club account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Sc",
-              "type": "integer",
-              "description": "Has login data for Social Club account.",
-              "enum": [
-                1
-              ]
-            }
-          },
-          {
             "name": "rewards_balance_min",
             "in": "query",
             "description": "Minimum rewards balance.",
@@ -4545,7 +4694,8 @@
                   "standard",
                   "left_behind",
                   "prepare_for_escape",
-                  "edge_of_darkness"
+                  "edge_of_darkness",
+                  "unheard_edition"
                 ]
               }
             }
@@ -4801,6 +4951,30 @@
           },
           {
             "$ref": "#/components/parameters/daybreak"
+          },
+          {
+            "name": "subscription",
+            "in": "query",
+            "description": "Name of subscription.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Subscription",
+              "type": "string",
+              "description": "Name of subscription.",
+              "enum": [
+                "premium",
+                "premiumAnywhere",
+                "basic"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/subscription_length"
+          },
+          {
+            "$ref": "#/components/parameters/subscription_period"
           },
           {
             "name": "r6_level_min",
@@ -5197,15 +5371,29 @@
             }
           },
           {
-            "name": "available_boosts",
+            "name": "boosts_min",
             "in": "query",
-            "description": "Number of available boosts.",
+            "description": "Minimum number of boosts.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "type": "integer",
-              "description": "Number of available boosts."
+              "description": "Minimum number of boosts.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "boosts_max",
+            "in": "query",
+            "description": "Maximum number of boosts.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "description": "Maximum number of boosts.",
+              "minimum": 0
             }
           },
           {
@@ -5506,6 +5694,9 @@
               "description": "Has a verified badge.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
+          },
+          {
+            "$ref": "#/components/parameters/email"
           }
         ],
         "responses": {
@@ -6206,6 +6397,7 @@
               "items": {
                 "type": "string",
                 "enum": [
+                  "Premium Basic",
                   "Premium Fallback",
                   "Premium Student",
                   "Premium Duo",
@@ -7144,6 +7336,19 @@
           },
           {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Username of buyer. (If **show** is **paid**)",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Username",
+              "description": "Username of buyer. (If **show** is **paid**)",
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -7508,13 +7713,87 @@
         ]
       }
     },
+    "/bulk/items": {
+      "post": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Bulk Get Accounts",
+        "description": "Bulk get up to 250 accounts.",
+        "operationId": "accountsManaging.BulkItems",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "item_id[]": {
+                    "description": "Item id.",
+                    "title": "Item ID",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maxItems": 250
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Successful Response.",
+                  "required": [
+                    "items",
+                    "left_item_id",
+                    "system_info"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "title": "Items",
+                      "type": "array",
+                      "items": {"type": "object", "properties": {"0": {"$ref": "#/components/schemas/ItemModel"}}}
+                    },
+                    "left_item_id": {
+                      "title": "Left",
+                      "type": "array",
+                      "items": {"type": "integer"}
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/{itemId}/inventory-value": {
       "get": {
         "tags": [
           "Accounts managing"
         ],
-        "summary": "Get Item Steam Inventory Value",
-        "description": "Gets item steam inventory value.",
+        "summary": "Get Account Steam Inventory Value",
+        "description": "Gets Account steam inventory value.",
         "operationId": "Managing.SteamValueItem",
         "parameters": [
           {
@@ -8879,7 +9158,7 @@
           "Account purchasing"
         ],
         "summary": "Confirm Buy",
-        "description": "Confirm buy.",
+        "description": "Confirm buy.\n\n> 🚧 This method doesn't check account for validity. If you want to confirm validity before buying, you should use [FastSell](https://lzt-market.readme.io/reference/accountpublishingfastsell) method",
         "operationId": "accountsPurchasing.confirmBuy",
         "parameters": [
           {
@@ -8887,22 +9166,6 @@
           },
           {
             "$ref": "#/components/parameters/price"
-          },
-          {
-            "name": "buy_without_validation",
-            "in": "query",
-            "description": "Put **1** if you want to buy account without account data validation (not safe).",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Buy Without Validation",
-              "type": "integer",
-              "description": "Put **1** if you want to buy account without account data validation (not safe).",
-              "enum": [
-                1
-              ]
-            }
           }
         ],
         "responses": {
@@ -9492,7 +9755,7 @@
         "tags": [
           "Account publishing"
         ],
-        "summary": "Add account",
+        "summary": "Add Account",
         "description": "Adds account on the market.\n\nAccount origin. Where did you get it from.\n\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
         "operationId": "accountPublishing.addItem",
         "parameters": [
@@ -9808,7 +10071,7 @@
         "tags": [
           "Account publishing"
         ],
-        "summary": "Check Not Published Acc",
+        "summary": "Check Not Published Account",
         "description": "Check and put up to sale not published account OR update account information existing account.\n\n**If you receive a \"captcha\" error, that you should send same request again.**",
         "operationId": "accountsPublishing.checkNotPublic",
         "parameters": [
@@ -10103,7 +10366,7 @@
         "tags": [
           "Account publishing"
         ],
-        "summary": "Get Info Not Published Acc (Get temp email for account)",
+        "summary": "Get Info Not Published Account (Get temp email for account)",
         "description": "Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.",
         "operationId": "accountsPublishing.getInfoNotPublic",
         "parameters": [
@@ -11026,7 +11289,7 @@
         "tags": [
           "Profile"
         ],
-        "summary": "Get Profile Market",
+        "summary": "Get Profile",
         "description": "Displays info about your profile.",
         "operationId": "marketProfileSettings.getInfo",
         "responses": {
@@ -11149,7 +11412,7 @@
         "tags": [
           "Profile"
         ],
-        "summary": "Edit Settings Market",
+        "summary": "Edit Market Settings",
         "description": "Change settings about your profile on the market.",
         "operationId": "marketProfileSettings.getSettings",
         "parameters": [
@@ -11530,6 +11793,91 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/balance/transfer/fee": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Check Transfer Fee",
+        "description": "Get transfer limits and get fee amount for transfer.",
+        "operationId": "paymentsList.Fee",
+        "parameters": [
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Amount you want to send in your  currency.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Amount",
+              "type": "number",
+              "description": "Amount you want to send in your currency.",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Successful Response",
+                  "type": "object",
+                  "properties": {
+                    "commission_percentage": {
+                      "title": "Commission",
+                      "type": "integer"
+                    },
+                    "spentIn30Days": {
+                      "title": "Spent in days",
+                      "type": "integer"
+                    },
+                    "calculator": {
+                      "title": "Calculator",
+                      "type": "object",
+                      "properties": {
+                        "inputAmount": {
+                          "title": "Input amount",
+                          "type": "integer"
+                        },
+                        "commissionAmount": {
+                          "title": "Commission amount",
+                          "type": "integer"
+                        },
+                        "totalOutputAmount": {
+                          "title": "Total output amount",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "inputAmount",
+                        "commissionAmount",
+                        "totalOutputAmount"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         },
         "security": [
@@ -14339,6 +14687,37 @@
           "title": "Premium",
           "description": "Has a premium subscription.",
           "$ref": "#/components/schemas/YesNoNoMatterScheme"
+        }
+      },
+      "premium_expiration": {
+        "name": "premium_expiration",
+        "in": "query",
+        "description": "When premium subscription will be active",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Premium Expiration",
+          "type": "integer",
+          "description": "When premium subscription will be active"
+        }
+      },
+      "premium_expiration_period": {
+        "name": "premium_expiration_period",
+        "in": "query",
+        "description": "In what notation is time measured",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Premium Expiration",
+          "type": "string",
+          "description": "In what notation is time measured",
+          "enum": [
+            "day",
+            "month",
+            "year"
+          ]
         }
       },
       "subscription_length": {
