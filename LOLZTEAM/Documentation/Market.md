@@ -118,6 +118,7 @@
     * [Add tag](#add-tag)
     * [Delete tag](#delete-tag)
   * [Get item](#get-item)
+  * [Bulk get](#bulk-get)
   * [Edit item](#edit-item)
   * [Delete item](#delete-item)
   * [Steam inventory value](#steam-inventory-value)
@@ -139,6 +140,7 @@
 * [Payments](#payments)
   * [History](#history)
   * [Transfer](#transfer)
+  * [Check transfer fee](#check-transfer-fee)
   * [Generate payment link](#generate-payment-link)
 * [Proxy](#proxy)
   * [Get proxies](#get-proxies)
@@ -2148,10 +2150,6 @@ print(response.json())
 
 *Displays item information or returns Steam account html code.*
 
-*[Official documentation reference (item info)](https://lzt-market.readme.io/reference/accountslistgetinformation)*
-*[Official documentation reference (steam html)](https://lzt-market.readme.io/reference/accountslistgetsteamhtml)*
-*[Official documentation reference (auction bids)](https://lzt-market.readme.io/reference/auctionget)*
-
 **Parameters:**
 
 - **item_id** (int): ID of item.
@@ -2170,6 +2168,25 @@ print(response.json())
 
 ```python
 {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}
+```
+
+### Bulk get
+
+*Bulk get up to 250 accounts.*
+
+**Parameters:**
+
+- **item_ids** (list): Item ids.
+
+**Example:**
+
+```python
+response = market.managing.bulk_get(item_ids=[i for i in range(100000000, 100000000+250)])
+print(response.json())
+```
+
+```python
+{'items': [{'0': {'item_id': 0, 'item_state': 'string', 'category_id': 0, 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}}], 'left_item_id': [0], 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Edit item
@@ -2627,6 +2644,25 @@ print(response.json())
 
 ```python
 {'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
+```
+
+### Check Transfer Fee
+
+*Get transfer limits and get fee amount for transfer.*
+
+**Parameters:**
+
+- **amount** (float): Amount to send in your currency.
+
+**Example:**
+
+```python
+response = market.payments.fee()
+print(response.json())
+```
+
+```python
+{'commission_percentage': 0, 'spentIn30Days': 3537, 'calculator': {'inputAmount': 1000, 'commissionAmount': 0, 'totalOutputAmount': 1000}, 'system_info': {'visitor_id': 2410024, 'time': 1714751908}}
 ```
 
 ### Generate payment link

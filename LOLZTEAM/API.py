@@ -11,7 +11,8 @@ from typing import Union, Literal
 from . import Exceptions
 from .Tweaks import _MainTweaks
 
-logging.basicConfig(format="\033[93mWARNING:%(message)s\033[0m", level=logging.WARNING)
+logging.basicConfig(
+    format="\033[93mWARNING:%(message)s\033[0m", level=logging.WARNING)
 
 
 @_MainTweaks._RetryWrapper
@@ -22,7 +23,7 @@ def _send_request(
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
-    if re.search(self._delay_pattern, path):
+    if re.search(self.base_url + self._delay_pattern, url):
         _MainTweaks._auto_delay(self=self)
     if params is None:
         params = {}
@@ -86,7 +87,8 @@ def _send_request(
             print(response.text)
         return response
     else:
-        raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
+        raise Exceptions.AS7RID_FUCK_UP(
+            "Invalid request method. Contact @AS7RID")
 
 
 @_MainTweaks._RetryWrapper
@@ -97,7 +99,7 @@ async def _send_async_request(
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
-    if re.search(self._delay_pattern, path):
+    if re.search(self.base_url + self._delay_pattern, url):
         await _MainTweaks._auto_delay_async(self=self)
     if params is None:
         params = {}
@@ -158,11 +160,10 @@ async def _send_async_request(
                 print(response.request_info.url)
                 print(response._body)
                 print(response.text)
-            else:
-                self._auto_delay_time = time.time()
             return response
     else:
-        raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
+        raise Exceptions.AS7RID_FUCK_UP(
+            "Invalid request method. Contact @AS7RID")
 
 
 class Forum:
@@ -2165,7 +2166,8 @@ class Forum:
             }
             if custom_fields is not None:
                 if "CREATE_JOB" in locals():
-                    params["custom_fields"] = custom_fields  # Костыль CreateJob
+                    # Костыль CreateJob
+                    params["custom_fields"] = custom_fields
                 else:
                     for key, value in custom_fields.items():
                         cf = f"custom_fields[{key}]"
@@ -3586,8 +3588,7 @@ class Market:
                 if not category.startswith("__")
             ]
         )
-        self._delay_pattern = f"/(?:{_categories})(?:/|$)" + "|" + r"/(\d+)(?:/.*|$)"
-
+        self._delay_pattern = rf"/(?:{_categories})(?:/|$)"
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
         self.category = self.__Category(self)
@@ -4141,9 +4142,9 @@ class Market:
                 """
                 path = "/valorant/params"
                 return _send_request(self=self._api, method="GET", path=path)
-            
+
             @_MainTweaks._CheckScopes(scopes=["market"])
-            def data(self, data_type:str=Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
+            def data(self, data_type: str = Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/data
 
@@ -4693,6 +4694,7 @@ class Market:
                 """
                 path = "/wot-blitz/params"
                 return _send_request(self=self._api, method="GET", path=path)
+
         class __Gifts:
             def __init__(self, _api_self):
                 self._api = _api_self
@@ -6532,6 +6534,30 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def fee(
+            self,
+            amount: float = None
+        ) -> httpx.Response:
+            """
+            GET https://api.lzt.market/balance/transfer/fee
+
+            Get transfer limits and get fee amount for transfer.
+
+            Required scopes: market
+
+            :param amount: Amount to send in your currency.
+
+            :return: httpx Response object
+            """
+            path = "/balance/transfer/fee"
+            params = {
+                "amount": amount
+            }
+            return _send_request(
+                self=self._api, method="GET", path=path, params=params
+            )
+
         @staticmethod
         def generate_link(
             amount: int,
@@ -6672,6 +6698,26 @@ class Market:
                 path = f"/{item_id}/steam-preview"
             params = {"type": preview_type}
             return _send_request(self=self._api, method="GET", path=path, params=params)
+
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def bulk_get(
+            self,
+            item_ids: list
+        ) -> httpx.Response:
+            """
+            POST https://api.lzt.market/bulk/items
+
+            Bulk get up to 250 accounts.
+
+            Required scopes: market
+
+            :param item_ids: Item ids.
+
+            :return: httpx Response object
+            """
+            path = "/bulk/items"
+            data = {"item_id[]": item_ids}
+            return _send_request(self=self._api, method="POST", path=path, data=data)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def delete(self, item_id: int, reason: str) -> httpx.Response:

@@ -30,6 +30,7 @@ class Market:
         cinema = "cinema"
         spotify = "spotify"
         warface = "warface"
+        gifts = "gifts"
 
     class CategoryId:
         steam = 1
@@ -55,7 +56,7 @@ class Market:
         cinema = 23
         spotify = 26
         warface = 4
-        gift = 30
+        gifts = 30
 
     class OperationTypes:
         income = "income"
@@ -94,7 +95,7 @@ class Market:
         autoreg = "autoreg"
         personal = "personal"
         resale = "resale"
-        dummy = "dummy"  # Only for steam (Пустышки)
+        dummy = "dummy"      # Only for steam (Пустышки)
 
     class Guarantee:
         half_day = -1
@@ -115,6 +116,8 @@ class Market:
         newest_upload = "pdate_to_down_upload"
         oldest_upload = "pdate_to_up_upload"
         auction_expiration = "exp_auctions"
+        newest_deleted = "ddate_to_down",
+        oldest_deleted = "ddate_to_up"
 
     class AppID:
         CS2 = 730
@@ -125,7 +128,7 @@ class Market:
         Rust = 252490
         Unturned = 304930
         KF2 = 232090
-        DST = 322330  # Don't Starve Together
+        DST = 322330
 
 
 class Forum:
@@ -163,13 +166,13 @@ class Forum:
         min_likes = "post_likes_reverse"
 
     class ReplyGroups:
-        staff = 0  # КФ + кураторы
-        everyone = 2  # Все
-        local = 21  # Местный и выше
+        staff = 0      # КФ + кураторы
+        everyone = 2   # Все
+        local = 21     # Местный и выше
         resident = 22  # Постоялец и выше
-        expert = 23  # Эксперт и выше
-        guru = 60  # Гуру и выше
-        ai = 351  # ИИ и выше
+        expert = 23    # Эксперт и выше
+        guru = 60      # Гуру и выше
+        ai = 351       # ИИ и выше
 
     class Arbitrage:
         class TransferType:
