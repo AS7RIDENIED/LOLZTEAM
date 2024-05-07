@@ -1,6 +1,4 @@
 import logging
-import asyncio
-import base64
 import httpx
 import time
 import json
@@ -11,8 +9,16 @@ from typing import Union, Literal
 from . import Exceptions
 from .Tweaks import _MainTweaks
 
-logging.basicConfig(
-    format="\033[93mWARNING:%(message)s\033[0m", level=logging.WARNING)
+_WarningsHandler = logging.StreamHandler()
+_WarningsHandler.setFormatter(logging.Formatter(
+    "\033[93mWARNING:%(message)s\033[0m"))
+_WarningsLogger = logging.getLogger("LOLZTEAM.Warnings")
+_WarningsLogger.setLevel(level=logging.WARNING)
+_WarningsLogger.addHandler(_WarningsHandler)
+
+
+_DebugLogger = logging.getLogger("LOLZTEAM.Debug")
+_DebugLogger.setLevel(level=100)
 
 
 @_MainTweaks._RetryWrapper
@@ -20,6 +26,7 @@ def _send_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
 ) -> httpx.Response:
     url = self.base_url + path
+    safe_url = url
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
@@ -64,6 +71,10 @@ def _send_request(
                 "Proxy type has invalid value. It can be only https, http, socks4 or socks5"
             )
     if method in request_methods:
+        censored_headers = headers.copy()
+        censored_headers["Authorization"] = "bearer ***Token***"
+        _DebugLogger.debug(
+            f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {json.dumps(files)} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
         response = httpx.request(
             method=method,
             url=url,
@@ -78,13 +89,8 @@ def _send_request(
             self.custom_params = {}
             self.custom_body = {}
             self.custom_headers = {}
-        if self.debug:
-            print(response.request.method)
-            print(response.json())
-            print(response.request.headers)
-            print(response.request.url)
-            print(response.request.body)
-            print(response.text)
+        _DebugLogger.debug(
+            f"Response: {response} | Plain response: {rf'{response.text}'}")
         return response
     else:
         raise Exceptions.AS7RID_FUCK_UP(
@@ -96,6 +102,7 @@ async def _send_async_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
 ) -> httpx.Response:
     url = self.base_url + path
+    safe_url = url
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
@@ -143,6 +150,10 @@ async def _send_async_request(
             )
 
     if method in request_methods:
+        censored_headers = headers.copy()
+        censored_headers["Authorization"] = "bearer ***Token***"
+        _DebugLogger.debug(
+            f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {json.dumps(files)} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
         async with httpx.AsyncClient(proxies=proxy) as client:
             response = await client.request(
                 method=method,
@@ -153,13 +164,8 @@ async def _send_async_request(
                 headers=self._main_headers,
                 timeout=self.timeout,
             )
-            if self.debug:
-                print(response.request_info.method)
-                print(response.json())
-                print(response.request_info.headers)
-                print(response.request_info.url)
-                print(response._body)
-                print(response.text)
+            _DebugLogger.debug(
+                f"Response: {response} | Plain response: {rf'{response.text}'}")
             return response
     else:
         raise Exceptions.AS7RID_FUCK_UP(
@@ -185,7 +191,6 @@ class Forum:
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://api.zelenka.guru"
-        self.debug = False
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
@@ -2014,7 +2019,7 @@ class Forum:
                 :return: httpx Response object
                 """
                 if "CREATE_JOB" in locals():
-                    logging.warn(
+                    _WarningsLogger.warn(
                         message=f"{FutureWarning.__name__}:You can't upload avatar using batch"
                     )
                 if user_id is None:
@@ -3551,7 +3556,6 @@ class Market:
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://api.lzt.market"
-        self.debug = False
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
@@ -7710,7 +7714,6 @@ class Antipublic:
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
         self.base_url = "https://antipublic.one"
-        self.debug = False
         if proxy_type is not None:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:

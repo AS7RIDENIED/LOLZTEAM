@@ -9,11 +9,14 @@ import base64
 import types
 import json
 import time
+import sys
 import re
+import os
 
 from . import Exceptions
 
-logging.basicConfig(format="\033[93mWARNING:%(message)s\033[0m", level=logging.WARNING)
+_WarningsLogger = logging.getLogger("LOLZTEAM.Warnings")
+_DebugLogger = logging.getLogger("LOLZTEAM.Debug")
 
 
 class _MainTweaks:
@@ -40,16 +43,16 @@ class _MainTweaks:
                     if (
                         time_diff < 3.0
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        if self.debug:
-                            print(f"Sleeping for {3-time_diff} seconds")
+                        _DebugLogger.debug(
+                            f"Sleeping for {3-time_diff} seconds")
                         time.sleep(3.003 - time_diff)
                 else:
                     time_diff = time.time() - self._auto_delay_time
                     if (
                         time_diff < 3.0
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        if self.debug:
-                            print(f"Sleeping for {3-time_diff} seconds")
+                        _DebugLogger.debug(
+                            f"Sleeping for {3-time_diff} seconds")
                         time.sleep(3.003 - time_diff)
 
     async def _auto_delay_async(self):
@@ -65,16 +68,16 @@ class _MainTweaks:
                     if (
                         time_diff < 3.0
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        if self.debug:
-                            print(f"Sleeping for {3-time_diff} seconds")
+                        _DebugLogger.debug(
+                            f"Sleeping for {3-time_diff} seconds")
                         await asyncio.sleep(3.003 - time_diff)
                 else:
                     time_diff = time.time() - self._auto_delay_time
                     if (
                         time_diff < 3.0
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        if self.debug:
-                            print(f"Sleeping for {3-time_diff} seconds")
+                        _DebugLogger.debug(
+                            f"Sleeping for {3-time_diff} seconds")
                         await asyncio.sleep(3.003 - time_diff)
 
     def setup_jwt(self, token, user_id=None):
@@ -86,8 +89,6 @@ class _MainTweaks:
                     else token.split(".")[1]
                 ).decode("utf-8")
             )
-            if self.debug:
-                print(decoded_payload)
             self.user_id = decoded_payload.get("sub", "me")
             scopes = decoded_payload.get(
                 "scope", "basic read post conversate market"
@@ -96,8 +97,8 @@ class _MainTweaks:
         else:
             self._scopes = "basic read post conversate market".split(" ")
             self.user_id = user_id
-        if self.debug:
-            print(f"User ID: {self.user_id}\nScopes: {self._scopes}")
+        _DebugLogger.debug(
+            "Setuped jwt token | User ID: {self.user_id} | Scopes: {self._scopes}")
 
     def _CheckScopes(scopes: list = None):
 
@@ -109,7 +110,8 @@ class _MainTweaks:
                     main_self = main_self.__self__
                 if hasattr(main_self, "_api"):
                     main_self = main_self._api
-                path = str(func.__qualname__).replace("<class '", "").replace("'>", "")
+                path = str(func.__qualname__).replace(
+                    "<class '", "").replace("'>", "")
                 for bad_path, cute_path in {
                     "__Profile": "profile",
                     "__Payments": "payments",
@@ -387,7 +389,8 @@ async def SendAsAsync(func, **cur_kwargs):
         if result:
             scopes = eval(result[0])
         if scopes:
-            path = str(func.__qualname__).replace("<class '", "").replace("'>", "")
+            path = str(func.__qualname__).replace(
+                "<class '", "").replace("'>", "")
             for bad_path, cute_path in {
                 "__Profile": "profile",
                 "__Payments": "payments",
@@ -487,3 +490,36 @@ async def SendAsAsync(func, **cur_kwargs):
     return await _send_async_request(
         self=self, method=method, path=path, params=params, data=data
     )
+
+
+class Debug:
+    def __init__(self):
+
+        self._status = False
+        self.DebugLogger = _DebugLogger
+        self.DebugLogger.setLevel(level=logging.DEBUG)
+
+        __DebugHandler = logging.FileHandler(
+            filename=f"{os.path.basename(sys.argv[0])} # LOLZTEAM {time.strftime('%Y.%m.%d - %H-%M-%S')}.log", mode="w", encoding="UTF-8")
+        formatter = logging.Formatter(
+            "%(asctime)s | %(message)s")
+        __DebugHandler.setFormatter(formatter)
+        self.DebugHandler = __DebugHandler
+
+    @property
+    def status(self):
+        return self._status
+
+    def enable(self):
+        if not self._status:
+            self._status = True
+            self.DebugLogger.addHandler(self.DebugHandler)
+        else:
+            _WarningsLogger.warn(" Debug logger already enabled")
+
+    def disable(self):
+        if self._status:
+            self._status = False
+            self.DebugLogger.removeHandler(self.DebugHandler)
+        else:
+            _WarningsLogger.warn(" Debug logger already disabled")
