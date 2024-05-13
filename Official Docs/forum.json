@@ -3590,7 +3590,7 @@
           {
             "name": "custom_fields[steam]",
             "in": "query",
-            "description": "User telegram field.",
+            "description": "User steam field.",
             "required": false,
             "style": "form",
             "explode": true,

@@ -9158,7 +9158,7 @@
           "Account purchasing"
         ],
         "summary": "Confirm Buy",
-        "description": "Confirm buy.\n\n> 🚧 This method doesn't check account for validity. If you want to confirm validity before buying, you should use [FastSell](https://lzt-market.readme.io/reference/accountpublishingfastsell) method",
+        "description": "Confirm buy.\n\n> 🚧 This method doesn't check account for validity. If you want to confirm validity before buying, you should use [FastBuy](https://lzt-market.readme.io/reference/accountspurchasingcheckbuy) method",
         "operationId": "accountsPurchasing.confirmBuy",
         "parameters": [
           {
