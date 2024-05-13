@@ -30,55 +30,55 @@ class _MainTweaks:
             variable = "no"
         return variable
 
-    def _auto_delay(self):
+    def _auto_delay(self, delay: float = 3.0):
         """
         Sleep for time difference between the last call and current call if it's less than 3 seconds
         """
         from .API import Antipublic
-
+        delay += 0.05
         if type(self) is not Antipublic:
             if self.bypass_429:
                 if self._delay_synchronizer:
                     time_diff = time.time() - self._auto_delay_time.value
                     if (
-                        time_diff < 3.0
+                        time_diff < delay
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
                         _DebugLogger.debug(
-                            f"Sleeping for {3-time_diff} seconds")
-                        time.sleep(3.003 - time_diff)
+                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
+                        time.sleep(delay - time_diff)
                 else:
                     time_diff = time.time() - self._auto_delay_time
                     if (
-                        time_diff < 3.0
+                        time_diff < delay
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
                         _DebugLogger.debug(
-                            f"Sleeping for {3-time_diff} seconds")
-                        time.sleep(3.003 - time_diff)
+                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
+                        time.sleep(delay - time_diff)
 
-    async def _auto_delay_async(self):
+    async def _auto_delay_async(self, delay: float = 3.0):
         """
         Sleep for time difference between the last call and current call if it's less than 3 seconds
         """
         from .API import Antipublic
-
+        delay += 0.05
         if type(self) is not Antipublic:
             if self.bypass_429:
                 if self._delay_synchronizer:
                     time_diff = time.time() - self._auto_delay_time.value
                     if (
-                        time_diff < 3.0
+                        time_diff < delay
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
                         _DebugLogger.debug(
-                            f"Sleeping for {3-time_diff} seconds")
-                        await asyncio.sleep(3.003 - time_diff)
+                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
+                        await asyncio.sleep(delay - time_diff)
                 else:
                     time_diff = time.time() - self._auto_delay_time
                     if (
-                        time_diff < 3.0
+                        time_diff < delay
                     ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
                         _DebugLogger.debug(
-                            f"Sleeping for {3-time_diff} seconds")
-                        await asyncio.sleep(3.003 - time_diff)
+                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
+                        await asyncio.sleep(delay - time_diff)
 
     def setup_jwt(self, token, user_id=None):
         if "." in self._token:
@@ -104,6 +104,7 @@ class _MainTweaks:
 
         def _wrapper(func):
 
+            @functools.wraps(func)
             def _wrapper_costyl(func_self, *args, **kwargs):
                 main_self = func_self
                 if hasattr(main_self, "__self__"):
@@ -202,10 +203,7 @@ class _MainTweaks:
                 try:
                     response = func(*args, **kwargs)
                     if self._delay_synchronizer:
-                        self._delay_synchronizer._synchronize(time.time())
                         self._lock.release()  # Unlocking to prevent softlock
-                    else:
-                        self._auto_delay_time = time.time()
                     return response
                 except ConnectError as e:
                     if tries == 30:
@@ -219,9 +217,13 @@ class DelaySync:
     def __init__(self, apis: list = []):
         self.apis = [i for i in apis]
         self.lock = Lock()
+        self.shared_value = Value(ctypes.c_longdouble, 0)
+        if apis:
+            self.shared_value.value = max(
+                [api_._auto_delay_time for api_ in apis] + [self.shared_value.value])
         for api in self.apis:
             api._add_delay_synchronizer(self)
-            api._auto_delay_time = Value(ctypes.c_longdouble, time.time())
+            api._auto_delay_time = self.shared_value
             api._lock = self.lock
 
     def _synchronize(self, auto_delay_new):
@@ -229,26 +231,31 @@ class DelaySync:
             api._auto_delay_time.value = auto_delay_new
 
     def add(self, api):
-        if self.apis:
-            sync_time = self.apis[0]._auto_delay_time.value
-        else:
-            sync_time = time.time()
         if type(api) is list:
+            if api:
+                self.shared_value.value = max(
+                    [api_._auto_delay_time for api_ in api] + [self.shared_value.value])
             for api_ in api:
                 self.apis.append(api_)
                 api_._add_delay_synchronizer(self)
-                api._auto_delay_time = Value(ctypes.c_longdouble, sync_time)
+                api._auto_delay_time = self.shared_value
                 api._lock = self.lock
+
         elif type(api) is dict:
+            if api:
+                self.shared_value.value = max(
+                    [api_._auto_delay_time for api_ in api.values()] + [self.shared_value.value])
             for key, value in api.items():
                 self.apis.append(value)
                 value._add_delay_synchronizer(self)
-                value._auto_delay_time = Value(ctypes.c_longdouble, sync_time)
+                value._auto_delay_time = self.shared_value
                 value._lock = self.lock
         else:
+            self.shared_value.value = max(
+                [self.shared_value.value, api._auto_delay_time])
             self.apis.append(api)
             api._add_delay_synchronizer(self)
-            api._auto_delay_time = Value(ctypes.c_longdouble, sync_time)
+            api._auto_delay_time = self.shared_value
             api._lock = self.lock
 
     def remove(self, api):
@@ -275,6 +282,38 @@ class DelaySync:
         self,
     ):  # Удаляем линки на синхронайзеры из объектов Forum/Market при удалении
         self.clear()
+
+
+class Debug:
+    def __init__(self):
+
+        self._status = False
+        self.DebugLogger = _DebugLogger
+        self.DebugLogger.setLevel(level=logging.DEBUG)
+
+        __DebugHandler = logging.FileHandler(
+            filename=f"{os.path.basename(sys.argv[0])} # LOLZTEAM {time.strftime('%Y.%m.%d - %H-%M-%S')}.log", mode="w", encoding="UTF-8")
+        formatter = logging.Formatter("%(asctime)s | %(message)s")
+        __DebugHandler.setFormatter(formatter)
+        self.DebugHandler = __DebugHandler
+
+    @property
+    def status(self):
+        return self._status
+
+    def enable(self):
+        if not self._status:
+            self._status = True
+            self.DebugLogger.addHandler(self.DebugHandler)
+        else:
+            _WarningsLogger.warn(" Debug logger already enabled")
+
+    def disable(self):
+        if self._status:
+            self._status = False
+            self.DebugLogger.removeHandler(self.DebugHandler)
+        else:
+            _WarningsLogger.warn(" Debug logger already disabled")
 
 
 def CreateJob(func, job_name, **cur_kwargs):
@@ -490,36 +529,3 @@ async def SendAsAsync(func, **cur_kwargs):
     return await _send_async_request(
         self=self, method=method, path=path, params=params, data=data
     )
-
-
-class Debug:
-    def __init__(self):
-
-        self._status = False
-        self.DebugLogger = _DebugLogger
-        self.DebugLogger.setLevel(level=logging.DEBUG)
-
-        __DebugHandler = logging.FileHandler(
-            filename=f"{os.path.basename(sys.argv[0])} # LOLZTEAM {time.strftime('%Y.%m.%d - %H-%M-%S')}.log", mode="w", encoding="UTF-8")
-        formatter = logging.Formatter(
-            "%(asctime)s | %(message)s")
-        __DebugHandler.setFormatter(formatter)
-        self.DebugHandler = __DebugHandler
-
-    @property
-    def status(self):
-        return self._status
-
-    def enable(self):
-        if not self._status:
-            self._status = True
-            self.DebugLogger.addHandler(self.DebugHandler)
-        else:
-            _WarningsLogger.warn(" Debug logger already enabled")
-
-    def disable(self):
-        if self._status:
-            self._status = False
-            self.DebugLogger.removeHandler(self.DebugHandler)
-        else:
-            _WarningsLogger.warn(" Debug logger already disabled")

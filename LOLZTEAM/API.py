@@ -32,6 +32,8 @@ def _send_request(
     method = method.upper()
     if re.search(self.base_url + self._delay_pattern, url):
         _MainTweaks._auto_delay(self=self)
+    elif type(self) is Market:
+        _MainTweaks._auto_delay(self=self, delay=0.5)
     if params is None:
         params = {}
     if not params.get("locale"):
@@ -75,6 +77,10 @@ def _send_request(
         censored_headers["Authorization"] = "bearer ***Token***"
         _DebugLogger.debug(
             f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {json.dumps(files)} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
+        if self._delay_synchronizer:
+            self._delay_synchronizer._synchronize(time.time())
+        else:
+            self._auto_delay_time = time.time()
         response = httpx.request(
             method=method,
             url=url,
@@ -90,7 +96,7 @@ def _send_request(
             self.custom_body = {}
             self.custom_headers = {}
         _DebugLogger.debug(
-            f"Response: {response} | Plain response: {rf'{response.text}'}")
+            f"Response: {response} | Plain response: {response.content}")
         return response
     else:
         raise Exceptions.AS7RID_FUCK_UP(
@@ -154,6 +160,10 @@ async def _send_async_request(
         censored_headers["Authorization"] = "bearer ***Token***"
         _DebugLogger.debug(
             f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {json.dumps(files)} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
+        if self._delay_synchronizer:
+            self._delay_synchronizer._synchronize(time.time())
+        else:
+            self._auto_delay_time = time.time()
         async with httpx.AsyncClient(proxies=proxy) as client:
             response = await client.request(
                 method=method,
@@ -165,7 +175,7 @@ async def _send_async_request(
                 timeout=self.timeout,
             )
             _DebugLogger.debug(
-                f"Response: {response} | Plain response: {rf'{response.text}'}")
+                f"Response: {response} | Plain response: {response.content}")
             return response
     else:
         raise Exceptions.AS7RID_FUCK_UP(
@@ -213,7 +223,7 @@ class Forum:
 
         self.bypass_429 = bypass_429
         self.timeout = timeout
-        self._auto_delay_time = time.time() - 3
+        self._auto_delay_time = 0
         self._locale = language
         self._delay_synchronizer = None
         self._lock = None
@@ -3578,7 +3588,7 @@ class Market:
 
         self.bypass_429 = bypass_429
         self.timeout = timeout
-        self._auto_delay_time = time.time() - 3
+        self._auto_delay_time = 0
         self._locale = language
         self._delay_synchronizer = None
         self._lock = None
