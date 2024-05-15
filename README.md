@@ -17,7 +17,7 @@ pip install LOLZTEAM
 ```python
 from LOLZTEAM import AutoUpdate, Constants, Utils
 from LOLZTEAM.API import Forum, Market, Antipublic
-from LOLZTEAM.Tweaks import DelaySync, SendAsAsync, CreateJob
+from LOLZTEAM.Tweaks import DelaySync, Debug, SendAsAsync, CreateJob
 
 token = "your_token"
 
@@ -26,6 +26,7 @@ forum = Forum(token=token, language="en")
 antipublic = Antipublic(token="Antipublic_key")
 
 DelaySync(apis=[market,forum])
+Debug().enable()
 ```
 
 ## Documentation
