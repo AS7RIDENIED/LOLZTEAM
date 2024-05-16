@@ -5612,7 +5612,7 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/battlenet/params
 
                 Displays search parameters for a category.
 
@@ -5624,7 +5624,7 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def games(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/category_name/games
+                GET https://api.lzt.market/battlenet/games
 
                 Displays a list of games in the category.
 
@@ -5713,7 +5713,7 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/vpn/params
 
                 Displays search parameters for a category.
 
@@ -5800,7 +5800,7 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/cinema/params
 
                 Displays search parameters for a category.
 
@@ -5887,7 +5887,7 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/spotify/params
 
                 Displays search parameters for a category.
 
@@ -5974,13 +5974,100 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/warface/params
 
                 Displays search parameters for a category.
 
                 :return: httpx Response object
                 """
                 path = "/warface/params"
+                return _send_request(self=self._api, method="GET", path=path)
+
+        class __Minecraft:
+            def __init__(self, _api_self):
+                self._api = _api_self
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def get(
+                self,
+                page: int = None,
+                auction: str = None,
+                title: str = None,
+                pmin: int = None,
+                pmax: int = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
+                order_by: str = None,
+                sold_before: bool = None,
+                sold_before_by_me: bool = None,
+                not_sold_before: bool = None,
+                not_sold_before_by_me: bool = None,
+                search_params: dict = None,
+                **kwargs,
+            ) -> httpx.Response:
+                """
+                GET https://api.lzt.market/categoryName
+
+                Displays a list of accounts in a specific category according to your parameters.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+                :param auction: Auction. Can be [yes, no, nomatter].
+                :param title: The word or words contained in the account title
+                :param pmin: Minimal price of account (Inclusive)
+                :param pmax: Maximum price of account (Inclusive)
+                :param origin: List of account origins.
+                :param not_origin: List of account origins that won't be included.
+                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                :param sold_before: Sold before.
+                :param sold_before_by_me: Sold before by me.
+                :param not_sold_before: Not sold before.
+                :param not_sold_before_by_me: Not sold before by me.
+                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                :return: httpx Response object
+                """
+                path = "/minecraft"
+                if True:  # Tweak market
+                    auction = _MainTweaks.market_variable_fix(auction)
+                params = {
+                    "page": page,
+                    "auction": auction,
+                    "title": title,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "origin[]": origin,
+                    "not_origin[]": not_origin,
+                    "order_by": order_by,
+                    "sb": sold_before,
+                    "sb_by_me": sold_before_by_me,
+                    "nsb": not_sold_before,
+                    "nsb_by_me": not_sold_before_by_me,
+                }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
+                return _send_request(
+                    self=self._api,
+                    method="GET",
+                    path=path,
+                    params=params,
+                )
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
+                """
+                GET https://api.lzt.market/minecraft/params
+
+                Displays search parameters for a category.
+
+                :return: httpx Response object
+                """
+                path = "/minecraft/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
         def __init__(self, _api_self):
@@ -6009,6 +6096,7 @@ class Market:
             self.cinema = self.__Cinema(_api_self)
             self.spotify = self.__Spotify(_api_self)
             self.warface = self.__Warface(_api_self)
+            self.minecraft = self.__Minecraft(_api_self)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def get(

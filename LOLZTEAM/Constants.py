@@ -31,6 +31,7 @@ class Market:
         spotify = "spotify"
         warface = "warface"
         gifts = "gifts"
+        minecraft = "minecraft"
 
     class CategoryId:
         steam = 1
@@ -57,6 +58,7 @@ class Market:
         spotify = 26
         warface = 4
         gifts = 30
+        minecraft = 28
 
     class OperationTypes:
         income = "income"
