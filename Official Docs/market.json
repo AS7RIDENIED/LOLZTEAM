@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.28"
+    "version": "1.1.29"
   },
   "servers": [
     {
@@ -1417,6 +1417,110 @@
                 "Samsung",
                 "xbl"
               ]
+            }
+          },
+          {
+            "name": "skins_shop_min",
+            "in": "query",
+            "description": "Minimum number of shop skins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Skins Shop Min",
+              "type": "integer",
+              "description": "Minimum number of shop skins."
+            }
+          },
+          {
+            "name": "skins_shop_max",
+            "in": "query",
+            "description": "Maximum number of shop skins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Skins Shop Max",
+              "type": "integer",
+              "description": "Maximum number of shop skins."
+            }
+          },
+          {
+            "name": "pickaxes_shop_min",
+            "in": "query",
+            "description": "Minimum number of shop pickaxes.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Pickaxes Shop Min",
+              "type": "integer",
+              "description": "Minimum number of shop pickaxes."
+            }
+          },
+          {
+            "name": "pickaxes_shop_max",
+            "in": "query",
+            "description": "Maximum number of shop pickaxes.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Pickaxes Shop Max",
+              "type": "integer",
+              "description": "Maximum number of shop pickaxes."
+            }
+          },
+          {
+            "name": "dances_shop_min",
+            "in": "query",
+            "description": "Minimum number of shop dances.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Dances Shop Min",
+              "type": "integer",
+              "description": "Minimum number of shop dances."
+            }
+          },
+          {
+            "name": "dances_shop_max",
+            "in": "query",
+            "description": "Maximum number of shop dances.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Dances Shop Max",
+              "type": "integer",
+              "description": "Maximum number of shop dances."
+            }
+          },
+          {
+            "name": "gliders_shop_min",
+            "in": "query",
+            "description": "Minimum number of shop gliders.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gliders Shop Min",
+              "type": "integer",
+              "description": "Minimum number of shop gliders."
+            }
+          },
+          {
+            "name": "gliders_shop_max",
+            "in": "query",
+            "description": "Maximum number of shop gliders.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gliders Shop Max",
+              "type": "integer",
+              "description": "Maximum number of shop gliders."
             }
           },
           {
@@ -2874,7 +2978,7 @@
             "$ref": "#/components/parameters/nsb_by_me"
           },
           {
-            "name": "lvl_min",
+            "name": "level_min",
             "in": "query",
             "description": "Minimum level.",
             "required": false,
@@ -2888,7 +2992,7 @@
             }
           },
           {
-            "name": "lvl_max",
+            "name": "level_max",
             "in": "query",
             "description": "Maximum level.",
             "required": false,
@@ -3172,15 +3276,13 @@
             "$ref": "#/components/parameters/tel"
           },
           {
-            "name": "mail",
+            "name": "email",
             "in": "query",
             "description": "Has confirmed email.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Mail",
-              "description": "Has confirmed email.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
@@ -3651,6 +3753,32 @@
             }
           },
           {
+            "name": "wins_min",
+            "in": "query",
+            "description": "Minimum number of wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Wins Min",
+              "type": "integer",
+              "description": "Minimum number of wins."
+            }
+          },
+          {
+            "name": "wins_max",
+            "in": "query",
+            "description": "Maximum number of wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Wins Max",
+              "type": "integer",
+              "description": "Maximum number of wins."
+            }
+          },
+          {
             "name": "brawler[]",
             "in": "query",
             "description": "List of brawlers.",
@@ -3799,6 +3927,84 @@
               "type": "integer",
               "description": "Maximum number of legendary brawlers.",
               "minimum": 0
+            }
+          },
+          {
+            "name": "town_hall_Level_min",
+            "in": "query",
+            "description": "Minimum level of town hall.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Town Hall Level Min",
+              "type": "integer",
+              "description": "Minimum level of town hall."
+            }
+          },
+          {
+            "name": "town_hall_Level_max",
+            "in": "query",
+            "description": "Maximum level of town hall.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Town Hall Level Max",
+              "type": "integer",
+              "description": "Maximum level of town hall."
+            }
+          },
+          {
+            "name": "builder_hall_level_min",
+            "in": "query",
+            "description": "Minimum level of builder hall.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Builder Hall Level Min",
+              "type": "integer",
+              "description": "Minimum level of builder hall."
+            }
+          },
+          {
+            "name": "builder_hall_level_max",
+            "in": "query",
+            "description": "Maximum level of builder hall.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Builder Hall Level Max",
+              "type": "integer",
+              "description": "Maximum level of builder hall."
+            }
+          },
+          {
+            "name": "builder_hall_cup_min",
+            "in": "query",
+            "description": "Minimum number of builder hall cups.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Builder Hall Cup Min",
+              "type": "integer",
+              "description": "Minimum number of builder hall cups."
+            }
+          },
+          {
+            "name": "builder_hall_cup_max",
+            "in": "query",
+            "description": "Maximum number of builder hall cups.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Builder Hall Cup Max",
+              "type": "integer",
+              "description": "Maximum number of builder hall cups."
             }
           }
         ],
@@ -5423,6 +5629,17 @@
             }
           },
           {
+            "name": "transactions",
+            "in": "query",
+            "description": "Has transactions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
             "name": "badge[]",
             "in": "query",
             "description": "List of badges.",
@@ -6096,13 +6313,14 @@
                 "enum": [
                   "AdguardVPN",
                   "PIAVPN",
+                  "cyberghostVPN",
                   "mullvadVPN",
                   "pureVPN",
+                  "tunnelbearVPN",
                   "ultraVPN",
                   "vanishVPN",
-                  "windscribeVPN",
-                  "zenmateVPN",
-                  "zenmateVPNUltimate"
+                  "vyprVPN",
+                  "windscribeVPN"
                 ]
               }
             }
@@ -6397,7 +6615,6 @@
               "items": {
                 "type": "string",
                 "enum": [
-                  "Premium Basic",
                   "Premium Fallback",
                   "Premium Student",
                   "Premium Duo",
@@ -6509,6 +6726,69 @@
           },
           {
             "$ref": "#/components/parameters/daybreak"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ItemListResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/minecraft": {
+      "get": {
+        "tags": [
+          "Category Search"
+        ],
+        "summary": "Minecraft",
+        "description": "Displays a list of accounts in a specific category according to your parameters.",
+        "operationId": "Category.Minecraft",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/auction"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/pmin"
+          },
+          {
+            "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/origin"
+          },
+          {
+            "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
           }
         ],
         "responses": {
@@ -7759,12 +8039,21 @@
                     "items": {
                       "title": "Items",
                       "type": "array",
-                      "items": {"type": "object", "properties": {"0": {"$ref": "#/components/schemas/ItemModel"}}}
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "0": {
+                            "$ref": "#/components/schemas/ItemModel"
+                          }
+                        }
+                      }
                     },
                     "left_item_id": {
                       "title": "Left",
                       "type": "array",
-                      "items": {"type": "integer"}
+                      "items": {
+                        "type": "integer"
+                      }
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -9546,13 +9835,14 @@
                     "enum": [
                       "AdguardVPN",
                       "PIAVPN",
+                      "cyberghostVPN",
                       "mullvadVPN",
                       "pureVPN",
+                      "tunnelbearVPN",
                       "ultraVPN",
                       "vanishVPN",
+                      "vyprVPN",
                       "windscribeVPN",
-                      "zenmateVPN",
-                      "zenmateVPNUltimate",
                       "start",
                       "telegram",
                       "discord"
@@ -10173,13 +10463,14 @@
                     "enum": [
                       "AdguardVPN",
                       "PIAVPN",
+                      "cyberghostVPN",
                       "mullvadVPN",
                       "pureVPN",
+                      "tunnelbearVPN",
                       "ultraVPN",
                       "vanishVPN",
+                      "vyprVPN",
                       "windscribeVPN",
-                      "zenmateVPN",
-                      "zenmateVPNUltimate",
                       "start",
                       "telegram",
                       "discord"
@@ -14022,7 +14313,8 @@
             "vpn",
             "cinema",
             "spotify",
-            "warface"
+            "warface",
+            "minecraft"
           ]
         }
       },
@@ -14055,7 +14347,7 @@
       "category_id": {
         "name": "category_id",
         "in": "query",
-        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 29 - League of Legends",
+        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+28 - Minecraft\n+ 29 - League of Legends",
         "required": false,
         "style": "form",
         "explode": true,
