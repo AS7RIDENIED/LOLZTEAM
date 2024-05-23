@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.29"
+    "version": "1.1.30"
   },
   "servers": [
     {
@@ -1754,6 +1754,28 @@
             }
           },
           {
+            "name": "not_region",
+            "in": "query",
+            "description": "List of disallowed regions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Not Region",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "asia",
+                  "usa",
+                  "eu",
+                  "cht"
+                ]
+              },
+              "type": "array",
+              "description": "List of disallowed regions."
+            }
+          },
+          {
             "name": "genshin_character[]",
             "in": "query",
             "description": "List of characters.",
@@ -3237,6 +3259,9 @@
             "$ref": "#/components/parameters/country"
           },
           {
+            "$ref": "#/components/parameters/not_country"
+          },
+          {
             "name": "region[]",
             "in": "query",
             "description": "Region.",
@@ -3267,6 +3292,22 @@
                   "sg2"
                 ]
               }
+            }
+          },
+          {
+            "name": "not_region",
+            "in": "query",
+            "description": "List of disallowed regions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Not Region",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of disallowed regions."
             }
           },
           {
@@ -6314,6 +6355,7 @@
                   "AdguardVPN",
                   "PIAVPN",
                   "cyberghostVPN",
+                  "hotspotShieldVPN",
                   "mullvadVPN",
                   "pureVPN",
                   "tunnelbearVPN",
@@ -6443,6 +6485,294 @@
               "title": "Renewable",
               "description": "Is auto renewal enabled.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ItemListResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/roblox": {
+      "get": {
+        "tags": [
+          "Category Search"
+        ],
+        "summary": "Roblox",
+        "description": "Displays a list of accounts in a specific category according to your parameters.",
+        "operationId": "Category.Roblox",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/auction"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/pmin"
+          },
+          {
+            "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/origin"
+          },
+          {
+            "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Has verified email.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "robux_min",
+            "in": "query",
+            "description": "Minimum robux.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Robux Min",
+              "type": "integer",
+              "description": "Minimum robux."
+            }
+          },
+          {
+            "name": "robux_max",
+            "in": "query",
+            "description": "Maximum robux.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Robux Max",
+              "type": "integer",
+              "description": "Maximum robux."
+            }
+          },
+          {
+            "name": "friends_min",
+            "in": "query",
+            "description": "Minimum friends.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Friends Min",
+              "type": "integer",
+              "description": "Minimum friends."
+            }
+          },
+          {
+            "name": "friends_max",
+            "in": "query",
+            "description": "Maximum friends.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Friends Max",
+              "type": "integer",
+              "description": "Maximum friends."
+            }
+          },
+          {
+            "name": "followers_min",
+            "in": "query",
+            "description": "Minimum followers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Followers Min",
+              "type": "integer",
+              "description": "Minimum followers."
+            }
+          },
+          {
+            "name": "followers_max",
+            "in": "query",
+            "description": "Maximum followers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Followers Max",
+              "type": "integer",
+              "description": "Maximum followers."
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "List of allowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Country",
+              "type": "array",
+              "description": "List of allowed countries.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "not_country",
+            "in": "query",
+            "description": "List of disallowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Not Country",
+              "type": "array",
+              "description": "List of disallowed countries.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Has free username change.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/reg"
+          },
+          {
+            "$ref": "#/components/parameters/reg_period"
+          },
+          {
+            "name": "subscription",
+            "in": "query",
+            "description": "Name of subscription.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Subscription",
+              "type": "string",
+              "description": "Name of subscription.",
+              "enum": [
+                "RobloxPremium450",
+                "RobloxPremium1000",
+                "RobloxPremium2200"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/subscription_length"
+          },
+          {
+            "$ref": "#/components/parameters/subscription_period"
+          },
+          {
+            "name": "xbox_connected",
+            "in": "query",
+            "description": "Xbox connected to account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "incoming_robux_total_min",
+            "in": "query",
+            "description": "Minimum amount of incoming robux.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Incoming Robux Total Min",
+              "type": "integer",
+              "description": "Minimum amount of incoming robux."
+            }
+          },
+          {
+            "name": "incoming_robux_total_max",
+            "in": "query",
+            "description": "Maximum amount of incoming robux.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Incoming Robux Total Max",
+              "type": "integer",
+              "description": "Maximum amount of incoming robux."
+            }
+          },
+          {
+            "name": "outgoing_robux_total_min",
+            "in": "query",
+            "description": "Maximum amount of outgoing robux.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Outgoing Robux Total Min",
+              "type": "integer",
+              "description": "Maximum amount of outgoing robux."
+            }
+          },
+          {
+            "name": "outgoing_robux_total_max",
+            "in": "query",
+            "description": "Maximum amount of outgoing robux.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Outgoing Robux Total Max",
+              "type": "integer",
+              "description": "Maximum amount of outgoing robux."
             }
           }
         ],
@@ -6789,6 +7119,190 @@
           },
           {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "name": "java",
+            "in": "query",
+            "description": "Has java edition.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "bedrock",
+            "in": "query",
+            "description": "Has bedrock edition.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "dungeons",
+            "in": "query",
+            "description": "Has Minecraft Dungeons.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "legends",
+            "in": "query",
+            "description": "Has Minecraft Legends.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "change_nickname",
+            "in": "query",
+            "description": "Can change nickname.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "capes_min",
+            "in": "query",
+            "description": "Minimum number of capes.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Capes Min",
+              "type": "integer",
+              "description": "Minimum number of capes."
+            }
+          },
+          {
+            "name": "capes_max",
+            "in": "query",
+            "description": "Maximum number of capes.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Capes Max",
+              "type": "integer",
+              "description": "Maximum number of capes."
+            }
+          },
+          {
+            "name": "rank_hypixel[]",
+            "in": "query",
+            "description": "Rank on hypixel.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Rank Hypixel",
+              "type": "integer",
+              "description": "Rank on hypixel.\n+ 0 - VIP\n+ 1 - VIP+\n+ 2 - MVP\n+ 3 - MVP+\n+ 4 - MVP++\n+ 5 - JR Helper\n+ 6 - Helper\n+ 7 - Mod\n+ 8 - Apple\n+ 9 - Sloth\n+ 10 - Admin\n+ 11 - YT\n+ 12 - Build Team\n+ 12 - Build Team+",
+              "enum": [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+            }
+          },
+          {
+            "name": "level_hypixel_min",
+            "in": "query",
+            "description": "Minimum number of level hypixel.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Level Hypixel Min",
+              "type": "integer",
+              "description": "Minimum number of level hypixel."
+            }
+          },
+          {
+            "name": "level_hypixel_max",
+            "in": "query",
+            "description": "Maximum number of level hypixel.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Level Hypixel Max",
+              "type": "integer",
+              "description": "Maximum number of level hypixel."
+            }
+          },
+          {
+            "name": "achievement_hypixel_min",
+            "in": "query",
+            "description": "Minimum number of achievement hypixel.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Achievement Hypixel Min",
+              "type": "integer",
+              "description": "Minimum number of achievement hypixel."
+            }
+          },
+          {
+            "name": "achievement_hypixel_max",
+            "in": "query",
+            "description": "Maximum number of achievement hypixel.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Achievement Hypixel Max",
+              "type": "integer",
+              "description": "Maximum number of achievement hypixel."
+            }
+          },
+          {
+            "$ref": "#/components/parameters/reg"
+          },
+          {
+            "$ref": "#/components/parameters/reg_period"
+          },
+          {
+            "name": "last_login_hypixel",
+            "in": "query",
+            "description": "How old is the last login account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Last Login Hypixel",
+              "type": "integer",
+              "description": "How old is the last login account."
+            }
+          },
+          {
+            "name": "last_login_hypixel_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Last Login Hypixel Period",
+              "type": "string",
+              "description": "In what notation is time measured.",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
           }
         ],
         "responses": {
@@ -7979,6 +8493,680 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermissionModel"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/{itemId}/claims": {
+      "post": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Create Arbitrage",
+        "description": "Create a Arbitrage.",
+        "operationId": "accountsManaging.Arbitrage",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/itemId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "title": "Post Body",
+                "required": [
+                  "post_body"
+                ],
+                "type": "object",
+                "properties": {
+                  "post_body": {
+                    "title": "Post Body",
+                    "type": "string",
+                    "description": "You should describe what's happened.\n- describe the situation in a nutshell. If you wish, you can describe the situation in more detail using the \"Spoiler\" function.\n- attach screenshots of correspondence. You must upload to the site [Imgur](https://imgur.com/upload) - for convenience, use Ctrl + V when uploading screenshots to the album.\n- other evidence;\n- notify the respondent about the complaint you created, familiarize him with hidden content\n\nDescribe the situation in as much detail as possible."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ThreadModel",
+                  "required": [
+                    "system_info",
+                    "thread"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "thread": {
+                      "title": "Thread",
+                      "required": [
+                        "creator_user_id",
+                        "creator_username",
+                        "first_post",
+                        "forum",
+                        "forum_id",
+                        "links",
+                        "permissions",
+                        "thread_create_date",
+                        "thread_id",
+                        "thread_is_deleted",
+                        "thread_is_followed",
+                        "thread_is_published",
+                        "thread_is_sticky",
+                        "thread_post_count",
+                        "thread_prefixes",
+                        "thread_tags",
+                        "thread_title",
+                        "thread_update_date",
+                        "thread_view_count",
+                        "user_is_ignored"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "thread_id": {
+                          "title": "Thread Id",
+                          "type": "integer"
+                        },
+                        "forum_id": {
+                          "title": "Forum Id",
+                          "type": "integer"
+                        },
+                        "thread_title": {
+                          "title": "Thread Title",
+                          "type": "string"
+                        },
+                        "thread_view_count": {
+                          "title": "Thread View Count",
+                          "type": "integer"
+                        },
+                        "creator_user_id": {
+                          "title": "Creator User Id",
+                          "type": "integer"
+                        },
+                        "creator_username": {
+                          "title": "Creator Username",
+                          "type": "string"
+                        },
+                        "thread_create_date": {
+                          "title": "Thread Create Date",
+                          "type": "integer"
+                        },
+                        "thread_update_date": {
+                          "title": "Thread Update Date",
+                          "type": "integer"
+                        },
+                        "user_is_ignored": {
+                          "title": "User Is Ignored",
+                          "type": "boolean"
+                        },
+                        "thread_post_count": {
+                          "title": "Thread Post Count",
+                          "type": "integer"
+                        },
+                        "thread_is_published": {
+                          "title": "Thread Is Published",
+                          "type": "boolean"
+                        },
+                        "thread_is_deleted": {
+                          "title": "Thread Is Deleted",
+                          "type": "boolean"
+                        },
+                        "thread_is_sticky": {
+                          "title": "Thread Is Sticky",
+                          "type": "boolean"
+                        },
+                        "thread_is_followed": {
+                          "title": "Thread Is Followed",
+                          "type": "boolean"
+                        },
+                        "first_post": {
+                          "title": "FirstPost",
+                          "required": [
+                            "like_users",
+                            "links",
+                            "permissions",
+                            "post_attachment_count",
+                            "post_body",
+                            "post_body_html",
+                            "post_body_plain_text",
+                            "post_create_date",
+                            "post_id",
+                            "post_is_deleted",
+                            "post_is_first_post",
+                            "post_is_published",
+                            "post_like_count",
+                            "post_update_date",
+                            "poster_user_id",
+                            "poster_username",
+                            "signature",
+                            "signature_html",
+                            "signature_plain_text",
+                            "thread_id",
+                            "user_is_ignored"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "post_id": {
+                              "title": "Post Id",
+                              "type": "integer"
+                            },
+                            "thread_id": {
+                              "title": "Thread Id",
+                              "type": "integer"
+                            },
+                            "poster_user_id": {
+                              "title": "Poster User Id",
+                              "type": "integer"
+                            },
+                            "poster_username": {
+                              "title": "Poster Username",
+                              "type": "string"
+                            },
+                            "post_create_date": {
+                              "title": "Post Create Date",
+                              "type": "integer"
+                            },
+                            "post_body": {
+                              "title": "Post Body",
+                              "type": "string"
+                            },
+                            "post_body_html": {
+                              "title": "Post Body Html",
+                              "type": "string"
+                            },
+                            "post_body_plain_text": {
+                              "title": "Post Body Plain Text",
+                              "type": "string"
+                            },
+                            "signature": {
+                              "title": "Signature",
+                              "type": "string"
+                            },
+                            "signature_html": {
+                              "title": "Signature Html",
+                              "type": "string"
+                            },
+                            "signature_plain_text": {
+                              "title": "Signature Plain Text",
+                              "type": "string"
+                            },
+                            "post_like_count": {
+                              "title": "Post Like Count",
+                              "type": "integer"
+                            },
+                            "post_attachment_count": {
+                              "title": "Post Attachment Count",
+                              "type": "integer"
+                            },
+                            "like_users": {
+                              "title": "Like Users",
+                              "type": "array",
+                              "items": {
+                                "title": "LikeUser",
+                                "required": [
+                                  "user_id",
+                                  "username"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "user_id": {
+                                    "title": "User Id",
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "title": "Username",
+                                    "type": "string"
+                                  },
+                                  "display_style_group_id": {
+                                    "title": "Display Style Group Id",
+                                    "type": "integer"
+                                  },
+                                  "is_banned": {
+                                    "title": "Is Banned",
+                                    "type": "integer"
+                                  },
+                                  "uniq_username_css": {
+                                    "title": "Uniq Username Css",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "user_is_ignored": {
+                              "title": "User Is Ignored",
+                              "type": "boolean"
+                            },
+                            "post_is_published": {
+                              "title": "Post Is Published",
+                              "type": "boolean"
+                            },
+                            "post_is_deleted": {
+                              "title": "Post Is Deleted",
+                              "type": "boolean"
+                            },
+                            "post_update_date": {
+                              "title": "Post Update Date",
+                              "type": "integer"
+                            },
+                            "post_is_first_post": {
+                              "title": "Post Is First Post",
+                              "type": "boolean"
+                            },
+                            "links": {
+                              "title": "Links",
+                              "required": [
+                                "attachments",
+                                "detail",
+                                "likes",
+                                "permalink",
+                                "poster",
+                                "poster_avatar",
+                                "report",
+                                "thread"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "permalink": {
+                                  "title": "Permalink",
+                                  "type": "string"
+                                },
+                                "detail": {
+                                  "title": "Detail",
+                                  "type": "string"
+                                },
+                                "thread": {
+                                  "title": "Thread",
+                                  "type": "string"
+                                },
+                                "poster": {
+                                  "title": "Poster",
+                                  "type": "string"
+                                },
+                                "likes": {
+                                  "title": "Likes",
+                                  "type": "string"
+                                },
+                                "report": {
+                                  "title": "Report",
+                                  "type": "string"
+                                },
+                                "attachments": {
+                                  "title": "Attachments",
+                                  "type": "string"
+                                },
+                                "poster_avatar": {
+                                  "title": "Poster Avatar",
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "permissions": {
+                              "title": "Permissions",
+                              "required": [
+                                "delete",
+                                "edit",
+                                "like",
+                                "reply",
+                                "report",
+                                "upload_attachment",
+                                "view"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "view": {
+                                  "title": "View",
+                                  "type": "boolean"
+                                },
+                                "edit": {
+                                  "title": "Edit",
+                                  "type": "boolean"
+                                },
+                                "delete": {
+                                  "title": "Delete",
+                                  "type": "boolean"
+                                },
+                                "reply": {
+                                  "title": "Reply",
+                                  "type": "boolean"
+                                },
+                                "like": {
+                                  "title": "Like",
+                                  "type": "boolean"
+                                },
+                                "report": {
+                                  "title": "Report",
+                                  "type": "boolean"
+                                },
+                                "upload_attachment": {
+                                  "title": "Upload Attachment",
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "thread_prefixes": {
+                          "title": "Thread Prefixes",
+                          "type": "array",
+                          "items": {}
+                        },
+                        "thread_tags": {
+                          "title": "Thread Tags",
+                          "type": "array",
+                          "items": {}
+                        },
+                        "links": {
+                          "title": "Links1",
+                          "required": [
+                            "detail",
+                            "first_post",
+                            "first_poster",
+                            "first_poster_avatar",
+                            "followers",
+                            "forum",
+                            "last_post",
+                            "last_poster",
+                            "permalink",
+                            "posts"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "permalink": {
+                              "title": "Permalink",
+                              "type": "string"
+                            },
+                            "detail": {
+                              "title": "Detail",
+                              "type": "string"
+                            },
+                            "followers": {
+                              "title": "Followers",
+                              "type": "string"
+                            },
+                            "forum": {
+                              "title": "Forum",
+                              "type": "string"
+                            },
+                            "posts": {
+                              "title": "Posts",
+                              "type": "string"
+                            },
+                            "first_poster": {
+                              "title": "First Poster",
+                              "type": "string"
+                            },
+                            "first_poster_avatar": {
+                              "title": "First Poster Avatar",
+                              "type": "string"
+                            },
+                            "first_post": {
+                              "title": "First Post",
+                              "type": "string"
+                            },
+                            "last_poster": {
+                              "title": "Last Poster",
+                              "type": "string"
+                            },
+                            "last_post": {
+                              "title": "Last Post",
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "permissions": {
+                          "title": "Permissions1",
+                          "required": [
+                            "delete",
+                            "edit",
+                            "follow",
+                            "post",
+                            "upload_attachment",
+                            "view"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "view": {
+                              "title": "View",
+                              "type": "boolean"
+                            },
+                            "delete": {
+                              "title": "Delete",
+                              "type": "boolean"
+                            },
+                            "follow": {
+                              "title": "Follow",
+                              "type": "boolean"
+                            },
+                            "post": {
+                              "title": "Post",
+                              "type": "boolean"
+                            },
+                            "upload_attachment": {
+                              "title": "Upload Attachment",
+                              "type": "boolean"
+                            },
+                            "edit": {
+                              "title": "Edit",
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "forum": {
+                          "title": "Forum",
+                          "required": [
+                            "forum_description",
+                            "forum_id",
+                            "forum_is_followed",
+                            "forum_post_count",
+                            "forum_prefixes",
+                            "forum_thread_count",
+                            "forum_title",
+                            "links",
+                            "permissions",
+                            "thread_default_prefix_id",
+                            "thread_prefix_is_required"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "forum_id": {
+                              "title": "Forum Id",
+                              "type": "integer"
+                            },
+                            "forum_title": {
+                              "title": "Forum Title",
+                              "type": "string"
+                            },
+                            "forum_description": {
+                              "title": "Forum Description",
+                              "type": "string"
+                            },
+                            "forum_thread_count": {
+                              "title": "Forum Thread Count",
+                              "type": "integer"
+                            },
+                            "forum_post_count": {
+                              "title": "Forum Post Count",
+                              "type": "integer"
+                            },
+                            "forum_prefixes": {
+                              "title": "Forum Prefixes",
+                              "type": "array",
+                              "items": {
+                                "title": "ForumPrefix",
+                                "required": [
+                                  "group_prefixes",
+                                  "group_title"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "group_title": {
+                                    "title": "Group Title",
+                                    "type": "string"
+                                  },
+                                  "group_prefixes": {
+                                    "title": "Group Prefixes",
+                                    "type": "array",
+                                    "items": {
+                                      "title": "GroupPrefix",
+                                      "required": [
+                                        "prefix_id",
+                                        "prefix_title"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "prefix_id": {
+                                          "title": "Prefix Id",
+                                          "type": "integer"
+                                        },
+                                        "prefix_title": {
+                                          "title": "Prefix Title",
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "thread_default_prefix_id": {
+                              "title": "Thread Default Prefix Id",
+                              "type": "integer"
+                            },
+                            "thread_prefix_is_required": {
+                              "title": "Thread Prefix Is Required",
+                              "type": "boolean"
+                            },
+                            "links": {
+                              "title": "Links2",
+                              "required": [
+                                "detail",
+                                "followers",
+                                "permalink",
+                                "sub-categories",
+                                "sub-forums",
+                                "threads"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "permalink": {
+                                  "title": "Permalink",
+                                  "type": "string"
+                                },
+                                "detail": {
+                                  "title": "Detail",
+                                  "type": "string"
+                                },
+                                "sub-categories": {
+                                  "title": "Sub-Categories",
+                                  "type": "string"
+                                },
+                                "sub-forums": {
+                                  "title": "Sub-Forums",
+                                  "type": "string"
+                                },
+                                "threads": {
+                                  "title": "Threads",
+                                  "type": "string"
+                                },
+                                "followers": {
+                                  "title": "Followers",
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "permissions": {
+                              "title": "Permissions2",
+                              "required": [
+                                "create_thread",
+                                "delete",
+                                "edit",
+                                "follow",
+                                "tag_thread",
+                                "upload_attachment",
+                                "view"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "view": {
+                                  "title": "View",
+                                  "type": "boolean"
+                                },
+                                "edit": {
+                                  "title": "Edit",
+                                  "type": "boolean"
+                                },
+                                "delete": {
+                                  "title": "Delete",
+                                  "type": "boolean"
+                                },
+                                "create_thread": {
+                                  "title": "Create Thread",
+                                  "type": "boolean"
+                                },
+                                "upload_attachment": {
+                                  "title": "Upload Attachment",
+                                  "type": "boolean"
+                                },
+                                "tag_thread": {
+                                  "title": "Tag Thread",
+                                  "type": "boolean"
+                                },
+                                "follow": {
+                                  "title": "Follow",
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "forum_is_followed": {
+                              "title": "Forum Is Followed",
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "system_info": {
+                      "title": "SystemInfo",
+                      "required": [
+                        "time",
+                        "visitor_id"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "visitor_id": {
+                          "title": "Visitor Id",
+                          "type": "integer"
+                        },
+                        "time": {
+                          "title": "Time",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -9836,6 +11024,7 @@
                       "AdguardVPN",
                       "PIAVPN",
                       "cyberghostVPN",
+                      "hotspotShieldVPN",
                       "mullvadVPN",
                       "pureVPN",
                       "tunnelbearVPN",
@@ -10464,6 +11653,7 @@
                       "AdguardVPN",
                       "PIAVPN",
                       "cyberghostVPN",
+                      "hotspotShieldVPN",
                       "mullvadVPN",
                       "pureVPN",
                       "tunnelbearVPN",
