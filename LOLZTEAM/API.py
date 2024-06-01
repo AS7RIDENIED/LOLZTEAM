@@ -6550,7 +6550,7 @@ class Market:
             if hold:
                 if hold_option in ["hour", "day", "week", "month"]:
                     hold_option += "s"
-                else:
+                if hold_option not in ["hours", "days", "weeks", "months"]:
                     raise Exception(
                         """Invalid hold_option. It can be only "hours","days","weeks" and "months" """
                     )
