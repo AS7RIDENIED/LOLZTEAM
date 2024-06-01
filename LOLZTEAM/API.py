@@ -3268,21 +3268,11 @@ class Forum:
 
             :return: httpx Response object
             """
-            if True:  # Tweak 0
-                if open_invite is True:
-                    open_invite = 1
-                elif open_invite is False:
-                    open_invite = 0
 
-                if conversation_locked is True:
-                    conversation_locked = 1
-                elif conversation_locked is False:
-                    conversation_locked = 0
+            open_invite = int(open_invite)
+            conversation_locked = int(conversation_locked)
+            allow_edit_messages = int(allow_edit_messages)
 
-                if allow_edit_messages is True:
-                    allow_edit_messages = 1
-                elif allow_edit_messages is False:
-                    allow_edit_messages = 0
             params = {
                 "recipient_id": recipient_id,
                 "is_group": 0,
@@ -3326,21 +3316,11 @@ class Forum:
 
             :return: httpx Response object
             """
-            if True:  # Tweak 0
-                if open_invite is True:
-                    open_invite = 1
-                elif open_invite is False:
-                    open_invite = 0
 
-                if conversation_locked is True:
-                    conversation_locked = 1
-                elif conversation_locked is False:
-                    conversation_locked = 0
-
-                if allow_edit_messages is True:
-                    allow_edit_messages = 1
-                elif allow_edit_messages is False:
-                    allow_edit_messages = 0
+            open_invite = int(open_invite)
+            conversation_locked = int(conversation_locked)
+            allow_edit_messages = int(allow_edit_messages)
+            
             params = {
                 "recipients": ",".join(recipients),
                 "title": title,
