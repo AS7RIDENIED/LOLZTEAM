@@ -407,13 +407,10 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/forums/{forum_id}/followers"
-            if True:  # Tweak 0
-                if post:
-                    post = 1
-                if alert:
-                    alert = 1
-                if email:
-                    email = 1
+
+            post = int(post)
+            alert = int(alert)
+            email = int(email)
             params = {
                 "post": post,
                 "alert": alert,
@@ -469,11 +466,8 @@ class Forum:
             :return: httpx Response object
             """
             path = "/forums/followed"
-            if True:  # Tweak 0
-                if total is True:
-                    total = 1
-                elif total is False:
-                    total = 0
+
+            total = int(total)
             params = {"total": total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
@@ -837,19 +831,11 @@ class Forum:
                     contest_type = "by_finish_date"
                     prize_type = "money"
                     forum_id = 766
-                    if True:  # Tweak 0
-                        if allow_ask_hidden_content is True:
-                            allow_ask_hidden_content = 1
-                        elif allow_ask_hidden_content is False:
-                            allow_ask_hidden_content = 0
-                        if comment_ignore_group is True:
-                            comment_ignore_group = 1
-                        elif comment_ignore_group is False:
-                            comment_ignore_group = 0
-                        if dont_alert_followers is True:
-                            dont_alert_followers = 1
-                        elif dont_alert_followers is False:
-                            dont_alert_followers = 0
+ 
+                    allow_ask_hidden_content = int(allow_ask_hidden_content)
+                    comment_ignore_group = int(comment_ignore_group)
+                    dont_alert_followers = int(dont_alert_followers)
+
                     if tags:
                         tags = ",".join(tags)
                     params = {
@@ -935,19 +921,11 @@ class Forum:
                     contest_type = "by_needed_members"
                     prize_type = "money"
                     forum_id = 766
-                    if True:  # Tweak 0
-                        if allow_ask_hidden_content is True:
-                            allow_ask_hidden_content = 1
-                        elif allow_ask_hidden_content is False:
-                            allow_ask_hidden_content = 0
-                        if comment_ignore_group is True:
-                            comment_ignore_group = 1
-                        elif comment_ignore_group is False:
-                            comment_ignore_group = 0
-                        if dont_alert_followers is True:
-                            dont_alert_followers = 1
-                        elif dont_alert_followers is False:
-                            dont_alert_followers = 0
+ 
+                    allow_ask_hidden_content = int(allow_ask_hidden_content)
+                    comment_ignore_group = int(comment_ignore_group)
+                    dont_alert_followers = int(dont_alert_followers)
+
                     if tags:
                         tags = ",".join(tags)
                     params = {
@@ -1053,19 +1031,9 @@ class Forum:
                     prize_type = "upgrades"
                     forum_id = 766
 
-                    if True:  # Tweak 0
-                        if allow_ask_hidden_content is True:
-                            allow_ask_hidden_content = 1
-                        elif allow_ask_hidden_content is False:
-                            allow_ask_hidden_content = 0
-                        if comment_ignore_group is True:
-                            comment_ignore_group = 1
-                        elif comment_ignore_group is False:
-                            comment_ignore_group = 0
-                        if dont_alert_followers is True:
-                            dont_alert_followers = 1
-                        elif dont_alert_followers is False:
-                            dont_alert_followers = 0
+                    allow_ask_hidden_content = int(allow_ask_hidden_content)
+                    comment_ignore_group = int(comment_ignore_group)
+                    dont_alert_followers = int(dont_alert_followers)
                     if tags:
                         tags = ",".join(tags)
                     params = {
@@ -1168,19 +1136,11 @@ class Forum:
                     prize_type = "upgrades"
 
                     forum_id = 766
-                    if True:  # Tweak 0
-                        if allow_ask_hidden_content is True:
-                            allow_ask_hidden_content = 1
-                        elif allow_ask_hidden_content is False:
-                            allow_ask_hidden_content = 0
-                        if comment_ignore_group is True:
-                            comment_ignore_group = 1
-                        elif comment_ignore_group is False:
-                            comment_ignore_group = 0
-                        if dont_alert_followers is True:
-                            dont_alert_followers = 1
-                        elif dont_alert_followers is False:
-                            dont_alert_followers = 0
+
+                    allow_ask_hidden_content = int(allow_ask_hidden_content)
+                    comment_ignore_group = int(comment_ignore_group)
+                    dont_alert_followers = int(dont_alert_followers)
+
                     if tags:
                         tags = ",".join(tags)
                     params = {
@@ -1264,23 +1224,12 @@ class Forum:
                 :return: httpx Response object
                 """
                 path = "/claims"
-                if True:  # Tweak 0
-                    if hide_contacts is True:
-                        hide_contacts = 1
-                    elif hide_contacts is False:
-                        hide_contacts = 0
-                    if allow_ask_hidden_content is True:
-                        allow_ask_hidden_content = 1
-                    elif allow_ask_hidden_content is False:
-                        allow_ask_hidden_content = 0
-                    if comment_ignore_group is True:
-                        comment_ignore_group = 1
-                    elif comment_ignore_group is False:
-                        comment_ignore_group = 0
-                    if dont_alert_followers is True:
-                        dont_alert_followers = 1
-                    elif dont_alert_followers is False:
-                        dont_alert_followers = 0
+      
+                hide_contacts = int(hide_contacts)
+                allow_ask_hidden_content = int(allow_ask_hidden_content)
+                comment_ignore_group = int(comment_ignore_group)
+                dont_alert_followers = int(dont_alert_followers)
+
                 if tags:
                     tags = ",".join(tags)
                 data = {
@@ -1348,23 +1297,12 @@ class Forum:
                 :return: httpx Response object
                 """
                 path = "/claims"
-                if True:  # Tweak 0
-                    if hide_contacts is True:
-                        hide_contacts = 1
-                    elif hide_contacts is False:
-                        hide_contacts = 0
-                    if allow_ask_hidden_content is True:
-                        allow_ask_hidden_content = 1
-                    elif allow_ask_hidden_content is False:
-                        allow_ask_hidden_content = 0
-                    if comment_ignore_group is True:
-                        comment_ignore_group = 1
-                    elif comment_ignore_group is False:
-                        comment_ignore_group = 0
-                    if dont_alert_followers is True:
-                        dont_alert_followers = 1
-                    elif dont_alert_followers is False:
-                        dont_alert_followers = 0
+
+                hide_contacts = int(hide_contacts)
+                allow_ask_hidden_content = int(allow_ask_hidden_content)
+                comment_ignore_group = int(comment_ignore_group)
+                dont_alert_followers = int(dont_alert_followers)
+
                 if tags:
                     tags = ",".join(tags)
                 data = {
@@ -1422,10 +1360,8 @@ class Forum:
             :return: httpx Response object
             """
             path = "/threads"
-            if sticky is True:  # Tweak 0
-                sticky = 1
-            elif sticky is False:
-                sticky = 0
+
+            sticky = int(sticky)
             params = {
                 "forum_id": forum_id,
                 "thread_ids": thread_ids,
@@ -1509,23 +1445,11 @@ class Forum:
             :return: httpx Response object
             """
             path = "/threads"
-            if True:  # Tweak 0
-                if hide_contacts is True:
-                    hide_contacts = 1
-                elif hide_contacts is False:
-                    hide_contacts = 0
-                if allow_ask_hidden_content is True:
-                    allow_ask_hidden_content = 1
-                elif allow_ask_hidden_content is False:
-                    allow_ask_hidden_content = 0
-                if comment_ignore_group is True:
-                    comment_ignore_group = 1
-                elif comment_ignore_group is False:
-                    comment_ignore_group = 0
-                if dont_alert_followers is True:
-                    dont_alert_followers = 1
-                elif dont_alert_followers is False:
-                    dont_alert_followers = 0
+            hide_contacts = int(hide_contacts)
+            allow_ask_hidden_content = int(allow_ask_hidden_content)
+            comment_ignore_group = int(comment_ignore_group)
+            dont_alert_followers = int(dont_alert_followers)
+
             if tags:
                 tags = ",".join(tags)
             params = {
@@ -1606,23 +1530,12 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/threads/{thread_id}"
-            if True:  # Tweak 0
-                if discussion_open is True:
-                    discussion_open = 1
-                elif discussion_open is False:
-                    discussion_open = 0
-                if hide_contacts is True:
-                    hide_contacts = 1
-                elif hide_contacts is False:
-                    hide_contacts = 0
-                if allow_ask_hidden_content is True:
-                    allow_ask_hidden_content = 1
-                elif allow_ask_hidden_content is False:
-                    allow_ask_hidden_content = 0
-                if comment_ignore_group is True:
-                    comment_ignore_group = 1
-                elif comment_ignore_group is False:
-                    comment_ignore_group = 0
+
+            discussion_open = int(discussion_open)
+            hide_contacts = int(hide_contacts)
+            allow_ask_hidden_content = int(allow_ask_hidden_content)
+            comment_ignore_group = int(comment_ignore_group)
+
             if tags:
                 tags = ",".join(tags)
             data = {
@@ -1669,19 +1582,13 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/threads/{thread_id}/move"
-            if True:  # Tweak 0
-                if prefix_ids:
-                    apply_thread_prefix = 1
-                else:
-                    apply_thread_prefix = None
-                if send_alert is True:
-                    send_alert = 1
-                elif send_alert is False:
-                    send_alert = 0
-                if send_starter_alert is True:
-                    send_starter_alert = 1
-                elif send_starter_alert is False:
-                    send_starter_alert = 0
+
+
+            apply_thread_prefix = 1 if prefix_ids else None
+            send_alert = int(send_alert)
+
+            send_starter_alert = int(send_starter_alert)
+            
             data = {
                 "node_id": forum_id,
                 "title": title,
@@ -1744,11 +1651,7 @@ class Forum:
             :return: httpx Response object
             """
             path = "/threads/followed"
-            if True:  # Tweak 0
-                if total is True:
-                    total = 1
-                elif total is False:
-                    total = 0
+            total = int(total)
             params = {"total": total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
@@ -1767,9 +1670,11 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/threads/{thread_id}/followers"
-            if True:  # Tweak 0
-                if email:
-                    email = 1
+            # wtf...
+            # if True:  # Tweak 0
+            #     if email:
+            #         email = 1
+            email = int(email)
             params = {"email": email}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
@@ -2417,11 +2322,8 @@ class Forum:
             :return: httpx Response object
             """
             path = "/users/ignored"
-            if True:  # Tweak 0
-                if total is True:
-                    total = 1
-                elif total is False:
-                    total = 0
+
+            total = int(total)
             params = {"total": total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
@@ -3268,21 +3170,11 @@ class Forum:
 
             :return: httpx Response object
             """
-            if True:  # Tweak 0
-                if open_invite is True:
-                    open_invite = 1
-                elif open_invite is False:
-                    open_invite = 0
 
-                if conversation_locked is True:
-                    conversation_locked = 1
-                elif conversation_locked is False:
-                    conversation_locked = 0
+            open_invite = int(open_invite)
+            conversation_locked = int(conversation_locked)
+            allow_edit_messages = int(allow_edit_messages)
 
-                if allow_edit_messages is True:
-                    allow_edit_messages = 1
-                elif allow_edit_messages is False:
-                    allow_edit_messages = 0
             params = {
                 "recipient_id": recipient_id,
                 "is_group": 0,
@@ -3326,21 +3218,11 @@ class Forum:
 
             :return: httpx Response object
             """
-            if True:  # Tweak 0
-                if open_invite is True:
-                    open_invite = 1
-                elif open_invite is False:
-                    open_invite = 0
 
-                if conversation_locked is True:
-                    conversation_locked = 1
-                elif conversation_locked is False:
-                    conversation_locked = 0
+            open_invite = int(open_invite)
+            conversation_locked = int(conversation_locked)
+            allow_edit_messages = int(allow_edit_messages)
 
-                if allow_edit_messages is True:
-                    allow_edit_messages = 1
-                elif allow_edit_messages is False:
-                    allow_edit_messages = 0
             params = {
                 "recipients": ",".join(recipients),
                 "title": title,
@@ -3741,31 +3623,12 @@ class Market:
 
             """
             path = "/me"
-            # Tweak 0
-            if disable_steam_guard is True:
-                disable_steam_guard = 1
-            elif disable_steam_guard is False:
-                disable_steam_guard = 0
-            if user_allow_ask_discount is True:
-                user_allow_ask_discount = 1
-            elif user_allow_ask_discount is False:
-                user_allow_ask_discount = 0
-            if hide_favorites is True:
-                hide_favorites = 1
-            elif hide_favorites is False:
-                hide_favorites = 0
-            if vk_show_links is True:
-                vk_show_links = 1
-            elif vk_show_links is False:
-                vk_show_links = 0
-            if deauthorize_steam is True:
-                deauthorize_steam = 1
-            elif deauthorize_steam is False:
-                deauthorize_steam = 0
-            if hide_bids is True:
-                hide_bids = 1
-            elif hide_bids is False:
-                hide_bids = 0
+            disable_steam_guard = int(disable_steam_guard)
+            user_allow_ask_discount = int(user_allow_ask_discount)
+            hide_favorites = int(hide_favorites)
+            vk_show_links = int(vk_show_links)
+            deauthorize_steam = int(deauthorize_steam)
+            hide_bids = int(hide_bids)
             params = {
                 "disable_steam_guard": disable_steam_guard,
                 "user_allow_ask_discount": user_allow_ask_discount,
@@ -6560,15 +6423,9 @@ class Market:
             :return: httpx Response object
 
             """
-            # Tweak 0
-            if is_hold is True:
-                is_hold = 1
-            elif is_hold is False:
-                is_hold = 0
-            if show_payments_stats is True:
-                show_payments_stats = 1
-            elif show_payments_stats is False:
-                show_payments_stats = 0
+            is_hold = int(is_hold)
+            show_payments_stats = int(show_payments_stats)
+
             params = {
                 "user_id": user_id,
                 "operation_type": operation_type,
@@ -6688,11 +6545,8 @@ class Market:
             :param hold_option: Hold option. Can be "hours","days","weeks","months"
             :return: string payment url
             """
-            # Tweak 0
-            if hold is True:
-                hold = 1
-            elif hold is False:
-                hold = 0
+            hold = int(hold)
+
             if hold:
                 if hold_option in ["hour", "day", "week", "month"]:
                     hold_option += "s"
@@ -6942,11 +6796,8 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/change-password"
-            # Tweak 0
-            if _cancel is True:
-                _cancel = 1
-            elif _cancel is False:
-                _cancel = 0
+
+            _cancel = int(_cancel)
             params = {"_cancel": _cancel}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
@@ -7340,11 +7191,7 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/confirm-buy"
-            # Tweak 0
-            if buy_without_validation is True:
-                buy_without_validation = 1
-            elif buy_without_validation is False:
-                buy_without_validation = 0
+            buy_without_validation = int(buy_without_validation)
             params = {"buy_without_validation": buy_without_validation}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
@@ -7368,11 +7215,7 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/fast-buy"
-            if True:  # Tweak 0
-                if buy_without_validation is True:
-                    buy_without_validation = 1
-                elif buy_without_validation is False:
-                    buy_without_validation = 0
+            buy_without_validation = int(buy_without_validation)
             params = {
                 "price": price,
                 "buy_without_validation": buy_without_validation,
@@ -7433,15 +7276,9 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/goods/check"
-            if True:  # Tweak 0
-                if random_proxy is True:
-                    random_proxy = 1
-                elif random_proxy is False:
-                    random_proxy = 0
-                if close_item is True:
-                    close_item = 1
-                elif close_item is False:
-                    close_item = 0
+
+            random_proxy = int(random_proxy)
+            close_item = int(close_item)
             params = {
                 "login": login,
                 "password": password,
@@ -7545,15 +7382,10 @@ class Market:
             :return: httpx Response object
             """
             path = "/item/add"
-            if True:  # Tweak 0
-                if random_proxy is True:
-                    random_proxy = 1
-                elif random_proxy is False:
-                    random_proxy = 0
-                if auction is True:
-                    type_sell = "auction"
-                else:
-                    type_sell = "price"
+ 
+            random_proxy = int(random_proxy)
+            type_sell = "auction" if auction else "price"
+            
             params = {
                 "category_id": category_id,
                 "type_sell": type_sell,
@@ -7669,15 +7501,8 @@ class Market:
             :return: httpx Response object
             """
             path = "/item/fast-sell"
-            # Tweak 0
-            if random_proxy is True:
-                random_proxy = 1
-            elif random_proxy is False:
-                random_proxy = 0
-            if auction is True:
-                type_sell = "auction"
-            else:
-                type_sell = "price"
+            random_proxy = int(random_proxy)
+            type_sell = "auction" if auction else "price"
             params = {
                 "category_id": category_id,
                 "price": price,
