@@ -18,6 +18,7 @@ class Market:
         wot = "world-of-tanks"
         wot_blitz = "wot-blitz"
         epicgames = "epicgames"
+        gifts = "gifts"
         eft = "escape-from-tarkov"
         socialclub = "socialclub"
         uplay = "uplay"
@@ -28,9 +29,9 @@ class Market:
         battlenet = "battlenet"
         vpn = "vpn"
         cinema = "cinema"
+        roblox = "roblox"
         spotify = "spotify"
         warface = "warface"
-        gifts = "gifts"
         minecraft = "minecraft"
 
     class CategoryId:
@@ -45,6 +46,7 @@ class Market:
         wot = 14
         wot_blitz = 16
         epicgames = 12
+        gifts = 30
         eft = 18
         socialclub = 7
         uplay = 5
@@ -55,9 +57,9 @@ class Market:
         battlenet = 11
         vpn = 19
         cinema = 23
+        roblox = 31
         spotify = 26
         warface = 4
-        gifts = 30
         minecraft = 28
 
     class OperationTypes:

@@ -1,4 +1,5 @@
 import logging
+import asyncio
 import httpx
 import time
 import json
@@ -21,86 +22,10 @@ _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
 _DebugLogger.setLevel(level=100)
 
 
-@_MainTweaks._RetryWrapper
 def _send_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
 ) -> httpx.Response:
-    url = self.base_url + path
-    safe_url = url
-    if type(self) is Antipublic:
-        url += f"?key={self.token}"
-    method = method.upper()
-    if re.search(self.base_url + self._delay_pattern, url):
-        _MainTweaks._auto_delay(self=self)
-    elif type(self) is Market:
-        _MainTweaks._auto_delay(self=self, delay=0.5)
-    if params is None:
-        params = {}
-    if not params.get("locale"):
-        params["locale"] = self._locale
-    params.update(self.custom_params)
-    if type(data) is dict:
-        data.update(self.custom_body)
-    headers = self._main_headers.copy()
-    headers.update(self.custom_headers)
-
-    ptd = []
-    for key in params.keys():
-        if params[key] is None:
-            ptd.append(key)
-    for key in ptd:
-        del params[key]
-
-    proxy_schemes = {
-        "HTTP": "http",
-        "HTTPS": "https",
-        "SOCKS4": "socks4",
-        "SOCKS5": "socks5",
-    }
-    request_methods = [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-    ]
-    proxy = None
-    if self._proxy_type is not None:
-        if self._proxy_type in proxy_schemes:
-            proxy_scheme = proxy_schemes[self._proxy_type]
-            proxy = f"{proxy_scheme}://{self._proxy}"
-        else:
-            raise Exceptions.INVALID_PROXY_TYPE(
-                "Proxy type has invalid value. It can be only https, http, socks4 or socks5"
-            )
-    if method in request_methods:
-        censored_headers = headers.copy()
-        censored_headers["Authorization"] = "bearer ***Token***"
-        _DebugLogger.debug(
-            f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {json.dumps(files)} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
-        if self._delay_synchronizer:
-            self._delay_synchronizer._synchronize(time.time())
-        else:
-            self._auto_delay_time = time.time()
-        response = httpx.request(
-            method=method,
-            url=url,
-            params=params,
-            data=data,
-            files=files,
-            headers=headers,
-            proxy=proxy,
-            timeout=self.timeout,
-        )
-        if self.reset_custom_variables:
-            self.custom_params = {}
-            self.custom_body = {}
-            self.custom_headers = {}
-        _DebugLogger.debug(
-            f"Response: {response} | Plain response: {response.content}")
-        return response
-    else:
-        raise Exceptions.AS7RID_FUCK_UP(
-            "Invalid request method. Contact @AS7RID")
+    return asyncio.run(_send_async_request(self=self, method=method, path=path, params=params, data=data, files=files))
 
 
 @_MainTweaks._RetryWrapper
@@ -112,20 +37,24 @@ async def _send_async_request(
     if type(self) is Antipublic:
         url += f"?key={self.token}"
     method = method.upper()
+
     if re.search(self.base_url + self._delay_pattern, url):
         await _MainTweaks._auto_delay_async(self=self)
+    elif type(self) is Market:
+        await _MainTweaks._auto_delay_async(self=self, delay=0.5)
+
     if params is None:
         params = {}
     if not params.get("locale"):
         params["locale"] = self._locale
-    ptd = []
-
     params.update(self.custom_params)
     if type(data) is dict:
         data.update(self.custom_body)
+
     headers = self._main_headers.copy()
     headers.update(self.custom_headers)
 
+    ptd = []
     for key, value in params.items():
         if type(params[key]) is bool:
             params[key] = str(value)
@@ -152,30 +81,22 @@ async def _send_async_request(
             proxy = f"{proxy_scheme}://{self._proxy}"
         else:
             raise Exceptions.INVALID_PROXY_TYPE(
-                "Proxy type has invalid value. It can be only https, http, socks4 or socks5"
-            )
+                "Proxy type has invalid value. It can be only https, http, socks4 or socks5")
 
     if method in request_methods:
         censored_headers = headers.copy()
         censored_headers["Authorization"] = "bearer ***Token***"
         _DebugLogger.debug(
-            f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {json.dumps(files)} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
-        if self._delay_synchronizer:
-            self._delay_synchronizer._synchronize(time.time())
-        else:
-            self._auto_delay_time = time.time()
+            f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {files} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
+        tbr = time.time()
         async with httpx.AsyncClient(proxies=proxy) as client:
-            response = await client.request(
-                method=method,
-                url=url,
-                params=params,
-                data=data,
-                files=files,
-                headers=self._main_headers,
-                timeout=self.timeout,
-            )
+            response = await client.request(method=method, url=url, params=params, data=data, files=files, headers=headers, timeout=self.timeout,)
             _DebugLogger.debug(
                 f"Response: {response} | Plain response: {response.content}")
+            if self._delay_synchronizer:
+                self._delay_synchronizer._synchronize(tbr)
+            else:
+                self._auto_delay_time = tbr
             return response
     else:
         raise Exceptions.AS7RID_FUCK_UP(
@@ -224,6 +145,7 @@ class Forum:
         self.bypass_429 = bypass_429
         self.timeout = timeout
         self._auto_delay_time = 0
+        self.additional_delay = 0.055
         self._locale = language
         self._delay_synchronizer = None
         self._lock = None
@@ -378,7 +300,6 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/forums/{forum_id}"
-
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
@@ -407,17 +328,14 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/forums/{forum_id}/followers"
-
-            post = int(post)
-            alert = int(alert)
-            email = int(email)
             params = {
-                "post": post,
-                "alert": alert,
-                "email": email,
+                "post": int(post) if post else post,
+                "alert": int(alert) if alert else alert,
+                "email": int(email) if email else email,
                 "minimal_contest_amount": minimal_contest_amount,
                 "prefix_ids[]": prefix_ids,
             }
+            # Tweak 0
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -466,9 +384,7 @@ class Forum:
             :return: httpx Response object
             """
             path = "/forums/followed"
-
-            total = int(total)
-            params = {"total": total}
+            params = {"total": int(total) if total else total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Pages:
@@ -831,21 +747,16 @@ class Forum:
                     contest_type = "by_finish_date"
                     prize_type = "money"
                     forum_id = 766
- 
-                    allow_ask_hidden_content = int(allow_ask_hidden_content)
-                    comment_ignore_group = int(comment_ignore_group)
-                    dont_alert_followers = int(dont_alert_followers)
-
                     if tags:
                         tags = ",".join(tags)
                     params = {
                         "prefix_id[]": prefix_ids,
                         "tags": tags,
                         "hide_contacts": 0,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
-                        "dont_alert_followers": dont_alert_followers,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                         "reply_group": reply_group,
-                        "comment_ignore_group": comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                         "count_winners": count_winners,
                         "length_value": length_value,
                         "length_option": length_option,
@@ -921,20 +832,13 @@ class Forum:
                     contest_type = "by_needed_members"
                     prize_type = "money"
                     forum_id = 766
- 
-                    allow_ask_hidden_content = int(allow_ask_hidden_content)
-                    comment_ignore_group = int(comment_ignore_group)
-                    dont_alert_followers = int(dont_alert_followers)
-
-                    if tags:
-                        tags = ",".join(tags)
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": tags,
+                        "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                         "reply_group": reply_group,
-                        "comment_ignore_group": comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
@@ -942,7 +846,7 @@ class Forum:
                         "contest_type": contest_type,
                         "needed_members": needed_members,
                         "prize_data_money": prize_data_money,
-                        "dont_alert_followers": dont_alert_followers,
+                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                     }
                     data = {
                         "title": title,
@@ -1030,27 +934,20 @@ class Forum:
                     contest_type = "by_finish_date"
                     prize_type = "upgrades"
                     forum_id = 766
-
-                    allow_ask_hidden_content = int(allow_ask_hidden_content)
-                    comment_ignore_group = int(comment_ignore_group)
-                    dont_alert_followers = int(dont_alert_followers)
-                    if tags:
-                        tags = ",".join(tags)
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": tags,
+                        "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                         "reply_group": reply_group,
-                        "comment_ignore_group": comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
                         "prize_type": prize_type,
                         "contest_type": contest_type,
-                        "dont_alert_followers": dont_alert_followers,
+                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                         "prize_data_upgrade": prize_data_upgrade,
-                        "count_winners": count_winners,
                         "length_value": length_value,
                         "length_option": length_option,
                     }
@@ -1131,44 +1028,30 @@ class Forum:
 
                     :return: httpx Response object
                     """
-                    path = "/threads"
-                    contest_type = "by_needed_members"
-                    prize_type = "upgrades"
-
-                    forum_id = 766
-
-                    allow_ask_hidden_content = int(allow_ask_hidden_content)
-                    comment_ignore_group = int(comment_ignore_group)
-                    dont_alert_followers = int(dont_alert_followers)
-
-                    if tags:
-                        tags = ",".join(tags)
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": tags,
+                        "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                         "reply_group": reply_group,
-                        "comment_ignore_group": comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
-                        "prize_type": prize_type,
-                        "contest_type": contest_type,
+                        "prize_type": "upgrades",
+                        "contest_type": "by_needed_members",
                         "needed_members": needed_members,
-                        "prize_type": prize_type,
-                        "contest_type": contest_type,
-                        "needed_members": needed_members,
-                        "dont_alert_followers": dont_alert_followers,
+                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                         "prize_data_upgrade": prize_data_upgrade,
                     }
+
                     data = {
                         "title": title,
                         "title_en": title_en,
                         "secret_answer": secret_answer,
                     }
                     required = {
-                        "forum_id": forum_id,
+                        "forum_id": 766,
                         "post_body": post_body,
                     }
                     if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
@@ -1224,14 +1107,6 @@ class Forum:
                 :return: httpx Response object
                 """
                 path = "/claims"
-      
-                hide_contacts = int(hide_contacts)
-                allow_ask_hidden_content = int(allow_ask_hidden_content)
-                comment_ignore_group = int(comment_ignore_group)
-                dont_alert_followers = int(dont_alert_followers)
-
-                if tags:
-                    tags = ",".join(tags)
                 data = {
                     "post_body": post_body,
                     "as_responder": responder,
@@ -1241,11 +1116,11 @@ class Forum:
                     "currency": currency,
                     "as_funds_receipt": "no",
                     "as_tg_login_screenshot": conversation_screenshot,
-                    "tags": tags,
-                    "hide_contacts": hide_contacts,
-                    "allow_ask_hidden_content": allow_ask_hidden_content,
-                    "comment_ignore_group": comment_ignore_group,
-                    "dont_alert_followers": dont_alert_followers,
+                    "tags": ",".join(tags) if tags else tags,
+                    "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
+                    "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                    "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                    "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                     "reply_group": reply_group,
                 }
                 return _send_request(
@@ -1297,14 +1172,6 @@ class Forum:
                 :return: httpx Response object
                 """
                 path = "/claims"
-
-                hide_contacts = int(hide_contacts)
-                allow_ask_hidden_content = int(allow_ask_hidden_content)
-                comment_ignore_group = int(comment_ignore_group)
-                dont_alert_followers = int(dont_alert_followers)
-
-                if tags:
-                    tags = ",".join(tags)
                 data = {
                     "post_body": post_body,
                     "as_responder": responder,
@@ -1317,10 +1184,10 @@ class Forum:
                     "transfer_type": transfer_type,
                     "as_funds_receipt": receipt,
                     "as_tg_login_screenshot": conversation_screenshot,
-                    "tags": tags,
-                    "hide_contacts": hide_contacts,
-                    "allow_ask_hidden_content": allow_ask_hidden_content,
-                    "comment_ignore_group": comment_ignore_group,
+                    "tags": ",".join(tags) if tags else tags,
+                    "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
+                    "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                    "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                     "dont_alert_followers": dont_alert_followers,
                     "reply_group": reply_group,
                 }
@@ -1360,13 +1227,11 @@ class Forum:
             :return: httpx Response object
             """
             path = "/threads"
-
-            sticky = int(sticky)
             params = {
                 "forum_id": forum_id,
                 "thread_ids": thread_ids,
                 "creator_user_id": creator_user_id,
-                "sticky": sticky,
+                "sticky": int(sticky) if sticky else sticky,
                 "thread_prefix_id": thread_prefix_id,
                 "thread_tag_id": thread_tag_id,
                 "page": page,
@@ -1445,20 +1310,13 @@ class Forum:
             :return: httpx Response object
             """
             path = "/threads"
-            hide_contacts = int(hide_contacts)
-            allow_ask_hidden_content = int(allow_ask_hidden_content)
-            comment_ignore_group = int(comment_ignore_group)
-            dont_alert_followers = int(dont_alert_followers)
-
-            if tags:
-                tags = ",".join(tags)
             params = {
                 "prefix_id[]": prefix_ids,
-                "tags": tags,
-                "hide_contacts": hide_contacts,
-                "allow_ask_hidden_content": allow_ask_hidden_content,
+                "tags": ",".join(tags) if tags else tags,
+                "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
+                "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                 "reply_group": reply_group,
-                "comment_ignore_group": comment_ignore_group,
+                "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                 "dont_alert_followers": dont_alert_followers,
             }
             data = {
@@ -1530,24 +1388,16 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/threads/{thread_id}"
-
-            discussion_open = int(discussion_open)
-            hide_contacts = int(hide_contacts)
-            allow_ask_hidden_content = int(allow_ask_hidden_content)
-            comment_ignore_group = int(comment_ignore_group)
-
-            if tags:
-                tags = ",".join(tags)
             data = {
                 "title": title,
                 "title_en": title_en,
                 "prefix_id[]": prefix_ids,
-                "tags": tags,
-                "discussion_open": discussion_open,
-                "hide_contacts": hide_contacts,
-                "allow_ask_hidden_content": allow_ask_hidden_content,
+                "tags": ",".join(tags) if tags else tags,
+                "discussion_open": int(discussion_open) if discussion_open is not None else discussion_open,
+                "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
+                "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                 "reply_group": reply_group,
-                "comment_ignore_group": comment_ignore_group,
+                "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
             }
             return _send_request(self=self._api, method="PUT", path=path, data=data)
 
@@ -1582,21 +1432,14 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/threads/{thread_id}/move"
-
-
-            apply_thread_prefix = 1 if prefix_ids else None
-            send_alert = int(send_alert)
-
-            send_starter_alert = int(send_starter_alert)
-            
             data = {
                 "node_id": forum_id,
                 "title": title,
                 "title_en": title_en,
                 "prefix_id[]": prefix_ids,
-                "apply_thread_prefix": apply_thread_prefix,
-                "send_alert": send_alert,
-                "send_starter_alert": send_starter_alert,
+                "apply_thread_prefix": 1 if prefix_ids else None,
+                "send_alert": int(send_alert) if send_alert else send_alert,
+                "send_starter_alert": int(send_starter_alert) if send_starter_alert else send_starter_alert,
                 "starter_alert_reason": starter_alert_reason,
             }
             return _send_request(self=self._api, method="POST", path=path, data=data)
@@ -1651,8 +1494,7 @@ class Forum:
             :return: httpx Response object
             """
             path = "/threads/followed"
-            total = int(total)
-            params = {"total": total}
+            params = {"total": int(total) if total else total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
@@ -1670,12 +1512,7 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/threads/{thread_id}/followers"
-            # wtf...
-            # if True:  # Tweak 0
-            #     if email:
-            #         email = 1
-            email = int(email)
-            params = {"email": email}
+            params = {"email": int(email) if email else email}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -1732,8 +1569,7 @@ class Forum:
         def vote(
             self,
             thread_id: int,
-            response_id: int = None,
-            response_ids: list[int] = None,
+            response_ids: list[int],
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/pool/votes
@@ -1749,22 +1585,12 @@ class Forum:
             :return: httpx Response object
             """
             path = f"/threads/{thread_id}/pool/votes"
-            if type(response_ids) is list:
-                for element in response_ids:
-                    if not isinstance(element, int):
-                        raise TypeError("All response_ids need to be integer")
-
-            params = (
-                {"response_id": response_id}
-                if response_id
-                else {"response_ids[]": response_ids}
-            )
-
-            if response_ids:
-                for element in response_ids:
-                    if not isinstance(element, int):
-                        raise TypeError("All response_ids need to be integers")
-
+            for element in response_ids:
+                if not isinstance(element, int):
+                    _WarningsLogger.warn(
+                        f"{FutureWarning.__name__} All response_ids elements should be integer")
+            params = {"response_id": response_ids[0]} if len(response_ids) == 1 else {
+                "response_ids[]": response_ids}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -1935,15 +1761,13 @@ class Forum:
                 """
                 if "CREATE_JOB" in locals():
                     _WarningsLogger.warn(
-                        message=f"{FutureWarning.__name__}:You can't upload avatar using batch"
-                    )
-                if user_id is None:
-                    path = "/users/me/avatar"
-                else:
-                    path = f"/users/{user_id}/avatar"
+                        msg=f"{FutureWarning.__name__}: You can't upload avatar using batch")
+                path = "/users/me/avatar" if not user_id else f"/users/{user_id}/avatar"
+                print(path)
                 files = {"avatar": avatar}
+                params = {"user_id": user_id}
                 return _send_request(
-                    self=self._api, method="POST", path=path, files=files
+                    self=self._api, method="POST", path=path, files=files, params=params
                 )
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
@@ -2322,9 +2146,7 @@ class Forum:
             :return: httpx Response object
             """
             path = "/users/ignored"
-
-            total = int(total)
-            params = {"total": total}
+            params = {"total": int(total) if total else total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
@@ -3170,20 +2992,15 @@ class Forum:
 
             :return: httpx Response object
             """
-
-            open_invite = int(open_invite)
-            conversation_locked = int(conversation_locked)
-            allow_edit_messages = int(allow_edit_messages)
-
+            path = "/conversations"
             params = {
                 "recipient_id": recipient_id,
                 "is_group": 0,
-                "open_invite": open_invite,
-                "conversation_locked": conversation_locked,
-                "allow_edit_messages": allow_edit_messages,
+                "open_invite": int(open_invite) if open_invite else open_invite,
+                "conversation_locked": int(conversation_locked) if conversation_locked else conversation_locked,
+                "allow_edit_messages": int(allow_edit_messages) if allow_edit_messages else allow_edit_messages,
             }
             data = {"message_body": message}
-            path = "/conversations"
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -3218,21 +3035,16 @@ class Forum:
 
             :return: httpx Response object
             """
-
-            open_invite = int(open_invite)
-            conversation_locked = int(conversation_locked)
-            allow_edit_messages = int(allow_edit_messages)
-
+            path = "/conversations"
             params = {
                 "recipients": ",".join(recipients),
                 "title": title,
                 "is_group": 1,
-                "open_invite": open_invite,
-                "conversation_locked": conversation_locked,
-                "allow_edit_messages": allow_edit_messages,
+                "open_invite": int(open_invite) if open_invite else open_invite,
+                "conversation_locked": int(conversation_locked) if conversation_locked else conversation_locked,
+                "allow_edit_messages": int(allow_edit_messages) if allow_edit_messages else allow_edit_messages,
             }
             data = {"message_body": message}
-            path = "/conversations"
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -3471,6 +3283,7 @@ class Market:
         self.bypass_429 = bypass_429
         self.timeout = timeout
         self._auto_delay_time = 0
+        self.additional_delay = 0.055
         self._locale = language
         self._delay_synchronizer = None
         self._lock = None
@@ -3594,8 +3407,6 @@ class Market:
             max_discount_percent: int = None,
             allow_accept_accounts: str = None,
             hide_favorites: bool = None,
-            vk_ua: str = None,
-            vk_show_links: bool = None,
             title: str = None,
             telegram_client: dict = None,
             deauthorize_steam: bool = None,
@@ -3613,7 +3424,6 @@ class Market:
             :param max_discount_percent: Maximum discount percents for your accounts
             :param allow_accept_accounts: Usernames who can transfer market accounts to you. Separate values with a comma.
             :param hide_favourites: Hide your profile info when you add an account to favorites
-            :param vk_ua: Your vk useragent to accounts
             :param title: Market title.
             :param telegram_client: Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}
             :param deauthorize_steam: Finish all Steam sessions after purchase.
@@ -3623,36 +3433,21 @@ class Market:
 
             """
             path = "/me"
-            disable_steam_guard = int(disable_steam_guard)
-            user_allow_ask_discount = int(user_allow_ask_discount)
-            hide_favorites = int(hide_favorites)
-            vk_show_links = int(vk_show_links)
-            deauthorize_steam = int(deauthorize_steam)
-            hide_bids = int(hide_bids)
             params = {
-                "disable_steam_guard": disable_steam_guard,
-                "user_allow_ask_discount": user_allow_ask_discount,
+                "disable_steam_guard": int(disable_steam_guard) if disable_steam_guard else disable_steam_guard,
+                "user_allow_ask_discount": int(user_allow_ask_discount) if user_allow_ask_discount else user_allow_ask_discount,
                 "max_discount_percent": max_discount_percent,
                 "allow_accept_accounts": allow_accept_accounts,
-                "hide_favourites": hide_favorites,
-                "vk_ua": vk_ua,
-                "show_account_links": vk_show_links,
+                "hide_favourites": int(hide_favorites) if hide_favorites else hide_favorites,
                 "market_custom_title": title,
-                "deauthorize_steam": deauthorize_steam,
-                "hide_bids": hide_bids,
+                "deauthorize_steam": int(deauthorize_steam) if deauthorize_steam else deauthorize_steam,
+                "hide_bids": int(hide_bids) if hide_bids else hide_bids,
             }
             if telegram_client:
                 for key, value in telegram_client.items():
-                    if key not in [
-                        "telegram_api_id",
-                        "telegram_api_hash",
-                        "telegram_device_model",
-                        "telegram_system_version",
-                        "telegram_app_version",
-                    ]:
-                        raise Exceptions.UNEXPECTED_ARG(
-                            f'Unknown param in telegram_client - "{key}"'
-                        )
+                    if key not in ["telegram_api_id", "telegram_api_hash", "telegram_device_model", "telegram_system_version", "telegram_app_version"]:
+                        _WarningsLogger.warn(
+                            f'{FutureWarning.__name__} Unknown param in telegram_client - "{key}"')
                     else:
                         params[key] = value
             return _send_request(self=self._api, method="PUT", path=path, params=params)
@@ -5672,6 +5467,93 @@ class Market:
                 path = "/cinema/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
+        class __Roblox:
+            def __init__(self, _api_self):
+                self._api = _api_self
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def get(
+                self,
+                page: int = None,
+                auction: str = None,
+                title: str = None,
+                pmin: int = None,
+                pmax: int = None,
+                origin: Union[str, list] = None,
+                not_origin: Union[str, list] = None,
+                order_by: str = None,
+                sold_before: bool = None,
+                sold_before_by_me: bool = None,
+                not_sold_before: bool = None,
+                not_sold_before_by_me: bool = None,
+                search_params: dict = None,
+                **kwargs,
+            ) -> httpx.Response:
+                """
+                GET https://api.lzt.market/categoryName
+
+                Displays a list of accounts in a specific category according to your parameters.
+
+                Required scopes: market
+
+                :param page: The number of the page to display results from
+                :param auction: Auction. Can be [yes, no, nomatter].
+                :param title: The word or words contained in the account title
+                :param pmin: Minimal price of account (Inclusive)
+                :param pmax: Maximum price of account (Inclusive)
+                :param origin: List of account origins.
+                :param not_origin: List of account origins that won't be included.
+                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
+                :param sold_before: Sold before.
+                :param sold_before_by_me: Sold before by me.
+                :param not_sold_before: Not sold before.
+                :param not_sold_before_by_me: Not sold before by me.
+                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+
+                :return: httpx Response object
+                """
+                path = "/roblox"
+                if True:  # Tweak market
+                    auction = _MainTweaks.market_variable_fix(auction)
+                params = {
+                    "page": page,
+                    "auction": auction,
+                    "title": title,
+                    "pmin": pmin,
+                    "pmax": pmax,
+                    "origin[]": origin,
+                    "not_origin[]": not_origin,
+                    "order_by": order_by,
+                    "sb": sold_before,
+                    "sb_by_me": sold_before_by_me,
+                    "nsb": not_sold_before,
+                    "nsb_by_me": not_sold_before_by_me,
+                }
+                if search_params is not None:
+                    for key, value in search_params.items():
+                        params[str(key)] = value
+                if kwargs:
+                    for kwarg_name, kwarg_value in kwargs.items():
+                        params[str(kwarg_name)] = kwarg_value
+                return _send_request(
+                    self=self._api,
+                    method="GET",
+                    path=path,
+                    params=params,
+                )
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def params(self) -> httpx.Response:
+                """
+                GET https://api.lzt.market/roblox/params
+
+                Displays search parameters for a category.
+
+                :return: httpx Response object
+                """
+                path = "/roblox/params"
+                return _send_request(self=self._api, method="GET", path=path)
+
         class __Spotify:
             def __init__(self, _api_self):
                 self._api = _api_self
@@ -5960,6 +5842,7 @@ class Market:
             self.spotify = self.__Spotify(_api_self)
             self.warface = self.__Warface(_api_self)
             self.minecraft = self.__Minecraft(_api_self)
+            self.roblox = self.__Roblox(_api_self)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def get(
@@ -6423,9 +6306,7 @@ class Market:
             :return: httpx Response object
 
             """
-            is_hold = int(is_hold)
-            show_payments_stats = int(show_payments_stats)
-
+            path = "/user/payments"
             params = {
                 "user_id": user_id,
                 "operation_type": operation_type,
@@ -6439,10 +6320,9 @@ class Market:
                 "end_date": end_date,
                 "wallet": wallet,
                 "comment": comment,
-                "is_hold": is_hold,
-                "show_payments_stats": show_payments_stats,
+                "is_hold": int(is_hold) if is_hold else is_hold,
+                "show_payments_stats": int(show_payments_stats) if show_payments_stats else show_payments_stats,
             }
-            path = "/user/payments"
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
@@ -6545,15 +6425,9 @@ class Market:
             :param hold_option: Hold option. Can be "hours","days","weeks","months"
             :return: string payment url
             """
-            hold = int(hold)
-
             if hold:
                 if hold_option in ["hour", "day", "week", "month"]:
                     hold_option += "s"
-                if hold_option not in ["hours", "days", "weeks", "months"]:
-                    raise Exception(
-                        """Invalid hold_option. It can be only "hours","days","weeks" and "months" """
-                    )
             params = {
                 "user_id": user_id,
                 "username": username,
@@ -6561,7 +6435,7 @@ class Market:
                 "comment": comment,
                 "redirect": redirect_url,
                 "currency": currency,
-                "hold": hold,
+                "hold": int(hold) if hold else hold,
                 "hold_length_value": hold_length,
                 "hold_length_option": hold_option,
             }
@@ -6573,6 +6447,8 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
             self.tag = self.__Tag(self._api)
+            self.steam = self.__Steam(self._api)
+            self.telegram = self.__Telegram(self._api)
 
         class __Tag:
             def __init__(self, _api_self):
@@ -6623,6 +6499,191 @@ class Market:
                     path=path,
                     params=params,
                 )
+
+        class __Steam:
+            def __init__(self, _api_self):
+                self._api = _api_self
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def guard(self, item_id: int) -> httpx.Response:
+                """
+                GET https://api.lzt.market/item_id/guard-code
+
+                Gets confirmation code from MaFile (Only for Steam accounts).
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: httpx Response object
+                """
+                path = f"/{item_id}/guard-code"
+                return _send_request(self=self._api, method="GET", path=path)
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def mafile(self, item_id: int) -> httpx.Response:
+                """
+                GET https://api.lzt.market/item_id/mafile
+
+                Returns mafile in JSON.
+
+                Warning: this action is cancelling active account guarantee.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: httpx Response object
+                """
+                path = f"/{item_id}/mafile"
+                return _send_request(self=self._api, method="GET", path=path)
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def update_inventory(self, item_id: int, app_id: int) -> httpx.Response:
+                """
+                POST https://api.lzt.market/item_id/update-inventory
+
+                Update inventory value.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+                :param app_id: App id.
+
+                :return: httpx Response object
+                """
+                params = {"app_id": app_id}
+                path = f"/{item_id}/update-inventory"
+                return _send_request(
+                    self=self._api, method="POST", path=path, params=params
+                )
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def inventory_value(
+                self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None
+            ) -> httpx.Response:
+                """
+                GET https://api.lzt.market/steam-value
+
+                Gets steam value.
+
+                Application id list:
+
+                730 - CS2
+
+                578080 - PUBG
+
+                753 - Steam
+
+                570 - Dota 2
+
+                440 - Team Fortress 2
+
+                252490 - Rust
+
+                304930 - Unturned
+
+                232090 - Killing Floor 2
+
+                322330 - Don't Starve Together
+
+                :param url: Link or id of account. Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
+                :param app_id: Application id.
+                :param currency: Using currency for amount.
+                :param ignore_cache: Ignore cache.
+
+                :return: httpx Response object
+                """
+                params = {
+                    "link": url,
+                    "app_id": app_id,
+                    "currency": currency,
+                    "ignore_cache": ignore_cache,
+                }
+                path = "/steam-value"
+                return _send_request(self=self._api, method="GET", path=path, params=params)
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def confirm_sda(
+                self, item_id: int, id: int = None, nonce: int = None
+            ) -> httpx.Response:
+                """
+                POST https://api.lzt.market/item_id/confirm-sda
+
+                Confirm steam action.
+
+                Don't set id and nonce parameters to get list of available confirmation requests.
+
+                Warning: this action is cancelling active account guarantee.
+
+                :param item_id: Item id.
+                :param id: Confirmation id. (Required along with nonce if you want to confirm action).
+                :param nonce: Confirmation nonce. (Required along with id if you want to confirm action).
+
+                :return: httpx Response object
+                """
+                params = {
+                    "id": id,
+                    "nonce": nonce,
+                }
+                path = f"/{item_id}/confirm-sda"
+                return _send_request(
+                    self=self._api, method="POST", path=path, params=params
+                )
+
+        class __Telegram:
+            def __init__(self, _api_self):
+                self._api = _api_self
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def code(self, item_id: int) -> httpx.Response:
+                """
+                GET https://api.lzt.market/item_id/telegram-login-code
+
+                Gets confirmation code from Telegram.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: httpx Response object
+                """
+                path = f"/{item_id}/telegram-login-code"
+                return _send_request(self=self._api, method="GET", path=path)
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
+            def reset_auth(self, item_id: int) -> httpx.Response:
+                """
+                POST https://api.lzt.market/item_id/telegram-reset-authorizations
+
+                Resets Telegram authorizations.
+
+                Required scopes: market
+
+                :param item_id: ID of item.
+
+                :return: httpx Response object
+                """
+                path = f"/{item_id}/telegram-reset-authorizations"
+                return _send_request(self=self._api, method="POST", path=path)
+
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def password_tm(self, item_id: int) -> httpx.Response:
+            """
+            GET https://api.lzt.market/item_id/temp-email-password
+
+            Gets password from temp email of account.
+
+            After calling of this method, the warranty will be cancelled, and you cannot automatically resell account.
+
+            Required scopes: market
+
+            :param item_id: ID of item.
+
+            :return: httpx Response object
+            """
+            path = f"/{item_id}/temp-email-password"
+            return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def get(
@@ -6676,7 +6737,7 @@ class Market:
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def delete(self, item_id: int, reason: str) -> httpx.Response:
+        def delete(self, item_id: int, reason: str = "Market.Managing.Delete") -> httpx.Response:
             """
             DELETE https://api.lzt.market/item_id
 
@@ -6696,7 +6757,7 @@ class Market:
             )
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def email(self, item_id: int, email: str, login: str) -> httpx.Response:
+        def email(self, item_id: int = None, email: str = None, login: str = None) -> httpx.Response:
             """
             GET https://api.lzt.market/email-code
 
@@ -6706,64 +6767,13 @@ class Market:
 
             :param item_id: ID of item.
             :param email: Account email.
+            :param login: Account login.
 
             :return: httpx Response object
             """
             path = "/email-code"
             params = {"email ": email, "login": login, "item_id": item_id}
             return _send_request(self=self._api, method="GET", path=path, params=params)
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def guard(self, item_id: int) -> httpx.Response:
-            """
-            GET https://api.lzt.market/item_id/guard-code
-
-            Gets confirmation code from MaFile (Only for Steam accounts).
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/guard-code"
-            return _send_request(self=self._api, method="GET", path=path)
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def mafile(self, item_id: int) -> httpx.Response:
-            """
-            GET https://api.lzt.market/item_id/mafile
-
-            Returns mafile in JSON.
-
-            Warning: this action is cancelling active account guarantee.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/mafile"
-            return _send_request(self=self._api, method="GET", path=path)
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def password_tm(self, item_id: int) -> httpx.Response:
-            """
-            GET https://api.lzt.market/item_id/temp-email-password
-
-            Gets password from temp email of account.
-
-            After calling of this method, the warranty will be cancelled, and you cannot automatically resell account.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/temp-email-password"
-            return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def refuse_guarantee(self, item_id: int) -> httpx.Response:
@@ -6796,9 +6806,7 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/change-password"
-
-            _cancel = int(_cancel)
-            params = {"_cancel": _cancel}
+            params = {"_cancel": int(_cancel) if _cancel else _cancel}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -6975,129 +6983,29 @@ class Market:
             }
             return _send_request(self=self._api, method="PUT", path=path, params=params)
 
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def telegram(self, item_id: int) -> httpx.Response:
-            """
-            GET https://api.lzt.market/item_id/telegram-login-code
-
-            Gets confirmation code from Telegram.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/telegram-login-code"
-            return _send_request(self=self._api, method="GET", path=path)
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def telegram_reset(self, item_id: int) -> httpx.Response:
-            """
-            POST https://api.lzt.market/item_id/telegram-reset-authorizations
-
-            Resets Telegram authorizations.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/telegram-reset-authorizations"
-            return _send_request(self=self._api, method="POST", path=path)
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def update_inventory(self, item_id: int, app_id: int) -> httpx.Response:
-            """
-            POST https://api.lzt.market/item_id/update-inventory
-
-            Update inventory value.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-            :param app_id: App id.
-
-            :return: httpx Response object
-            """
-            params = {"app_id": app_id}
-            path = f"/{item_id}/update-inventory"
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def steam_inventory_value(
-            self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None
+        @_MainTweaks._CheckScopes(scopes=["post"])
+        def arbitrage(
+            self,
+            item_id: int,
+            post_body: str
         ) -> httpx.Response:
             """
-            GET https://api.lzt.market/steam-value
+            POST https://api.zelenka.guru/item_id/claims
 
-            Gets steam value.
+            Create a Arbitrage.
 
-            Application id list:
+            Required scopes: post
 
-            730 - CS2
-
-            578080 - PUBG
-
-            753 - Steam
-
-            570 - Dota 2
-
-            440 - Team Fortress 2
-
-            252490 - Rust
-
-            304930 - Unturned
-
-            232090 - Killing Floor 2
-
-            322330 - Don't Starve Together
-
-            :param url: Link or id of account. Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
-            :param app_id: Application id.
-            :param currency: Using currency for amount.
-            :param ignore_cache: Ignore cache.
+            :param post_body: You should describe what's happened.
 
             :return: httpx Response object
             """
-            params = {
-                "link": url,
-                "app_id": app_id,
-                "currency": currency,
-                "ignore_cache": ignore_cache,
+            path = f"/{item_id}/claims"
+            data = {
+                "post_body": post_body
             }
-            path = "/steam-value"
-            return _send_request(self=self._api, method="GET", path=path, params=params)
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
-        def confirm_sda(
-            self, item_id: int, id: int = None, nonce: int = None
-        ) -> httpx.Response:
-            """
-            POST https://api.lzt.market/item_id/confirm-sda
-
-            Confirm steam action.
-
-            Don't set id and nonce parameters to get list of available confirmation requests.
-
-            Warning: this action is cancelling active account guarantee.
-
-            :param item_id: Item id.
-            :param id: Confirmation id. (Required along with nonce if you want to confirm action).
-            :param nonce: Confirmation nonce. (Required along with id if you want to confirm action).
-
-            :return: httpx Response object
-            """
-            params = {
-                "id": id,
-                "nonce": nonce,
-            }
-            path = f"/{item_id}/confirm-sda"
             return _send_request(
-                self=self._api, method="POST", path=path, params=params
+                self=self._api, method="POST", path=path, data=data
             )
 
     class __Purchasing:
@@ -7191,8 +7099,8 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/confirm-buy"
-            buy_without_validation = int(buy_without_validation)
-            params = {"buy_without_validation": buy_without_validation}
+            params = {"buy_without_validation": int(
+                buy_without_validation) if buy_without_validation else buy_without_validation}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -7215,10 +7123,9 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/fast-buy"
-            buy_without_validation = int(buy_without_validation)
             params = {
                 "price": price,
-                "buy_without_validation": buy_without_validation,
+                "buy_without_validation": int(buy_without_validation) if buy_without_validation else buy_without_validation,
             }
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
@@ -7276,16 +7183,13 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/goods/check"
-
-            random_proxy = int(random_proxy)
-            close_item = int(close_item)
             params = {
                 "login": login,
                 "password": password,
                 "login_password": login_password,
-                "close_item": close_item,
+                "close_item": int(close_item) if close_item else close_item,
                 "resell_item_id": resell_item_id,
-                "random_proxy": random_proxy,
+                "random_proxy": int(random_proxy) if random_proxy else random_proxy,
             }
             data = {}
             if extra is not None:
@@ -7382,13 +7286,9 @@ class Market:
             :return: httpx Response object
             """
             path = "/item/add"
- 
-            random_proxy = int(random_proxy)
-            type_sell = "auction" if auction else "price"
-            
             params = {
                 "category_id": category_id,
-                "type_sell": type_sell,
+                "type_sell": "auction" if auction else "price",
                 "price": price,
                 "currency": currency,
                 "item_origin": item_origin,
@@ -7402,7 +7302,7 @@ class Market:
                 "email_type": email_type,
                 "allow_ask_discount": allow_ask_discount,
                 "proxy_id": proxy_id,
-                "random_proxy": random_proxy,
+                "random_proxy": int(random_proxy) if random_proxy else random_proxy,
             }
             if auction is True:
                 params["duration_auction_value"] = auction_duration_value
@@ -7501,12 +7401,10 @@ class Market:
             :return: httpx Response object
             """
             path = "/item/fast-sell"
-            random_proxy = int(random_proxy)
-            type_sell = "auction" if auction else "price"
             params = {
                 "category_id": category_id,
                 "price": price,
-                "type_sell": type_sell,
+                "type_sell": "auction" if auction else "price",
                 "currency": currency,
                 "item_origin": item_origin,
                 "extended_guarantee": extended_guarantee,
@@ -7519,7 +7417,7 @@ class Market:
                 "email_type": email_type,
                 "allow_ask_discount": allow_ask_discount,
                 "proxy_id": proxy_id,
-                "random_proxy": random_proxy,
+                "random_proxy": int(random_proxy) if random_proxy else random_proxy,
                 "login": login,
                 "password": password,
                 "login_password": login_password,

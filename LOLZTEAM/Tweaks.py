@@ -1,5 +1,3 @@
-from multiprocessing import Value, Lock
-from httpx import ConnectError
 import functools
 import logging
 import inspect
@@ -7,6 +5,7 @@ import asyncio
 import ctypes
 import base64
 import types
+import httpx
 import json
 import time
 import sys
@@ -14,6 +13,8 @@ import re
 import os
 
 from . import Exceptions
+from multiprocessing import Value, Lock
+from binascii import Error as binasciiError
 
 _WarningsLogger = logging.getLogger("LOLZTEAM.Warnings")
 _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
@@ -30,76 +31,47 @@ class _MainTweaks:
             variable = "no"
         return variable
 
-    def _auto_delay(self, delay: float = 3.0):
-        """
-        Sleep for time difference between the last call and current call if it's less than 3 seconds
-        """
-        from .API import Antipublic
-        delay += 0.05
-        if type(self) is not Antipublic:
-            if self.bypass_429:
-                if self._delay_synchronizer:
-                    time_diff = time.time() - self._auto_delay_time.value
-                    if (
-                        time_diff < delay
-                    ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        _DebugLogger.debug(
-                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
-                        time.sleep(delay - time_diff)
-                else:
-                    time_diff = time.time() - self._auto_delay_time
-                    if (
-                        time_diff < delay
-                    ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        _DebugLogger.debug(
-                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
-                        time.sleep(delay - time_diff)
-
+    @staticmethod
     async def _auto_delay_async(self, delay: float = 3.0):
         """
         Sleep for time difference between the last call and current call if it's less than 3 seconds
         """
-        from .API import Antipublic
-        delay += 0.05
-        if type(self) is not Antipublic:
-            if self.bypass_429:
-                if self._delay_synchronizer:
-                    time_diff = time.time() - self._auto_delay_time.value
-                    if (
-                        time_diff < delay
-                    ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        _DebugLogger.debug(
-                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
-                        await asyncio.sleep(delay - time_diff)
-                else:
-                    time_diff = time.time() - self._auto_delay_time
-                    if (
-                        time_diff < delay
-                    ):  # if difference between current and last call > 3 seconds we will sleep the rest of the time
-                        _DebugLogger.debug(
-                            f"Sleeping for {round(delay-time_diff, 3)} seconds")
-                        await asyncio.sleep(delay - time_diff)
+        delay += self.additional_delay
+        if self.bypass_429:
+            if self._delay_synchronizer:
+                time_diff = time.time() - self._auto_delay_time.value
+                if (
+                    time_diff < delay
+                ):
+                    _DebugLogger.debug(
+                        f"Sleeping for {round(delay-time_diff, 3)} seconds")
+                    await asyncio.sleep(delay - time_diff)
+            else:
+                time_diff = time.time() - self._auto_delay_time
+                if (
+                    time_diff < delay
+                ):
+                    _DebugLogger.debug(
+                        f"Sleeping for {round(delay-time_diff, 3)} seconds")
+                    await asyncio.sleep(delay - time_diff)
 
+    @staticmethod
     def setup_jwt(self, token, user_id=None):
-        if "." in self._token:
-            decoded_payload = json.loads(
-                base64.b64decode(
-                    token.split(".")[1] + "=="
-                    if "==" not in token.split(".")[1]
-                    else token.split(".")[1]
-                ).decode("utf-8")
-            )
-            self.user_id = decoded_payload.get("sub", "me")
-            scopes = decoded_payload.get(
-                "scope", "basic read post conversate market"
-            ).split(" ")
-            self._scopes = scopes
-        else:
-            self._scopes = "basic read post conversate market".split(" ")
-            self.user_id = user_id
-        _DebugLogger.debug(
-            "Setuped jwt token | User ID: {self.user_id} | Scopes: {self._scopes}")
+        try:
+            if "." in self._token:
+                decoded_payload = json.loads(base64.b64decode(token.split(".")[1] + "==" if "==" not in token.split(".")[1] else token.split(".")[1]).decode("utf-8"))
+                self.user_id = decoded_payload.get("sub", "me")
+                scopes = decoded_payload.get("scope", "basic read post conversate market").split(" ")  # Tweak На самых первых jwt токенах не указывались скопы
+                self._scopes = scopes
+            else:
+                raise Exceptions.BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
+        except json.JSONDecodeError:
+            raise Exceptions.BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
+        except binasciiError:
+            raise Exceptions.BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
+        _DebugLogger.debug("Setuped jwt token | User ID: {self.user_id} | Scopes: {self._scopes}")
 
+    @staticmethod
     def _CheckScopes(scopes: list = None):
 
         def _wrapper(func):
@@ -205,8 +177,10 @@ class _MainTweaks:
                     if self._delay_synchronizer:
                         self._lock.release()  # Unlocking to prevent softlock
                     return response
-                except ConnectError as e:
+                except httpx.ConnectError as e:
                     if tries == 30:
+                        if self._delay_synchronizer:
+                            self._lock.release()  # Unlocking to prevent softlock
                         raise e
                     time.sleep(0.05)
                     continue
@@ -291,8 +265,7 @@ class Debug:
         self.DebugLogger = _DebugLogger
         self.DebugLogger.setLevel(level=logging.DEBUG)
 
-        __DebugHandler = logging.FileHandler(
-            filename=f"{os.path.basename(sys.argv[0])} # LOLZTEAM {time.strftime('%Y.%m.%d - %H-%M-%S')}.log", mode="w", encoding="UTF-8")
+        __DebugHandler = logging.FileHandler(filename=f"{os.path.basename(sys.argv[0])} # LOLZTEAM {time.strftime('%Y.%m.%d - %H-%M-%S')}.log", mode="w", encoding="UTF-8")
         formatter = logging.Formatter("%(asctime)s | %(message)s")
         __DebugHandler.setFormatter(formatter)
         self.DebugHandler = __DebugHandler
@@ -316,30 +289,22 @@ class Debug:
             _WarningsLogger.warn(" Debug logger already disabled")
 
 
-def CreateJob(func, job_name, **cur_kwargs):
+def CreateJob(func, job_name, **cur_kwargs) -> dict:
+    CREATE_JOB = True
     self = functools.partial(func).func.__self__
     if "scope" in functools.partial(func).func.__code__.co_varnames:
-        func = next(
-            (
-                c
-                for c in (c.cell_contents for c in func.__closure__)
-                if isinstance(c, types.FunctionType)
-            ),
-            None,
-        )
+        func = next((c for c in (c.cell_contents for c in func.__closure__) if isinstance(c, types.FunctionType)), None,)
     else:
         func = functools.partial(func).func
     if hasattr(self, "_api"):
         self = self._api
     arguments = func.__code__.co_varnames
-    CREATE_JOB = True
     loc = locals()
     for arg in arguments:
         if arg != "self":
             exec(f"{arg} = None", loc)
         if arg == "kwargs":
             exec("kwargs = {}", loc)
-    user_id = None  # Костыль для Tweak 1
     for arg, value in cur_kwargs.items():
         if "kwargs" not in arguments and arg not in arguments:
             raise Exceptions.INVALID_ARG(
@@ -376,7 +341,7 @@ def CreateJob(func, job_name, **cur_kwargs):
     return job
 
 
-async def SendAsAsync(func, **cur_kwargs):
+async def SendAsAsync(func, **cur_kwargs) -> httpx.Response:
     """
     Send async request
 
@@ -385,29 +350,23 @@ async def SendAsAsync(func, **cur_kwargs):
 
     :return: httpx Response object
     """
+    SEND_AS_ASYNC = True
     self = functools.partial(func).func.__self__
     if "scope" in functools.partial(func).func.__code__.co_varnames:
-        func = next(
-            (
-                c
-                for c in (c.cell_contents for c in func.__closure__)
-                if isinstance(c, types.FunctionType)
-            ),
-            None,
-        )
+        func = next((c for c in (c.cell_contents for c in func.__closure__)
+                    if isinstance(c, types.FunctionType)), None,)
     else:
         func = functools.partial(func).func
     if hasattr(self, "_api"):
         self = self._api
     arguments = func.__code__.co_varnames
-    SEND_AS_ASYNC = True
+
     loc = locals()
     for arg in arguments:
         if arg != "self":
             exec(f"{arg} = None", loc)
         if arg == "kwargs":
             exec("kwargs = {}", loc)
-    user_id = None  # Костыль для Tweak 1
     for arg, value in cur_kwargs.items():
         if "kwargs" not in arguments and arg not in arguments:
             raise Exceptions.INVALID_ARG(
@@ -513,19 +472,19 @@ async def SendAsAsync(func, **cur_kwargs):
     return_code = "\n".join(lines).split('"""')[2].split("return ")[-1]
     func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
     exec(func_code, globals(), loc)
+
     path = loc.get("path")
     params = loc.get("params", {})
+    files = loc.get("files", None)
     data = loc.get("data", {})
     if type(data) is dict:
         params.update(data)
-    method = [
-        eval(i.replace("method=", "").strip())
-        for i in return_code.split(",")
-        if "method=" in i
-    ][0]
     params["locale"] = self._locale
+
+    method = [eval(i.replace("method=", "").strip())
+              for i in return_code.split(",") if "method=" in i][0]
     from .API import _send_async_request
 
     return await _send_async_request(
-        self=self, method=method, path=path, params=params, data=data
+        self=self, method=method, path=path, params=params, data=data, files=files
     )

@@ -24,3 +24,7 @@ class URL_IS_DIFFERENT_FROM_BASE_MARKET(Exception):
 
 class MISSING_SCOPE(Exception):
     pass
+
+
+class BAD_TOKEN(Exception):
+    pass
