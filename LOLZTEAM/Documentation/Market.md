@@ -2171,7 +2171,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.managing.steam_inventory_value(url="https://steamcommunity.com/id/AS7RID",currency=Constants.Market.Currency.rub,app_id=Constants.Market.AppID.CSGO)
+response = market.managing.steam.inventory_value(url="https://steamcommunity.com/id/AS7RID",currency=Constants.Market.Currency.rub,app_id=Constants.Market.AppID.CSGO)
 print(response.json())
 ```
 
@@ -2190,7 +2190,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.managing.guard(item_id=2410024)
+response = market.managing.steam.guard(item_id=2410024)
 print(response.json())
 ```
 
@@ -2211,7 +2211,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.managing.confirm_sda(item_id=2410024, id=1000, nonce=98765)
+response = market.managing.steam.confirm_sda(item_id=2410024, id=1000, nonce=98765)
 print(response.json())
 ```
 
@@ -2230,7 +2230,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.managing.mafile(item_id=2410024)
+response = market.managing.steam.mafile(item_id=2410024)
 print(response.json())
 ```
 
@@ -2250,7 +2250,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.managing.update_inventory(item_id=2410024, app_id=730)
+response = market.managing.steam.update_inventory(item_id=2410024, app_id=730)
 print(response.json())
 ```
 
@@ -2269,7 +2269,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.managing.telegram_reset(item_id=2410024)
+response = market.managing.telegram.reset_auth(item_id=2410024)
 print(response.json())
 ```
 
@@ -2288,7 +2288,7 @@ print(response.json())
 **Example:**
 
 ```python
-response = market.managing.telegram(item_id=2410024)
+response = market.managing.telegram.code(item_id=2410024)
 print(response.json())
 ```
 
