@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "\n[Forum API](https://docs.api.zelenka.guru/?forum)\n\n\n**API free libraries**\n\n\n+ [Node.js](https://github.com/NztForum/node-lzt) \n+ [Python](https://github.com/AS7RIDENIED/Lolzteam_Python_Api)\n+ [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n**Rate limit**\n\n\n+ 20 requests per minute for only **Category Search** methods (3 seconds delay between requests)\nIf you exceed the limit, the response code 429 will be returned to you.\n\n**Authorization**\n\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n**Content-Type**\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.\n\n**Is for free access?**\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).",
-    "version": "1.1.30"
+    "version": "1.1.31"
   },
   "servers": [
     {
@@ -3630,6 +3630,94 @@
               "description": "Maximum number of contacts.",
               "minimum": 0
             }
+          },
+          {
+            "name": "min_stars",
+            "in": "query",
+            "description": "Minimum number of Telegram Stars.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Min Stars",
+              "type": "integer",
+              "description": "Minimum number of Telegram Stars."
+            }
+          },
+          {
+            "name": "max_stars",
+            "in": "query",
+            "description": "Maximum number of Telegram Stars.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Max Stars",
+              "type": "integer",
+              "description": "Maximum number of Telegram Stars."
+            }
+          },
+          {
+            "name": "birthday",
+            "in": "query",
+            "description": "Birthday was X time before.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Birthday",
+              "type": "integer",
+              "description": "Birthday was X time before."
+            }
+          },
+          {
+            "name": "birthday_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Birthday Period",
+              "type": "string",
+              "description": "In what notation is time measured.",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "birthday_after",
+            "in": "query",
+            "description": "Birthday was X time after.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Birthday After",
+              "type": "integer",
+              "description": "Birthday was X time after."
+            }
+          },
+          {
+            "name": "birthday_after_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Birthday After Period",
+              "type": "string",
+              "description": "In what notation is time measured.",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
           }
         ],
         "responses": {
@@ -4919,7 +5007,10 @@
                 "cis",
                 "eu",
                 "as",
-                "us"
+                "us",
+                "oc",
+                "af",
+                "me"
               ]
             }
           },
@@ -6945,6 +7036,7 @@
               "items": {
                 "type": "string",
                 "enum": [
+                  "Premium Basic",
                   "Premium Fallback",
                   "Premium Student",
                   "Premium Duo",
@@ -7121,6 +7213,54 @@
             "$ref": "#/components/parameters/nsb_by_me"
           },
           {
+            "name": "subscription",
+            "in": "query",
+            "description": "Name of subscription.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Subscription",
+              "type": "string",
+              "description": "Name of subscription.",
+              "enum": [
+                "Xbox Game Pass Ultimate",
+                "PC Game Pass"
+              ]
+            }
+          },
+          {
+            "name": "subscription_length",
+            "in": "query",
+            "description": "Length of subscription.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Subscription Length",
+              "type": "integer",
+              "description": "Length of subscription."
+            }
+          },
+          {
+            "name": "subscription_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Subscription Period",
+              "type": "string",
+              "description": "In what notation is time measured.",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
             "name": "java",
             "in": "query",
             "description": "Has java edition.",
@@ -7212,7 +7352,22 @@
               "title": "Rank Hypixel",
               "type": "integer",
               "description": "Rank on hypixel.\n+ 0 - VIP\n+ 1 - VIP+\n+ 2 - MVP\n+ 3 - MVP+\n+ 4 - MVP++\n+ 5 - JR Helper\n+ 6 - Helper\n+ 7 - Mod\n+ 8 - Apple\n+ 9 - Sloth\n+ 10 - Admin\n+ 11 - YT\n+ 12 - Build Team\n+ 12 - Build Team+",
-              "enum": [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
             }
           },
           {
@@ -10524,7 +10679,6 @@
                   "title": "FastBuyModel",
                   "required": [
                     "item",
-                    "reserve_end_date",
                     "system_info"
                   ],
                   "type": "object",
@@ -10533,10 +10687,6 @@
                       "title": "Status",
                       "type": "string",
                       "default": "ok"
-                    },
-                    "reserve_end_date": {
-                      "title": "Reserve End Date",
-                      "type": "integer"
                     },
                     "item": {
                       "$ref": "#/components/schemas/ItemModel"
@@ -10574,7 +10724,7 @@
           "Account purchasing"
         ],
         "summary": "Check Account",
-        "description": "Checking account for validity. If the account is invalid, the purchase will be canceled automatically (you don't need to make request **POST /:itemId/cancel-reserve**).",
+        "description": "Checking account for validity. If the account is invalid, the purchase will be canceled automatically.",
         "operationId": "accountsPurchasing.check",
         "parameters": [
           {
@@ -10654,7 +10804,6 @@
                   "title": "ConfirmBuyModel",
                   "required": [
                     "item",
-                    "reserve_end_date",
                     "system_info"
                   ],
                   "type": "object",
@@ -10663,10 +10812,6 @@
                       "title": "Status",
                       "type": "string",
                       "default": "ok"
-                    },
-                    "reserve_end_date": {
-                      "title": "Reserve End Date",
-                      "type": "integer"
                     },
                     "item": {
                       "title": "ItemLoginData",
@@ -14235,10 +14380,6 @@
             "type": "string",
             "default": "Description EN"
           },
-          "is_reserved": {
-            "type": "integer",
-            "default": 0
-          },
           "item_domain": {
             "type": "string",
             "default": "string"
@@ -14365,22 +14506,6 @@
           "auction": {
             "type": "array",
             "items": {}
-          },
-          "reserve": {
-            "type": "object",
-            "properties": {
-              "reserve_user_id": {
-                "type": "integer"
-              },
-              "reserve_price": {
-                "type": "integer",
-                "default": 0
-              },
-              "reserve_date": {
-                "type": "integer",
-                "default": 0
-              }
-            }
           },
           "description_html": {
             "type": "string",
