@@ -106,8 +106,6 @@
     * [Fast buy](#fast-buy)
     * [Check](#check)
     * [Confirm buy](#confirm-buy)
-    * [Reserve](#reserve)
-    * [Cancel reserve](#cancel-reserve)
 * [Publishing](#publishing)
     * [Fast sell](#fast-sell)
     * [Add](#add)
@@ -1861,7 +1859,7 @@ print(response.json())
 ```
 
 ```python
-{'status': 'ok', 'reserve_end_date': 0, 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
+{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
 ```
 
 ### Check
@@ -1902,46 +1900,6 @@ print(response.json())
 
 ```python
 {'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Reserve
-
-*Reserves account for you.*
-  > Reserve time - 300 seconds.
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **price** (int): Current price of account in your currency
-
-*Example:*
-
-```python
-response = market.purchasing.reserve(item_id=2410024,price=10)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'reserve_end_date': 0, 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Cancel reserve
-
-*Cancels reserve.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.purchasing.reserve_cancel(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'Changes Saved'}
 ```
 
 # Publishing
