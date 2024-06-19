@@ -37,6 +37,7 @@ class _MainTweaks:
         Sleep for time difference between the last call and current call if it's less than 3 seconds
         """
         delay += self.additional_delay
+        # Возможно когда-нибудь моя любимка полюбит меня вновь и сделает, чтобы лолз возвращал время с миллисекундами и тогда мы избавимся от костыля в задержке ❤️❤️❤️
         if self.bypass_429:
             if self._delay_synchronizer:
                 time_diff = time.time() - self._auto_delay_time.value

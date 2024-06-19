@@ -5,6 +5,7 @@ import time
 import json
 import re
 
+from concurrent.futures import ThreadPoolExecutor
 from typing import Union, Literal
 
 from . import Exceptions
@@ -25,7 +26,11 @@ _DebugLogger.setLevel(level=100)
 def _send_request(
     self, method: str, path: dict, params: dict = None, data=None, files=None
 ) -> httpx.Response:
-    return asyncio.run(_send_async_request(self=self, method=method, path=path, params=params, data=data, files=files))
+    #  Закостылил по гайду от величайшего
+    #  https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    executor = ThreadPoolExecutor()
+    result = executor.submit(asyncio.run, _send_async_request(self=self, method=method, path=path, params=params, data=data, files=files)).result()
+    return result
 
 
 @_MainTweaks._RetryWrapper
@@ -145,7 +150,7 @@ class Forum:
         self.bypass_429 = bypass_429
         self.timeout = timeout
         self._auto_delay_time = 0
-        self.additional_delay = 0.055
+        self.additional_delay = 0.1
         self._locale = language
         self._delay_synchronizer = None
         self._lock = None
@@ -3283,7 +3288,7 @@ class Market:
         self.bypass_429 = bypass_429
         self.timeout = timeout
         self._auto_delay_time = 0
-        self.additional_delay = 0.055
+        self.additional_delay = 0.1
         self._locale = language
         self._delay_synchronizer = None
         self._lock = None
@@ -3297,7 +3302,7 @@ class Market:
                 if not category.startswith("__")
             ]
         )
-        self._delay_pattern = rf"/(?:{_categories})(?:/|$)"
+        self._delay_pattern = rf"/(?:{_categories}|steam-value)(?:/|$)"
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
         self.category = self.__Category(self)
