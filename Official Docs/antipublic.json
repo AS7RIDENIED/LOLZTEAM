@@ -1,9 +1,9 @@
 {
-  "openapi": "3.0.3",
+  "openapi": "3.1.0",
   "info": {
     "title": "AntiPublic.One API",
-    "description": "Official API documentation for AntiPublic MYRZ.\n\nLinks:\n+ Download [AntiPublic](https://antipublic.one/dl/AntiPublic.zip).\n+ AntiPublic [Management](https://zelenka.guru/account/antipublic).",
-    "version": "1.0.6"
+    "description": "Official API documentation for AntiPublic MYRZ.\n\nLinks:\n+ Download [AntiPublic](https://antipublic.one/dl/AntiPublic.zip).\n+ AntiPublic [Management](https://lolz.live/account/antipublic).",
+    "version": "1.0.8"
   },
   "servers": [
     {
@@ -18,7 +18,7 @@
         ],
         "summary": "Count Lines",
         "description": "Get count of rows in the AntiPublic db.",
-        "operationId": "antipublic.countLines",
+        "operationId": "Public.CountLines",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -40,7 +40,7 @@
         ],
         "summary": "Count Lines Plain",
         "description": "Get count of rows in the AntiPublic db (raw format).",
-        "operationId": "antipublic.countLinesPlain",
+        "operationId": "Public.CountLinesPlain",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -62,7 +62,7 @@
         ],
         "summary": "Check Updates",
         "description": "Get current version etc.",
-        "operationId": "antipublic.version",
+        "operationId": "Public.Version",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -80,11 +80,11 @@
     "/checkAccess": {
       "get": {
         "tags": [
-          "Check"
+          "Account"
         ],
         "summary": "Check Access",
         "description": "Checks your license.",
-        "operationId": "antipublic.checkLicense",
+        "operationId": "License.CheckLicense",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -117,11 +117,11 @@
     "/availableQueries": {
       "get": {
         "tags": [
-          "Check"
+          "Account"
         ],
-        "summary": "Available Queries",
+        "summary": "Get Available Queries",
         "description": "Get your available queries.",
-        "operationId": "antipublic.availableQueries",
+        "operationId": "License.AvailableQueries",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -154,11 +154,11 @@
     "/checkLines": {
       "post": {
         "tags": [
-          "Search"
+          "Check"
         ],
         "summary": "Check Lines",
         "description": "Check your lines. Maximum 1000 lines per request.",
-        "operationId": "antipublic.checkLines",
+        "operationId": "License.CheckLines",
         "requestBody": {
           "content": {
             "application/json": {
@@ -214,28 +214,29 @@
         ]
       }
     },
-    "/emailSearch": {
+    "/search": {
       "post": {
         "tags": [
           "Search"
         ],
-        "summary": "Email Search",
-        "description": "Get passwords for email.",
-        "operationId": "antipublic.emailSearch",
+        "summary": "Search",
+        "description": "Search lines by email/password/domain.",
+        "operationId": "License.Search",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "email"
-                ],
-                "properties": {
-                  "email": {
-                    "description": "Email or login for search.",
-                    "title": "Email",
-                    "type": "string"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SearchEmail"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SearchPassword"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SearchDomain"
                   }
-                }
+                ]
               }
             }
           }
@@ -272,11 +273,11 @@
     "/emailPasswords": {
       "post": {
         "tags": [
-          "Plus"
+          "Search"
         ],
         "summary": "Email Passwords",
         "description": "Get passwords for emails. AntiPublic Plus subscription required.",
-        "operationId": "antipublic.emailPasswords",
+        "operationId": "LicensePlus.EmailPasswords",
         "requestBody": {
           "content": {
             "application/json": {
@@ -336,6 +337,154 @@
   },
   "components": {
     "schemas": {
+      "SearchEmail": {
+        "title": "Search by email",
+        "required": [
+          "searchBy",
+          "query"
+        ],
+        "properties": {
+          "searchBy": {
+            "description": "Search type.",
+            "title": "Search type.",
+            "type": "string",
+            "const": "email"
+          },
+          "query": {
+            "description": "Search query.",
+            "title": "Search query.",
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "title": "Email"
+              }
+            },
+            "required": [
+              "email"
+            ]
+          },
+          "direction": {
+            "description": "Search direction.",
+            "title": "Search direction.",
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "title": "Email",
+                "enum": [
+                  "start",
+                  "strict"
+                ]
+              }
+            }
+          },
+          "pageToken": {
+            "type": "string",
+            "title": "Page token",
+            "description": "Page token"
+          }
+        }
+      },
+      "SearchPassword": {
+        "title": "Search by password",
+        "required": [
+          "searchBy",
+          "query"
+        ],
+        "properties": {
+          "searchBy": {
+            "description": "Search type.",
+            "title": "Search type.",
+            "type": "string",
+            "const": "password"
+          },
+          "query": {
+            "description": "Search query.",
+            "title": "Search query.",
+            "type": "object",
+            "properties": {
+              "password": {
+                "type": "string",
+                "title": "Password"
+              }
+            },
+            "required": [
+              "password"
+            ]
+          },
+          "direction": {
+            "description": "Search direction.",
+            "title": "Search direction.",
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "title": "Email",
+                "enum": [
+                  "start",
+                  "strict"
+                ]
+              }
+            }
+          },
+          "pageToken": {
+            "type": "string",
+            "title": "Page token",
+            "description": "Page token"
+          }
+        }
+      },
+      "SearchDomain": {
+        "title": "Search by domain",
+        "required": [
+          "searchBy",
+          "query"
+        ],
+        "properties": {
+          "searchBy": {
+            "description": "Search type.",
+            "title": "Search type.",
+            "type": "string",
+            "const": "domain"
+          },
+          "query": {
+            "description": "Search query.",
+            "title": "Search query.",
+            "type": "object",
+            "properties": {
+              "domain": {
+                "type": "string",
+                "title": "Domain"
+              }
+            },
+            "required": [
+              "domain"
+            ]
+          },
+          "direction": {
+            "description": "Search direction.",
+            "title": "Search direction.",
+            "type": "object",
+            "properties": {
+              "domain": {
+                "type": "string",
+                "title": "Domain",
+                "enum": [
+                  "start",
+                  "strict",
+                  "end"
+                ]
+              }
+            }
+          },
+          "pageToken": {
+            "type": "string",
+            "title": "Page token",
+            "description": "Page token"
+          }
+        }
+      },
       "CountLines": {
         "type": "object",
         "properties": {
@@ -460,23 +609,55 @@
         "type": "object",
         "properties": {
           "success": {
+            "title": "Success",
             "type": "boolean"
           },
           "availableQueries": {
+            "title": "Available queries",
             "type": "integer"
           },
           "resultCount": {
-            "type": "integer",
-            "default": 1
+            "title": "Result count",
+            "type": "integer"
           },
           "results": {
+            "title": "Results",
             "type": "array",
             "items": {
-              "type": "string",
-              "default": "example@gmail.com:password"
+              "type": "string"
             }
+          },
+          "page": {
+            "title": "Page",
+            "type": "object",
+            "properties": {
+              "totalResults": {
+                "title": "Total results",
+                "type": "integer"
+              },
+              "pageNumber": {
+                "title": "Page number",
+                "type": "integer"
+              },
+              "nextPageToken": {
+                "title": "Next page token",
+                "type": "string"
+              }
+            },
+            "required": [
+              "totalResults",
+              "pageNumber",
+              "nextPageToken"
+            ]
           }
-        }
+        },
+        "required": [
+          "success",
+          "availableQueries",
+          "resultCount",
+          "results",
+          "page"
+        ]
       }
     },
     "securitySchemes": {
