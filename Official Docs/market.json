@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.",
-    "version": "1.1.34"
+    "version": "1.1.35"
   },
   "servers": [
     {
@@ -2493,6 +2493,214 @@
               "description": "Maximum number of Stellar Jade.",
               "minimum": 0
             }
+          },
+          {
+            "name": "zenless_character[]",
+            "in": "query",
+            "description": "List of Zenless Zone Zero characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Character",
+              "type": "string",
+              "description": "List of Zenless Zone Zero characters."
+            }
+          },
+          {
+            "name": "zenless_weapon[]",
+            "in": "query",
+            "description": "List of Zenless Zone Zero weapons.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Weapon",
+              "type": "string",
+              "description": "List of Zenless Zone Zero weapons."
+            }
+          },
+          {
+            "name": "zenless_legendary_min",
+            "in": "query",
+            "description": "Minimum number of Zenless Zone Zero legendary characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Legendary Min",
+              "type": "integer",
+              "description": "Minimum number of Zenless Zone Zero legendary characters."
+            }
+          },
+          {
+            "name": "zenless_legendary_max",
+            "in": "query",
+            "description": "Maximum number of Zenless Zone Zero legendary characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Legendary Max",
+              "type": "integer",
+              "description": "Maximum number of Zenless Zone Zero legendary characters."
+            }
+          },
+          {
+            "name": "cinemas_min",
+            "in": "query",
+            "description": "Minimum number of cinemas on Zenless Zone Zero characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Cinemas Min",
+              "type": "integer",
+              "description": "Minimum number of cinemas on Zenless Zone Zero characters."
+            }
+          },
+          {
+            "name": "cinemas_max",
+            "in": "query",
+            "description": "Maximum number of cinemas on Zenless Zone Zero characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Cinemas Max",
+              "type": "integer",
+              "description": "Maximum number of cinemas on Zenless Zone Zero characters."
+            }
+          },
+          {
+            "name": "zenless_legendary_weapon_min",
+            "in": "query",
+            "description": "Minimum number of legendary Zenless Zone Zero weapon characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Legendary Weapon Min",
+              "type": "integer",
+              "description": "Minimum number of legendary Zenless Zone Zero weapon characters."
+            }
+          },
+          {
+            "name": "zenless_legendary_weapon_max",
+            "in": "query",
+            "description": "Maximum number of legendary Zenless Zone Zero weapon characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Legendary Weapon Max",
+              "type": "integer",
+              "description": "Maximum number of legendary Zenless Zone Zero weapon characters."
+            }
+          },
+          {
+            "name": "zenless_char_min",
+            "in": "query",
+            "description": "Minimum number of Zenless Zone Zero characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Char Min",
+              "type": "integer",
+              "description": "Minimum number of Zenless Zone Zero characters."
+            }
+          },
+          {
+            "name": "zenless_char_max",
+            "in": "query",
+            "description": "Maximum number of Zenless Zone Zero characters.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Char Max",
+              "type": "integer",
+              "description": "Maximum number of Zenless Zone Zero characters."
+            }
+          },
+          {
+            "name": "zenless_level_min",
+            "in": "query",
+            "description": "Minimum Zenless Zone Zero level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Level Min",
+              "type": "integer",
+              "description": "Minimum Zenless Zone Zero level."
+            }
+          },
+          {
+            "name": "zenless_level_max",
+            "in": "query",
+            "description": "Maximum Zenless Zone Zero level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Level Max",
+              "type": "integer",
+              "description": "Maximum Zenless Zone Zero level."
+            }
+          },
+          {
+            "name": "zenless_achievement_min",
+            "in": "query",
+            "description": "Minimum count of Zenless Zone Zero achievements.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Achievement Min",
+              "type": "integer",
+              "description": "Minimum count of Zenless Zone Zero achievements."
+            }
+          },
+          {
+            "name": "zenless_achievement_max",
+            "in": "query",
+            "description": "Maximum count of Zenless Zone Zero achievements.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Achievement Max",
+              "type": "integer",
+              "description": "Maximum count of Zenless Zone Zero achievements."
+            }
+          },
+          {
+            "name": "zenless_currency_min",
+            "in": "query",
+            "description": "Minimum count of Zenless Zone Zero polychrome.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Currency Min",
+              "type": "integer",
+              "description": "Minimum count of Zenless Zone Zero polychrome."
+            }
+          },
+          {
+            "name": "zenless_currency_max",
+            "in": "query",
+            "description": "Maximum count of Zenless Zone Zero polychrome.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Zenless Currency Max",
+              "type": "integer",
+              "description": "Maximum count of Zenless Zone Zero polychrome."
+            }
           }
         ],
         "responses": {
@@ -3717,6 +3925,32 @@
                 "month",
                 "year"
               ]
+            }
+          },
+          {
+            "name": "min_id",
+            "in": "query",
+            "description": "Minimum ID of account, will be rounded down till nearest 10k. Available if your balance is higher than 100000 RUB.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Min Id",
+              "type": "integer",
+              "description": "Minimum ID of account, will be rounded down till nearest 10k. Available if your balance is higher than 100000 RUB."
+            }
+          },
+          {
+            "name": "max_id",
+            "in": "query",
+            "description": "Maximum ID of account, will be rounded down till nearest 10k. Available if your balance is higher than 100000 RUB.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Max Id",
+              "type": "integer",
+              "description": "Maximum ID of account, will be rounded down till nearest 10k. Available if your balance is higher than 100000 RUB."
             }
           }
         ],
@@ -5378,6 +5612,64 @@
             "schema": {
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
+          },
+          {
+            "name": "r6_smin",
+            "in": "query",
+            "description": "Minimum number of skins in Tom Clancy's Rainbow Six Siege.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "R6 Smin",
+              "type": "integer",
+              "description": "Minimum number of skins in Tom Clancy's Rainbow Six Siege."
+            }
+          },
+          {
+            "name": "r6_smax",
+            "in": "query",
+            "description": "Maximum number of skins in Tom Clancy's Rainbow Six Siege.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "R6 Smax",
+              "type": "integer",
+              "description": "Maximum number of skins in Tom Clancy's Rainbow Six Siege."
+            }
+          },
+          {
+            "name": "r6_skin[]",
+            "in": "query",
+            "description": "List of weapon skins in Tom Clancy's Rainbow Six Siege.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "R6 Skin",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of weapon skins in Tom Clancy's Rainbow Six Siege."
+            }
+          },
+          {
+            "name": "r6_operator[]",
+            "in": "query",
+            "description": "List of operators in Tom Clancy's Rainbow Six Siege.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "R6 Operator",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of operators in Tom Clancy's Rainbow Six Siege."
+            }
           }
         ],
         "responses": {
@@ -6435,12 +6727,6 @@
                 0
               ]
             }
-          },
-          {
-            "$ref": "#/components/parameters/lmin"
-          },
-          {
-            "$ref": "#/components/parameters/lmax"
           },
           {
             "$ref": "#/components/parameters/balance_min"
@@ -11326,7 +11612,7 @@
         "requestBody": {
           "required": false,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "properties": {
                   "description": {
@@ -11378,154 +11664,7 @@
                     "title": "Close Item",
                     "type": "boolean"
                   },
-                  "extra[region]": {
-                    "description": "Region. Required if you want to upload WoT, Valorant, Escape From Tarkov account. Optional if you want to upload Genshin Impact account.",
-                    "title": "Region",
-                    "type": "string"
-                  },
-                  "extra[service_id]": {
-                    "description": "Service id. Required if you want to upload VPN, Cinema account or gift.",
-                    "title": "Service Id",
-                    "type": "string",
-                    "enum": [
-                      "AdguardVPN",
-                      "PIAVPN",
-                      "cyberghostVPN",
-                      "hotspotShieldVPN",
-                      "mullvadVPN",
-                      "pureVPN",
-                      "tunnelbearVPN",
-                      "ultraVPN",
-                      "vanishVPN",
-                      "vyprVPN",
-                      "windscribeVPN",
-                      "start",
-                      "ivi",
-                      "telegram",
-                      "discord"
-                    ]
-                  },
-                  "extra[system]": {
-                    "description": "System. Required if you want to upload Supercell account.",
-                    "title": "System",
-                    "type": "string",
-                    "enum": [
-                      "laser",
-                      "scroll",
-                      "magic"
-                    ]
-                  },
-                  "extra[discord_token]": {
-                    "description": "Discord token. Required if you want to upload Discord account.",
-                    "title": "Discord Token",
-                    "type": "string"
-                  },
-                  "extra[cookies]": {
-                    "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
-                    "title": "Cookies",
-                    "type": "string"
-                  },
-                  "extra[sc]": {
-                    "description": "Required if you want to upload Epic Games account.",
-                    "title": "sc",
-                    "type": "integer",
-                    "enum": [
-                      1,
-                      0
-                    ]
-                  },
-                  "extra[ItTakesTwo]": {
-                    "description": "Required if you want to upload Origin (EA) account.",
-                    "title": "ItTakesTwo",
-                    "type": "integer",
-                    "enum": [
-                      1,
-                      0
-                    ]
-                  },
-                  "extra[apex_legends]": {
-                    "description": "Required if you want to upload Origin (EA) account.",
-                    "title": "ApexLegends",
-                    "type": "integer",
-                    "enum": [
-                      1,
-                      0
-                    ]
-                  },
-                  "extra[login_without_cookies]": {
-                    "description": "Login without cookies. Required if you want to upload Instagram account.",
-                    "title": "Login Without Cookies",
-                    "type": "boolean"
-                  },
-                  "extra[mfa_file]": {
-                    "description": "Mfa file. Optional. Used only if you want to upload Steam account.",
-                    "title": "Mfa File",
-                    "type": "string"
-                  },
-                  "extra[dota2_mmr]": {
-                    "description": "Dota 2 MMR. Optional. Used only if you want to upload Steam account.",
-                    "title": "Dota 2 MMR",
-                    "type": "string"
-                  },
-                  "extra[ea_games]": {
-                    "description": "EA Games. Optional. Used only if you want to upload Steam account.",
-                    "title": "EA Games",
-                    "type": "boolean"
-                  },
-                  "extra[uplay_games]": {
-                    "description": "Uplay Games. Optional. Used only if you want to upload Steam account.",
-                    "title": "Uplay Games",
-                    "type": "string"
-                  },
-                  "extra[the_quarry]": {
-                    "description": "The quarry. Optional. Used only if you want to upload Steam account.",
-                    "title": "The Quarry",
-                    "type": "string"
-                  },
-                  "extra[warframe]": {
-                    "description": "Warframe. Optional. Used only if you want to upload Steam account.",
-                    "title": "Warframe",
-                    "type": "boolean"
-                  },
-                  "extra[ark]": {
-                    "description": "Ark. Optional. Used only if you want to upload Steam account.",
-                    "title": "Ark",
-                    "type": "boolean"
-                  },
-                  "extra[socialclub_games]": {
-                    "description": "Social club games. Optional. Used only if you want to upload Steam account.",
-                    "title": "SocialClub Games",
-                    "type": "string"
-                  },
-                  "extra[game_version]": {
-                    "description": "Game version. Required if you want to upload Escape From Tarkov account.",
-                    "title": "Game Version",
-                    "type": "string"
-                  },
-                  "extra[cookie_login]": {
-                    "description": "Cookie login. Optional. Used only if you want to upload TikTok account.",
-                    "title": "Cookie login",
-                    "type": "boolean"
-                  },
-                  "extra[telegramClient]": {
-                    "description": "Telegram client. Used only if you want to upload Telegram account.",
-                    "$ref": "#/components/schemas/TelegramClientModel"
-                  },
-                  "extra[telegramJson]": {
-                    "description": "Contents of session.json file.",
-                    "title": "Telegram Json",
-                    "type": "string"
-                  },
-                  "extra[checkChannels]": {
-                    "description": "Check channels. Used only if you want to upload Telegram account.",
-                    "title": "Check Channels",
-                    "type": "boolean"
-                  },
-                  "extra[checkSpam]": {
-                    "description": "Check spam. Used only if you want to upload Telegram account.",
-                    "title": "Check Spam",
-                    "type": "boolean"
-                  }
+                  "extra": {"$ref":"#/components/schemas/PublishingExtra"}
                 }
               }
             }
@@ -11971,7 +12110,7 @@
         "requestBody": {
           "required": false,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "properties": {
                   "login": {
@@ -12008,154 +12147,7 @@
                       "autoreg"
                     ]
                   },
-                  "extra[region]": {
-                    "description": "Region. Required if you want to upload WoT, Valorant, Escape From Tarkov account. Optional if you want to upload Genshin Impact account.",
-                    "title": "Region",
-                    "type": "string"
-                  },
-                  "extra[service_id]": {
-                    "description": "Service id. Required if you want to upload VPN, Cinema account or gift.",
-                    "title": "Service Id",
-                    "type": "string",
-                    "enum": [
-                      "AdguardVPN",
-                      "PIAVPN",
-                      "cyberghostVPN",
-                      "hotspotShieldVPN",
-                      "mullvadVPN",
-                      "pureVPN",
-                      "tunnelbearVPN",
-                      "ultraVPN",
-                      "vanishVPN",
-                      "vyprVPN",
-                      "windscribeVPN",
-                      "start",
-                      "ivi",
-                      "telegram",
-                      "discord"
-                    ]
-                  },
-                  "extra[system]": {
-                    "description": "System. Required if you want to upload Supercell account.",
-                    "title": "System",
-                    "type": "string",
-                    "enum": [
-                      "laser",
-                      "scroll",
-                      "magic"
-                    ]
-                  },
-                  "extra[discord_token]": {
-                    "description": "Discord token. Required if you want to upload Discord account.",
-                    "title": "Discord Token",
-                    "type": "string"
-                  },
-                  "extra[cookies]": {
-                    "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
-                    "title": "Cookies",
-                    "type": "string"
-                  },
-                  "extra[sc]": {
-                    "description": "Required if you want to upload Epic Games account.",
-                    "title": "sc",
-                    "type": "integer",
-                    "enum": [
-                      1,
-                      0
-                    ]
-                  },
-                  "extra[ItTakesTwo]": {
-                    "description": "Required if you want to upload Origin (EA) account.",
-                    "title": "ItTakesTwo",
-                    "type": "integer",
-                    "enum": [
-                      1,
-                      0
-                    ]
-                  },
-                  "extra[apex_legends]": {
-                    "description": "Required if you want to upload Origin (EA) account.",
-                    "title": "ApexLegends",
-                    "type": "integer",
-                    "enum": [
-                      1,
-                      0
-                    ]
-                  },
-                  "extra[login_without_cookies]": {
-                    "description": "Login without cookies. Required if you want to upload Instagram account.",
-                    "title": "Login Without Cookies",
-                    "type": "boolean"
-                  },
-                  "extra[mfa_file]": {
-                    "description": "Mfa file. Optional. Used only if you want to upload Steam account.",
-                    "title": "Mfa File",
-                    "type": "string"
-                  },
-                  "extra[dota2_mmr]": {
-                    "description": "Dota 2 MMR. Optional. Used only if you want to upload Steam account.",
-                    "title": "Dota 2 MMR",
-                    "type": "string"
-                  },
-                  "extra[ea_games]": {
-                    "description": "EA Games. Optional. Used only if you want to upload Steam account.",
-                    "title": "EA Games",
-                    "type": "boolean"
-                  },
-                  "extra[uplay_games]": {
-                    "description": "Uplay Games. Optional. Used only if you want to upload Steam account.",
-                    "title": "Uplay Games",
-                    "type": "string"
-                  },
-                  "extra[the_quarry]": {
-                    "description": "The quarry. Optional. Used only if you want to upload Steam account.",
-                    "title": "The Quarry",
-                    "type": "string"
-                  },
-                  "extra[warframe]": {
-                    "description": "Warframe. Optional. Used only if you want to upload Steam account.",
-                    "title": "Warframe",
-                    "type": "boolean"
-                  },
-                  "extra[ark]": {
-                    "description": "Ark. Optional. Used only if you want to upload Steam account.",
-                    "title": "Ark",
-                    "type": "boolean"
-                  },
-                  "extra[socialclub_games]": {
-                    "description": "Social club games. Optional. Used only if you want to upload Steam account.",
-                    "title": "SocialClub Games",
-                    "type": "string"
-                  },
-                  "extra[game_version]": {
-                    "description": "Game version. Required if you want to upload Escape From Tarkov account.",
-                    "title": "Game Version",
-                    "type": "string"
-                  },
-                  "extra[cookie_login]": {
-                    "description": "Cookie login. Optional. Used only if you want to upload TikTok account.",
-                    "title": "Cookie login",
-                    "type": "boolean"
-                  },
-                  "extra[telegramClient]": {
-                    "description": "Telegram client. Used only if you want to upload Telegram account.",
-                    "$ref": "#/components/schemas/TelegramClientModel"
-                  },
-                  "extra[telegramJson]": {
-                    "description": "Contents of session.json file.",
-                    "title": "Telegram Json",
-                    "type": "string"
-                  },
-                  "extra[checkChannels]": {
-                    "description": "Check channels. Used only if you want to upload Telegram account.",
-                    "title": "Check Channels",
-                    "type": "boolean"
-                  },
-                  "extra[checkSpam]": {
-                    "description": "Check spam. Used only if you want to upload Telegram account.",
-                    "title": "Check Spam",
-                    "type": "boolean"
-                  }
+                  "extra":{"$ref":"#/components/schemas/PublishingExtra"}
                 }
               }
             }
@@ -14395,6 +14387,160 @@
   },
   "components": {
     "schemas": {
+      "PublishingExtra": {
+        "type": "object",
+        "title": "Extra",
+        "properties": {
+          "region": {
+            "description": "Region. Required if you want to upload WoT, Valorant, Escape From Tarkov account. Optional if you want to upload Genshin Impact account.",
+            "title": "Region",
+            "type": "string"
+          },
+          "service_id": {
+            "description": "Service id. Required if you want to upload VPN, Cinema account or gift.",
+            "title": "Service Id",
+            "type": "string",
+            "enum": [
+              "AdguardVPN",
+              "PIAVPN",
+              "cyberghostVPN",
+              "hotspotShieldVPN",
+              "mullvadVPN",
+              "pureVPN",
+              "tunnelbearVPN",
+              "ultraVPN",
+              "vanishVPN",
+              "vyprVPN",
+              "windscribeVPN",
+              "start",
+              "ivi",
+              "telegram",
+              "discord"
+            ]
+          },
+          "system": {
+            "description": "System. Required if you want to upload Supercell account.",
+            "title": "System",
+            "type": "string",
+            "enum": [
+              "laser",
+              "scroll",
+              "magic"
+            ]
+          },
+          "discord_token": {
+            "description": "Discord token. Required if you want to upload Discord account.",
+            "title": "Discord Token",
+            "type": "string"
+          },
+          "cookies": {
+            "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
+            "title": "Cookies",
+            "type": "string"
+          },
+          "sc": {
+            "description": "Required if you want to upload Epic Games account.",
+            "title": "sc",
+            "type": "integer",
+            "enum": [
+              1,
+              0
+            ]
+          },
+          "ItTakesTwo": {
+            "description": "Required if you want to upload Origin (EA) account.",
+            "title": "ItTakesTwo",
+            "type": "integer",
+            "enum": [
+              1,
+              0
+            ]
+          },
+          "apex_legends": {
+            "description": "Required if you want to upload Origin (EA) account.",
+            "title": "ApexLegends",
+            "type": "integer",
+            "enum": [
+              1,
+              0
+            ]
+          },
+          "login_without_cookies": {
+            "description": "Login without cookies. Required if you want to upload Instagram account.",
+            "title": "Login Without Cookies",
+            "type": "boolean"
+          },
+          "mfa_file": {
+            "description": "Mfa file. Optional. Used only if you want to upload Steam account.",
+            "title": "Mfa File",
+            "type": "string"
+          },
+          "dota2_mmr": {
+            "description": "Dota 2 MMR. Optional. Used only if you want to upload Steam account.",
+            "title": "Dota 2 MMR",
+            "type": "string"
+          },
+          "ea_games": {
+            "description": "EA Games. Optional. Used only if you want to upload Steam account.",
+            "title": "EA Games",
+            "type": "boolean"
+          },
+          "uplay_games": {
+            "description": "Uplay Games. Optional. Used only if you want to upload Steam account.",
+            "title": "Uplay Games",
+            "type": "string"
+          },
+          "the_quarry": {
+            "description": "The quarry. Optional. Used only if you want to upload Steam account.",
+            "title": "The Quarry",
+            "type": "string"
+          },
+          "warframe": {
+            "description": "Warframe. Optional. Used only if you want to upload Steam account.",
+            "title": "Warframe",
+            "type": "boolean"
+          },
+          "ark": {
+            "description": "Ark. Optional. Used only if you want to upload Steam account.",
+            "title": "Ark",
+            "type": "boolean"
+          },
+          "socialclub_games": {
+            "description": "Social club games. Optional. Used only if you want to upload Steam account.",
+            "title": "SocialClub Games",
+            "type": "string"
+          },
+          "game_version": {
+            "description": "Game version. Required if you want to upload Escape From Tarkov account.",
+            "title": "Game Version",
+            "type": "string"
+          },
+          "cookie_login": {
+            "description": "Cookie login. Optional. Used only if you want to upload TikTok account.",
+            "title": "Cookie login",
+            "type": "boolean"
+          },
+          "telegramClient": {
+            "description": "Telegram client. Used only if you want to upload Telegram account.",
+            "$ref": "#/components/schemas/TelegramClientModel"
+          },
+          "telegramJson": {
+            "description": "Contents of session.json file.",
+            "title": "Telegram Json",
+            "type": "string"
+          },
+          "checkChannels": {
+            "description": "Check channels. Used only if you want to upload Telegram account.",
+            "title": "Check Channels",
+            "type": "boolean"
+          },
+          "checkSpam": {
+            "description": "Check spam. Used only if you want to upload Telegram account.",
+            "title": "Check Spam",
+            "type": "boolean"
+          }
+        }
+      },
       "ConfCodeModel": {
         "title": "ConfCodeModel",
         "required": [
