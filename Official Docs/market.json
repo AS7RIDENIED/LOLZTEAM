@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.",
-    "version": "1.1.35"
+    "version": "1.1.36"
   },
   "servers": [
     {
@@ -224,11 +224,8 @@
             "explode": true,
             "schema": {
               "title": "Vac",
-              "type": "integer",
-              "description": "Don't check game existence while checking for vac.",
-              "enum": [
-                1
-              ]
+              "type": "boolean",
+              "description": "Don't check game existence while checking for vac."
             }
           },
           {
@@ -387,10 +384,7 @@
             "schema": {
               "title": "No Vac",
               "description": "Has no VAC ban.",
-              "type": "integer",
-              "enum": [
-                1
-              ]
+              "type": "boolean"
             }
           },
           {
@@ -933,11 +927,8 @@
             "explode": true,
             "schema": {
               "title": "Trans",
-              "type": "integer",
-              "description": "Has transactions.",
-              "enum": [
-                1
-              ]
+              "type": "boolean",
+              "description": "Has transactions."
             }
           },
           {
@@ -1179,6 +1170,37 @@
             "schema": {
               "type": "integer",
               "description": "Maximum number of Rust kills"
+            }
+          },
+          {
+            "name": "d2_last_match_date",
+            "in": "query",
+            "description": "How old is last match of Dota 2.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "D2 Last Match Date",
+              "type": "integer",
+              "description": "How old is last match of Dota 2."
+            }
+          },
+          {
+            "name": "d2_last_match_date_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "D2 Last Match Date Period",
+              "type": "string",
+              "description": "In what notation is time measured.",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
             }
           }
         ],
@@ -1617,11 +1639,8 @@
             "explode": true,
             "schema": {
               "title": "RL Purchases",
-              "type": "integer",
-              "description": "Has Rocket League purchases.",
-              "enum": [
-                1
-              ]
+              "type": "boolean",
+              "description": "Has Rocket League purchases."
             }
           },
           {
@@ -2815,12 +2834,8 @@
             "explode": true,
             "schema": {
               "title": "Knife",
-              "type": "integer",
-              "description": "Has any knife.",
-              "enum": [
-                1,
-                0
-              ]
+              "type": "boolean",
+              "description": "Has any knife."
             }
           },
           {
@@ -4488,9 +4503,7 @@
                   "Gold",
                   "Platinum",
                   "Diamond",
-                  "Master",
-                  "Apex",
-                  "Predator"
+                  "Master"
                 ]
               }
             }
@@ -4971,6 +4984,7 @@
               "description": "Name of subscription.",
               "enum": [
                 "telegram_premium",
+                "discord_nitro_trial",
                 "discord_nitro_basic",
                 "discord_nitro"
               ]
@@ -5105,11 +5119,8 @@
             "explode": true,
             "schema": {
               "title": "RL Purchases",
-              "type": "integer",
-              "description": "Has Rocket League purchases.",
-              "enum": [
-                1
-              ]
+              "type": "boolean",
+              "description": "Has Rocket League purchases."
             }
           },
           {
@@ -5136,6 +5147,32 @@
               "type": "integer",
               "description": "Maximum rewards balance.",
               "minimum": 0
+            }
+          },
+          {
+            "name": "gmin",
+            "in": "query",
+            "description": "Minimum number of games.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gmin",
+              "type": "integer",
+              "description": "Minimum number of games."
+            }
+          },
+          {
+            "name": "gmax",
+            "in": "query",
+            "description": "Maximum number of games.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gmax",
+              "type": "integer",
+              "description": "Maximum number of games."
             }
           }
         ],
@@ -5360,11 +5397,8 @@
             "explode": true,
             "schema": {
               "title": "Gtav",
-              "type": "string",
-              "description": "Has GTA 5.",
-              "enum": [
-                "on"
-              ]
+              "type": "boolean",
+              "description": "Has GTA 5."
             }
           },
           {
@@ -7824,6 +7858,22 @@
             }
           },
           {
+            "name": "capes",
+            "in": "query",
+            "description": "List of capes.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Capes",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of capes."
+            }
+          },
+          {
             "name": "capes_min",
             "in": "query",
             "description": "Minimum number of capes.",
@@ -7847,6 +7897,49 @@
               "title": "Capes Max",
               "type": "integer",
               "description": "Maximum number of capes."
+            }
+          },
+          {
+            "name": "country[]",
+            "in": "query",
+            "description": "List of allowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Country",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of allowed countries."
+            }
+          },
+          {
+            "name": "not_country[]",
+            "in": "query",
+            "description": "List of disallowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Not Country",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of disallowed countries."
+            }
+          },
+          {
+            "name": "hypixel_ban",
+            "in": "query",
+            "description": "Has active Hypixel ban.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -11664,7 +11757,9 @@
                     "title": "Close Item",
                     "type": "boolean"
                   },
-                  "extra": {"$ref":"#/components/schemas/PublishingExtra"}
+                  "extra": {
+                    "$ref": "#/components/schemas/PublishingExtra"
+                  }
                 }
               }
             }
@@ -12147,7 +12242,9 @@
                       "autoreg"
                     ]
                   },
-                  "extra":{"$ref":"#/components/schemas/PublishingExtra"}
+                  "extra": {
+                    "$ref": "#/components/schemas/PublishingExtra"
+                  }
                 }
               }
             }
@@ -12633,6 +12730,63 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermissionModel"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/{itemId}/check-guarantee": {
+      "post": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Check Guarantee",
+        "description": "Checks the guarantee and cancels it if there are reasons to cancel it.",
+        "operationId": "accountsManaging.checkGuarantee",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/itemId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "OkModel",
+                  "required": [
+                    "message",
+                    "system_info"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -14532,12 +14686,29 @@
           "checkChannels": {
             "description": "Check channels. Used only if you want to upload Telegram account.",
             "title": "Check Channels",
-            "type": "boolean"
+            "type": "integer",
+            "enum": [
+              1,
+              0
+            ]
           },
           "checkSpam": {
             "description": "Check spam. Used only if you want to upload Telegram account.",
             "title": "Check Spam",
-            "type": "boolean"
+            "type": "integer",
+            "enum": [
+              1,
+              0
+            ]
+          },
+          "checkHypixelBan": {
+            "description": "Check ban on Hypixel. Used only if you want to upload Minecraft account.",
+            "title": "Check ban on Hypixel",
+            "type": "integer",
+            "enum": [
+              1,
+              0
+            ]
           }
         }
       },
@@ -16552,11 +16723,8 @@
         "explode": true,
         "schema": {
           "title": "No Trans",
-          "type": "integer",
-          "description": "Has no transactions.",
-          "enum": [
-            1
-          ]
+          "type": "boolean",
+          "description": "Has no transactions."
         }
       },
       "temp_email": {
