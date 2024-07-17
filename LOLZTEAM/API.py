@@ -5,10 +5,11 @@ import time
 import json
 import re
 
-from concurrent.futures import ThreadPoolExecutor
-from typing import Union, Literal
+from importlib.metadata import version
+from typing import Union, Literal, Optional, Self
 
 from . import Exceptions
+from . import Constants
 from .Tweaks import _MainTweaks
 
 _WarningsHandler = logging.StreamHandler()
@@ -23,24 +24,18 @@ _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
 _DebugLogger.setLevel(level=100)
 
 
-def _send_request(
-    self, method: str, path: dict, params: dict = None, data=None, files=None
-) -> httpx.Response:
-    #  Закостылил по гайду от величайшего
-    #  https://www.youtube.com/watch?v=dQw4w9WgXcQ
-    executor = ThreadPoolExecutor()
-    result = executor.submit(asyncio.run, _send_async_request(self=self, method=method, path=path, params=params, data=data, files=files)).result()
-    return result
+def _send_request(self, method: str, path: dict, params: dict = None, data=None, files=None) -> httpx.Response:
+    return _MainTweaks._AsyncExecutor(_send_async_request(self=self, method=method, path=path, params=params, data=data, files=files))
 
 
 @_MainTweaks._RetryWrapper
-async def _send_async_request(
-    self, method: str, path: dict, params: dict = None, data=None, files=None
-) -> httpx.Response:
+async def _send_async_request(self, method: str, path: dict, params: dict = None, data=None, files=None) -> httpx.Response:
     url = self.base_url + path
-    safe_url = url
     if type(self) is Antipublic:
-        url += f"?key={self.token}"
+        if params:
+            params["key"] = self.token
+        else:
+            params = {"key": self.token}
     method = method.upper()
 
     if re.search(self.base_url + self._delay_pattern, url):
@@ -48,25 +43,27 @@ async def _send_async_request(
     elif type(self) is Market:
         await _MainTweaks._auto_delay_async(self=self, delay=0.5)
 
-    if params is None:
-        params = {}
-    if not params.get("locale"):
-        params["locale"] = self._locale
-    params.update(self.custom_params)
+    if params:
+        if not params.get("locale"):  # Фикс для какого-то метода. Там коллизия параметра locale
+            params["locale"] = self._locale
+        params.update(self.custom_params)
+        ptd = []
+        for key, value in params.items():  # Буль это миф, а еще убираем None
+            if type(params[key]) is bool:
+                params[key] = str(value)
+            if params[key] is None:
+                ptd.append(key)
+        for key in ptd:
+            del params[key]
     if type(data) is dict:
         data.update(self.custom_body)
 
     headers = self._main_headers.copy()
+    if data:  # Фикс для антипаблика. httpx по дефолту отправляет appication форм дату какую-то там, а мы всегда в тело передаем жсон. Можно конечно передавать напрямую в json, но это не хайп
+        headers["Content-Type"] = "application/json"
     headers.update(self.custom_headers)
+    headers["User-Agent"] = f"LOLZTEAM v{version('LOLZTEAM')}"
 
-    ptd = []
-    for key, value in params.items():
-        if type(params[key]) is bool:
-            params[key] = str(value)
-        if params[key] is None:
-            ptd.append(key)
-    for key in ptd:
-        del params[key]
     proxy_schemes = {
         "HTTP": "http",
         "HTTPS": "https",
@@ -82,8 +79,7 @@ async def _send_async_request(
     proxy = None
     if self._proxy_type is not None:
         if self._proxy_type in proxy_schemes:
-            proxy_scheme = proxy_schemes[self._proxy_type]
-            proxy = f"{proxy_scheme}://{self._proxy}"
+            proxy = f"{proxy_schemes[self._proxy_type]}://{self._proxy}"
         else:
             raise Exceptions.INVALID_PROXY_TYPE(
                 "Proxy type has invalid value. It can be only https, http, socks4 or socks5")
@@ -92,20 +88,19 @@ async def _send_async_request(
         censored_headers = headers.copy()
         censored_headers["Authorization"] = "bearer ***Token***"
         _DebugLogger.debug(
-            f"{method} {safe_url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {files} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
+            f"{method} {url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {files} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
         tbr = time.time()
         async with httpx.AsyncClient(proxies=proxy) as client:
             response = await client.request(method=method, url=url, params=params, data=data, files=files, headers=headers, timeout=self.timeout,)
-            _DebugLogger.debug(
-                f"Response: {response} | Plain response: {response.content}")
+            _DebugLogger.debug(f"Response: {response} | Plain response: {response.content}")
             if self._delay_synchronizer:
                 self._delay_synchronizer._synchronize(tbr)
             else:
                 self._auto_delay_time = tbr
+
             return response
     else:
-        raise Exceptions.AS7RID_FUCK_UP(
-            "Invalid request method. Contact @AS7RID")
+        raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
 
 
 class Forum:
@@ -224,7 +219,7 @@ class Forum:
             self,
             parent_category_id: int = None,
             parent_forum_id: int = None,
-            order: str = None,
+            order: Literal["natural", "list"] = None,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/categories
@@ -270,7 +265,7 @@ class Forum:
             self,
             parent_category_id: int = None,
             parent_forum_id: int = None,
-            order: str = None,
+            order: Literal["natural", "list"] = None,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums
@@ -398,7 +393,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def get_pages(
-            self, parent_page_id: int = None, order: str = None
+            self, parent_page_id: int = None, order: Literal["natural", "list"] = None
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/pages
@@ -492,7 +487,7 @@ class Forum:
             post_ids: list = None,
             page: int = None,
             limit: int = None,
-            order: int = None,
+            order: Constants.Forum.PostOrder._Literal = None,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/posts
@@ -710,11 +705,11 @@ class Forum:
                     prize_data_money: int,
                     count_winners: int,
                     length_value: int,
-                    length_option: str,
+                    length_option: Constants.Forum.Contests.Length._Literal,
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    reply_group: int = 2,
+                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
                     title: str = None,
                     title_en: str = None,
                     prefix_ids: list = None,
@@ -800,7 +795,7 @@ class Forum:
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    reply_group: int = 2,
+                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
                     title: str = None,
                     title_en: str = None,
                     prefix_ids: list = None,
@@ -880,14 +875,14 @@ class Forum:
                 def create_by_time(
                     self,
                     post_body: str,
-                    prize_data_upgrade: int,
+                    prize_data_upgrade: Constants.Forum.Contests.UpgradePrize._Literal,
                     count_winners: int,
                     length_value: int,
-                    length_option: str,
+                    length_option: Constants.Forum.Contests.Length._Literal,
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    reply_group: int = 2,
+                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
                     title: str = None,
                     title_en: str = None,
                     prefix_ids: list = None,
@@ -979,13 +974,13 @@ class Forum:
                 def create_by_count(
                     self,
                     post_body: str,
-                    prize_data_upgrade: int,
+                    prize_data_upgrade: Constants.Forum.Contests.UpgradePrize._Literal,
                     count_winners: int,
                     needed_members: int,
                     require_like_count: int,
                     require_total_like_count: int,
                     secret_answer: str,
-                    reply_group: int = 2,
+                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
                     title: str = None,
                     title_en: str = None,
                     prefix_ids: list = None,
@@ -1080,14 +1075,14 @@ class Forum:
                 item_id: int,
                 amount: float,
                 post_body: str,
-                currency: str = None,
+                currency: Constants.Market.Currency._Literal = None,
                 conversation_screenshot: str = "no",
                 tags: list = None,
                 hide_contacts: bool = None,
                 allow_ask_hidden_content: bool = None,
                 comment_ignore_group: bool = None,
                 dont_alert_followers: bool = None,
-                reply_group: int = 2,
+                reply_group: Constants.Forum.ReplyGroups._Literal = 2,
             ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/claims
@@ -1142,14 +1137,14 @@ class Forum:
                 pay_claim: bool,
                 conversation_screenshot: str = "no",
                 responder_data: str = None,
-                currency: str = None,
-                transfer_type: str = "notsafe",
+                currency: Constants.Market.Currency._Literal = None,
+                transfer_type: Constants.Forum.Arbitrage.TransferType._Literal = "notsafe",
                 tags: list = None,
                 hide_contacts: bool = None,
                 allow_ask_hidden_content: bool = None,
                 comment_ignore_group: bool = None,
                 dont_alert_followers: bool = None,
-                reply_group: int = 2,
+                reply_group: Constants.Forum.ReplyGroups._Literal = 2,
             ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/claims
@@ -1211,7 +1206,7 @@ class Forum:
             thread_tag_id: int = None,
             page: int = None,
             limit: int = None,
-            order: str = None,
+            order: Constants.Forum.ThreadOrder._Literal = None,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads
@@ -1266,7 +1261,7 @@ class Forum:
             self,
             forum_id: int,
             post_body: str,
-            reply_group: int = 2,
+            reply_group: Constants.Forum.ReplyGroups._Literal = 2,
             title: str = None,
             title_en: str = None,
             prefix_ids: list = None,
@@ -1353,7 +1348,7 @@ class Forum:
             discussion_open: bool = None,
             hide_contacts: bool = None,
             allow_ask_hidden_content: bool = None,
-            reply_group: int = None,
+            reply_group: Constants.Forum.ReplyGroups._Literal = None,
             comment_ignore_group: bool = None,
         ) -> httpx.Response:
             """
@@ -1414,9 +1409,7 @@ class Forum:
             title: str = None,
             title_en: str = None,
             prefix_ids: list = None,
-            send_alert: bool = None,
-            send_starter_alert: bool = None,
-            starter_alert_reason: str = None,
+            send_alert: bool = None
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/thread_id/move
@@ -1431,8 +1424,6 @@ class Forum:
             :param title_en: Thread title in english.
             :param prefix_ids: Thread prefixes.
             :param send_alert: Send a notification to users who are followed to target node.
-            :param send_starter_alert: Send alert to thread starter.
-            :param starter_alert_reason: Reason of moving thread which will sent to thread starter. (Required if **send_starter_alert** is set)
 
             :return: httpx Response object
             """
@@ -1443,9 +1434,7 @@ class Forum:
                 "title_en": title_en,
                 "prefix_id[]": prefix_ids,
                 "apply_thread_prefix": 1 if prefix_ids else None,
-                "send_alert": int(send_alert) if send_alert else send_alert,
-                "send_starter_alert": int(send_starter_alert) if send_starter_alert else send_starter_alert,
-                "starter_alert_reason": starter_alert_reason,
+                "send_alert": int(send_alert) if send_alert else send_alert
             }
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
@@ -1768,7 +1757,6 @@ class Forum:
                     _WarningsLogger.warn(
                         msg=f"{FutureWarning.__name__}: You can't upload avatar using batch")
                 path = "/users/me/avatar" if not user_id else f"/users/{user_id}/avatar"
-                print(path)
                 files = {"avatar": avatar}
                 params = {"user_id": user_id}
                 return _send_request(
@@ -2082,7 +2070,7 @@ class Forum:
         def followers(
             self,
             user_id: int = None,
-            order: str = None,
+            order: Literal["natural", "follow_date", "follow_date_reverse"] = None,
             page: int = None,
             limit: int = None,
         ) -> httpx.Response:
@@ -2112,7 +2100,7 @@ class Forum:
         def followings(
             self,
             user_id: int = None,
-            order: str = None,
+            order: Literal["natural", "follow_date", "follow_date_reverse"] = None,
             page: int = None,
             limit: int = None,
         ) -> httpx.Response:
@@ -2629,49 +2617,6 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        @_MainTweaks._CheckScopes(scopes=["post"])
-        def indexing(
-            self,
-            content_type: str,
-            content_id: str,
-            title: str,
-            body: str,
-            link: str,
-            date: int = None,
-        ) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/search/indexing
-
-            Index external content data into search system to be searched later.
-
-            Required scopes: post
-
-            :param content_type: The type of content being indexed.
-            :param content_id:  The unique id for the content.
-            :param title:  Content title.
-            :param body:  Content body.
-            :param link:  Link related to content.
-            :param date: Unix timestamp in second of the content. If missing, current time will be used.
-
-            :return: httpx Response object
-            """
-            path = "/search/indexing"
-            data = {
-                "content_type": content_type,
-                "content_id": content_id,
-                "title": title,
-                "body": body,
-                "link": link,
-                "date": date,
-            }
-
-            return _send_request(
-                self=self._api,
-                method="POST",
-                path=path,
-                data=json.dumps(data),
-            )
-
     class __Notifications:
         def __init__(self, _api_self):
             self._api = _api_self
@@ -2723,51 +2668,6 @@ class Forum:
                 self=self._api, method="POST", path=path, params=params
             )
 
-        @_MainTweaks._CheckScopes(scopes=["post"])
-        def custom(
-            self,
-            user_id: int = None,
-            username: str = None,
-            message: str = None,
-            message_html: str = None,
-            notification_type: str = None,
-            extra_data: str = None,
-        ) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/notifications/custom
-
-            Send a custom alert.
-
-            Required scopes: post, Send custom alert permission
-            :param user_id: The alert receiver.
-            :param username: The alert receiver.
-            :param message: The alert message.
-            :param message_html: The alert message.
-            :param notification_type: The notification type.
-            :param extra_data: Extra data when sending alert. Предположительно это словарик, но я не уверен
-
-            :return: httpx Response object
-            """
-
-            path = "/notifications/custom"
-            params = {
-                "user_id": user_id,
-                "username": username,
-                "notification_type": notification_type,
-            }
-            data = {
-                "message": message,
-                "message_html": message_html,
-                "extra_data": extra_data,
-            }
-            return _send_request(
-                self=self._api,
-                method="POST",
-                path=path,
-                params=params,
-                data=data,
-            )
-
     class __Conversations:
         class __Conversations_messages:
             def __init__(self, _api_self):
@@ -2779,7 +2679,7 @@ class Forum:
                 conversation_id: int,
                 page: int = None,
                 limit: int = None,
-                order: str = None,
+                order: Literal["natural", "natural_reverse"] = None,
                 before: int = None,
                 after: int = None,
             ) -> httpx.Response:
@@ -2953,7 +2853,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
         def leave(
-            self, conversation_id: int, leave_type: str = "delete"
+            self, conversation_id: int, leave_type: Literal["delete", "delete_ignore"] = "delete"
         ) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/conversations/conversation_id
@@ -3142,25 +3042,6 @@ class Forum:
                 "client_secret": client_secret,
                 "facebook_token": google_token,
             }
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
-        @_MainTweaks._CheckScopes(scopes=["admincp"])
-        def admin(self, user_id: int) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/oauth/token/admin
-
-            Request API access token for another user. This requires admincp scope and the current user must have sufficient system permissions.
-
-            Required scopes: admincp
-
-            :param user_id: ID of the user that needs access token.
-
-            :return: httpx Response object or token string
-            """
-            path = "/oauth/token/admin"
-            params = {"user_id": user_id}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -3472,7 +3353,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -3504,11 +3385,9 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/steam"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -3573,7 +3452,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -3605,11 +3484,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/fortnite"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -3660,7 +3538,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -3692,11 +3570,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/mihoyo"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -3747,7 +3624,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -3779,11 +3656,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/valorant"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -3821,7 +3697,7 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
             @_MainTweaks._CheckScopes(scopes=["market"])
-            def data(self, data_type: str = Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
+            def data(self, data_type: Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
                 """
                 GET https://api.lzt.market/fortnite/data
 
@@ -3850,7 +3726,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -3882,11 +3758,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/league-of-legends"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -3937,7 +3812,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -3969,11 +3844,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/telegram"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4024,7 +3898,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4056,11 +3930,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/supercell"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4111,7 +3984,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4143,11 +4016,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/origin"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4212,7 +4084,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4244,11 +4116,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/world-of-tanks"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4299,7 +4170,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4331,11 +4202,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/wot-blitz"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4386,7 +4256,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4418,11 +4288,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/gifts"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4473,7 +4342,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4505,11 +4374,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/epicgames"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4574,7 +4442,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4606,11 +4474,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/escape-from-tarkov"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4661,7 +4528,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4693,11 +4560,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/socialclub"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4762,7 +4628,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4794,11 +4660,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/uplay"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4863,7 +4728,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4895,11 +4760,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/war-thunder"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4950,7 +4814,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -4982,11 +4846,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/discord"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5037,7 +4900,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5069,11 +4932,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/tiktok"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5124,7 +4986,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5156,11 +5018,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/instagram"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5211,7 +5072,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5243,11 +5104,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/battlenet"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5312,7 +5172,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5344,11 +5204,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/vpn"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5399,7 +5258,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5431,11 +5290,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/cinema"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5486,7 +5344,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5518,11 +5376,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/roblox"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5573,7 +5430,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5605,11 +5462,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/spotify"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5660,7 +5516,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5692,11 +5548,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/warface"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5747,7 +5602,7 @@ class Market:
                 pmax: int = None,
                 origin: Union[str, list] = None,
                 not_origin: Union[str, list] = None,
-                order_by: str = None,
+                order_by: Constants.Market.ItemOrder._Literal = None,
                 sold_before: bool = None,
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
@@ -5779,11 +5634,10 @@ class Market:
                 :return: httpx Response object
                 """
                 path = "/minecraft"
-                if True:  # Tweak market
-                    auction = _MainTweaks.market_variable_fix(auction)
+
                 params = {
                     "page": page,
-                    "auction": auction,
+                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5852,7 +5706,7 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def get(
             self,
-            category_name: str,
+            category_name: Constants.Market.Category._Literal,
             page: int = None,
             auction: str = None,
             title: str = None,
@@ -5860,7 +5714,7 @@ class Market:
             pmax: int = None,
             origin: Union[str, list] = None,
             not_origin: Union[str, list] = None,
-            order_by: str = None,
+            order_by: Constants.Market.ItemOrder._Literal = None,
             sold_before: bool = None,
             sold_before_by_me: bool = None,
             not_sold_before: bool = None,
@@ -5896,7 +5750,7 @@ class Market:
                 auction = _MainTweaks.market_variable_fix(auction)
             params = {
                 "page": page,
-                "auction": auction,
+                "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                 "title": title,
                 "pmin": pmin,
                 "pmax": pmax,
@@ -6010,11 +5864,11 @@ class Market:
             self,
             user_id: int = None,
             page: int = None,
-            category_id: int = None,
+            category_id: Constants.Market.CategoryId._Literal = None,
             pmin: int = None,
             pmax: int = None,
             title: str = None,
-            status: str = None,
+            status: Constants.Market.ItemStatus._Literal = None,
             search_params: dict = None,
             **kwargs,
         ) -> httpx.Response:
@@ -6105,11 +5959,11 @@ class Market:
             self,
             user_id: int = None,
             page: int = None,
-            category_id: int = None,
+            category_id: Constants.Market.CategoryId._Literal = None,
             pmin: int = None,
             pmax: int = None,
             title: str = None,
-            status: str = None,
+            status: Constants.Market.ItemStatus._Literal = None,
             search_params: dict = None,
             **kwargs,
         ) -> httpx.Response:
@@ -6200,7 +6054,7 @@ class Market:
         def favorite(
             self,
             page: int = None,
-            status: str = None,
+            status: Constants.Market.ItemStatus._Literal = None,
             title: str = None,
             search_params: dict = None,
             **kwargs,
@@ -6234,7 +6088,7 @@ class Market:
         def viewed(
             self,
             page: int = None,
-            status: str = None,
+            status: Constants.Market.ItemStatus._Literal = None,
             title: str = None,
             search_params: dict = None,
             **kwargs,
@@ -6272,7 +6126,7 @@ class Market:
         def history(
             self,
             user_id: int = None,
-            operation_type: str = None,
+            operation_type: Constants.Market.OperationTypes._Literal = None,
             pmin: int = None,
             pmax: int = None,
             page: int = None,
@@ -6333,14 +6187,14 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def transfer(
             self,
-            amount: int,
+            amount: float,
             secret_answer: str,
-            currency: str = "rub",
+            currency: Constants.Market.Currency._Literal = "rub",
             user_id: int = None,
             username: str = None,
             comment: str = None,
             transfer_hold: bool = None,
-            hold_length_option: str = None,
+            hold_length_option: Constants.Market.HoldPeriod._Literal = None,
             hold_length_value: int = None,
         ) -> httpx.Response:
             """
@@ -6404,15 +6258,15 @@ class Market:
 
         @staticmethod
         def generate_link(
-            amount: int,
+            amount: float,
             user_id: int = None,
             username: str = None,
             comment: str = None,
             redirect_url: str = None,
-            currency: str = None,
+            currency: Constants.Market.Currency._Literal = None,
             hold: bool = None,
             hold_length: int = None,
-            hold_option: str = None,
+            hold_option: Literal["hours", "days", "weeks", "months"] = None,
         ) -> str:
             """
             Generate payment link
@@ -6427,7 +6281,7 @@ class Market:
             :param currency: Using currency for amount. Allowed values: cny, usd, rub, eur, uah, kzt, byn, gbp
             :param hold: Hold transfer or not
             :param hold_length: Hold length ( max 1 month )
-            :param hold_option: Hold option. Can be "hours","days","weeks","months"
+            :param hold_period: Hold option. Can be "hours","days","weeks","months"
             :return: string payment url
             """
             if hold:
@@ -6544,7 +6398,7 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
             @_MainTweaks._CheckScopes(scopes=["market"])
-            def update_inventory(self, item_id: int, app_id: int) -> httpx.Response:
+            def update_inventory(self, item_id: int, app_id: Constants.Market.AppID._Literal) -> httpx.Response:
                 """
                 POST https://api.lzt.market/item_id/update-inventory
 
@@ -6565,7 +6419,7 @@ class Market:
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def inventory_value(
-                self, url: str, app_id: int, currency: str = None, ignore_cache: bool = None
+                self, url: str, app_id: int, currency: Constants.Market.Currency._Literal = None, ignore_cache: bool = None
             ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/steam-value
@@ -6696,7 +6550,7 @@ class Market:
             item_id: int,
             auction: bool = False,
             steam_preview: bool = False,
-            preview_type: str = None,
+            preview_type: Literal["profiles", "games"] = None,
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/item_id
@@ -6794,6 +6648,22 @@ class Market:
             :return: httpx Response object
             """
             path = f"/{item_id}/refuse-guarantee"
+            return _send_request(self=self._api, method="POST", path=path)
+
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def check_guarantee(self, item_id: int) -> httpx.Response:
+            """
+            POST https://api.lzt.market/item_id/check-guarantee
+
+            Checks the guarantee and cancels it if there are reasons to cancel it.
+
+            Required scopes: market
+
+            :param item_id: ID of item.
+
+            :return: httpx Response object
+            """
+            path = f"/{item_id}/check-guarantee"
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
@@ -6923,9 +6793,9 @@ class Market:
         def edit(
             self,
             item_id: int,
-            price: int = None,
-            currency: str = None,
-            item_origin: str = None,
+            price: float = None,
+            currency: Constants.Market.Currency._Literal = None,
+            item_origin: Constants.Market.ItemOrigin._Literal = None,
             title: str = None,
             title_en: str = None,
             description: str = None,
@@ -7024,7 +6894,7 @@ class Market:
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def place_bid(
-                self, item_id: int, amount: int, currency: str = None
+                self, item_id: int, amount: float, currency: Constants.Market.Currency._Literal = None
             ) -> httpx.Response:
                 """
                 POST https://api.lzt.market/item_id/auction/bid
@@ -7112,7 +6982,7 @@ class Market:
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def fast_buy(
-            self, item_id: int, price: int, buy_without_validation: bool = None
+            self, item_id: int, price: float, buy_without_validation: bool = None
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/item_id/fast-buy
@@ -7198,12 +7068,7 @@ class Market:
             }
             data = {}
             if extra is not None:
-                if "CREATE_JOB" in locals():
-                    data["extra"] = extra  # Костыль CreateJob
-                else:
-                    for key, value in extra.items():
-                        es = f"extra[{key}]"
-                        data[es] = value
+                data["extra"] = extra
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -7215,11 +7080,11 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def add(
             self,
-            category_id: int,
-            price: int,
-            currency: str,
-            item_origin: str,
-            extended_guarantee: int = None,
+            category_id: Constants.Market.CategoryId._Literal,
+            price: float,
+            currency: Constants.Market.Currency._Literal,
+            item_origin: Constants.Market.ItemOrigin._Literal,
+            extended_guarantee: Constants.Market.Guarantee._Literal = None,
             title: str = None,
             title_en: str = None,
             description: str = None,
@@ -7232,8 +7097,8 @@ class Market:
             random_proxy: bool = None,
             auction: bool = False,
             auction_duration_value: int = None,
-            auction_duration_option: str = None,
-            instabuy_price: int = None,
+            auction_duration_option: Literal["minutes", "hours", "days"] = None,
+            instabuy_price: float = None,
             not_bids_action: str = None,
         ) -> httpx.Response:
             """
@@ -7322,11 +7187,11 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def fast_sell(
             self,
-            category_id: int,
-            price: int,
-            currency: str,
-            item_origin: str,
-            extended_guarantee: int = None,
+            category_id: Constants.Market.CategoryId._Literal,
+            price: float,
+            currency: Constants.Market.Currency._Literal,
+            item_origin: Constants.Market.ItemOrigin._Literal,
+            extended_guarantee: Constants.Market.Guarantee._Literal = None,
             title: str = None,
             title_en: str = None,
             description: str = None,
@@ -7343,8 +7208,8 @@ class Market:
             extra: dict = None,
             auction: bool = False,
             auction_duration_value: int = None,
-            auction_duration_option: str = None,
-            instabuy_price: int = None,
+            auction_duration_option: Literal["minutes", "hours", "days"] = None,
+            instabuy_price: float = None,
             not_bids_action: str = None,
         ) -> httpx.Response:
             """
@@ -7655,33 +7520,48 @@ class Antipublic:
         path = "/api/v2/checkLines"
         return _send_request(self=self, method="POST", path=path, params=params)
 
-    def search(
-        self, login: str = None, logins: list[str] = None, limit: int = None
+    def search(self, search_by: Constants.Antipublic.SearchBy._Literal, query: str, direction: Constants.Antipublic.SearchDirection._Literal = None, page_token: Optional[str] = None) -> httpx.Response:
+        """
+        POST https://antipublic.one/api/v2/search
+
+        Search lines by email/password/domain.
+
+        :param search_by: Search type. Can be email/password/domain
+            (For password and domain search you need Antipublic Plus subscription)
+        :param query: Search query.
+        :param direction: Search direction. Can be start/strict/end
+
+        :return: httpx Response object
+        """
+        path = "/api/v2/search"
+        if search_by not in ["email", "password", "domain"]:
+            _WarningsLogger.warn("Search type has invalid value. It can be only \"email\", \"password\" or \"domain\"")
+        data = {
+            "searchBy": search_by,
+            "query": {str(search_by): query},
+        }
+        if direction:
+            data["direction"] = {str(search_by): direction}
+        if page_token:
+            data["pageToken"] = page_token
+        data = json.dumps(data)
+        return _send_request(self=self, method="POST", path=path, data=data)
+
+    def email_passwords(
+        self, emails: list[str] = None, limit: int = None
     ) -> httpx.Response:
         """
-        POST https://antipublic.one/api/v2/emailSearch
         POST https://antipublic.one/api/v2/emailPasswords
 
         Get passwords for login's/email's
 
         Token required
 
-        :param login:
-            Email or login for search.
-        :param logins:
-            Emails or logins for search.
-
-            !!! You need Antupublic Plus subscription to use this param !!!
+        :param emails: List of emails or logins for search.
         :param limit: Result limit (per email).
 
         :return: httpx Response object
         """
-        if logins:
-            data = {"emails": logins, "limit": limit}
-            path = "/api/v2/emailPasswords"
-        elif login:
-            data = {"email": login}
-            path = "/api/v2/emailSearch"
-        else:
-            raise KeyError("You need to specify login or logins param")
+        data = {"emails": emails, "limit": limit}
+        path = "/api/v2/emailPasswords"
         return _send_request(self=self, method="POST", path=path, data=data)

@@ -13,8 +13,10 @@ import re
 import os
 
 from . import Exceptions
+from .API import version
 from multiprocessing import Value, Lock
 from binascii import Error as binasciiError
+from concurrent.futures import ThreadPoolExecutor
 
 _WarningsLogger = logging.getLogger("LOLZTEAM.Warnings")
 _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
@@ -66,11 +68,9 @@ class _MainTweaks:
                 self._scopes = scopes
             else:
                 raise Exceptions.BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
-        except json.JSONDecodeError:
+        except (binasciiError, json.JSONDecodeError):
             raise Exceptions.BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
-        except binasciiError:
-            raise Exceptions.BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
-        _DebugLogger.debug("Setuped jwt token | User ID: {self.user_id} | Scopes: {self._scopes}")
+        _DebugLogger.debug(f"Setuped jwt token | User ID: {self.user_id} | Scopes: {self._scopes}")
 
     @staticmethod
     def _CheckScopes(scopes: list = None):
@@ -166,7 +166,7 @@ class _MainTweaks:
         return _wrapper
 
     def _RetryWrapper(func):
-        def _wrapper(*args, **kwargs):
+        async def _wrapper(*args, **kwargs):
             tries = 0
             self = kwargs["self"]
             if self._delay_synchronizer:
@@ -174,7 +174,7 @@ class _MainTweaks:
             while tries < 30:
                 tries += 1
                 try:
-                    response = func(*args, **kwargs)
+                    response = await func(*args, **kwargs)
                     if self._delay_synchronizer:
                         self._lock.release()  # Unlocking to prevent softlock
                     return response
@@ -183,9 +183,152 @@ class _MainTweaks:
                         if self._delay_synchronizer:
                             self._lock.release()  # Unlocking to prevent softlock
                         raise e
-                    time.sleep(0.05)
+                    asyncio.sleep(0.05)
                     continue
         return _wrapper
+
+    async def _ExecCode(func, loc, cur_kwargs):
+        SEND_AS_ASYNC = loc.get("SEND_AS_ASYNC", False)
+        CREATE_JOB = loc.get("CREATE_JOB", False)
+
+        self = functools.partial(func).func.__self__
+        if "scope" in functools.partial(func).func.__code__.co_varnames:
+            func = next((c for c in (c.cell_contents for c in func.__closure__) if isinstance(c, types.FunctionType)), None,)
+        else:
+            func = functools.partial(func).func
+        if hasattr(self, "_api"):
+            self = self._api
+        loc["self"] = self  # Определяем селф в нашей локали, чтобы дальше не ебнуло
+
+        arguments = func.__code__.co_varnames
+        for arg in arguments:
+            if arg != "self":
+                exec(f"{arg} = None", loc)
+            if arg == "kwargs":
+                exec("kwargs = {}", loc)
+        for arg, value in cur_kwargs.items():  # Чек на левые кварги
+            if "kwargs" not in arguments and arg not in arguments:
+                raise Exceptions.INVALID_ARG(
+                    f'Function "{func.__name__}" don\'t have "{arg}" parameter'
+                )
+            else:
+                if arg not in arguments:
+                    loc["kwargs"][arg] = value
+                else:
+                    loc[arg] = value
+
+        # Не придумал пока лучшего испольнения чека скопов
+        if SEND_AS_ASYNC:
+            pre_def = inspect.getsource(func).split("def")[0]
+            pattern = r"\[.*?\]"
+            result = re.findall(pattern, pre_def)
+            scopes = None
+            if result:
+                scopes = eval(result[0])
+            if scopes:
+                path = str(func.__qualname__).replace(
+                    "<class '", "").replace("'>", "")
+                for bad_path, cute_path in {
+                    "__Profile": "profile",
+                    "__Payments": "payments",
+                    "__Category": "category",
+                    "__List": "list",
+                    "__Publishing": "publishing",
+                    "__Purchasing": "purchasing",
+                    "__Managing": "managing",
+                    "__Proxy": "proxy",
+                    "__Steam": "steam",
+                    "__Fortnite": "fortnite",
+                    "__MiHoYo": "mihoyo",
+                    "__Valorant": "valorant",
+                    "__LeagueOfLegends": "lol",
+                    "__Telegram": "telegram",
+                    "__Supercell": "supercell",
+                    "__Origin": "origin",
+                    "__WorldOfTanks": "wot",
+                    "__WorldOfTanksBlitz": "wot_blitz",
+                    "__EpicGames": "epicgames",
+                    "__EscapeFromTarkov": "eft",
+                    "__SocialClub": "socialclub",
+                    "__Uplay": "uplay",
+                    "__WarThunder": "war_thunder",
+                    "__Discord": "discord",
+                    "__TikTok": "tiktok",
+                    "__Instagram": "instagram",
+                    "__BattleNet": "battlenet",
+                    "__VPN": "vpn",
+                    "__Cinema": "cinema",
+                    "__Spotify": "spotify",
+                    "__Warface": "warface",
+                    "__Tag": "tag",
+                    "__Auction": "auction",
+                    "__Categories": "categories",
+                    "__Forums": "forums",
+                    "__Pages": "pages",
+                    "__Threads": "threads",
+                    "__Posts": "posts",
+                    "__Tags": "tags",
+                    "__Users": "users",
+                    "__Profile_posts": "profile_posts",
+                    "__Conversations": "conversations",
+                    "__Notifications": "notifications",
+                    "__Search": "search",
+                    "__Oauth": "oauth",
+                    "__Posts_comments": "comments",
+                    "__Contests": "contests",
+                    "__Arbitrage": "arbitrage",
+                    "__Money": "money",
+                    "__Upgrade": "upgrade",
+                    "__Avatar": "avatar",
+                    "__Profile_posts_comments": "comments",
+                    "__Conversations_messages": "messages",
+                }.items():
+                    if bad_path in path:
+                        path = path.replace(bad_path, cute_path)
+                for scope in scopes:
+                    scope_parsed = scope.split("?")
+                    joined = ", ".join(scope_parsed)
+                    if len(scope_parsed) > 1:
+                        if not any(_scope in self._scopes for _scope in scope_parsed):
+                            logging.warn(msg=f'{Exceptions.MISSING_SCOPE.__name__}: One of [{joined}] scope is required to use "{path}" but not provided in your token.\nYou should recreate token with at least one of these scopes.', stack_info=False,)
+                        elif scope_parsed[0] not in self._scopes:
+                            logging.warn(msg=f'{Exceptions.MISSING_SCOPE.__name__}: "{joined}" scope is required to use "{path}" but not provided in your token.\nYou should recreate token with "{joined}" scope.', stack_info=False,)
+
+        #  Огромная ебанина, которая находит код функции, парсит и выполняет его
+        func_code = str(inspect.getsource(func)).replace(" -> httpx.Response", "")
+        func_code = func_code.split("):\n", 1)[1]
+        lines = func_code.split("\n")
+        indent = lines[0].split('"""')[0]
+        for line in lines.copy():
+            if " def " in line:
+                lines.remove(line)
+        lines = [line.replace(indent, "", 1) for line in lines.copy()]
+        return_code = "\n".join(lines).split('"""')[2].split("return ")[-1]
+        func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
+        exec(func_code, globals(), loc)
+
+        # Получаем переменные из локали, в которой отработал exec
+        path = loc.get("path")
+        params = loc.get("params", {})
+        files = loc.get("files")  # Если вы файлы передаете в batch, то вы плохие люди
+        data = loc.get("data", {})
+
+        if CREATE_JOB:  # Фикс для job'а
+            path = self.base_url + path  # Полный путь кушает
+            if data:  # Batch принимает только парамсы в теле, вот такой костыль здесь
+                params.update(data)
+            params["locale"] = self._locale  # Ставим локаль для ответа job'a
+
+        # Ебанина для получения метода
+        method = [eval(i.replace("method=", "").strip())for i in return_code.split(",") if "method=" in i][0]
+        return {"self": self, "path": path, "method": method, "params": params, "files": files, "data": data}
+
+    def _AsyncExecutor(coroutine):
+        #  Закостылил по гайду от величайшего
+        #  https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        executor = ThreadPoolExecutor()
+        result = executor.submit(asyncio.run, coroutine).result()
+        return result
 
 
 class DelaySync:
@@ -253,9 +396,7 @@ class DelaySync:
         for api in apis_td:
             self.remove(api)
 
-    def __del__(
-        self,
-    ):  # Удаляем линки на синхронайзеры из объектов Forum/Market при удалении
+    def __del__(self,):  # Удаляем линки на синхронайзеры из объектов Forum/Market при удалении
         self.clear()
 
 
@@ -279,6 +420,7 @@ class Debug:
         if not self._status:
             self._status = True
             self.DebugLogger.addHandler(self.DebugHandler)
+            _DebugLogger.debug(f"Debug started | LOLZTEAM {version('LOLZTEAM')}")
         else:
             _WarningsLogger.warn(" Debug logger already enabled")
 
@@ -286,59 +428,15 @@ class Debug:
         if self._status:
             self._status = False
             self.DebugLogger.removeHandler(self.DebugHandler)
+            _DebugLogger.debug(f"Debug stopped | LOLZTEAM {version('LOLZTEAM')}")
         else:
             _WarningsLogger.warn(" Debug logger already disabled")
 
 
 def CreateJob(func, job_name, **cur_kwargs) -> dict:
     CREATE_JOB = True
-    self = functools.partial(func).func.__self__
-    if "scope" in functools.partial(func).func.__code__.co_varnames:
-        func = next((c for c in (c.cell_contents for c in func.__closure__) if isinstance(c, types.FunctionType)), None,)
-    else:
-        func = functools.partial(func).func
-    if hasattr(self, "_api"):
-        self = self._api
-    arguments = func.__code__.co_varnames
-    loc = locals()
-    for arg in arguments:
-        if arg != "self":
-            exec(f"{arg} = None", loc)
-        if arg == "kwargs":
-            exec("kwargs = {}", loc)
-    for arg, value in cur_kwargs.items():
-        if "kwargs" not in arguments and arg not in arguments:
-            raise Exceptions.INVALID_ARG(
-                f'Function "{func.__name__}" don\'t have "{arg}" parameter'
-            )
-        else:
-            if arg not in arguments:
-                loc["kwargs"][arg] = value
-            else:
-                loc[arg] = value
-    func_code = str(inspect.getsource(func)).replace(" -> httpx.Response", "")
-    func_code = func_code.split("):\n", 1)[1]
-    lines = func_code.split("\n")
-    indent = lines[0].split('"""')[0]
-    for line in lines:
-        if " def " in line:
-            lines.remove(line)
-    lines = [line.replace(indent, "", 1) for line in lines]
-    return_code = "\n".join(lines).split('"""')[2].split("return ")[-1]
-    func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
-    exec(func_code, globals(), loc)
-    path = loc.get("path")
-    params = loc.get("params", {})
-    data = loc.get("data", {})
-    params.update(data)
-    method = [
-        eval(i.replace("method=", "").strip())
-        for i in return_code.split(",")
-        if "method=" in i
-    ][0]
-    url = self.base_url + path
-    params["locale"] = self._locale
-    job = {"id": str(job_name), "uri": url, "method": method, "params": params}
+    code_data = _MainTweaks._AsyncExecutor(_MainTweaks._ExecCode(func=func, loc=locals(), cur_kwargs=cur_kwargs))
+    job = {"id": str(job_name), "uri": code_data["path"], "method": code_data["method"], "params": code_data["params"]}
     return job
 
 
@@ -352,140 +450,6 @@ async def SendAsAsync(func, **cur_kwargs) -> httpx.Response:
     :return: httpx Response object
     """
     SEND_AS_ASYNC = True
-    self = functools.partial(func).func.__self__
-    if "scope" in functools.partial(func).func.__code__.co_varnames:
-        func = next((c for c in (c.cell_contents for c in func.__closure__)
-                    if isinstance(c, types.FunctionType)), None,)
-    else:
-        func = functools.partial(func).func
-    if hasattr(self, "_api"):
-        self = self._api
-    arguments = func.__code__.co_varnames
-
-    loc = locals()
-    for arg in arguments:
-        if arg != "self":
-            exec(f"{arg} = None", loc)
-        if arg == "kwargs":
-            exec("kwargs = {}", loc)
-    for arg, value in cur_kwargs.items():
-        if "kwargs" not in arguments and arg not in arguments:
-            raise Exceptions.INVALID_ARG(
-                f'Function "{func.__name__}" don\'t have "{arg}" parameter'
-            )
-        else:
-            if arg not in arguments:
-                loc["kwargs"][arg] = value
-            else:
-                loc[arg] = value
-
-    # Не придумал пока лучшего испольнения чека скопов для асинк запросов
-    if True:
-        pre_def = inspect.getsource(func).split("def")[0]
-        pattern = r"\[.*?\]"
-        result = re.findall(pattern, pre_def)
-        scopes = None
-        if result:
-            scopes = eval(result[0])
-        if scopes:
-            path = str(func.__qualname__).replace(
-                "<class '", "").replace("'>", "")
-            for bad_path, cute_path in {
-                "__Profile": "profile",
-                "__Payments": "payments",
-                "__Category": "category",
-                "__List": "list",
-                "__Publishing": "publishing",
-                "__Purchasing": "purchasing",
-                "__Managing": "managing",
-                "__Proxy": "proxy",
-                "__Steam": "steam",
-                "__Fortnite": "fortnite",
-                "__MiHoYo": "mihoyo",
-                "__Valorant": "valorant",
-                "__LeagueOfLegends": "lol",
-                "__Telegram": "telegram",
-                "__Supercell": "supercell",
-                "__Origin": "origin",
-                "__WorldOfTanks": "wot",
-                "__WorldOfTanksBlitz": "wot_blitz",
-                "__EpicGames": "epicgames",
-                "__EscapeFromTarkov": "eft",
-                "__SocialClub": "socialclub",
-                "__Uplay": "uplay",
-                "__WarThunder": "war_thunder",
-                "__Discord": "discord",
-                "__TikTok": "tiktok",
-                "__Instagram": "instagram",
-                "__BattleNet": "battlenet",
-                "__VPN": "vpn",
-                "__Cinema": "cinema",
-                "__Spotify": "spotify",
-                "__Warface": "warface",
-                "__Tag": "tag",
-                "__Auction": "auction",
-                "__Categories": "categories",
-                "__Forums": "forums",
-                "__Pages": "pages",
-                "__Threads": "threads",
-                "__Posts": "posts",
-                "__Tags": "tags",
-                "__Users": "users",
-                "__Profile_posts": "profile_posts",
-                "__Conversations": "conversations",
-                "__Notifications": "notifications",
-                "__Search": "search",
-                "__Oauth": "oauth",
-                "__Posts_comments": "comments",
-                "__Contests": "contests",
-                "__Arbitrage": "arbitrage",
-                "__Money": "money",
-                "__Upgrade": "upgrade",
-                "__Avatar": "avatar",
-                "__Profile_posts_comments": "comments",
-                "__Conversations_messages": "messages",
-            }.items():
-                if bad_path in path:
-                    path = path.replace(bad_path, cute_path)
-            for scope in scopes:
-                scope_parsed = scope.split("?")
-                joined = ", ".join(scope_parsed)
-                if len(scope_parsed) > 1:
-                    if not any(_scope in self._scopes for _scope in scope_parsed):
-                        logging.warn(
-                            msg=f'{Exceptions.MISSING_SCOPE.__name__}: One of [{joined}] scope is required to use "{path}" but not provided in your token.\nYou should recreate token with at least one of these scopes.',
-                            stack_info=False,
-                        )
-                    elif scope_parsed[0] not in self._scopes:
-                        logging.warn(
-                            msg=f'{Exceptions.MISSING_SCOPE.__name__}: "{joined}" scope is required to use "{path}" but not provided in your token.\nYou should recreate token with "{joined}" scope.',
-                            stack_info=False,
-                        )
-
-    func_code = str(inspect.getsource(func)).replace(" -> httpx.Response", "")
-    func_code = func_code.split("):\n", 1)[1]
-    lines = func_code.split("\n")
-    indent = lines[0].split('"""')[0]
-    for line in lines:
-        if " def " in line:
-            lines.remove(line)
-    lines = [line.replace(indent, "", 1) for line in lines]
-    return_code = "\n".join(lines).split('"""')[2].split("return ")[-1]
-    func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
-    exec(func_code, globals(), loc)
-
-    path = loc.get("path")
-    params = loc.get("params", {})
-    files = loc.get("files", None)
-    data = loc.get("data", {})
-    if type(data) is dict:
-        params.update(data)
-    params["locale"] = self._locale
-
-    method = [eval(i.replace("method=", "").strip())
-              for i in return_code.split(",") if "method=" in i][0]
+    code_data = await _MainTweaks._ExecCode(func=func, loc=locals(), cur_kwargs=cur_kwargs)
     from .API import _send_async_request
-
-    return await _send_async_request(
-        self=self, method=method, path=path, params=params, data=data, files=files
-    )
+    return await _send_async_request(self=code_data["self"], method=code_data["method"], path=code_data["path"], params=code_data["params"], data=code_data["data"], files=code_data["files"])

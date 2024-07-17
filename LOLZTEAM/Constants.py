@@ -1,3 +1,6 @@
+from typing import Literal
+
+
 class Proxy:
     socks5 = "SOCKS5"
     socks4 = "SOCKS4"
@@ -7,6 +10,7 @@ class Proxy:
 
 class Market:
     class Category:
+        _Literal = Literal["steam", "fortnite", "mihoyo", "valorant", "league-of-legends", "telegram", "supercell", "origin", "world-of-tanks", "wot-blitz", "epicgames", "gifts", "escape-from-tarkov", "socialclub", "uplay", "war-thunder", "discord", "tiktok", "instagram", "battlenet", "vpn", "cinema", "roblox", "spotify", "warface", "minecraft"]
         steam = "steam"
         fortnite = "fortnite"
         mihoyo = "mihoyo"
@@ -35,6 +39,7 @@ class Market:
         minecraft = "minecraft"
 
     class CategoryId:
+        _Literal = Literal[1, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31]
         steam = 1
         fortnite = 9
         mihoyo = 17
@@ -63,6 +68,7 @@ class Market:
         minecraft = 28
 
     class OperationTypes:
+        _Literal = Literal["income", "cost", "refilled_balance", "withdrawal_balance", "paid_item", "sold_item", "money_transfer", "receiving_money", "internal_purchase", "claim_hold", "bid"]
         income = "income"
         cost = "cost"
         refilled_balance = "refilled_balance"
@@ -76,6 +82,7 @@ class Market:
         bid = "bid"
 
     class HoldPeriod:
+        _Literal = Literal["hour", "day", "week", "month", "year"]
         hour = "hour"
         day = "day"
         week = "week"
@@ -83,6 +90,7 @@ class Market:
         year = "year"
 
     class Currency:
+        _Literal = Literal["cny", "usd", "rub", "eur", "uah", "kzt", "byn", "gbp"]
         cny = "cny"
         usd = "usd"
         rub = "rub"
@@ -93,6 +101,7 @@ class Market:
         gbp = "gbp"
 
     class ItemOrigin:
+        _Literal = Literal["brute", "stealer", "fishing", "autoreg", "personal", "resale", "dummy"]
         brute = "brute"
         stealer = "stealer"
         fishing = "fishing"
@@ -102,17 +111,20 @@ class Market:
         dummy = "dummy"      # Only for steam (Пустышки)
 
     class Guarantee:
+        _Literal = Literal[-1, 0, 1]
         half_day = -1
         day = 0
         three_days = 1
 
     class ItemStatus:
+        _Literal = Literal["active", "paid", "deleted", "awaiting"]
         active = "active"
         paid = "paid"
         deleted = "deleted"
         awaiting = "awaiting"
 
     class ItemOrder:
+        _Literal = Literal["price_to_up", "price_to_down", "pdate_to_down", "pdate_to_up", "pdate_to_down_upload", "pdate_to_up_upload", "exp_auctions", "ddate_to_down", "ddate_to_up"]
         cheap = "price_to_up"
         expensive = "price_to_down"
         newest = "pdate_to_down"
@@ -124,6 +136,7 @@ class Market:
         oldest_deleted = "ddate_to_up"
 
     class AppID:
+        _Literal = Literal[730, 578080, 753, 570, 440, 252490, 304930, 232090, 322330]
         CS2 = 730
         PUBG = 578080
         Steam = 753
@@ -138,11 +151,13 @@ class Market:
 class Forum:
     class Contests:
         class Length:
+            _Literal = Literal["minutes", "hours", "days"]
             minutes = "minutes"
             hours = "hours"
             days = "days"
 
         class UpgradePrize:
+            _Literal = Literal[1, 6, 12, 14, 17, 19]
             supreme = 1
             legend = 6
             antipublic = 12
@@ -151,6 +166,7 @@ class Forum:
             auto_participation = 19
 
     class ThreadOrder:
+        _Literal = Literal["natural", "natural_reverse", "thread_create_date", "thread_create_date_reverse", "thread_update_date", "thread_update_date_reverse", "thread_view_count", "thread_view_count_reverse", "thread_post_count", "thread_post_count_reverse", "first_post_likes", "first_post_likes_reverse"]
         default = "natural"
         oldest = "thread_create_date"
         newest = "thread_create_date_reverse"
@@ -164,12 +180,14 @@ class Forum:
         max_likes = "first_post_likes_reverse"
 
     class PostOrder:
+        _Literal = Literal["natural", "natural_reverse", "post_likes", "post_likes_reverse"]
         default = "natural"
         default_reverse = "natural_reverse"
         max_likes = "post_likes"
         min_likes = "post_likes_reverse"
 
     class ReplyGroups:
+        _Literal = Literal[0, 2, 21, 22, 23, 60, 351]
         staff = 0      # КФ + кураторы
         everyone = 2   # Все
         local = 21     # Местный и выше
@@ -180,12 +198,9 @@ class Forum:
 
     class Arbitrage:
         class TransferType:
+            _Literal = Literal["safe", "notsafe"]
             safe = "safe"
             not_safe = "notsafe"
-
-        class PayClaim:
-            now = "now"
-            later = "later"
 
         class Currency:
             cny = "cny"
@@ -196,3 +211,17 @@ class Forum:
             kzt = "kzt"
             byn = "byn"
             gbp = "gbp"
+
+
+class Antipublic:
+    class SearchBy:
+        _Literal = Literal["email", "password", "domain"]
+        email = "email"
+        password = "password"
+        domain = "domain"
+
+    class SearchDirection:
+        _Literal = Literal["start", "strict", "end"]
+        start = "start"
+        strict = "strict"
+        end = "end"

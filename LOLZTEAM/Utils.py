@@ -1,5 +1,5 @@
 from .Tweaks import SendAsAsync
-from .models import Payment
+from .Models import Payment
 
 async def CheckPayment(
     self,
