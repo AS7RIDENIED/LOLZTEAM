@@ -59,8 +59,12 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
         data.update(self.custom_body)
 
     headers = self._main_headers.copy()
-    if data:  # Фикс для антипаблика. httpx по дефолту отправляет appication форм дату какую-то там, а мы всегда в тело передаем жсон. Можно конечно передавать напрямую в json, но это не хайп
-        headers["Content-Type"] = "application/json"
+    if data:  # Фикс для всея всего. Обычно отправляет в app/x-www-form-urlencode, но мы то всегда жсон юзаем. Можно конечно json=data, но не хайп
+        try:
+            data = json.dumps(data)
+            headers["Content-Type"] = "application/json"
+        except json.JSONDecodeError:
+            pass
     headers.update(self.custom_headers)
     headers["User-Agent"] = f"LOLZTEAM v{version('LOLZTEAM')}"
 
@@ -3123,7 +3127,7 @@ class Forum:
         import json
 
         path = "/batch"
-        data = json.dumps(jobs)
+        data = jobs
         return _send_request(self=self, method="POST", path=path, data=data)
 
 
@@ -3263,7 +3267,7 @@ class Market:
         import json
 
         path = "/batch"
-        data = json.dumps(jobs)
+        data = jobs
         return _send_request(self=self, method="POST", path=path, data=data)
 
     class __Profile:
@@ -7067,7 +7071,7 @@ class Market:
                 "random_proxy": int(random_proxy) if random_proxy else random_proxy,
             }
             data = {}
-            if extra is not None:
+            if extra:
                 data["extra"] = extra
             return _send_request(
                 self=self._api,
@@ -7159,6 +7163,10 @@ class Market:
             params = {
                 "category_id": category_id,
                 "type_sell": "auction" if auction else "price",
+                "duration_auction_value": auction_duration_value if auction else None,
+                "duration_auction_option": auction_duration_option if auction else None,
+                "instant_price": instabuy_price if auction else None,
+                "not_bids_action": not_bids_action if auction else None,
                 "price": price,
                 "currency": currency,
                 "item_origin": item_origin,
@@ -7174,12 +7182,6 @@ class Market:
                 "proxy_id": proxy_id,
                 "random_proxy": int(random_proxy) if random_proxy else random_proxy,
             }
-            if auction is True:
-                params["duration_auction_value"] = auction_duration_value
-                params["duration_auction_option"] = auction_duration_option
-                params["instant_price"] = instabuy_price
-                params["not_bids_action"] = not_bids_action
-
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -7275,6 +7277,10 @@ class Market:
                 "category_id": category_id,
                 "price": price,
                 "type_sell": "auction" if auction else "price",
+                "duration_auction_value": auction_duration_value if auction else None,
+                "duration_auction_option": auction_duration_option if auction else None,
+                "instant_price": instabuy_price if auction else None,
+                "not_bids_action": not_bids_action if auction else None,
                 "currency": currency,
                 "item_origin": item_origin,
                 "extended_guarantee": extended_guarantee,
@@ -7292,19 +7298,9 @@ class Market:
                 "password": password,
                 "login_password": login_password,
             }
-            if auction is True:
-                params["duration_auction_value"] = auction_duration_value
-                params["duration_auction_option"] = auction_duration_option
-                params["instant_price"] = instabuy_price
-                params["not_bids_action"] = not_bids_action
             data = {}
-            if extra is not None:
-                if "CREATE_JOB" in locals():
-                    data["extra"] = extra  # Костыль CreateJob
-                else:
-                    for key, value in extra.items():
-                        es = f"extra[{key}]"
-                        data[es] = value
+            if extra:
+                data["extra"] = extra
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -7544,7 +7540,6 @@ class Antipublic:
             data["direction"] = {str(search_by): direction}
         if page_token:
             data["pageToken"] = page_token
-        data = json.dumps(data)
         return _send_request(self=self, method="POST", path=path, data=data)
 
     def email_passwords(
