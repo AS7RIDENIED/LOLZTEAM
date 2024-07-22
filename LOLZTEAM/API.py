@@ -6,15 +6,14 @@ import json
 import re
 
 from importlib.metadata import version
-from typing import Union, Literal, Optional, Self
+from typing import Union, Literal, Optional
 
 from . import Exceptions
 from . import Constants
 from .Tweaks import _MainTweaks
 
 _WarningsHandler = logging.StreamHandler()
-_WarningsHandler.setFormatter(logging.Formatter(
-    "\033[93mWARNING:%(message)s\033[0m"))
+_WarningsHandler.setFormatter(logging.Formatter("\033[93mWARNING:%(message)s\033[0m"))
 _WarningsLogger = logging.getLogger("LOLZTEAM.Warnings")
 _WarningsLogger.setLevel(level=logging.WARNING)
 _WarningsLogger.addHandler(_WarningsHandler)
@@ -60,13 +59,10 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
 
     headers = self._main_headers.copy()
     if data:  # Фикс для всея всего. Обычно отправляет в app/x-www-form-urlencode, но мы то всегда жсон юзаем. Можно конечно json=data, но не хайп
-        try:
-            data = json.dumps(data)
-            headers["Content-Type"] = "application/json"
-        except json.JSONDecodeError:
-            pass
-    headers.update(self.custom_headers)
+        data = json.dumps(data)
+        headers["Content-Type"] = "application/json"
     headers["User-Agent"] = f"LOLZTEAM v{version('LOLZTEAM')}"
+    headers.update(self.custom_headers)
 
     proxy_schemes = {
         "HTTP": "http",
