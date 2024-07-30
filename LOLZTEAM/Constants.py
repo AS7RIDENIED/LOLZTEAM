@@ -10,12 +10,11 @@ class Proxy:
 
 class Market:
     class Category:
-        _Literal = Literal["steam", "fortnite", "mihoyo", "valorant", "league-of-legends", "telegram", "supercell", "origin", "world-of-tanks", "wot-blitz", "epicgames", "gifts", "escape-from-tarkov", "socialclub", "uplay", "war-thunder", "discord", "tiktok", "instagram", "battlenet", "vpn", "cinema", "roblox", "spotify", "warface", "minecraft"]
+        _Literal = Literal["steam", "fortnite", "mihoyo", "riot", "telegram", "supercell", "origin", "world-of-tanks", "wot-blitz", "epicgames", "gifts", "escape-from-tarkov", "socialclub", "uplay", "war-thunder", "discord", "tiktok", "instagram", "battlenet", "vpn", "cinema", "roblox", "spotify", "warface", "minecraft"]
         steam = "steam"
         fortnite = "fortnite"
         mihoyo = "mihoyo"
-        valorant = "valorant"
-        lol = "league-of-legends"
+        riot = "riot"
         telegram = "telegram"
         supercell = "supercell"
         origin = "origin"
@@ -39,12 +38,11 @@ class Market:
         minecraft = "minecraft"
 
     class CategoryId:
-        _Literal = Literal[1, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31]
+        _Literal = Literal[1, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 26, 27, 28, 30, 31]
         steam = 1
         fortnite = 9
         mihoyo = 17
-        valorant = 13
-        lol = 29
+        riot = 13
         telegram = 24
         supercell = 15
         origin = 3

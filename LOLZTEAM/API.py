@@ -1,5 +1,5 @@
 import logging
-import asyncio
+import builtins
 import httpx
 import time
 import json
@@ -23,12 +23,12 @@ _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
 _DebugLogger.setLevel(level=100)
 
 
-def _send_request(self, method: str, path: dict, params: dict = None, data=None, files=None) -> httpx.Response:
-    return _MainTweaks._AsyncExecutor(_send_async_request(self=self, method=method, path=path, params=params, data=data, files=files))
+def _send_request(self, method: str, path: dict, params: dict = None, data=None, dataJ=None, files=None) -> httpx.Response:
+    return _MainTweaks._AsyncExecutor(_send_async_request(self=self, method=method, path=path, params=params, data=data, dataJ=dataJ, files=files))
 
 
 @_MainTweaks._RetryWrapper
-async def _send_async_request(self, method: str, path: dict, params: dict = None, data=None, files=None) -> httpx.Response:
+async def _send_async_request(self, method: str, path: dict, params: dict = None, data=None, dataJ=None, files=None) -> httpx.Response:
     url = self.base_url + path
     if type(self) is Antipublic:
         if params:
@@ -47,20 +47,21 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
             params["locale"] = self._locale
         params.update(self.custom_params)
         ptd = []
-        for key, value in params.items():  # Буль это миф, а еще убираем None
-            if type(params[key]) is bool:
-                params[key] = str(value)
+        for key, value in params.items():  # Убираем None
             if params[key] is None:
                 ptd.append(key)
         for key in ptd:
             del params[key]
-    if type(data) is dict:
-        data.update(self.custom_body)
+    if data:
+        if type(data) is dict:
+            data.update(self.custom_body)
+            if dataJ:
+                dataJ = None
+    elif dataJ:
+        if type(dataJ) is dict:
+            dataJ.update(self.custom_body)
 
     headers = self._main_headers.copy()
-    if data:  # Фикс для всея всего. Обычно отправляет в app/x-www-form-urlencode, но мы то всегда жсон юзаем. Можно конечно json=data, но не хайп
-        data = json.dumps(data)
-        headers["Content-Type"] = "application/json"
     headers["User-Agent"] = f"LOLZTEAM v{version('LOLZTEAM')}"
     headers.update(self.custom_headers)
 
@@ -81,23 +82,26 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
         if self._proxy_type in proxy_schemes:
             proxy = f"{proxy_schemes[self._proxy_type]}://{self._proxy}"
         else:
-            raise Exceptions.INVALID_PROXY_TYPE(
-                "Proxy type has invalid value. It can be only https, http, socks4 or socks5")
+            raise Exceptions.INVALID_PROXY_TYPE("Proxy type has invalid value. It can be only https, http, socks4 or socks5")
 
     if method in request_methods:
         censored_headers = headers.copy()
         censored_headers["Authorization"] = "bearer ***Token***"
-        _DebugLogger.debug(
-            f"{method} {url} | Params: {json.dumps(params)} | Data: {json.dumps(data)} | Files: {files} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
+        if data:
+            body = json.dumps(data)
+        elif dataJ:
+            body = json.dumps(dataJ)
+        else:
+            body = None
+        _DebugLogger.debug(f"{method} {url} | Params: {json.dumps(params)} | Data: {body} | Files: {files} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
         tbr = time.time()
         async with httpx.AsyncClient(proxies=proxy) as client:
-            response = await client.request(method=method, url=url, params=params, data=data, files=files, headers=headers, timeout=self.timeout,)
+            response = await client.request(method=method, url=url, params=params, data=data, json=dataJ, files=files, headers=headers, timeout=self.timeout)
             _DebugLogger.debug(f"Response: {response} | Plain response: {response.content}")
             if self._delay_synchronizer:
                 self._delay_synchronizer._synchronize(tbr)
             else:
                 self._auto_delay_time = tbr
-
             return response
     else:
         raise Exceptions.AS7RID_FUCK_UP("Invalid request method. Contact @AS7RID")
@@ -115,11 +119,14 @@ class Forum:
         timeout: int = 90,
     ):
         """
-        :param token: Your token. You can get in there -> https://zelenka.guru/account/api
-        :param bypass_429: Bypass status code 429 by sleep
-        :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
-        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
-        :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
+        - **token** (str): Your token.
+            > You can get it [there](https://zelenka.guru/account/api)
+        - **bypass_429** (bool): Bypass status code 429 by sleep
+        - **language** (str): Language for your api responses.
+        - **proxy_type** (str): Your proxy type.
+        - **proxy** (str): Proxy string.
+        - **reset_custom_variables** (bool): Reset custom variables.
+        - **timeout** (int): Request timeout.
         """
         self.base_url = "https://api.zelenka.guru"
         if proxy_type is not None:
@@ -137,9 +144,7 @@ class Forum:
 
         self._token = token
         self._scopes = None
-        _MainTweaks.setup_jwt(
-            self=self, token=token, user_id=locals().get("user_id", None)
-        )
+        _MainTweaks.setup_jwt(self=self, token=token)
         self._main_headers = {"Authorization": f"bearer {self._token}"}
 
         self.bypass_429 = bypass_429
@@ -167,7 +172,6 @@ class Forum:
         self.conversations = self.__Conversations(self)
         self.notifications = self.__Notifications(self)
         self.search = self.__Search(self)
-        self.oauth = self.__Oauth(self)
 
     @property
     def scopes(self):
@@ -215,7 +219,7 @@ class Forum:
             self._api = _api_self
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_categories(
+        def list(
             self,
             parent_category_id: int = None,
             parent_forum_id: int = None,
@@ -224,14 +228,22 @@ class Forum:
             """
             GET https://api.zelenka.guru/categories
 
-            List of all categories in the system.
+            *List of all categories in the system.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param parent_category_id: ID of parent category.
-            :param parent_forum_id: ID of parent forum.
-            :param order: Ordering of categories. Can be [natural, list]
-            :return: httpx Response object
+            **Parameters:**
+
+            - **parent_category_id** (int): ID of parent category.
+            - **parent_forum_id** (int): ID of parent forum.
+            - **order** (str): Ordering of categories.
+                > Can be [natural, list]
+
+            **Example:**
+
+            ```python
+            forum.categories.list()
+            ```
             """
             path = "/categories"
             params = {
@@ -242,16 +254,24 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_category(self, category_id: int) -> httpx.Response:
+        def get(self, category_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/categories/{category_id}
 
-            Detail information of a category.
+            *Detail information of a category.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param category_id: ID of category we want to get
-            :return: httpx Response object
+            **Parameters:**
+
+            - **category_id** (int): Category ID.
+
+            **Example:**
+
+            ```python
+            response = forum.categories.get(category_id=1)
+            print(response.json())
+            ```
             """
             path = f"/categories/{category_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -261,7 +281,7 @@ class Forum:
             self._api = _api_self
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_forums(
+        def list(
             self,
             parent_category_id: int = None,
             parent_forum_id: int = None,
@@ -270,14 +290,23 @@ class Forum:
             """
             GET https://api.zelenka.guru/forums
 
-            List of all forums in the system.
+            *List of all forums in the system.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param parent_category_id: ID of parent category.
-            :param parent_forum_id: ID of parent forum.
-            :param order: Ordering of categories. Can be [natural, list]
-            :return: httpx Response object
+            **Parameters:**
+
+            - **parent_category_id** (int): ID of parent category.
+            - **parent_forum_id** (int): ID of parent forum.
+            - **order** (str): Ordering of categories.
+                > Can be [natural, list]
+
+            **Example:**
+
+            ```python
+            response = forum.forums.list()
+            print(response.json())
+            ```
             """
             path = "/forums"
             params = {
@@ -288,16 +317,24 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_forum(self, forum_id: int) -> httpx.Response:
+        def get(self, forum_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums/{forum_id}
 
-            Detail information of a forum.
+            *Detail information of a forum.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param forum_id: ID of forum we want to get
-            :return: httpx Response object
+            **Parameters:**
+
+            - **transfer_type** (str): ID of forum.
+
+            **Example:**
+
+            ```python
+            response = forum.forums.get(forum_id=766)
+            print(response.json())
+            ```
             """
             path = f"/forums/{forum_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -313,19 +350,28 @@ class Forum:
             email: bool = None,
         ) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/forums/forum_id/followers
-            Follow a forum.
+            POST https://api.zelenka.guru/forums/{forum_id}/followers
 
-            Required scopes: post
+            *Follow a forum.*
 
-            :param forum_id: ID of forum we want to get
-            :param prefix_ids: List with prefix id's.
-            :param minimal_contest_amount: Minimal contest amount.( for forumid 766 )
-            :param post: Whether to receive notification for post.
-            :param alert: Whether to receive notification as alert.
-            :param email: Whether to receive notification as email.
+            Required scopes: *post*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **transfer_type** (str): Forum id.
+            - **prefix_ids** (list): List with prefix id's.
+            - **minimal_contest_amount** (int): Minimal contest amount.
+                > For forum id 766
+            - **post** (bool): Whether to receive notification for post.
+            - **alert** (bool): Whether to receive notification as alert.
+            - **email** (bool): Whether to receive notification as email.
+
+            **Example:**
+
+            ```python
+            response = forum.forums.follow(forum_id=766)
+            print(response.json())
+            ```
             """
             path = f"/forums/{forum_id}/followers"
             params = {
@@ -335,7 +381,6 @@ class Forum:
                 "minimal_contest_amount": minimal_contest_amount,
                 "prefix_ids[]": prefix_ids,
             }
-            # Tweak 0
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -343,14 +388,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def unfollow(self, forum_id: int) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/forums/forum_id/followers
-            Unfollow a forum.
+            DELETE https://api.zelenka.guru/forums/{forum_id}/followers
 
-            Required scopes: post
+            *Unfollow a forum.*
 
-            :param forum_id: ID of forum we want to get
+            Required scopes: *post*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **transfer_type** (str): Forum ID.
+
+            **Example:**
+
+            ```python
+            response = forum.forums.unfollow(forum_id=766)
+            print(response.json())
+            ```
             """
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -358,14 +411,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def followers(self, forum_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/forums/forum_id/followers
+            GET https://api.zelenka.guru/forums/{forum_id}/followers
 
-            List of a forum's followers. For privacy reason, only the current user will be included in the list (if the user follows the specified forum).
+            *List of a forum's followers. For privacy reason, only the current user will be included in the list (if the user follows the specified forum).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param forum_id: ID of forum we want to get
-            :return: httpx Response object
+            **Parameters:**
+
+            - **transfer_type** (str): Forum ID.
+
+            **Example:**
+
+            ```python
+            response = forum.forums.followers(forum_id=766)
+            print(response.json())
+            ```
             """
             path = f"/forums/{forum_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
@@ -375,13 +436,20 @@ class Forum:
             """
             GET https://api.zelenka.guru/forums/followed
 
-            List of followed forums by current user.
+            *List of followed forums by current user.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param total: If included in the request, only the forum count is returned as forums_total.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **total** (bool): If included in the request, only the forum count is returned as forums_total.
+
+            **Example:**
+
+            ```python
+            response = forum.forums.followed()
+            print(response.json())
+            ```
             """
             path = "/forums/followed"
             params = {"total": int(total) if total else total}
@@ -392,37 +460,53 @@ class Forum:
             self._api = _api_self
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_pages(
+        def list(
             self, parent_page_id: int = None, order: Literal["natural", "list"] = None
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/pages
 
-            List of all pages in the system.
+            *List of all pages in the system.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param parent_page_id: ID of parent page. If exists, filter pages that are direct children of that page.
-            :param order: Ordering of pages. Can be [natural, list]
+            **Parameters:**
 
-            :return: httpx Response object
+            - **parent_page_id** (int): ID of parent page.
+                > If exists, filter pages that are direct children of that page.
+            - **order** (str): Ordering of pages.
+                > Can be [natural, list]
+
+            **Example:**
+
+            ```python
+            response = forum.pages.list()
+            print(response.json())
+            ```
             """
             path = "/pages"
             params = {"parent_page_id": parent_page_id, "order": order}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_page(self, page_id: int) -> httpx.Response:
+        def get(self, page_id: int) -> httpx.Response:
             """
             GET https://api.zelenka.guru/pages/page_id
 
-            Detail information of a page.
+            *Detail information of a page.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param page_id: ID of parent page. If exists, filter pages that are direct children of that page.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **page_id** (int): ID of parent page. If exists, filter pages that are direct children of that page.
+
+            **Example:**
+
+            ```python
+            response = forum.pages.get(page_id=1)
+            print(response.json())
+            ```
             """
             path = f"/pages/{page_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -435,16 +519,23 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["read"])
             def get(self, post_id: int, before: int = None) -> httpx.Response:
                 """
-                GET https://api.zelenka.guru/posts/post_id/comments
+                GET https://api.zelenka.guru/posts/{post_id}/comments
 
-                List of post comments in a thread (with pagination).
+                *List of post comments in a thread (with pagination).*
 
-                Required scopes: read
+                Required scopes: *read*
 
-                :param post_id: ID of post.
-                :param before: The time in milliseconds (e.g. 1652177794083) before last comment date
+                **Parameters:**
 
-                :return: httpx Response object
+                - **post_id** (int): Post ID.
+                - **before** (int): The time in milliseconds (e.g. 1652177794083) before last comment date
+
+                **Example:**
+
+                ```python
+                response = forum.posts.comments.get(post_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/posts/{post_id}/comments"
                 params = {"before": before}
@@ -458,21 +549,28 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["post"])
             def create(self, post_id: int, comment_body: str = None) -> httpx.Response:
                 """
-                POST https://api.zelenka.guru/posts/post_id/comments
+                POST https://api.zelenka.guru/posts/{post_id}/comments
 
-                Create a new post comment.
+                *Create a new post comment.*
 
-                Required scopes: post
+                Required scopes: *post*
 
-                :param post_id: ID of post.
-                :param comment_body: Content of the new post
+                **Parameters:**
 
-                :return: httpx Response object
+                - **post_id** (int): Post ID.
+                - **comment_body** (str): Content of the new post.
+
+                **Example:**
+
+                ```python
+                response = forum.posts.comments.create(post_id=1000000, comment_body="Comment text")
+                print(response.json())
+                ```
                 """
                 path = f"/posts/{post_id}/comments"
-                data = {"comment_body": comment_body}
+                dataJ = {"comment_body": comment_body}
                 return _send_request(
-                    self=self._api, method="POST", path=path, data=data
+                    self=self._api, method="POST", path=path, dataJ=dataJ
                 )
 
         def __init__(self, _api_self):
@@ -480,7 +578,7 @@ class Forum:
             self.comments = self.__Posts_comments(self._api)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_posts(
+        def list(
             self,
             thread_id: int = None,
             page_of_post_id: int = None,
@@ -492,17 +590,28 @@ class Forum:
             """
             GET https://api.zelenka.guru/posts
 
-            List of posts in a thread (with pagination).
+            *List of posts in a thread (with pagination).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param thread_id: ID of the containing thread.
-            :param page_of_post_id: ID of a post, posts that are in the same page with the specified post will be returned. thread_id may be skipped.
-            :param post_ids: ID's of needed posts. If this parameter is set, all other filtering parameters will be ignored.
-            :param page: Page number of posts.
-            :param limit: Number of posts in a page. Default value depends on the system configuration.
-            :param order: Ordering of posts. Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
-            :return: httpx Response object
+            **Parameters:**
+
+            - **thread_id** (int): ID of the containing thread.
+            - **page_of_post_id** (int): ID of a post, posts that are in the same page with the specified post will be returned.
+                > If this parameter is set, thread_id may be skipped.
+            - **post_ids** (list): ID's of needed posts.
+                > If this parameter is set, all other filtering parameters will be ignored.
+            - **page** (int): Page number of posts.
+            - **limit** (int): Number of posts in a page.
+            - **order** (str): Ordering of posts.
+                > Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
+
+            **Example:**
+
+            ```python
+            response = forum.posts.list(thread_id=1000000)
+            print(response.json())
+            ```
             """
             path = "/posts"
             if type(post_ids) is list:
@@ -520,15 +629,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def get(self, post_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/posts/post_id
+            GET https://api.zelenka.guru/posts/{post_id}
 
-            Detail information of a post.
+            *Detail information of a post.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param post_id: ID of post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_id** (int): Post ID.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.get(post_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/posts/{post_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -540,17 +656,24 @@ class Forum:
             """
             POST https://api.zelenka.guru/posts
 
-            Create a new post.
+            *Create a new post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param post_body: Content of the new post.
-            :param thread_id: ID of the target thread.
-            :param quote_post_id: ID of the quote post. It's possible to skip thread_id if this parameter is provided. An extra check is performed if both parameters exist and does not match.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_body** (str): Content of the new post.
+            - **thread_id** (int): ID of the target thread.
+            - **quote_post_id** (int): ID of the quote post.
+                > It's possible to skip thread_id if this parameter is provided. An extra check is performed if both parameters exist and does not match.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.create(post_body="Post text", thread_id=1000000)
+            print(response.json())
+            ```
             """
-
             path = "/posts"
             params = {
                 "thread_id": thread_id,
@@ -570,17 +693,25 @@ class Forum:
             self, post_id: int, post_body: str = None, message_state: str = None
         ) -> httpx.Response:
             """
-            PUT https://api.zelenka.guru/posts/post_id
+            PUT https://api.zelenka.guru/posts/{post_id}
 
-            Edit a post.
+            *Edit a post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param post_id: ID of post.
-            :param message_state: Message state. Can be [visible,deleted,moderated]
-            :param post_body: New content of the post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_id** (int): Post ID.
+            - **message_state** (str): Message state.
+                > Can be [visible, deleted, moderated]
+            - **post_body** (str): New content of the post.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.edit(post_id=1000000, post_body="New text")
+            print(response.json())
+            ```
             """
             path = f"/posts/{post_id}"
             params = {"message_state": message_state}
@@ -596,16 +727,23 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def delete(self, post_id: int, reason: str = None) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/posts/post_id
+            DELETE https://api.zelenka.guru/posts/{post_id}
 
-            Delete a post.
+            *Delete a post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param post_id: ID of post.
-            :param reason: Reason of the post removal.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_id** (int): Post ID.
+            - **reason** (str): Reason of the post removal.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.delete(post_id=1000000, reason="test")
+            print(response.json())
+            ```
             """
             path = f"/posts/{post_id}"
             data = {"reason": reason}
@@ -616,17 +754,24 @@ class Forum:
             self, post_id: int, page: int = None, limit: int = None
         ) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/posts/post_id/likes
+            GET https://api.zelenka.guru/posts/{post_id}/likes
 
-            List of users who liked a post.
+            *List of users who liked a post.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param post_id: ID of post.
-            :param page: Page number of users.
-            :param limit: Number of users in a page. Default value depends on the system configuration.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_id** (int): Post ID.
+            - **page** (int): Page number of users.
+            - **limit** (int): Number of users in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.likes(post_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/posts/{post_id}/likes"
             params = {"page": page, "limit": limit}
@@ -635,15 +780,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def like(self, post_id: int) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/posts/post_id/likes
+            POST https://api.zelenka.guru/posts/{post_id}/likes
 
-            Like a post.
+            *Like a post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param post_id: ID of post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_id** (int): Post ID.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.like(post_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="POST", path=path)
@@ -651,35 +803,49 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def unlike(self, post_id: int) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/posts/post_id/likes
+            DELETE https://api.zelenka.guru/posts/{post_id}/likes
 
-            Unlike a post.
+            *Unlike a post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param post_id: ID of post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_id** (int): Post ID.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.unlike(post_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/posts/{post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def report(self, post_id: int, message: str) -> httpx.Response:
+        def report(self, post_id: int, reason: str) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/posts/post_id/report
+            POST https://api.zelenka.guru/posts/{post_id}/report
 
-            Report a post.
+            *Report a post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param post_id: ID of post.
-            :param message: Reason of the report.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_id** (int): Post ID.
+            - **reason** (str): Reason of the report.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.report(post_id=1000000, reason="test")
+            print(response.json())
+            ```
             """
             path = f"/posts/{post_id}/report"
-            data = {"message": message}
+            data = {"message": reason}
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
     class __Threads:
@@ -702,7 +868,7 @@ class Forum:
                 def create_by_time(
                     self,
                     post_body: str,
-                    prize_data_money: int,
+                    prize_data_money: float,
                     count_winners: int,
                     length_value: int,
                     length_option: Constants.Forum.Contests.Length._Literal,
@@ -721,28 +887,42 @@ class Forum:
                     """
                     POST https://api.zelenka.guru/threads
 
-                    Create a new thread.
+                    *Create a new thread.*
 
-                    Required scopes: post
+                    Required scopes: *post*
 
-                    :param post_body: Content of the new thread.
-                    :param title: Thread title. Can be skipped if title_en set.
-                    :param title_en: Thread title in english. Can be skipped if title set.
-                    :param prefix_ids: Thread prefixes.
-                    :param tags: Thread tags.
-                    :param allow_ask_hidden_content: Allow ask hidden content.
-                    :param dont_alert_followers: Don't alert followers
-                    :param reply_group: Allow to reply only users with chosen or higher group.
-                    :param comment_ignore_group: Allow commenting if user can't post in thread.
-                    :param prize_data_money: How much money will each winner receive.
-                    :param count_winners: Winner count (prize count). The maximum value is 100.
-                    :param length_value: Giveaway duration value. The maximum duration is 3 days.
-                    :param length_option: Giveaway duration type. Can be [minutes, hours, days]. The maximum duration is 3 days.
-                    :param require_like_count: Sympathies for this week.
-                    :param require_total_like_count: Symapthies for all time.
-                    :param secret_answer:Secret answer of your account.
+                    **Parameters:**
 
-                    :return: httpx Response object
+                    - **post_body** (str): Content of the new thread.
+                    - **prize_data_money** (float): How much money will each winner receive.
+                    - **count_winners** (int): Winner count (prize count).
+                        > The maximum value is 100.
+                    - **length_value** (int): Giveaway duration value.
+                        > The maximum duration is 3 days.
+                    - **length_option** (str): Giveaway duration type.
+                        > Can be [minutes, hours, days]. The maximum duration is 3 days.
+                    - **require_like_count** (int): Sympathies for this week.
+                    - **require_total_like_count** (int): Symapthies for all time.
+                    - **secret_answer** (str): Secret answer of your account.
+                    - **reply_group** (int): Allow to reply only users with chosen or higher group.
+                    - **title** (str): Thread title.
+                        > Can be skipped if title_en set.
+                    - **title_en** (str): Thread title in english.
+                        > Can be skipped if title set.
+                    - **prefix_ids** (list): Thread prefixes.
+                    - **tags** (list): Thread tags.
+                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+                    - **dont_alert_followers** (bool): Don't alert followers.
+
+                    **Example:**
+
+                    ```python
+                    response = forum.threads.contests.money.create_by_time(post_body="Contest",prize_data_money=500, count_winners=1,
+                                                                           length_value=3, length_option="days", require_like_count=1,
+                                                                           require_total_like_count=50, secret_answer="My secret answer", title="Contest")
+                    print(response.json())
+                    ```
                     """
                     contest_type = "by_finish_date"
                     prize_type = "money"
@@ -789,7 +969,7 @@ class Forum:
                 def create_by_count(
                     self,
                     post_body: str,
-                    prize_data_money: int,
+                    prize_data_money: float,
                     count_winners: int,
                     needed_members: int,
                     require_like_count: int,
@@ -807,27 +987,39 @@ class Forum:
                     """
                     POST https://api.zelenka.guru/threads
 
-                    Create a new thread.
+                    *Create a new thread.*
 
-                    Required scopes: post
+                    Required scopes: *post*
 
-                    :param post_body: Content of the new thread.
-                    :param title: Thread title. Can be skipped if title_en set.
-                    :param title_en: Thread title in english. Can be skipped if title set.
-                    :param prefix_ids: Thread prefixes.
-                    :param tags: Thread tags.
-                    :param allow_ask_hidden_content: Allow ask hidden content.
-                    :param dont_alert_followers: Don't alert followers
-                    :param reply_group: Allow to reply only users with chosen or higher group.
-                    :param comment_ignore_group: Allow commenting if user can't post in thread.
-                    :param prize_data_money: How much money will each winner receive.
-                    :param count_winners: Winner count (prize count). The maximum value is 100.
-                    :param needed_members: Max member count.
-                    :param require_like_count: Sympathies for this week.
-                    :param require_total_like_count: Symapthies for all time.
-                    :param secret_answer:Secret answer of your account.
+                    **Parameters:**
 
-                    :return: httpx Response object
+                    - **post_body** (str): Content of the new thread.
+                    - **prize_data_money** (float): How much money will each winner receive.
+                    - **count_winners** (int): Winner count (prize count).
+                    - **needed_members** (int): Max member count.
+                    - **require_like_count** (int): Sympathies for this week.
+                    - **require_total_like_count** (int): Symapthies for all time.
+                    - **secret_answer** (str): Secret answer of your account.
+                    - **reply_group** (int): Allow to reply only users with chosen or higher group.
+                    - **title** (str): Thread title.
+                        > Can be skipped if title_en set.
+                    - **title_en** (str): Thread title in english.
+                        > Can be skipped if title set.
+                    - **prefix_ids** (list): Thread prefixes.
+                    - **tags** (list): Thread tags.
+                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+                        > The maximum value is 100.
+                    - **dont_alert_followers** (bool): Don't alert followers.
+
+                    **Example:**
+
+                    ```python
+                    response = forum.threads.contests.money.create_by_count(post_body="Contest",prize_data_money=500, count_winners=1,
+                                                                           needed_members=300, require_like_count=1, require_total_like_count=50,
+                                                                           secret_answer="My secret answer", title="Contest")
+                    print(response.json())
+                    ```
                     """
                     contest_type = "by_needed_members"
                     prize_type = "money"
@@ -894,42 +1086,42 @@ class Forum:
                     """
                     POST https://api.zelenka.guru/threads
 
-                    Create a new thread.
+                    *Create a new thread.*
 
-                    Contest prize upgrade type:
+                    Required scopes: *post*
 
-                    1 - Supreme - 3 months.
+                    **Parameters:**
 
-                    6 - Legend - 12 months.
+                    - **post_body** (str): Content of the new thread.
+                    - **prize_data_upgrade** (int): Which upgrade will each winner receive.
+                    - **count_winners** (int): Winner count (prize count).
+                        > The maximum value is 100.
+                    - **length_value** (int): Giveaway duration value.
+                        > The maximum duration is 3 days.
+                    - **length_option** (str): Giveaway duration type.
+                        > Can be [minutes, hours, days]. The maximum duration is 3 days.
+                    - **require_like_count** (int): Sympathies for this week.
+                    - **require_total_like_count** (int): Symapthies for all time.
+                    - **secret_answer** (str): Secret answer of your account.
+                    - **reply_group** (int): Allow to reply only users with chosen or higher group.
+                    - **title** (str): Thread title.
+                        > Can be skipped if title_en set.
+                    - **title_en** (str): Thread title in english.
+                        > Can be skipped if title set.
+                    - **prefix_ids** (list): Thread prefixes.
+                    - **tags** (list): Thread tags.
+                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+                    - **dont_alert_followers** (bool): Don't alert followers.
+                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
 
-                    12 - AntiPublic.One Plus subscription - 1 month.
+                    **Example:**
 
-                    14 - Uniq - lifetime.
-
-                    17 - 18+ Photo leaks - 6 months.
-
-                    19 - Auto giveaway participation - 1 month.
-
-                    Required scopes: post
-
-                    :param post_body: Content of the new thread.
-                    :param title: Thread title. Can be skipped if title_en set.
-                    :param title_en: Thread title in english. Can be skipped if title set.
-                    :param prefix_ids: Thread prefixes.
-                    :param tags: Thread tags.
-                    :param allow_ask_hidden_content: Allow ask hidden content.
-                    :param reply_group: Allow to reply only users with chosen or higher group.
-                    :param comment_ignore_group: Allow commenting if user can't post in thread.
-                    :param dont_alert_followers: Don't alert followers
-                    :param prize_data_upgrade: Which upgrade will each winner receive. Check description above
-                    :param count_winners: Winner count (prize count). The maximum value is 100.
-                    :param length_value: Giveaway duration value. The maximum duration is 3 days.
-                    :param length_option: Giveaway duration type. Can be [minutes, hours, days]. The maximum duration is 3 days.
-                    :param require_like_count: Sympathies for this week.
-                    :param require_total_like_count: Symapthies for all time.
-                    :param secret_answer:Secret answer of your account.
-
-                    :return: httpx Response object
+                    ```python
+                    response = forum.threads.contests.upgrade.create_by_time(post_body="Contest",prize_data_upgrade=1, count_winners=1,
+                                                                           length_value=3, length_option="days", require_like_count=1,
+                                                                           require_total_like_count=50, secret_answer="My secret answer", title="Contest")
+                    print(response.json())
+                    ```
                     """
                     contest_type = "by_finish_date"
                     prize_type = "upgrades"
@@ -992,41 +1184,39 @@ class Forum:
                     """
                     POST https://api.zelenka.guru/threads
 
-                    Create a new thread.
+                    *Create a new thread.*
 
-                    Contest prize upgrade type:
+                    Required scopes: *post*
 
-                    1 - Supreme - 3 months.
+                    **Parameters:**
 
-                    6 - Legend - 12 months.
+                    - **post_body** (str): Content of the new thread.
+                    - **prize_data_upgrade** (int): Which upgrade will each winner receive.
+                    - **count_winners** (int): Winner count (prize count).
+                        > The maximum value is 100.
+                    - **needed_members** (int): Max member count.
+                    - **require_like_count** (int): Sympathies for this week.
+                    - **require_total_like_count** (int): Symapthies for all time.
+                    - **secret_answer** (str): Secret answer of your account.
+                    - **reply_group** (int): Allow to reply only users with chosen or higher group.
+                    - **title** (str): Thread title.
+                        > Can be skipped if title_en set.
+                    - **title_en** (str): Thread title in english.
+                        > Can be skipped if title set.
+                    - **prefix_ids** (list): Thread prefixes.
+                    - **tags** (list): Thread tags.
+                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+                    - **dont_alert_followers** (bool): Don't alert followers.
+                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
 
-                    12 - AntiPublic.One Plus subscription - 1 month.
+                    **Example:**
 
-                    14 - Uniq - lifetime.
-
-                    17 - 18+ Photo leaks - 6 months.
-
-                    19 - Auto giveaway participation - 1 month.
-
-                    Required scopes: post
-
-                    :param post_body: Content of the new thread.
-                    :param title: Thread title. Can be skipped if title_en set.
-                    :param title_en: Thread title in english. Can be skipped if title set.
-                    :param prefix_ids: Thread prefixes.
-                    :param tags: Thread tags.
-                    :param allow_ask_hidden_content: Allow ask hidden content.
-                    :param reply_group: Allow to reply only users with chosen or higher group.
-                    :param comment_ignore_group: Allow commenting if user can't post in thread.
-                    :param dont_alert_followers: Don't alert followers
-                    :param prize_data_upgrade: Which upgrade will each winner receive. Check description above
-                    :param count_winners: Winner count (prize count). The maximum value is 100.
-                    :param needed_members: Max member count.
-                    :param require_like_count: Sympathies for this week.
-                    :param require_total_like_count: Symapthies for all time.
-                    :param secret_answer:Secret answer of your account.
-
-                    :return: httpx Response object
+                    ```python
+                    response = forum.threads.contests.money.create_by_count(post_body="Contest",prize_data_upgrade=1, count_winners=1,
+                                                                           needed_members=300, require_like_count=1, require_total_like_count=50,
+                                                                           secret_answer="My secret answer", title="Contest")
+                    print(response.json())
+                    ```
                     """
                     params = {
                         "prefix_id[]": prefix_ids,
@@ -1072,7 +1262,7 @@ class Forum:
             def market(
                 self,
                 responder: str,
-                item_id: int,
+                item_id: Union[str, int],
                 amount: float,
                 post_body: str,
                 currency: Constants.Market.Currency._Literal = None,
@@ -1087,24 +1277,32 @@ class Forum:
                 """
                 POST https://api.zelenka.guru/claims
 
-                Create a Arbitrage.
+                *Create a Arbitrage.*
 
-                Required scopes: post
+                Required scopes: *post*
 
-                :param responder: To whom the complaint is filed. Specify a nickname or a link to the profile.
-                :param item_id: Write account link or item_id.
-                :param amount: Amount by which the responder deceived you.
-                :param post_body: You should describe what's happened.
-                :param currency: Currency of Arbitrage.
-                :param conversation_screenshot: Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
-                :param tags: Thread tags.
-                :param hide_contacts: Hide contacts.
-                :param allow_ask_hidden_content: Allow ask hidden content.
-                :param comment_ignore_group: Allow commenting if user can't post in thread.
-                :param dont_alert_followers: Don't alert followers
-                :param reply_group: Allow to reply only users with chosen or higher group.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+                - **item_id** (str|int): Write account link or item_id.
+                - **amount** (float): Amount by which the responder deceived you.
+                - **post_body** (str): You should describe what's happened.
+                - **currency** (str): Currency of Arbitrage.
+                - **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+                - **tags** (list): Thread tags.
+                - **hide_contacts** (bool): Hide contacts.
+                - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+                - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+                - **dont_alert_followers** (bool): Don't alert followers.
+                - **reply_group** (int): Allow to reply only users with chosen or higher group.
+
+                **Example:**
+
+                ```python
+                response = forum.threads.arbitrage.market(responder="AS7RID", item_id=1000000, amount=1000,
+                                                          post_body="Arbitrage test", currency="rub")
+                print(response.json())
+                ```
                 """
                 path = "/claims"
                 data = {
@@ -1149,27 +1347,36 @@ class Forum:
                 """
                 POST https://api.zelenka.guru/claims
 
-                Create a Arbitrage.
+                *Create a Arbitrage.*
 
-                Required scopes: post
+                Required scopes: *post*
 
-                :param responder: To whom the complaint is filed. Specify a nickname or a link to the profile.
-                :param amount: Amount by which the responder deceived you.
-                :param currency: Currency of Arbitrage.
-                :param receipt: Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
-                :param post_body: You should describe what's happened.
-                :param pay_claim: !!!  If you set this parameter to **True** forum will automatically calculate the amount and debit it from your account.  !!!\nFor filing claims, it is necessary to make a contribution in the amount of 5% of the amount of damage (but not less than 50 rubles and not more than 5000 rubles). For example, for an amount of damage of 300 rubles, you will need to pay 50 rubles, for 2,000 and 10,000 rubles - 100 and 500 rubles, respectively).
-                :param responder_data: Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
-                :param transfer_type: The transaction took place through a guarantor or there was a transfer to the market with a hold? Can be ["safe", "notsafe"]
-                :param conversation_screenshot: Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
-                :param tags: Thread tags.
-                :param hide_contacts: Hide contacts.
-                :param allow_ask_hidden_content: Allow ask hidden content.
-                :param comment_ignore_group: Allow commenting if user can't post in thread.
-                :param dont_alert_followers: Don't alert followers
-                :param reply_group: Allow to reply only users with chosen or higher group.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+                - **amount** (float): Amount by which the responder deceived you.
+                - **currency** (str): Currency of Arbitrage.
+                - **receipt** (str): Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
+                - **post_body** (str): You should describe what's happened.
+                - **pay_claim** (bool): If you set this parameter to **True** forum will automatically calculate the amount and debit it from your account.
+                    > For filing claims, it is necessary to make a contribution in the amount of 5% of the amount of damage (but not less than 50 rubles and not more than 5000 rubles). For example, for an amount of damage of 300 rubles, you will need to pay 50 rubles, for 2,000 and 10,000 rubles - 100 and 500 rubles, respectively).
+                - **pay_claim** (str): Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
+                - **transfer_type** (str): The transaction took place through a guarantor or there was a transfer to the market with a hold? Can be ["safe", "notsafe"]
+                - **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+                - **tags** (list): Thread tags.
+                - **hide_contacts** (bool): Hide contacts.
+                - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+                - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+                - **dont_alert_followers** (bool): Don't alert followers.
+                - **reply_group** (int): Allow to reply only users with chosen or higher group.
+
+                **Example:**
+
+                ```python
+                response = forum.threads.arbitrage.non_market(responder="AS7RID", amount=100, currency="rub", receipt="no",
+                                                              post_body="Non market arbitrage", pay_claim=True, transfer_type="safe")
+                print(response.json())
+                ```
                 """
                 path = "/claims"
                 data = {
@@ -1196,7 +1403,7 @@ class Forum:
                 )
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_threads(
+        def list(
             self,
             forum_id: int = None,
             thread_ids: str = None,
@@ -1211,20 +1418,32 @@ class Forum:
             """
             GET https://api.zelenka.guru/threads
 
-            List of threads in a forum (with pagination).
+            *List of threads in a forum (with pagination).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param forum_id: ID of the containing forum. Can be skipped if thread_ids set.
-            :param thread_ids: ID's of needed threads (separated by comma). If this parameter is set, all other filtering parameters will be ignored.
-            :param creator_user_id: Filter to get only threads created by the specified user.
-            :param sticky: Filter to get only sticky <sticky=1> or non-sticky <sticky=0> threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards threads_total and does not affect pagination.
-            :param thread_prefix_id: Filter to get only threads with the specified prefix.
-            :param thread_tag_id: Filter to get only threads with the specified tag.
-            :param page: Page number of threads.
-            :param limit: Number of threads in a page.
-            :param order: Can be [natural, thread_create_date, thread_create_date_reverse, thread_update_date, thread_update_date_reverse, thread_view_count, thread_view_count_reverse, thread_post_count, thread_post_count_reverse]
-            :return: httpx Response object
+            **Parameters:**
+
+            - **forum_id** (int): ID of the containing forum.
+                > Can be skipped if thread_ids set.
+            - **thread_ids** (list): ID's of needed threads (separated by comma).
+                > If this parameter is set, all other filtering parameters will be ignored.
+            - **creator_user_id** (int): Filter to get only threads created by the specified user.
+            - **sticky** (bool): Filter to get only sticky or non-sticky threads.
+                > By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards threads_total and does not affect pagination.
+            - **thread_prefix_id** (int): Filter to get only threads with the specified prefix.
+            - **thread_tag_id** (int): Filter to get only threads with the specified tag.
+            - **page** (int): Page number of threads.
+            - **limit** (int): Number of threads in a page.
+            - **order** (str): Threads order.
+                > Can be [natural, thread_create_date, thread_create_date_reverse, thread_update_date, thread_update_date_reverse, thread_view_count, thread_view_count_reverse, thread_post_count, thread_post_count_reverse]
+
+            **Example:**
+
+            ```python
+            response = forum.threads.list(forum_id=766)
+            print(response.json())
+            ```
             """
             path = "/threads"
             params = {
@@ -1243,15 +1462,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def get(self, thread_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/threads/thread_id
+            GET https://api.zelenka.guru/threads/{thread_id}
 
-            Detail information of a thread.
+            *Detail information of a thread.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param thread_id: ID of thread.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.get(thread_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1275,39 +1501,32 @@ class Forum:
             """
             POST https://api.zelenka.guru/threads
 
-            Create a new thread.
+            *Create a new thread.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            Reply groups:
+            **Parameters:**
 
-            0 - Only staff members and curators can reply in thread.
+            - **forum_id** (int): ID of the target forum.
+            - **post_body** (str): Content of the new thread.
+            - **title** (str): Thread title.
+                        > Can be skipped if title_en set.
+            - **title_en** (str): Thread title in english.
+                        > Can be skipped if title set.
+            - **prefix_ids** (list): Thread prefixes.
+            - **tags** (list): Thread tags.
+            - **hide_contacts** (bool): Hide contacts.
+            - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+            - **reply_group** (int): Allow to reply only users with chosen or higher group.
+            - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+            - **dont_alert_followers** (bool): Don't alert followers.
 
-            2 - Everyone can reply in thread.
+            **Example:**
 
-            21 - Local and higher can reply in thread.
-
-            22 - Resident or higher can reply in thread.
-
-            23 - Expert or higher can reply in thread.
-
-            60 - Guru and higher can reply in thread.
-
-            351 - Artificial Intelligence and higher can reply in thread.
-
-            :param forum_id: ID of the target forum.
-            :param post_body: Content of the new thread.
-            :param title: Thread title. Can be skipped if title_en set.
-            :param title_en: Thread title in english. Can be skipped if title set.
-            :param prefix_ids: Thread prefixes.
-            :param tags: Thread tags.
-            :param hide_contacts: Hide contacts.
-            :param allow_ask_hidden_content: Allow ask hidden content.
-            :param reply_group: Allow to reply only users with chosen or higher group.
-            :param comment_ignore_group: Allow commenting if user can't post in thread.
-            :param dont_alert_followers: Don't alert followers
-
-            :return: httpx Response object
+            ```python
+            response = forum.threads.create(forum_id=876, post_body="Test thread in test forum", title="Test thread")
+            print(response.json())
+            ```
             """
             path = "/threads"
             params = {
@@ -1352,40 +1571,33 @@ class Forum:
             comment_ignore_group: bool = None,
         ) -> httpx.Response:
             """
-            PUT https://api.zelenka.guru/threads/thread_id
+            PUT https://api.zelenka.guru/threads/{thread_id}
 
-            Edit a thread.
+            *Edit a thread.*
 
-            Required scopes: post
+            Required scopes: *post*
 
             Reply groups:
 
-            0 - Only staff members and curators can reply in thread.
+            **Parameters:**
 
-            2 - Everyone can reply in thread.
+            - **thread_id** (int): Id of thread.
+            - **title** (str): Thread title.
+            - **title_en** (str): Thread title in english.
+            - **prefix_ids** (list): Thread prefixes.
+            - **tags** (list): Thread tags.
+            - **discussion_open** (bool): Discussion state.
+            - **hide_contacts** (bool): Hide contacts.
+            - **allow_ask_hidden_content** (bool): Allow ask hidden content.
+            - **reply_group** (int): Allow to reply only users with chosen or higher group.
+            - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
 
-            21 - Local and higher can reply in thread.
+            **Example:**
 
-            22 - Resident or higher can reply in thread.
-
-            23 - Expert or higher can reply in thread.
-
-            60 - Guru and higher can reply in thread.
-
-            351 - Artificial Intelligence and higher can reply in thread.
-
-            :param thread_id: Id of thread.
-            :param title: Thread title.
-            :param title_en: Thread title in english.
-            :param prefix_ids: Thread prefixes.
-            :param tags: Thread tags.
-            :param discussion_open: Discussion state.
-            :param hide_contacts: Hide contacts.
-            :param allow_ask_hidden_content: Allow ask hidden content.
-            :param reply_group: Allow to reply only users with chosen or higher group.
-            :param comment_ignore_group: Allow commenting if user can't post in thread.
-
-            :return: httpx Response object
+            ```python
+            response = forum.threads.edit(thread_id=1000000, title="New thread title")
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}"
             data = {
@@ -1412,20 +1624,27 @@ class Forum:
             send_alert: bool = None
         ) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/threads/thread_id/move
+            POST https://api.zelenka.guru/threads/{thread_id}/move
 
-            Move a thread.
+            *Move a thread.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param thread_id: Id of thread.
-            :param forum_id: Target forum id.
-            :param title: Thread title.
-            :param title_en: Thread title in english.
-            :param prefix_ids: Thread prefixes.
-            :param send_alert: Send a notification to users who are followed to target node.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): Id of thread.
+            - **forum_id** (int): Target forum id.
+            - **title** (str): Thread title.
+            - **title_en** (str): Thread title in english.
+            - **prefix_ids** (list): Thread prefixes.
+            - **send_alert** (bool): Send a notification to users who are followed to target node.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.move(thread_id=1000000, forum_id=876)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/move"
             data = {
@@ -1441,16 +1660,23 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def delete(self, thread_id: int, reason: str = None) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/threads/thread_id
+            DELETE https://api.zelenka.guru/threads/{thread_id}
 
-            Delete a thread.
+            *Delete a thread.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param thread_id: ID of thread.
-            :param reason: Reason of the thread removal.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+            - **reason** (str): Reason of the thread removal.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.delete(thread_id=1000000, reason="delete reason)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}"
             params = {"reason": reason}
@@ -1461,15 +1687,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def followers(self, thread_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/threads/thread_id/followers
+            GET https://api.zelenka.guru/threads/{thread_id}/followers
 
-            List of a thread's followers. For privacy reason, only the current user will be included in the list.
+            *List of a thread's followers. For privacy reason, only the current user will be included in the list.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param thread_id: ID of thread.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.followers(thread_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1479,13 +1712,20 @@ class Forum:
             """
             GET https://api.zelenka.guru/threads/followed
 
-            List of followed threads by current user.
+            *List of followed threads by current user.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param total: If included in the request, only the thread count is returned as threads_total.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **total** (bool): If included in the request, only the thread count is returned as threads_total.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.followed()
+            print(response.json())
+            ```
             """
             path = "/threads/followed"
             params = {"total": int(total) if total else total}
@@ -1494,16 +1734,23 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def follow(self, thread_id: int, email: bool = None) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/threads/thread_id/followers
+            POST https://api.zelenka.guru/threads/{thread_id}/followers
 
-            Follow a thread.
+            *Follow a thread.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param thread_id: ID of thread.
-            :param email: Whether to receive notification as email.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+            - **email** (bool): Whether to receive notification as email.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.follow(threads_id=1000000, email=False)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/followers"
             params = {"email": int(email) if email else email}
@@ -1514,15 +1761,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def unfollow(self, thread_id: int) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/threads/thread_id/followers
+            DELETE https://api.zelenka.guru/threads/{thread_id}/followers
 
-            Unfollow a thread.
+            *Unfollow a thread.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param thread_id: ID of thread.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.unfollow(thread_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -1530,15 +1784,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def navigation(self, thread_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/threads/thread_id/navigation
+            GET https://api.zelenka.guru/threads/{thread_id}/navigation
 
-            List of navigation elements to reach the specified thread.
+            *List of navigation elements to reach the specified thread.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param thread_id: ID of thread.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.navigation(thread_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/navigation"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1546,15 +1807,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def votes(self, thread_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/threads/thread_id/poll
+            GET https://api.zelenka.guru/threads/{thread_id}/poll
 
-            Detail information of a poll.
+            *Detail information of a poll.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param thread_id: ID of thread.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.votes(thread_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/poll"
             return _send_request(self=self._api, method="GET", path=path)
@@ -1563,26 +1831,35 @@ class Forum:
         def vote(
             self,
             thread_id: int,
-            response_ids: list[int],
+            response_ids: Union[builtins.list[int], int],
         ) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/threads/thread_id/pool/votes
+            POST https://api.zelenka.guru/threads/{thread_id}/pool/votes
 
-            Vote on a thread poll.
+            *Vote on a thread poll.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param thread_id: ID of thread.
-            :param response_id: The id of the response to vote for. Can be skipped if response_ids set.
-            :param response_ids: An array of ids of responses (if the poll allows multiple choices).
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+            - **response_ids** (list): Pool response ids. (if the poll allows multiple choices).
+
+            **Example:**
+
+            ```python
+            response = forum.threads.vote(thread_id=1000000, response_ids=264758)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/pool/votes"
-            for element in response_ids:
-                if not isinstance(element, int):
-                    _WarningsLogger.warn(
-                        f"{FutureWarning.__name__} All response_ids elements should be integer")
+
+            if type(response_ids) is list:
+                for element in response_ids:
+                    if not isinstance(element, int):
+                        _WarningsLogger.warn(f"{FutureWarning.__name__} All response_ids elements should be integer")
+            elif type(response_ids) is int:
+                response_ids = [response_ids]
             params = {"response_id": response_ids[0]} if len(response_ids) == 1 else {
                 "response_ids[]": response_ids}
             return _send_request(
@@ -1596,14 +1873,24 @@ class Forum:
             """
             GET https://api.zelenka.guru/threads/new
 
-            List of unread threads (must be logged in).
+            *List of unread threads (must be logged in).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param forum_id: ID of the container forum to search for threads. Child forums of the specified forum will be included in the search.
-            :param limit: Maximum number of result threads. The limit may get decreased if the value is too large (depending on the system configuration).
-            :param data_limit: Number of thread data to be returned. Default value is 20.
-            :return: httpx Response object
+            **Parameters:**
+
+            - **forum_id** (int): ID of the container forum to search for threads.
+                > Child forums of the specified forum will be included in the search.
+            - **limit** (int): Maximum number of result threads.
+            - **data_limit** (int): Number of thread data to be returned.
+                > Default value is 20.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.new(thread_id=876)
+            print(response.json())
+            ```
             """
             path = "/threads/new"
             params = {
@@ -1624,15 +1911,25 @@ class Forum:
             """
             GET https://api.zelenka.guru/threads/recent
 
-            List of recent threads.
+            *List of recent threads.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param days: Maximum number of days to search for threads.
-            :param forum_id: ID of the container forum to search for threads. Child forums of the specified forum will be included in the search.
-            :param limit: Maximum number of result threads. The limit may get decreased if the value is too large (depending on the system configuration).
-            :param data_limit: Number of thread data to be returned. Default value is 20.
-            :return: httpx Response object
+            **Parameters:**
+
+            - **days** (int): Maximum number of days to search for threads.
+            - **forum_id** (int): ID of the container forum to search for threads.
+                > Child forums of the specified forum will be included in the search.
+            - **limit** (int): Maximum number of result threads.
+            - **data_limit** (int): Number of thread data to be returned.
+                > Default value is 20.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.recent(days=3, forum_id=876)
+            print(response.json())
+            ```
             """
             path = "/threads/recent"
             params = {
@@ -1646,15 +1943,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def bump(self, thread_id: int) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/threads/thread_id/bump
+            POST https://api.zelenka.guru/threads/{thread_id}/bump
 
-            Bump a thread.
+            *Bump a thread.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param thread_id: ID of thread.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **thread_id** (int): ID of thread.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.bump(thread_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/threads/{thread_id}/bump"
             return _send_request(self=self._api, method="POST", path=path)
@@ -1668,29 +1972,40 @@ class Forum:
             """
             GET https://api.zelenka.guru/tags
 
-            List of popular tags (no pagination).
+            *List of popular tags (no pagination).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = forum.tags.popular()
+            print(response.json())
+            ```
             """
             path = "/tags"
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def tags(self, page: int = None, limit: int = None) -> httpx.Response:
+        def list(self, page: int = None, limit: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/tags/list
 
-            List of tags.
+            *List of tags.*
 
-            Required scopes: read
+            Required scopes: *read*
 
+            **Parameters:**
 
-            :param page: Page number of tags list.
-            :param limit: Limit of tags on a page.
+            - **page** (int): Page number of tags list.
+            - **limit** (int): Limit of tags on a page.
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = forum.tags.list(page=123)
+            print(response.json())
+            ```
             """
             path = "/tags/list"
             params = {"page": page, "limit": limit}
@@ -1701,17 +2016,24 @@ class Forum:
             self, tag_id: int, page: int = None, limit: int = None
         ) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/tags/tag_id
+            GET https://api.zelenka.guru/tags/{tag_id}
 
-            List of tagged contents.
+            *List of tagged contents.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param tag_id: ID of tag.
-            :param page: Page number of tags list.
-            :param limit: Number of tagged contents in a page.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **tag_id** (int): ID of tag.
+            - **page** (int): Page number of tags list.
+            - **limit** (int): Number of tagged contents in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.tags.tagged(tag_id=1000)
+            print(response.json())
+            ```
             """
             path = f"/tags/{tag_id}"
             params = {"page": page, "limit": limit}
@@ -1722,13 +2044,20 @@ class Forum:
             """
             GET https://api.zelenka.guru/tags/find
 
-            Filtered list of tags.
+            *Filtered list of tags.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param tag: tag to filter. Tags start with the query will be returned.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **tag** (str): Tag to filter. Tags start with the query will be returned.
+
+            **Example:**
+
+            ```python
+            response = forum.tags.find(tag="LOLZTEAM")
+            print(response.json())
+            ```
             """
             path = "/tags/find"
             params = {"tag": tag}
@@ -1742,16 +2071,26 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
             def upload(self, avatar: bytes, user_id: int = None) -> httpx.Response:
                 """
-                POST https://api.zelenka.guru/users/user_id/avatar
+                POST https://api.zelenka.guru/users/{user_id}/avatar
 
-                Upload avatar for a user.
+                *Upload avatar for a user.*
 
-                Required scopes: post / admincp
+                Required scopes: *post*
 
-                :param user_id: ID of user. If you do not specify the user_id, then you will change the avatar of the current user
-                :param avatar: Binary data of the avatar.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **user_id** (int): ID of user.
+                    > If you do not specify the user_id, then you will change the avatar of the current user
+                - **avatar** (binary): Binary data of the avatar.
+
+                **Example:**
+
+                ```python
+                with open("avatar.png", "rb") as file:
+                    avatar = file.read()
+                response = forum.users.avatar.upload(avatar=avatar)
+                print(response.json())
+                ```
                 """
                 if "CREATE_JOB" in locals():
                     _WarningsLogger.warn(
@@ -1766,15 +2105,23 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
             def delete(self, user_id: int = None) -> httpx.Response:
                 """
-                DELETE https://api.zelenka.guru/users/user_id/avatar
+                DELETE https://api.zelenka.guru/users/{user_id}/avatar
 
-                Delete avatar for a user.
+                *Delete avatar for a user.*
 
-                Required scopes: post / admincp
+                Required scopes: *post*
 
-                :param user_id: ID of user. If you do not specify the user_id, then you will delete the avatar of the current user
+                **Parameters:**
 
-                :return: httpx Response object
+                - **user_id** (int): ID of user.
+                    > If you do not specify the user_id, then you will delete the avatar of the current user
+
+                **Example:**
+
+                ```python
+                response = forum.users.avatar.delete()
+                print(response.json())
+                ```
                 """
                 if user_id is None:
                     path = "/users/me/avatar"
@@ -1784,29 +2131,35 @@ class Forum:
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
             def crop(
-                self, user_id: int, size: int, x: int = None, y: int = None
+                self, user_id: int = None, size: int = 16, x: int = None, y: int = None
             ) -> httpx.Response:
                 """
-                POST https://api.zelenka.guru/users/user_id/avatar-crop
+                POST https://api.zelenka.guru/users/{user_id}/avatar-crop
 
-                Crop avatar for a user.
+                *Crop avatar for a user.*
 
-                Required scopes: post / admincp
+                Required scopes: *post*
 
-                :param user_id: ID of user.
-                :param x: The starting point of the selection by width.
-                :param y: The starting point of the selection by height
-                :param size: Selection size. Minimum value - 16.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **user_id** (int): ID of user.
+                - **x** (int): The starting point of the selection by width.
+                - **y** (int): The starting point of the selection by height
+                - **size** (int): Selection size.
+                    > Minimum value - 16.
+
+                **Example:**
+
+                ```python
+                response = forum.users.avatar.crop(size=128, x=256, y=384)
+                print(response.json())
+                ```
                 """
                 params = {"x": x, "y": y, "crop": size}
-                if (
-                    user_id is None
-                ):  # Пока такое не работает, но надеюсь пофиксят. Пусть лежит
-                    path = "/users/me/avatar-crop"
-                else:
+                if user_id:
                     path = f"/users/{user_id}/avatar-crop"
+                else:
+                    path = "/users/me/avatar-crop"
                 return _send_request(
                     self=self._api,
                     method="POST",
@@ -1818,44 +2171,26 @@ class Forum:
             self._api = _api_self
             self.avatar = self.__Avatar(self._api)
 
-        def lost_password(
-            self, oauth_token: str, username: str = None, email: str = None
-        ) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/lost-password
-
-            Request a password reset via email. Either username or email parameter must be provided. If both are provided, username will be used.
-
-            Required scopes: None
-
-            :param oauth_token: A valid one time token.
-            :param username: Username
-            :param email: Email
-
-            :return: httpx Response object
-            """
-            path = "/lost-password"
-            params = {
-                "oauth_token": oauth_token,
-                "username": username,
-                "email": email,
-            }
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def users(self, page: int = None, limit: int = None) -> httpx.Response:
+        def list(self, page: int = None, limit: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users
 
-            List of users (with pagination).
+            *List of users (with pagination).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param page: Page number of users.
-            :param limit: Number of users in a page.
-            :return: httpx Response object
+            **Parameters:**
+
+            - **page** (int): Page number of users.
+            - **limit** (int): Number of users in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.users.list(page=1)
+            print(response.json())
+            ```
             """
             path = "/users"
             params = {"page": page, "limit": limit}
@@ -1866,11 +2201,16 @@ class Forum:
             """
             GET https://api.zelenka.guru/users/fields
 
-            List of user fields.
+            *List of user fields.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = forum.users.fields()
+            print(response.json())
+            ```
             """
 
             path = "/users/fields"
@@ -1886,15 +2226,24 @@ class Forum:
             """
             GET https://api.zelenka.guru/users/find
 
-            Filtered list of users by username, email or custom fields.
+            *Filtered list of users by username, email or custom fields.*
 
-            Required scopes: read / admincp
+            Required scopes: *read*
 
-            :param username: Username to filter. Usernames start with the query will be returned.
-            :param user_email: Email to filter. Requires admincp scope.
-            :param custom_fields: Custom fields to filter. Example: {"telegram": "Telegram_Login"}
+            **Parameters:**
 
-            :return: httpx Response object
+            - **username** (str): Username to filter. Usernames start with the query will be returned.
+            - **user_email** (str): Email to filter.
+                > Requires admincp scope.
+            - **custom_fields** (str): Custom fields to filter.
+                > Example {"telegram": "AS7RID"}
+
+            **Example:**
+
+            ```python
+            response = forum.users.search(username="AS7RID)
+            print(response.json())
+            ```
             """
             path = "/users/find"
             params = {
@@ -1914,14 +2263,23 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read?basic"])
         def get(self, user_id: int = None) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/users/user_id
+            GET https://api.zelenka.guru/users/{user_id}
 
-            Detail information of a user.
+            *Detail information of a user.*
 
-            Required scopes: read, basic
+            Required scopes: *read*, *basic*
 
-            :param user_id: ID of user. If you do not specify the user_id, you will get info about current user
-            :return: httpx Response object
+            **Parameters:**
+
+            - **user_id** (int): ID of user.
+                > If you do not specify the user_id, you will get info about current user
+
+            **Example:**
+
+            ```python
+            response = forum.users.get(user_id=2410024)
+            print(response.json())
+            ```
             """
             if user_id is None:
                 path = "/users/me"
@@ -1930,21 +2288,29 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_timeline(
+        def timeline(
             self, user_id: int = None, page: int = None, limit: int = None
         ) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/users/user_id/timeline
+            GET https://api.zelenka.guru/users/{user_id}/timeline
 
-            List of contents created by user (with pagination).
+            *List of contents created by user (with pagination).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param user_id: ID of user. If you do not specify the user_id, you will get timeline of current user
-            :param page: Page number of contents.
-            :param limit: Number of contents in a page.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user.
+                > If you do not specify the user_id, you will get timeline of current user
+            - **page** (int): Page number of contents.
+            - **limit** (int): Number of contents in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.users.timeline(user_id=2410024)
+            print(response.json())
+            ```
             """
             if user_id is None:
                 path = "/users/me/timeline"
@@ -1964,7 +2330,7 @@ class Forum:
             username: str = None,
             user_title: str = None,
             primary_group_id: int = None,
-            secondary_group_ids: list[int] = None,
+            secondary_group_ids: builtins.list[int] = None,
             user_dob_day: int = None,
             user_dob_month: int = None,
             user_dob_year: int = None,
@@ -1972,37 +2338,42 @@ class Forum:
             display_group_id: int = None,
         ) -> httpx.Response:
             """
-            PUT https://api.zelenka.guru/users/user_id
+            PUT https://api.zelenka.guru/users/{user_id}
 
-            Edit a user.
+            *Edit a user.*
 
-            Encryption:
-            For sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the client_secret will be used as the key. List of supported encryptions:
-            aes128: AES 128-bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.
+            Required scopes: *post*
 
-            Required scopes: post / admincp
+            **Parameters:**
 
-            :param user_id: ID of user. If you do not specify the user_id, you will edit current user
-            :param password: New password.
-            :param password_old: Data of the existing password, it is not required if (1) the current authenticated user has user admin permission, (2) the admincp scope is granted and (3) the user being edited is not the current authenticated user.
-            :param password_algo: Algorithm used to encrypt the password and password_old parameters. See Encryption section for more information.
-            :param user_email:New email of the user.
-            :param username: New username of the user. Changing username requires Administrator permission.
-            :param user_title: New custom title of the user.
-            :param primary_group_id: ID of new primary group.
-            :param secondary_group_ids: Array of ID's of new secondary groups.
-            :param user_dob_day: Date of birth (day) of the new user.
-            :param user_dob_month: Date of birth (month) of the new user.
-            :param user_dob_year: Date of birth (year) of the new user.
-            :param fields: Array of values for user fields.
-            :param display_group_id: Id of group you want to display.
+            - **user_id** (int): ID of user.
+                > If you do not specify the user_id, you will edit current user
+            - **password** (str): New password.
+            - **password_old** (str): Data of the existing password, it is not required if (1) the current authenticated user has user admin permission, (2) the admincp scope is granted and (3) the user being edited is not the current authenticated user.
+            - **password_algo** (str): Algorithm used to encrypt the password and password_old parameters.
+            - **user_email** (str): New email of the user.
+            - **username** (str): New username of the user.
+                > Changing username requires Administrator permission.
+            - **user_title** (str): New custom title of the user.
+            - **primary_group_id** (int): ID of new primary group.
+            - **secondary_group_ids** (list): Array of ID's of new secondary groups.
+            - **user_dob_day** (int): Date of birth (day) of the new user.
+            - **user_dob_month** (int): Date of birth (month) of the new user.
+            - **user_dob_year** (int): Date of birth (year) of the new user.
+            - **fields** (dict): Dictionary for user fields.
+            - **display_group_id** (int): Id of group you want to display.
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = forum.users.edit(title="New title")
+            print(response.json())
+            ```
             """
-            if user_id is None:
-                path = "/users/me"
-            else:
+            if user_id:
                 path = f"/users/{user_id}"
+            else:
+                path = "/users/me"
             params = {
                 "user_email": user_email,
                 "username": username,
@@ -2037,15 +2408,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def follow(self, user_id: int) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/users/user_id/followers
+            POST https://api.zelenka.guru/users/{user_id}/followers
 
-            Follow a user.
+            *Follow a user.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param user_id: ID of user
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user
+
+            **Example:**
+
+            ```python
+            response = forum.users.follow(user_id=2410024)
+            print(response.json())
+            ```
             """
             path = f"/users/{user_id}/followers"
             return _send_request(self=self._api, method="POST", path=path)
@@ -2053,15 +2431,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def unfollow(self, user_id: int) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/users/user_id/followers
+            DELETE https://api.zelenka.guru/users/{user_id}/followers
 
-            Unfollow a user.
+            *Unfollow a user.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param user_id: ID of user
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user
+
+            **Example:**
+
+            ```python
+            response = forum.users.unfollow(user_id=2410024)
+            print(response.json())
+            ```
             """
             path = f"/users/{user_id}/followers"
             return _send_request(self=self._api, method="DELETE", path=path)
@@ -2075,19 +2460,26 @@ class Forum:
             limit: int = None,
         ) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/users/user_id/followers
+            GET https://api.zelenka.guru/users/{user_id}/followers
 
-            List of a user's followers.
+            *List of a user's followers.*
 
+            Required scopes: *read*
 
-            Required scopes: read
+            **Parameters:**
 
-            :param user_id: ID of user. If you do not specify the user_id, you will get followers of current user
-            :param order: Ordering of followers. Support: natural, follow_date, follow_date_reverse
-            :param page: Page number of followers.
-            :param limit: Number of followers in a page.
+            - **user_id** (int): ID of user.
+                > If you do not specify the user_id, you will get followers of current user
+            - **order** (str): Ordering of followers.
+            - **page** (int): Page number of followers.
+            - **limit** (int): Number of followers in a page.
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = forum.users.followers(user_id=2410024)
+            print(response.json())
+            ```
             """
             if user_id is None:
                 path = "/users/me/followers"
@@ -2105,38 +2497,53 @@ class Forum:
             limit: int = None,
         ) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/users/user_id/followings
+            GET https://api.zelenka.guru/users/{user_id}/followings
 
-            List of users whom are followed by a user.
+            *List of users whom are followed by a user.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param user_id: ID of user. If you do not specify the user_id, you will get followings users by current user
-            :param order: Ordering of users. Support: natural, follow_date, follow_date_reverse
-            :param page: Page number of users.
-            :param limit: Number of users in a page.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user.
+                > If you do not specify the user_id, you will get followings users by current user
+            - **order** (str): Ordering of users.
+            - **page** (int): Page number of users.
+            - **limit** (int): Number of users in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.users.followings(user_id=2410024)
+            print(response.json())
+            ```
             """
-            if user_id is None:
-                path = "/users/me/followings"
-            else:
+            if user_id:
                 path = f"/users/{user_id}/followings"
+            else:
+                path = "/users/me/followings"
             params = {"order": order, "page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def ignored(self, total: bool = None) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/users/ignored
+             GET https://api.zelenka.guru/users/ignored
 
-            List of ignored users of current user.
+            *List of ignored users of current user.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param total: If included in the request, only the user count is returned as users_total.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **total** (bool): If included in the request, only the user count is returned as users_total.
+
+            **Example:**
+
+            ```python
+            response = forum.users.ignored()
+            print(response.json())
+            ```
             """
             path = "/users/ignored"
             params = {"total": int(total) if total else total}
@@ -2145,15 +2552,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def ignore(self, user_id: int) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/users/user_id/ignore
+            POST https://api.zelenka.guru/users/{user_id}/ignore
 
-            Ignore a user.
+            *Ignore a user.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param user_id: ID of user
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user
+
+            **Example:**
+
+            ```python
+            response = forum.users.ignore(user_id=2410024)
+            print(response.json())
+            ```
             """
 
             path = f"/users/{user_id}/ignore"
@@ -2162,15 +2576,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def unignore(self, user_id: int) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/users/user_id/ignore
+            DELETE https://api.zelenka.guru/users/{user_id}/ignore
 
-            Unignore a user.
+            *Unignore a user.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param user_id: ID of user
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user
+
+            **Example:**
+
+            ```python
+            response = forum.users.unignore(user_id=2410024)
+            print(response.json())
+            ```
             """
 
             path = f"/users/{user_id}/ignore"
@@ -2179,20 +2600,28 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def groups(self, user_id: int = None) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/users/user_id/groups
+            GET https://api.zelenka.guru/users/{user_id}/groups
 
-            List of a user's groups.
+            *List of a user's groups.*
 
-            Required scopes: read / admincp
+            Required scopes: *read*
 
-            :param user_id: ID of user. If user_id skipped, method will return current user groups
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user.
+                > If user_id skipped, method will return current user groups
+
+            **Example:**
+
+            ```python
+            response = forum.users.groups(user_id=2410024)
+            print(response.json())
+            ```
             """
-            if user_id is None:
-                path = "/users/me/groups"
-            else:
+            if user_id:
                 path = f"/users/{user_id}/groups"
+            else:
+                path = "/users/me/groups"
             return _send_request(self=self._api, method="GET", path=path)
 
     class __Profile_posts:
@@ -2201,21 +2630,28 @@ class Forum:
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["read"])
-            def comments(
+            def list(
                 self, profile_post_id: int, before: int = None, limit: int = None
             ) -> httpx.Response:
                 """
-                GET https://api.zelenka.guru/profile-posts/profile_post_id/comments
+                GET https://api.zelenka.guru/profile-posts/{profile_post_id}/comments
 
-                List of comments of a profile post.
+                *List of comments of a profile post.*
 
-                Required scopes: read
+                Required scopes: *read*
 
-                :param profile_post_id: ID of profile post.
-                :param before: Date to get older comments. Please note that this entry point does not support the page parameter, but it still does support limit.
-                :param limit: Number of profile posts in a page.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **profile_post_id** (int): ID of profile post.
+                - **before** (int): Date to get older comments.
+                - **limit** (int): Number of profile posts in a page.
+
+                **Example:**
+
+                ```python
+                response = forum.profile_posts.comments.list(profile_post_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/profile-posts/{profile_post_id}/comments"
                 params = {"before": before, "limit": limit}
@@ -2229,16 +2665,23 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["read"])
             def get(self, profile_post_id: int, comment_id: int) -> httpx.Response:
                 """
-                GET https://api.zelenka.guru/profile-posts/profile_post_id/comments/comment_id
+                GET https://api.zelenka.guru/profile-posts/{profile_post_id}/comments/{comment_id}
 
-                Detail information of a profile post comment.
+                *Detail information of a profile post comment.*
 
-                Required scopes: read
+                Required scopes: *read*
 
-                :param profile_post_id: ID of profile post.
-                :param comment_id: ID of profile post comment
+                **Parameters:**
 
-                :return: httpx Response object
+                - **profile_post_id** (int): ID of profile post.
+                - **comment_id** (int): ID of profile post comment
+
+                **Example:**
+
+                ```python
+                response = forum.profile_posts.comments.get(profile_post_id=1000000, comment_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/profile-posts/{profile_post_id}/comments/{comment_id}"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -2246,16 +2689,23 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["post"])
             def create(self, profile_post_id: int, comment_body: str) -> httpx.Response:
                 """
-                POST https://api.zelenka.guru/profile-posts/profile_post_id/comments
+                POST https://api.zelenka.guru/profile-posts/{profile_post_id}/comments
 
-                Create a new profile post comment.
+                *Create a new profile post comment.*
 
-                Required scopes: post
+                Required scopes: *post*
 
-                :param profile_post_id: ID of profile post.
-                :param comment_body: Content of the new profile post comment.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **profile_post_id** (int): ID of profile post.
+                - **comment_body** (str): Content of the new profile post comment.
+
+                **Example:**
+
+                ```python
+                response = forum.profile_posts.comments.create(profile_post_id=1000000, comment_body="Comment text")
+                print(response.json())
+                ```
                 """
                 path = f"/profile-posts/{profile_post_id}/comments"
                 data = {
@@ -2270,21 +2720,28 @@ class Forum:
             self.comments = self.__Profile_posts_comments(self._api)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_posts(
+        def list(
             self, user_id: int, page: int = None, limit: int = None
         ) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/users/user_id/profile-posts
+            GET https://api.zelenka.guru/users/{user_id}/profile-posts
 
-            List of profile posts (with pagination).
+            *List of profile posts (with pagination).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param user_id: ID of user.
-            :param page: Page number of contents.
-            :param limit: Number of contents in a page.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user.
+            - **page** (int): Page number of contents.
+            - **limit** (int): Number of contents in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.list(user_id=2410024)
+            print(response.json())
+            ```
             """
             params = {"page": page, "limit": limit}
             path = f"/users/{user_id}/profile-posts"
@@ -2293,15 +2750,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def get(self, profile_post_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/profile-posts/profile_post_id
+            GET https://api.zelenka.guru/profile-posts/{profile_post_id}
 
-            Detail information of a profile post.
+            *Detail information of a profile post.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param profile_post_id: ID of profile post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **profile_post_id** (int): ID of profile post.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.get(profile_post_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/profile-posts/{profile_post_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -2309,37 +2773,52 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def create(self, post_body: str, user_id: int = None) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/users/user_id/timeline
+           POST https://api.zelenka.guru/users/{user_id}/timeline
 
-            Create a new profile post on a user timeline.
+            *Create a new profile post on a user timeline.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param user_id: ID of user. If you do not specify the user_id, you will create profile post in current user's timeline
-            :param post_body: Content of the new profile post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user.
+                > If you do not specify the user_id, you will create profile post in current user's timeline
+            - **post_body** (str): Content of the new profile post.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.create(user_id=2410024, post_body="Profile post text")
+            print(response.json())
+            ```
             """
-            if user_id is None:
-                path = "/users/me/timeline"
-            else:
+            if user_id:
                 path = f"/users/{user_id}/timeline"
+            else:
+                path = "/users/me/timeline"
             data = {"post_body": post_body}
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def edit(self, profile_post_id: int, post_body: str) -> httpx.Response:
             """
-            PUT https://api.zelenka.guru/profile-posts/profile_post_id
+            PUT https://api.zelenka.guru/profile-posts/{profile_post_id}
 
-            Edit a profile post.
+            *Edit a profile post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param profile_post_id: ID of profile post.
-            :param post_body: New content of the profile post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **profile_post_id** (int): ID of profile post.
+            - **post_body** (str): New content of the profile post.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.edit(profile_post_id=1000000, post_body="New profile post text")
+            print(response.json())
+            ```
             """
 
             path = f"/profile-posts/{profile_post_id}"
@@ -2349,17 +2828,23 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def delete(self, profile_post_id: int, reason: str = None) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/profile-posts/profile_post_id
+            DELETE https://api.zelenka.guru/profile-posts/{profile_post_id}
 
-            Delete a profile post.
+            *Delete a profile post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param profile_post_id: ID of profile post.
-            :param reason: Reason of the profile post removal.
+            **Parameters:**
 
+            - **profile_post_id** (int): ID of profile post.
+            - **reason** (str): Reason of the profile post removal.
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.delete(profile_post_id=1000000, reason="Reason")
+            print(response.json())
+            ```
             """
             path = f"/profile-posts/{profile_post_id}"
             data = {"reason": reason}
@@ -2368,15 +2853,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def likes(self, profile_post_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/profile-posts/profile_post_id/likes
+            GET https://api.zelenka.guru/profile-posts/{profile_post_id}/likes
 
-            List of users who liked a profile post.
+            *List of users who liked a profile post.*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :param profile_post_id: ID of profile post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **profile_post_id** (int): ID of profile post.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.likes(profile_post_id=1000000)
+            print(response.json())
+            ```
             """
 
             path = f"/profile-posts/{profile_post_id}/likes"
@@ -2385,53 +2877,72 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def like(self, profile_post_id: int) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/profile-posts/profile_post_id/likes
+            POST https://api.zelenka.guru/profile-posts/{profile_post_id}/likes
 
-            Like a profile post.
+            *Like a profile post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param profile_post_id: ID of profile post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **profile_post_id** (int): ID of profile post.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.like(profile_post_id=1000000)
+            print(response.json())
+            ```
             """
-
             path = f"/profile-posts/{profile_post_id}/likes"
-
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def unlike(self, profile_post_id: int) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/profile-posts/profile_post_id/likes
+            DELETE https://api.zelenka.guru/profile-posts/{profile_post_id}/likes
 
-            Unlike a profile post.
+            *Unlike a profile post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param profile_post_id: ID of profile post.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **profile_post_id** (int): ID of profile post.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.unlike(profile_post_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/profile-posts/{profile_post_id}/likes"
             return _send_request(self=self._api, method="DELETE", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def report(self, profile_post_id: int, message: str) -> httpx.Response:
+        def report(self, profile_post_id: int, reason: str) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/profile-posts/profile_post_id/report
+            POST https://api.zelenka.guru/profile-posts/{profile_post_id}/report
 
-            Report a profile post.
+            *Report a profile post.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param profile_post_id: ID of profile post.
-            :param message: Reason of the report.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **profile_post_id** (int): ID of profile post.
+            - **reason** (str): Reason of the report.
+
+            **Example:**
+
+            ```python
+            response = forum.profile_posts.report(profile_post_id=1000000, reason="Reason")
+            print(response.json())
+            ```
             """
             path = f"/profile-posts/{profile_post_id}/report"
-            data = {"message": message}
+            data = {"message": reason}
             return _send_request(self=self._api, method="POST", path=path, data=data)
 
     class __Search:
@@ -2451,18 +2962,25 @@ class Forum:
             """
             POST https://api.zelenka.guru/search
 
-            Search for threads.
+            *Search for threads.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param q: Search query. Can be skipped if user_id is set.
-            :param tag: Tag to search for tagged contents.
-            :param forum_id: ID of the container forum to search for contents. Child forums of the specified forum will be included in the search.
-            :param user_id: ID of the creator to search for contents.
-            :param page: Page number of results.
-            :param limit: Number of results in a page.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **q** (str): Search query. Can be skipped if user_id is set.
+            - **tag** (str): Tag to search for tagged contents.
+            - **forum_id** (int): ID of the container forum to search for contents. Child forums of the specified forum will be included in the search.
+            - **user_id** (int): ID of the creator to search for contents.
+            - **page** (int): Page number of results.
+            - **limit** (int): Number of results in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.search.all(q="LOLZTEAM)
+            print(response.json())
+            ```
             """
             path = "/search"
             params = {
@@ -2491,18 +3009,28 @@ class Forum:
             """
             POST https://api.zelenka.guru/search/threads
 
-            Search for threads.
+            *Search for threads.*
 
-            Required scopes: post
-            :param q: Search query. Can be skipped if user_id is set.
-            :param tag: Tag to search for tagged contents.
-            :param forum_id: ID of the container forum to search for contents. Child forums of the specified forum will be included in the search.
-            :param user_id: ID of the creator to search for contents.
-            :param page: Page number of results.
-            :param limit: Number of results in a page.
-            :param data_limit: Number of thread data to be returned.
+            Required scopes: *post*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **q** (str): Search query.
+                > Can be skipped if user_id is set.
+            - **tag** (str): Tag to search for tagged contents.
+            - **forum_id** (int): ID of the container forum to search for contents.
+                > Child forums of the specified forum will be included in the search.
+            - **user_id** (int): ID of the creator to search for contents.
+            - **page** (int): Page number of results.
+            - **limit** (int): Number of results in a page.
+            - **data_limit** (int): Number of thread data to be returned.
+
+            **Example:**
+
+            ```python
+            response = forum.search.thread(q="LOLZTEAM")
+            print(response.json())
+            ```
             """
             path = "/search/threads"
             params = {
@@ -2532,18 +3060,28 @@ class Forum:
             """
             POST https://api.zelenka.guru/search/posts
 
-            Search for posts.
+            *Search for posts.*
 
-            Required scopes: post
-            :param q: Search query. Can be skipped if user_id is set.
-            :param tag: Tag to search for tagged contents.
-            :param forum_id: ID of the container forum to search for contents. Child forums of the specified forum will be included in the search.
-            :param user_id: ID of the creator to search for contents.
-            :param page: Page number of results.
-            :param limit: Number of results in a page.
-            :param data_limit: Number of thread data to be returned.
+            Required scopes: *post*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **q** (str): Search query.
+                > Can be skipped if user_id is set.
+            - **tag** (str): Tag to search for tagged contents.
+            - **forum_id** (int): ID of the container forum to search for contents.
+                > Child forums of the specified forum will be included in the search.
+            - **user_id** (int): ID of the creator to search for contents.
+            - **page** (int): Page number of results.
+            - **limit** (int): Number of results in a page.
+            - **data_limit** (int): Number of thread data to be returned.
+
+            **Example:**
+
+            ```python
+            response = forum.search.post(q="LOLZTEAM")
+            print(response.json())
+            ```
             """
             path = "/search/posts"
             params = {
@@ -2562,26 +3100,34 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def tag(
             self,
-            tag: str = None,
-            tags: list[str] = None,
+            tags: Union[list[str], str] = None,
             page: int = None,
             limit: int = None,
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/tagged
 
-            Search for tagged contents.
+            *Search for tagged contents.*
 
-            Required scopes: post
-            :param tag: Tag to search for tagged contents.
-            :param tags: Array of tags to search for tagged contents.
-            :param page: Page number of results.
-            :param limit: Number of results in a page.
-            :return: httpx Response object
+            Required scopes: *post*
+
+            **Parameters:**
+
+            - **tags** (str|list): Array of tags to search for tagged contents.
+            - **page** (int): Page number of results.
+            - **limit** (int): Number of results in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.search.tag(tag="LOLZTEAM")
+            print(response.json())
+            ```
             """
             path = "/search/tagged"
+            if type(tags) is str:
+                tags = list(tags)
             params = {
-                "tag": tag,
                 "tags[]": tags,
                 "page": page,
                 "limit": limit,
@@ -2601,15 +3147,24 @@ class Forum:
             """
             POST https://api.zelenka.guru/search/profile-posts
 
-            Search for threads.
+            *Search for threads.*
 
-            Required scopes: post
-            :param q: Search query. Can be skipped if user_id is set.
-            :param user_id: ID of the creator to search for contents.
-            :param page: Page number of results.
-            :param limit: Number of results in a page.
+            Required scopes: *post*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **q** (str): Search query.
+                > Can be skipped if user_id is set.
+            - **user_id** (int): ID of the creator to search for contents.
+            - **page** (int): Page number of results.
+            - **limit** (int): Number of results in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.search.profile_posts(q="LOLZTEAM)
+            print(response.json())
+            ```
             """
             path = "/search/profile-posts"
             params = {"q": q, "user_id": user_id, "page": page, "limit": limit}
@@ -2622,15 +3177,20 @@ class Forum:
             self._api = _api_self
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def get_all(self) -> httpx.Response:
+        def list(self) -> httpx.Response:
             """
             GET https://api.zelenka.guru/notifications
 
-            List of notifications (both read and unread).
+            *List of notifications (both read and unread).*
 
-            Required scopes: read
+            Required scopes: *read*
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = forum.notifications.list()
+            print(response.json())
+            ```
             """
             path = "/notifications"
             return _send_request(self=self._api, method="GET", path=path)
@@ -2640,12 +3200,20 @@ class Forum:
             """
             GET https://api.zelenka.guru/notifications/{notification_id}/content
 
-            Get associated content of notification. The response depends on the content type.
+            *Get associated content of notification. The response depends on the content type.*
 
-            Required scopes: read
-            :param notification_id: ID of notification.
+            Required scopes: *read*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **notification_id** (int): ID of notification.
+
+            **Example:**
+
+            ```python
+            response = forum.notifications.get(notification_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/notifications/{notification_id}/content"
             return _send_request(self=self._api, method="GET", path=path)
@@ -2655,12 +3223,21 @@ class Forum:
             """
             POST https://api.zelenka.guru/notifications/read
 
-            Mark single notification or all existing notifications read.
+            *Mark single notification or all existing notifications read.*
 
-            Required scopes: post
-            :param notification_id: ID of notification. If notification_id is omitted, it's mark all existing notifications as read.
+            Required scopes: *post*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **notification_id** (int): ID of notification.
+                > If notification_id is omitted, it's mark all existing notifications as read.
+
+            **Example:**
+
+            ```python
+            response = forum.notifications.read()
+            print(response.json())
+            ```
             """
             path = "/notifications/read"
             params = {"notification_id": notification_id}
@@ -2674,7 +3251,7 @@ class Forum:
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
-            def get_all(
+            def list(
                 self,
                 conversation_id: int,
                 page: int = None,
@@ -2686,18 +3263,25 @@ class Forum:
                 """
                 GET https://api.zelenka.guru/conversation-messages
 
-                List of messages in a conversation (with pagination).
+                *List of messages in a conversation (with pagination).*
 
-                Required scopes: conversate, read
+                Required scopes: *conversate*, *read*
 
-                :param conversation_id: ID of conversation.
-                :param page: Page number of messages.
-                :param limit: Number of messages in a page.
-                :param order: Ordering of messages. Can be [natural, natural_reverse].
-                :param before: Date to get older messages.
-                :param after: Date to get newer messages.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **conversation_id** (int): ID of conversation.
+                - **page** (int): Page number of messages.
+                - **limit** (int): Number of messages in a page.
+                - **order** (str): Ordering of messages.
+                - **before** (int): Date to get older messages.
+                - **after** (int): Date to get newer messages.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.list(conversation_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = "/conversation-messages"
                 params = {
@@ -2718,15 +3302,22 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
             def get(self, message_id: int) -> httpx.Response:
                 """
-                GET https://api.zelenka.guru/conversation-messages/message_id
+                GET https://api.zelenka.guru/conversation-messages/{message_id}
 
-                Detail information of a message.
+                *Detail information of a message.*
 
-                Required scopes: conversate, read
+                Required scopes: *conversate*, *read*
 
-                :param message_id: ID of conversation message.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **message_id** (int): ID of conversation message.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.get(message_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -2736,14 +3327,21 @@ class Forum:
                 """
                 POST https://api.zelenka.guru/conversation-messages
 
-                Create a new conversation message.
+                *Create a new conversation message.*
 
-                Required scopes: conversate, post
+                Required scopes: *conversate*, *post*
 
-                :param conversation_id: ID of conversation.
-                :param message_body: Content of the new message.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **conversation_id** (int): ID of conversation.
+                - **message_body** (str): Content of the new message.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.create(conversation_id=1000000, message_body="Message text")
+                print(response.json())
+                ```
                 """
                 path = "/conversation-messages"
                 params = {
@@ -2761,16 +3359,23 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
             def edit(self, message_id: int, message_body: str) -> httpx.Response:
                 """
-                PUT https://api.zelenka.guru/conversation-messages/message_id
+                PUT https://api.zelenka.guru/conversation-messages/{message_id}
 
-                Edit a message.
+                *Edit a message.*
 
-                Required scopes: conversate, post
+                Required scopes: *conversate*, *post*
 
-                :param message_id: ID of conversation message.
-                :param message_body: New content of the message.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **message_id** (int): ID of conversation message.
+                - **message_body** (str): New content of the message.
+
+                **Example:**
+
+                ```python
+                response = forum.conversation.messages.edit(message_id=1000000, message_body="New message text")
+                print(response.json())
+                ```
                 """
                 path = f"/conversation-messages/{message_id}"
                 data = {"message_body": message_body}
@@ -2779,36 +3384,50 @@ class Forum:
             @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
             def delete(self, message_id: int) -> httpx.Response:
                 """
-                DELETE https://api.zelenka.guru/conversation-messages/message_id
+                DELETE https://api.zelenka.guru/conversation-messages/{message_id}
 
-                Delete a message.
+                *Delete a message.*
 
-                Required scopes: conversate, post
+                Required scopes: *conversate*, *post*
 
-                :param message_id: ID of conversation message.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **message_id** (int): ID of conversation message.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.delete(message_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
             @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
-            def report(self, message_id: int, message: str = None) -> httpx.Response:
+            def report(self, message_id: int, reason: str = None) -> httpx.Response:
                 """
-                POST https://api.zelenka.guru/conversation-messages/message_id/report
+                POST https://api.zelenka.guru/conversation-messages/{message_id}/report
 
-                Create a new conversation message.
+                *Create a new conversation message.*
 
-                Required scopes: conversate, post
+                Required scopes: *conversate*, *post*
 
-                :param message_id: ID of conversation message.
-                :param message : Reason of the report.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **message_id** (int): ID of conversation message.
+                - **message** (str): Reason of the report.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.report(message_id=1000000, reason="Reason")
+                print(response.json())
+                ```
                 """
 
                 path = f"/conversation-messages/{message_id}/report"
-                data = {"message": message}
+                data = {"message": reason}
                 return _send_request(
                     self=self._api, method="POST", path=path, data=data
                 )
@@ -2818,18 +3437,25 @@ class Forum:
             self.messages = self.__Conversations_messages(self._api)
 
         @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
-        def get_all(self, page: int = None, limit: int = None) -> httpx.Response:
+        def list(self, page: int = None, limit: int = None) -> httpx.Response:
             """
             GET https://api.zelenka.guru/conversations
 
-            List of conversations (with pagination).
+            *List of conversations (with pagination).*
 
-            Required scopes: conversate, read
+            Required scopes: *conversate*, *read*
 
-            :param page: Page number of conversations.
-            :param limit: Number of conversations in a page.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **page** (int): Page number of conversations.
+            - **limit** (int): Number of conversations in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.list()
+            print(response.json())
+            ```
             """
             path = "/conversations"
             params = {"page": page, "limit": limit}
@@ -2838,15 +3464,22 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
         def get(self, conversation_id: int) -> httpx.Response:
             """
-            GET https://api.zelenka.guru/conversations/conversation_id
+            GET https://api.zelenka.guru/conversations/{conversation_id}
 
-            Detail information of a conversation.
+            *Detail information of a conversation.*
 
-            Required scopes: conversate, read
+            Required scopes: *conversate*, *read*
 
-            :param conversation_id: ID of conversation.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **conversation_id** (int): ID of conversation.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.get(conversation_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/conversations/{conversation_id}"
             return _send_request(self=self._api, method="GET", path=path)
@@ -2856,16 +3489,23 @@ class Forum:
             self, conversation_id: int, leave_type: Literal["delete", "delete_ignore"] = "delete"
         ) -> httpx.Response:
             """
-            DELETE https://api.zelenka.guru/conversations/conversation_id
+            DELETE https://api.zelenka.guru/conversations/{conversation_id}
 
-            Leave from conversation
+            *Leave from conversation*
 
-            Required scopes: conversate, post
+            Required scopes: *conversate*, *post*
 
-            :param conversation_id: ID of conversation.
-            :param leave_type: Leave type. Can be [delete,delete_ignore].
+            **Parameters:**
 
-            :return: httpx Response object
+            - **conversation_id** (int): ID of conversation.
+            - **leave_type** (str): Leave type.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.leave(conversation_id=1000000)
+            print(response.json())
+            ```
             """
             params = {"delete_type": leave_type}
             path = f"/conversations/{conversation_id}"
@@ -2885,17 +3525,24 @@ class Forum:
             """
             POST https://api.zelenka.guru/conversations
 
-            Create a new conversation.
+            *Create a new conversation.*
 
-            Required scopes: conversate, post
+            Required scopes: *conversate*, *post*
 
-            :param recipient_id: ID of recipient.
-            :param message: First message in conversation.
-            :param open_invite: Allow invites in conversation.
-            :param conversation_locked: Is conversation locked.
-            :param allow_edit_messages: Allow edit messages.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **recipient_id** (int): ID of recipient.
+            - **message** (str): First message in conversation.
+            - **open_invite** (bool): Allow invites in conversation.
+            - **conversation_locked** (bool): Is conversation locked.
+            - **allow_edit_messages** (bool): Allow edit messages.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.create(recipient_id=2410024, message="First message text")
+            print(response.json())
+            ```
             """
             path = "/conversations"
             params = {
@@ -2927,18 +3574,26 @@ class Forum:
             """
             POST https://api.zelenka.guru/conversations
 
-            Create a new group conversation.
+            *Create a new group conversation.*
 
-            Required scopes: conversate, post
+            Required scopes: *conversate*, *post*
 
-            :param recipients: List of usernames. Max recipients count is 10
-            :param title: The title of new conversation.
-            :param message: First message in conversation.
-            :param open_invite: Allow invites in conversation.
-            :param conversation_locked: Is conversation locked.
-            :param allow_edit_messages: Allow edit messages.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **recipients** (list): List of usernames.
+                > Max recipients count is 10
+            - **title** (str): The title of new conversation.
+            - **message** (str): First message in conversation.
+            - **open_invite** (bool): Allow invites in conversation.
+            - **conversation_locked** (bool): Is conversation locked.
+            - **allow_edit_messages** (bool): Allow edit messages.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.create_group(recipients=["AS7RID", "a911"], title="Group title", message="First message text")
+            print(response.json())
+            ```
             """
             path = "/conversations"
             params = {
@@ -2958,141 +3613,25 @@ class Forum:
                 data=data,
             )
 
-    class __Oauth:
-        def __init__(self, _api_self):
-            self._api = _api_self
-
-        def facebook(
-            self, client_id: int, client_secret: str, facebook_token: str
-        ) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/oauth/token/facebook
-
-            Request API access token using Facebook access token. Please note that because Facebook uses app-scoped user_id, it is not possible to recognize user across different Facebook Applications.
-
-            Required scopes: None
-
-            :param client_id: ID of facebook client.
-            :param client_secret: Secret phrase of facebook client.
-            :param facebook_token: Facebook token.
-
-            :return: httpx Response object or token string
-            """
-            path = "/oauth/token/facebook"
-            params = {
-                "client_id": client_id,
-                "client_secret": client_secret,
-                "facebook_token": facebook_token,
-            }
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
-        def twitter(
-            self,
-            client_id: int,
-            client_secret: str,
-            twitter_url: str,
-            twitter_auth: str,
-        ) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/oauth/token/twitter
-
-            Request API access token using Twitter access token. The twitter_uri and twitter_auth parameters are similar to X-Auth-Service-Provider and X-Verify-Credentials-Authorization as specified in Twitter's OAuth Echo specification.
-
-            Required scopes: None
-
-            :param client_id: ID of twitter client.
-            :param client_secret: Secret phrase of twitter client.
-            :param twitter_url: "the full /account/verify_credentials.json uri that has been used to calculate OAuth signature. For security reason, the uri must use HTTPS protocol and the hostname must be either "twitter.com" or "api.twitter.com"."
-            :param twitter_auth: the complete authentication header that starts with "OAuth". Consult Twitter document for more information.
-
-            :return: httpx Response object or token string
-            """
-            path = "/oauth/token/twitter"
-            params = {
-                "client_id": client_id,
-                "client_secret": client_secret,
-                "twitter_uri": twitter_url,
-                "twitter_auth": twitter_auth,
-            }
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
-        def google(
-            self, client_id: int, client_secret: str, google_token: str
-        ) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/oauth/token/google
-
-            Request API access token using Google access token.
-
-            Required scopes: None
-
-            :param client_id: ID of facebook client.
-            :param client_secret: Secret phrase of facebook client.
-            :param google_token : Google token.
-
-            :return: httpx Response object or token string
-            """
-            path = "/oauth/token/google"
-            params = {
-                "client_id": client_id,
-                "client_secret": client_secret,
-                "facebook_token": google_token,
-            }
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
-        def associate(
-            self,
-            client_id: int,
-            user_id: str,
-            password: str,
-            extra_data: str,
-            extra_timestamp: int,
-        ) -> httpx.Response:
-            """
-            POST https://api.zelenka.guru/oauth/token/associate
-
-            Request API access token and associate social account with an existing user account.
-
-            Required scopes: None
-
-            :param client_id: ID of associate client.
-            :param user_id: ID of user.
-            :param password: Can be used with password_algo for better security. See Encryption section for more information.
-            :param extra_data: Extra data
-            :param extra_timestamp: Extra timestamp
-
-            :return: httpx Response object or token string
-            """
-            path = "/oauth/token/associate"
-            params = {
-                "client_id": client_id,
-                "user_id": user_id,
-                "password": password,
-                "extra_data": extra_data,
-                "extra_timestamp": extra_timestamp,
-            }
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
-
     @_MainTweaks._CheckScopes(scopes=["read"])
     def navigation(self, parent: int = None) -> httpx.Response:
         """
         GET https://api.zelenka.guru/navigation
 
-        List of navigation elements within the system.
+        *List of navigation elements within the system.*
 
-        Required scopes: read
+        Required scopes: *read*
 
-        :param parent: ID of parent element. If exists, filter elements that are direct children of that element.
+        **Parameters:**
 
-        :return: httpx Response object
+        - **parent** (int): ID of parent element. If exists, filter elements that are direct children of that element.
+
+        **Example:**
+
+        ```python
+        response = forum.navigation()
+        print(response.json())
+        ```
         """
         path = "/navigation"
         params = {"parent": parent}
@@ -3102,9 +3641,9 @@ class Forum:
         """
         POST https://api.zelenka.guru/batch
 
-        Execute multiple API requests at once. Maximum batch jobs is 10.
+        *Execute multiple API requests at once. Maximum batch jobs is 10.*
 
-        Example scheme:
+        **Example jobs scheme:**
 
         [
             {
@@ -3112,19 +3651,34 @@ class Forum:
             "uri": "https://api.zelenka.guru/users/2410024",
             "method": "GET",
             "params": {}
+            },
+            {
+            "id": "job_2",
+            "uri": "https://api.zelenka.guru/users/1",
+            "method": "GET",
+            "params": {}
             }
         ]
 
-        Required scopes: Same as called API requests.
+        Required scopes: *Same as called API requests.*
 
-        :param jobs: List of batch jobs. (Check example above)
-        :return: httpx Response object
+        **Parameters:**
+
+        - **jobs** (list): List of batch jobs.
+
+        **Example:**
+
+        ```python
+        response = forum.batch(jobs=[
+            {"id": "job_1","uri": "https://api.zelenka.guru/users/2410024","method": "GET","params": {}},
+            {"id": "job_2","uri": "https://api.zelenka.guru/users/1","method": "GET","params": {}}
+        ])
+        print(response.json())
+        ```
         """
-        import json
-
         path = "/batch"
-        data = jobs
-        return _send_request(self=self, method="POST", path=path, data=data)
+        dataJ = jobs
+        return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
 
 class Market:
@@ -3139,11 +3693,14 @@ class Market:
         timeout: int = 90,
     ):
         """
-        :param token: Your token. You can get in there -> https://zelenka.guru/account/api
-        :param bypass_429: Bypass status code 429 by sleep
-        :param language: Language for your api responses. Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
-        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
-        :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
+        - **token** (str): Your token.
+            > You can get it [there](https://zelenka.guru/account/api)
+        - **bypass_429** (bool): Bypass status code 429 by sleep
+        - **language** (str): Language for your api responses.
+        - **proxy_type** (str): Your proxy type.
+        - **proxy** (str): Proxy string.
+        - **reset_custom_variables** (bool): Reset custom variables.
+        - **timeout** (int): Request timeout.
         """
         self.base_url = "https://api.lzt.market"
         if proxy_type is not None:
@@ -3161,9 +3718,7 @@ class Market:
 
         self._token = token
         self._scopes = None
-        _MainTweaks.setup_jwt(
-            self=self, token=token, user_id=locals().get("user_id", None)
-        )
+        _MainTweaks.setup_jwt(self=self, token=token)
         self._main_headers = {"Authorization": f"bearer {self._token}"}
 
         self.bypass_429 = bypass_429
@@ -3239,33 +3794,6 @@ class Market:
         self._auto_delay_time = self._auto_delay_time.value
         self._lock = None
 
-    @_MainTweaks._CheckScopes(scopes=["market"])
-    def batch(self, jobs: list[dict]) -> httpx.Response:
-        """
-        POST https://api.lzt.market/batch
-
-        Execute multiple API requests at once.(10 max)
-
-        Example scheme:
-
-        [
-            {
-            "id": "1",
-            "uri": "https://api.lzt.market/me",
-            "method": "GET",
-            "params": {}
-            }
-        ]
-
-        :param jobs: List of batch jobs. (Check example above)
-        :return: httpx Response object
-        """
-        import json
-
-        path = "/batch"
-        data = jobs
-        return _send_request(self=self, method="POST", path=path, data=data)
-
     class __Profile:
         def __init__(self, _api_self):
             self._api = _api_self
@@ -3275,12 +3803,16 @@ class Market:
             """
             GET https://api.lzt.market/me
 
-            Displays info about your profile.
+            *Displays info about your profile.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :return: httpx Response object
+            **Example:**
 
+            ```python
+            response = market.profile.get()
+            print(response.json())
+            ```
             """
             path = "/me"
             return _send_request(self=self._api, method="GET", path=path)
@@ -3301,22 +3833,28 @@ class Market:
             """
             PUT https://api.lzt.market/me
 
-            Change settings about your profile on the market.
+            *Change settings about your profile on the market.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param disable_steam_guard: Disable Steam Guard on account purchase moment
-            :param user_allow_ask_discount: Allow users ask discount for your accounts
-            :param max_discount_percent: Maximum discount percents for your accounts
-            :param allow_accept_accounts: Usernames who can transfer market accounts to you. Separate values with a comma.
-            :param hide_favourites: Hide your profile info when you add an account to favorites
-            :param title: Market title.
-            :param telegram_client: Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}
-            :param deauthorize_steam: Finish all Steam sessions after purchase.
-            :param hide_bids: Hide your profile when bid on the auction.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **disable_steam_guard** (bool): Disable Steam Guard on account purchase moment
+            - **user_allow_ask_discount** (bool): Allow users ask discount for your accounts
+            - **max_discount_percent** (int): Maximum discount percents for your accounts
+            - **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
+            - **hide_favorites** (bool): Hide your profile info when you add an account to favorites
+            - **title** (str): Market title.
+            - **telegram_client** (dict): Telegram client. It should be {"telegram_api_id"
+            - **deauthorize_steam** (bool): Finish all Steam sessions after purchase.
+            - **hide_bids** (bool): Hide your profile when bid on the auction.
 
+            **Example:**
+
+            ```python
+            response = market.profile.edit(user_allow_ask_discount=True, max_discount_percent=25, title="Selling some stuff")
+            print(response.json())
+            ```
             """
             path = "/me"
             params = {
@@ -3358,31 +3896,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/steam
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.steam.get()
+                print(response.json())
+                ```
                 """
                 path = "/steam"
                 params = {
@@ -3399,9 +3944,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -3417,9 +3960,16 @@ class Market:
                 """
                 GET https://api.lzt.market/steam/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                Required scopes: *market*
+
+                **Example:**
+
+                ```python
+                response = market.category.steam.params()
+                print(response.json())
+                ```
                 """
                 path = "/steam/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3427,13 +3977,18 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def games(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/category_name/games
+                GET https://api.lzt.market/steam/games
 
-                Displays a list of games in the category.
+                *Displays a list of games in the category.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.steam.games()
+                print(response.json())
+                ```
                 """
                 path = "/steam/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3457,31 +4012,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/fortnite
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.fortnite.get()
+                print(response.json())
+                ```
                 """
                 path = "/fortnite"
 
@@ -3499,9 +4061,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -3517,9 +4077,14 @@ class Market:
                 """
                 GET https://api.lzt.market/fortnite/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.fortnite.params()
+                print(response.json())
+                ```
                 """
                 path = "/fortnite/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3543,31 +4108,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/mihoyo
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.mihoyo.get()
+                print(response.json())
+                ```
                 """
                 path = "/mihoyo"
 
@@ -3585,9 +4157,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -3601,16 +4171,21 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/mihoyo/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.mihoyo.params()
+                print(response.json())
+                ```
                 """
                 path = "/mihoyo/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-        class __Valorant:
+        class __Riot:
             def __init__(self, _api_self):
                 self._api = _api_self
 
@@ -3629,33 +4204,40 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/riot
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.riot.get()
+                print(response.json())
+                ```
                 """
-                path = "/valorant"
+                path = "/riot"
 
                 params = {
                     "page": page,
@@ -3671,9 +4253,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -3687,23 +4267,33 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/riot/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.riot.params()
+                print(response.json())
+                ```
                 """
-                path = "/valorant/params"
+                path = "/riot/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
             @_MainTweaks._CheckScopes(scopes=["market"])
-            def data(self, data_type: Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
+            def valorant_data(self, data_type: Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/data
+                GET https://api.lzt.market/data/valorant
 
-                Displays data for specified type in valorant category.
+                *Displays data for specified type in valorant category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.riot.valorant_data(data_type="Agent")
+                print(response.json())
+                ```
                 """
                 path = "/data/valorant"
                 params = {
@@ -3711,92 +4301,6 @@ class Market:
                     "locale": language
                 }
                 return _send_request(self=self._api, method="GET", path=path, params=params)
-
-        class __LeagueOfLegends:
-            def __init__(self, _api_self):
-                self._api = _api_self
-
-            @_MainTweaks._CheckScopes(scopes=["market"])
-            def get(
-                self,
-                page: int = None,
-                auction: str = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
-                search_params: dict = None,
-                **kwargs,
-            ) -> httpx.Response:
-                """
-                GET https://api.lzt.market/categoryName
-
-                Displays a list of accounts in a specific category according to your parameters.
-
-                Required scopes: market
-
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
-
-                :return: httpx Response object
-                """
-                path = "/league-of-legends"
-
-                params = {
-                    "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
-                    "title": title,
-                    "pmin": pmin,
-                    "pmax": pmax,
-                    "origin[]": origin,
-                    "not_origin[]": not_origin,
-                    "order_by": order_by,
-                    "sb": sold_before,
-                    "sb_by_me": sold_before_by_me,
-                    "nsb": not_sold_before,
-                    "nsb_by_me": not_sold_before_by_me,
-                }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
-                if kwargs:
-                    for kwarg_name, kwarg_value in kwargs.items():
-                        params[str(kwarg_name)] = kwarg_value
-                return _send_request(
-                    self=self._api,
-                    method="GET",
-                    path=path,
-                    params=params,
-                )
-
-            @_MainTweaks._CheckScopes(scopes=["market"])
-            def params(self) -> httpx.Response:
-                """
-                GET https://api.lzt.market/fortnite/params
-
-                Displays search parameters for a category.
-
-                :return: httpx Response object
-                """
-                path = "/league-of-legends/params"
-                return _send_request(self=self._api, method="GET", path=path)
 
         class __Telegram:
             def __init__(self, _api_self):
@@ -3817,31 +4321,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/telegram
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.telegram.get()
+                print(response.json())
+                ```
                 """
                 path = "/telegram"
 
@@ -3859,9 +4370,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -3875,11 +4384,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/telegram/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.telegram.params()
+                print(response.json())
+                ```
                 """
                 path = "/telegram/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3903,31 +4417,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/supercell
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.supercell.get()
+                print(response.json())
+                ```
                 """
                 path = "/supercell"
 
@@ -3945,9 +4466,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -3961,11 +4480,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/supercell/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.supercell.params()
+                print(response.json())
+                ```
                 """
                 path = "/supercell/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -3989,31 +4513,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/origin
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.origin.get()
+                print(response.json())
+                ```
                 """
                 path = "/origin"
 
@@ -4031,9 +4562,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4047,11 +4576,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/origin/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.origin.params()
+                print(response.json())
+                ```
                 """
                 path = "/origin/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4059,13 +4593,18 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def games(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/category_name/games
+                GET https://api.lzt.market/origin/games
 
-                Displays a list of games in the category.
+                *Displays a list of games in the category.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.origin.games()
+                print(response.json())
+                ```
                 """
                 path = "/origin/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4089,31 +4628,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/world-of-tanks
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.wot.get()
+                print(response.json())
+                ```
                 """
                 path = "/world-of-tanks"
 
@@ -4131,9 +4677,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4147,11 +4691,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/world-of-tanks/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.wot.params()
+                print(response.json())
+                ```
                 """
                 path = "/world-of-tanks/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4175,31 +4724,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/wot-blitz
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.wot_blitz.get()
+                print(response.json())
+                ```
                 """
                 path = "/wot-blitz"
 
@@ -4217,9 +4773,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4233,11 +4787,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/wot-blitz/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.wot_blitz.params()
+                print(response.json())
+                ```
                 """
                 path = "/wot-blitz/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4261,31 +4820,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/gifts
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.gifts.get()
+                print(response.json())
+                ```
                 """
                 path = "/gifts"
 
@@ -4303,9 +4869,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4319,11 +4883,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/gifts/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.gitfs.params()
+                print(response.json())
+                ```
                 """
                 path = "/gifts/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4347,31 +4916,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/epicgames
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.epicgames.get()
+                print(response.json())
+                ```
                 """
                 path = "/epicgames"
 
@@ -4389,9 +4965,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4405,11 +4979,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/epicgames/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.epicgames.params()
+                print(response.json())
+                ```
                 """
                 path = "/epicgames/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4417,13 +4996,18 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def games(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/category_name/games
+                GET https://api.lzt.market/epicgames/games
 
-                Displays a list of games in the category.
+                *Displays a list of games in the category.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.epicgames.games()
+                print(response.json())
+                ```
                 """
                 path = "/epicgames/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4447,31 +5031,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/espace-from-tarkov
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.eft.get()
+                print(response.json())
+                ```
                 """
                 path = "/escape-from-tarkov"
 
@@ -4489,9 +5080,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4505,11 +5094,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/escape-from-tarkov/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.eft.params()
+                print(response.json())
+                ```
                 """
                 path = "/escape-from-tarkov/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4533,31 +5127,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/socialclub
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.socialclub.get()
+                print(response.json())
+                ```
                 """
                 path = "/socialclub"
 
@@ -4575,9 +5176,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4591,11 +5190,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/socialclub/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.socialclub.params()
+                print(response.json())
+                ```
                 """
                 path = "/socialclub/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4603,13 +5207,18 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def games(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/category_name/games
+                GET https://api.lzt.market/socialclub/games
 
-                Displays a list of games in the category.
+                *Displays a list of games in the category.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.socialclub.games()
+                print(response.json())
+                ```
                 """
                 path = "/socialclub/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4633,31 +5242,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/uplay
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.uplat.get()
+                print(response.json())
+                ```
                 """
                 path = "/uplay"
 
@@ -4675,9 +5291,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4691,11 +5305,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/uplay/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.uplay.params()
+                print(response.json())
+                ```
                 """
                 path = "/uplay/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4703,13 +5322,18 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def games(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/category_name/games
+                GET https://api.lzt.market/uplay/games
 
-                Displays a list of games in the category.
+                *Displays a list of games in the category.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.uplay.games()
+                print(response.json())
+                ```
                 """
                 path = "/steam/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4733,31 +5357,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/war-thunder
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.war_thunder.get()
+                print(response.json())
+                ```
                 """
                 path = "/war-thunder"
 
@@ -4775,9 +5406,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4791,11 +5420,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/war-thunder/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.war_thunder.params()
+                print(response.json())
+                ```
                 """
                 path = "/war-thunder/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4819,31 +5453,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/discord
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.discord.get()
+                print(response.json())
+                ```
                 """
                 path = "/discord"
 
@@ -4861,9 +5502,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4877,11 +5516,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/discord/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.discord.params()
+                print(response.json())
+                ```
                 """
                 path = "/discord/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4905,31 +5549,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/tiktok
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.tiktok.get()
+                print(response.json())
+                ```
                 """
                 path = "/tiktok"
 
@@ -4947,9 +5598,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -4963,11 +5612,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/tiktok/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.tiktok.params()
+                print(response.json())
+                ```
                 """
                 path = "/tiktok/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -4991,31 +5645,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/telegram
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.telegram.get()
+                print(response.json())
+                ```
                 """
                 path = "/instagram"
 
@@ -5033,9 +5694,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5049,11 +5708,16 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def params(self) -> httpx.Response:
                 """
-                GET https://api.lzt.market/fortnite/params
+                GET https://api.lzt.market/telegram/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.telegram.params()
+                print(response.json())
+                ```
                 """
                 path = "/instagram/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5077,31 +5741,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/battlenet
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.battlenet.get()
+                print(response.json())
+                ```
                 """
                 path = "/battlenet"
 
@@ -5119,9 +5790,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5137,9 +5806,14 @@ class Market:
                 """
                 GET https://api.lzt.market/battlenet/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.battlenet.params()
+                print(response.json())
+                ```
                 """
                 path = "/battlenet/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5149,11 +5823,16 @@ class Market:
                 """
                 GET https://api.lzt.market/battlenet/games
 
-                Displays a list of games in the category.
+                *Displays a list of games in the category.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.battlenet.games()
+                print(response.json())
+                ```
                 """
                 path = "/battlenet/games"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5177,31 +5856,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/vpn
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.vpn.get()
+                print(response.json())
+                ```
                 """
                 path = "/vpn"
 
@@ -5219,9 +5905,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5237,9 +5921,14 @@ class Market:
                 """
                 GET https://api.lzt.market/vpn/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.vpn.params()
+                print(response.json())
+                ```
                 """
                 path = "/vpn/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5263,31 +5952,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/cinema
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.cinema.get()
+                print(response.json())
+                ```
                 """
                 path = "/cinema"
 
@@ -5305,9 +6001,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5323,9 +6017,14 @@ class Market:
                 """
                 GET https://api.lzt.market/cinema/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.cinema.params()
+                print(response.json())
+                ```
                 """
                 path = "/cinema/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5349,31 +6048,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/roblox
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.roblox.get()
+                print(response.json())
+                ```
                 """
                 path = "/roblox"
 
@@ -5391,9 +6097,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5409,9 +6113,14 @@ class Market:
                 """
                 GET https://api.lzt.market/roblox/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.roblox.params()
+                print(response.json())
+                ```
                 """
                 path = "/roblox/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5435,31 +6144,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/spotify
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.spotify.get()
+                print(response.json())
+                ```
                 """
                 path = "/spotify"
 
@@ -5477,9 +6193,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5495,9 +6209,14 @@ class Market:
                 """
                 GET https://api.lzt.market/spotify/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.spotify.params()
+                print(response.json())
+                ```
                 """
                 path = "/spotify/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5521,31 +6240,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/warface
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.warface.get()
+                print(response.json())
+                ```
                 """
                 path = "/warface"
 
@@ -5563,9 +6289,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5581,9 +6305,14 @@ class Market:
                 """
                 GET https://api.lzt.market/warface/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.warface.params()
+                print(response.json())
+                ```
                 """
                 path = "/warface/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5607,31 +6336,38 @@ class Market:
                 sold_before_by_me: bool = None,
                 not_sold_before: bool = None,
                 not_sold_before_by_me: bool = None,
-                search_params: dict = None,
+
                 **kwargs,
             ) -> httpx.Response:
                 """
-                GET https://api.lzt.market/categoryName
+                GET https://api.lzt.market/minecraft
 
-                Displays a list of accounts in a specific category according to your parameters.
+                *Displays a list of accounts in a specific category according to your parameters.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param page: The number of the page to display results from
-                :param auction: Auction. Can be [yes, no, nomatter].
-                :param title: The word or words contained in the account title
-                :param pmin: Minimal price of account (Inclusive)
-                :param pmax: Maximum price of account (Inclusive)
-                :param origin: List of account origins.
-                :param not_origin: List of account origins that won't be included.
-                :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-                :param sold_before: Sold before.
-                :param sold_before_by_me: Sold before by me.
-                :param not_sold_before: Not sold before.
-                :param not_sold_before_by_me: Not sold before by me.
-                :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+                **Parameters:**
 
-                :return: httpx Response object
+                - **page** (int): The number of the page to display results from
+                - **auction** (bool): Auction.
+                - **title** (str): The word or words contained in the account title.
+                - **pmin** (float): Minimal price of account (Inclusive).
+                - **pmax** (float): Maximum price of account (Inclusive).
+                - **origin** (list): List of account origins.
+                - **not_origin** (list): List of account origins that won't be included.
+                - **order_by** (str): Item order.
+                - **sold_before** (bool): Sold before.
+                - **sold_before_by_me** (bool): Sold before by me.
+                - **not_sold_before** (bool): Not sold before.
+                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **kwargs** (any): Additional search parameters for your request.
+
+                **Example:**
+
+                ```python
+                response = market.category.minecraft.get()
+                print(response.json())
+                ```
                 """
                 path = "/minecraft"
 
@@ -5649,9 +6385,7 @@ class Market:
                     "nsb": not_sold_before,
                     "nsb_by_me": not_sold_before_by_me,
                 }
-                if search_params is not None:
-                    for key, value in search_params.items():
-                        params[str(key)] = value
+
                 if kwargs:
                     for kwarg_name, kwarg_value in kwargs.items():
                         params[str(kwarg_name)] = kwarg_value
@@ -5667,9 +6401,14 @@ class Market:
                 """
                 GET https://api.lzt.market/minecraft/params
 
-                Displays search parameters for a category.
+                *Displays search parameters for a category.*
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.category.minecraft.params()
+                print(response.json())
+                ```
                 """
                 path = "/minecraft/params"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -5679,8 +6418,7 @@ class Market:
             self.steam = self.__Steam(_api_self)
             self.fortnite = self.__Fortnite(_api_self)
             self.mihoyo = self.__MiHoYo(_api_self)
-            self.valorant = self.__Valorant(_api_self)
-            self.lol = self.__LeagueOfLegends(_api_self)
+            self.riot = self.__Riot(_api_self)
             self.telegram = self.__Telegram(_api_self)
             self.supercell = self.__Supercell(_api_self)
             self.origin = self.__Origin(_api_self)
@@ -5710,8 +6448,8 @@ class Market:
             page: int = None,
             auction: str = None,
             title: str = None,
-            pmin: int = None,
-            pmax: int = None,
+            pmin: float = None,
+            pmax: float = None,
             origin: Union[str, list] = None,
             not_origin: Union[str, list] = None,
             order_by: Constants.Market.ItemOrder._Literal = None,
@@ -5719,31 +6457,39 @@ class Market:
             sold_before_by_me: bool = None,
             not_sold_before: bool = None,
             not_sold_before_by_me: bool = None,
-            search_params: dict = None,
+
             **kwargs,
         ) -> httpx.Response:
             """
-            GET https://api.lzt.market/categoryName
+            GET https://api.lzt.market/{category_name}
 
-            Displays a list of accounts in a specific category according to your parameters.
+            *Displays a list of accounts in a specific category according to your parameters.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param page: The number of the page to display results from
-            :param auction: Auction. Can be [yes, no, nomatter].
-            :param title: The word or words contained in the account title
-            :param pmin: Minimal price of account (Inclusive)
-            :param pmax: Maximum price of account (Inclusive)
-            :param origin: List of account origins.
-            :param not_origin: List of account origins that won't be included.
-            :param order_by: Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-            :param sold_before: Sold before.
-            :param sold_before_by_me: Sold before by me.
-            :param not_sold_before: Not sold before.
-            :param not_sold_before_by_me: Not sold before by me.
-            :param search_params: Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+            **Parameters:**
 
-            :return: httpx Response object
+            - **category_name** (str): Category name.
+            - **page** (int): The number of the page to display results from
+            - **auction** (bool): Auction.
+            - **title** (str): The word or words contained in the account title.
+            - **pmin** (float): Minimal price of account (Inclusive).
+            - **pmax** (float): Maximum price of account (Inclusive).
+            - **origin** (list): List of account origins.
+            - **not_origin** (list): List of account origins that won't be included.
+            - **order_by** (str): Item order.
+            - **sold_before** (bool): Sold before.
+            - **sold_before_by_me** (bool): Sold before by me.
+            - **not_sold_before** (bool): Not sold before.
+            - **not_sold_before_by_me** (bool): Not sold before by me.
+            - **kwargs** (any): Additional search parameters for your request.
+
+            **Example:**
+
+            ```python
+            response = market.category.get(category_name="telegram")
+            print(response.json())
+            ```
             """
             path = f"/{category_name}"
             if True:  # Tweak market
@@ -5762,9 +6508,7 @@ class Market:
                 "nsb": not_sold_before,
                 "nsb_by_me": not_sold_before_by_me,
             }
-            if search_params is not None:
-                for key, value in search_params.items():
-                    params[str(key)] = value
+
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
                     params[str(kwarg_name)] = kwarg_value
@@ -5780,13 +6524,20 @@ class Market:
             """
             GET https://api.lzt.market/category
 
-            Display category list.
+            *Display category list.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param top_queries: Display top queries for per category.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **top_queries** (bool): Display top queries for per category.
+
+            **Example:**
+
+            ```python
+            response = market.category.list()
+            print(response.json())
+            ```
             """
             path = "/category"
             params = {"top_queries": top_queries}
@@ -5806,11 +6557,19 @@ class Market:
             """
             Displays a list of the latest accounts from your market url with search params
 
-            Required scopes: market
+            Required scopes: *market**
 
-            :param url: Your market search url. It can be https://lzt.market/search_params or https://api.lzt.market/search_params
+            **Parameters:**
 
-            :return: httpx Response object
+            - **url** (str): Your market search url.
+                > It can be *https://lzt.market/search_params* or *https://api.lzt.market/search_params*
+
+            **Example:**
+
+            ```python
+            response = market.list.from_url(url="https://lzt.market/steam?origin[]=fishing&eg=1")
+            print(response.json())
+            ```
             """
             if "CREATE_JOB" in locals() or "SEND_AS_ASYNC" in locals():
                 base_api = self
@@ -5832,28 +6591,32 @@ class Market:
             self,
             page: int = None,
             title: str = None,
-            search_params: dict = None,
+
             **kwargs,
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/
 
-            Displays a list of the latest accounts.
+            *Displays a list of the latest accounts.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param page: The number of the page to display results from
-            :param title: The word or words contained in the account title
-            :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
+            **Parameters:**
 
-            :return: httpx Response object
+            - **page** (int): The number of the page to display results from
+            - **title** (str): The word or words contained in the account title.
+            - **kwargs** (any): Additional search parameters for your request.
 
+            **Example:**
+
+            ```python
+            response = market.list.latest()
+            print(response.json())
+            ```
             """
             path = "/"
             params = {"page": page, "title": title}
-            if search_params is not None:
-                for key, value in search_params.items():
-                    params[str(key)] = value
+
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
                     params[str(kwarg_name)] = kwarg_value
@@ -5865,76 +6628,37 @@ class Market:
             user_id: int = None,
             page: int = None,
             category_id: Constants.Market.CategoryId._Literal = None,
-            pmin: int = None,
-            pmax: int = None,
+            pmin: float = None,
+            pmax: float = None,
             title: str = None,
             status: Constants.Market.ItemStatus._Literal = None,
-            search_params: dict = None,
+
             **kwargs,
         ) -> httpx.Response:
             """
-            GET https://api.lzt.market/user/user_id/items
+            GET https://api.lzt.market/user/{user_id}/items
 
-            Displays a list of owned accounts.
+            *Displays a list of owned accounts.*
 
-            Category id-names list:
+            Required scopes: *market*
 
-            1 - steam - Steam
+            **Parameters:**
 
-            3 - origin - Origin
+            - **user_id** (int): ID of user.
+            - **page** (int): Page
+            - **category_id** (int): Accounts category
+            - **pmin** (float): Minimal price of account (Inclusive).
+            - **pmax** (float): Maximum price of account (Inclusive).
+            - **title** (str): The word or words contained in the account title.
+            - **status** (str): Account status.
+            - **kwargs** (any): Additional search parameters for your request.
 
-            4 - warface - Warface
+            **Example:**
 
-            5 - uplay - Uplay
-
-            7 - socialclub - Social Club
-
-            9 - fortnite - Fortnite
-
-            10 - instagram - Instagram
-
-            11 - battlenet - Battle.net
-
-            12 - epicgames - Epic Games
-
-            13 - valorant - Valorant
-
-            14 - world-of-tanks - World Of Tanks
-
-            16 - wot-blitz - World Of Tanks Blitz
-
-            15 - supercell - Supercell
-
-            17 - genshin-impact - Genshin Impact
-
-            18 - escape-from-tarkov - Escape From Tarkov
-
-            19 - vpn - VPN
-
-            20 - tiktok - TikTok
-
-            22 - discord - Discord
-
-            23 - cinema - Online Cinema
-
-            24 - telegram - Telegram
-
-            26 - spotify - Spotify
-
-            27 - war-thunder - War Thunder
-
-            Required scopes: market
-
-            :param user_id: ID of user.
-            :param page: Page
-            :param category_id: Accounts category
-            :param pmin: Minimal price of account (Inclusive)
-            :param pmax: Maximum price of account (Inclusive)
-            :param title: The word or words contained in the account title
-            :param status: Account status. Can be [active, paid, deleted or awaiting].
-            :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-
-            :return: httpx Response object
+            ```python
+            response = market.list.owned()
+            print(response.json())
+            ```
             """
             params = {
                 "user_id": user_id,
@@ -5946,9 +6670,7 @@ class Market:
                 "show": status,
             }
             path = "/user/items"
-            if search_params is not None:
-                for key, value in search_params.items():
-                    params[str(key)] = value
+
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
                     params[str(kwarg_name)] = kwarg_value
@@ -5960,77 +6682,37 @@ class Market:
             user_id: int = None,
             page: int = None,
             category_id: Constants.Market.CategoryId._Literal = None,
-            pmin: int = None,
-            pmax: int = None,
+            pmin: float = None,
+            pmax: float = None,
             title: str = None,
             status: Constants.Market.ItemStatus._Literal = None,
-            search_params: dict = None,
+
             **kwargs,
         ) -> httpx.Response:
             """
-            GET https://api.lzt.market/user/user_id/orders
+            GET https://api.lzt.market/user/{user_id}/orders
 
-            Displays a list of purchased accounts.
+            *Displays a list of purchased accounts.*
 
-            Category id-names list:
+            Required scopes: *market*
 
-            1 - steam - Steam
+            **Parameters:**
 
-            3 - origin - Origin
+            - **user_id** (int): ID of user.
+            - **page** (int): Page
+            - **category_id** (int): Accounts category
+            - **pmin** (float): Minimal price of account (Inclusive).
+            - **pmax** (float): Maximum price of account (Inclusive).
+            - **title** (str): The word or words contained in the account title.
+            - **status** (str): Account status.
+            - **kwargs** (any): Additional search parameters for your request.
 
-            4 - warface - Warface
+            **Example:**
 
-            5 - uplay - Uplay
-
-            7 - socialclub - Social Club
-
-            9 - fortnite - Fortnite
-
-            10 - instagram - Instagram
-
-            11 - battlenet - Battle.net
-
-            12 - epicgames - Epic Games
-
-            13 - valorant - Valorant
-
-            14 - world-of-tanks - World Of Tanks
-
-            16 - wot-blitz - World Of Tanks Blitz
-
-            15 - supercell - Supercell
-
-            17 - genshin-impact - Genshin Impact
-
-            18 - escape-from-tarkov - Escape From Tarkov
-
-            19 - vpn - VPN
-
-            20 - tiktok - TikTok
-
-            22 - discord - Discord
-
-            23 - cinema - Online Cinema
-
-            24 - telegram - Telegram
-
-            26 - spotify - Spotify
-
-            27 - war-thunder - War Thunder
-
-            Required scopes: market
-
-            :param user_id: ID of user.
-            :param page: Page
-            :param category_id: Accounts category
-            :param pmin: Minimal price of account (Inclusive)
-            :param pmax: Maximum price of account (Inclusive)
-            :param title: The word or words contained in the account title
-            :param status: Account status. Can be [active, paid, deleted or awaiting].
-            :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-
-            :return: httpx Response object
-
+            ```python
+            response = market.list.orders()
+            print(response.json())
+            ```
             """
             params = {
                 "category_id": category_id,
@@ -6041,9 +6723,7 @@ class Market:
                 "show": status,
                 "user_id": user_id,
             }
-            if search_params is not None:
-                for key, value in search_params.items():
-                    params[str(key)] = value
+
             path = "/user/orders"
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
@@ -6056,29 +6736,33 @@ class Market:
             page: int = None,
             status: Constants.Market.ItemStatus._Literal = None,
             title: str = None,
-            search_params: dict = None,
+
             **kwargs,
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/fave
 
-            Displays a list of favourites accounts.
+            *Displays a list of favourites accounts.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param page: The number of the page to display results from
-            :param status: Account status. Can be [active, paid, deleted or awaiting].
-            :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-            :param title: The word or words contained in the account title
+            **Parameters:**
 
-            :return: httpx Response object
+            - **page** (int): The number of the page to display results from
+            - **status** (str): Account status.
+            - **title** (str): The word or words contained in the account title.
+            - **kwargs** (any): Additional search parameters for your request.
 
+            **Example:**
+
+            ```python
+            response = market.list.favorite()
+            print(response.json())
+            ```
             """
             path = "/fave"
             params = {"page": page, "show": status, "title": title}
-            if search_params is not None:
-                for key, value in search_params.items():
-                    params[str(key)] = value
+
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
                     params[str(kwarg_name)] = kwarg_value
@@ -6090,29 +6774,33 @@ class Market:
             page: int = None,
             status: Constants.Market.ItemStatus._Literal = None,
             title: str = None,
-            search_params: dict = None,
+
             **kwargs,
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/viewed
 
-            Displays a list of viewed accounts.
+            *Displays a list of viewed accounts.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param page: The number of the page to display results from
-            :param status: Account status. Can be [active, paid, deleted or awaiting].
-            :param search_params: Search params for your request. Example {"category_id":19} will return only VPN accounts
-            :param title: The word or words contained in the account title
+            **Parameters:**
 
-            :return: httpx Response object
+            - **page** (int): The number of the page to display results from
+            - **status** (str): Account status.
+            - **title** (str): The word or words contained in the account title.
+            - **kwargs** (any): Additional search parameters for your request.
 
+            **Example:**
+
+            ```python
+            response = market.list.viewed()
+            print(response.json())
+            ```
             """
             path = "/viewed"
             params = {"page": page, "show": status, "title": title}
-            if search_params is not None:
-                for key, value in search_params.items():
-                    params[str(key)] = value
+
             if kwargs:
                 for kwarg_name, kwarg_value in kwargs.items():
                     params[str(kwarg_name)] = kwarg_value
@@ -6127,8 +6815,8 @@ class Market:
             self,
             user_id: int = None,
             operation_type: Constants.Market.OperationTypes._Literal = None,
-            pmin: int = None,
-            pmax: int = None,
+            pmin: float = None,
+            pmax: float = None,
             page: int = None,
             operation_id_lt: int = None,
             receiver: str = None,
@@ -6141,29 +6829,35 @@ class Market:
             show_payments_stats: bool = None,
         ) -> httpx.Response:
             """
-            GET https://api.lzt.market/user/user_id/payments
+            GET https://api.lzt.market/user/{user_id}/payments
 
-            Displays info about your profile.
+            *Displays info about your profile.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param user_id: ID of user.
-            :param operation_type: Type of operation. Allowed operation types: income, cost, refilled_balance, withdrawal_balance, paid_item, sold_item, money_transfer, receiving_money, internal_purchase, claim_hold
-            :param pmin: Minimal price of operation (Inclusive)
-            :param pmax: Maximum price of operation (Inclusive)
-            :param page: The number of the page to display results from
-            :param operation_id_lt: ID of the operation from which the result begins
-            :param receiver: Username of user, which receive money from you
-            :param sender: Username of user, which sent money to you
-            :param start_date: Start date of operation (RFC 3339 date format)
-            :param end_date: End date of operation (RFC 3339 date format)
-            :param wallet: Wallet, which used for money payots
-            :param comment: Comment for money transfers
-            :param is_hold: Display hold operations
-            :param show_payments_stats: Display payment stats for selected period (outgoing value, incoming value)
+            **Parameters:**
 
-            :return: httpx Response object
+            - **user_id** (int): ID of user.
+            - **operation_type** (str): Type of operation.
+            - **pmin** (float): Minimal price of operation (Inclusive).
+            - **pmax** (float): Maximum price of operation (Inclusive).
+            - **page** (int): The number of the page to display results from.
+            - **operation_id_lt** (int): ID of the operation from which the result begins.
+            - **receiver** (str): Username of user, which receive money from you.
+            - **sender** (str): Username of user, which sent money to you.
+            - **start_date** (str): Start date of operation (RFC 3339 date format).
+            - **end_date** (str): End date of operation (RFC 3339 date format).
+            - **wallet** (str): Wallet, which used for money payots.
+            - **comment** (str): Comment for money transfers.
+            - **is_hold** (bool): Display hold operations.
+            - **show_payments_stats** (bool): Display payment stats for selected period (outgoing value, incoming value).
 
+            **Example:**
+
+            ```python
+            response = market.payments.history()
+            print(response.json())
+            ```
             """
             path = "/user/payments"
             params = {
@@ -6200,21 +6894,28 @@ class Market:
             """
             POST https://api.lzt.market/balance/transfer
 
-            Send money to any user.
+            *Send money to any user.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param amount: Amount to send in your currency.
-            :param secret_answer: Secret answer of your account
-            :param currency: Using currency for amount. Allowed values: cny, usd, rub, eur, uah, kzt, byn, gbp ("rub" by default)
-            :param user_id: User id of receiver. If user_id specified, username is not required.
-            :param username: Username of receiver. If username specified, user_id is not required.
-            :param comment: Transfer comment
-            :param transfer_hold: Hold transfer or not
-            :param hold_length_option: Hold length option. Allowed values: hour, day, week, month, year
-            :param hold_length_value: Hold length value
+            **Parameters:**
 
-            :return: httpx Response object
+            - **amount** (float): Amount to send in your currency.
+            - **secret_answer** (str): Secret answer of your account.
+            - **currency** (str): Using currency for amount.
+            - **user_id** (int): User id of receiver. If user_id specified, username is not required.
+            - **username** (str): Username of receiver. If username specified, user_id is not required.
+            - **comment** (str): Transfer comment.
+            - **transfer_hold** (bool): Hold transfer or not.
+            - **hold_length_option** (str): Hold length option.
+            - **hold_length_value** (int): Hold length value.
+
+            **Example:**
+
+            ```python
+            response = market.payments.transfer(user_id=2410024, amount=250, currency="rub", secret_answer="My secret answer")
+            print(response.json())
+            ```
             """
             path = "/balance/transfer"
             params = {
@@ -6240,13 +6941,20 @@ class Market:
             """
             GET https://api.lzt.market/balance/transfer/fee
 
-            Get transfer limits and get fee amount for transfer.
+            *Get transfer limits and get fee amount for transfer.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param amount: Amount to send in your currency.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **amount** (float): Amount to send in your currency.
+
+            **Example:**
+
+            ```python
+            response = market.payments.fee(amount=250)
+            print(response.json())
+            ```
             """
             path = "/balance/transfer/fee"
             params = {
@@ -6269,20 +6977,27 @@ class Market:
             hold_option: Literal["hours", "days", "weeks", "months"] = None,
         ) -> str:
             """
-            Generate payment link
+            *Generate payment link.*
 
-            Required scopes: None
+            **Parameters:**
 
-            :param amount: Amount to send in your currency.
-            :param user_id: ID of user to transfer money
-            :param username: Username to transfer money
-            :param comment: Payment comment.
-            :param redirect_url: Redirect url. User who paid on this link will be redirected to this url
-            :param currency: Using currency for amount. Allowed values: cny, usd, rub, eur, uah, kzt, byn, gbp
-            :param hold: Hold transfer or not
-            :param hold_length: Hold length ( max 1 month )
-            :param hold_period: Hold option. Can be "hours","days","weeks","months"
-            :return: string payment url
+            - **amount** (float): Amount to send in your currency.
+            - **user_id** (int): ID of user to transfer money.
+            - **username** (str): Username to transfer money.
+            - **comment** (str): Payment comment.
+            - **redirect_url** (str): Redirect url. User who paid on this link will be redirected to this url.
+            - **currency** (str): Using currency for amount.
+            - **hold** (bool): Hold transfer or not.
+            - **hold_length** (int): Hold length.
+                > Max - 1 month.
+            - **hold_period** (str): Hold option.
+
+            **Example:**
+
+            ```python
+            payment_link = market.payments.generate_link(user_id=2410024, amount=250, comment="Comment", redirect_url="https://example.com")
+            print(payment_link)
+            ```
             """
             if hold:
                 if hold_option in ["hour", "day", "week", "month"]:
@@ -6306,8 +7021,8 @@ class Market:
         def __init__(self, _api_self):
             self._api = _api_self
             self.tag = self.__Tag(self._api)
-            self.steam = self.__Steam(self._api)
-            self.telegram = self.__Telegram(self._api)
+            self.steam = self.__SteamMan(self._api)
+            self.telegram = self.__TelegramMan(self._api)
 
         class __Tag:
             def __init__(self, _api_self):
@@ -6316,16 +7031,24 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def delete(self, item_id: int, tag_id: int) -> httpx.Response:
                 """
-                DELETE https://api.lzt.market/item_id/tag
+                DELETE https://api.lzt.market/{item_id}/tag
 
-                Deletes tag for the account.
+                *Deletes tag for the account.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
-                :param tag_id: Tag id. Tag list is available via api.market.profile.get()
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+                - **tag_id** (int): Tag id.
+                    > Tag list is available via market.profile.get()
+
+                **Example:**
+
+                ```python
+                response = market.managing.tag.delete(item_id=1000000, tag_id=1000)
+                print(response.json())
+                ```
                 """
                 path = f"/{item_id}/tag"
                 params = {"tag_id": tag_id}
@@ -6339,16 +7062,24 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def add(self, item_id: int, tag_id: int) -> httpx.Response:
                 """
-                POST https://api.lzt.market/item_id/tag
+                POST https://api.lzt.market/{item_id}/tag
 
-                Adds tag for the account.
+                *Adds tag for the account.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
-                :param tag_id: Tag id. Tag list is available via api.market.profile.get()
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+                - **tag_id** (int): Tag id.
+                    > Tag list is available via market.profile.get()
+
+                **Example:**
+
+                ```python
+                response = market.managing.tag.add(item_id=1000000, tag_id=1000)
+                print(response.json())
+                ```
                 """
                 path = f"/{item_id}/tag"
                 params = {"tag_id": tag_id}
@@ -6359,22 +7090,29 @@ class Market:
                     params=params,
                 )
 
-        class __Steam:
+        class __SteamMan:
             def __init__(self, _api_self):
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def guard(self, item_id: int) -> httpx.Response:
                 """
-                GET https://api.lzt.market/item_id/guard-code
+                GET https://api.lzt.market/{item_id}/guard-code
 
-                Gets confirmation code from MaFile (Only for Steam accounts).
+                *Gets confirmation code from MaFile (Only for Steam accounts).*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+
+                **Example:**
+
+                ```python
+                response = market.managing.steam.guard(item_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/{item_id}/guard-code"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -6382,17 +7120,22 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def mafile(self, item_id: int) -> httpx.Response:
                 """
-                GET https://api.lzt.market/item_id/mafile
+                GET https://api.lzt.market/{item_id}/mafile
 
-                Returns mafile in JSON.
+                *Returns mafile in JSON.*
 
-                Warning: this action is cancelling active account guarantee.
+                Required scopes: *market*
 
-                Required scopes: market
+                **Parameters:**
 
-                :param item_id: ID of item.
+                - **item_id** (int): ID of item.
 
-                :return: httpx Response object
+                **Example:**
+
+                ```python
+                response = market.managing.steam.mafile(item_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/{item_id}/mafile"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -6400,16 +7143,23 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def update_inventory(self, item_id: int, app_id: Constants.Market.AppID._Literal) -> httpx.Response:
                 """
-                POST https://api.lzt.market/item_id/update-inventory
+                POST https://api.lzt.market/{item_id}/update-inventory
 
-                Update inventory value.
+                *Update inventory value.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
-                :param app_id: App id.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+                - **app_id** (int): App id.
+
+                **Example:**
+
+                ```python
+                response = market.managing.steam.update_inventory(item_id=1000000, app_id=730)
+                print(response.json())
+                ```
                 """
                 params = {"app_id": app_id}
                 path = f"/{item_id}/update-inventory"
@@ -6419,47 +7169,39 @@ class Market:
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def inventory_value(
-                self, url: str, app_id: int, currency: Constants.Market.Currency._Literal = None, ignore_cache: bool = None
+                self, url: str = None, item_id: int = None, app_id: int = 730, currency: Constants.Market.Currency._Literal = None, ignore_cache: bool = None
             ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/steam-value
 
-                Gets steam value.
+                *Gets steam value.*
 
-                Application id list:
+                **Parameters:**
 
-                730 - CS2
+                - **url** (str): Link or id of account.
+                    > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
+                - **item_id** (int): Item id.
+                - **app_id** (int): Application id.
+                - **currency** (str): Using currency for amount.
+                - **ignore_cache** (bool): Ignore cache.
 
-                578080 - PUBG
+                **Example:**
 
-                753 - Steam
-
-                570 - Dota 2
-
-                440 - Team Fortress 2
-
-                252490 - Rust
-
-                304930 - Unturned
-
-                232090 - Killing Floor 2
-
-                322330 - Don't Starve Together
-
-                :param url: Link or id of account. Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
-                :param app_id: Application id.
-                :param currency: Using currency for amount.
-                :param ignore_cache: Ignore cache.
-
-                :return: httpx Response object
+                ```python
+                response = market.managing.steam.inventory_value(item_id=1000000, app_id=730)
+                print(response.json())
+                ```
                 """
                 params = {
-                    "link": url,
                     "app_id": app_id,
                     "currency": currency,
                     "ignore_cache": ignore_cache,
                 }
-                path = "/steam-value"
+                if url:
+                    params["link"] = url
+                    path = "/steam-value"
+                elif item_id:
+                    path = f"/{item_id}/inventory-value"
                 return _send_request(self=self._api, method="GET", path=path, params=params)
 
             @_MainTweaks._CheckScopes(scopes=["market"])
@@ -6467,19 +7209,25 @@ class Market:
                 self, item_id: int, id: int = None, nonce: int = None
             ) -> httpx.Response:
                 """
-                POST https://api.lzt.market/item_id/confirm-sda
+                POST https://api.lzt.market/{item_id}/confirm-sda
 
-                Confirm steam action.
+                *Confirm steam action.*
+                > Don't set id and nonce parameters to get list of available confirmation requests.
 
-                Don't set id and nonce parameters to get list of available confirmation requests.
+                **Parameters:**
 
-                Warning: this action is cancelling active account guarantee.
+                - **item_id** (int): Item id.
+                - **id** (int): Confirmation id.
+                    > Required along with **nonce** if you want to confirm action.
+                - **nonce** (int): Confirmation nonce.
+                    > Required along with **id** if you want to confirm action.
 
-                :param item_id: Item id.
-                :param id: Confirmation id. (Required along with nonce if you want to confirm action).
-                :param nonce: Confirmation nonce. (Required along with id if you want to confirm action).
+                **Example:**
 
-                :return: httpx Response object
+                ```python
+                response = market.managing.steam.confirm_sda(item_id=1000000)
+                print(response.json())
+                ```
                 """
                 params = {
                     "id": id,
@@ -6490,22 +7238,29 @@ class Market:
                     self=self._api, method="POST", path=path, params=params
                 )
 
-        class __Telegram:
+        class __TelegramMan:
             def __init__(self, _api_self):
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def code(self, item_id: int) -> httpx.Response:
                 """
-                GET https://api.lzt.market/item_id/telegram-login-code
+                GET https://api.lzt.market/{item_id}/telegram-login-code
 
-                Gets confirmation code from Telegram.
+                *Gets confirmation code from Telegram.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+
+                **Example:**
+
+                ```python
+                response = market.managing.telegram.code(item_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/{item_id}/telegram-login-code"
                 return _send_request(self=self._api, method="GET", path=path)
@@ -6513,33 +7268,45 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def reset_auth(self, item_id: int) -> httpx.Response:
                 """
-                POST https://api.lzt.market/item_id/telegram-reset-authorizations
+                POST https://api.lzt.market/{item_id}/telegram-reset-authorizations
 
-                Resets Telegram authorizations.
+                *Resets Telegram authorizations.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+
+                **Example:**
+
+                ```python
+                response = market.managing.telegram.reset_auth(item_id=1000000)
+                print(response.json())
+                ```
                 """
                 path = f"/{item_id}/telegram-reset-authorizations"
                 return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def password_tm(self, item_id: int) -> httpx.Response:
+        def password_temp_mail(self, item_id: int) -> httpx.Response:
             """
-            GET https://api.lzt.market/item_id/temp-email-password
+            GET https://api.lzt.market/{item_id}/temp-email-password
 
-            Gets password from temp email of account.
+            *Gets password from temp email of account.*
 
-            After calling of this method, the warranty will be cancelled, and you cannot automatically resell account.
+            Required scopes: *market*
 
-            Required scopes: market
+            **Parameters:**
 
-            :param item_id: ID of item.
+            - **item_id** (int): ID of item.
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = market.managing.password_temp_mail(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/temp-email-password"
             return _send_request(self=self._api, method="GET", path=path)
@@ -6553,19 +7320,26 @@ class Market:
             preview_type: Literal["profiles", "games"] = None,
         ) -> httpx.Response:
             """
-            GET https://api.lzt.market/item_id
-            GET https://api.lzt.market/item_id/steam-preview
-            GET https://api.lzt.market/item_id/auction
+            GET https://api.lzt.market/{item_id}
+            GET https://api.lzt.market/{item_id}/steam-preview
+            GET https://api.lzt.market/{item_id}/auction
 
-            Displays account information or returns Steam account html code.
+            *Displays account information or returns Steam account html code.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param steam_preview: Set it True if you want to get steam html and False/None if you want to get account info
-            :param preview_type: Type of page - profiles or games
-            :return: httpx Response object
+            **Parameters:**
 
+            - **item_id** (int): ID of item.
+            - **steam_preview** (bool): Set it True if you want to get steam html and False/None if you want to get account info
+            - **preview_type** (str): Type of page - profiles or games
+
+            **Example:**
+
+            ```python
+            response = market.managing.get(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}"
             if auction:
@@ -6583,31 +7357,45 @@ class Market:
             """
             POST https://api.lzt.market/bulk/items
 
-            Bulk get up to 250 accounts.
+            *Bulk get up to 250 accounts.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_ids: Item ids.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_ids** (list): Item ids.
+
+            **Example:**
+
+            ```python
+            response = market.managing.bulk_get(item_ids=[1000000, 2000000, 3000000, 4000000, 500000])
+            print(response.json())
+            ```
             """
             path = "/bulk/items"
-            data = {"item_id[]": item_ids}
-            return _send_request(self=self._api, method="POST", path=path, data=data)
+            dataJ = {"item_id": item_ids}
+            return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def delete(self, item_id: int, reason: str = "Market.Managing.Delete") -> httpx.Response:
             """
-            DELETE https://api.lzt.market/item_id
+            DELETE https://api.lzt.market/{item_id}
 
-            Deletes your account from public search. Deletetion type is soft. You can restore account after deletetion if you want.
+            *Deletes your account from public search. Deletetion type is soft. You can restore account after deletetion if you want.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param reason: Delete reason.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+            - **reason** (str): Delete reason.
+
+            **Example:**
+
+            ```python
+            response = market.managing.delete(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}"
             params = {"reason": reason}
@@ -6620,15 +7408,22 @@ class Market:
             """
             GET https://api.lzt.market/email-code
 
-            Gets confirmation code or link.
+            *Gets confirmation code or link.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param email: Account email.
-            :param login: Account login.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+            - **email** (str): Account email.
+            - **login** (str): Account login.
+
+            **Example:**
+
+            ```python
+            response = market.managing.email(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = "/email-code"
             params = {"email ": email, "login": login, "item_id": item_id}
@@ -6637,15 +7432,22 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def refuse_guarantee(self, item_id: int) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/refuse-guarantee
+            POST https://api.lzt.market/{item_id}/refuse-guarantee
 
-            Cancel guarantee of account. It can be useful for account reselling.
+            *Cancel guarantee of account. It can be useful for account reselling.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.managing.refuse_guarantee(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/refuse-guarantee"
             return _send_request(self=self._api, method="POST", path=path)
@@ -6653,15 +7455,22 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def check_guarantee(self, item_id: int) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/check-guarantee
+            POST https://api.lzt.market/{item_id}/check-guarantee
 
-            Checks the guarantee and cancels it if there are reasons to cancel it.
+            *Checks the guarantee and cancels it if there are reasons to cancel it.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.managing.check_guarantee(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/check-guarantee"
             return _send_request(self=self._api, method="POST", path=path)
@@ -6669,16 +7478,23 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def change_password(self, item_id: int, _cancel: bool = None) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/change-password
+            POST https://api.lzt.market/{item_id}/change-password
 
-            Changes password of account.
+            *Changes password of account.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param _cancel: Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+            - **_cancel** (bool): Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
+
+            **Example:**
+
+            ```python
+            response = market.managing.change_password(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/change-password"
             params = {"_cancel": int(_cancel) if _cancel else _cancel}
@@ -6687,81 +7503,116 @@ class Market:
             )
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def unstick(self, item_id: int) -> httpx.Response:
-            """
-            DELETE https://api.lzt.market/item_id/stick
-
-            Unstick account of the top of search.
-
-            Required scopes: market
-
-            :param item_id: ID of item.
-
-            :return: httpx Response object
-            """
-            path = f"/{item_id}/stick"
-            return _send_request(self=self._api, method="DELETE", path=path)
-
-        @_MainTweaks._CheckScopes(scopes=["market"])
         def stick(self, item_id: int) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/stick
+            POST https://api.lzt.market/{item_id}/stick
 
-            Stick account in the top of search.
+            *Stick account in the top of search.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.managing.stick(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def unfavorite(self, item_id: int) -> httpx.Response:
+        def unstick(self, item_id: int) -> httpx.Response:
             """
-            DELETE https://api.lzt.market/item_id/star
+            DELETE https://api.lzt.market/{item_id}/stick
 
-            Deletes account from favourites.
+            *Unstick account of the top of search.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.managing.unstick(item_id=1000000)
+            print(response.json())
+            ```
             """
-            path = f"/{item_id}/star"
+            path = f"/{item_id}/stick"
             return _send_request(self=self._api, method="DELETE", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def favorite(self, item_id: int) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/star
+             POST https://api.lzt.market/{item_id}/star
 
-            Adds account to favourites.
+            *Adds account to favourites.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.managing.favorite(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/star"
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
+        def unfavorite(self, item_id: int) -> httpx.Response:
+            """
+            DELETE https://api.lzt.market/{item_id}/star
+
+            *Deletes account from favourites.*
+
+            Required scopes: *market*
+
+            **Parameters:**
+
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.managing.unfavorite(item_id=1000000)
+            print(response.json())
+            ```
+            """
+            path = f"/{item_id}/star"
+            return _send_request(self=self._api, method="DELETE", path=path)
+
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def bump(self, item_id: int) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/bump
+            POST https://api.lzt.market/{item_id}/bump
 
-            Bumps account in the search.
+            *Bumps account in the search.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.managing.bump(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/bump"
             return _send_request(self=self._api, method="POST", path=path)
@@ -6771,17 +7622,24 @@ class Market:
             self, item_id: int, username: str, secret_answer: str
         ) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/change-owner
+            POST https://api.lzt.market/{item_id}/change-owner
 
-            Change of account owner.
+            *Change of account owner.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param username: The username of the new account owner
-            :param secret_answer: Secret answer of your account
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+            - **username** (str): The username of the new account owner.
+            - **secret_answer** (str): Secret answer of your account.
+
+            **Example:**
+
+            ```python
+            response = market.managing.change_owner(item_id=1000000, username="AS7RID", secret_answer="My secret answer")
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/change-owner"
             params = {"username": username, "secret_answer": secret_answer}
@@ -6806,41 +7664,35 @@ class Market:
             proxy_id: int = None,
         ) -> httpx.Response:
             """
-            PUT https://api.lzt.market/item_id/edit
+            PUT https://api.lzt.market/{item_id}/edit
 
-            Edits any details of account.
+            *Edits any details of account.*
 
-            Account origin:
+            Required scopes: *market*
 
-            brute - Account received using Bruteforce
+            **Parameters:**
 
-            fishing - Account received from fishing page
+            - **item_id** (int): ID of item
+            - **price** (float): Account price in your currency.
+            - **currency** (str): Using currency.
+            - **item_origin** (str): Account origin.
+            - **title** (str): Russian title of account.
+                > If title specified and title_en is empty, title_en will be automatically translated to English language.
+            - **title_en** (str): English title of account.
+                > If title_en specified and title is empty, title will be automatically translated to Russian language.
+            - **description** (str): Account public description.
+            - **information** (str): Account private information (visible for buyer only if purchased).
+            - **email_login_data** (str): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+            - **email_type** (str): Email type.
+            - **allow_ask_discount** (bool): Allow users to ask discount for this account.
+            - **proxy_id** (int): Using proxy id for account checking.
 
-            stealer - Account received from stealer logs
+            **Example:**
 
-            autoreg - Account is automatically registered by a tool
-
-            personal - Account is yours. You created it yourself
-
-            resale - Account received from another seller
-
-            retrive - Account is recovered by email or phone (only for VKontakte category)
-
-            Required scopes: market
-            :param item_id: ID of item
-            :param price: Account price in your currency.
-            :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
-            :param item_origin: Account origin. Where did you get it from.
-            :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
-            :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
-            :param description: Account public description.
-            :param information: Account private information (visible for buyer only if purchased).
-            :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
-            :param email_type: Email type. Allowed values: native, autoreg.
-            :param allow_ask_discount: Allow users to ask discount for this account.
-            :param proxy_id: Using proxy id for account checking.
-
-            :return: httpx Response object
+            ```python
+            response = market.managing.edit(item_id=1000000, price=1000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/edit"
             params = {
@@ -6865,15 +7717,22 @@ class Market:
             post_body: str
         ) -> httpx.Response:
             """
-            POST https://api.zelenka.guru/item_id/claims
+            POST https://api.lzt.market/{item_id}/claims
 
-            Create a Arbitrage.
+            *Create a Arbitrage.*
 
-            Required scopes: post
+            Required scopes: *post*
 
-            :param post_body: You should describe what's happened.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **post_body** (str): You should describe what's happened.
+
+            **Example:**
+
+            ```python
+            response = market.managing.arbitrage(item_id=1000000, post_body="There i'am discribe what's happened.")
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/claims"
             data = {
@@ -6897,17 +7756,24 @@ class Market:
                 self, item_id: int, amount: float, currency: Constants.Market.Currency._Literal = None
             ) -> httpx.Response:
                 """
-                POST https://api.lzt.market/item_id/auction/bid
+                POST https://api.lzt.market/{item_id}/auction/bid
 
-                Create a new auction bid.
+                *Create a new auction bid.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
-                :param amount: Amount bid.
-                :param currency: Using currency. Can be [rub, uah, kzt, byn, usd, eur, gbp, cny, try].
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+                - **amount** (float): Amount bid.
+                - **currency** (str): Using currency.
+
+                **Example:**
+
+                ```python
+                response = market.purchasing.auction.place_bid(item_id=1000000, amount=1000)
+                print(response.json())
+                ```
                 """
                 params = {"amount": amount, "currency": currency}
                 path = f"/{item_id}/auction/bid"
@@ -6921,16 +7787,23 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def delete_bid(self, item_id: int, bid_id: int) -> httpx.Response:
                 """
-                GET https://api.lzt.market/item_id/auction/bid
+                GET https://api.lzt.market/{item_id}/auction/bid
 
-                Delete your auction bid.
+                *Delete your auction bid.*
 
-                Required scopes: market
+                Required scopes: *market*
 
-                :param item_id: ID of item.
-                :param bid_id: ID of bid.
+                **Parameters:**
 
-                :return: httpx Response object
+                - **item_id** (int): ID of item.
+                - **bid_id** (int): ID of bid.
+
+                **Example:**
+
+                ```python
+                response = market.purchasing.auction.delete_bid(item_id=1000000, bid_id=1000)
+                print(response.json())
+                ```
                 """
                 params = {"bid_id": bid_id}
                 path = f"/{item_id}/auction/bid"
@@ -6944,58 +7817,68 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def check(self, item_id: int) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/check-account
+            POST https://api.lzt.market/{item_id}/check-account
 
-            Checking account for validity. If the account is invalid, the purchase will be canceled automatically
+            *Checking account for validity. If the account is invalid, the purchase will be canceled automatically*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+
+            **Example:**
+
+            ```python
+            response = market.purchasing.check(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/check-account"
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def confirm(
-            self, item_id: int, buy_without_validation: bool = None
-        ) -> httpx.Response:
+        def confirm(self, item_id: int) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/confirm-buy
+            POST https://api.lzt.market/{item_id}/confirm-buy
 
-            Confirm buy.
+            *Confirm buy.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
+            **Example:**
 
-            :return: httpx Response object
+            ```python
+            response = market.purchasing.confirm(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/confirm-buy"
-            params = {"buy_without_validation": int(
-                buy_without_validation) if buy_without_validation else buy_without_validation}
-            return _send_request(
-                self=self._api, method="POST", path=path, params=params
-            )
+            return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def fast_buy(
             self, item_id: int, price: float, buy_without_validation: bool = None
         ) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/fast-buy
+            POST https://api.lzt.market/{item_id}/fast-buy
 
-            Check and buy account.
+            *Check and buy account.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param price: Current price of account in your currency
-            :param buy_without_validation: Use TRUE if you want to buy account without account data validation (not safe).
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+            - **price** (float): Current price of account in your currency.
+            - **buy_without_validation** (bool): Use TRUE if you want to buy account without account data validation (not safe).
+
+            **Example:**
+
+            ```python
+            response = market.purchasing.fast_buy(item_id=1000000, price=1000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/fast-buy"
             params = {
@@ -7013,16 +7896,23 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def info(self, item_id: int, resell_item_id: int = None) -> httpx.Response:
             """
-            GET https://api.lzt.market/item_id/goods/add
+            GET https://api.lzt.market/{item_id}/goods/add
 
-            Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.
+            *Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param item_id: ID of item.
-            :param resell_item_id: Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
+            **Parameters:**
 
-            :return: httpx Response object
+            - **item_id** (int): ID of item.
+            - **resell_item_id** (int): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
+
+            **Example:**
+
+            ```python
+            response = market.publishing.info(item_id=1000000)
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/goods/add"
             params = {"resell_item_id": resell_item_id}
@@ -7041,21 +7931,29 @@ class Market:
             random_proxy: bool = None,
         ) -> httpx.Response:
             """
-            POST https://api.lzt.market/item_id/goods/check
+            POST https://api.lzt.market/{item_id}/goods/check
 
-            Check account on validity. If account is valid, account will be published on the market.
+            *Check account on validity. If account is valid, account will be published on the market.*
 
-            Required scopes: market
-            :param item_id: ID for item.
-            :param login: Account login (or email)
-            :param password: Account password
-            :param login_password: Account login data format login:password
-            :param close_item: If True, the item will be closed item_state = closed
-            :param extra: Extra params for account checking. E.g. you need to put cookies to extra[cookies] if you want to upload TikTok/Fortnite/Epic Games account
-            :param resell_item_id: Put item id, if you are trying to resell item.
-            :param random_proxy: Pass True, if you get captcha in previous response
+            Required scopes: *market*
 
-            :return: httpx Response object
+            **Parameters:**
+
+            - **item_id** (int): ID for item.
+            - **login** (str): Account login (or email).
+            - **password** (str): Account password.
+            - **login_password** (str): Account login data format login:password.
+            - **close_item** (bool): If True, the item will be closed item_state = closed.
+            - **extra** (str): Extra params for account checking.
+            - **resell_item_id** (int): Put item id, if you are trying to resell item.
+            - **random_proxy** (bool): Pass True, if you get captcha in previous response.
+
+            **Example:**
+
+            ```python
+            response = market.publishing.check(item_id=1000000, login="login", password="password")
+            print(response.json())
+            ```
             """
             path = f"/{item_id}/goods/check"
             params = {
@@ -7104,56 +8002,41 @@ class Market:
             """
             POST https://api.lzt.market/item/add
 
-            Adds account on the market.
+            *Adds account on the market.*
 
-            Account origin:
+            Required scopes: *market*
 
-            brute - Account received using Bruteforce
+            **Parameters:**
 
-            fishing - Account received from fishing page
+            - **category_id** (int): Accounts category.
+            - **price** (float): Account price in your currency.
+            - **currency** (str): Using currency.
+            - **item_origin** (str): Account origin. Where did you get it from.
+            - **extended_guarantee** (int): Guarantee type.
+            - **title** (str): Russian title of account.
+                > If title specified and title_en is empty, title_en will be automatically translated to English language.
+            - **title_en** (str): English title of account.
+                > If title_en specified and title is empty, title will be automatically translated to Russian language.
+            - **description** (str): Account public description.
+            - **information** (str): Account private information (visible for buyer only if purchased).
+            - **has_email_login_data** (bool): Required if a category is one of list of Required email login data categories.
+            - **email_login_data** (str): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+            - **email_type** (str): Email type.
+            - **allow_ask_discount** (bool): Allow users to ask discount for this account.
+            - **proxy_id** (int): Using proxy id for account checking.
+            - **random_proxy** (bool): Pass True, if you get captcha in previous response
+            - **auction** (bool): Pass True if you want to create auction
+            - **auction_duration_value** (int): Duration auction value.
+            - **auction_duration_option** (str): Duration auction option.
+            - **instabuy_price** (float): The price for which you can instantly redeem your account.
+            - **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
-            stealer - Account received from stealer logs
+            **Example:**
 
-            autoreg - Account is automatically registered by a tool
-
-            personal - Account is yours. You created it yourself
-
-            resale - Account received from another seller
-
-            retrive - Account is recovered by email or phone (only for VKontakte category)
-
-            Required email login data categories:
-
-            9 - Fortnite
-
-            12 - Epic games
-
-            18 - Escape from Tarkov
-
-
-            Required scopes: market
-            :param category_id: Accounts category.
-            :param price: Account price in your currency.
-            :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
-            :param item_origin: Account origin. Where did you get it from.
-            :param extended_guarantee: Guarantee type. Allowed values: -1 -> 12 hours, 0 -> 24 hours, 1 -> 3 days.
-            :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
-            :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
-            :param description: Account public description.
-            :param information: Account private information (visible for buyer only if purchased).
-            :param has_email_login_data: Required if a category is one of list of Required email login data categories.
-            :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
-            :param email_type: Email type. Allowed values: native, autoreg.
-            :param allow_ask_discount: Allow users to ask discount for this account.
-            :param proxy_id: Using proxy id for account checking.
-            :param random_proxy: Pass True, if you get captcha in previous response
-            :param auction: Pass True if you want to create auction
-            :param auction_duration_value: Duration auction value.
-            :param auction_duration_option: Duration auction option. Can be [minutes, hours, days].
-            :param instabuy_price: The price for which you can instantly redeem your account.
-            :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
-
-            :return: httpx Response object
+            ```python
+            response = market.publishing.add(category_id=24, price=100, currency="rub", item_origin="stealer", title="Telegram")
+            print(response.json())
+            ```
             """
             path = "/item/add"
             params = {
@@ -7213,60 +8096,45 @@ class Market:
             """
             POST https://api.lzt.market/item/fast-sell
 
-            Adds and check account on validity. If account is valid, account will be published on the market.
+            *Adds and check account on validity. If account is valid, account will be published on the market.*
 
-            Account origin:
+            Required scopes: *market*
 
-            brute - Account received using Bruteforce
+            **Parameters:**
 
-            fishing - Account received from fishing page
+            - **category_id** (int): Accounts category.
+            - **price** (float): Account price in your currency.
+            - **currency** (str): Using currency.
+            - **item_origin** (str): Account origin. Where did you get it from.
+            - **extended_guarantee** (int): Guarantee type.
+            - **title** (str): Russian title of account.
+                > If title specified and title_en is empty, title_en will be automatically translated to English language.
+            - **title_en** (str): English title of account.
+                > If title_en specified and title is empty, title will be automatically translated to Russian language.
+            - **description** (str): Account public description.
+            - **information** (str): Account private information (visible for buyer only if purchased).
+            - **has_email_login_data** (bool): Required if a category is one of list of Required email login data categories.
+            - **email_login_data** (str): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+            - **email_type** (str): Email type.
+            - **allow_ask_discount** (bool): Allow users to ask discount for this account.
+            - **proxy_id** (int): Using proxy id for account checking.
+            - **random_proxy** (bool): Pass True, if you get captcha in previous response.
+            - **login** (str): Account login (or email).
+            - **password** (str): Account password.
+            - **login_password** (str): Account login data format login:password.
+            - **extra** (str): Extra params for account checking.
+            - **auction** (bool): Pass True if you want to create auction.
+            - **auction_duration_value** (int): Duration auction value.
+            - **auction_duration_option** (str): Duration auction option.
+            - **instabuy_price** (float): The price for which you can instantly redeem your account.
+            - **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
-            stealer - Account received from stealer logs
+            **Example:**
 
-            autoreg - Account is automatically registered by a tool
-
-            personal - Account is yours. You created it yourself
-
-            resale - Account received from another seller
-
-            retrive - Account is recovered by email or phone (only for VKontakte category)
-
-            Required email login data categories:
-
-            9 - Fortnite
-
-            12 - Epic games
-
-            18 - Escape from Tarkov
-
-
-            Required scopes: market
-            :param category_id: Accounts category.
-            :param price: Account price in your currency.
-            :param currency: Using currency. Allowed values: cny, usd, rub, eur, uah, kzt, byn or gbp.
-            :param item_origin: Account origin. Where did you get it from.
-            :param extended_guarantee: Guarantee type. Allowed values: -1 -> 12 hours, 0 -> 24 hours, 1 -> 3 days.
-            :param title: Russian title of account. If title specified and title_en is empty, title_en will be automatically translated to English language.
-            :param title_en: English title of account. If title_en specified and title is empty, title will be automatically translated to Russian language.
-            :param description: Account public description.
-            :param information: Account private information (visible for buyer only if purchased).
-            :param has_email_login_data: Required if a category is one of list of Required email login data categories.
-            :param email_login_data: Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
-            :param email_type: Email type. Allowed values: native, autoreg.
-            :param allow_ask_discount: Allow users to ask discount for this account.
-            :param proxy_id: Using proxy id for account checking.
-            :param random_proxy: Pass True, if you get captcha in previous response
-            :param login: Account login (or email)
-            :param password: Account password
-            :param login_password: Account login data format login:password
-            :param extra: Extra params for account checking. E.g. you need to put cookies to extra[cookies] if you want to upload TikTok/Fortnite/Epic Games account
-            :param auction: Pass True if you want to create auction
-            :param auction_duration_value: Duration auction value.
-            :param auction_duration_option: Duration auction option. Can be [minutes, hours, days].
-            :param instabuy_price: The price for which you can instantly redeem your account.
-            :param not_bids_action: If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
-
-            :return: httpx Response object
+            ```python
+            response = market.publishing.add(category_id=24, price=100, currency="rub", item_origin="stealer", login="auth_key", password="dc_id", title="Telegram")
+            print(response.json())
+            ```
             """
             path = "/item/fast-sell"
             params = {
@@ -7314,11 +8182,16 @@ class Market:
             """
             GET https://api.lzt.market/proxy
 
-            Gets your proxy list.
+            *Gets your proxy list.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = market.proxy.get()
+            print(response.json())
+            ```
             """
             path = "/proxy"
             return _send_request(self=self._api, method="GET", path=path)
@@ -7330,14 +8203,21 @@ class Market:
             """
             DELETE https://api.lzt.market/proxy
 
-            Delete single or all proxies.
+            *Delete single or all proxies.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param proxy_id: ID of an existing proxy
-            :param delete_all: Use True if you want to delete all proxy
+            **Parameters:**
 
-            :return: httpx Response object
+            - **proxy_id** (int): ID of an existing proxy.
+            - **delete_all** (bool): Use True if you want to delete all proxy.
+
+            **Example:**
+
+            ```python
+            response = market.proxy.delete(delete_all=True)
+            print(response.json())
+            ```
             """
             path = "/proxy"
             params = {"proxy_id": proxy_id, "delete_all": delete_all}
@@ -7357,17 +8237,25 @@ class Market:
             """
             POST https://api.lzt.market/proxy
 
-            Add single proxy or proxy list.
+            *Add single proxy or proxy list.*
 
-            Required scopes: market
+            Required scopes: *market*
 
-            :param proxy_ip: Proxy ip or host.
-            :param proxy_port: Proxy port
-            :param proxy_user: Proxy username
-            :param proxy_pass: Proxy password
-            :param proxy_row: Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \n separator)
+            **Parameters:**
 
-            :return: httpx Response object
+            - **proxy_ip** (str): Proxy ip or host.
+            - **proxy_port** (str): Proxy port
+            - **proxy_user** (str): Proxy username
+            - **proxy_pass** (str): Proxy password
+            - **proxy_row** (str): Proxy list in String format ip:port:user:pass.
+                > Each proxy must be start with new line (use *\\n* separator)
+
+            **Example:**
+
+            ```python
+            response = market.proxy.add(proxy_row="192.168.1.1:8080:login:password\n192.168.2.2:8080:login:password")
+            print(response.json())
+            ```
             """
             path = "/proxy"
             params = {
@@ -7381,6 +8269,33 @@ class Market:
                 self=self._api, method="POST", path=path, params=params
             )
 
+    @_MainTweaks._CheckScopes(scopes=["market"])
+    def batch(self, jobs: list[dict]) -> httpx.Response:
+        """
+        POST https://api.lzt.market/batch
+
+        Execute multiple API requests at once.(10 max)
+
+        Example scheme:
+
+        [
+            {
+            "id": "1",
+            "uri": "https://api.lzt.market/me",
+            "method": "GET",
+            "params": {}
+            }
+        ]
+
+        :param jobs: List of batch jobs. (Check example above)
+        :return: httpx Response object
+        """
+        import json
+
+        path = "/batch"
+        data = jobs
+        return _send_request(self=self, method="POST", path=path, data=data)
+
 
 class Antipublic:
     def __init__(
@@ -7392,9 +8307,13 @@ class Antipublic:
         timeout: int = 90,
     ):
         """
-        :param token: Your token. You can get in there -> https://zelenka.guru/account/antipublic or in antipublic app
-        :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
-        :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
+        - **token** (str): Your token.
+            > You can get it [there](https://zelenka.guru/account/antipublic) or in antipublic app
+        - **proxy_type** (str): Your proxy type.
+        - **proxy** (str): Proxy string.
+            > ip:port or login:password@ip:port
+        - **reset_custom_variables** (bool): Reset custom variables.
+        - **timeout** (int): Request timeout.
         """
         self.base_url = "https://antipublic.one"
         if proxy_type is not None:
@@ -7434,9 +8353,14 @@ class Antipublic:
             """
             GET https://antipublic.one/api/v2/countLines
 
-            Get count of rows in the AntiPublic db
+            *Get count of rows in the AntiPublic db*
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = antipublic.info.lines_count()
+            print(response.json())
+            ```
             """
 
             path = "/api/v2/countLines"
@@ -7446,9 +8370,14 @@ class Antipublic:
             """
             GET https://antipublic.one/api/v2/countLinesPlain
 
-            Get count of rows in the AntiPublic db (raw format)
+            *Get count of rows in the AntiPublic db (raw format)*
 
-            :return: str
+            **Example:**
+
+            ```python
+            response = antipublic.info.lines_count_plain()
+            print(response.text)
+            ```
             """
 
             path = "/api/v2/countLinesPlain"
@@ -7458,9 +8387,14 @@ class Antipublic:
             """
             GET https://antipublic.one/api/v2/version
 
-            Get current antipublic version, change log and download url
+            *Get current antipublic version, change log and download url*
 
-            :return: json {'filename': str, 'version': str, 'changeLog': str, 'url': str}
+            **Example:**
+
+            ```python
+            response = antipublic.info.version()
+            print(response.json())
+            ```
             """
 
             path = "/api/v2/version"
@@ -7474,11 +8408,16 @@ class Antipublic:
             """
             GET https://antipublic.one/api/v2/checkAccess
 
-            Checks your license
+            *Checks your license*
 
             Token required
 
-            :return: httpx Response object
+            **Example:**
+
+            ```python
+            response = antipublic.account.license()
+            print(response.json())
+            ```
             """
             path = "/api/v2/checkAccess"
             return _send_request(self=self._api, method="GET", path=path)
@@ -7487,11 +8426,14 @@ class Antipublic:
             """
             GET https://antipublic.one/api/v2/availableQueries
 
-            Get your available queries
+            *Get your available queries*
 
-            Token required
+            **Example:**
 
-            :return: httpx Response object
+            ```python
+            response = antipublic.account.queries()
+            print(response.json())
+            ```
             """
             path = "/api/v2/availableQueries"
             return _send_request(self=self._api, method="GET", path=path)
@@ -7500,43 +8442,56 @@ class Antipublic:
         """
         POST https://antipublic.one/api/v2/checkLines
 
-        Check your lines.
+        *Check your lines.*
 
-        Token required
-        :param lines: Lines for check, email:password or login:password
-        :param insert: Upload private rows to AntiPublic db
+        **Parameters:**
 
-        :return: httpx Response object
+        - **lines** (list): Lines for check, email:password or login:password
+        - **insert** (bool): Upload private rows to AntiPublic db
+
+        **Example:**
+
+        ```python
+        response = antipublic.check(lines=["email:password", "login:password"])
+        print(response.json())
+        ```
         """
-        params = {"lines": lines, "insert": insert}
+        dataJ = {"lines": lines, "insert": insert}
         path = "/api/v2/checkLines"
-        return _send_request(self=self, method="POST", path=path, params=params)
+        return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
     def search(self, search_by: Constants.Antipublic.SearchBy._Literal, query: str, direction: Constants.Antipublic.SearchDirection._Literal = None, page_token: Optional[str] = None) -> httpx.Response:
         """
         POST https://antipublic.one/api/v2/search
 
-        Search lines by email/password/domain.
+        *Search lines by email/password/domain.*
 
-        :param search_by: Search type. Can be email/password/domain
-            (For password and domain search you need Antipublic Plus subscription)
-        :param query: Search query.
-        :param direction: Search direction. Can be start/strict/end
+        **Parameters:**
 
-        :return: httpx Response object
+        - **search_by** (INSERT_HERE): Search type.
+            > For password and domain search you need Antipublic Plus subscription
+        - **query** (INSERT_HERE): Search query.
+        - **direction** (INSERT_HERE): Search direction.
+
+        **Example:**
+
+        ```python
+        response = antipublic.search(search_by="email", query="email7357@example.com")
+        print(response.json())
+        ```
         """
         path = "/api/v2/search"
         if search_by not in ["email", "password", "domain"]:
             _WarningsLogger.warn("Search type has invalid value. It can be only \"email\", \"password\" or \"domain\"")
-        data = {
+        dataJ = {
             "searchBy": search_by,
             "query": {str(search_by): query},
         }
         if direction:
-            data["direction"] = {str(search_by): direction}
+            dataJ["direction"] = {str(search_by): direction}
         if page_token:
-            data["pageToken"] = page_token
-        return _send_request(self=self, method="POST", path=path, data=data)
+            dataJ["pageToken"] = page_token
+        return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
     def email_passwords(
         self, emails: list[str] = None, limit: int = None
@@ -7544,15 +8499,20 @@ class Antipublic:
         """
         POST https://antipublic.one/api/v2/emailPasswords
 
-        Get passwords for login's/email's
+        *Get passwords for login's/email's*
 
-        Token required
+        **Parameters:**
 
-        :param emails: List of emails or logins for search.
-        :param limit: Result limit (per email).
+        - **emails** (list): List of emails or logins for search.
+        - **limit** (int): Result limit (per email).
 
-        :return: httpx Response object
+        **Example:**
+
+        ```python
+        response = antipublic.email_passwords(emails=["email7357@example.com", "email7358@example.com"], limit=1)
+        print(response.json())
+        ```
         """
-        data = {"emails": emails, "limit": limit}
+        dataJ = {"emails": emails, "limit": limit}
         path = "/api/v2/emailPasswords"
-        return _send_request(self=self, method="POST", path=path, data=data)
+        return _send_request(self=self, method="POST", path=path, dataJ=dataJ)

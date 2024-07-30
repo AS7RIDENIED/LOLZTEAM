@@ -1,6 +1,7 @@
 from .Tweaks import SendAsAsync
 from .Models import Payment
 
+
 async def CheckPayment(
     self,
     amount,
@@ -8,7 +9,7 @@ async def CheckPayment(
     user_id: int = None,
     allow_hold: bool = None,
     include_payment_data: bool = False,
-):
+) -> Payment:
     """
     A function to check payment status based on given parameters.
 

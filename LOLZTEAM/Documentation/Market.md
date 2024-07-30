@@ -7,150 +7,153 @@
 
 <summary><font size="4">Method tree</font></summary>
 
-* [Profile](#profile)
-    * [Get profile](#get-profile)
-    * [Edit profile](#edit-profile)
-* [Category](#category)
-    * [Steam](#steam)
-        * [Get](#get)
-        * [Params](#params)
-        * [Games](#games)
-    * [Fortnite](#fortnite)
-        * [Get](#get-1)
-        * [Params](#params-1)
-    * [Genshin Impact](#genshin-impact)
-        * [Get](#get-2)
-        * [Params](#params-2)
-    * [Valorant](#valorant)
-        * [Get](#get-3)
-        * [Params](#params-3)
-        * [Data](#data)
-    * [League of Legends](#league-of-legends)
-        * [Get](#get-4)
-        * [Params](#params-4)
-    * [Telegram](#telegram)
-        * [Get](#get-5)
-        * [Params](#params-5)
-    * [Supercell](#supercell)
-        * [Get](#get-6)
-        * [Params](#params-6)
-    * [Origin](#origin)
-        * [Get](#get-7)
-        * [Params](#params-7)
-        * [Games](#games-0)
-    * [World of Tanks](#world-of-tanks)
-        * [Get](#get-8)
-        * [Params](#params-8)
-    * [World of Tanks Blitz](#world-of-tanks-blitz)
-        * [Get](#get-9)
-        * [Params](#params-9)\
-    * [Gifts](#gifts)
-        * [Get](#get-10)
-        * [Params](#params-10)
-    * [Epicgames](#epicgames)
-        * [Get](#get-11)
-        * [Params](#params-11)
-        * [Games](#games-1)
-    * [Escape from Tarkov](#escape-from-tarkov)
-        * [Get](#get-12)
-        * [Params](#params-12)
-    * [Social Club](#social-club)
-        * [Get](#get-13)
-        * [Params](#params-13)
-    * [Uplay](#uplay)
-        * [Get](#get-14)
-        * [Params](#params-14)
-        * [Games](#games-2)
-    * [War Thunder](#war-thunder)
-        * [Get](#get-15)
-        * [Params](#params-15)
-    * [Discord](#discord)
-        * [Get](#get-16)
-        * [Params](#params-16)
-    * [Tiktok](#tiktok)
-        * [Get](#get-17)
-        * [Params](#params-17)
-    * [Instagram](#instagram)
-        * [Get](#get-18)
-        * [Params](#params-18)
-    * [Battle Net](#battle-net)
-        * [Get](#get-19)
-        * [Params](#params-19)
-        * [Games](#games-3)
-    * [VPN](#vpn)
-        * [Get](#get-20)
-        * [Params](#params-20)
-    * [Cinema](#cinema)
-        * [Get](#get-21)
-        * [Params](#params-21)
-    * [Spotify](#spotify)
-        * [Get](#get-22)
-        * [Params](#params-22)
-    * [Warface](#warface)
-        * [Get](#get-23)
-        * [Params](#params-23)
-    * [Get](#get-24)
-    * [Get categories](#get-categories)
-* [List](#list)
-    * [Latest items](#latest-items)
-    * [From url](#from-url)
-    * [Viewed accounts](#viewed-accounts)
-    * [Favorite accounts](#favorite-accounts)
-    * [Purchased accounts](#purchased-accounts)
-    * [Owned accounts](#owned-accounts)
-* [Purchasing](#purchasing)
-    * [Auction](#auction)
-        * [Get auction bids](#get-auction-bids) 
-        * [Place auction bid](#place-auction-bid)
-        * [Delete auction bid](#delete-auction-bid)
-    * [Fast buy](#fast-buy)
-    * [Check](#check)
-    * [Confirm buy](#confirm-buy)
-* [Publishing](#publishing)
-    * [Fast sell](#fast-sell)
-    * [Add](#add)
-    * [Check](#check-1)
-    * [Info](#info)
-* [Managing](#managing)
-    * [Tag](#tag)
-        * [Add tag](#add-tag)
-        * [Delete tag](#delete-tag)
-    * [Steam](#steam-1)
-        * [Steam inventory value](#steam-inventory-value)
-        * [Steam guard](#get-steam-guard)
-        * [Confirm SDA](#confirm-sda)
-        * [Get mafile](#get-mafile)
-        * [Update Inventory Value](#update-inventory-value)
-    * [Telegram](#telegram-1)
-        * [Reset telegram authorizations](#reset-telegram-authorizations)
-        * [Get telegram confirmation code](#get-telegram-confirmation-code)
-    * [Get item](#get-item)
-    * [Bulk get](#bulk-get)
-    * [Edit item](#edit-item)
-    * [Delete item](#delete-item)
-    * [Create arbitrage](#Arbitrage)
-    * [Change owner](#change-owner)
-    * [Change password](#change-password)
-    * [Bump](#bump)
-    * [Get email code](#get-email-code)
-    * [Get temp mail password](#get-temp-mail-password)
-    * [Refuse guaranteee](#refuse-guarantee)
-    * [Favorite](#favorite)
-    * [Unfavorite](#unfavorite)
-    * [Stick](#stick)
-    * [Unstick](#unstick)
-* [Payments](#payments)
-    * [History](#history)
-    * [Transfer](#transfer)
-    * [Check transfer fee](#check-transfer-fee)
-    * [Generate payment link](#generate-payment-link)
-* [Proxy](#proxy)
-    * [Get proxies](#get-proxies)
-    * [Add proxy](#add-proxy)
-    * [Delete proxy](#delete-proxy)
-* [Create batch job](#get-batch-job)
 * [Batch](#batch)
-* [Send as async](#send-async)
+* [Profile](#profile)
+  * [Get](#get)
+  * [Edit](#edit)
+* [Category](#category)
+  * [Steam](#steam)
+    * [Get](#get-1)
+    * [Params](#params)
+    * [Games](#games)
+  * [Fortnite](#fortnite)
+    * [Get](#get-2)
+    * [Params](#params-1)
+  * [Mihoyo](#mihoyo)
+    * [Get](#get-3)
+    * [Params](#params-2)
+  * [Riot](#riot)
+    * [Get](#get-4)
+    * [Params](#params-3)
+    * [Valorant Data](#valorant-data)
+  * [Telegram](#telegram)
+    * [Get](#get-5)
+    * [Params](#params-4)
+  * [Supercell](#supercell)
+    * [Get](#get-6)
+    * [Params](#params-5)
+  * [Origin](#origin)
+    * [Get](#get-7)
+    * [Params](#params-6)
+    * [Games](#games-1)
+  * [Worldoftanks](#worldoftanks)
+    * [Get](#get-8)
+    * [Params](#params-7)
+  * [Worldoftanksblitz](#worldoftanksblitz)
+    * [Get](#get-9)
+    * [Params](#params-8)
+  * [Gifts](#gifts)
+    * [Get](#get-10)
+    * [Params](#params-9)
+  * [Epicgames](#epicgames)
+    * [Get](#get-11)
+    * [Params](#params-10)
+    * [Games](#games-2)
+  * [Escapefromtarkov](#escapefromtarkov)
+    * [Get](#get-12)
+    * [Params](#params-11)
+  * [Socialclub](#socialclub)
+    * [Get](#get-13)
+    * [Params](#params-12)
+    * [Games](#games-3)
+  * [Uplay](#uplay)
+    * [Get](#get-14)
+    * [Params](#params-13)
+    * [Games](#games-4)
+  * [Warthunder](#warthunder)
+    * [Get](#get-15)
+    * [Params](#params-14)
+  * [Discord](#discord)
+    * [Get](#get-16)
+    * [Params](#params-15)
+  * [Tiktok](#tiktok)
+    * [Get](#get-17)
+    * [Params](#params-16)
+  * [Instagram](#instagram)
+    * [Get](#get-18)
+    * [Params](#params-17)
+  * [Battlenet](#battlenet)
+    * [Get](#get-19)
+    * [Params](#params-18)
+    * [Games](#games-5)
+  * [Vpn](#vpn)
+    * [Get](#get-20)
+    * [Params](#params-19)
+  * [Cinema](#cinema)
+    * [Get](#get-21)
+    * [Params](#params-20)
+  * [Roblox](#roblox)
+    * [Get](#get-22)
+    * [Params](#params-21)
+  * [Spotify](#spotify)
+    * [Get](#get-23)
+    * [Params](#params-22)
+  * [Warface](#warface)
+    * [Get](#get-24)
+    * [Params](#params-23)
+  * [Minecraft](#minecraft)
+    * [Get](#get-25)
+    * [Params](#params-24)
+  * [Get](#get-26)
+  * [List](#list)
+* [List](#list)
+  * [From Url](#from-url)
+  * [Latest](#latest)
+  * [Owned](#owned)
+  * [Purchased](#purchased)
+  * [Favorite](#favorite)
+  * [Viewed](#viewed)
+* [Payments](#payments)
+  * [History](#history)
+  * [Transfer](#transfer)
+  * [Fee](#fee)
+  * [Generate Link](#generate-link)
+* [Managing](#managing)
+  * [Tag](#tag)
+    * [Delete](#delete)
+    * [Add](#add)
+  * [Steamman](#steamman)
+    * [Guard](#guard)
+    * [Mafile](#mafile)
+    * [Update Inventory](#update-inventory)
+    * [Inventory Value](#inventory-value)
+    * [Confirm Sda](#confirm-sda)
+  * [Telegramman](#telegramman)
+    * [Code](#code)
+    * [Reset Auth](#reset-auth)
+  * [Password Temp Mail](#password-temp-mail)
+  * [Get](#get-27)
+  * [Bulk Get](#bulk-get)
+  * [Delete](#delete-1)
+  * [Email](#email)
+  * [Refuse Guarantee](#refuse-guarantee)
+  * [Check Guarantee](#check-guarantee)
+  * [Change Password](#change-password)
+  * [Stick](#stick)
+  * [Unstick](#unstick)
+  * [Favorite](#favorite-1)
+  * [Unfavorite](#unfavorite)
+  * [Bump](#bump)
+  * [Change Owner](#change-owner)
+  * [Edit](#edit-1)
+  * [Arbitrage](#arbitrage)
+* [Purchasing](#purchasing)
+  * [Auction](#auction)
+    * [Place Bid](#place-bid)
+    * [Delete Bid](#delete-bid)
+  * [Check](#check)
+  * [Confirm](#confirm)
+  * [Fast Buy](#fast-buy)
+* [Publishing](#publishing)
+  * [Info](#info)
+  * [Check](#check-1)
+  * [Add](#add-1)
+  * [Fast Sell](#fast-sell)
+* [Proxy](#proxy)
+  * [Get](#get-28)
+  * [Delete](#delete-2)
+  * [Add](#add-2)
+
 
 </details>
 
@@ -174,23 +177,43 @@ forum = Forum(token=token, language="en")
 **Parameters:**
 
 - **token** (str): Your token.
-  > You can get in there -> https://zelenka.guru/account/api
+  > You can get it [there](https://zelenka.guru/account/api)
 - **bypass_429** (bool): Bypass status code 429 by sleep
-  > It's True by default. You can skip it or set False if you want
-- **language** (str): Language for your api responses. 
-  > Pass "en" if you want to get responses in english or pass "ru" if you want to get responses in russian.
-- **proxy_type** (str): Your proxy type. 
-  > You can use types ( Constants.Proxy.socks5 or socks4,https,http )
-- **proxy** (str): Proxy string. 
-  > Example -> ip:port or login:password@ip:port
+- **language** (str): Language for your api responses.
+- **proxy_type** (str): Your proxy type.
+- **proxy** (str): Proxy string.
+- **reset_custom_variables** (bool): Reset custom variables.
+- **timeout** (int): Request timeout.
+# Batch
+
+POST https://api.lzt.market/batch
+
+Execute multiple API requests at once.(10 max)
+
+Example scheme:
+
+[
+    {
+    "id": "1",
+    "uri": "https://api.lzt.market/me",
+    "method": "GET",
+    "params": {}
+    }
+]
+
+:param jobs: List of batch jobs. (Check example above)
+:return: httpx Response object
+
 
 # Profile
 
-*Methods to get and edit profile info*
+## Get
 
-### Get profile
+GET https://api.lzt.market/me
 
 *Displays info about your profile.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -199,78 +222,78 @@ response = market.profile.get()
 print(response.json())
 ```
 
-```python
-{'user': {'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_email': 'string', 'user_unread_notification_count': 0, 'user_dob_day': 0, 'user_dob_month': 0, 'user_dob_year': 0, 'user_title': 'string', 'user_last_seen_date': 0, 'balance': 0, 'hold': 0, 'system_info': {'visitor_id': 0, 'time': 0}}}
-```
 
-### Edit profile
+## Edit
+
+PUT https://api.lzt.market/me
 
 *Change settings about your profile on the market.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **disable_steam_guard** (bool): Disable Steam Guard on account purchase moment
-- **deauthorize_steam** (bool): Finish all Steam sessions after purchase
-- **user_allow_ask_discount** (bool): Allow users ask discount for your accounts
-- **max_discount_percent** (int): Maximum discount percents for your accounts
-- **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
-- **hide_favourites** (bool): Hide your profile info when you add an account to favorites
-- **hide_bids** (bool): Hide your profile when bid on the auction
-- **title** (str): Market title.
-- **telegram_client** (dict): Telegram client. It should be {"telegram_api_id": 12345, "telegram_api_hash": "12345","telegram_device_model":"12345","telegram_system_version":"12345","telegram_app_version":"12345"}
+- **disable_steam_guard** (INSERT_HERE): Disable Steam Guard on account purchase moment
+- **user_allow_ask_discount** (INSERT_HERE): Allow users ask discount for your accounts
+- **max_discount_percent** (INSERT_HERE): Maximum discount percents for your accounts
+- **allow_accept_accounts** (INSERT_HERE): Usernames who can transfer market accounts to you. Separate values with a comma.
+- **hide_favourites** (INSERT_HERE): Hide your profile info when you add an account to favorites
+- **title** (INSERT_HERE): Market title.
+- **telegram_client** (INSERT_HERE): Telegram client. It should be {"telegram_api_id"
+- **deauthorize_steam** (INSERT_HERE): Finish all Steam sessions after purchase.
+- **hide_bids** (INSERT_HERE): Hide your profile when bid on the auction.
 
 **Example:**
 
 ```python
-response = market.profile.edit(user_allow_ask_discount=True)
+response = market.profile.edit(user_allow_ask_discount=True, max_discount_percent=25, title="Selling some stuff")
 print(response.json())
 ```
 
-```python
-{'status': 'ok', 'message': 'Changes Saved'}
-```
 
+# Category
 
-## Category
+## Steam
 
----
+### Get
 
-### Steam
-
-#### Get
+GET https://api.lzt.market/steam
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.steam.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.steam.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/steam/params
 
 *Displays search parameters for a category.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -279,13 +302,14 @@ response = market.category.steam.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-#### Games
+### Games
+
+GET https://api.lzt.market/steam/games
 
 *Displays a list of games in the category.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -294,47 +318,44 @@ response = market.category.steam.games()
 print(response.json())
 ```
 
-```python
-{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Fortnite
 
+### Get
 
-### Fortnite
-
-#### Get
+GET https://api.lzt.market/fortnite
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.fortnite.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.fortnite.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/fortnite/params
 
 *Displays search parameters for a category.*
 
@@ -345,216 +366,154 @@ response = market.category.fortnite.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Mihoyo
 
-### Genshin impact
+### Get
 
-#### Get
+GET https://api.lzt.market/mihoyo
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.genshin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.mihoyo.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/mihoyo/params
 
 *Displays search parameters for a category.*
 
 **Example:**
 
 ```python
-response = market.category.genshin.params()
+response = market.category.mihoyo.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Riot
 
-### Valorant
+### Get
 
-#### Get
+GET https://api.lzt.market/riot
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.valorant.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.riot.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/riot/params
 
 *Displays search parameters for a category.*
 
 **Example:**
 
 ```python
-response = market.category.valorant.params()
+response = market.category.riot.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-### Data
+### Valorant Data
+
+GET https://api.lzt.market/data/valorant
 
 *Displays data for specified type in valorant category.*
 
-**Parameters:**
-
-- **data_type** (str): Data type. Can be ["Agent", "Buddy", "WeaponSkins"]
-- **language** (str): Response language. Can be ["ru-RU", "en-US"]
-
 **Example:**
 
 ```python
-response = market.categoryvalorant.data(data_type="WeaponSkins", language="en-US")
+response = market.category.riot.valorant_data(data_type="Agent")
 print(response.json())
 ```
 
-```python
-{'ffffffff-ffff-ffff-ffff-ffffffffffff': {'uuid': 'string', 'displayName': 'string', 'themeUuid': 'string', 'contentTierUuid': 'string', 'displayIcon': 'string', 'assetPath': 'string', 'chromas': [{'uuid': 'string', 'displayName': 'string', 'fullRender': 'string', 'assetPath': 'string'}], 'levels': [{'uuid': 'string', 'displayName': 'string', 'displayIcon': 'string', 'assetPath': 'string'}], 'weapon': 'string', 'rank': 0}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Telegram
 
-### League of Legends
+### Get
 
-#### Get
+GET https://api.lzt.market/telegram
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
-**Parameters:**
-
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
-
-**Example:**
-
-```python
-response = market.category.lol.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
-print(response.json())
-```
-
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
-
-#### Params
-
-*Displays search parameters for a category.*
-
-**Example:**
-
-```python
-response = market.category.lol.params()
-print(response.json())
-```
-
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
----
-
-### Telegram
-
-#### Get
-
-*Displays a list of accounts in a specific category according to your parameters.*
+Required scopes: *market*
 
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.telegram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.telegram.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/telegram/params
 
 *Displays search parameters for a category.*
 
@@ -565,96 +524,92 @@ response = market.category.telegram.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Supercell
 
-### Supercell
+### Get
 
-#### Get
+GET https://api.lzt.market/supercell
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.supercell.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.supercell.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/supercell/params
 
 *Displays search parameters for a category.*
 
 **Example:**
 
 ```python
-response = market.category.supercell.params()
+response = INSERT_HERE
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Origin
 
-### Origin
+### Get
 
-#### Get
+GET https://api.lzt.market/origin
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.origin.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.origin.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/origin/params
 
 *Displays search parameters for a category.*
 
@@ -665,13 +620,14 @@ response = market.category.origin.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-#### Games
+### Games
+
+GET https://api.lzt.market/origin/games
 
 *Displays a list of games in the category.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -680,46 +636,44 @@ response = market.category.origin.games()
 print(response.json())
 ```
 
-```python
-{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Worldoftanks
 
-### World of Tanks
+### Get
 
-#### Get
+GET https://api.lzt.market/world-of-tanks
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.wot.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.wot.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/world-of-tanks/params
 
 *Displays search parameters for a category.*
 
@@ -730,146 +684,140 @@ response = market.category.wot.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Worldoftanksblitz
 
-### World of Tanks Blitz
+### Get
 
-#### Get
+GET https://api.lzt.market/wot-blitz
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.wot_blitz.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.wot_blitz.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/wot-blitz/params
 
 *Displays search parameters for a category.*
 
 **Example:**
 
 ```python
-response = market.category.steam.params()
+response = market.category.wot_blitz.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Gifts
 
-### Gifts
+### Get
 
-#### Get
+GET https://api.lzt.market/gifts
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.gifts.get(pmax=50)
+response = market.category.gifts.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/gifts/params
 
 *Displays search parameters for a category.*
 
 **Example:**
 
 ```python
-response = market.category.gifts.params()
+response = market.category.gitfs.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Epicgames
 
-### Epicgames
+### Get
 
-#### Get
+GET https://api.lzt.market/epicgames
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.epicgames.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.epicgames.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/epicgames/params
 
 *Displays search parameters for a category.*
 
@@ -880,13 +828,14 @@ response = market.category.epicgames.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-#### Games
+### Games
+
+GET https://api.lzt.market/epicgames/games
 
 *Displays a list of games in the category.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -895,96 +844,92 @@ response = market.category.epicgames.games()
 print(response.json())
 ```
 
-```python
-{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Escapefromtarkov
 
-### Escape from Tarkov
+### Get
 
-#### Get
+GET https://api.lzt.market/espace-from-tarkov
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.eft.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.eft.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/escape-from-tarkov/params
 
 *Displays search parameters for a category.*
 
 **Example:**
 
 ```python
-response = market.categoryparams()
+response = market.category.eft.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Socialclub
 
-### Social Club
+### Get
 
-#### Get
+GET https://api.lzt.market/socialclub
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.socialclub.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.socialclub.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/socialclub/params
 
 *Displays search parameters for a category.*
 
@@ -995,13 +940,14 @@ response = market.category.socialclub.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-#### Games
+### Games
+
+GET https://api.lzt.market/socialclub/games
 
 *Displays a list of games in the category.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -1010,46 +956,44 @@ response = market.category.socialclub.games()
 print(response.json())
 ```
 
-```python
-{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Uplay
 
-### Uplay
+### Get
 
-#### Get
+GET https://api.lzt.market/uplay
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.uplay.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.uplat.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/uplay/params
 
 *Displays search parameters for a category.*
 
@@ -1060,13 +1004,14 @@ response = market.category.uplay.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-#### Games
+### Games
+
+GET https://api.lzt.market/uplay/games
 
 *Displays a list of games in the category.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -1075,46 +1020,44 @@ response = market.category.uplay.games()
 print(response.json())
 ```
 
-```python
-{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Warthunder
 
-### War Thunder
+### Get
 
-#### Get
+GET https://api.lzt.market/war-thunder
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.war_thunder.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.war_thunder.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/war-thunder/params
 
 *Displays search parameters for a category.*
 
@@ -1125,46 +1068,44 @@ response = market.category.war_thunder.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Discord
 
-### Discord
+### Get
 
-#### Get
+GET https://api.lzt.market/discord
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.discord.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.discord.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/discord/params
 
 *Displays search parameters for a category.*
 
@@ -1175,46 +1116,44 @@ response = market.category.discord.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Tiktok
 
-### TikTok
+### Get
 
-#### Get
+GET https://api.lzt.market/tiktok
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.tiktok.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.tiktok.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/tiktok/params
 
 *Displays search parameters for a category.*
 
@@ -1225,96 +1164,92 @@ response = market.category.tiktok.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Instagram
 
-### Instagram
+### Get
 
-#### Get
+GET https://api.lzt.market/telegram
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.instagram.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.telegram.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/telegram/params
 
 *Displays search parameters for a category.*
 
 **Example:**
 
 ```python
-response = market.category.instagram.params()
+response = market.category.telegram.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Battlenet
 
-### Battle Net
+### Get
 
-#### Get
+GET https://api.lzt.market/battlenet
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.battlenet.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.battlenet.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/battlenet/params
 
 *Displays search parameters for a category.*
 
@@ -1325,13 +1260,14 @@ response = market.category.battlenet.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-#### Games
+### Games
+
+GET https://api.lzt.market/battlenet/games
 
 *Displays a list of games in the category.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -1340,46 +1276,44 @@ response = market.category.battlenet.games()
 print(response.json())
 ```
 
-```python
-{'games': [{'app_id': 'string', 'title': 'string', 'abbr': 'string', 'category_id': 0, 'img': 'string', 'url': 'string', 'ru': ['string']}], 'isIsolatedMarket': True, 'isIsolatedMarketAlt': True, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Vpn
 
-### VPN
+### Get
 
-#### Get
+GET https://api.lzt.market/vpn
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.vpn.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.vpn.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/vpn/params
 
 *Displays search parameters for a category.*
 
@@ -1390,46 +1324,44 @@ response = market.category.vpn.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Cinema
 
-### Cinema
+### Get
 
-#### Get
+GET https://api.lzt.market/cinema
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.cinema.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.cinema.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/cinema/params
 
 *Displays search parameters for a category.*
 
@@ -1440,46 +1372,92 @@ response = market.category.cinema.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Roblox
 
-### Spotify
+### Get
 
-#### Get
+GET https://api.lzt.market/roblox
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.spotify.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.roblox.get()
 print(response.json())
 ```
 
+
+### Params
+
+GET https://api.lzt.market/roblox/params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
 ```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+response = market.category.roblox.params()
+print(response.json())
 ```
 
-#### Params
+
+## Spotify
+
+### Get
+
+GET https://api.lzt.market/spotify
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+
+**Example:**
+
+```python
+response = market.category.spotify.get()
+print(response.json())
+```
+
+
+### Params
+
+GET https://api.lzt.market/spotify/params
 
 *Displays search parameters for a category.*
 
@@ -1490,46 +1468,44 @@ response = market.category.spotify.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Warface
 
-### Warface
+### Get
 
-#### Get
+GET https://api.lzt.market/warface
 
 *Displays a list of accounts in a specific category according to your parameters.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.warface.get(pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.warface.get()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-#### Params
+### Params
+
+GET https://api.lzt.market/warface/params
 
 *Displays search parameters for a category.*
 
@@ -1540,51 +1516,99 @@ response = market.category.warface.params()
 print(response.json())
 ```
 
-```python
-{'category': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
----
+## Minecraft
 
 ### Get
 
+GET https://api.lzt.market/minecraft
+
 *Displays a list of accounts in a specific category according to your parameters.*
+
+Required scopes: *market*
 
 **Parameters:**
 
-- **category_name** (str): Category name.
-- **page** (int): The number of the page to display results from
-- **auction** (str): Auction. Can be [yes, no, nomatter].
-- **title** (str): The word or words contained in the account title
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **origin** (strorlist): List of account origins.
-- **not_origin** (strorlist): List of account origins that won't be included.
-- **order_by** (str): Order by. Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_down_upload, pdate_to_up, pdate_to_up_upload].
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
-- **search_params** (dict): Search params for your request. Example {"mafile":"yes"} in steam category will return accounts that have mafile
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.category.get(category_name="steam", pmax=50, origin=[Constants.Market.ItemOrigin.brute, Constants.Market.ItemOrigin.retrieve])
+response = market.category.minecraft.get()
 print(response.json())
 ```
 
+
+### Params
+
+GET https://api.lzt.market/minecraft/params
+
+*Displays search parameters for a category.*
+
+**Example:**
+
 ```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
+response = market.category.minecraft.params()
+print(response.json())
 ```
 
-### Get categories
 
-*Display category list.*
+## Get
+
+GET https://api.lzt.market/{category_name}
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+Required scopes: *market*
 
 **Parameters:**
 
-- **top_queries** (bool): Display top queries for per category.
+- **category_name** (str): Category name.
+- **page** (INSERT_HERE): The number of the page to display results from
+- **auction** (INSERT_HERE): Auction.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **origin** (INSERT_HERE): List of account origins.
+- **not_origin** (INSERT_HERE): List of account origins that won't be included.
+- **order_by** (INSERT_HERE): Item order.
+- **sold_before** (INSERT_HERE): Sold before.
+- **sold_before_by_me** (INSERT_HERE): Sold before by me.
+- **not_sold_before** (INSERT_HERE): Not sold before.
+- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+
+**Example:**
+
+```python
+response = market.category.get(category_name="telegram")
+print(response.json())
+```
+
+
+## List
+
+GET https://api.lzt.market/category
+
+*Display category list.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **top_queries** (INSERT_HERE): Display top queries for per category.
 
 **Example:**
 
@@ -1593,168 +1617,68 @@ response = market.category.list()
 print(response.json())
 ```
 
-```python
-{'0': {'category_id': 0, 'category_title': 'string', 'category_description': 'string', 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
----
 
 # List
 
-*Methods for getting account lists*
+## From Url
 
-### Latest items
+Displays a list of the latest accounts from your market url with search params
+
+Required scopes: *market**
+
+**Parameters:**
+
+- **url** (INSERT_HERE): Your market search url.
+    > It can be *https://lzt.market/search_params* or *https://api.lzt.market/search_params*
+
+**Example:**
+
+```python
+response = market.list.from_url(url="https://lzt.market/steam?origin[]=fishing&eg=1")
+print(response.json())
+```
+
+
+## Latest
+
+GET https://api.lzt.market/
 
 *Displays a list of the latest accounts.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **page** (int): The number of the page to display results from
-- **title** (str): The word or words contained in the account title
-- **search_params** (dict): Search params for your request.
-  > Example {"category_id":19} will return only VPN accounts
+- **page** (INSERT_HERE): The number of the page to display results from
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.list.new()
+response = market.list.latest()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-### From url
+## Owned
 
-*Displays a list of the latest accounts from your market url with search params.*
-
-**Parameters:**
-
-- **url** (str): Your market search url.
-  > It can be https://lzt.market or https://lzt.market
-
-**Example:**
-
-```python
-response = market.list.from_url(url="https://lzt.market/steam/cs-go-prime?origin[]=fishing&eg=1")
-print(response.json())
-```
-
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
-
-### Viewed accounts
-
-*Displays a list of viewed accounts.*
-
-
-**Parameters:**
-
-- **page** (int): The number of the page to display results from
-- **status** (str): Account status.
-  > Can be [active, paid, deleted or awaiting].
-
-  > You also can use types - Constants.Market.ItemStatus
-- **title** (str): The word or words contained in the account title
-- **search_params** (dict): Search params for your request. 
-  > Example {"category_id":19} will return only VPN accounts
-
-**Example:**
-
-```python
-response = market.list.viewed()
-print(response.json())
-```
-
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
-
-### Favorite accounts
-
-*Displays a list of favorite accounts.*
-
-**Parameters:**
-
-- **page** (int): The number of the page to display results from
-- **status** (str): Account status.
-  > Can be [active, paid, deleted or awaiting].
-
-  > You also can use types - Constants.Market.ItemStatus
-- **title** (str): The word or words contained in the account title
-- **search_params** (dict): Search params for your request.
-  > Example {"category_id":19} will return only VPN accounts
-
-**Example:**
-```python
-response = market.list.favorite()
-print(response.json())
-```
-
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-
-```
-
-### Purchased accounts
-
-*Displays a list of purchased accounts.*
-
-**Parameters:**
-
-- **user_id** (int): ID of user.
-- **page** (int): Page
-- **category_id** (int): Accounts category
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **title** (str): The word or words contained in the account title
-- **search_params** (dict): Search params for your request. 
-  > Example {"category_id":19} will return only VPN accounts
-- **status** (str): Account status.
-  > Can be [active, paid, deleted or awaiting].
-
-  > You also can use types - Constants.Market.ItemStatus
-- **order** (str): Order type.
-  > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
-
-  >You also can use types - Constants.Market.Order
-
-**Example:**
-
-```python
-response = market.list.purchased()
-print(response.json())
-```
-
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
-
-### Owned accounts
+GET https://api.lzt.market/user/{user_id}/items
 
 *Displays a list of owned accounts.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **user_id** (int): ID of user.
-  > It will set automatically if you didn't but take addictional 3 seconds
-- **page** (int): Page
-- **category_id** (int): Accounts category
-- **pmin** (int): Minimal price of account (Inclusive)
-- **pmax** (int): Maximum price of account (Inclusive)
-- **title** (str): The word or words contained in the account title
-- **search_params** (dict): Search params for your request. 
-  > Example {"category_id":19} will return only VPN accounts
-- **status** (str): Account status. 
-  > Can be [active, paid, deleted or awaiting].
-
-  > You also can use types - Constants.Market.ItemStatus
-- **order** (str): Order type.
-  > Can be [price_to_up, price_to_down, pdate_to_down, pdate_to_up, pdate_to_down_upload, pdate_to_up_upload].
-
-  >You also can use types - Constants.Market.Order
+- **user_id** (INSERT_HERE): ID of user.
+- **page** (INSERT_HERE): Page
+- **category_id** (INSERT_HERE): Accounts category
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **status** (INSERT_HERE): Account status. Can be [active, paid, deleted or awaiting].
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
@@ -1763,931 +1687,1004 @@ response = market.list.owned()
 print(response.json())
 ```
 
-```python
-{'items': ['string'], 'totalItems': 0, 'totalItemsPrice': 0, 'perPage': 0, 'page': 0, 'searchUrl': 'string'}
-```
 
-# Purchasing
+## Purchased
 
-*Methods for item purchasing*
+GET https://api.lzt.market/user/{user_id}/orders
 
-## Auction
+*Displays a list of purchased accounts.*
 
----
-
-### Get auction bids
-
-*Display a list of bids in the auction.*
+Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (int): ID of item.
+- **user_id** (INSERT_HERE): ID of user.
+- **page** (INSERT_HERE): Page
+- **category_id** (INSERT_HERE): Accounts category
+- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **status** (INSERT_HERE): Account status. Can be [active, paid, deleted or awaiting].
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.purchasing.auction.get(item_id=2410024)
+response = market.list.orders()
 print(response.json())
 ```
 
-```python
-{'itemId': 0, 'bids': [{'bid_id': 0, 'bid_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'minAllowedBidValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'bid_previous_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'user': {'user_id': 0, 'avatar': 'string', 'usernameHtml': 'string'}, 'bid_date': 0, 'canCancelBid': False, 'endTimeAuction': 0}], 'is_finished': 0, 'endTime': 0, 'currencies': {'{currency}': {'title': 'string', 'symbol': 'string', 'rate': {'Value': 0, 'Nominal': 0}}}, 'userCurrency': 'string', 'minAllowedBidValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'startValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-### Place auction bid
+## Favorite
 
-*Create a new auction bid.*
+GET https://api.lzt.market/fave
 
+*Displays a list of favourites accounts.*
+
+Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (int): ID of item.
-- **amount** (int): Amount bid.
-- **currency** (str): Bid currency.
-  > Can be [rub, uah, kzt, byn, usd, eur, gbp, cny, try].
+- **page** (INSERT_HERE): The number of the page to display results from
+- **status** (INSERT_HERE): Account status.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.purchasing.auction.place_bid(item_id=2410024, amount=250)
+response = market.list.favorite()
 print(response.json())
 ```
 
-```python
-{'status': 'ok', 'bid': {'bid_id': 0, 'bid_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'minAllowedBidValue': {'rub': 0, 'uah': 0, 'kzt': 0, 'byn': 0, 'usd': 0, 'eur': 0, 'gbp': 0, 'cny': 0, 'try': 0}, 'bid_previous_value': {'rub': 'string', 'uah': 'string', 'kzt': 'string', 'byn': 'string', 'usd': 'string', 'eur': 'string', 'gbp': 'string', 'cny': 'string', 'try': 'string'}, 'user': {'user_id': 0, 'avatar': 'string', 'usernameHtml': 'string'}, 'bid_date': 0, 'canCancelBid': False, 'endTimeAuction': 0}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-### Delete auction bid
+## Viewed
 
-*Delete your auction bid.*
+GET https://api.lzt.market/viewed
+
+*Displays a list of viewed accounts.*
+
+Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (int): ID of item.
-- **bid_id** (int): ID of bid.
+- **page** (INSERT_HERE): The number of the page to display results from
+- **status** (INSERT_HERE): Account status.
+- **title** (INSERT_HERE): The word or words contained in the account title.
+- **kwargs** (INSERT_HERE): Additional search parameters for your request.
 
 **Example:**
 
 ```python
-response = market.purchasing.auction.delete_bid(item_id=2410024, bid_id=2410024)
+response = market.list.viewed()
 print(response.json())
 ```
 
-```python
-{'status': 'ok', 'message': 'The bid success deleted', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
----
-
-### Fast buy
-
-*Check and buy account.*
-
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **price** (int): Current price of account in your currency
-- **buy_without_validation** (bool): Buy account without validation
-  > Use TRUE if you want to buy account without account data validation (not safe)
-
-**Example:**
-
-```python
-response = market.purchasing.fast_buy(item_id=2410024,price=10)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Check
-
-*Checking account for validity. If the account is invalid, the purchase will be canceled automatically.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.purchasing.check(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Confirm buy
-
-*Confirm buy.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **buy_without_validation** (bool): Buy account without validation
-  > Use TRUE if you want to buy account without account data validation (not safe)
-
-**Example:**
-
-```python
-response = market.purchasing.confirm(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'item': {'account': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-# Publishing
-
-*Methods for item publishing*
-
-### Fast sell
-
-*Adds and check account on validity. If account is valid, account will be published on the market.*
-
-**Parameters:**
-
-- **category_id** (int): Accounts category.
-- **price** (int): Account price in your currency.
-- **currency** (str): Using currency.
-- **item_origin** (str): Account origin. Where did you get it from.
-- **extended_guarantee** (int): Guarantee type.
-- **title** (str): Russian title of account.
-  > If title specified and title_en is empty, title_en will be automatically translated to English language.
-- **title_en** (str): English title of account.
-  > If title_en specified and title is empty, title will be automatically translated to Russian language.
-- **description** (str): Account public description.
-- **information** (str): Account private information (visible for buyer only if purchased).
-- **has_email_login_data** (bool): Required if a category is one of list of Required email login data categories.
-- **email_login_data** (str): Required if a category is one of list of Required email login data categories. 
-  > Email login data (login:pass format).
-- **email_type** (str): Email type.
-  > Use types -> Constants.Market.ItemOrigin
-- **allow_ask_discount** (bool): Allow users to ask discount for this account.
-- **proxy_id** (int): Using proxy id for account checking.
-- **random_proxy** (bool): Pass True, if you get captcha in previous response
-- **login** (str): Account login (or email)
-- **password** (str): Account password
-- **login_password** (str): Account login data
-  > Format - login:password
-- **extra** (dict): Extra params for account checking.
-  > E.g. you need to put cookies to extra (extra={"cookies": cookies}) if you want to upload TikTok/Fortnite/Epic Games account
-- **auction** (bool): Pass True if you want to create auction
-- **auction_duration_value** (int): Duration auction value.
-- **auction_duration_option** (str): Duration auction option. Can be [minutes, hours, days].
-- **instabuy_price** (int): The price for which you can instantly redeem your account.
-- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
-
-**Example:**
-
-```python
-response = market.publishing.fast_sell(category_id=Constants.Market.CategoryID.vk, price=10,
-                                       currency=Constants.Market.Currency.rub, item_origin=Constants.Market.ItemOrigin.autoreg,
-                                       extended_guarantee=Constants.Market.Guarantee.day, title="Acc vk",
-                                       allow_ask_discount=True, login_password="Login:password")
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'item': {'item_id': 0, 'item_state': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Add
-
-*Adds account on the market.*
-
-**Parameters:**
-
-- **category_id** (int): Accounts category.
-- **price** (int): Account price in your currency.
-- **currency** (str): Using currency.
-- **item_origin** (str): Account origin.
-- **extended_guarantee** (int): Guarantee type.
-- **title** (str): Russian title of account.
-  > If title specified and title_en is empty, title_en will be automatically translated to English language.
-- **title_en** (str): English title of account. 
-  > If title_en specified and title is empty, title will be automatically translated to Russian language.
-- **description** (str): Account public description.
-- **information** (str): Account private information (visible for buyer only if purchased).
-- **has_email_login_data** (bool): Required if a category is one of list of Required email login data categories.
-- **email_login_data** (str): Required if a category is one of list of Required email login data categories. 
-  > Email login data (login:pass format).
-- **email_type** (str): Email type.
-- **allow_ask_discount** (bool): Allow users to ask discount for this account.
-- **proxy_id** (int): Using proxy id for account checking.
-- **random_proxy** (bool): Pass True, if you get captcha in previous response
-- **auction** (bool): Pass True if you want to create auction
-- **auction_duration_value** (int): Duration auction value.
-- **auction_duration_option** (str): Duration auction option. Can be [minutes, hours, days].
-- **instabuy_price** (int): The price for which you can instantly redeem your account.
-- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
-
-**Example:**
-
-```python
-response = market.publishing.add(category_id=Constants.Market.CategoryID.vk, price=10,
-                                 currency=Constants.Market.Currency.rub, item_origin=Constants.Market.ItemOrigin.autoreg,
-                                 extended_guarantee=Constants.Market.Guarantee.day, title="Acc vk",
-                                 allow_ask_discount=True)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'item': {'item_id': 0, 'item_state': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Check
-
-*Check and put up to sale not published account OR update account information existing account.*
-
-**Parameters:**
-
-- **item_id** (int): ID for item.
-- **login** (str): Account login (or email)
-- **password** (str): Account password
-- **login_password** (str): Account login data 
-  > Format login:password
-- **close_item** (bool): Close item or not.
-  > If True, the item will be closed item_state = closed
-- **extra** (dict): Extra params for account checking. 
-  > E.g. you need to put cookies to extra[cookies] if you want to upload TikTok/Fortnite/Epic Games account
-- **resell_item_id** (int): Resell item id
-  > Put item id, if you are trying to resell item.
-- **random_proxy** (bool): Use random proxy
-  > Pass True, if you get captcha in previous response
-
-**Example:**
-
-```python
-response = market.publishing.check(item_id=2410024,login_password="Login:password")
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Info
-
-*Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **resell_item_id** (int): Put item id, if you are trying to resell item.
-  > This is useful to pass temporary email from reselling item to new item. 
-  
-  > You will get same temporary email from reselling account.
-
-**Example:**
-
-```python
-response = market.publishing.info(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'string', 'item': {'item_id': 0, 'item_state': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}, 'temp_email': 'string', 'sessionLoginData': ['string'], 'ignoreCookieUpload': True}
-```
-
-# Managing
-
-*Methods for account managing*
-
----
-
-## Tag
-
-*Methods for items tagging*
-
-### Add tag
-
-*Adds tag for the account.*
-
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **tag_id** (int): Tag id. Tag list is available via market.profile.get()
-
-**Example:**
-
-```python
-response = market.managing.tag.add(item_id=2410024, tag_id=1)
-print(response.json())
-```
-
-```python
-{'itemId': 0, 'tag': {'tag_id': 0, 'title': 'string', 'isDefault': True, 'forOwnedAccountsOnly': True, 'bc': 'string'}, 'addedTagId': 0, 'deleteTags': [0], 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Delete tag
-
-*Deletes tag for the account.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **tag_id** (int): Tag id. Tag list is available via market.profile.get()
-
-**Example:**
-
-```python
-response = market.managing.tag.delete(item_id=2410024, tag_id=1)
-print(response.json())
-```
-
-```python
-{'itemId': 0, 'tag': {'tag_id': 0, 'title': 'string', 'isDefault': True, 'forOwnedAccountsOnly': True, 'bc': 'string'}, 'addedTagId': 0, 'deleteTags': [0], 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
----
-
-## Steam
-
-# Steam inventory value
-
-*Gets steam value.*
-
-
-**Parameters:**
-
-- **url** (str): Link or id of account. 
-  > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
-- **app_id** (int): Application id.
-  > You can use Constants. Check example below
-- **currency** (str): Using currency for amount.
-  > You can use Constants. Check example below
-- **ignore_cache** (bool): Ignore cache.
-  > If you pass False (default) market api will take inventory from cache (Inventory can be outdated). If you pass True inventory will reparse and you get price at current moment
-
-**Example:**
-
-```python
-response = market.managing.steam.inventory_value(url="https://steamcommunity.com/id/AS7RID",currency=Constants.Market.Currency.rub,app_id=Constants.Market.AppID.CSGO)
-print(response.json())
-```
-
-```python
-{'query': 'https://steamcommunity.com/id/AS7RID', 'data': {'items': {'5189384637': {'classid': '5189384637', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQynaHMJT9B74-ywtjYxfOmMe_Vx28AucQj3brAoYrz3Fay_kY4MG_wdYeLMlhpLMaM-1U', 'title': 'Revolution Case', 'price': 112.3, 'count': '1', 'stickers': None, 'type': 'Base Grade Container', 'market_hash_name': 'Revolution%20Case', 'fraudwarnings': None}, '3946324730': {'classid': '3946324730', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFU2nfGaJG0btN2wwYHfxa-hY-uFxj4Dv50nj7uXpI7w3AewrhBpMWH6d9CLMlhpEbAe-Zk', 'title': 'Fracture Case', 'price': 59.05, 'count': '1', 'stickers': None, 'type': 'Base Grade Container', 'market_hash_name': 'Fracture%20Case', 'fraudwarnings': None}, '3220810394': {'classid': '3220810394', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou6ryFAR17P7YJgJQ7d-9kZSOkuXLPr7Vn35cppB0ievCp9322VKyrkVrN2z6dtOSdVQ8MAyD-QC6lb26gZe7tZrMmnF9-n51z91ErA0', 'title': 'StatTrak™ MP7 | Mischief (Field-Tested)', 'price': 46.47, 'count': '1', 'stickers': None, 'type': 'StatTrak™ Mil-Spec Grade SMG', 'market_hash_name': 'StatTrak%E2%84%A2%20MP7%20%7C%20Mischief%20%28Field-Tested%29', 'fraudwarnings': None}, '3591173339': {'classid': '3591173339', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposbaqKAxf0Ob3djFN79eJkIWKg__gPLfdqWZU7Mxkh6eToY2l3wy2rkFkNmj0JYaTcQY8YV-BqATrweu615-4u5zLnHVl6CJz-z-DyCIevZ0V', 'title': 'Glock-18 | Catacombs (Field-Tested)', 'price': 24.2, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Mil-Spec Grade Pistol', 'market_hash_name': 'Glock-18%20%7C%20Catacombs%20%28Field-Tested%29', 'fraudwarnings': None}, '3035569050': {'classid': '3035569050', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposLOzLhRlxfbGTjVb09ijl5SYqPDmNr7fqWdY781lxL-Zoo-hiVC1_BJsam37I4TAJ1Q7M1zYqQPol-2618fvupWYwSZk73Q8pSGKLd3ROFw', 'title': 'Five-SeveN | Coolant (Factory New)', 'price': 6.78, 'count': '1', 'stickers': None, 'type': 'Consumer Grade Pistol', 'market_hash_name': 'Five-SeveN%20%7C%20Coolant%20%28Factory%20New%29', 'fraudwarnings': None}, '3035569189': {'classid': '3035569189', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou6r8FA957ODYfTxW-Nmkx7-HnvD8J_XUzjwJupdw3-rA8I6jiQPl80I5Yzz7IoCTcwRtZl3VrFa2l-jp18O9ot2XnhWS9Knh', 'title': 'MP9 | Slide (Minimal Wear)', 'price': 4.84, 'count': '1', 'stickers': None, 'type': 'Consumer Grade SMG', 'market_hash_name': 'MP9%20%7C%20Slide%20%28Minimal%20Wear%29', 'fraudwarnings': None}, '3035580092': {'classid': '3035580092', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo7e1f1Jf2-r3czFX6cyknY6fqPX4Jr7Dk29u4MBwnPCP8d-iilGwqhVpYzzwLIeVcgNoY1zSq1bqlOm5hJ687ZzJmHVkvXN2tmGdwUIRV2k43w', 'title': 'UMP-45 | Facility Dark (Battle-Scarred)', 'price': 3.87, 'count': '1', 'stickers': None, 'type': 'Consumer Grade SMG', 'market_hash_name': 'UMP-45%20%7C%20Facility%20Dark%20%28Battle-Scarred%29', 'fraudwarnings': None}, '310777179': {'classid': '310777179', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpouLWzKjhz3MzbcDNG09GzkImemrnwYOOGwjIJ7JB1j-3D9Nms0FDh_0tqYjulLNCWdFNvZl7QrlPswOu6m9bi6_rlVdP1', 'title': 'Nova | Sand Dune (Field-Tested)', 'price': 3.87, 'count': '1', 'stickers': None, 'type': 'Consumer Grade Shotgun', 'market_hash_name': 'Nova%20%7C%20Sand%20Dune%20%28Field-Tested%29', 'fraudwarnings': None}, '1989297441': {'classid': '1989297441', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0su2fDm25bWCWeXKPT1sxTLBaYDrb-GX2t7_BQ2rOFbotEVhXLKoCpzBJNciBOQx9itAdqGq0mFZwCxo8e9VKaVLjnSBHZelHVPZFwA', 'title': 'Sealed Graffiti | Sorry (Brick Red)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Sorry%20%28Brick%20Red%29', 'fraudwarnings': None}, '1989279141': {'classid': '1989279141', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0suOBCG25Pm-Te3WBHg84T7ZdPT6N-WChtOqVE2vAEuglSwECf_cM9mIdbprYPgx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyaadCusA', 'title': 'Sealed Graffiti | NaCl (Shark White)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20NaCl%20%28Shark%20White%29', 'fraudwarnings': None}, '1989299897': {'classid': '1989299897', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0o_ePHnjyVzPBLiWXSgw9TrMMY2jbqGCm5OvCF27BF-4tRFtVfqoApzJNNc7YPRo60IQN8iuomUM7HRkkfddLZQOvw2QfKOAhnCJLcMkz1YlJgQ', 'title': 'Sealed Graffiti | Death Sentence (Tracer Yellow)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Death%20Sentence%20%28Tracer%20Yellow%29', 'fraudwarnings': None}, '1989288246': {'classid': '1989288246', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0rO2BBTqjOWGReHiLGV9uH7ZbY2ve9zKtsemWRG3BEuotQg9Ve6pX-m1IPMGNIVJjg5FYpGm3hUloEgIhYslfLVm-nnJKNxikjmox', 'title': 'Sealed Graffiti | Toasted (Monster Purple)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20Toasted%20%28Monster%20Purple%29', 'fraudwarnings': None}, '1989276589': {'classid': '1989276589', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pO-CI3DyeyfFJjOXS1s9SOJZZ2rb9zXx5OrAFjDOE-1_R1pQKaNW8TUbOs-LPxJo1I8JqiuomUM7HRkkfddLZQOvw2QfKOAhnCJLcMm5ggoI_A', 'title': 'Sealed Graffiti | QQ (Tracer Yellow)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20QQ%20%28Tracer%20Yellow%29', 'fraudwarnings': None}, '4302203091': {'classid': '4302203091', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXQ9QVcJY8gulRPQV6CF7b9mNvbRRMjdgIO5ez2flZj0qTKI24TuNi1x9bexqakZe2JzjIIuMMh2rHEotqgxkS6rPdFh4ZR', 'title': 'Sticker | 100 Thieves | 2020 RMR', 'price': 2.9, 'count': 24, 'stickers': None, 'type': 'High Grade Sticker', 'market_hash_name': 'Sticker%20%7C%20100%20Thieves%20%7C%202020%20RMR', 'fraudwarnings': None}, '1989287941': {'classid': '1989287941', 'tradable': 1, 'marketable': 1, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVLtzyAVaLvjeQiSVQ', 'title': 'Sealed Graffiti | King Me (Monster Purple)', 'price': 2.9, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Sealed%20Graffiti%20%7C%20King%20Me%20%28Monster%20Purple%29', 'fraudwarnings': None}, '3496846827': {'classid': '3496846827', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaO1U1g72Ycz4bvYzvxdLakfWnYuPQxWlTuZ133O_ArN6j0Qa3_BI9Z2rwJoaQbEZgNvzyEwH0', 'title': 'P250', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Pistol', 'market_hash_name': 'P250', 'fraudwarnings': None}, '3515046014': {'classid': '3515046014', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaOBRng6uGI2oT7YTjwobex_HwZbrSxzsAvJYi3rmYrY6kiQDnr0VtMT2ndo6ccBh-Pw_WKbm-EQ', 'title': 'SSG 08', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Sniper Rifle', 'market_hash_name': 'SSG%2008', 'fraudwarnings': None}, '3528419424': {'classid': '3528419424', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaLAZs2v_JY3NAtIjnwdPdwq_1Nb_TwW9SupNw07GUoYmg3gKyrxZvNTr3JtWXcFNofxiOrQoC97_e', 'title': 'Galil AR', 'price': None, 'count': '1', 'stickers': {'stickerCount': 3, 'patchCount': 0, 'count': 3, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Rifle', 'market_hash_name': 'Galil%20AR', 'fraudwarnings': None}, '1989274499': {'classid': '1989274499', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyX6bcTBg', 'title': 'Graffiti | King Me (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20King%20Me%20%28Shark%20White%29', 'fraudwarnings': None}, '1989275289': {'classid': '1989275289', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0tuuDG2e5P2DBfnWMGg0_RLtbND6N-WDwse2VSmmdE74oEF0CdKUB-jcYbMuBagx9itAdqGq0mFZwCxo8e9VKaVK4m3dCMuyY2Tc6Pw', 'title': 'Graffiti | Take Flight (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Take%20Flight%20%28Shark%20White%29', 'fraudwarnings': None}, '1989275676': {'classid': '1989275676', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pveDD3n4YzKKdieBTAhpH7ZbMD3R_Gfx5L6cFDrNQu8uEgFRe_NXoDAfPcuAPRM80ZlLpWL-lEtxEQQlZ8lSeR-30ykQYL50y3ClvG56Ng', 'title': 'Graffiti | Quickdraw (Shark White)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Quickdraw%20%28Shark%20White%29', 'fraudwarnings': None}, '1989270691': {'classid': '1989270691', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pe2BEHXlJjadf3HcTQswSrJbPD6IrTak5O6dQDjPRbklQVpSf_BR9zAfPsiNPRIjlNlc7Wa3m0tvEwMkZsxWfBbmniVEMOkkivTsgr4', 'title': 'Graffiti | Keep the Change (Jungle Green)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Keep%20the%20Change%20%28Jungle%20Green%29', 'fraudwarnings': None}, '3653202725': {'classid': '3653202725', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXQ9Q1LO5kNoBhSQl-fVOG_wcbQVmJ5IABWuoX3e1Uw7P_efWwMudjnzNaJlKH3Zu2EkDMGv8ByjuiToI2tigbg-kplYj3xdY6cIFVtM0aQpAYy5bU4zQ', 'title': '2020 Service Medal', 'price': None, 'count': '1', 'stickers': None, 'type': 'Extraordinary Collectible', 'market_hash_name': '2020%20Service%20Medal', 'fraudwarnings': None}, '1989274048': {'classid': '1989274048', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0pO-CI2P4eiXdYSKKHQw9TLNZNGvYrGL25-WTQTmfRu0rRgsDffRQp2BBPMGIPhY93Y8Vu2u_0UdyEhk6f9BKZAarxm1ONOkmyyVHBfEvLrw', 'title': 'Graffiti | Worry (War Pig Pink)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20Worry%20%28War%20Pig%20Pink%29', 'fraudwarnings': None}, '1989271413': {'classid': '1989271413', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0ovCCC3q5bDOdLCSNHgpqT7JdNDzf_jH05-jCRDmcQ-t4Q1tRLqZW-mVBa8_YOQx9itAdqGq0mFZwCxo8e9VKaVLvzyMVMORPsBckkw', 'title': 'Graffiti | King Me (Monarch Blue)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%20King%20Me%20%28Monarch%20Blue%29', 'fraudwarnings': None}, '3500707668': {'classid': '3500707668', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaKhBwnaGQKGRHvd_gx9TekvOkZr-HxGlV6sAg27vF99332QXjr0NuYTz3I4GLMlhpm0KUJjU', 'title': 'AWP', 'price': None, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Sniper Rifle', 'market_hash_name': 'AWP', 'fraudwarnings': None}, '3494936622': {'classid': '3494936622', 'tradable': 0, 'marketable': 0, 'image_url': '-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQh5hlcX0nvUOGsx8DdQBJjIAVHubSaPhRw7ODBfThM79mk2tbbz_KlY-OHxDMJvZUp3uvDpI_wiwHhr0trMTj2cYCcdlRoNV7S-wWggbC4gMgSD1s', 'title': 'USP-S', 'price': None, 'count': '1', 'stickers': {'stickerCount': 4, 'patchCount': 0, 'count': 4, 'images': [], 'title': 'Sticker: DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019, DeadFox | Berlin 2019'}, 'type': 'Stock Pistol', 'market_hash_name': 'USP-S', 'fraudwarnings': None}, '1989272030': {'classid': '1989272030', 'tradable': 0, 'marketable': 0, 'image_url': 'IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdB2ozio1RrlIWFK3UfvMYB8UsvjiMXojflsZalyxSh31CIyHz2GZ-KuFpPsrTzBG0qe6yGX3wYCPGLi3VUgluTOVdNDvf_WH05ezFS2nIROp_Fg0CL_cE-jYdOJraPBQ5htQD_zL2h0p6WBUnfspUfRq33n0DPaR4zXURJs9XfaeMfrs', 'title': 'Graffiti | 8-Ball (War Pig Pink)', 'price': None, 'count': '1', 'stickers': None, 'type': 'Base Grade Graffiti', 'market_hash_name': 'Graffiti%20%7C%208-Ball%20%28War%20Pig%20Pink%29', 'fraudwarnings': None}}, 'steamId': '76561198993773915', 'steam_id': '76561198993773915', 'appId': 730, 'appTitle': 'CS:GO', 'totalValue': 348.38, 'itemCount': 51, 'marketableItemCount': 38, 'currency': 'rub', 'currencyIcon': '₽', 'language': 'english', 'time': 1695207618, 'cache': True}, 'appId': 730, 'isIsolatedMarket': True, 'isIsolatedMarketAlt': False, 'system_info': {'visitor_id': 2410024, 'time': 1695587503}}
-```
-
-### Get steam guard
-
-*Gets confirmation code from MaFile (Only for Steam accounts).*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.steam.guard(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'item': {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}, 'codeData': {'code': 'string', 'date': 0, 'textPlain': 'string'}}
-```
-
-### Confirm SDA
-
-*Confirm steam action.*
-
-**Parameters:**
-
-- **item_id** (int): Item id.
-- **id** (int): Confirmation id. (Required along with nonce if you want to confirm action).
-- **nonce** (int): Confirmation nonce. (Required along with id if you want to confirm action).
-
-**Example:**
-
-```python
-response = market.managing.steam.confirm_sda(item_id=2410024, id=1000, nonce=98765)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'The action is confirmed', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get mafile
-
-*Returns mafile in JSON.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.steam.mafile(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'maFile': {}}
-```
-
-### Update inventory value
-
-*Update inventory value.*
-
-**Parameters:**
-
-- **item_id** (int): Item id.
-- **app_id** (int): App id.
-
-**Example:**
-
-```python
-response = market.managing.steam.update_inventory(item_id=2410024, app_id=730)
-print(response.json())
-```
-
----
-
-## Telegram
-
-### Reset telegram authorizations
-
-*Resets Telegram authorizations.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.telegram.reset_auth(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'Changes Saved'}
-```
-
-### Get telegram confirmation code
-
-*Gets confirmation code from Telegram.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.telegram.code(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'item': {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}, 'codes': {'code': 'string', 'date': 0}}
-```
-
----
-
-### Get item
-
-*Displays item information or returns Steam account html code.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **auction** (bool): Parse auction bids
-- **steam_preview** (bool): Steam preview
-  > Set it True if you want to get steam html and False/None if you want to get item info
-- **preview_type** (str): Type of page. 
-  > Can be "profiles" or "games"
-
-**Example:**
-
-```python
-response = market.managing.get(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}
-```
-
-### Bulk get
-
-*Bulk get up to 250 accounts.*
-
-**Parameters:**
-
-- **item_ids** (list): Item ids.
-
-**Example:**
-
-```python
-response = market.managing.bulk_get(item_ids=[i for i in range(100000000, 100000000+250)])
-print(response.json())
-```
-
-```python
-{'items': [{'0': {'item_id': 0, 'item_state': 'string', 'category_id': 0, 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}}], 'left_item_id': [0], 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Edit item
-
-*Edits any details of account.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **price** (int): Account price in your currency.
-- **currency** (str): Using currency. 
-- **item_origin** (str): Account origin. Where did you get it from.
-- **title** (str): Russian title of account. 
-  > If title specified and title_en is empty, title_en will be automatically translated to English language.
-- **title_en** (str): English title of account.
-  > If title_en specified and title is empty, title will be automatically translated to Russian language.
-- **description** (str): Account public description.
-- **information** (str): Account private information (visible for buyer only if purchased).
-- **email_login_data** (str): Required if a category is one of list of Required email login data categories. 
-  > Email login data (login:pass format).
-- **email_type** (str): Email type.
-- **allow_ask_discount** (bool): Allow users to ask discount for this account.
-- **proxy_id** (int): Using proxy id for account checking.
-
-**Example:**
-
-```python
-response = market.managing.edit(item_id=2410024,price=777)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Delete item
-
-*Deletes your account from public search. Deletion type is soft. You can restore account after deletion if you want.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **reason** (str): Delete reason.
-
-**Example:**
-
-```python
-response = market.managing.delete(item_id=2410024,reason="Literally no reason")
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Arbitrage
-
-*Create a Arbitrage.*
-
-**Parameters:**
-
-- **item_id** (int): Item id.
-- **post_body** (str): You should describe what's happened.
-
-**Example:**
-
-```python
-response = market.managing.arbitrage(item_id=2410024,post_body="Something went wrong")
-```
-
-```python
-{'thread': {'thread_id': 0, 'forum_id': 0, 'thread_title': 'string', 'thread_view_count': 0, 'creator_user_id': 0, 'creator_username': 'string', 'thread_create_date': 0, 'thread_update_date': 0, 'user_is_ignored': True, 'thread_post_count': 0, 'thread_is_published': True, 'thread_is_deleted': True, 'thread_is_sticky': True, 'thread_is_followed': True, 'first_post': {'post_id': 0, 'thread_id': 0, 'poster_user_id': 0, 'poster_username': 'string', 'post_create_date': 0, 'post_body': 'string', 'post_body_html': 'string', 'post_body_plain_text': 'string', 'signature': 'string', 'signature_html': 'string', 'signature_plain_text': 'string', 'post_like_count': 0, 'post_attachment_count': 0, 'like_users': [{'user_id': 0, 'username': 'string', 'display_style_group_id': 0, 'is_banned': 0, 'uniq_username_css': 'string'}], 'user_is_ignored': True, 'post_is_published': True, 'post_is_deleted': True, 'post_update_date': 0, 'post_is_first_post': True, 'links': {'permalink': 'string', 'detail': 'string', 'thread': 'string', 'poster': 'string', 'likes': 'string', 'report': 'string', 'attachments': 'string', 'poster_avatar': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'reply': True, 'like': True, 'report': True, 'upload_attachment': True}}, 'thread_prefixes': ['string'], 'thread_tags': ['string'], 'links': {'permalink': 'string', 'detail': 'string', 'followers': 'string', 'forum': 'string', 'posts': 'string', 'first_poster': 'string', 'first_poster_avatar': 'string', 'first_post': 'string', 'last_poster': 'string', 'last_post': 'string'}, 'permissions': {'view': True, 'delete': True, 'follow': True, 'post': True, 'upload_attachment': True, 'edit': True}, 'forum': {'forum_id': 0, 'forum_title': 'string', 'forum_description': 'string', 'forum_thread_count': 0, 'forum_post_count': 0, 'forum_prefixes': [{'group_title': 'string', 'group_prefixes': [{'prefix_id': 0, 'prefix_title': 'string'}]}], 'thread_default_prefix_id': 0, 'thread_prefix_is_required': True, 'links': {'permalink': 'string', 'detail': 'string', 'sub-categories': 'string', 'sub-forums': 'string', 'threads': 'string', 'followers': 'string'}, 'permissions': {'view': True, 'edit': True, 'delete': True, 'create_thread': True, 'upload_attachment': True, 'tag_thread': True, 'follow': True}, 'forum_is_followed': True}}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Change owner
-
-*Change of account owner.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **username** (str): The username of the new account owner
-- **secret_answer** (str): Secret answer of your account
-
-**Example:**
-
-```python
-response = market.managing.change_owner(item_id=2410024,username="AS7RID",secret_answer="Denyak net")
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string'}
-```
-
-### Change password
-
-*Changes password of account.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **_cancel** (bool): Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
-
-**Example:**
-
-```python
-response = market.managing.change_password(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'Changes Saved', 'new_password': 'string'}
-```
-
-### Bump
-
-*Bumps account in the search.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.bump(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Get email code
-
-*Gets confirmation code or link.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **email** (str): Account email.
-- **login** (str): Account login.
-
-**Example:**
-
-```python
-response = market.managing.email(item_id=2410024,email="as7rid@zelenka.guru")
-print(response.json())
-```
-
-```python
-{'item': {'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'seller': {'user_id': 0, 'username': 'string', 'avatar_date': 0, 'user_group_id': 0, 'secondary_group_ids': 'string', 'display_style_group_id': 0, 'uniq_username_css': 'string'}}, 'codeData': {'code': 'string', 'date': 0, 'textPlain': 'string'}}
-```
-
-### Get temp mail password
-
-*Gets password from temp email of account.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.password_tm(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'item': {'account': 'string'}}
-```
-
-### Refuse guarantee
-
-*Cancel guarantee of account. It can be useful for account reselling.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.refuse_guarantee(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'Changes Saved'}
-```
-
-### Favorite
-
-*Adds account to favourites.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.favorite(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Unfavorite
-
-*Deletes account from favourites.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.unfavorite(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
-
-### Stick
-
-*Stick account in the top of search.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.stick(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string'}
-```
-
-### Unstick
-
-*Unstick account of the top of search.*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-
-**Example:**
-
-```python
-response = market.managing.unstick(item_id=2410024)
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'string'}
-```
-
-```python
-{'status': 'ok', 'item': {'item_id': 0, 'item_state': 'string', 'published_date': 'string', 'title': 'string', 'description': 'string', 'price': 0, 'update_stat_date': 0, 'refreshed_date': 0, 'login': 'string', 'temp_email': 'string', 'view_count': 0, 'information': 'string', 'item_origin': 'string'}, 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
 # Payments
 
-*Methods to transfer market balance and check payments history*
+## History
 
-### History
+GET https://api.lzt.market/user/{user_id}/payments
 
-*Displays list of your payments.*
+*Displays info about your profile.*
+
+Required scopes: *market*
 
 **Parameters:**
 
-- **user_id** (int): ID of user.
-- **operation_type** (str): Type of operation. Allowed operation types
-- **pmin** (int): Minimal price of operation (Inclusive)
-- **pmax** (int): Maximum price of operation (Inclusive)
-- **page** (int): The number of the page to display results from
-- **operation_id_lt** (int): ID of the operation from which the result begins
-- **receiver** (str): Username of user, which receive money from you
-- **sender** (str): Username of user, which sent money to you
-- **start_date** (str): Start date of operation (RFC 3339 date format)
-- **end_date** (str): End date of operation (RFC 3339 date format)
-- **wallet** (str): Wallet, which used for money payots
-- **comment** (str): Comment for money transfers
-- **is_hold** (bool): Display hold operations
-- **show_payments_stats** (bool): Display payment stats for selected period (outgoing value, incoming value)
+- **user_id** (INSERT_HERE): ID of user.
+- **operation_type** (INSERT_HERE): Type of operation.
+- **pmin** (INSERT_HERE): Minimal price of operation (Inclusive).
+- **pmax** (INSERT_HERE): Maximum price of operation (Inclusive).
+- **page** (INSERT_HERE): The number of the page to display results from.
+- **operation_id_lt** (INSERT_HERE): ID of the operation from which the result begins.
+- **receiver** (INSERT_HERE): Username of user, which receive money from you.
+- **sender** (INSERT_HERE): Username of user, which sent money to you.
+- **start_date** (INSERT_HERE): Start date of operation (RFC 3339 date format).
+- **end_date** (INSERT_HERE): End date of operation (RFC 3339 date format).
+- **wallet** (INSERT_HERE): Wallet, which used for money payots.
+- **comment** (INSERT_HERE): Comment for money transfers.
+- **is_hold** (INSERT_HERE): Display hold operations.
+- **show_payments_stats** (INSERT_HERE): Display payment stats for selected period (outgoing value, incoming value).
 
 **Example:**
 
 ```python
-response = market.payments.history(user_id=2410024,sender="root")
+response = market.payments.history()
 print(response.json())
 ```
 
-```python
-{'payments': {'payment': 'string'}, 'hasNextPage': True, 'lastOperationId': 0, 'nextPageHref': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-### Transfer
+## Transfer
+
+POST https://api.lzt.market/balance/transfer
 
 *Send money to any user.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **amount** (int): Amount to send in your currency.
-- **secret_answer** (str): Secret answer of your account
-- **currency** (str): Using currency for amount.
-- **user_id** (int): User id of receiver. 
-  > If user_id specified, username is not required.
-- **username** (str): Username of receiver. 
-  > If username specified, user_id is not required.
-- **comment** (str): Transfer comment
-- **transfer_hold** (bool): Hold transfer or not
-- **hold_length_option** (str): Hold length option.
-- **hold_length_value** (int): Hold length value
+- **amount** (INSERT_HERE): Amount to send in your currency.
+- **secret_answer** (INSERT_HERE): Secret answer of your account.
+- **currency** (INSERT_HERE): Using currency for amount.
+- **user_id** (INSERT_HERE): User id of receiver. If user_id specified, username is not required.
+- **username** (INSERT_HERE): Username of receiver. If username specified, user_id is not required.
+- **comment** (INSERT_HERE): Transfer comment.
+- **transfer_hold** (INSERT_HERE): Hold transfer or not.
+- **hold_length_option** (INSERT_HERE): Hold length option.
+- **hold_length_value** (INSERT_HERE): Hold length value.
 
 **Example:**
 
 ```python
-response = market.payments.transfer(user_id=2410024, amount=250, currency=Constants.Market.Currency.rub, secret_answer="Secret answer")
+response = market.payments.transfer(user_id=2410024, amount=250, currency="rub", secret_answer="My secret answer")
 print(response.json())
 ```
 
-```python
-{'status': 'ok', 'message': 'string', 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-### Check Transfer Fee
+## Fee
+
+GET https://api.lzt.market/balance/transfer/fee
 
 *Get transfer limits and get fee amount for transfer.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **amount** (float): Amount to send in your currency.
+- **amount** (INSERT_HERE): Amount to send in your currency.
 
 **Example:**
 
 ```python
-response = market.payments.fee()
+response = market.payments.fee(amount=250)
 print(response.json())
 ```
 
-```python
-{'commission_percentage': 0, 'spentIn30Days': 3537, 'calculator': {'inputAmount': 1000, 'commissionAmount': 0, 'totalOutputAmount': 1000}, 'system_info': {'visitor_id': 2410024, 'time': 1714751908}}
-```
 
-### Generate payment link
+## Generate Link
 
-*Generates payment link*
+*Generate payment link.*
 
 **Parameters:**
 
-- **amount** (int): Amount to send in your currency.
-- **user_id** (int): ID of user to transfer money
-- **username** (str): Username to transfer money
-- **comment** (str): Payment comment.
-- **redirect_url** (str): Redirect url. User who paid on this link will be redirected to this url
-- **currency** (str): Using currency for amount. Allowed values
-- **hold** (bool): Hold transfer or not
-- **hold_length** (int): Hold length ( max 1 month )
-- **hold_option** (str): Hold option. Can be "hours","days","weeks","months"
+- **amount** (INSERT_HERE): Amount to send in your currency.
+- **user_id** (INSERT_HERE): ID of user to transfer money.
+- **username** (INSERT_HERE): Username to transfer money.
+- **comment** (INSERT_HERE): Payment comment.
+- **redirect_url** (INSERT_HERE): Redirect url. User who paid on this link will be redirected to this url.
+- **currency** (INSERT_HERE): Using currency for amount.
+- **hold** (INSERT_HERE): Hold transfer or not.
+- **hold_length** (INSERT_HERE): Hold length.
+    > Max - 1 month.
+- **hold_period** (INSERT_HERE): Hold option.
 
 **Example:**
 
 ```python
-payment_link = market.payments.generate_link(user_id=2410024, comment="LOLZTEAM example", currency=Constants.Market.Currency.rub, amount=250)
+payment_link = market.payments.generate_link(user_id=2410024, amount=250, comment="Comment", redirect_url="https://example.com")
 print(payment_link)
 ```
 
+
+# Managing
+
+## Tag
+
+### Delete
+
+DELETE https://api.lzt.market/{item_id}/tag
+
+*Deletes tag for the account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **tag_id** (INSERT_HERE): Tag id.
+    > Tag list is available via market.profile.get()
+
+**Example:**
+
 ```python
-https://lzt.market/balance/transfer?user_id=2410024&amount=250&comment=LOLZTEAM+example&currency=rub&hold=0
+response = market.managing.tag.delete(item_id=1000000, tag_id=1000)
+print(response.json())
 ```
+
+
+### Add
+
+POST https://api.lzt.market/{item_id}/tag
+
+*Adds tag for the account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **tag_id** (INSERT_HERE): Tag id.
+    > Tag list is available via market.profile.get()
+
+**Example:**
+
+```python
+response = market.managing.tag.add(item_id=1000000, tag_id=1000)
+print(response.json())
+```
+
+
+## Steamman
+
+### Guard
+
+GET https://api.lzt.market/{item_id}/guard-code
+
+*Gets confirmation code from MaFile (Only for Steam accounts).*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.steam.guard(item_id=1000000)
+print(response.json())
+```
+
+
+### Mafile
+
+GET https://api.lzt.market/{item_id}/mafile
+
+*Returns mafile in JSON.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.steam.mafile(item_id=1000000)
+print(response.json())
+```
+
+
+### Update Inventory
+
+POST https://api.lzt.market/{item_id}/update-inventory
+
+*Update inventory value.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **app_id** (INSERT_HERE): App id.
+
+**Example:**
+
+```python
+response = market.managing.steam.update_inventory(item_id=1000000, app_id=730)
+print(response.json())
+```
+
+
+### Inventory Value
+
+GET https://api.lzt.market/steam-value
+
+*Gets steam value.*
+
+**Parameters:**
+
+- **url** (INSERT_HERE): Link or id of account.
+    > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
+- **item_id** (INSERT_HERE): Item id.
+- **app_id** (INSERT_HERE): Application id.
+- **currency** (INSERT_HERE): Using currency for amount.
+- **ignore_cache** (INSERT_HERE): Ignore cache.
+
+**Example:**
+
+```python
+response = market.managing.steam.inventory_value(item_id=1000000, app_id=730)
+print(response.json())
+```
+
+
+### Confirm Sda
+
+POST https://api.lzt.market/{item_id}/confirm-sda
+
+*Confirm steam action.*
+> Don't set id and nonce parameters to get list of available confirmation requests.
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): Item id.
+- **id** (INSERT_HERE): Confirmation id.
+    > Required along with **nonce** if you want to confirm action.
+- **nonce** (INSERT_HERE): Confirmation nonce.
+    > Required along with **id** if you want to confirm action.
+
+**Example:**
+
+```python
+response = market.managing.steam.confirm_sda(item_id=1000000)
+print(response.json())
+```
+
+
+## Telegramman
+
+### Code
+
+GET https://api.lzt.market/{item_id}/telegram-login-code
+
+*Gets confirmation code from Telegram.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.telegram.code(item_id=1000000)
+print(response.json())
+```
+
+
+### Reset Auth
+
+POST https://api.lzt.market/{item_id}/telegram-reset-authorizations
+
+*Resets Telegram authorizations.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.telegram.reset_auth(item_id=1000000)
+print(response.json())
+```
+
+
+## Password Temp Mail
+
+GET https://api.lzt.market/{item_id}/temp-email-password
+
+*Gets password from temp email of account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.password_temp_mail(item_id=1000000)
+print(response.json())
+```
+
+
+## Get
+
+GET https://api.lzt.market/{item_id}
+GET https://api.lzt.market/{item_id}/steam-preview
+GET https://api.lzt.market/{item_id}/auction
+
+*Displays account information or returns Steam account html code.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **steam_preview** (INSERT_HERE): Set it True if you want to get steam html and False/None if you want to get account info
+- **preview_type** (INSERT_HERE): Type of page - profiles or games
+
+**Example:**
+
+```python
+response = market.managing.get(item_id=1000000)
+print(response.json())
+```
+
+
+## Bulk Get
+
+POST https://api.lzt.market/bulk/items
+
+*Bulk get up to 250 accounts.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_ids** (INSERT_HERE): Item ids.
+
+**Example:**
+
+```python
+response = market.managing.bulk_get(item_ids=[1000000, 2000000, 3000000, 4000000, 500000])
+print(response.json())
+```
+
+
+## Delete
+
+DELETE https://api.lzt.market/{item_id}
+
+*Deletes your account from public search. Deletetion type is soft. You can restore account after deletetion if you want.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **reason** (INSERT_HERE): Delete reason.
+
+**Example:**
+
+```python
+response = market.managing.delete(item_id=1000000)
+print(response.json())
+```
+
+
+## Email
+
+GET https://api.lzt.market/email-code
+
+*Gets confirmation code or link.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **email** (INSERT_HERE): Account email.
+- **login** (INSERT_HERE): Account login.
+
+**Example:**
+
+```python
+response = market.managing.email(item_id=1000000)
+print(response.json())
+```
+
+
+## Refuse Guarantee
+
+POST https://api.lzt.market/{item_id}/refuse-guarantee
+
+*Cancel guarantee of account. It can be useful for account reselling.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.refuse_guarantee(item_id=1000000)
+print(response.json())
+```
+
+
+## Check Guarantee
+
+POST https://api.lzt.market/{item_id}/check-guarantee
+
+*Checks the guarantee and cancels it if there are reasons to cancel it.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.check_guarantee(item_id=1000000)
+print(response.json())
+```
+
+
+## Change Password
+
+POST https://api.lzt.market/{item_id}/change-password
+
+*Changes password of account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **_cancel** (INSERT_HERE): Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
+
+**Example:**
+
+```python
+response = market.managing.change_password(item_id=1000000)
+print(response.json())
+```
+
+
+## Stick
+
+POST https://api.lzt.market/{item_id}/stick
+
+*Stick account in the top of search.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.stick(item_id=1000000)
+print(response.json())
+```
+
+
+## Unstick
+
+DELETE https://api.lzt.market/{item_id}/stick
+
+*Unstick account of the top of search.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.unstick(item_id=1000000)
+print(response.json())
+```
+
+
+## Favorite
+
+ POST https://api.lzt.market/{item_id}/star
+
+*Adds account to favourites.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.favorite(item_id=1000000)
+print(response.json())
+```
+
+
+## Unfavorite
+
+DELETE https://api.lzt.market/{item_id}/star
+
+*Deletes account from favourites.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.unfavorite(item_id=1000000)
+print(response.json())
+```
+
+
+## Bump
+
+POST https://api.lzt.market/{item_id}/bump
+
+*Bumps account in the search.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.bump(item_id=1000000)
+print(response.json())
+```
+
+
+## Change Owner
+
+POST https://api.lzt.market/{item_id}/change-owner
+
+*Change of account owner.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **username** (INSERT_HERE): The username of the new account owner.
+- **secret_answer** (INSERT_HERE): Secret answer of your account.
+
+**Example:**
+
+```python
+response = market.managing.change_owner(item_id=1000000, username="AS7RID", secret_answer="My secret answer")
+print(response.json())
+```
+
+
+## Edit
+
+PUT https://api.lzt.market/{item_id}/edit
+
+*Edits any details of account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item
+- **price** (INSERT_HERE): Account price in your currency.
+- **currency** (INSERT_HERE): Using currency.
+- **item_origin** (INSERT_HERE): Account origin.
+- **title** (INSERT_HERE): Russian title of account.
+    > If title specified and title_en is empty, title_en will be automatically translated to English language.
+- **title_en** (INSERT_HERE): English title of account.
+    > If title_en specified and title is empty, title will be automatically translated to Russian language.
+- **description** (INSERT_HERE): Account public description.
+- **information** (INSERT_HERE): Account private information (visible for buyer only if purchased).
+- **email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+- **email_type** (INSERT_HERE): Email type.
+- **allow_ask_discount** (INSERT_HERE): Allow users to ask discount for this account.
+- **proxy_id** (INSERT_HERE): Using proxy id for account checking.
+
+**Example:**
+
+```python
+response = market.managing.edit(item_id=1000000, price=1000)
+print(response.json())
+```
+
+
+## Arbitrage
+
+POST https://api.lzt.market/{item_id}/claims
+
+*Create a Arbitrage.*
+
+Required scopes: *post*
+
+**Parameters:**
+
+- **post_body** (INSERT_HERE): You should describe what's happened.
+
+**Example:**
+
+```python
+response = market.managing.arbitrage(item_id=1000000, post_body="There i'am discribe what's happened.")
+print(response.json())
+```
+
+
+# Purchasing
+
+## Auction
+
+### Place Bid
+
+POST https://api.lzt.market/{item_id}/auction/bid
+
+*Create a new auction bid.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **amount** (INSERT_HERE): Amount bid.
+- **currency** (INSERT_HERE): Using currency.
+
+**Example:**
+
+```python
+response = market.purchasing.auction.place_bid(item_id=1000000, amount=1000)
+print(response.json())
+```
+
+
+### Delete Bid
+
+GET https://api.lzt.market/{item_id}/auction/bid
+
+*Delete your auction bid.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **bid_id** (INSERT_HERE): ID of bid.
+
+**Example:**
+
+```python
+response = market.purchasing.auction.delete_bid(item_id=1000000, bid_id=1000)
+print(response.json())
+```
+
+
+## Check
+
+POST https://api.lzt.market/{item_id}/check-account
+
+*Checking account for validity. If the account is invalid, the purchase will be canceled automatically*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+
+**Example:**
+
+```python
+response = market.purchasing.check(item_id=1000000)
+print(response.json())
+```
+
+
+## Confirm
+
+POST https://api.lzt.market/{item_id}/confirm-buy
+
+*Confirm buy.*
+
+Required scopes: *market*
+
+**Example:**
+
+```python
+response = market.purchasing.confirm(item_id=1000000)
+print(response.json())
+```
+
+
+## Fast Buy
+
+POST https://api.lzt.market/{item_id}/fast-buy
+
+*Check and buy account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **price** (INSERT_HERE): Current price of account in your currency.
+- **buy_without_validation** (INSERT_HERE): Use TRUE if you want to buy account without account data validation (not safe).
+
+**Example:**
+
+```python
+response = market.purchasing.fast_buy(item_id=1000000, price=1000)
+print(response.json())
+```
+
+
+# Publishing
+
+## Info
+
+GET https://api.lzt.market/{item_id}/goods/add
+
+*Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID of item.
+- **resell_item_id** (INSERT_HERE): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
+
+**Example:**
+
+```python
+response = market.publishing.info(item_id=1000000)
+print(response.json())
+```
+
+
+## Check
+
+POST https://api.lzt.market/{item_id}/goods/check
+
+*Check account on validity. If account is valid, account will be published on the market.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (INSERT_HERE): ID for item.
+- **login** (INSERT_HERE): Account login (or email).
+- **password** (INSERT_HERE): Account password.
+- **login_password** (INSERT_HERE): Account login data format login:password.
+- **close_item** (INSERT_HERE): If True, the item will be closed item_state = closed.
+- **extra** (INSERT_HERE): Extra params for account checking.
+- **resell_item_id** (INSERT_HERE): Put item id, if you are trying to resell item.
+- **random_proxy** (INSERT_HERE): Pass True, if you get captcha in previous response.
+
+**Example:**
+
+```python
+response = market.publishing.check(item_id=1000000, login="login", password="password")
+print(response.json())
+```
+
+
+## Add
+
+POST https://api.lzt.market/item/add
+
+*Adds account on the market.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **category_id** (INSERT_HERE): Accounts category.
+- **price** (INSERT_HERE): Account price in your currency.
+- **currency** (INSERT_HERE): Using currency.
+- **item_origin** (INSERT_HERE): Account origin. Where did you get it from.
+- **extended_guarantee** (INSERT_HERE): Guarantee type.
+- **title** (INSERT_HERE): Russian title of account.
+    > If title specified and title_en is empty, title_en will be automatically translated to English language.
+- **title_en** (INSERT_HERE): English title of account.
+    > If title_en specified and title is empty, title will be automatically translated to Russian language.
+- **description** (INSERT_HERE): Account public description.
+- **information** (INSERT_HERE): Account private information (visible for buyer only if purchased).
+- **has_email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories.
+- **email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+- **email_type** (INSERT_HERE): Email type.
+- **allow_ask_discount** (INSERT_HERE): Allow users to ask discount for this account.
+- **proxy_id** (INSERT_HERE): Using proxy id for account checking.
+- **random_proxy** (INSERT_HERE): Pass True, if you get captcha in previous response
+- **auction** (INSERT_HERE): Pass True if you want to create auction
+- **auction_duration_value** (INSERT_HERE): Duration auction value.
+- **auction_duration_option** (INSERT_HERE): Duration auction option.
+- **instabuy_price** (INSERT_HERE): The price for which you can instantly redeem your account.
+- **not_bids_action** (INSERT_HERE): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
+
+**Example:**
+
+```python
+response = market.publishing.add(category_id=24, price=100, currency="rub", item_origin="stealer", title="Telegram")
+print(response.json())
+```
+
+
+## Fast Sell
+
+POST https://api.lzt.market/item/fast-sell
+
+*Adds and check account on validity. If account is valid, account will be published on the market.*
+
+Account origin:
+
+brute - Account received using Bruteforce
+
+fishing - Account received from fishing page
+
+stealer - Account received from stealer logs
+
+autoreg - Account is automatically registered by a tool
+
+personal - Account is yours. You created it yourself
+
+resale - Account received from another seller
+
+retrive - Account is recovered by email or phone (only for VKontakte category)
+
+Required email login data categories:
+
+9 - Fortnite
+
+12 - Epic games
+
+18 - Escape from Tarkov
+
+
+Required scopes: *market*
+**Parameters:**
+
+- **category_id** (INSERT_HERE): Accounts category.
+- **price** (INSERT_HERE): Account price in your currency.
+- **currency** (INSERT_HERE): Using currency.
+- **item_origin** (INSERT_HERE): Account origin. Where did you get it from.
+- **extended_guarantee** (INSERT_HERE): Guarantee type.
+- **title** (INSERT_HERE): Russian title of account.
+    > If title specified and title_en is empty, title_en will be automatically translated to English language.
+- **title_en** (INSERT_HERE): English title of account.
+    > If title_en specified and title is empty, title will be automatically translated to Russian language.
+- **description** (INSERT_HERE): Account public description.
+- **information** (INSERT_HERE): Account private information (visible for buyer only if purchased).
+- **has_email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories.
+- **email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+- **email_type** (INSERT_HERE): Email type.
+- **allow_ask_discount** (INSERT_HERE): Allow users to ask discount for this account.
+- **proxy_id** (INSERT_HERE): Using proxy id for account checking.
+- **random_proxy** (INSERT_HERE): Pass True, if you get captcha in previous response.
+- **login** (INSERT_HERE): Account login (or email).
+- **password** (INSERT_HERE): Account password.
+- **login_password** (INSERT_HERE): Account login data format login:password.
+- **extra** (INSERT_HERE): Extra params for account checking.
+- **auction** (INSERT_HERE): Pass True if you want to create auction.
+- **auction_duration_value** (INSERT_HERE): Duration auction value.
+- **auction_duration_option** (INSERT_HERE): Duration auction option.
+- **instabuy_price** (INSERT_HERE): The price for which you can instantly redeem your account.
+- **not_bids_action** (INSERT_HERE): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
+
+**Example:**
+
+```python
+response = market.publishing.add(category_id=24, price=100, currency="rub", item_origin="stealer", login="auth_key", password="dc_id", title="Telegram")
+print(response.json())
+```
+
 
 # Proxy
 
-*Methods to add/delete and get your market proxies*
+## Get
 
-### Get proxies
+GET https://api.lzt.market/proxy
 
 *Gets your proxy list.*
+
+Required scopes: *market*
 
 **Example:**
 
@@ -2696,42 +2693,19 @@ response = market.proxy.get()
 print(response.json())
 ```
 
-```python
-{'proxies': [{'proxy': {'proxy_id': 0, 'user_id': 0, 'proxy_ip': 'string', 'proxy_port': 0, 'proxy_user': 'string', 'proxy_pass': 'string', 'proxyString': 'string'}}], 'system_info': {'visitor_id': 0, 'time': 0}}
-```
 
-### Add proxy
+## Delete
 
-*Add single proxy or proxy list.*
-
-**Parameters:**
-
-- **proxy_ip** (str): Proxy ip or host.
-- **proxy_port** (int): Proxy port
-- **proxy_user** (str): Proxy username
-- **proxy_pass** (str): Proxy password
-- **proxy_row** (str): Proxy list in String format ip:port:user:pass. 
-  > Each proxy must be start with new line (use \n separator)
-
-**Example:**
-
-```python
-response = market.proxy.add(proxy_ip="192.168.1.1",proxy_port="5000",proxy_user="Login",proxy_pass="Password")
-print(response.json())
-```
-
-```python
-{'status': 'ok', 'message': 'Changes Saved', 'system_info': {'visitor_id': 2410024, 'time': 1695586117}}
-```
-
-### Delete proxy
+DELETE https://api.lzt.market/proxy
 
 *Delete single or all proxies.*
 
+Required scopes: *market*
+
 **Parameters:**
 
-- **proxy_id** (int): ID of an existing proxy
-- **delete_all** (bool): Use True if you want to delete all proxy
+- **proxy_id** (INSERT_HERE): ID of an existing proxy.
+- **delete_all** (INSERT_HERE): Use True if you want to delete all proxy.
 
 **Example:**
 
@@ -2740,86 +2714,30 @@ response = market.proxy.delete(delete_all=True)
 print(response.json())
 ```
 
-```python
-{'status': 'ok', 'message': 'Changes Saved'}
-```
 
-# Get batch job
+## Add
 
-*Creates batch job for Batch method*
+POST https://api.lzt.market/proxy
+
+*Add single proxy or proxy list.*
+
+Required scopes: *market*
 
 **Parameters:**
 
-- **func** (function): Needed method pointer
-- **job_name** (str): Job name
-- ****kwargs** (str): Arguments for needed method
+- **proxy_ip** (INSERT_HERE): Proxy ip or host.
+- **proxy_port** (INSERT_HERE): Proxy port
+- **proxy_user** (INSERT_HERE): Proxy username
+- **proxy_pass** (INSERT_HERE): Proxy password
+- **proxy_row** (INSERT_HERE): Proxy list in String format ip:port:user:pass.
+    > Each proxy must be start with new line (use *\n* separator)
 
 **Example:**
 
 ```python
-jobs = [
-    CreateJob(market.list.favorite, job_name="1", page=1),
-    CreateJob(market.payments.history, job_name="2", user_id=2410024, sender="root"),
-    CreateJob(market.managing.steam.steam_inventory_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
-]
-for job in jobs:
-    print(job)
-```
-
-```python
-{'id': '1', 'uri': 'https://lzt.market/fave', 'method': 'GET', 'params': {'page': 1, 'locale': 'en'}, 'data': {'page': 1}, 'files': None}
-{'id': '2', 'uri': 'https://lzt.market/user/2410024/payments', 'method': 'GET', 'params': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0, 'locale': 'en'}, 'data': {'user_id': 2410024, 'operation_type': None, 'pmin': None, 'pmax': None, 'page': None, 'operation_id_lt': None, 'receiver': None, 'sender': 'root', 'start_date': None, 'end_date': None, 'wallet': None, 'comment': None, 'is_hold': 0, 'show_payments_stats': 0}, 'files': None}
-{'id': '3', 'uri': 'https://lzt.market/steam-value', 'method': 'GET', 'params': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None, 'locale': 'en'}, 'data': {'link': 'https://steamcommunity.com/id/AS7RID', 'app_id': 730, 'currency': 'usd', 'ignore_cache': None}, 'files': None}
-```
-
-# Batch
-
-*Execute multiple API requests at once.*
-
-  > Maximum batch jobs is 10.
-  >
-  > Market batch can only proceed with market url's. If you want to use batch with forum url's try [this](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md#batch)
-
-**Parameters:**
-
-- **jobs** (list[dict]): List of batch jobs.
-
-**Example:**
-
-```python
-jobs = [
-    CreateJob(market.list.favorite, job_name="1", page=1),
-    CreateJob(market.payments.history, job_name="2", user_id=2410024, sender="root"),
-    CreateJob(market.managing.steam.steam_inventory_value, job_name="3", url="https://steamcommunity.com/id/AS7RID", app_id=Constants.Market.AppID.CS2, currency=Constants.Market.Currency.usd)
-]
-response = market.batch(jobs=jobs)
-data = response.json()
-for job_name, job_data in data["jobs"].items():
-    print(job_data)
-```
-
-```python
-{'_job_result': 'ok', 'items': [], 'totalItems': 0, 'totalItemsPrice': None, 'perPage': 40, 'page': 1, 'searchUrl': '/fave', 'stickyItems': []}
-{'_job_result': 'ok', 'payments': {'121540810': {'operation_id': 121540810, 'operation_date': 1694350167, 'operation_type': 'receiving_money', 'outgoing_sum': 0, 'incoming_sum': 777,  ... }
-{'_job_result': 'ok', 'query': 'https://steamcommunity.com/id/AS7RID', 'data': {'items': {'5189384637': {'classid': '5189384637', 'tradable': 1, 'marketable': 1, 'image_url': '-9a81dl ... }
-```
-
-# Send async
-
-*Send request as async*
-
-**Parameters:**
-
-- **func** (function): Target function.
-- ****kwargs** (any): Target function parameters.
-
-**Example:**
-
-```python
-response = await SendAsAsync(func=market.profile.get, user_id=2410024)
+response = market.proxy.add(proxy_row="192.168.1.1:8080:login:password
+192.168.2.2:8080:login:password")
 print(response.json())
 ```
 
-```python
-{'user': {'user_id': 0, 'username': 'string', 'user_message_count': 0, 'user_register_date': 0, 'user_like_count': 0, 'short_link': 'string', 'user_email': 'string', 'user_unread_notification_count': 0, 'user_dob_day': 0, 'user_dob_month': 0, 'user_dob_year': 0, 'user_title': 'string', 'user_last_seen_date': 0, 'balance': 0, 'hold': 0, 'system_info': {'visitor_id': 0, 'time': 0}}}
-```
+

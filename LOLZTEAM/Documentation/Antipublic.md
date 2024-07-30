@@ -9,14 +9,16 @@
 <summary><font size="4">Method tree</font></summary>
 
 * [Info](#info)
-  * [Lines count](#lines-count)
-  * [Lines count plain](#lines-count-plain)
+  * [Lines Count](#lines-count)
+  * [Lines Count Plain](#lines-count-plain)
   * [Version](#version)
 * [Account](#account)
   * [License](#license)
   * [Queries](#queries)
 * [Check](#check)
 * [Search](#search)
+* [Email Passwords](#email-passwords)
+
 
 </details>
 
@@ -28,7 +30,7 @@ You need to create class instance to use library
 from LOLZTEAM import AutoUpdate
 from LOLZTEAM import Constants
 from LOLZTEAM.API import Antipublic
-from LOLZTEAM.Tweaks import SendAsAsync
+from LOLZTEAM.Tweaks import SendAsAsync, CreateJob
 
 token = "your_token"
 
@@ -38,176 +40,104 @@ antipublic = Antipublic(token=token)
 **Parameters:**
 
 - **token** (str): Your token.
-
-  > You can get in there -&gt; https://zelenka.guru/account/antipublic or in antipublic app
-
+  > You can get it [there](https://zelenka.guru/account/antipublic) or in antipublic app
 - **proxy_type** (str): Your proxy type.
-
-  > You can use Types to set your proxy type
-  >
-  > ```python
-  > from LOLZTEAM import Constants
-  > 
-  > Constants.Proxy.socks5  # "socks5"
-  > Constants.Proxy.socks4  # "socks4"
-  > Constants.Proxy.https   # "https"
-  > Constants.Proxy.http    # "http"
-  > 
-  > antipublic = AntipublicApi(token="Your_token", proxy_type=Constants.Proxy.socks5)
-  > ```
-
-- proxy (str): Proxy string.
-
+- **proxy** (str): Proxy string.
   > ip:port or login:password@ip:port
+- **reset_custom_variables** (bool): Reset custom variables.
+- **timeout** (int): Request timeout.
 
 # Info
 
-*A category that contains methods that return information about Antipublic*
+## Lines Count
 
-*For this category token is **unrequired***
+GET https://antipublic.one/api/v2/countLines
 
-### Lines count
+Get count of rows in the AntiPublic db
 
-*Get count of rows in the AntiPublic db*
+:return: httpx Response object
 
-*[Official documentation reference](https://antipublic.readme.io/reference/antipubliccountlines)*
 
-**Example:**
+## Lines Count Plain
 
-```python
-response = antipublic.info.lines_count()
-print(response.json())
-```
+GET https://antipublic.one/api/v2/countLinesPlain
 
-```python
-{'count': 10438655969}
-```
+Get count of rows in the AntiPublic db (raw format)
 
-### Lines count plain
+:return: str
 
-*Get count of rows in the AntiPublic db (raw format)*
 
-*[Official documentation reference](https://antipublic.readme.io/reference/antipubliccountlinesplain)*
+## Version
 
-**Example:**
+GET https://antipublic.one/api/v2/version
 
-```python
-response = antipublic.info.lines_count_plain()
-print(response.json())
-```
+Get current antipublic version, change log and download url
 
-```python
-10438655969
-```
+:return: json {'filename': str, 'version': str, 'changeLog': str, 'url': str}
 
-### Version
-
-*Get current antipublic version, change log and download url*
-
-*[Official documentation reference](https://antipublic.readme.io/reference/antipublicversion)*
-
-**Example:**
-
-```python
-response = antipublic.info.version()
-print(response.json())
-```
-```python
-{'filename': 'AntiPublic.exe', 'version': '1.0.18', 'changeLog': 'New feature for window title, provide custom password count input for per email/login', 'url': 'https://antipublic.one/dl/AntiPublic.zip'}
-```
 
 # Account
 
-*A category that contains methods that return information about account*
+## License
 
-### License
+GET https://antipublic.one/api/v2/checkAccess
 
-*Checks your license*
+Checks your license
 
-*[Official documentation reference](https://antipublic.readme.io/reference/antipublicchecklicense)*
+Token required
 
-```python
-response = antipublic.account.license()
-print(response.json())
-```
+:return: httpx Response object
 
-```python
-{'success': True, 'plus': False, 'trial': False, 'plus_expires': '0', 'trial_expires': '0'}
-```
 
-### Queries
+## Queries
 
-*Get your available queries*
+GET https://antipublic.one/api/v2/availableQueries
 
-*[Official documentation reference](https://antipublic.readme.io/reference/antipublicavailablequeries)*
+Get your available queries
 
-```python
-response = antipublic.account.queries()
-print(response.json())
-```
+Token required
 
-```python
-{'success': True, 'emailSearch': 1000, 'passwordSearch': 0}
-```
+:return: httpx Response object
 
-# Data processing
 
-*Methods for data processing*
+# Check
 
-### Check
+POST https://antipublic.one/api/v2/checkLines
 
-*Check your lines for private*
+Check your lines.
 
-*[Official documentation reference](https://antipublic.readme.io/reference/antipublicchecklines)*
+Token required
+:param lines: Lines for check, email:password or login:password
+:param insert: Upload private rows to AntiPublic db
 
-**Parameters:**
+:return: httpx Response object
 
-- **lines** (list\[str\]): Lines for check
-  > email:password or login:password
-- **insert** (bool): Upload private rows to AntiPublic db
 
-```python
-lines = ["admin@zelenka.guru:Lanskoy228",
-         "truea911fan@a911.com:Animeshka228"]
-response = antipublic.check(lines=lines,insert=False)
-print(response.json())
+# Search
 
-#  Or 
+POST https://antipublic.one/api/v2/search
 
-with open("Base.txt","r") as f:
-    lines = f.readlines()
-response = antipublic.check(lines=lines,insert=False)
-print(response.json())
-```
+Search lines by email/password/domain.
 
-```python
-{'success': True, 'result': [{'is_private': True, 'line': 'admin@zelenka.guru:Lanskoy228'}, {'is_private': True, 'line': 'truea911fan@a911.com:Animeshka228'}]}
-```
+:param search_by: Search type. Can be email/password/domain
+    (For password and domain search you need Antipublic Plus subscription)
+:param query: Search query.
+:param direction: Search direction. Can be start/strict/end
 
-### Search
+:return: httpx Response object
 
-*Get passwords for login's/email's*
 
-*[Official documentation reference 1](https://antipublic.readme.io/reference/antipublicemailsearch)*
-*[Official documentation reference 2](https://antipublic.one/api/v2/emailPasswords)*
+# Email Passwords
 
-**Parameters:**
+POST https://antipublic.one/api/v2/emailPasswords
 
-- **login** (str): Email or login for search.
-- **logins** (list[str]): Emails or logins for search.
-  >  You need Antupublic Plus subscription to use this param
-- **limit** (int): Result limit (per email).
+Get passwords for login's/email's
 
-```python
-response = antipublic.search(login="example")
-print(response.json())
+Token required
 
-# or
+:param emails: List of emails or logins for search.
+:param limit: Result limit (per email).
 
-response = antipublic.search(logins=["example@gmail.com", "example1@gmail.com"], limit=1)
-print(response.json())
-```
+:return: httpx Response object
 
-```python
-{"success":True,"availableQueries":0,"resultCount":1,"results":["example@gmail.com:password"]}
-```
+

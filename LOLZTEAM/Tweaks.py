@@ -59,7 +59,7 @@ class _MainTweaks:
                     await asyncio.sleep(delay - time_diff)
 
     @staticmethod
-    def setup_jwt(self, token, user_id=None):
+    def setup_jwt(self, token):
         try:
             if "." in self._token:
                 decoded_payload = json.loads(base64.b64decode(token.split(".")[1] + "==" if "==" not in token.split(".")[1] else token.split(".")[1]).decode("utf-8"))
@@ -187,7 +187,7 @@ class _MainTweaks:
                     continue
         return _wrapper
 
-    async def _ExecCode(func, loc, cur_kwargs):
+    async def _ExecCode(func, loc, cur_kwargs):  # Смотрите на свой страх и риск. Никому не стоит сюда суваться
         SEND_AS_ASYNC = loc.get("SEND_AS_ASYNC", False)
         CREATE_JOB = loc.get("CREATE_JOB", False)
 
@@ -312,16 +312,19 @@ class _MainTweaks:
         params = loc.get("params", {})
         files = loc.get("files")  # Если вы файлы передаете в batch, то вы плохие люди
         data = loc.get("data", {})
+        dataJ = loc.get("dataJ", {})
 
         if CREATE_JOB:  # Фикс для job'а
             path = self.base_url + path  # Полный путь кушает
-            if data:  # Batch принимает только парамсы в теле, вот такой костыль здесь
-                params.update(data)
+            if data:
+                params.update(data)  # Фикс для батча
+            if dataJ:
+                params.update(dataJ)
             params["locale"] = self._locale  # Ставим локаль для ответа job'a
 
         # Ебанина для получения метода
-        method = [eval(i.replace("method=", "").strip())for i in return_code.split(",") if "method=" in i][0]
-        return {"self": self, "path": path, "method": method, "params": params, "files": files, "data": data}
+        method = [eval(i.replace("method=", "").strip()) for i in return_code.split(",") if "method=" in i][0]
+        return {"self": self, "path": path, "method": method, "params": params, "files": files, "data": data, "dataJ": dataJ}
 
     def _AsyncExecutor(coroutine):
         #  Закостылил по гайду от величайшего
@@ -452,4 +455,4 @@ async def SendAsAsync(func, **cur_kwargs) -> httpx.Response:
     SEND_AS_ASYNC = True
     code_data = await _MainTweaks._ExecCode(func=func, loc=locals(), cur_kwargs=cur_kwargs)
     from .API import _send_async_request
-    return await _send_async_request(self=code_data["self"], method=code_data["method"], path=code_data["path"], params=code_data["params"], data=code_data["data"], files=code_data["files"])
+    return await _send_async_request(self=code_data["self"], method=code_data["method"], path=code_data["path"], params=code_data["params"], data=code_data["data"], dataJ=code_data["dataJ"], files=code_data["files"])
