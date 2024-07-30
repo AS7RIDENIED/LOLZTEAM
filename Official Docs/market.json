@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.",
-    "version": "1.1.36"
+    "version": "1.1.37"
   },
   "servers": [
     {
@@ -428,7 +428,7 @@
             "explode": true,
             "schema": {
               "title": "Inv Min",
-              "type": "integer",
+              "type": "number",
               "minimum": 0,
               "description": "Minimum inventory price for game."
             }
@@ -442,7 +442,7 @@
             "explode": true,
             "schema": {
               "title": "Inv Max",
-              "type": "integer",
+              "type": "number",
               "minimum": 0,
               "description": "Maximum inventory price for game."
             }
@@ -2739,14 +2739,14 @@
         ]
       }
     },
-    "/valorant": {
+    "/riot": {
       "get": {
         "tags": [
           "Category Search"
         ],
-        "summary": "Valorant",
+        "summary": "Riot",
         "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.Valorant",
+        "operationId": "Category.Riot",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2810,6 +2810,66 @@
             "$ref": "#/components/parameters/nsb_by_me"
           },
           {
+            "name": "rmin",
+            "in": "query",
+            "description": "Minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "R Min",
+              "type": "integer",
+              "description": "Minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+              "minimum": 3,
+              "maximum": 27
+            }
+          },
+          {
+            "name": "rmax",
+            "in": "query",
+            "description": "Maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "R Max",
+              "type": "integer",
+              "description": "Maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+              "minimum": 3,
+              "maximum": 27
+            }
+          },
+          {
+            "name": "last_rmin",
+            "in": "query",
+            "description": "Last minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Last R Min",
+              "type": "integer",
+              "description": "Last minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+              "minimum": 3,
+              "maximum": 27
+            }
+          },
+          {
+            "name": "last_rmax",
+            "in": "query",
+            "description": "Last maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Last R Max",
+              "type": "integer",
+              "description": "Last maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+              "minimum": 3,
+              "maximum": 27
+            }
+          },
+          {
             "name": "weaponSkin[]",
             "in": "query",
             "description": "List of weapon skins.",
@@ -2817,12 +2877,362 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Weapon Skin",
-              "type": "array",
-              "description": "List of weapon skins.",
+              "title": "Weaponskin",
               "items": {
                 "type": "string"
+              },
+              "type": "array",
+              "description": "List of weapon skins."
+            }
+          },
+          {
+            "name": "buddy[]",
+            "in": "query",
+            "description": "List of buddies.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Buddy",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of buddies."
+            }
+          },
+          {
+            "name": "agent[]",
+            "in": "query",
+            "description": "List of agents.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Agent",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of agents."
+            }
+          },
+          {
+            "name": "champion[]",
+            "in": "query",
+            "description": "List of champions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Champion",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of champions."
+            }
+          },
+          {
+            "name": "skin[]",
+            "in": "query",
+            "description": "List of LoL skins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Skin",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of LoL skins."
+            }
+          },
+          {
+            "name": "country[]",
+            "in": "query",
+            "description": "List of allowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Country",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of allowed countries."
+            }
+          },
+          {
+            "name": "not_country[]",
+            "in": "query",
+            "description": "List of disallowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Not Country",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of disallowed countries."
+            }
+          },
+          {
+            "name": "daybreak[]",
+            "in": "query",
+            "description": "Number of days the account has been offline.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Daybreak",
+              "type": "integer",
+              "description": "Number of days the account has been offline."
+            }
+          },
+          {
+            "name": "valorant_level_min",
+            "in": "query",
+            "description": "Minimum level in Valorant.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Valorant Level Min",
+              "type": "integer",
+              "description": "Minimum level in Valorant."
+            }
+          },
+          {
+            "name": "valorant_level_max",
+            "in": "query",
+            "description": "Maximum level in Valorant.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Valorant Level Max",
+              "type": "integer",
+              "description": "Maximum level in Valorant."
+            }
+          },
+          {
+            "name": "lol_level_min",
+            "in": "query",
+            "description": "Minimum level in LoL.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Lol Level Min",
+              "type": "integer",
+              "description": "Minimum level in LoL."
+            }
+          },
+          {
+            "name": "lol_level_max",
+            "in": "query",
+            "description": "Maximum level in LoL.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Lol Level Max",
+              "type": "integer",
+              "description": "Maximum level in LoL."
+            }
+          },
+          {
+            "name": "inv_min",
+            "in": "query",
+            "description": "Minimum inventory value.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Inv Min",
+              "type": "integer",
+              "description": "Minimum inventory value."
+            }
+          },
+          {
+            "name": "inv_max",
+            "in": "query",
+            "description": "Maximum inventory value.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Inv Max",
+              "type": "integer",
+              "description": "Maximum inventory value."
+            }
+          },
+          {
+            "name": "vp_min",
+            "in": "query",
+            "description": "Minimum number of Valorant points.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Vp Min",
+              "type": "integer",
+              "description": "Minimum number of Valorant points."
+            }
+          },
+          {
+            "name": "vp_max",
+            "in": "query",
+            "description": "Maximum number of Valorant points.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Vp Max",
+              "type": "integer",
+              "description": "Maximum number of Valorant points."
+            }
+          },
+          {
+            "name": "valorant_smin",
+            "in": "query",
+            "description": "Minimum number of skins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Valorant Smin",
+              "type": "integer",
+              "description": "Minimum number of skins."
+            }
+          },
+          {
+            "name": "valorant_smax",
+            "in": "query",
+            "description": "Maximum number of skins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Valorant Smax",
+              "type": "integer",
+              "description": "Maximum number of skins."
+            }
+          },
+          {
+            "name": "valorant_rank_type[]",
+            "in": "query",
+            "description": "List of allowed rank types.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Valorant Rank Type",
+              "type": "array",
+              "description": "List of allowed rank types.",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ranked",
+                  "ranked_ready",
+                  "unrated"
+                ]
               }
+            }
+          },
+          {
+            "name": "amin",
+            "in": "query",
+            "description": "Minimum amount of agents.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Amin",
+              "type": "integer",
+              "description": "Minimum amount of agents."
+            }
+          },
+          {
+            "name": "amax",
+            "in": "query",
+            "description": "Maximum amount of agents.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Amax",
+              "type": "integer",
+              "description": "Maximum amount of agents."
+            }
+          },
+          {
+            "name": "valorant_region[]",
+            "in": "query",
+            "description": "List of allowed regions in Valorant.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Valorant Region",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of allowed regions in Valorant."
+            }
+          },
+          {
+            "name": "valorant_not_region[]",
+            "in": "query",
+            "description": "List of disallowed regions in Valorant.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Valorant Not Region",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of disallowed regions in Valorant."
+            }
+          },
+          {
+            "name": "lol_region[]",
+            "in": "query",
+            "description": "List of allowed regions in LoL.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Lol Region",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of allowed regions in LoL."
+            }
+          },
+          {
+            "name": "lol_not_region[]",
+            "in": "query",
+            "description": "List of disallowed regions in LoL.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Lol Not Region",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "List of disallowed regions in LoL."
             }
           },
           {
@@ -2839,471 +3249,29 @@
             }
           },
           {
-            "name": "buddy[]",
+            "name": "lol_smin",
             "in": "query",
-            "description": "List of buddies.",
+            "description": "Minimum number of skins in LoL.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Buddy",
-              "type": "array",
-              "description": "List of buddies.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "agent[]",
-            "in": "query",
-            "description": "List of agents.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Agent",
-              "type": "array",
-              "description": "List of agents.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "$ref": "#/components/parameters/country"
-          },
-          {
-            "$ref": "#/components/parameters/not_country"
-          },
-          {
-            "$ref": "#/components/parameters/daybreak"
-          },
-          {
-            "name": "level_min",
-            "in": "query",
-            "description": "Minimum level.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Level Min",
+              "title": "Lol Smin",
               "type": "integer",
-              "description": "Minimum level.",
-              "minimum": 1
+              "description": "Minimum number of skins in LoL."
             }
           },
           {
-            "name": "level_max",
+            "name": "lol_smax",
             "in": "query",
-            "description": "Maximum level.",
+            "description": "Maximum number of skins in LoL.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Level Max",
+              "title": "Lol Smax",
               "type": "integer",
-              "description": "Maximum level.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "inv_min",
-            "in": "query",
-            "description": "Minimum inventory value.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Inv Min",
-              "type": "integer",
-              "description": "Minimum inventory value.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "inv_max",
-            "in": "query",
-            "description": "Maximum inventory value.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Inv Max",
-              "type": "integer",
-              "description": "Maximum inventory value.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "vp_min",
-            "in": "query",
-            "description": "Minimum number of Valorant points.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vp Min",
-              "type": "integer",
-              "description": "Minimum number of Valorant points.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "vp_max",
-            "in": "query",
-            "description": "Maximum number of Valorant points.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Vp Max",
-              "type": "integer",
-              "description": "Maximum number of Valorant points.",
-              "minimum": 0
-            }
-          },
-          {
-            "$ref": "#/components/parameters/smin"
-          },
-          {
-            "$ref": "#/components/parameters/smax"
-          },
-          {
-            "name": "rmin",
-            "in": "query",
-            "description": "Minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "R Min",
-              "type": "integer",
-              "description": "Minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-              "minimum": 3,
-              "maximum": 27
-            }
-          },
-          {
-            "name": "rmax",
-            "in": "query",
-            "description": "Maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "R Max",
-              "type": "integer",
-              "description": "Maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-              "minimum": 3,
-              "maximum": 27
-            }
-          },
-          {
-            "name": "last_rmin",
-            "in": "query",
-            "description": "Last minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Last R Min",
-              "type": "integer",
-              "description": "Last minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-              "minimum": 3,
-              "maximum": 27
-            }
-          },
-          {
-            "name": "last_rmax",
-            "in": "query",
-            "description": "Last maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Last R Max",
-              "type": "integer",
-              "description": "Maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-              "minimum": 3,
-              "maximum": 27
-            }
-          },
-          {
-            "name": "rank_type",
-            "in": "query",
-            "description": "Rank type.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Rank Type",
-              "type": "string",
-              "description": "Rank type.",
-              "enum": [
-                "ranked",
-                "ranked_ready",
-                "unrated"
-              ]
-            }
-          },
-          {
-            "name": "amin",
-            "in": "query",
-            "description": "Minimum amount of agents.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "A Min",
-              "type": "integer",
-              "description": "Minimum amount of agents.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "amax",
-            "in": "query",
-            "description": "Maximum amount of agents.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "A Max",
-              "type": "integer",
-              "description": "Maximum amount of agents.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "region[]",
-            "in": "query",
-            "description": "Region.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Region",
-              "type": "array",
-              "description": "Region.",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "eu",
-                  "ap",
-                  "kr",
-                  "na",
-                  "br",
-                  "la"
-                ]
-              }
-            }
-          },
-          {
-            "name": "not_region[]",
-            "in": "query",
-            "description": "Exclude region.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Not Region",
-              "type": "array",
-              "description": "Exclude region.",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "eu",
-                  "ap",
-                  "kr",
-                  "na",
-                  "br",
-                  "la"
-                ]
-              }
-            }
-          },
-          {
-            "$ref": "#/components/parameters/email"
-          },
-          {
-            "$ref": "#/components/parameters/tel"
-          },
-          {
-            "$ref": "#/components/parameters/changeable_email"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/ItemListResponse"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
-    "/league-of-legends": {
-      "get": {
-        "tags": [
-          "Category Search"
-        ],
-        "summary": "League of Legends",
-        "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.LoL",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/page"
-          },
-          {
-            "$ref": "#/components/parameters/auction"
-          },
-          {
-            "$ref": "#/components/parameters/title"
-          },
-          {
-            "$ref": "#/components/parameters/pmin"
-          },
-          {
-            "$ref": "#/components/parameters/pmax"
-          },
-          {
-            "$ref": "#/components/parameters/origin"
-          },
-          {
-            "$ref": "#/components/parameters/not_origin"
-          },
-          {
-            "name": "email_type[]",
-            "in": "query",
-            "description": "Email type.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Email Type",
-              "description": "Email type.",
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "autoreg",
-                  "native",
-                  "no"
-                ]
-              }
-            }
-          },
-          {
-            "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
-          },
-          {
-            "name": "level_min",
-            "in": "query",
-            "description": "Minimum level.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Lvl Min",
-              "type": "integer",
-              "description": "Minimum level.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "level_max",
-            "in": "query",
-            "description": "Maximum level.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Lvl Max",
-              "type": "integer",
-              "description": "Maximum level.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "winrate_min",
-            "in": "query",
-            "description": "Minimum winrate.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Winrate Min",
-              "type": "integer",
-              "description": "Minimum winrate.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "winrate_max",
-            "in": "query",
-            "description": "Maximum winrate.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Winrate Max",
-              "type": "integer",
-              "description": "Maximum winrate.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "skin_min",
-            "in": "query",
-            "description": "Minimum number of skins.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Skins Min",
-              "type": "integer",
-              "description": "Minimum number of skins.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "skin_max",
-            "in": "query",
-            "description": "Maximum number of skins.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Skins Max",
-              "type": "integer",
-              "description": "Maximum number of skins.",
-              "minimum": 0
+              "description": "Maximum number of skins in LoL."
             }
           },
           {
@@ -3314,10 +3282,9 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Champions Min",
+              "title": "Champion Min",
               "type": "integer",
-              "description": "Minimum number of champions.",
-              "minimum": 0
+              "description": "Minimum number of champions."
             }
           },
           {
@@ -3328,227 +3295,149 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Champions Max",
+              "title": "Champion Max",
               "type": "integer",
-              "description": "Maximum number of champions.",
-              "minimum": 0
+              "description": "Maximum number of champions."
             }
           },
           {
-            "name": "wallet_blue_min",
+            "name": "win_rate_min",
+            "in": "query",
+            "description": "Minimum win-rate.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Win Rate Min",
+              "type": "integer",
+              "description": "Minimum win-rate."
+            }
+          },
+          {
+            "name": "win_rate_max",
+            "in": "query",
+            "description": "Maximum win-rate.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Win Rate Max",
+              "type": "integer",
+              "description": "Maximum win-rate."
+            }
+          },
+          {
+            "name": "blue_min",
             "in": "query",
             "description": "Minimum wallet blue balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Blue Min",
+              "title": "Blue Min",
               "type": "integer",
-              "description": "Minimum wallet blue balance.",
-              "minimum": 0
+              "description": "Minimum wallet blue balance."
             }
           },
           {
-            "name": "wallet_blue_max",
+            "name": "blue_max",
             "in": "query",
             "description": "Maximum wallet blue balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Blue Max",
+              "title": "Blue Max",
               "type": "integer",
-              "description": "Maximum wallet blue balance.",
-              "minimum": 0
+              "description": "Maximum wallet blue balance."
             }
           },
           {
-            "name": "wallet_orange_min",
+            "name": "orange_min",
             "in": "query",
             "description": "Minimum wallet orange balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Orange Min",
+              "title": "Orange Min",
               "type": "integer",
-              "description": "Minimum wallet orange balance.",
-              "minimum": 0
+              "description": "Minimum wallet orange balance."
             }
           },
           {
-            "name": "wallet_orange_max",
+            "name": "orange_max",
             "in": "query",
             "description": "Maximum wallet orange balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Orange Max",
+              "title": "Orange Max",
               "type": "integer",
-              "description": "Maximum wallet orange balance.",
-              "minimum": 0
+              "description": "Maximum wallet orange balance."
             }
           },
           {
-            "name": "wallet_mythic_min",
+            "name": "mythic_min",
             "in": "query",
             "description": "Minimum wallet mythic balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Mythic Min",
+              "title": "Mythic Min",
               "type": "integer",
-              "description": "Minimum wallet mythic balance.",
-              "minimum": 0
+              "description": "Minimum wallet mythic balance."
             }
           },
           {
-            "name": "wallet_mythic_max",
+            "name": "mythic_max",
             "in": "query",
             "description": "Maximum wallet mythic balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Mythic Max",
+              "title": "Mythic Max",
               "type": "integer",
-              "description": "Maximum wallet mythic balance.",
-              "minimum": 0
+              "description": "Maximum wallet mythic balance."
             }
           },
           {
-            "name": "wallet_riot_min",
+            "name": "riot_min",
             "in": "query",
             "description": "Minimum wallet riot balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Riot Min",
+              "title": "Riot Min",
               "type": "integer",
-              "description": "Minimum wallet riot balance.",
-              "minimum": 0
+              "description": "Minimum wallet riot balance."
             }
           },
           {
-            "name": "wallet_riot_max",
+            "name": "riot_max",
             "in": "query",
             "description": "Maximum wallet riot balance.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Wallet Riot Max",
+              "title": "Riot Max",
               "type": "integer",
-              "description": "Maximum wallet riot balance.",
-              "minimum": 0
+              "description": "Maximum wallet riot balance."
             }
           },
           {
-            "name": "skin[]",
-            "in": "query",
-            "description": "List of skins.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Skin",
-              "type": "array",
-              "description": "List of skins.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "champion[]",
-            "in": "query",
-            "description": "List of champions.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Champion",
-              "type": "array",
-              "description": "List of champions.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "$ref": "#/components/parameters/country"
-          },
-          {
-            "$ref": "#/components/parameters/not_country"
-          },
-          {
-            "name": "region[]",
-            "in": "query",
-            "description": "Region.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Region",
-              "type": "array",
-              "description": "Region.",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "la1",
-                  "la2",
-                  "br1",
-                  "euw1",
-                  "tr1",
-                  "na1",
-                  "eun1",
-                  "ru",
-                  "oc1",
-                  "jp1",
-                  "ph2",
-                  "vn2",
-                  "th2",
-                  "sg2"
-                ]
-              }
-            }
-          },
-          {
-            "name": "not_region",
-            "in": "query",
-            "description": "List of disallowed regions.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Not Region",
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "description": "List of disallowed regions."
-            }
-          },
-          {
-            "$ref": "#/components/parameters/daybreak"
+            "$ref": "#/components/parameters/email"
           },
           {
             "$ref": "#/components/parameters/tel"
           },
           {
-            "name": "email",
-            "in": "query",
-            "description": "Has confirmed email.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
+            "$ref": "#/components/parameters/changeable_email"
           }
         ],
         "responses": {
@@ -3864,6 +3753,7 @@
             "schema": {
               "title": "Min Stars",
               "type": "integer",
+              "minimum": 0,
               "description": "Minimum number of Telegram Stars."
             }
           },
@@ -3877,6 +3767,7 @@
             "schema": {
               "title": "Max Stars",
               "type": "integer",
+              "minimum": 0,
               "description": "Maximum number of Telegram Stars."
             }
           },
@@ -5124,6 +5015,32 @@
             }
           },
           {
+            "name": "balance_min",
+            "in": "query",
+            "description": "Minimum epic wallet balance.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Balance Min",
+              "type": "number",
+              "description": "Minimum epic wallet balance."
+            }
+          },
+          {
+            "name": "balance_max",
+            "in": "query",
+            "description": "Maximum epic wallet balance.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Balance Max",
+              "type": "number",
+              "description": "Maximum epic wallet balance."
+            }
+          },
+          {
             "name": "rewards_balance_min",
             "in": "query",
             "description": "Minimum rewards balance.",
@@ -5131,7 +5048,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "integer",
+              "type": "number",
               "description": "Minimum rewards balance.",
               "minimum": 0
             }
@@ -5174,6 +5091,15 @@
               "type": "integer",
               "description": "Maximum number of games."
             }
+          },
+          {
+            "$ref": "#/components/parameters/country"
+          },
+          {
+            "$ref": "#/components/parameters/not_country"
+          },
+          {
+            "$ref": "#/components/parameters/daybreak"
           }
         ],
         "responses": {
@@ -6386,6 +6312,12 @@
           },
           {
             "$ref": "#/components/parameters/tel"
+          },
+          {
+            "$ref": "#/components/parameters/reg"
+          },
+          {
+            "$ref": "#/components/parameters/reg_period"
           },
           {
             "$ref": "#/components/parameters/fmin"
@@ -7951,24 +7883,27 @@
             "explode": true,
             "schema": {
               "title": "Rank Hypixel",
-              "type": "integer",
+              "type": "array",
               "description": "Rank on hypixel.\n+ 0 - VIP\n+ 1 - VIP+\n+ 2 - MVP\n+ 3 - MVP+\n+ 4 - MVP++\n+ 5 - JR Helper\n+ 6 - Helper\n+ 7 - Mod\n+ 8 - Apple\n+ 9 - Sloth\n+ 10 - Admin\n+ 11 - YT\n+ 12 - Build Team\n+ 12 - Build Team+",
-              "enum": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13
-              ]
+              "items": {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12,
+                  13
+                ]
+              }
             }
           },
           {
@@ -11393,7 +11328,18 @@
             "$ref": "#/components/parameters/itemId"
           },
           {
-            "$ref": "#/components/parameters/price"
+            "name": "price",
+            "in": "query",
+            "required": false,
+            "description": "Current price of account in your currency.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Price",
+              "type": "integer",
+              "description": "Current price of account in your currency.",
+              "minimum": 1
+            }
           }
         ],
         "responses": {
