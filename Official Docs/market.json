@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://docs.api.zelenka.guru/swagger/market.json) file.",
-    "version": "1.1.37"
+    "version": "1.1.38"
   },
   "servers": [
     {
@@ -2870,6 +2870,32 @@
             }
           },
           {
+            "name": "previous_rmin",
+            "in": "query",
+            "description": "Previous minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Previous Rmin",
+              "type": "integer",
+              "description": "Previous minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant"
+            }
+          },
+          {
+            "name": "previous_rmax",
+            "in": "query",
+            "description": "Previous maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Previous Rmax",
+              "type": "integer",
+              "description": "Previous maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant"
+            }
+          },
+          {
             "name": "weaponSkin[]",
             "in": "query",
             "description": "List of weapon skins.",
@@ -5629,6 +5655,39 @@
               },
               "type": "array",
               "description": "List of operators in Tom Clancy's Rainbow Six Siege."
+            }
+          },
+          {
+            "name": "xbox_connected",
+            "in": "query",
+            "description": "Xbox connected to account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "psn_connected",
+            "in": "query",
+            "description": "PSN connected to account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "steam_connected",
+            "in": "query",
+            "description": "Steam connected to account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
         ],
@@ -13831,7 +13890,7 @@
         ]
       }
     },
-    "/user/{userId}/payments": {
+    "/user/payments": {
       "get": {
         "tags": [
           "Payments"
@@ -13840,9 +13899,6 @@
         "description": "Displays list of your payments.",
         "operationId": "paymentsList.history",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/userId"
-          },
           {
             "name": "type",
             "in": "query",
@@ -13927,7 +13983,7 @@
             "schema": {
               "title": "Startdate",
               "type": "string",
-              "description": "Start date of operation (RFC 3339 date format)."
+              "description": "Start date of operation (RFC 3339 date format).\nUsed only in pair with **endDate**."
             }
           },
           {
@@ -13940,7 +13996,7 @@
             "schema": {
               "title": "Enddate",
               "type": "string",
-              "description": "End date of operation (RFC 3339 date format)."
+              "description": "End date of operation (RFC 3339 date format).\nUsed only in pair with **startDate**."
             }
           },
           {
@@ -14492,7 +14548,7 @@
         "title": "Extra",
         "properties": {
           "region": {
-            "description": "Region. Required if you want to upload WoT, Valorant, Escape From Tarkov account. Optional if you want to upload Genshin Impact account.",
+            "description": "Region. Required if you want to upload WoT, Riot, Escape From Tarkov account. Optional if you want to upload Genshin Impact account.",
             "title": "Region",
             "type": "string"
           },
@@ -16095,8 +16151,7 @@
             "steam",
             "fortnite",
             "genshin-impact",
-            "valorant",
-            "league-of-legends",
+            "riot",
             "telegram",
             "supercell",
             "origin",
@@ -16149,7 +16204,7 @@
       "category_id": {
         "name": "category_id",
         "in": "query",
-        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Valorant\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft\n+ 29 - League of Legends",
+        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft",
         "required": false,
         "style": "form",
         "explode": true,
@@ -16198,7 +16253,8 @@
             "active",
             "paid",
             "deleted",
-            "awaiting"
+            "awaiting",
+            "closed"
           ],
           "description": "Account Status."
         }
