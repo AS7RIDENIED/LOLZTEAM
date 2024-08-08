@@ -98,7 +98,7 @@
   * [Like](#like-1)
   * [Unlike](#unlike-1)
   * [Report](#report-1)
-* [Search](#search)
+* [Search](#search-1)
   * [All](#all)
   * [Thread](#thread)
   * [Post](#post)
@@ -2257,7 +2257,7 @@ Required scopes: *conversate*, *post*
 **Parameters:**
 
 - **message_id** (int): ID of conversation message.
-- **message ** (str): Reason of the report.
+- **message** (str): Reason of the report.
 
 **Example:**
 

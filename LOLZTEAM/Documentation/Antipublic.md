@@ -53,27 +53,42 @@ antipublic = Antipublic(token=token)
 
 GET https://antipublic.one/api/v2/countLines
 
-Get count of rows in the AntiPublic db
+*Get count of rows in the AntiPublic db*
 
-:return: httpx Response object
+**Example:**
+
+```python
+response = antipublic.info.lines_count()
+print(response.json())
+```
 
 
 ## Lines Count Plain
 
 GET https://antipublic.one/api/v2/countLinesPlain
 
-Get count of rows in the AntiPublic db (raw format)
+*Get count of rows in the AntiPublic db (raw format)*
 
-:return: str
+**Example:**
+
+```python
+response = antipublic.info.lines_count_plain()
+print(response.text)
+```
 
 
 ## Version
 
 GET https://antipublic.one/api/v2/version
 
-Get current antipublic version, change log and download url
+*Get current antipublic version, change log and download url*
 
-:return: json {'filename': str, 'version': str, 'changeLog': str, 'url': str}
+**Example:**
+
+```python
+response = antipublic.info.version()
+print(response.json())
+```
 
 
 # Account
@@ -82,62 +97,88 @@ Get current antipublic version, change log and download url
 
 GET https://antipublic.one/api/v2/checkAccess
 
-Checks your license
+*Checks your license*
 
 Token required
 
-:return: httpx Response object
+**Example:**
+
+```python
+response = antipublic.account.license()
+print(response.json())
+```
 
 
 ## Queries
 
 GET https://antipublic.one/api/v2/availableQueries
 
-Get your available queries
+*Get your available queries*
 
-Token required
+**Example:**
 
-:return: httpx Response object
+```python
+response = antipublic.account.queries()
+print(response.json())
+```
 
 
 # Check
 
 POST https://antipublic.one/api/v2/checkLines
 
-Check your lines.
+*Check your lines.*
 
-Token required
-:param lines: Lines for check, email:password or login:password
-:param insert: Upload private rows to AntiPublic db
+**Parameters:**
 
-:return: httpx Response object
+- **lines** (list): Lines for check, email:password or login:password
+- **insert** (bool): Upload private rows to AntiPublic db
+
+**Example:**
+
+```python
+response = antipublic.check(lines=["email:password", "login:password"])
+print(response.json())
+```
 
 
 # Search
 
 POST https://antipublic.one/api/v2/search
 
-Search lines by email/password/domain.
+*Search lines by email/password/domain.*
 
-:param search_by: Search type. Can be email/password/domain
-    (For password and domain search you need Antipublic Plus subscription)
-:param query: Search query.
-:param direction: Search direction. Can be start/strict/end
+**Parameters:**
 
-:return: httpx Response object
+- **search_by** (INSERT_HERE): Search type.
+    > For password and domain search you need Antipublic Plus subscription
+- **query** (INSERT_HERE): Search query.
+- **direction** (INSERT_HERE): Search direction.
+
+**Example:**
+
+```python
+response = antipublic.search(search_by="email", query="email7357@example.com")
+print(response.json())
+```
 
 
 # Email Passwords
 
 POST https://antipublic.one/api/v2/emailPasswords
 
-Get passwords for login's/email's
+*Get passwords for login's/email's*
 
-Token required
+**Parameters:**
 
-:param emails: List of emails or logins for search.
-:param limit: Result limit (per email).
+- **emails** (list): List of emails or logins for search.
+- **limit** (int): Result limit (per email).
 
-:return: httpx Response object
+**Example:**
+
+```python
+response = antipublic.email_passwords(emails=["email7357@example.com", "email7358@example.com"], limit=1)
+print(response.json())
+```
 
 

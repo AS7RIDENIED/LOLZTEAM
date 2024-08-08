@@ -333,6 +333,65 @@ class _MainTweaks:
         result = executor.submit(asyncio.run, coroutine).result()
         return result
 
+    class _Custom:
+        def __init__(self):
+            self.__params = {}
+            self.__data = {}
+            self.__json = {}
+            self.__headers = {}
+
+        @property
+        def params(self):
+            return self.__params
+
+        @params.setter
+        def params(self, value):
+            if type(value) is dict:
+                self.__params = value
+            else:
+                _WarningsLogger.warn(" Params must be dict")
+
+        @property
+        def data(self):
+            return self.__data
+
+        @data.setter
+        def data(self, value):
+            if type(value) is dict:
+                self.__data = value
+            else:
+                _WarningsLogger.warn(" Data must be dict")
+
+        @property
+        def json(self):
+            return self.__json
+
+        @json.setter
+        def json(self, value):
+            if type(value) is str:
+                self.__json = json.loads(value)
+            elif type(value) is dict:
+                self.__json = value
+            else:
+                _WarningsLogger.warn(" Json must be str or dict")
+
+        @property
+        def headers(self):
+            return self.__headers
+
+        @headers.setter
+        def headers(self, value):
+            if type(value) is dict:
+                self.__headers = value
+            else:
+                _WarningsLogger.warn(" Headers must be dict")
+
+        def reset(self):
+            self.__params = {}
+            self.__data = {}
+            self.__json = {}
+            self.__headers = {}
+
 
 class DelaySync:
     def __init__(self, apis: list = []):

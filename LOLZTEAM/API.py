@@ -45,7 +45,7 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
     if params:
         if not params.get("locale"):  # Фикс для какого-то метода. Там коллизия параметра locale
             params["locale"] = self._locale
-        params.update(self.custom_params)
+        params.update(self.custom.params)
         ptd = []
         for key, value in params.items():  # Убираем None
             if params[key] is None:
@@ -54,16 +54,16 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
             del params[key]
     if data:
         if type(data) is dict:
-            data.update(self.custom_body)
+            data.update(self.custom.data)
             if dataJ:
                 dataJ = None
     elif dataJ:
         if type(dataJ) is dict:
-            dataJ.update(self.custom_body)
+            dataJ.update(self.custom.json)
 
     headers = self._main_headers.copy()
     headers["User-Agent"] = f"LOLZTEAM v{version('LOLZTEAM')}"
-    headers.update(self.custom_headers)
+    headers.update(self.custom.headers)
 
     proxy_schemes = {
         "HTTP": "http",
@@ -98,6 +98,8 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
         async with httpx.AsyncClient(proxies=proxy) as client:
             response = await client.request(method=method, url=url, params=params, data=data, json=dataJ, files=files, headers=headers, timeout=self.timeout)
             _DebugLogger.debug(f"Response: {response} | Plain response: {response.content}")
+            if self.reset_custom_variables:
+                self.custom.reset()
             if self._delay_synchronizer:
                 self._delay_synchronizer._synchronize(tbr)
             else:
@@ -157,9 +159,7 @@ class Forum:
         self._delay_pattern = ".*"
 
         self.reset_custom_variables = reset_custom_variables
-        self.custom_params = {}
-        self.custom_body = {}
-        self.custom_headers = {}
+        self.custom = _MainTweaks._Custom()
 
         self.categories = self.__Categories(self)
         self.forums = self.__Forums(self)
@@ -237,7 +237,6 @@ class Forum:
             - **parent_category_id** (int): ID of parent category.
             - **parent_forum_id** (int): ID of parent forum.
             - **order** (str): Ordering of categories.
-                > Can be [natural, list]
 
             **Example:**
 
@@ -299,7 +298,6 @@ class Forum:
             - **parent_category_id** (int): ID of parent category.
             - **parent_forum_id** (int): ID of parent forum.
             - **order** (str): Ordering of categories.
-                > Can be [natural, list]
 
             **Example:**
 
@@ -475,7 +473,6 @@ class Forum:
             - **parent_page_id** (int): ID of parent page.
                 > If exists, filter pages that are direct children of that page.
             - **order** (str): Ordering of pages.
-                > Can be [natural, list]
 
             **Example:**
 
@@ -604,7 +601,6 @@ class Forum:
             - **page** (int): Page number of posts.
             - **limit** (int): Number of posts in a page.
             - **order** (str): Ordering of posts.
-                > Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
 
             **Example:**
 
@@ -690,7 +686,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def edit(
-            self, post_id: int, post_body: str = None, message_state: str = None
+            self, post_id: int, post_body: str = None, message_state: str = Literal["visible", "deleted", "moderated"]
         ) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/posts/{post_id}
@@ -3404,34 +3400,6 @@ class Forum:
                 path = f"/conversation-messages/{message_id}"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
-            @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
-            def report(self, message_id: int, reason: str = None) -> httpx.Response:
-                """
-                POST https://api.zelenka.guru/conversation-messages/{message_id}/report
-
-                *Create a new conversation message.*
-
-                Required scopes: *conversate*, *post*
-
-                **Parameters:**
-
-                - **message_id** (int): ID of conversation message.
-                - **message** (str): Reason of the report.
-
-                **Example:**
-
-                ```python
-                response = forum.conversations.messages.report(message_id=1000000, reason="Reason")
-                print(response.json())
-                ```
-                """
-
-                path = f"/conversation-messages/{message_id}/report"
-                data = {"message": reason}
-                return _send_request(
-                    self=self._api, method="POST", path=path, data=data
-                )
-
         def __init__(self, _api_self):
             self._api = _api_self
             self.messages = self.__Conversations_messages(self._api)
@@ -3643,7 +3611,7 @@ class Forum:
 
         *Execute multiple API requests at once. Maximum batch jobs is 10.*
 
-        **Example jobs scheme:**
+        **Example json jobs scheme:**
 
         [
             {
@@ -3749,9 +3717,7 @@ class Market:
         self.proxy = self.__Proxy(self)
 
         self.reset_custom_variables = reset_custom_variables
-        self.custom_params = {}
-        self.custom_body = {}
-        self.custom_headers = {}
+        self.custom = _MainTweaks._Custom()
 
     @property
     def scopes(self):
@@ -8092,6 +8058,7 @@ class Market:
             auction_duration_option: Literal["minutes", "hours", "days"] = None,
             instabuy_price: float = None,
             not_bids_action: str = None,
+            close_item: bool = None,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/item/fast-sell
@@ -8128,6 +8095,7 @@ class Market:
             - **auction_duration_option** (str): Duration auction option.
             - **instabuy_price** (float): The price for which you can instantly redeem your account.
             - **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
+            - **close_item** (bool): If True, the item will be closed item_state = closed.
 
             **Example:**
 
@@ -8161,6 +8129,7 @@ class Market:
                 "login": login,
                 "password": password,
                 "login_password": login_password,
+                "close_item": int(close_item) if close_item else close_item,
             }
             data = {}
             if extra:
@@ -8337,9 +8306,7 @@ class Antipublic:
         self._delay_pattern = "^$"
 
         self.reset_custom_variables = reset_custom_variables
-        self.custom_params = {}
-        self.custom_body = {}
-        self.custom_headers = {}
+        self.custom = _MainTweaks._Custom()
         self._main_headers = {}
 
         self.info = self.__Info(self)
@@ -8468,10 +8435,10 @@ class Antipublic:
 
         **Parameters:**
 
-        - **search_by** (INSERT_HERE): Search type.
+        - **search_by** (str): Search type.
             > For password and domain search you need Antipublic Plus subscription
-        - **query** (INSERT_HERE): Search query.
-        - **direction** (INSERT_HERE): Search direction.
+        - **query** (str): Search query.
+        - **direction** (str): Search direction.
 
         **Example:**
 

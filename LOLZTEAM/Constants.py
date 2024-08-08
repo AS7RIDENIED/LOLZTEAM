@@ -115,11 +115,12 @@ class Market:
         three_days = 1
 
     class ItemStatus:
-        _Literal = Literal["active", "paid", "deleted", "awaiting"]
+        _Literal = Literal["active", "paid", "deleted", "awaiting", "closed"]
         active = "active"
         paid = "paid"
         deleted = "deleted"
         awaiting = "awaiting"
+        closed = "closed"
 
     class ItemOrder:
         _Literal = Literal["price_to_up", "price_to_down", "pdate_to_down", "pdate_to_up", "pdate_to_down_upload", "pdate_to_up_upload", "exp_auctions", "ddate_to_down", "ddate_to_up"]

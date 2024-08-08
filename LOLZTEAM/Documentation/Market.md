@@ -7,7 +7,6 @@
 
 <summary><font size="4">Method tree</font></summary>
 
-* [Batch](#batch)
 * [Profile](#profile)
   * [Get](#get)
   * [Edit](#edit)
@@ -96,7 +95,7 @@
     * [Params](#params-24)
   * [Get](#get-26)
   * [List](#list)
-* [List](#list)
+* [List](#list-1)
   * [From Url](#from-url)
   * [Latest](#latest)
   * [Owned](#owned)
@@ -112,13 +111,13 @@
   * [Tag](#tag)
     * [Delete](#delete)
     * [Add](#add)
-  * [Steamman](#steamman)
+  * [Steam](#steam-1)
     * [Guard](#guard)
     * [Mafile](#mafile)
     * [Update Inventory](#update-inventory)
     * [Inventory Value](#inventory-value)
     * [Confirm Sda](#confirm-sda)
-  * [Telegramman](#telegramman)
+  * [Telegram](#telegram-1)
     * [Code](#code)
     * [Reset Auth](#reset-auth)
   * [Password Temp Mail](#password-temp-mail)
@@ -153,6 +152,7 @@
   * [Get](#get-28)
   * [Delete](#delete-2)
   * [Add](#add-2)
+* [Batch](#batch)
 
 
 </details>
@@ -184,27 +184,6 @@ forum = Forum(token=token, language="en")
 - **proxy** (str): Proxy string.
 - **reset_custom_variables** (bool): Reset custom variables.
 - **timeout** (int): Request timeout.
-# Batch
-
-POST https://api.lzt.market/batch
-
-Execute multiple API requests at once.(10 max)
-
-Example scheme:
-
-[
-    {
-    "id": "1",
-    "uri": "https://api.lzt.market/me",
-    "method": "GET",
-    "params": {}
-    }
-]
-
-:param jobs: List of batch jobs. (Check example above)
-:return: httpx Response object
-
-
 # Profile
 
 ## Get
@@ -233,15 +212,15 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **disable_steam_guard** (INSERT_HERE): Disable Steam Guard on account purchase moment
-- **user_allow_ask_discount** (INSERT_HERE): Allow users ask discount for your accounts
-- **max_discount_percent** (INSERT_HERE): Maximum discount percents for your accounts
-- **allow_accept_accounts** (INSERT_HERE): Usernames who can transfer market accounts to you. Separate values with a comma.
-- **hide_favourites** (INSERT_HERE): Hide your profile info when you add an account to favorites
-- **title** (INSERT_HERE): Market title.
-- **telegram_client** (INSERT_HERE): Telegram client. It should be {"telegram_api_id"
-- **deauthorize_steam** (INSERT_HERE): Finish all Steam sessions after purchase.
-- **hide_bids** (INSERT_HERE): Hide your profile when bid on the auction.
+- **disable_steam_guard** (bool): Disable Steam Guard on account purchase moment
+- **user_allow_ask_discount** (bool): Allow users ask discount for your accounts
+- **max_discount_percent** (int): Maximum discount percents for your accounts
+- **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
+- **hide_favorites** (bool): Hide your profile info when you add an account to favorites
+- **title** (str): Market title.
+- **telegram_client** (dict): Telegram client. It should be {"telegram_api_id"
+- **deauthorize_steam** (bool): Finish all Steam sessions after purchase.
+- **hide_bids** (bool): Hide your profile when bid on the auction.
 
 **Example:**
 
@@ -265,19 +244,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -331,19 +310,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -379,19 +358,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -427,19 +406,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -489,19 +468,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -537,19 +516,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -568,7 +547,7 @@ GET https://api.lzt.market/supercell/params
 **Example:**
 
 ```python
-response = INSERT_HERE
+response = market.category.supercell.params()
 print(response.json())
 ```
 
@@ -585,19 +564,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -649,19 +628,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -697,19 +676,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -745,19 +724,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -793,19 +772,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -857,19 +836,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -905,19 +884,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -969,19 +948,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1033,19 +1012,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1081,19 +1060,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1129,19 +1108,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1177,19 +1156,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1225,19 +1204,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1289,19 +1268,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1337,19 +1316,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1385,19 +1364,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1433,19 +1412,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1481,19 +1460,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1529,19 +1508,19 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1576,19 +1555,19 @@ Required scopes: *market*
 **Parameters:**
 
 - **category_name** (str): Category name.
-- **page** (INSERT_HERE): The number of the page to display results from
-- **auction** (INSERT_HERE): Auction.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **origin** (INSERT_HERE): List of account origins.
-- **not_origin** (INSERT_HERE): List of account origins that won't be included.
-- **order_by** (INSERT_HERE): Item order.
-- **sold_before** (INSERT_HERE): Sold before.
-- **sold_before_by_me** (INSERT_HERE): Sold before by me.
-- **not_sold_before** (INSERT_HERE): Not sold before.
-- **not_sold_before_by_me** (INSERT_HERE): Not sold before by me.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **auction** (bool): Auction.
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1608,7 +1587,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **top_queries** (INSERT_HERE): Display top queries for per category.
+- **top_queries** (bool): Display top queries for per category.
 
 **Example:**
 
@@ -1628,7 +1607,7 @@ Required scopes: *market**
 
 **Parameters:**
 
-- **url** (INSERT_HERE): Your market search url.
+- **url** (str): Your market search url.
     > It can be *https://lzt.market/search_params* or *https://api.lzt.market/search_params*
 
 **Example:**
@@ -1649,9 +1628,9 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **title** (str): The word or words contained in the account title.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1671,14 +1650,14 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **user_id** (INSERT_HERE): ID of user.
-- **page** (INSERT_HERE): Page
-- **category_id** (INSERT_HERE): Accounts category
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **status** (INSERT_HERE): Account status. Can be [active, paid, deleted or awaiting].
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **user_id** (int): ID of user.
+- **page** (int): Page
+- **category_id** (int): Accounts category
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **title** (str): The word or words contained in the account title.
+- **status** (str): Account status.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1698,14 +1677,14 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **user_id** (INSERT_HERE): ID of user.
-- **page** (INSERT_HERE): Page
-- **category_id** (INSERT_HERE): Accounts category
-- **pmin** (INSERT_HERE): Minimal price of account (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of account (Inclusive).
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **status** (INSERT_HERE): Account status. Can be [active, paid, deleted or awaiting].
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **user_id** (int): ID of user.
+- **page** (int): Page
+- **category_id** (int): Accounts category
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **title** (str): The word or words contained in the account title.
+- **status** (str): Account status.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1725,10 +1704,10 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **status** (INSERT_HERE): Account status.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **status** (str): Account status.
+- **title** (str): The word or words contained in the account title.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1748,10 +1727,10 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **page** (INSERT_HERE): The number of the page to display results from
-- **status** (INSERT_HERE): Account status.
-- **title** (INSERT_HERE): The word or words contained in the account title.
-- **kwargs** (INSERT_HERE): Additional search parameters for your request.
+- **page** (int): The number of the page to display results from
+- **status** (str): Account status.
+- **title** (str): The word or words contained in the account title.
+- **kwargs** (any): Additional search parameters for your request.
 
 **Example:**
 
@@ -1773,20 +1752,20 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **user_id** (INSERT_HERE): ID of user.
-- **operation_type** (INSERT_HERE): Type of operation.
-- **pmin** (INSERT_HERE): Minimal price of operation (Inclusive).
-- **pmax** (INSERT_HERE): Maximum price of operation (Inclusive).
-- **page** (INSERT_HERE): The number of the page to display results from.
-- **operation_id_lt** (INSERT_HERE): ID of the operation from which the result begins.
-- **receiver** (INSERT_HERE): Username of user, which receive money from you.
-- **sender** (INSERT_HERE): Username of user, which sent money to you.
-- **start_date** (INSERT_HERE): Start date of operation (RFC 3339 date format).
-- **end_date** (INSERT_HERE): End date of operation (RFC 3339 date format).
-- **wallet** (INSERT_HERE): Wallet, which used for money payots.
-- **comment** (INSERT_HERE): Comment for money transfers.
-- **is_hold** (INSERT_HERE): Display hold operations.
-- **show_payments_stats** (INSERT_HERE): Display payment stats for selected period (outgoing value, incoming value).
+- **user_id** (int): ID of user.
+- **operation_type** (str): Type of operation.
+- **pmin** (float): Minimal price of operation (Inclusive).
+- **pmax** (float): Maximum price of operation (Inclusive).
+- **page** (int): The number of the page to display results from.
+- **operation_id_lt** (int): ID of the operation from which the result begins.
+- **receiver** (str): Username of user, which receive money from you.
+- **sender** (str): Username of user, which sent money to you.
+- **start_date** (str): Start date of operation (RFC 3339 date format).
+- **end_date** (str): End date of operation (RFC 3339 date format).
+- **wallet** (str): Wallet, which used for money payots.
+- **comment** (str): Comment for money transfers.
+- **is_hold** (bool): Display hold operations.
+- **show_payments_stats** (bool): Display payment stats for selected period (outgoing value, incoming value).
 
 **Example:**
 
@@ -1806,15 +1785,15 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **amount** (INSERT_HERE): Amount to send in your currency.
-- **secret_answer** (INSERT_HERE): Secret answer of your account.
-- **currency** (INSERT_HERE): Using currency for amount.
-- **user_id** (INSERT_HERE): User id of receiver. If user_id specified, username is not required.
-- **username** (INSERT_HERE): Username of receiver. If username specified, user_id is not required.
-- **comment** (INSERT_HERE): Transfer comment.
-- **transfer_hold** (INSERT_HERE): Hold transfer or not.
-- **hold_length_option** (INSERT_HERE): Hold length option.
-- **hold_length_value** (INSERT_HERE): Hold length value.
+- **amount** (float): Amount to send in your currency.
+- **secret_answer** (str): Secret answer of your account.
+- **currency** (str): Using currency for amount.
+- **user_id** (int): User id of receiver. If user_id specified, username is not required.
+- **username** (str): Username of receiver. If username specified, user_id is not required.
+- **comment** (str): Transfer comment.
+- **transfer_hold** (bool): Hold transfer or not.
+- **hold_length_option** (str): Hold length option.
+- **hold_length_value** (int): Hold length value.
 
 **Example:**
 
@@ -1834,7 +1813,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **amount** (INSERT_HERE): Amount to send in your currency.
+- **amount** (float): Amount to send in your currency.
 
 **Example:**
 
@@ -1850,16 +1829,16 @@ print(response.json())
 
 **Parameters:**
 
-- **amount** (INSERT_HERE): Amount to send in your currency.
-- **user_id** (INSERT_HERE): ID of user to transfer money.
-- **username** (INSERT_HERE): Username to transfer money.
-- **comment** (INSERT_HERE): Payment comment.
-- **redirect_url** (INSERT_HERE): Redirect url. User who paid on this link will be redirected to this url.
-- **currency** (INSERT_HERE): Using currency for amount.
-- **hold** (INSERT_HERE): Hold transfer or not.
-- **hold_length** (INSERT_HERE): Hold length.
+- **amount** (float): Amount to send in your currency.
+- **user_id** (int): ID of user to transfer money.
+- **username** (str): Username to transfer money.
+- **comment** (str): Payment comment.
+- **redirect_url** (str): Redirect url. User who paid on this link will be redirected to this url.
+- **currency** (str): Using currency for amount.
+- **hold** (bool): Hold transfer or not.
+- **hold_length** (int): Hold length.
     > Max - 1 month.
-- **hold_period** (INSERT_HERE): Hold option.
+- **hold_period** (str): Hold option.
 
 **Example:**
 
@@ -1883,8 +1862,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **tag_id** (INSERT_HERE): Tag id.
+- **item_id** (int): ID of item.
+- **tag_id** (int): Tag id.
     > Tag list is available via market.profile.get()
 
 **Example:**
@@ -1905,8 +1884,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **tag_id** (INSERT_HERE): Tag id.
+- **item_id** (int): ID of item.
+- **tag_id** (int): Tag id.
     > Tag list is available via market.profile.get()
 
 **Example:**
@@ -1917,7 +1896,7 @@ print(response.json())
 ```
 
 
-## Steamman
+## Steam
 
 ### Guard
 
@@ -1929,7 +1908,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -1949,7 +1928,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -1969,8 +1948,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **app_id** (INSERT_HERE): App id.
+- **item_id** (int): ID of item.
+- **app_id** (int): App id.
 
 **Example:**
 
@@ -1988,12 +1967,12 @@ GET https://api.lzt.market/steam-value
 
 **Parameters:**
 
-- **url** (INSERT_HERE): Link or id of account.
+- **url** (str): Link or id of account.
     > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
-- **item_id** (INSERT_HERE): Item id.
-- **app_id** (INSERT_HERE): Application id.
-- **currency** (INSERT_HERE): Using currency for amount.
-- **ignore_cache** (INSERT_HERE): Ignore cache.
+- **item_id** (int): Item id.
+- **app_id** (int): Application id.
+- **currency** (str): Using currency for amount.
+- **ignore_cache** (bool): Ignore cache.
 
 **Example:**
 
@@ -2012,10 +1991,10 @@ POST https://api.lzt.market/{item_id}/confirm-sda
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): Item id.
-- **id** (INSERT_HERE): Confirmation id.
+- **item_id** (int): Item id.
+- **id** (int): Confirmation id.
     > Required along with **nonce** if you want to confirm action.
-- **nonce** (INSERT_HERE): Confirmation nonce.
+- **nonce** (int): Confirmation nonce.
     > Required along with **id** if you want to confirm action.
 
 **Example:**
@@ -2026,7 +2005,7 @@ print(response.json())
 ```
 
 
-## Telegramman
+## Telegram
 
 ### Code
 
@@ -2038,7 +2017,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2058,7 +2037,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2078,7 +2057,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2100,9 +2079,9 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **steam_preview** (INSERT_HERE): Set it True if you want to get steam html and False/None if you want to get account info
-- **preview_type** (INSERT_HERE): Type of page - profiles or games
+- **item_id** (int): ID of item.
+- **steam_preview** (bool): Set it True if you want to get steam html and False/None if you want to get account info
+- **preview_type** (str): Type of page - profiles or games
 
 **Example:**
 
@@ -2122,7 +2101,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_ids** (INSERT_HERE): Item ids.
+- **item_ids** (list): Item ids.
 
 **Example:**
 
@@ -2142,8 +2121,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **reason** (INSERT_HERE): Delete reason.
+- **item_id** (int): ID of item.
+- **reason** (str): Delete reason.
 
 **Example:**
 
@@ -2163,9 +2142,9 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **email** (INSERT_HERE): Account email.
-- **login** (INSERT_HERE): Account login.
+- **item_id** (int): ID of item.
+- **email** (str): Account email.
+- **login** (str): Account login.
 
 **Example:**
 
@@ -2185,7 +2164,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2205,7 +2184,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2225,8 +2204,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **_cancel** (INSERT_HERE): Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
+- **item_id** (int): ID of item.
+- **_cancel** (bool): Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data
 
 **Example:**
 
@@ -2246,7 +2225,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2266,7 +2245,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2286,7 +2265,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2306,7 +2285,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2326,7 +2305,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2346,9 +2325,9 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **username** (INSERT_HERE): The username of the new account owner.
-- **secret_answer** (INSERT_HERE): Secret answer of your account.
+- **item_id** (int): ID of item.
+- **username** (str): The username of the new account owner.
+- **secret_answer** (str): Secret answer of your account.
 
 **Example:**
 
@@ -2368,20 +2347,20 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item
-- **price** (INSERT_HERE): Account price in your currency.
-- **currency** (INSERT_HERE): Using currency.
-- **item_origin** (INSERT_HERE): Account origin.
-- **title** (INSERT_HERE): Russian title of account.
+- **item_id** (int): ID of item
+- **price** (float): Account price in your currency.
+- **currency** (str): Using currency.
+- **item_origin** (str): Account origin.
+- **title** (str): Russian title of account.
     > If title specified and title_en is empty, title_en will be automatically translated to English language.
-- **title_en** (INSERT_HERE): English title of account.
+- **title_en** (str): English title of account.
     > If title_en specified and title is empty, title will be automatically translated to Russian language.
-- **description** (INSERT_HERE): Account public description.
-- **information** (INSERT_HERE): Account private information (visible for buyer only if purchased).
-- **email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
-- **email_type** (INSERT_HERE): Email type.
-- **allow_ask_discount** (INSERT_HERE): Allow users to ask discount for this account.
-- **proxy_id** (INSERT_HERE): Using proxy id for account checking.
+- **description** (str): Account public description.
+- **information** (str): Account private information (visible for buyer only if purchased).
+- **email_login_data** (str): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+- **email_type** (str): Email type.
+- **allow_ask_discount** (bool): Allow users to ask discount for this account.
+- **proxy_id** (int): Using proxy id for account checking.
 
 **Example:**
 
@@ -2401,7 +2380,7 @@ Required scopes: *post*
 
 **Parameters:**
 
-- **post_body** (INSERT_HERE): You should describe what's happened.
+- **post_body** (str): You should describe what's happened.
 
 **Example:**
 
@@ -2425,9 +2404,9 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **amount** (INSERT_HERE): Amount bid.
-- **currency** (INSERT_HERE): Using currency.
+- **item_id** (int): ID of item.
+- **amount** (float): Amount bid.
+- **currency** (str): Using currency.
 
 **Example:**
 
@@ -2447,8 +2426,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **bid_id** (INSERT_HERE): ID of bid.
+- **item_id** (int): ID of item.
+- **bid_id** (int): ID of bid.
 
 **Example:**
 
@@ -2468,7 +2447,7 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
+- **item_id** (int): ID of item.
 
 **Example:**
 
@@ -2504,9 +2483,9 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **price** (INSERT_HERE): Current price of account in your currency.
-- **buy_without_validation** (INSERT_HERE): Use TRUE if you want to buy account without account data validation (not safe).
+- **item_id** (int): ID of item.
+- **price** (float): Current price of account in your currency.
+- **buy_without_validation** (bool): Use TRUE if you want to buy account without account data validation (not safe).
 
 **Example:**
 
@@ -2528,8 +2507,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID of item.
-- **resell_item_id** (INSERT_HERE): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
+- **item_id** (int): ID of item.
+- **resell_item_id** (int): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
 
 **Example:**
 
@@ -2549,14 +2528,14 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **item_id** (INSERT_HERE): ID for item.
-- **login** (INSERT_HERE): Account login (or email).
-- **password** (INSERT_HERE): Account password.
-- **login_password** (INSERT_HERE): Account login data format login:password.
-- **close_item** (INSERT_HERE): If True, the item will be closed item_state = closed.
-- **extra** (INSERT_HERE): Extra params for account checking.
-- **resell_item_id** (INSERT_HERE): Put item id, if you are trying to resell item.
-- **random_proxy** (INSERT_HERE): Pass True, if you get captcha in previous response.
+- **item_id** (int): ID for item.
+- **login** (str): Account login (or email).
+- **password** (str): Account password.
+- **login_password** (str): Account login data format login:password.
+- **close_item** (bool): If True, the item will be closed item_state = closed.
+- **extra** (str): Extra params for account checking.
+- **resell_item_id** (int): Put item id, if you are trying to resell item.
+- **random_proxy** (bool): Pass True, if you get captcha in previous response.
 
 **Example:**
 
@@ -2576,28 +2555,28 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **category_id** (INSERT_HERE): Accounts category.
-- **price** (INSERT_HERE): Account price in your currency.
-- **currency** (INSERT_HERE): Using currency.
-- **item_origin** (INSERT_HERE): Account origin. Where did you get it from.
-- **extended_guarantee** (INSERT_HERE): Guarantee type.
-- **title** (INSERT_HERE): Russian title of account.
+- **category_id** (int): Accounts category.
+- **price** (float): Account price in your currency.
+- **currency** (str): Using currency.
+- **item_origin** (str): Account origin. Where did you get it from.
+- **extended_guarantee** (int): Guarantee type.
+- **title** (str): Russian title of account.
     > If title specified and title_en is empty, title_en will be automatically translated to English language.
-- **title_en** (INSERT_HERE): English title of account.
+- **title_en** (str): English title of account.
     > If title_en specified and title is empty, title will be automatically translated to Russian language.
-- **description** (INSERT_HERE): Account public description.
-- **information** (INSERT_HERE): Account private information (visible for buyer only if purchased).
-- **has_email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories.
-- **email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
-- **email_type** (INSERT_HERE): Email type.
-- **allow_ask_discount** (INSERT_HERE): Allow users to ask discount for this account.
-- **proxy_id** (INSERT_HERE): Using proxy id for account checking.
-- **random_proxy** (INSERT_HERE): Pass True, if you get captcha in previous response
-- **auction** (INSERT_HERE): Pass True if you want to create auction
-- **auction_duration_value** (INSERT_HERE): Duration auction value.
-- **auction_duration_option** (INSERT_HERE): Duration auction option.
-- **instabuy_price** (INSERT_HERE): The price for which you can instantly redeem your account.
-- **not_bids_action** (INSERT_HERE): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
+- **description** (str): Account public description.
+- **information** (str): Account private information (visible for buyer only if purchased).
+- **has_email_login_data** (bool): Required if a category is one of list of Required email login data categories.
+- **email_login_data** (str): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+- **email_type** (str): Email type.
+- **allow_ask_discount** (bool): Allow users to ask discount for this account.
+- **proxy_id** (int): Using proxy id for account checking.
+- **random_proxy** (bool): Pass True, if you get captcha in previous response
+- **auction** (bool): Pass True if you want to create auction
+- **auction_duration_value** (int): Duration auction value.
+- **auction_duration_option** (str): Duration auction option.
+- **instabuy_price** (float): The price for which you can instantly redeem your account.
+- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
 **Example:**
 
@@ -2613,60 +2592,36 @@ POST https://api.lzt.market/item/fast-sell
 
 *Adds and check account on validity. If account is valid, account will be published on the market.*
 
-Account origin:
-
-brute - Account received using Bruteforce
-
-fishing - Account received from fishing page
-
-stealer - Account received from stealer logs
-
-autoreg - Account is automatically registered by a tool
-
-personal - Account is yours. You created it yourself
-
-resale - Account received from another seller
-
-retrive - Account is recovered by email or phone (only for VKontakte category)
-
-Required email login data categories:
-
-9 - Fortnite
-
-12 - Epic games
-
-18 - Escape from Tarkov
-
-
 Required scopes: *market*
+
 **Parameters:**
 
-- **category_id** (INSERT_HERE): Accounts category.
-- **price** (INSERT_HERE): Account price in your currency.
-- **currency** (INSERT_HERE): Using currency.
-- **item_origin** (INSERT_HERE): Account origin. Where did you get it from.
-- **extended_guarantee** (INSERT_HERE): Guarantee type.
-- **title** (INSERT_HERE): Russian title of account.
+- **category_id** (int): Accounts category.
+- **price** (float): Account price in your currency.
+- **currency** (str): Using currency.
+- **item_origin** (str): Account origin. Where did you get it from.
+- **extended_guarantee** (int): Guarantee type.
+- **title** (str): Russian title of account.
     > If title specified and title_en is empty, title_en will be automatically translated to English language.
-- **title_en** (INSERT_HERE): English title of account.
+- **title_en** (str): English title of account.
     > If title_en specified and title is empty, title will be automatically translated to Russian language.
-- **description** (INSERT_HERE): Account public description.
-- **information** (INSERT_HERE): Account private information (visible for buyer only if purchased).
-- **has_email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories.
-- **email_login_data** (INSERT_HERE): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
-- **email_type** (INSERT_HERE): Email type.
-- **allow_ask_discount** (INSERT_HERE): Allow users to ask discount for this account.
-- **proxy_id** (INSERT_HERE): Using proxy id for account checking.
-- **random_proxy** (INSERT_HERE): Pass True, if you get captcha in previous response.
-- **login** (INSERT_HERE): Account login (or email).
-- **password** (INSERT_HERE): Account password.
-- **login_password** (INSERT_HERE): Account login data format login:password.
-- **extra** (INSERT_HERE): Extra params for account checking.
-- **auction** (INSERT_HERE): Pass True if you want to create auction.
-- **auction_duration_value** (INSERT_HERE): Duration auction value.
-- **auction_duration_option** (INSERT_HERE): Duration auction option.
-- **instabuy_price** (INSERT_HERE): The price for which you can instantly redeem your account.
-- **not_bids_action** (INSERT_HERE): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
+- **description** (str): Account public description.
+- **information** (str): Account private information (visible for buyer only if purchased).
+- **has_email_login_data** (bool): Required if a category is one of list of Required email login data categories.
+- **email_login_data** (str): Required if a category is one of list of Required email login data categories. Email login data (login:pass format).
+- **email_type** (str): Email type.
+- **allow_ask_discount** (bool): Allow users to ask discount for this account.
+- **proxy_id** (int): Using proxy id for account checking.
+- **random_proxy** (bool): Pass True, if you get captcha in previous response.
+- **login** (str): Account login (or email).
+- **password** (str): Account password.
+- **login_password** (str): Account login data format login:password.
+- **extra** (str): Extra params for account checking.
+- **auction** (bool): Pass True if you want to create auction.
+- **auction_duration_value** (int): Duration auction value.
+- **auction_duration_option** (str): Duration auction option.
+- **instabuy_price** (float): The price for which you can instantly redeem your account.
+- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
 **Example:**
 
@@ -2704,8 +2659,8 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **proxy_id** (INSERT_HERE): ID of an existing proxy.
-- **delete_all** (INSERT_HERE): Use True if you want to delete all proxy.
+- **proxy_id** (int): ID of an existing proxy.
+- **delete_all** (bool): Use True if you want to delete all proxy.
 
 **Example:**
 
@@ -2725,11 +2680,11 @@ Required scopes: *market*
 
 **Parameters:**
 
-- **proxy_ip** (INSERT_HERE): Proxy ip or host.
-- **proxy_port** (INSERT_HERE): Proxy port
-- **proxy_user** (INSERT_HERE): Proxy username
-- **proxy_pass** (INSERT_HERE): Proxy password
-- **proxy_row** (INSERT_HERE): Proxy list in String format ip:port:user:pass.
+- **proxy_ip** (str): Proxy ip or host.
+- **proxy_port** (str): Proxy port
+- **proxy_user** (str): Proxy username
+- **proxy_pass** (str): Proxy password
+- **proxy_row** (str): Proxy list in String format ip:port:user:pass.
     > Each proxy must be start with new line (use *\n* separator)
 
 **Example:**
@@ -2739,5 +2694,26 @@ response = market.proxy.add(proxy_row="192.168.1.1:8080:login:password
 192.168.2.2:8080:login:password")
 print(response.json())
 ```
+
+
+# Batch
+
+POST https://api.lzt.market/batch
+
+Execute multiple API requests at once.(10 max)
+
+Example scheme:
+
+[
+    {
+    "id": "1",
+    "uri": "https://api.lzt.market/me",
+    "method": "GET",
+    "params": {}
+    }
+]
+
+:param jobs: List of batch jobs. (Check example above)
+:return: httpx Response object
 
 
