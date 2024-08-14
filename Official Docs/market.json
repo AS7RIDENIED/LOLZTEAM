@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.39"
+    "version": "1.1.40"
   },
   "servers": [
     {
@@ -448,7 +448,7 @@
             }
           },
           {
-            "name": "friend_min",
+            "name": "friends_min",
             "in": "query",
             "description": "Minimum number of friends.",
             "required": false,
@@ -462,7 +462,7 @@
             }
           },
           {
-            "name": "friend_max",
+            "name": "friends_max",
             "in": "query",
             "description": "Maximum number of friends.",
             "required": false,
@@ -4076,6 +4076,17 @@
             }
           },
           {
+            "name": "pass",
+            "in": "query",
+            "description": "Has Battle Pass.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
             "name": "brawler[]",
             "in": "query",
             "description": "List of brawlers.",
@@ -4227,7 +4238,7 @@
             }
           },
           {
-            "name": "town_hall_Level_min",
+            "name": "town_hall_level_min",
             "in": "query",
             "description": "Minimum level of town hall.",
             "required": false,
@@ -4240,7 +4251,7 @@
             }
           },
           {
-            "name": "town_hall_Level_max",
+            "name": "town_hall_level_max",
             "in": "query",
             "description": "Maximum level of town hall.",
             "required": false,
@@ -5886,17 +5897,7 @@
             }
           },
           {
-            "name": "phone_verified",
-            "in": "query",
-            "description": "Has verified mobile.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Phone Verified",
-              "description": "Has verified mobile.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
+            "$ref": "#/components/parameters/tel"
           },
           {
             "name": "email_verified",
@@ -6381,10 +6382,10 @@
             "$ref": "#/components/parameters/reg_period"
           },
           {
-            "$ref": "#/components/parameters/fmin"
+            "$ref": "#/components/parameters/followers_min"
           },
           {
-            "$ref": "#/components/parameters/fmax"
+            "$ref": "#/components/parameters/followers_max"
           },
           {
             "$ref": "#/components/parameters/post_min"
@@ -6563,10 +6564,10 @@
             }
           },
           {
-            "$ref": "#/components/parameters/fmin"
+            "$ref": "#/components/parameters/followers_min"
           },
           {
-            "$ref": "#/components/parameters/fmax"
+            "$ref": "#/components/parameters/followers_max"
           },
           {
             "$ref": "#/components/parameters/post_min"
@@ -6825,14 +6826,14 @@
             "$ref": "#/components/parameters/nsb_by_me"
           },
           {
-            "name": "service_id[]",
+            "name": "service",
             "in": "query",
             "description": "List of allowed VPN services.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Service Id",
+              "title": "Service",
               "type": "array",
               "description": "List of allowed VPN services.",
               "uniqueItems": true,
@@ -6861,15 +6862,13 @@
             "$ref": "#/components/parameters/subscription_period"
           },
           {
-            "name": "renewable",
+            "name": "autorenewal",
             "in": "query",
-            "description": "Is renewable enabled.",
+            "description": "Is auto renewal enabled.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Renewable",
-              "description": "Is renewable enabled.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
@@ -6937,7 +6936,7 @@
             "$ref": "#/components/parameters/nsb_by_me"
           },
           {
-            "name": "service_id[]",
+            "name": "service[]",
             "in": "query",
             "description": "List of allowed cinema services.",
             "required": false,
@@ -7102,30 +7101,10 @@
             }
           },
           {
-            "name": "followers_min",
-            "in": "query",
-            "description": "Minimum followers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Followers Min",
-              "type": "integer",
-              "description": "Minimum followers."
-            }
+            "$ref": "#/components/parameters/followers_min"
           },
           {
-            "name": "followers_max",
-            "in": "query",
-            "description": "Maximum followers.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Followers Max",
-              "type": "integer",
-              "description": "Maximum followers."
-            }
+            "$ref": "#/components/parameters/followers_max"
           },
           {
             "name": "country",
@@ -7530,15 +7509,13 @@
             "$ref": "#/components/parameters/subscription_period"
           },
           {
-            "name": "recurring",
+            "name": "autorenewal",
             "in": "query",
             "description": "Is auto renewal enabled.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Recurring",
-              "description": "Is auto renewal enabled.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -14565,9 +14542,9 @@
             "title": "Region",
             "type": "string"
           },
-          "service_id": {
-            "description": "Service id. Required if you want to upload VPN, Cinema account or gift.",
-            "title": "Service Id",
+          "service": {
+            "description": "Service. Required if you want to upload VPN, Cinema account or gift.",
+            "title": "Service",
             "type": "string",
             "enum": [
               "AdguardVPN",
@@ -14584,7 +14561,8 @@
               "start",
               "ivi",
               "telegram",
-              "discord"
+              "discord",
+              "discord_trial"
             ]
           },
           "system": {
@@ -14603,7 +14581,7 @@
             "type": "string"
           },
           "cookies": {
-            "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram, TikTok or Warface account.",
+            "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram or TikTok account.",
             "title": "Cookies",
             "type": "string"
           },
@@ -17193,8 +17171,8 @@
           "minimum": 0
         }
       },
-      "fmin": {
-        "name": "fmin",
+      "followers_min": {
+        "name": "followers_min",
         "in": "query",
         "description": "Minimum number of followers.",
         "required": false,
@@ -17207,8 +17185,8 @@
           "minimum": 0
         }
       },
-      "fmax": {
-        "name": "fmax",
+      "followers_max": {
+        "name": "followers_max",
         "in": "query",
         "description": "Maximum number of followers.",
         "required": false,
