@@ -23,12 +23,12 @@ _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
 _DebugLogger.setLevel(level=100)
 
 
-def _send_request(self, method: str, path: dict, params: dict = None, data=None, dataJ=None, files=None) -> httpx.Response:
-    return _MainTweaks._AsyncExecutor(_send_async_request(self=self, method=method, path=path, params=params, data=data, dataJ=dataJ, files=files))
+def _send_request(self, method: str, path: dict, params: dict = None, dataJ=None, files=None) -> httpx.Response:
+    return _MainTweaks._AsyncExecutor(_send_async_request(self=self, method=method, path=path, params=params, dataJ=dataJ, files=files))
 
 
 @_MainTweaks._RetryWrapper
-async def _send_async_request(self, method: str, path: dict, params: dict = None, data=None, dataJ=None, files=None) -> httpx.Response:
+async def _send_async_request(self, method: str, path: dict, params: dict = None, dataJ=None, files=None) -> httpx.Response:
     url = self.base_url + path
     if type(self) is Antipublic:
         if params:
@@ -36,7 +36,6 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
         else:
             params = {"key": self.token}
     method = method.upper()
-
     if re.search(self.base_url + self._delay_pattern, url):
         await _MainTweaks._auto_delay_async(self=self)
     elif type(self) is Market:
@@ -47,22 +46,16 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
             params["locale"] = self._locale
         params.update(self.custom.params)
         ptd = []
-        for key, value in params.items():  # Убираем None
-            if params[key] is None:
+        for key in params.keys():  # Убираем None
+            if params.get(key) is None:
                 ptd.append(key)
         for key in ptd:
             del params[key]
-    if data:
-        if type(data) is dict:
-            data.update(self.custom.data)
-            if dataJ:
-                dataJ = None
     elif dataJ:
         if type(dataJ) is dict:
             dataJ.update(self.custom.json)
 
     headers = self._main_headers.copy()
-    headers["User-Agent"] = f"LOLZTEAM v{version('LOLZTEAM')}"
     headers.update(self.custom.headers)
 
     proxy_schemes = {
@@ -87,16 +80,14 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
     if method in request_methods:
         censored_headers = headers.copy()
         censored_headers["Authorization"] = "bearer ***Token***"
-        if data:
-            body = json.dumps(data)
-        elif dataJ:
+        if dataJ:
             body = json.dumps(dataJ)
         else:
             body = None
         _DebugLogger.debug(f"{method} {url} | Params: {json.dumps(params)} | Data: {body} | Files: {files} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
         tbr = time.time()
         async with httpx.AsyncClient(proxies=proxy) as client:
-            response = await client.request(method=method, url=url, params=params, data=data, json=dataJ, files=files, headers=headers, timeout=self.timeout)
+            response = await client.request(method=method, url=url, params=params, json=dataJ, files=files, headers=headers, timeout=self.timeout)
             _DebugLogger.debug(f"Response: {response} | Plain response: {response.content}")
             if self.reset_custom_variables:
                 self.custom.reset()
@@ -147,7 +138,7 @@ class Forum:
         self._token = token
         self._scopes = None
         _MainTweaks.setup_jwt(self=self, token=token)
-        self._main_headers = {"Authorization": f"bearer {self._token}"}
+        self._main_headers = {"Authorization": f"bearer {self._token}", "User-Agent": f"LOLZTEAM v{version('LOLZTEAM')}"}
 
         self.bypass_429 = bypass_429
         self.timeout = timeout
@@ -675,13 +666,13 @@ class Forum:
                 "thread_id": thread_id,
                 "quote_post_id": quote_post_id,
             }
-            data = {"post_body": post_body}
+            dataJ = {"post_body": post_body}
             return _send_request(
                 self=self._api,
                 method="POST",
                 path=path,
                 params=params,
-                data=data,
+                dataJ=dataJ,
             )
 
         @_MainTweaks._CheckScopes(scopes=["post"])
@@ -711,13 +702,13 @@ class Forum:
             """
             path = f"/posts/{post_id}"
             params = {"message_state": message_state}
-            data = {"post_body": post_body}
+            dataJ = {"post_body": post_body}
             return _send_request(
                 self=self._api,
                 method="PUT",
                 path=path,
                 params=params,
-                data=data,
+                dataJ=dataJ,
             )
 
         @_MainTweaks._CheckScopes(scopes=["post"])
@@ -742,8 +733,8 @@ class Forum:
             ```
             """
             path = f"/posts/{post_id}"
-            data = {"reason": reason}
-            return _send_request(self=self._api, method="DELETE", path=path, data=data)
+            dataJ = {"reason": reason}
+            return _send_request(self=self._api, method="DELETE", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def likes(
@@ -841,8 +832,8 @@ class Forum:
             ```
             """
             path = f"/posts/{post_id}/report"
-            data = {"message": reason}
-            return _send_request(self=self._api, method="POST", path=path, data=data)
+            dataJ = {"message": reason}
+            return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
     class __Threads:
         def __init__(self, _api_self):
@@ -942,7 +933,7 @@ class Forum:
                         "contest_type": contest_type,
                         "prize_data_money": prize_data_money,
                     }
-                    data = {
+                    dataJ = {
                         "title": title,
                         "title_en": title_en,
                         "secret_answer": secret_answer,
@@ -958,7 +949,7 @@ class Forum:
                     return base_api.threads.create(
                         **required,
                         **params,
-                        **data,
+                        **dataJ,
                     )
 
                 @_MainTweaks._CheckScopes(scopes=["post"])
@@ -1036,7 +1027,7 @@ class Forum:
                         "prize_data_money": prize_data_money,
                         "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                     }
-                    data = {
+                    dataJ = {
                         "title": title,
                         "title_en": title_en,
                         "secret_answer": secret_answer,
@@ -1052,7 +1043,7 @@ class Forum:
                     return base_api.threads.create(
                         **required,
                         **params,
-                        **data,
+                        **dataJ,
                     )
 
             class __Upgrade:
@@ -1139,7 +1130,7 @@ class Forum:
                         "length_value": length_value,
                         "length_option": length_option,
                     }
-                    data = {
+                    dataJ = {
                         "title": title,
                         "title_en": title_en,
                         "secret_answer": secret_answer,
@@ -1155,7 +1146,7 @@ class Forum:
                     return base_api.threads.create(
                         **required,
                         **params,
-                        **data,
+                        **dataJ,
                     )
 
                 @_MainTweaks._CheckScopes(scopes=["post"])
@@ -1231,7 +1222,7 @@ class Forum:
                         "prize_data_upgrade": prize_data_upgrade,
                     }
 
-                    data = {
+                    dataJ = {
                         "title": title,
                         "title_en": title_en,
                         "secret_answer": secret_answer,
@@ -1247,7 +1238,7 @@ class Forum:
                     return base_api.threads.create(
                         **required,
                         **params,
-                        **data,
+                        **dataJ,
                     )
 
         class __Arbitrage:
@@ -1301,7 +1292,7 @@ class Forum:
                 ```
                 """
                 path = "/claims"
-                data = {
+                dataJ = {
                     "post_body": post_body,
                     "as_responder": responder,
                     "as_is_market_deal": 1,
@@ -1318,7 +1309,7 @@ class Forum:
                     "reply_group": reply_group,
                 }
                 return _send_request(
-                    self=self._api, method="POST", path=path, data=data
+                    self=self._api, method="POST", path=path, dataJ=dataJ
                 )
 
             @_MainTweaks._CheckScopes(scopes=["post"])
@@ -1375,7 +1366,7 @@ class Forum:
                 ```
                 """
                 path = "/claims"
-                data = {
+                dataJ = {
                     "post_body": post_body,
                     "as_responder": responder,
                     "as_is_market_deal": 0,
@@ -1395,7 +1386,7 @@ class Forum:
                     "reply_group": reply_group,
                 }
                 return _send_request(
-                    self=self._api, method="POST", path=path, data=data
+                    self=self._api, method="POST", path=path, dataJ=dataJ
                 )
 
         @_MainTweaks._CheckScopes(scopes=["read"])
@@ -1534,7 +1525,7 @@ class Forum:
                 "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                 "dont_alert_followers": dont_alert_followers,
             }
-            data = {
+            dataJ = {
                 "forum_id": forum_id,
                 "title": title,
                 "title_en": title_en,
@@ -1542,13 +1533,13 @@ class Forum:
             }
             if kwargs:
                 for key, value in kwargs.items():
-                    if (key not in params) and (key not in data):
-                        data[key] = value
+                    if (key not in params) and (key not in dataJ):
+                        dataJ[key] = value
             return _send_request(
                 self=self._api,
                 method="POST",
                 path=path,
-                data=data,
+                dataJ=dataJ,
                 params=params,
             )
 
@@ -1596,7 +1587,7 @@ class Forum:
             ```
             """
             path = f"/threads/{thread_id}"
-            data = {
+            dataJ = {
                 "title": title,
                 "title_en": title_en,
                 "prefix_id[]": prefix_ids,
@@ -1607,7 +1598,7 @@ class Forum:
                 "reply_group": reply_group,
                 "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
             }
-            return _send_request(self=self._api, method="PUT", path=path, data=data)
+            return _send_request(self=self._api, method="PUT", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def move(
@@ -1643,7 +1634,7 @@ class Forum:
             ```
             """
             path = f"/threads/{thread_id}/move"
-            data = {
+            dataJ = {
                 "node_id": forum_id,
                 "title": title,
                 "title_en": title_en,
@@ -1651,7 +1642,7 @@ class Forum:
                 "apply_thread_prefix": 1 if prefix_ids else None,
                 "send_alert": int(send_alert) if send_alert else send_alert
             }
-            return _send_request(self=self._api, method="POST", path=path, data=data)
+            return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def delete(self, thread_id: int, reason: str = None) -> httpx.Response:
@@ -2380,7 +2371,7 @@ class Forum:
                 "user_dob_year": user_dob_year,
                 "display_group_id": display_group_id,
             }
-            data = {
+            dataJ = {
                 "user_title": user_title,
                 "password": password,
                 "password_old": password_old,
@@ -2388,17 +2379,17 @@ class Forum:
             }
             if fields is not None:
                 if "CREATE_JOB" in locals():
-                    data["fields"] = fields  # Костыль CreateJob
+                    dataJ["fields"] = fields  # Костыль CreateJob
                 else:
                     for key, value in fields.items():
                         field = f"fields[{key}]"
-                        data[field] = value
+                        dataJ[field] = value
             return _send_request(
                 self=self._api,
                 method="PUT",
                 path=path,
                 params=params,
-                data=data,
+                dataJ=dataJ,
             )
 
         @_MainTweaks._CheckScopes(scopes=["post"])
@@ -2704,11 +2695,11 @@ class Forum:
                 ```
                 """
                 path = f"/profile-posts/{profile_post_id}/comments"
-                data = {
+                dataJ = {
                     "comment_body": comment_body,
                 }
                 return _send_request(
-                    self=self._api, method="POST", path=path, data=data
+                    self=self._api, method="POST", path=path, dataJ=dataJ
                 )
 
         def __init__(self, _api_self):
@@ -2792,8 +2783,8 @@ class Forum:
                 path = f"/users/{user_id}/timeline"
             else:
                 path = "/users/me/timeline"
-            data = {"post_body": post_body}
-            return _send_request(self=self._api, method="POST", path=path, data=data)
+            dataJ = {"post_body": post_body}
+            return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def edit(self, profile_post_id: int, post_body: str) -> httpx.Response:
@@ -2818,8 +2809,8 @@ class Forum:
             """
 
             path = f"/profile-posts/{profile_post_id}"
-            data = {"post_body": post_body}
-            return _send_request(self=self._api, method="PUT", path=path, data=data)
+            dataJ = {"post_body": post_body}
+            return _send_request(self=self._api, method="PUT", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def delete(self, profile_post_id: int, reason: str = None) -> httpx.Response:
@@ -2843,8 +2834,8 @@ class Forum:
             ```
             """
             path = f"/profile-posts/{profile_post_id}"
-            data = {"reason": reason}
-            return _send_request(self=self._api, method="DELETE", path=path, data=data)
+            dataJ = {"reason": reason}
+            return _send_request(self=self._api, method="DELETE", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def likes(self, profile_post_id: int) -> httpx.Response:
@@ -2938,8 +2929,8 @@ class Forum:
             ```
             """
             path = f"/profile-posts/{profile_post_id}/report"
-            data = {"message": reason}
-            return _send_request(self=self._api, method="POST", path=path, data=data)
+            dataJ = {"message": reason}
+            return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
     class __Search:
         def __init__(self, _api_self):
@@ -3343,13 +3334,13 @@ class Forum:
                 params = {
                     "conversation_id": conversation_id,
                 }
-                data = {"message_body": message_body}
+                dataJ = {"message_body": message_body}
                 return _send_request(
                     self=self._api,
                     method="POST",
                     path=path,
                     params=params,
-                    data=data,
+                    dataJ=dataJ,
                 )
 
             @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
@@ -3374,8 +3365,8 @@ class Forum:
                 ```
                 """
                 path = f"/conversation-messages/{message_id}"
-                data = {"message_body": message_body}
-                return _send_request(self=self._api, method="PUT", path=path, data=data)
+                dataJ = {"message_body": message_body}
+                return _send_request(self=self._api, method="PUT", path=path, dataJ=dataJ)
 
             @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
             def delete(self, message_id: int) -> httpx.Response:
@@ -3520,13 +3511,13 @@ class Forum:
                 "conversation_locked": int(conversation_locked) if conversation_locked else conversation_locked,
                 "allow_edit_messages": int(allow_edit_messages) if allow_edit_messages else allow_edit_messages,
             }
-            data = {"message_body": message}
+            dataJ = {"message_body": message}
             return _send_request(
                 self=self._api,
                 method="POST",
                 path=path,
                 params=params,
-                data=data,
+                dataJ=dataJ,
             )
 
         @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
@@ -3572,13 +3563,13 @@ class Forum:
                 "conversation_locked": int(conversation_locked) if conversation_locked else conversation_locked,
                 "allow_edit_messages": int(allow_edit_messages) if allow_edit_messages else allow_edit_messages,
             }
-            data = {"message_body": message}
+            dataJ = {"message_body": message}
             return _send_request(
                 self=self._api,
                 method="POST",
                 path=path,
                 params=params,
-                data=data,
+                dataJ=dataJ,
             )
 
     @_MainTweaks._CheckScopes(scopes=["read"])
@@ -3687,7 +3678,7 @@ class Market:
         self._token = token
         self._scopes = None
         _MainTweaks.setup_jwt(self=self, token=token)
-        self._main_headers = {"Authorization": f"bearer {self._token}"}
+        self._main_headers = {"Authorization": f"bearer {self._token}", "User-Agent": f"LOLZTEAM v{version('LOLZTEAM')}"}
 
         self.bypass_429 = bypass_429
         self.timeout = timeout
@@ -6981,7 +6972,7 @@ class Market:
             }
             url = httpx.URL("https://lzt.market/balance/transfer")
             url = url.copy_with(params=params)
-            return url
+            return str(url)
 
     class __Managing:
         def __init__(self, _api_self):
@@ -7701,11 +7692,11 @@ class Market:
             ```
             """
             path = f"/{item_id}/claims"
-            data = {
+            dataJ = {
                 "post_body": post_body
             }
             return _send_request(
-                self=self._api, method="POST", path=path, data=data
+                self=self._api, method="POST", path=path, dataJ=dataJ
             )
 
     class __Purchasing:
@@ -7930,15 +7921,15 @@ class Market:
                 "resell_item_id": resell_item_id,
                 "random_proxy": int(random_proxy) if random_proxy else random_proxy,
             }
-            data = {}
+            dataJ = {}
             if extra:
-                data["extra"] = extra
+                dataJ["extra"] = extra
             return _send_request(
                 self=self._api,
                 method="POST",
                 path=path,
                 params=params,
-                data=data,
+                dataJ=dataJ,
             )
 
         @_MainTweaks._CheckScopes(scopes=["market"])
@@ -8131,15 +8122,15 @@ class Market:
                 "login_password": login_password,
                 "close_item": int(close_item) if close_item else close_item,
             }
-            data = {}
+            dataJ = {}
             if extra:
-                data["extra"] = extra
+                dataJ["extra"] = extra
             return _send_request(
                 self=self._api,
                 method="POST",
                 path=path,
                 params=params,
-                data=data,
+                dataJ=dataJ,
             )
 
     class __Proxy:
@@ -8262,8 +8253,8 @@ class Market:
         import json
 
         path = "/batch"
-        data = jobs
-        return _send_request(self=self, method="POST", path=path, data=data)
+        dataJ = jobs
+        return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
 
 class Antipublic:
@@ -8307,7 +8298,7 @@ class Antipublic:
 
         self.reset_custom_variables = reset_custom_variables
         self.custom = _MainTweaks._Custom()
-        self._main_headers = {}
+        self._main_headers = {"User-Agent": f"LOLZTEAM v{version('LOLZTEAM')}"}
 
         self.info = self.__Info(self)
         self.account = self.__Account(self)

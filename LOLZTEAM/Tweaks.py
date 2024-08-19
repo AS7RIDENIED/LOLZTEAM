@@ -311,20 +311,17 @@ class _MainTweaks:
         path = loc.get("path")
         params = loc.get("params", {})
         files = loc.get("files")  # Если вы файлы передаете в batch, то вы плохие люди
-        data = loc.get("data", {})
         dataJ = loc.get("dataJ", {})
 
         if CREATE_JOB:  # Фикс для job'а
             path = self.base_url + path  # Полный путь кушает
-            if data:
-                params.update(data)  # Фикс для батча
             if dataJ:
-                params.update(dataJ)
+                params.update(dataJ)  # Фикс для батча
             params["locale"] = self._locale  # Ставим локаль для ответа job'a
 
         # Ебанина для получения метода
         method = [eval(i.replace("method=", "").strip()) for i in return_code.split(",") if "method=" in i][0]
-        return {"self": self, "path": path, "method": method, "params": params, "files": files, "data": data, "dataJ": dataJ}
+        return {"self": self, "path": path, "method": method, "params": params, "files": files, "dataJ": dataJ}
 
     def _AsyncExecutor(coroutine):
         #  Закостылил по гайду от величайшего
@@ -336,8 +333,7 @@ class _MainTweaks:
     class _Custom:
         def __init__(self):
             self.__params = {}
-            self.__data = {}
-            self.__json = {}
+            self.__dataJ = {}
             self.__headers = {}
 
         @property
@@ -352,26 +348,15 @@ class _MainTweaks:
                 _WarningsLogger.warn(" Params must be dict")
 
         @property
-        def data(self):
-            return self.__data
-
-        @data.setter
-        def data(self, value):
-            if type(value) is dict:
-                self.__data = value
-            else:
-                _WarningsLogger.warn(" Data must be dict")
-
-        @property
         def json(self):
-            return self.__json
+            return self.__dataJ
 
         @json.setter
         def json(self, value):
             if type(value) is str:
-                self.__json = json.loads(value)
+                self.__dataJ = json.loads(value)
             elif type(value) is dict:
-                self.__json = value
+                self.__dataJ = value
             else:
                 _WarningsLogger.warn(" Json must be str or dict")
 
@@ -388,8 +373,7 @@ class _MainTweaks:
 
         def reset(self):
             self.__params = {}
-            self.__data = {}
-            self.__json = {}
+            self.__dataJ = {}
             self.__headers = {}
 
 
@@ -425,7 +409,7 @@ class DelaySync:
             if api:
                 self.shared_value.value = max(
                     [api_._auto_delay_time for api_ in api.values()] + [self.shared_value.value])
-            for key, value in api.items():
+            for value in api.values():
                 self.apis.append(value)
                 value._add_delay_synchronizer(self)
                 value._auto_delay_time = self.shared_value
@@ -444,7 +428,7 @@ class DelaySync:
                 self.apis.remove(api_)
                 api_._remove_delay_synchronizer(self)
         elif type(api) is dict:
-            for key, value in api.items():
+            for value in api.values():
                 self.apis.remove(value)
                 value._remove_delay_synchronizer(self)
         else:
@@ -514,4 +498,4 @@ async def SendAsAsync(func, **cur_kwargs) -> httpx.Response:
     SEND_AS_ASYNC = True
     code_data = await _MainTweaks._ExecCode(func=func, loc=locals(), cur_kwargs=cur_kwargs)
     from .API import _send_async_request
-    return await _send_async_request(self=code_data["self"], method=code_data["method"], path=code_data["path"], params=code_data["params"], data=code_data["data"], dataJ=code_data["dataJ"], files=code_data["files"])
+    return await _send_async_request(self=code_data["self"], method=code_data["method"], path=code_data["path"], params=code_data["params"], dataJ=code_data["dataJ"], files=code_data["files"])
