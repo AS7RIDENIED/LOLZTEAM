@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.41"
+    "version": "1.1.42"
   },
   "servers": [
     {
@@ -700,7 +700,9 @@
                   270,
                   271,
                   280,
-                  298
+                  298,
+                  299,
+                  300
                 ]
               }
             }
@@ -3660,7 +3662,8 @@
                   "a_057_athena_commando_f_thegoldenskeleton",
                   "a_348_athena_commando_m_treycozy_e_vh8p6",
                   "a_179_athena_commando_f_tiedyefashion_d",
-                  "a_193_athena_commando_m_dragonfruit_7n3a3"
+                  "a_193_athena_commando_m_dragonfruit_7n3a3",
+                  "character_middlesock"
                 ]
               }
             }
@@ -4946,7 +4949,8 @@
                   "pickaxe_bonemarrow",
                   "pickaxe_id_365_spytechhackermale",
                   "pickaxe_id_702_grandeurmale_6uv6l",
-                  "pickaxe_vitalinventor"
+                  "pickaxe_vitalinventor",
+                  "pickaxe_middlesock"
                 ]
               }
             }
@@ -5547,7 +5551,8 @@
                   "glider_id_136_bullseye",
                   "glider_id_332_parallelcomicmale",
                   "glider_id_103_nautilus",
-                  "glider_id_336_orbittealmale_vcpm0"
+                  "glider_id_336_orbittealmale_vcpm0",
+                  "glider_middlesock"
                 ]
               }
             }
@@ -6769,7 +6774,7 @@
                   "darkfirelegends",
                   "gumball",
                   "hiphops7",
-                  "tapshuffle"
+                  "tapshuffle","encounter", "snippet_owned_follower", "snippet_sync_owned", "snippet", "snippet_sync_follower", "snippet_sync", "middlesock"
                 ]
               }
             }
@@ -7256,7 +7261,8 @@
                   10000098,
                   10000099,
                   10000094,
-                  10000095
+                  10000095,
+                  10000100, 10000102
                 ]
               }
             }
@@ -7460,7 +7466,8 @@
                   13426,
                   15513,
                   11514,
-                  11515
+                  11515,
+                  13431, 14516, 14431, 12431
                 ]
               }
             }
@@ -7732,7 +7739,8 @@
                   1006,
                   1008,
                   1009,
-                  1013
+                  1013,
+                  1218
                 ]
               }
             }
@@ -7854,7 +7862,8 @@
                   23026,
                   23027,
                   23028,
-                  23030
+                  23030,
+                  23029, 21045
                 ]
               }
             }
@@ -8149,7 +8158,8 @@
                   12011,
                   12012,
                   12013,
-                  12014
+                  12014,
+                  13013
                 ]
               }
             }
@@ -9611,24 +9621,6 @@
             }
           },
           {
-            "name": "system",
-            "in": "query",
-            "description": "Account service.\n+ laser - Brawl Stars\n+ scroll - Clash Royale\n+ magic - Clash Of Clans",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "System",
-              "type": "string",
-              "description": "Account service.",
-              "enum": [
-                "laser",
-                "scroll",
-                "magic"
-              ]
-            }
-          },
-          {
             "name": "tel",
             "in": "query",
             "description": "Has linked mobile.",
@@ -9639,77 +9631,13 @@
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
-          {
-            "$ref": "#/components/parameters/lmin"
-          },
-          {
-            "$ref": "#/components/parameters/lmax"
-          },
-          {
-            "name": "cup_min",
-            "in": "query",
-            "description": "Minimum number of cups.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Cup Min",
-              "type": "integer",
-              "description": "Minimum number of cups.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "cup_max",
-            "in": "query",
-            "description": "Maximum number of cups.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Cup Max",
-              "type": "integer",
-              "description": "Maximum number of cups.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "wins_min",
-            "in": "query",
-            "description": "Minimum number of wins.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Wins Min",
-              "type": "integer",
-              "description": "Minimum number of wins."
-            }
-          },
-          {
-            "name": "wins_max",
-            "in": "query",
-            "description": "Maximum number of wins.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Wins Max",
-              "type": "integer",
-              "description": "Maximum number of wins."
-            }
-          },
-          {
-            "name": "pass",
-            "in": "query",
-            "description": "Has Battle Pass.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
+          {"name": "brawl_level_min", "in": "query", "description": "Minimum Brawl Stars level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Level Min", "type": "integer", "description": "Minimum Brawl Stars level."}},
+          {"name": "brawl_level_max", "in": "query", "description": "Maximum Brawl Stars level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Level Max", "type": "integer", "description": "Maximum Brawl Stars level."}},
+          {"name": "brawl_cup_min", "in": "query", "description": "Minimum number of Brawl Stars trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Cup Min", "type": "integer", "description": "Minimum number of Brawl Stars trophies."}},
+          {"name": "brawl_cup_max", "in": "query", "description": "Maximum number of Brawl Stars trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Cup Max", "type": "integer", "description": "Maximum number of Brawl Stars trophies."}},
+          {"name": "brawl_wins_min", "in": "query", "description": "Minimum number of Brawl Stars wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Wins Min", "type": "integer", "description": "Minimum number of Brawl Stars wins."}},
+          {"name": "brawl_wins_max", "in": "query", "description": "Maximum number of Brawl Stars wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Wins Max", "type": "integer", "description": "Maximum number of Brawl Stars wins."}},
+          {"name": "brawl_pass", "in": "query", "description": "Has Brawl Pass.", "required": false, "style": "form", "explode": true, "schema": {"$ref": "#/components/schemas/YesNoNoMatterScheme"}},
           {
             "name": "brawler[]",
             "in": "query",
@@ -9861,6 +9789,32 @@
               "minimum": 0
             }
           },
+          {"name": "royale_level_min", "in": "query", "description": "Minimum Clash Royale level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Level Min", "type": "integer", "description": "Minimum Clash Royale level."}},
+          {"name": "royale_level_max", "in": "query", "description": "Maximum Clash Royale level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Level Max", "type": "integer", "description": "Maximum Clash Royale level."}},
+          {"name": "royale_cup_min", "in": "query", "description": "Minimum number of Clash Royale trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Cup Min", "type": "integer", "description": "Minimum number of Clash Royale trophies."}},
+          {"name": "royale_cup_max", "in": "query", "description": "Maximum number of Clash Royale trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Cup Max", "type": "integer", "description": "Maximum number of Clash Royale trophies."}},
+          {"name": "royale_wins_min", "in": "query", "description": "Minimum number of Clash Royale wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Wins Min", "type": "integer", "description": "Minimum number of Clash Royale wins."}},
+          {"name": "royale_wins_max", "in": "query", "description": "Maximum number of Clash Royale wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Wins Max", "type": "integer", "description": "Maximum number of Clash Royale wins."}},
+          {"name": "king_level_min", "in": "query", "description": "Minimum King level in Clash Royale.", "required": false, "style": "form", "explode": true, "schema": {"title": "King Level Min", "type": "integer", "description": "Minimum King level in Clash Royale."}},
+          {"name": "king_level_max", "in": "query", "description": "Maximum King level in Clash Royale.", "required": false, "style": "form", "explode": true, "schema": {"title": "King Level Max", "type": "integer", "description": "Maximum King level in Clash Royale."}},
+          {"name": "royale_pass", "in": "query", "description": "Has Royale Pass.", "required": false, "style": "form", "explode": true, "schema": {"$ref": "#/components/schemas/YesNoNoMatterScheme"}},
+          {"name": "clash_level_min", "in": "query", "description": "Minimum Clash of Clans level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Level Min", "type": "integer", "description": "Minimum Clash of Clans level."}},
+          {"name": "clash_level_max", "in": "query", "description": "Maximum Clash of Clans level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Level Max", "type": "integer", "description": "Maximum Clash of Clans level."}},
+          {"name": "clash_cup_min", "in": "query", "description": "Minimum number of Clash of Clans trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Cup Min", "type": "integer", "description": "Minimum number of Clash of Clans trophies."}},
+          {"name": "clash_cup_max", "in": "query", "description": "Maximum number of Clash of Clans trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Cup Max", "type": "integer", "description": "Maximum number of Clash of Clans trophies."}},
+          {"name": "clash_wins_min", "in": "query", "description": "Minimum number of Clash of Clans wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Wins Min", "type": "integer", "description": "Minimum number of Clash of Clans wins."}},
+          {"name": "clash_wins_max", "in": "query", "description": "Maximum number of Clash of Clans wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Wins Max", "type": "integer", "description": "Maximum number of Clash of Clans wins."}},
+          {"name": "clash_pass", "in": "query", "description": "Has Battle Pass.", "required": false, "style": "form", "explode": true, "schema": {"$ref": "#/components/schemas/YesNoNoMatterScheme"}},
+          {"name": "total_heroes_level_min", "in": "query", "description": "Minimum total heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Heroes Level Min", "type": "integer", "description": "Minimum total heroes level count in Clash of Clans."}},
+          {"name": "total_heroes_level_max", "in": "query", "description": "Maximum total heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Heroes Level Max", "type": "integer", "description": "Maximum total heroes level count in Clash of Clans."}},
+          {"name": "total_troops_level_min", "in": "query", "description": "Minimum total troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Troops Level Min", "type": "integer", "description": "Minimum total troops level count in Clash of Clans."}},
+          {"name": "total_troops_level_max", "in": "query", "description": "Maximum total troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Troops Level Max", "type": "integer", "description": "Maximum total troops level count in Clash of Clans."}},
+          {"name": "total_spells_level_min", "in": "query", "description": "Minimum total spells level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Spells Level Min", "type": "integer", "description": "Minimum total spells level count in Clash of Clans."}},
+          {"name": "total_spells_level_max", "in": "query", "description": "Maximum total spells level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Spells Level Max", "type": "integer", "description": "Maximum total spells level count in Clash of Clans."}},
+          {"name": "total_builder_heroes_level_min", "in": "query", "description": "Minimum total builder village heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Heroes Level Min", "type": "integer", "description": "Minimum total builder village heroes level count in Clash of Clans."}},
+          {"name": "total_builder_heroes_level_max", "in": "query", "description": "Maximum total builder village heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Heroes Level Max", "type": "integer", "description": "Maximum total builder village heroes level count in Clash of Clans."}},
+          {"name": "total_builder_troops_level_min", "in": "query", "description": "Minimum total builder village troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Troops Level Min", "type": "integer", "description": "Minimum total builder village troops level count in Clash of Clans."}},
+          {"name": "total_builder_troops_level_max", "in": "query", "description": "Maximum total builder village troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Troops Level Max", "type": "integer", "description": "Maximum total builder village troops level count in Clash of Clans."}},
           {
             "name": "town_hall_level_min",
             "in": "query",
@@ -10036,6 +9990,9 @@
           {
             "$ref": "#/components/parameters/not_country"
           },
+          {"name": "gmin", "in": "query", "description": "Minimum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmin", "type": "integer", "description": "Minimum count of games."}},
+          {"name": "gmax", "in": "query", "description": "Maximum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmax", "type": "integer", "description": "Maximum count of games."}},
+
           {
             "name": "al_rank_min",
             "in": "query",
@@ -10970,11 +10927,8 @@
             "explode": true,
             "schema": {
               "title": "Rdr2",
-              "type": "string",
-              "description": "Has Red Dead Redemption 2.",
-              "enum": [
-                "on"
-              ]
+              "type": "boolean",
+              "description": "Has Red Dead Redemption 2."
             }
           },
           {
@@ -11147,6 +11101,8 @@
           {
             "$ref": "#/components/parameters/daybreak"
           },
+          {"name": "gmin", "in": "query", "description": "Minimum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmin", "type": "integer", "description": "Minimum count of games."}},
+          {"name": "gmax", "in": "query", "description": "Maximum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmax", "type": "integer", "description": "Maximum count of games."}},
           {
             "name": "subscription",
             "in": "query",
@@ -11665,7 +11621,7 @@
             "explode": true,
             "schema": {
               "title": "Nitro Type",
-              "type": "string",
+              "type": "integer",
               "description": "Nitro type.",
               "enum": [
                 0,
@@ -13576,7 +13532,7 @@
               "type": "array",
               "description": "Rank on hypixel.",
               "items": {
-                "type": "integer",
+                "type": "string",
                 "enum": [
                   "MVP",
                   "MVP+",
@@ -20272,57 +20228,46 @@
               "magic"
             ]
           },
+          "confirmationCode": {
+            "description": "Code from email (in case of problems). Optional if you want to upload Supercell account.",
+            "title": "Confirmaton Code",
+            "type": "string"
+          },
           "discord_token": {
             "description": "Discord token. Required if you want to upload Discord account.",
             "title": "Discord Token",
             "type": "string"
           },
           "cookies": {
-            "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Origin (EA), Social Club, Instagram or TikTok account.",
+            "description": "Cookies. Required if you want to upload Fortnite, Epic Games, Social Club, Instagram or TikTok account.",
             "title": "Cookies",
             "type": "string"
+          },
+          "login_without_cookies": {
+            "description": "Login without cookies. Optional if you want to upload Instagram account.",
+            "title": "Login Without Cookies",
+            "type": "boolean"
+          },
+          "cookie_login": {
+            "description": "Cookie login. Optional. Used only if you want to upload TikTok account.",
+            "title": "Cookie login",
+            "type": "boolean"
           },
           "sc": {
             "description": "Required if you want to upload Epic Games account.",
             "title": "sc",
-            "type": "integer",
-            "enum": [
-              1,
-              0
-            ]
-          },
-          "ItTakesTwo": {
-            "description": "Required if you want to upload Origin (EA) account.",
-            "title": "ItTakesTwo",
-            "type": "integer",
-            "enum": [
-              1,
-              0
-            ]
-          },
-          "apex_legends": {
-            "description": "Required if you want to upload Origin (EA) account.",
-            "title": "ApexLegends",
-            "type": "integer",
-            "enum": [
-              1,
-              0
-            ]
-          },
-          "login_without_cookies": {
-            "description": "Login without cookies. Required if you want to upload Instagram account.",
-            "title": "Login Without Cookies",
             "type": "boolean"
           },
           "mfa_file": {
-            "description": "Mfa file. Optional. Used only if you want to upload Steam account.",
+            "description": "Steam mafile. Optional. Used only if you want to upload Steam account.",
             "title": "Mfa File",
-            "type": "string"
+            "type": "string",
+            "format": "binary"
           },
           "dota2_mmr": {
             "description": "Dota 2 MMR. Optional. Used only if you want to upload Steam account.",
             "title": "Dota 2 MMR",
-            "type": "string"
+            "type": "integer"
           },
           "ea_games": {
             "description": "EA Games. Optional. Used only if you want to upload Steam account.",
@@ -20332,12 +20277,12 @@
           "uplay_games": {
             "description": "Uplay Games. Optional. Used only if you want to upload Steam account.",
             "title": "Uplay Games",
-            "type": "string"
+            "type": "boolean"
           },
           "the_quarry": {
             "description": "The quarry. Optional. Used only if you want to upload Steam account.",
             "title": "The Quarry",
-            "type": "string"
+            "type": "boolean"
           },
           "warframe": {
             "description": "Warframe. Optional. Used only if you want to upload Steam account.",
@@ -20349,56 +20294,40 @@
             "title": "Ark",
             "type": "boolean"
           },
-          "socialclub_games": {
-            "description": "Social club games. Optional. Used only if you want to upload Steam account.",
-            "title": "SocialClub Games",
-            "type": "string"
-          },
-          "game_version": {
-            "description": "Game version. Required if you want to upload Escape From Tarkov account.",
-            "title": "Game Version",
-            "type": "string"
-          },
-          "cookie_login": {
-            "description": "Cookie login. Optional. Used only if you want to upload TikTok account.",
-            "title": "Cookie login",
+          "ark_ascended": {
+            "description": "Ark Ascended. Optional. Used only if you want to upload Steam account.",
+            "title": "Ark Ascended",
             "type": "boolean"
           },
-          "telegramClient": {
-            "description": "Telegram client. Used only if you want to upload Telegram account.",
-            "$ref": "#/components/schemas/TelegramClientModel"
+          "genshin_currency": {
+            "description": "Genshin primogems count. Optional. Used only if you want to upload Mihoyo account.",
+            "title": "Ark Ascended",
+            "type": "integer"
           },
-          "telegramJson": {
-            "description": "Contents of session.json file.",
-            "title": "Telegram Json",
-            "type": "string"
+          "honkai_currency": {
+            "description": "Honkai Stellar Jade count. Optional. Used only if you want to upload Mihoyo account.",
+            "title": "Stellar Jade",
+            "type": "integer"
+          },
+          "zenless_currency": {
+            "description": "Zenless Zone Zero Polychrome count. Optional. Used only if you want to upload Mihoyo account.",
+            "title": "Polychrome",
+            "type": "integer"
           },
           "checkChannels": {
-            "description": "Check channels. Used only if you want to upload Telegram account.",
+            "description": "Check channels. Optional. Used only if you want to upload Telegram account.",
             "title": "Check Channels",
-            "type": "integer",
-            "enum": [
-              1,
-              0
-            ]
+            "type": "boolean"
           },
           "checkSpam": {
-            "description": "Check spam. Used only if you want to upload Telegram account.",
+            "description": "Check spam. Optional. Used only if you want to upload Telegram account.",
             "title": "Check Spam",
-            "type": "integer",
-            "enum": [
-              1,
-              0
-            ]
+            "type": "boolean"
           },
           "checkHypixelBan": {
-            "description": "Check ban on Hypixel. Used only if you want to upload Minecraft account.",
+            "description": "Check ban on Hypixel. Optional. Used only if you want to upload Minecraft account.",
             "title": "Check ban on Hypixel",
-            "type": "integer",
-            "enum": [
-              1,
-              0
-            ]
+            "type": "boolean"
           }
         }
       },
@@ -20437,11 +20366,6 @@
             }
           }
         }
-      },
-      "TelegramClientModel": {
-        "title": "Telegram client",
-        "type": "string",
-        "example": "{\"telegram_api_id\": integer, \"telegram_api_hash\": string, \"telegram_device_model\": string, \"telegram_system_version\": string, \"telegram_app_version\": string}"
       },
       "CurrencyModel": {
         "title": "Currency",
