@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.42"
+    "version": "1.1.43"
   },
   "servers": [
     {
@@ -6774,7 +6774,14 @@
                   "darkfirelegends",
                   "gumball",
                   "hiphops7",
-                  "tapshuffle","encounter", "snippet_owned_follower", "snippet_sync_owned", "snippet", "snippet_sync_follower", "snippet_sync", "middlesock"
+                  "tapshuffle",
+                  "encounter",
+                  "snippet_owned_follower",
+                  "snippet_sync_owned",
+                  "snippet",
+                  "snippet_sync_follower",
+                  "snippet_sync",
+                  "middlesock"
                 ]
               }
             }
@@ -6791,22 +6798,25 @@
             "explode": true,
             "schema": {
               "title": "Platform",
-              "type": "string",
+              "type": "array",
               "description": "Platform.",
-              "enum": [
-                "Epic",
-                "EpicAndroid",
-                "EpicIOS",
-                "EpicPC",
-                "EpicPCKorea",
-                "GooglePlay",
-                "IOSAppStore",
-                "Live",
-                "Nintendo",
-                "PSN",
-                "Samsung",
-                "xbl"
-              ]
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Epic",
+                  "EpicAndroid",
+                  "EpicIOS",
+                  "EpicPC",
+                  "EpicPCKorea",
+                  "GooglePlay",
+                  "IOSAppStore",
+                  "Live",
+                  "Nintendo",
+                  "PSN",
+                  "Samsung",
+                  "xbl"
+                ]
+              }
             }
           },
           {
@@ -7130,14 +7140,17 @@
             "explode": true,
             "schema": {
               "title": "Region",
-              "type": "string",
+              "type": "array",
               "description": "Region.",
-              "enum": [
-                "asia",
-                "cht",
-                "eu",
-                "usa"
-              ]
+              "items": {
+                "type": "string",
+                "enum": [
+                  "asia",
+                  "cht",
+                  "eu",
+                  "usa"
+                ]
+              }
             }
           },
           {
@@ -7262,7 +7275,8 @@
                   10000099,
                   10000094,
                   10000095,
-                  10000100, 10000102
+                  10000100,
+                  10000102
                 ]
               }
             }
@@ -7467,7 +7481,11 @@
                   15513,
                   11514,
                   11515,
-                  13431, 14516, 14431, 12431
+                  13431,
+                  14516,
+                  14431,
+                  12431,
+                  14427
                 ]
               }
             }
@@ -7863,7 +7881,8 @@
                   23027,
                   23028,
                   23030,
-                  23029, 21045
+                  23029,
+                  21045
                 ]
               }
             }
@@ -8073,7 +8092,7 @@
             "explode": true,
             "schema": {
               "title": "Zenless Character",
-              "type": "integer",
+              "type": "array",
               "description": "List of Zenless Zone Zero characters.",
               "items": {
                 "type": "integer",
@@ -9631,13 +9650,95 @@
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
-          {"name": "brawl_level_min", "in": "query", "description": "Minimum Brawl Stars level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Level Min", "type": "integer", "description": "Minimum Brawl Stars level."}},
-          {"name": "brawl_level_max", "in": "query", "description": "Maximum Brawl Stars level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Level Max", "type": "integer", "description": "Maximum Brawl Stars level."}},
-          {"name": "brawl_cup_min", "in": "query", "description": "Minimum number of Brawl Stars trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Cup Min", "type": "integer", "description": "Minimum number of Brawl Stars trophies."}},
-          {"name": "brawl_cup_max", "in": "query", "description": "Maximum number of Brawl Stars trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Cup Max", "type": "integer", "description": "Maximum number of Brawl Stars trophies."}},
-          {"name": "brawl_wins_min", "in": "query", "description": "Minimum number of Brawl Stars wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Wins Min", "type": "integer", "description": "Minimum number of Brawl Stars wins."}},
-          {"name": "brawl_wins_max", "in": "query", "description": "Maximum number of Brawl Stars wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Brawl Wins Max", "type": "integer", "description": "Maximum number of Brawl Stars wins."}},
-          {"name": "brawl_pass", "in": "query", "description": "Has Brawl Pass.", "required": false, "style": "form", "explode": true, "schema": {"$ref": "#/components/schemas/YesNoNoMatterScheme"}},
+          {
+            "name": "brawl_level_min",
+            "in": "query",
+            "description": "Minimum Brawl Stars level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawl Level Min",
+              "type": "integer",
+              "description": "Minimum Brawl Stars level."
+            }
+          },
+          {
+            "name": "brawl_level_max",
+            "in": "query",
+            "description": "Maximum Brawl Stars level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawl Level Max",
+              "type": "integer",
+              "description": "Maximum Brawl Stars level."
+            }
+          },
+          {
+            "name": "brawl_cup_min",
+            "in": "query",
+            "description": "Minimum number of Brawl Stars trophies.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawl Cup Min",
+              "type": "integer",
+              "description": "Minimum number of Brawl Stars trophies."
+            }
+          },
+          {
+            "name": "brawl_cup_max",
+            "in": "query",
+            "description": "Maximum number of Brawl Stars trophies.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawl Cup Max",
+              "type": "integer",
+              "description": "Maximum number of Brawl Stars trophies."
+            }
+          },
+          {
+            "name": "brawl_wins_min",
+            "in": "query",
+            "description": "Minimum number of Brawl Stars wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawl Wins Min",
+              "type": "integer",
+              "description": "Minimum number of Brawl Stars wins."
+            }
+          },
+          {
+            "name": "brawl_wins_max",
+            "in": "query",
+            "description": "Maximum number of Brawl Stars wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Brawl Wins Max",
+              "type": "integer",
+              "description": "Maximum number of Brawl Stars wins."
+            }
+          },
+          {
+            "name": "brawl_pass",
+            "in": "query",
+            "description": "Has Brawl Pass.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
           {
             "name": "brawler[]",
             "in": "query",
@@ -9789,32 +9890,340 @@
               "minimum": 0
             }
           },
-          {"name": "royale_level_min", "in": "query", "description": "Minimum Clash Royale level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Level Min", "type": "integer", "description": "Minimum Clash Royale level."}},
-          {"name": "royale_level_max", "in": "query", "description": "Maximum Clash Royale level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Level Max", "type": "integer", "description": "Maximum Clash Royale level."}},
-          {"name": "royale_cup_min", "in": "query", "description": "Minimum number of Clash Royale trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Cup Min", "type": "integer", "description": "Minimum number of Clash Royale trophies."}},
-          {"name": "royale_cup_max", "in": "query", "description": "Maximum number of Clash Royale trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Cup Max", "type": "integer", "description": "Maximum number of Clash Royale trophies."}},
-          {"name": "royale_wins_min", "in": "query", "description": "Minimum number of Clash Royale wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Wins Min", "type": "integer", "description": "Minimum number of Clash Royale wins."}},
-          {"name": "royale_wins_max", "in": "query", "description": "Maximum number of Clash Royale wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Royale Wins Max", "type": "integer", "description": "Maximum number of Clash Royale wins."}},
-          {"name": "king_level_min", "in": "query", "description": "Minimum King level in Clash Royale.", "required": false, "style": "form", "explode": true, "schema": {"title": "King Level Min", "type": "integer", "description": "Minimum King level in Clash Royale."}},
-          {"name": "king_level_max", "in": "query", "description": "Maximum King level in Clash Royale.", "required": false, "style": "form", "explode": true, "schema": {"title": "King Level Max", "type": "integer", "description": "Maximum King level in Clash Royale."}},
-          {"name": "royale_pass", "in": "query", "description": "Has Royale Pass.", "required": false, "style": "form", "explode": true, "schema": {"$ref": "#/components/schemas/YesNoNoMatterScheme"}},
-          {"name": "clash_level_min", "in": "query", "description": "Minimum Clash of Clans level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Level Min", "type": "integer", "description": "Minimum Clash of Clans level."}},
-          {"name": "clash_level_max", "in": "query", "description": "Maximum Clash of Clans level.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Level Max", "type": "integer", "description": "Maximum Clash of Clans level."}},
-          {"name": "clash_cup_min", "in": "query", "description": "Minimum number of Clash of Clans trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Cup Min", "type": "integer", "description": "Minimum number of Clash of Clans trophies."}},
-          {"name": "clash_cup_max", "in": "query", "description": "Maximum number of Clash of Clans trophies.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Cup Max", "type": "integer", "description": "Maximum number of Clash of Clans trophies."}},
-          {"name": "clash_wins_min", "in": "query", "description": "Minimum number of Clash of Clans wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Wins Min", "type": "integer", "description": "Minimum number of Clash of Clans wins."}},
-          {"name": "clash_wins_max", "in": "query", "description": "Maximum number of Clash of Clans wins.", "required": false, "style": "form", "explode": true, "schema": {"title": "Clash Wins Max", "type": "integer", "description": "Maximum number of Clash of Clans wins."}},
-          {"name": "clash_pass", "in": "query", "description": "Has Battle Pass.", "required": false, "style": "form", "explode": true, "schema": {"$ref": "#/components/schemas/YesNoNoMatterScheme"}},
-          {"name": "total_heroes_level_min", "in": "query", "description": "Minimum total heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Heroes Level Min", "type": "integer", "description": "Minimum total heroes level count in Clash of Clans."}},
-          {"name": "total_heroes_level_max", "in": "query", "description": "Maximum total heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Heroes Level Max", "type": "integer", "description": "Maximum total heroes level count in Clash of Clans."}},
-          {"name": "total_troops_level_min", "in": "query", "description": "Minimum total troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Troops Level Min", "type": "integer", "description": "Minimum total troops level count in Clash of Clans."}},
-          {"name": "total_troops_level_max", "in": "query", "description": "Maximum total troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Troops Level Max", "type": "integer", "description": "Maximum total troops level count in Clash of Clans."}},
-          {"name": "total_spells_level_min", "in": "query", "description": "Minimum total spells level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Spells Level Min", "type": "integer", "description": "Minimum total spells level count in Clash of Clans."}},
-          {"name": "total_spells_level_max", "in": "query", "description": "Maximum total spells level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Spells Level Max", "type": "integer", "description": "Maximum total spells level count in Clash of Clans."}},
-          {"name": "total_builder_heroes_level_min", "in": "query", "description": "Minimum total builder village heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Heroes Level Min", "type": "integer", "description": "Minimum total builder village heroes level count in Clash of Clans."}},
-          {"name": "total_builder_heroes_level_max", "in": "query", "description": "Maximum total builder village heroes level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Heroes Level Max", "type": "integer", "description": "Maximum total builder village heroes level count in Clash of Clans."}},
-          {"name": "total_builder_troops_level_min", "in": "query", "description": "Minimum total builder village troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Troops Level Min", "type": "integer", "description": "Minimum total builder village troops level count in Clash of Clans."}},
-          {"name": "total_builder_troops_level_max", "in": "query", "description": "Maximum total builder village troops level count in Clash of Clans.", "required": false, "style": "form", "explode": true, "schema": {"title": "Total Builder Troops Level Max", "type": "integer", "description": "Maximum total builder village troops level count in Clash of Clans."}},
+          {
+            "name": "royale_level_min",
+            "in": "query",
+            "description": "Minimum Clash Royale level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Royale Level Min",
+              "type": "integer",
+              "description": "Minimum Clash Royale level."
+            }
+          },
+          {
+            "name": "royale_level_max",
+            "in": "query",
+            "description": "Maximum Clash Royale level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Royale Level Max",
+              "type": "integer",
+              "description": "Maximum Clash Royale level."
+            }
+          },
+          {
+            "name": "royale_cup_min",
+            "in": "query",
+            "description": "Minimum number of Clash Royale trophies.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Royale Cup Min",
+              "type": "integer",
+              "description": "Minimum number of Clash Royale trophies."
+            }
+          },
+          {
+            "name": "royale_cup_max",
+            "in": "query",
+            "description": "Maximum number of Clash Royale trophies.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Royale Cup Max",
+              "type": "integer",
+              "description": "Maximum number of Clash Royale trophies."
+            }
+          },
+          {
+            "name": "royale_wins_min",
+            "in": "query",
+            "description": "Minimum number of Clash Royale wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Royale Wins Min",
+              "type": "integer",
+              "description": "Minimum number of Clash Royale wins."
+            }
+          },
+          {
+            "name": "royale_wins_max",
+            "in": "query",
+            "description": "Maximum number of Clash Royale wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Royale Wins Max",
+              "type": "integer",
+              "description": "Maximum number of Clash Royale wins."
+            }
+          },
+          {
+            "name": "king_level_min",
+            "in": "query",
+            "description": "Minimum King level in Clash Royale.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "King Level Min",
+              "type": "integer",
+              "description": "Minimum King level in Clash Royale."
+            }
+          },
+          {
+            "name": "king_level_max",
+            "in": "query",
+            "description": "Maximum King level in Clash Royale.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "King Level Max",
+              "type": "integer",
+              "description": "Maximum King level in Clash Royale."
+            }
+          },
+          {
+            "name": "royale_pass",
+            "in": "query",
+            "description": "Has Royale Pass.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "clash_level_min",
+            "in": "query",
+            "description": "Minimum Clash of Clans level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Clash Level Min",
+              "type": "integer",
+              "description": "Minimum Clash of Clans level."
+            }
+          },
+          {
+            "name": "clash_level_max",
+            "in": "query",
+            "description": "Maximum Clash of Clans level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Clash Level Max",
+              "type": "integer",
+              "description": "Maximum Clash of Clans level."
+            }
+          },
+          {
+            "name": "clash_cup_min",
+            "in": "query",
+            "description": "Minimum number of Clash of Clans trophies.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Clash Cup Min",
+              "type": "integer",
+              "description": "Minimum number of Clash of Clans trophies."
+            }
+          },
+          {
+            "name": "clash_cup_max",
+            "in": "query",
+            "description": "Maximum number of Clash of Clans trophies.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Clash Cup Max",
+              "type": "integer",
+              "description": "Maximum number of Clash of Clans trophies."
+            }
+          },
+          {
+            "name": "clash_wins_min",
+            "in": "query",
+            "description": "Minimum number of Clash of Clans wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Clash Wins Min",
+              "type": "integer",
+              "description": "Minimum number of Clash of Clans wins."
+            }
+          },
+          {
+            "name": "clash_wins_max",
+            "in": "query",
+            "description": "Maximum number of Clash of Clans wins.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Clash Wins Max",
+              "type": "integer",
+              "description": "Maximum number of Clash of Clans wins."
+            }
+          },
+          {
+            "name": "clash_pass",
+            "in": "query",
+            "description": "Has Battle Pass.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "total_heroes_level_min",
+            "in": "query",
+            "description": "Minimum total heroes level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Heroes Level Min",
+              "type": "integer",
+              "description": "Minimum total heroes level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_heroes_level_max",
+            "in": "query",
+            "description": "Maximum total heroes level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Heroes Level Max",
+              "type": "integer",
+              "description": "Maximum total heroes level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_troops_level_min",
+            "in": "query",
+            "description": "Minimum total troops level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Troops Level Min",
+              "type": "integer",
+              "description": "Minimum total troops level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_troops_level_max",
+            "in": "query",
+            "description": "Maximum total troops level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Troops Level Max",
+              "type": "integer",
+              "description": "Maximum total troops level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_spells_level_min",
+            "in": "query",
+            "description": "Minimum total spells level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Spells Level Min",
+              "type": "integer",
+              "description": "Minimum total spells level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_spells_level_max",
+            "in": "query",
+            "description": "Maximum total spells level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Spells Level Max",
+              "type": "integer",
+              "description": "Maximum total spells level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_builder_heroes_level_min",
+            "in": "query",
+            "description": "Minimum total builder village heroes level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Builder Heroes Level Min",
+              "type": "integer",
+              "description": "Minimum total builder village heroes level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_builder_heroes_level_max",
+            "in": "query",
+            "description": "Maximum total builder village heroes level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Builder Heroes Level Max",
+              "type": "integer",
+              "description": "Maximum total builder village heroes level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_builder_troops_level_min",
+            "in": "query",
+            "description": "Minimum total builder village troops level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Builder Troops Level Min",
+              "type": "integer",
+              "description": "Minimum total builder village troops level count in Clash of Clans."
+            }
+          },
+          {
+            "name": "total_builder_troops_level_max",
+            "in": "query",
+            "description": "Maximum total builder village troops level count in Clash of Clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Total Builder Troops Level Max",
+              "type": "integer",
+              "description": "Maximum total builder village troops level count in Clash of Clans."
+            }
+          },
           {
             "name": "town_hall_level_min",
             "in": "query",
@@ -9990,9 +10399,32 @@
           {
             "$ref": "#/components/parameters/not_country"
           },
-          {"name": "gmin", "in": "query", "description": "Minimum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmin", "type": "integer", "description": "Minimum count of games."}},
-          {"name": "gmax", "in": "query", "description": "Maximum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmax", "type": "integer", "description": "Maximum count of games."}},
-
+          {
+            "name": "gmin",
+            "in": "query",
+            "description": "Minimum count of games.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gmin",
+              "type": "integer",
+              "description": "Minimum count of games."
+            }
+          },
+          {
+            "name": "gmax",
+            "in": "query",
+            "description": "Maximum count of games.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gmax",
+              "type": "integer",
+              "description": "Maximum count of games."
+            }
+          },
           {
             "name": "al_rank_min",
             "in": "query",
@@ -11101,8 +11533,32 @@
           {
             "$ref": "#/components/parameters/daybreak"
           },
-          {"name": "gmin", "in": "query", "description": "Minimum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmin", "type": "integer", "description": "Minimum count of games."}},
-          {"name": "gmax", "in": "query", "description": "Maximum count of games.", "required": false, "style": "form", "explode": true, "schema": {"title": "Gmax", "type": "integer", "description": "Maximum count of games."}},
+          {
+            "name": "gmin",
+            "in": "query",
+            "description": "Minimum count of games.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gmin",
+              "type": "integer",
+              "description": "Minimum count of games."
+            }
+          },
+          {
+            "name": "gmax",
+            "in": "query",
+            "description": "Maximum count of games.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Gmax",
+              "type": "integer",
+              "description": "Maximum count of games."
+            }
+          },
           {
             "name": "subscription",
             "in": "query",
@@ -12357,10 +12813,7 @@
             "schema": {
               "title": "Parent Control",
               "description": "Has disabled parent control.",
-              "type": "integer",
-              "enum": [
-                0
-              ]
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -13156,7 +13609,7 @@
                 "type": "string",
                 "enum": [
                   "Basic Family",
-                  "Premium Basic",
+                  "Basic Duo",
                   "Premium Fallback",
                   "Premium Student",
                   "Premium Duo",
@@ -16349,6 +16802,54 @@
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/{itemId}/note-save": {
+      "post": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Edit Note",
+        "description": "Edits a note for the account.",
+        "operationId": "accountsManaging.NoteSave",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/itemId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "title": "Text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkStatus"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermissionModel"
           }
         },
         "security": [
