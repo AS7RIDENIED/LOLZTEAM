@@ -676,9 +676,7 @@ class Forum:
             )
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def edit(
-            self, post_id: int, post_body: str = None, message_state: str = Literal["visible", "deleted", "moderated"]
-        ) -> httpx.Response:
+        def edit(self, post_id: int, post_body: str = None) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/posts/{post_id}
 
@@ -689,8 +687,6 @@ class Forum:
             **Parameters:**
 
             - **post_id** (int): Post ID.
-            - **message_state** (str): Message state.
-                > Can be [visible, deleted, moderated]
             - **post_body** (str): New content of the post.
 
             **Example:**
@@ -701,13 +697,11 @@ class Forum:
             ```
             """
             path = f"/posts/{post_id}"
-            params = {"message_state": message_state}
             dataJ = {"post_body": post_body}
             return _send_request(
                 self=self._api,
                 method="PUT",
                 path=path,
-                params=params,
                 dataJ=dataJ,
             )
 
@@ -870,6 +864,8 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
+                    forum_notifications: bool = True,
+                    email_notifications: bool = False,
                 ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
@@ -901,6 +897,8 @@ class Forum:
                     - **allow_ask_hidden_content** (bool): Allow ask hidden content.
                     - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
                     - **dont_alert_followers** (bool): Don't alert followers.
+                    - **forum_notifications** (bool): Get forum notifications.
+                    - **email_notifications** (bool): Get email notifications.
 
                     **Example:**
 
@@ -914,12 +912,13 @@ class Forum:
                     contest_type = "by_finish_date"
                     prize_type = "money"
                     forum_id = 766
-                    if tags:
-                        tags = ",".join(tags)
                     params = {
                         "prefix_id[]": prefix_ids,
                         "tags": tags,
                         "hide_contacts": 0,
+                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
+                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
                         "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                         "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                         "reply_group": reply_group,
@@ -970,6 +969,8 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
+                    forum_notifications: bool = True,
+                    email_notifications: bool = False,
                 ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
@@ -996,8 +997,9 @@ class Forum:
                     - **tags** (list): Thread tags.
                     - **allow_ask_hidden_content** (bool): Allow ask hidden content.
                     - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-                        > The maximum value is 100.
                     - **dont_alert_followers** (bool): Don't alert followers.
+                    - **forum_notifications** (bool): Get forum notifications.
+                    - **email_notifications** (bool): Get email notifications.
 
                     **Example:**
 
@@ -1013,9 +1015,13 @@ class Forum:
                     forum_id = 766
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": ",".join(tags) if tags else tags,
+                        "tags": tags,
                         "hide_contacts": 0,
+                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
+                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
                         "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                         "reply_group": reply_group,
                         "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                         "count_winners": count_winners,
@@ -1025,7 +1031,6 @@ class Forum:
                         "contest_type": contest_type,
                         "needed_members": needed_members,
                         "prize_data_money": prize_data_money,
-                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                     }
                     dataJ = {
                         "title": title,
@@ -1069,6 +1074,8 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
+                    forum_notifications: bool = True,
+                    email_notifications: bool = False,
                 ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
@@ -1098,8 +1105,10 @@ class Forum:
                     - **prefix_ids** (list): Thread prefixes.
                     - **tags** (list): Thread tags.
                     - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                    - **dont_alert_followers** (bool): Don't alert followers.
                     - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+                    - **dont_alert_followers** (bool): Don't alert followers.
+                    - **forum_notifications** (bool): Get forum notifications.
+                    - **email_notifications** (bool): Get email notifications.
 
                     **Example:**
 
@@ -1116,7 +1125,9 @@ class Forum:
                     params = {
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
-                        "hide_contacts": 0,
+                        "hide_contacts": 0, "watch_thread_state": int(any([forum_notifications, email_notifications])),
+                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
                         "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                         "reply_group": reply_group,
                         "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
@@ -1167,6 +1178,8 @@ class Forum:
                     allow_ask_hidden_content: bool = None,
                     comment_ignore_group: bool = None,
                     dont_alert_followers: bool = None,
+                    forum_notifications: bool = True,
+                    email_notifications: bool = False,
                 ) -> httpx.Response:
                     """
                     POST https://api.zelenka.guru/threads
@@ -1193,8 +1206,10 @@ class Forum:
                     - **prefix_ids** (list): Thread prefixes.
                     - **tags** (list): Thread tags.
                     - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                    - **dont_alert_followers** (bool): Don't alert followers.
                     - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+                    - **dont_alert_followers** (bool): Don't alert followers.
+                    - **forum_notifications** (bool): Get forum notifications.
+                    - **email_notifications** (bool): Get email notifications.
 
                     **Example:**
 
@@ -1208,7 +1223,9 @@ class Forum:
                     params = {
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
-                        "hide_contacts": 0,
+                        "hide_contacts": 0, "watch_thread_state": int(any([forum_notifications, email_notifications])),
+                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
                         "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
                         "reply_group": reply_group,
                         "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
@@ -1260,6 +1277,8 @@ class Forum:
                 comment_ignore_group: bool = None,
                 dont_alert_followers: bool = None,
                 reply_group: Constants.Forum.ReplyGroups._Literal = 2,
+                forum_notifications: bool = True,
+                    email_notifications: bool = False,
             ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/claims
@@ -1282,6 +1301,8 @@ class Forum:
                 - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
                 - **dont_alert_followers** (bool): Don't alert followers.
                 - **reply_group** (int): Allow to reply only users with chosen or higher group.
+                - **forum_notifications** (bool): Get forum notifications.
+                - **email_notifications** (bool): Get email notifications.
 
                 **Example:**
 
@@ -1307,6 +1328,9 @@ class Forum:
                     "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
                     "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
                     "reply_group": reply_group,
+                    "watch_thread_state": int(any([forum_notifications, email_notifications])),
+                    "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
+                    "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
                 }
                 return _send_request(
                     self=self._api, method="POST", path=path, dataJ=dataJ
@@ -1394,7 +1418,7 @@ class Forum:
             self,
             forum_id: int = None,
             thread_ids: str = None,
-            creator_user_id: int = None,
+            creator_user_id: Union[int, str] = None,
             sticky: bool = None,
             thread_prefix_id: int = None,
             thread_tag_id: int = None,
@@ -2056,7 +2080,7 @@ class Forum:
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
-            def upload(self, avatar: bytes, user_id: int = None) -> httpx.Response:
+            def upload(self, image: bytes, user_id: Union[int, str] = "me", size: int = None, x: int = None, y: int = None) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/{user_id}/avatar
 
@@ -2069,28 +2093,31 @@ class Forum:
                 - **user_id** (int): ID of user.
                     > If you do not specify the user_id, then you will change the avatar of the current user
                 - **avatar** (binary): Binary data of the avatar.
-
+                - **x** (int): The starting point of the selection by width.
+                - **y** (int): The starting point of the selection by height
+                - **size** (int): Selection size.
+                    > Minimum value - 16.
                 **Example:**
 
                 ```python
                 with open("avatar.png", "rb") as file:
                     avatar = file.read()
-                response = forum.users.avatar.upload(avatar=avatar)
+                response = forum.users.avatar.upload(image=avatar)
                 print(response.json())
                 ```
                 """
                 if "CREATE_JOB" in locals():
                     _WarningsLogger.warn(
                         msg=f"{FutureWarning.__name__}: You can't upload avatar using batch")
-                path = "/users/me/avatar" if not user_id else f"/users/{user_id}/avatar"
-                files = {"avatar": avatar}
-                params = {"user_id": user_id}
+                path = f"/users/{user_id}/avatar"
+                files = {"avatar": image}
+                params = {"user_id": user_id, "x": x, "y": y, "crop": size}
                 return _send_request(
                     self=self._api, method="POST", path=path, files=files, params=params
                 )
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
-            def delete(self, user_id: int = None) -> httpx.Response:
+            def delete(self, user_id: Union[int, str] = "me") -> httpx.Response:
                 """
                 DELETE https://api.zelenka.guru/users/{user_id}/avatar
 
@@ -2110,15 +2137,12 @@ class Forum:
                 print(response.json())
                 ```
                 """
-                if user_id is None:
-                    path = "/users/me/avatar"
-                else:
-                    path = f"/users/{user_id}/avatar"
+                path = f"/users/{user_id}/avatar"
                 return _send_request(self=self._api, method="DELETE", path=path)
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
             def crop(
-                self, user_id: int = None, size: int = 16, x: int = None, y: int = None
+                self, user_id: Union[int, str] = "me", size: int = 16, x: int = None, y: int = None
             ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/{user_id}/avatar-crop
@@ -2143,10 +2167,107 @@ class Forum:
                 ```
                 """
                 params = {"x": x, "y": y, "crop": size}
-                if user_id:
-                    path = f"/users/{user_id}/avatar-crop"
-                else:
-                    path = "/users/me/avatar-crop"
+                path = f"/users/{user_id}/avatar/crop"
+                return _send_request(
+                    self=self._api,
+                    method="POST",
+                    path=path,
+                    params=params,
+                )
+
+        class __Background:
+            def __init__(self, _api_self):
+                self._api = _api_self
+
+            @_MainTweaks._CheckScopes(scopes=["post?admincp"])
+            def upload(self, image: bytes, user_id: Union[int, str] = "me", size: int = None, x: int = None, y: int = None) -> httpx.Response:
+                """
+                POST https://api.zelenka.guru/users/{user_id}/background
+
+                *Upload background for a user.*
+
+                Required scopes: *post*
+
+                **Parameters:**
+
+                - **user_id** (int): ID of user.
+                    > If you do not specify the user_id, then you will change the background of the current user
+                - **image** (binary): Binary data of the background.
+                - **x** (int): The starting point of the selection by width.
+                - **y** (int): The starting point of the selection by height
+                - **size** (int): Selection size.
+                    > Minimum value - 100.
+                **Example:**
+
+                ```python
+                with open("background.png", "rb") as file:
+                    background = file.read()
+                response = forum.users.background.upload(image=background)
+                print(response.json())
+                ```
+                """
+                if "CREATE_JOB" in locals():
+                    _WarningsLogger.warn(
+                        msg=f"{FutureWarning.__name__}: You can't upload avatar using batch")
+                path = f"/users/{user_id}/background"
+                files = {"background": image}
+                params = {"user_id": user_id, "x": x, "y": y, "crop": size}
+                return _send_request(
+                    self=self._api, method="POST", path=path, files=files, params=params
+                )
+
+            @_MainTweaks._CheckScopes(scopes=["post?admincp"])
+            def delete(self, user_id: Union[int, str] = "me") -> httpx.Response:
+                """
+                DELETE https://api.zelenka.guru/users/{user_id}/background
+
+                *Delete background for a user.*
+
+                Required scopes: *post*
+
+                **Parameters:**
+
+                - **user_id** (int): ID of user.
+                    > If you do not specify the user_id, then you will delete the avatar of the current user
+
+                **Example:**
+
+                ```python
+                response = forum.users.background.delete()
+                print(response.json())
+                ```
+                """
+                path = f"/users/{user_id}/background"
+                return _send_request(self=self._api, method="DELETE", path=path)
+
+            @_MainTweaks._CheckScopes(scopes=["post?admincp"])
+            def crop(
+                self, user_id: Union[int, str] = "me", size: int = 100, x: int = None, y: int = None
+            ) -> httpx.Response:
+                """
+                POST https://api.zelenka.guru/users/{user_id}/background/crop
+
+                *Crop background for a user.*
+
+                Required scopes: *post*
+
+                **Parameters:**
+
+                - **user_id** (int): ID of user.
+                - **x** (int): The starting point of the selection by width.
+                - **y** (int): The starting point of the selection by height
+                - **size** (int): Selection size.
+                    > Minimum value - 100.
+
+                **Example:**
+
+                ```python
+                response = forum.users.background.crop(size=128, x=256, y=384)
+                print(response.json())
+                ```
+                """
+                params = {"x": x, "y": y, "crop": size}
+                path = f"/users/{user_id}/background/crop"
                 return _send_request(
                     self=self._api,
                     method="POST",
@@ -2157,6 +2278,7 @@ class Forum:
         def __init__(self, _api_self):
             self._api = _api_self
             self.avatar = self.__Avatar(self._api)
+            self.background = self.__Background(self._api)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def list(self, page: int = None, limit: int = None) -> httpx.Response:
@@ -2248,7 +2370,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["read?basic"])
-        def get(self, user_id: int = None) -> httpx.Response:
+        def get(self, user_id: Union[int, str] = "me") -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/{user_id}
 
@@ -2268,15 +2390,12 @@ class Forum:
             print(response.json())
             ```
             """
-            if user_id is None:
-                path = "/users/me"
-            else:
-                path = f"/users/{user_id}"
+            path = f"/users/{user_id}"
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def timeline(
-            self, user_id: int = None, page: int = None, limit: int = None
+            self, user_id: Union[int, str] = "me", page: int = None, limit: int = None
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/timeline
@@ -2299,17 +2418,14 @@ class Forum:
             print(response.json())
             ```
             """
-            if user_id is None:
-                path = "/users/me/timeline"
-            else:
-                path = f"/users/{user_id}/timeline"
+            path = f"/users/{user_id}/timeline"
             params = {"page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["post?admincp"])
         def edit(
             self,
-            user_id: int = None,
+            user_id: Union[int, str] = "me",
             password: str = None,
             password_old: str = None,
             password_algo: str = None,
@@ -2357,10 +2473,7 @@ class Forum:
             print(response.json())
             ```
             """
-            if user_id:
-                path = f"/users/{user_id}"
-            else:
-                path = "/users/me"
+            path = f"/users/{user_id}"
             params = {
                 "user_email": user_email,
                 "username": username,
@@ -2441,7 +2554,7 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def followers(
             self,
-            user_id: int = None,
+            user_id: Union[int, str] = "me",
             order: Literal["natural", "follow_date", "follow_date_reverse"] = None,
             page: int = None,
             limit: int = None,
@@ -2468,17 +2581,14 @@ class Forum:
             print(response.json())
             ```
             """
-            if user_id is None:
-                path = "/users/me/followers"
-            else:
-                path = f"/users/{user_id}/followers"
+            path = f"/users/{user_id}/followers"
             params = {"order": order, "page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def followings(
             self,
-            user_id: int = None,
+            user_id: Union[int, str] = "me",
             order: Literal["natural", "follow_date", "follow_date_reverse"] = None,
             page: int = None,
             limit: int = None,
@@ -2505,10 +2615,7 @@ class Forum:
             print(response.json())
             ```
             """
-            if user_id:
-                path = f"/users/{user_id}/followings"
-            else:
-                path = "/users/me/followings"
+            path = f"/users/{user_id}/followings"
             params = {"order": order, "page": page, "limit": limit}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
@@ -2537,7 +2644,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def ignore(self, user_id: int) -> httpx.Response:
+        def ignore(self, user_id: Union[int, str]) -> httpx.Response:
             """
             POST https://api.zelenka.guru/users/{user_id}/ignore
 
@@ -2561,7 +2668,7 @@ class Forum:
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def unignore(self, user_id: int) -> httpx.Response:
+        def unignore(self, user_id: Union[int, str]) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/users/{user_id}/ignore
 
@@ -2585,7 +2692,7 @@ class Forum:
             return _send_request(self=self._api, method="DELETE", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def groups(self, user_id: int = None) -> httpx.Response:
+        def groups(self, user_id: Union[int, str] = "me") -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/groups
 
@@ -2605,10 +2712,7 @@ class Forum:
             print(response.json())
             ```
             """
-            if user_id:
-                path = f"/users/{user_id}/groups"
-            else:
-                path = "/users/me/groups"
+            path = f"/users/{user_id}/groups"
             return _send_request(self=self._api, method="GET", path=path)
 
     class __Profile_posts:
@@ -2758,7 +2862,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def create(self, post_body: str, user_id: int = None) -> httpx.Response:
+        def create(self, post_body: str, user_id: Union[int, str] = "me") -> httpx.Response:
             """
            POST https://api.zelenka.guru/users/{user_id}/timeline
 
@@ -2779,10 +2883,7 @@ class Forum:
             print(response.json())
             ```
             """
-            if user_id:
-                path = f"/users/{user_id}/timeline"
-            else:
-                path = "/users/me/timeline"
+            path = "/users/me/timeline"
             dataJ = {"post_body": post_body}
             return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
@@ -2942,7 +3043,7 @@ class Forum:
             q: str = None,
             tag: str = None,
             forum_id: int = None,
-            user_id: int = None,
+            user_id: Union[int, str] = None,
             page: int = None,
             limit: int = None,
         ) -> httpx.Response:
@@ -2988,7 +3089,7 @@ class Forum:
             q: str = None,
             tag: str = None,
             forum_id: int = None,
-            user_id: int = None,
+            user_id: Union[int, str] = None,
             page: int = None,
             limit: int = None,
             data_limit: int = None,
@@ -3039,7 +3140,7 @@ class Forum:
             q: str = None,
             tag: str = None,
             forum_id: int = None,
-            user_id: int = None,
+            user_id: Union[int, str] = None,
             page: int = None,
             limit: int = None,
             data_limit: int = None,
@@ -3127,7 +3228,7 @@ class Forum:
         def profile_posts(
             self,
             q: str = None,
-            user_id: int = None,
+            user_id: Union[int, str] = None,
             page: int = None,
             limit: int = None,
         ) -> httpx.Response:
@@ -3367,29 +3468,6 @@ class Forum:
                 path = f"/conversation-messages/{message_id}"
                 dataJ = {"message_body": message_body}
                 return _send_request(self=self._api, method="PUT", path=path, dataJ=dataJ)
-
-            @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
-            def delete(self, message_id: int) -> httpx.Response:
-                """
-                DELETE https://api.zelenka.guru/conversation-messages/{message_id}
-
-                *Delete a message.*
-
-                Required scopes: *conversate*, *post*
-
-                **Parameters:**
-
-                - **message_id** (int): ID of conversation message.
-
-                **Example:**
-
-                ```python
-                response = forum.conversations.messages.delete(message_id=1000000)
-                print(response.json())
-                ```
-                """
-                path = f"/conversation-messages/{message_id}"
-                return _send_request(self=self._api, method="DELETE", path=path)
 
         def __init__(self, _api_self):
             self._api = _api_self
@@ -6919,6 +6997,37 @@ class Market:
             }
             return _send_request(
                 self=self._api, method="GET", path=path, params=params
+            )
+
+        @_MainTweaks._CheckScopes(scopes=["market"])
+        def transfer_cancel(
+            self,
+            payment_id: int,
+        ) -> httpx.Response:
+            """
+            POST https://api.lzt.market/balance/transfer/cancel
+
+            *Cancels a transfer with a hold that was sent to your account.*
+
+            Required scopes: *market*
+
+            **Parameters:**
+
+            - **payment_id** (int): Payment id.
+
+            **Example:**
+
+            ```python
+            response = market.payments.transfer_cancel(payment_id=2410024)
+            print(response.json())
+            ```
+            """
+            path = "/balance/transfer/cancel"
+            params = {
+                "payment_id": payment_id
+            }
+            return _send_request(
+                self=self._api, method="POST", path=path, params=params
             )
 
         @staticmethod

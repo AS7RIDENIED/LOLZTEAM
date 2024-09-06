@@ -150,10 +150,10 @@ POST https://antipublic.one/api/v2/search
 
 **Parameters:**
 
-- **search_by** (INSERT_HERE): Search type.
+- **search_by** (str): Search type.
     > For password and domain search you need Antipublic Plus subscription
-- **query** (INSERT_HERE): Search query.
-- **direction** (INSERT_HERE): Search direction.
+- **query** (str): Search query.
+- **direction** (str): Search direction.
 
 **Example:**
 

@@ -106,6 +106,7 @@
   * [History](#history)
   * [Transfer](#transfer)
   * [Fee](#fee)
+  * [Transfer Cancel](#transfer-cancel)
   * [Generate Link](#generate-link)
 * [Managing](#managing)
   * [Tag](#tag)
@@ -1823,6 +1824,26 @@ print(response.json())
 ```
 
 
+## Transfer Cancel
+
+POST https://api.lzt.market/balance/transfer/cancel
+
+*Cancels a transfer with a hold that was sent to your account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **payment_id** (int): Payment id.
+
+**Example:**
+
+```python
+response = market.payments.transfer_cancel(payment_id=2410024)
+print(response.json())
+```
+
+
 ## Generate Link
 
 *Generate payment link.*
@@ -2622,6 +2643,7 @@ Required scopes: *market*
 - **auction_duration_option** (str): Duration auction option.
 - **instabuy_price** (float): The price for which you can instantly redeem your account.
 - **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
+- **close_item** (bool): If True, the item will be closed item_state = closed.
 
 **Example:**
 

@@ -70,6 +70,10 @@
     * [Upload](#upload)
     * [Delete](#delete-2)
     * [Crop](#crop)
+  * [Background](#background)
+    * [Upload](#upload-1)
+    * [Delete](#delete-3)
+    * [Crop](#crop-1)
   * [List](#list-6)
   * [Fields](#fields)
   * [Search](#search)
@@ -93,7 +97,7 @@
   * [Get](#get-8)
   * [Create](#create-4)
   * [Edit](#edit-3)
-  * [Delete](#delete-3)
+  * [Delete](#delete-4)
   * [Likes](#likes-1)
   * [Like](#like-1)
   * [Unlike](#unlike-1)
@@ -114,8 +118,6 @@
     * [Get](#get-10)
     * [Create](#create-5)
     * [Edit](#edit-4)
-    * [Delete](#delete-4)
-    * [Report](#report-2)
   * [List](#list-11)
   * [Get](#get-11)
   * [Leave](#leave)
@@ -168,7 +170,6 @@ Required scopes: *read*
 - **parent_category_id** (int): ID of parent category.
 - **parent_forum_id** (int): ID of parent forum.
 - **order** (str): Ordering of categories.
-    > Can be [natural, list]
 
 **Example:**
 
@@ -212,7 +213,6 @@ Required scopes: *read*
 - **parent_category_id** (int): ID of parent category.
 - **parent_forum_id** (int): ID of parent forum.
 - **order** (str): Ordering of categories.
-    > Can be [natural, list]
 
 **Example:**
 
@@ -343,7 +343,6 @@ Required scopes: *read*
 - **parent_page_id** (int): ID of parent page.
     > If exists, filter pages that are direct children of that page.
 - **order** (str): Ordering of pages.
-    > Can be [natural, list]
 
 **Example:**
 
@@ -437,7 +436,6 @@ Required scopes: *read*
 - **page** (int): Page number of posts.
 - **limit** (int): Number of posts in a page.
 - **order** (str): Ordering of posts.
-    > Can be [natural, natural_reverse, post_create_date, post_create_date_reverse].
 
 **Example:**
 
@@ -501,8 +499,6 @@ Required scopes: *post*
 **Parameters:**
 
 - **post_id** (int): Post ID.
-- **message_state** (str): Message state.
-    > Can be [visible, deleted, moderated]
 - **post_body** (str): New content of the post.
 
 **Example:**
@@ -654,6 +650,8 @@ Required scopes: *post*
 - **allow_ask_hidden_content** (bool): Allow ask hidden content.
 - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
 - **dont_alert_followers** (bool): Don't alert followers.
+- **forum_notifications** (bool): Get forum notifications.
+- **email_notifications** (bool): Get email notifications.
 
 **Example:**
 
@@ -691,8 +689,9 @@ Required scopes: *post*
 - **tags** (list): Thread tags.
 - **allow_ask_hidden_content** (bool): Allow ask hidden content.
 - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-    > The maximum value is 100.
 - **dont_alert_followers** (bool): Don't alert followers.
+- **forum_notifications** (bool): Get forum notifications.
+- **email_notifications** (bool): Get email notifications.
 
 **Example:**
 
@@ -735,8 +734,10 @@ Required scopes: *post*
 - **prefix_ids** (list): Thread prefixes.
 - **tags** (list): Thread tags.
 - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **dont_alert_followers** (bool): Don't alert followers.
 - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers.
+- **forum_notifications** (bool): Get forum notifications.
+- **email_notifications** (bool): Get email notifications.
 
 **Example:**
 
@@ -774,8 +775,10 @@ Required scopes: *post*
 - **prefix_ids** (list): Thread prefixes.
 - **tags** (list): Thread tags.
 - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **dont_alert_followers** (bool): Don't alert followers.
 - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
+- **dont_alert_followers** (bool): Don't alert followers.
+- **forum_notifications** (bool): Get forum notifications.
+- **email_notifications** (bool): Get email notifications.
 
 **Example:**
 
@@ -811,6 +814,8 @@ Required scopes: *post*
 - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
 - **dont_alert_followers** (bool): Don't alert followers.
 - **reply_group** (int): Allow to reply only users with chosen or higher group.
+- **forum_notifications** (bool): Get forum notifications.
+- **email_notifications** (bool): Get email notifications.
 
 **Example:**
 
@@ -1326,14 +1331,17 @@ Required scopes: *post*
 
 - **user_id** (int): ID of user.
     > If you do not specify the user_id, then you will change the avatar of the current user
-- **avatar** (binary): Binary data of the avatar.
-
+- **image** (binary): Binary data of the avatar.
+- **x** (int): The starting point of the selection by width.
+- **y** (int): The starting point of the selection by height
+- **size** (int): Selection size.
+    > Minimum value - 16.
 **Example:**
 
 ```python
 with open("avatar.png", "rb") as file:
     avatar = file.read()
-response = forum.users.avatar.upload(avatar=avatar)
+response = forum.users.avatar.upload(image=avatar)
 print(response.json())
 ```
 
@@ -1379,6 +1387,80 @@ Required scopes: *post*
 
 ```python
 response = forum.users.avatar.crop(size=128, x=256, y=384)
+print(response.json())
+```
+
+
+## Background
+
+### Upload
+
+POST https://api.zelenka.guru/users/{user_id}/background
+
+*Upload background for a user.*
+
+Required scopes: *post*
+
+**Parameters:**
+
+- **user_id** (int): ID of user.
+    > If you do not specify the user_id, then you will change the background of the current user
+- **image** (binary): Binary data of the background.
+- **x** (int): The starting point of the selection by width.
+- **y** (int): The starting point of the selection by height
+- **size** (int): Selection size.
+    > Minimum value - 100.
+**Example:**
+
+```python
+with open("background.png", "rb") as file:
+    background = file.read()
+response = forum.users.background.upload(image=background)
+print(response.json())
+```
+
+
+### Delete
+
+DELETE https://api.zelenka.guru/users/{user_id}/background
+
+*Delete background for a user.*
+
+Required scopes: *post*
+
+**Parameters:**
+
+- **user_id** (int): ID of user.
+    > If you do not specify the user_id, then you will delete the avatar of the current user
+
+**Example:**
+
+```python
+response = forum.users.background.delete()
+print(response.json())
+```
+
+
+### Crop
+
+POST https://api.zelenka.guru/users/{user_id}/background/crop
+
+*Crop background for a user.*
+
+Required scopes: *post*
+
+**Parameters:**
+
+- **user_id** (int): ID of user.
+- **x** (int): The starting point of the selection by width.
+- **y** (int): The starting point of the selection by height
+- **size** (int): Selection size.
+    > Minimum value - 100.
+
+**Example:**
+
+```python
+response = forum.users.background.crop(size=128, x=256, y=384)
 print(response.json())
 ```
 
@@ -2226,47 +2308,6 @@ print(response.json())
 ```
 
 
-### Delete
-
-DELETE https://api.zelenka.guru/conversation-messages/{message_id}
-
-*Delete a message.*
-
-Required scopes: *conversate*, *post*
-
-**Parameters:**
-
-- **message_id** (int): ID of conversation message.
-
-**Example:**
-
-```python
-response = forum.conversations.messages.delete(message_id=1000000)
-print(response.json())
-```
-
-
-### Report
-
-POST https://api.zelenka.guru/conversation-messages/{message_id}/report
-
-*Create a new conversation message.*
-
-Required scopes: *conversate*, *post*
-
-**Parameters:**
-
-- **message_id** (int): ID of conversation message.
-- **message** (str): Reason of the report.
-
-**Example:**
-
-```python
-response = forum.conversations.messages.report(message_id=1000000, reason="Reason")
-print(response.json())
-```
-
-
 ## List
 
 GET https://api.zelenka.guru/conversations
@@ -2405,7 +2446,7 @@ POST https://api.zelenka.guru/batch
 
 *Execute multiple API requests at once. Maximum batch jobs is 10.*
 
-**Example jobs scheme:**
+**Example json jobs scheme:**
 
 [
     {
