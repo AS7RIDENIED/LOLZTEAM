@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.43a"
+    "version": "1.1.44"
   },
   "servers": [
     {
@@ -19768,7 +19768,7 @@
         ],
         "summary": "Send Money",
         "description": "Send money to any user.\n\nThe web version additionally has a **redirect** parameter (After payment, there will be a redirect to the specified link).",
-        "operationId": "paymentsList.sendMoney",
+        "operationId": "Balance.Payments.Send",
         "parameters": [
           {
             "name": "user_id",
@@ -19966,12 +19966,12 @@
         ],
         "summary": "Check Transfer Fee",
         "description": "Get transfer limits and get fee amount for transfer.",
-        "operationId": "paymentsList.Fee",
+        "operationId": "Balance.Payments.Fee",
         "parameters": [
           {
             "name": "amount",
             "in": "query",
-            "description": "Amount you want to send in your  currency.",
+            "description": "Amount you want to send in your currency.",
             "required": false,
             "style": "form",
             "explode": true,
@@ -20044,6 +20044,46 @@
         ]
       }
     },
+    "/balance/transfer/cancel": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Cancel Transfer",
+        "description": "Cancels a transfer with a hold that was sent to your account.",
+        "operationId": "Balance.Payments.Cancel",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "query",
+            "description": "Payment id.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Amount",
+              "type": "integer",
+              "description": "Payment id."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkStatus"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/user/payments": {
       "get": {
         "tags": [
@@ -20051,7 +20091,7 @@
         ],
         "summary": "Payments History",
         "description": "Displays list of your payments.",
-        "operationId": "paymentsList.history",
+        "operationId": "Balance.Payments.History",
         "parameters": [
           {
             "name": "type",
