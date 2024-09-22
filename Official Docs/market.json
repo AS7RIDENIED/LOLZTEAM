@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.44b"
+    "version": "1.1.45"
   },
   "servers": [
     {
@@ -702,7 +702,9 @@
                   280,
                   298,
                   299,
-                  300
+                  300,
+                  301,
+                  302
                 ]
               }
             }
@@ -3663,7 +3665,23 @@
                   "a_348_athena_commando_m_treycozy_e_vh8p6",
                   "a_179_athena_commando_f_tiedyefashion_d",
                   "a_193_athena_commando_m_dragonfruit_7n3a3",
-                  "character_middlesock"
+                  "character_middlesock",
+                  "character_thornededen",
+                  "character_rankedscythe",
+                  "character_sunnysquawk",
+                  "character_buffbeak",
+                  "character_carminefae",
+                  "character_sweetcuddle",
+                  "character_bananacake",
+                  "character_bikemold",
+                  "character_magmabreak",
+                  "character_clawedraven",
+                  "character_sweetletter",
+                  "character_livelydomino",
+                  "character_cattlejar",
+                  "character_infernofncs",
+                  "character_bandageninjafncs",
+                  "character_freedrive"
                 ]
               }
             }
@@ -4950,7 +4968,21 @@
                   "pickaxe_id_365_spytechhackermale",
                   "pickaxe_id_702_grandeurmale_6uv6l",
                   "pickaxe_vitalinventor",
-                  "pickaxe_middlesock"
+                  "pickaxe_middlesock",
+                  "pickaxe_fnbirthday7",
+                  "pickaxe_anglepatch",
+                  "pickaxe_sunnysquawk",
+                  "pickaxe_rankedscythe",
+                  "pickaxe_sweetcuddle",
+                  "pickaxe_cattlejar",
+                  "pickaxe_livelydomino",
+                  "pickaxe_thornededen",
+                  "pickaxe_freedrive",
+                  "pickaxe_sweetletter",
+                  "pickaxe_rezzpickaxe",
+                  "pickaxe_magmabreak",
+                  "pickaxe_bikemold",
+                  "pickaxe_bandageninjaheart"
                 ]
               }
             }
@@ -5552,7 +5584,8 @@
                   "glider_id_332_parallelcomicmale",
                   "glider_id_103_nautilus",
                   "glider_id_336_orbittealmale_vcpm0",
-                  "glider_middlesock"
+                  "glider_middlesock",
+                  "glider_anglepatch"
                 ]
               }
             }
@@ -6781,7 +6814,15 @@
                   "snippet",
                   "snippet_sync_follower",
                   "snippet_sync",
-                  "middlesock"
+                  "middlesock",
+                  "chorus",
+                  "asteroid",
+                  "anglepatch",
+                  "avian",
+                  "livelydomino",
+                  "bestow",
+                  "dignified",
+                  "cattlejar"
                 ]
               }
             }
@@ -7276,6 +7317,7 @@
                   10000094,
                   10000095,
                   10000100,
+                  10000101,
                   10000102
                 ]
               }
@@ -7485,7 +7527,8 @@
                   14516,
                   14431,
                   12431,
-                  14427
+                  14427,
+                  12513, 11431
                 ]
               }
             }
@@ -7758,7 +7801,7 @@
                   1008,
                   1009,
                   1013,
-                  1218
+                  1218,1220, 1223
                 ]
               }
             }
@@ -7882,7 +7925,8 @@
                   23028,
                   23030,
                   23029,
-                  21045
+                  21045,
+                  21046, 23031
                 ]
               }
             }
@@ -8114,7 +8158,7 @@
                   1081,
                   1211,
                   1021,
-                  1151
+                  1151,1261, 1271
                 ]
               }
             }
@@ -8178,7 +8222,7 @@
                   12012,
                   12013,
                   12014,
-                  13013
+                  13013,13011, 14126, 13127
                 ]
               }
             }
@@ -13608,6 +13652,7 @@
               "items": {
                 "type": "string",
                 "enum": [
+                  "Basic Individual",
                   "Basic Family",
                   "Basic Duo",
                   "Premium Fallback",
