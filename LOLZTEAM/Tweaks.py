@@ -74,9 +74,7 @@ class _MainTweaks:
 
     @staticmethod
     def _CheckScopes(scopes: list = None):
-
         def _wrapper(func):
-
             @functools.wraps(func)
             def _wrapper_costyl(func_self, *args, **kwargs):
                 main_self = func_self
@@ -183,7 +181,7 @@ class _MainTweaks:
                         if self._delay_synchronizer:
                             self._lock.release()  # Unlocking to prevent softlock
                         raise e
-                    asyncio.sleep(0.05)
+                    await asyncio.sleep(0.25)
                     continue
         return _wrapper
 
@@ -448,7 +446,6 @@ class DelaySync:
 
 class Debug:
     def __init__(self):
-
         self._status = False
         self.DebugLogger = _DebugLogger
         self.DebugLogger.setLevel(level=logging.DEBUG)

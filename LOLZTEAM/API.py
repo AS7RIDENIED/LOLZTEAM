@@ -8026,13 +8026,13 @@ class Market:
                 "login": login,
                 "password": password,
                 "login_password": login_password,
-                "close_item": int(close_item) if close_item else close_item,
                 "resell_item_id": resell_item_id,
                 "random_proxy": int(random_proxy) if random_proxy else random_proxy,
             }
-            dataJ = {}
+            dataJ = {"extra": {}}
             if extra:
-                dataJ["extra"] = extra
+                dataJ["extra"].update(extra)
+            dataJ["extra"]["close_item"] = int(close_item) if close_item else close_item
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -8228,12 +8228,12 @@ class Market:
                 "random_proxy": int(random_proxy) if random_proxy else random_proxy,
                 "login": login,
                 "password": password,
-                "login_password": login_password,
-                "close_item": int(close_item) if close_item else close_item,
+                "login_password": login_password
             }
-            dataJ = {}
+            dataJ = {"extra": {}}
             if extra:
-                dataJ["extra"] = extra
+                dataJ["extra"].update(extra)
+            dataJ["extra"]["close_item"] = int(close_item) if close_item else close_item
             return _send_request(
                 self=self._api,
                 method="POST",
