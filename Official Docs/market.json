@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.45"
+    "version": "1.1.46"
   },
   "servers": [
     {
@@ -704,7 +704,8 @@
                   299,
                   300,
                   301,
-                  302
+                  302,
+                  303
                 ]
               }
             }
@@ -1365,6 +1366,58 @@
                 "month",
                 "year"
               ]
+            }
+          },
+          {
+            "name": "cards_min",
+            "in": "query",
+            "description": "Minimum number of available to collect trading cards.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Cards Min",
+              "type": "integer",
+              "description": "Minimum number of available to collect trading cards."
+            }
+          },
+          {
+            "name": "cards_max",
+            "in": "query",
+            "description": "Maximum number of available to collect trading cards.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Cards Max",
+              "type": "integer",
+              "description": "Maximum number of available to collect trading cards."
+            }
+          },
+          {
+            "name": "cards_games_min",
+            "in": "query",
+            "description": "Minimum number of available games with available to collect trading cards.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Cards Games Min",
+              "type": "integer",
+              "description": "Minimum number of available games with available to collect trading cards."
+            }
+          },
+          {
+            "name": "cards_games_max",
+            "in": "query",
+            "description": "Maximum number of available games with available to collect trading cards.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Cards Games Max",
+              "type": "integer",
+              "description": "Maximum number of available games with available to collect trading cards."
             }
           }
         ],
@@ -3681,7 +3734,10 @@
                   "character_cattlejar",
                   "character_infernofncs",
                   "character_bandageninjafncs",
-                  "character_freedrive"
+                  "character_freedrive",
+                  "character_nutmegmayo",
+                  "character_satincheddar",
+                  "character_citrusspoon"
                 ]
               }
             }
@@ -4982,7 +5038,10 @@
                   "pickaxe_rezzpickaxe",
                   "pickaxe_magmabreak",
                   "pickaxe_bikemold",
-                  "pickaxe_bandageninjaheart"
+                  "pickaxe_bandageninjaheart",
+                  "pickaxe_nutmegmayo",
+                  "pickaxe_citrusspoon",
+                  "pickaxe_satincheddar"
                 ]
               }
             }
@@ -6822,7 +6881,13 @@
                   "livelydomino",
                   "bestow",
                   "dignified",
-                  "cattlejar"
+                  "cattlejar",
+                  "satincheddar",
+                  "perish",
+                  "farewell_sync",
+                  "citrusspoon",
+                  "farewell",
+                  "farewell_sync_follower"
                 ]
               }
             }
@@ -7528,7 +7593,8 @@
                   14431,
                   12431,
                   14427,
-                  12513, 11431
+                  12513,
+                  11431
                 ]
               }
             }
@@ -7801,7 +7867,9 @@
                   1008,
                   1009,
                   1013,
-                  1218,1220, 1223
+                  1218,
+                  1220,
+                  1223
                 ]
               }
             }
@@ -7926,7 +7994,8 @@
                   23030,
                   23029,
                   21045,
-                  21046, 23031
+                  21046,
+                  23031
                 ]
               }
             }
@@ -8158,7 +8227,10 @@
                   1081,
                   1211,
                   1021,
-                  1151,1261, 1271
+                  1151,
+                  1261,
+                  1271,
+                  1071
                 ]
               }
             }
@@ -8222,7 +8294,11 @@
                   12012,
                   12013,
                   12014,
-                  13013,13011, 14126, 13127
+                  13013,
+                  13011,
+                  14126,
+                  13127,
+                  14107
                 ]
               }
             }
