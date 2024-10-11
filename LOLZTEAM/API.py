@@ -332,7 +332,7 @@ class Forum:
         def follow(
             self,
             forum_id: int,
-            prefix_ids: list = None,
+            prefix_ids: builtins.list = None,
             minimal_contest_amount: int = None,
             post: bool = None,
             alert: bool = None,
@@ -570,7 +570,6 @@ class Forum:
             self,
             thread_id: int = None,
             page_of_post_id: int = None,
-            post_ids: list = None,
             page: int = None,
             limit: int = None,
             order: Constants.Forum.PostOrder._Literal = None,
@@ -587,8 +586,6 @@ class Forum:
             - **thread_id** (int): ID of the containing thread.
             - **page_of_post_id** (int): ID of a post, posts that are in the same page with the specified post will be returned.
                 > If this parameter is set, thread_id may be skipped.
-            - **post_ids** (list): ID's of needed posts.
-                > If this parameter is set, all other filtering parameters will be ignored.
             - **page** (int): Page number of posts.
             - **limit** (int): Number of posts in a page.
             - **order** (str): Ordering of posts.
@@ -601,12 +598,9 @@ class Forum:
             ```
             """
             path = "/posts"
-            if type(post_ids) is list:
-                post_ids = ",".join(str(i) for i in post_ids)
             params = {
                 "thread_id": thread_id,
                 "page_of_post_id": page_of_post_id,
-                "post_ids": post_ids,
                 "page": page,
                 "limit": limit,
                 "order": order,
@@ -914,7 +908,7 @@ class Forum:
                     forum_id = 766
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": tags,
+                        "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
                         "watch_thread_state": int(any([forum_notifications, email_notifications])),
                         "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
@@ -1015,7 +1009,7 @@ class Forum:
                     forum_id = 766
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": tags,
+                        "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
                         "watch_thread_state": int(any([forum_notifications, email_notifications])),
                         "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
@@ -1125,7 +1119,8 @@ class Forum:
                     params = {
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
-                        "hide_contacts": 0, "watch_thread_state": int(any([forum_notifications, email_notifications])),
+                        "hide_contacts": 0,
+                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
                         "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
                         "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
                         "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
@@ -1223,7 +1218,8 @@ class Forum:
                     params = {
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
-                        "hide_contacts": 0, "watch_thread_state": int(any([forum_notifications, email_notifications])),
+                        "hide_contacts": 0,
+                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
                         "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
                         "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
                         "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
@@ -1417,7 +1413,6 @@ class Forum:
         def list(
             self,
             forum_id: int = None,
-            thread_ids: str = None,
             creator_user_id: Union[int, str] = None,
             sticky: bool = None,
             thread_prefix_id: int = None,
@@ -1436,9 +1431,6 @@ class Forum:
             **Parameters:**
 
             - **forum_id** (int): ID of the containing forum.
-                > Can be skipped if thread_ids set.
-            - **thread_ids** (list): ID's of needed threads (separated by comma).
-                > If this parameter is set, all other filtering parameters will be ignored.
             - **creator_user_id** (int): Filter to get only threads created by the specified user.
             - **sticky** (bool): Filter to get only sticky or non-sticky threads.
                 > By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards threads_total and does not affect pagination.
@@ -1459,7 +1451,6 @@ class Forum:
             path = "/threads"
             params = {
                 "forum_id": forum_id,
-                "thread_ids": thread_ids,
                 "creator_user_id": creator_user_id,
                 "sticky": int(sticky) if sticky else sticky,
                 "thread_prefix_id": thread_prefix_id,
@@ -1501,8 +1492,8 @@ class Forum:
             reply_group: Constants.Forum.ReplyGroups._Literal = 2,
             title: str = None,
             title_en: str = None,
-            prefix_ids: list = None,
-            tags: list = None,
+            prefix_ids: builtins.list = None,
+            tags: builtins.list = None,
             hide_contacts: bool = None,
             allow_ask_hidden_content: bool = None,
             comment_ignore_group: bool = None,
@@ -1573,8 +1564,8 @@ class Forum:
             thread_id: int,
             title: str = None,
             title_en: str = None,
-            prefix_ids: list = None,
-            tags: list = None,
+            prefix_ids: builtins.list = None,
+            tags: builtins.list = None,
             discussion_open: bool = None,
             hide_contacts: bool = None,
             allow_ask_hidden_content: bool = None,
@@ -1631,7 +1622,7 @@ class Forum:
             forum_id: int,
             title: str = None,
             title_en: str = None,
-            prefix_ids: list = None,
+            prefix_ids: builtins.list = None,
             send_alert: bool = None
         ) -> httpx.Response:
             """
@@ -3601,7 +3592,7 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["conversate", "post"])
         def create_group(
             self,
-            recipients: list,
+            recipients: builtins.list,
             title: str,
             message: str = None,
             open_invite: bool = True,
@@ -6864,7 +6855,7 @@ class Market:
             show_payments_stats: bool = None,
         ) -> httpx.Response:
             """
-            GET https://api.lzt.market/user/{user_id}/payments
+            GET https://api.lzt.market/user/payments
 
             *Displays info about your profile.*
 
@@ -7418,7 +7409,7 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def bulk_get(
             self,
-            item_ids: list
+            item_ids: list,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/bulk/items
@@ -7684,6 +7675,31 @@ class Market:
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
+        def note(self, item_id: int, text: str = None) -> httpx.Response:
+            """
+            POST https://api.lzt.market/{item_id}/note-save
+
+            *Edits a note for the account.*
+
+            Required scopes: *market*
+
+            **Parameters:**
+
+            - **item_id** (int): ID of item.
+            - **text** (str): Text of note.
+
+            **Example:**
+
+            ```python
+            response = market.managing.note(item_id=1000000, text="Good account")
+            print(response.json())
+            ```
+            """
+            path = f"/{item_id}/note-save"
+            params = {"text": text}
+            return _send_request(self=self._api, method="POST", path=path, params=params)
+
+        @_MainTweaks._CheckScopes(scopes=["market"])
         def change_owner(
             self, item_id: int, username: str, secret_answer: str
         ) -> httpx.Response:
@@ -7924,7 +7940,7 @@ class Market:
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def fast_buy(
-            self, item_id: int, price: float, buy_without_validation: bool = None
+            self, item_id: int, price: float = None, buy_without_validation: bool = None
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/{item_id}/fast-buy
@@ -7995,6 +8011,7 @@ class Market:
             extra: dict = None,
             resell_item_id: int = None,
             random_proxy: bool = None,
+            proxy: str = None,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/{item_id}/goods/check
@@ -8013,6 +8030,7 @@ class Market:
             - **extra** (str): Extra params for account checking.
             - **resell_item_id** (int): Put item id, if you are trying to resell item.
             - **random_proxy** (bool): Pass True, if you get captcha in previous response.
+            - **proxy** (str): Proxy line format ip:port:user:pass (prioritize over proxy_id parameter).
 
             **Example:**
 
@@ -8033,6 +8051,8 @@ class Market:
             if extra:
                 dataJ["extra"].update(extra)
             dataJ["extra"]["close_item"] = int(close_item) if close_item else close_item
+            dataJ["extra"]["proxy"] = proxy
+
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -8159,6 +8179,7 @@ class Market:
             instabuy_price: float = None,
             not_bids_action: str = None,
             close_item: bool = None,
+            proxy: str = None,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/item/fast-sell
@@ -8196,11 +8217,12 @@ class Market:
             - **instabuy_price** (float): The price for which you can instantly redeem your account.
             - **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
             - **close_item** (bool): If True, the item will be closed item_state = closed.
+            - **proxy** (str): Proxy line format ip:port:user:pass (prioritize over proxy_id parameter).
 
             **Example:**
 
             ```python
-            response = market.publishing.add(category_id=24, price=100, currency="rub", item_origin="stealer", login="auth_key", password="dc_id", title="Telegram")
+            response = market.publishing.fast_sell(category_id=24, price=100, currency="rub", item_origin="stealer", login="auth_key", password="dc_id", title="Telegram")
             print(response.json())
             ```
             """
@@ -8234,6 +8256,8 @@ class Market:
             if extra:
                 dataJ["extra"].update(extra)
             dataJ["extra"]["close_item"] = int(close_item) if close_item else close_item
+            dataJ["extra"]["proxy"] = proxy
+
             return _send_request(
                 self=self._api,
                 method="POST",
