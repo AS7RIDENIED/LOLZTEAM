@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.47b"
+    "version": "1.1.47c"
   },
   "servers": [
     {
@@ -1228,6 +1228,9 @@
                   "Fallen: A2P Protocol",
                   "Fallout 3: Game of the Year Edition",
                   "Fallout 4 - Automatron",
+                  "Fallout 4 - Wasteland Workshop",
+                  "Fallout 4 Far Harbor",
+                  "Fallout 4 Season Pass",
                   "Fallout New Vegas Courier's Stash",
                   "Fallout New Vegas Ultimate",
                   "Fallout New Vegas Ultimate PCR",
@@ -1913,6 +1916,7 @@
                   "Super Monday Night Combat Gift",
                   "Super Monday Night Combat Gift_cis",
                   "Supermarket Together - The Cool Pack",
+                  "Supreme Commander: Forged Alliance",
                   "Surgeon Simulator",
                   "Surgeon Simulator + I Am Bread",
                   "Surgeon Simulator_cis",
@@ -1977,6 +1981,7 @@
                   "The Odyssey: Winds of Athena_cis",
                   "The Past Within",
                   "The Path",
+                  "The Planet Crafter",
                   "The Political Machine",
                   "The Red Solstice",
                   "The Secret of Monkey Island: Special Edition",
@@ -2319,7 +2324,7 @@
             "$ref": "#/components/parameters/not_country"
           },
           {
-            "name": "csgo_profile_rank_min",
+            "name": "cs2_profile_rank_min",
             "in": "query",
             "description": "Minimum CS2 rank.",
             "required": false,
@@ -2334,7 +2339,7 @@
             }
           },
           {
-            "name": "csgo_profile_rank_max",
+            "name": "cs2_profile_rank_max",
             "in": "query",
             "description": "Maximum CS2 rank.",
             "required": false,
