@@ -99,7 +99,7 @@ class Market:
         gbp = "gbp"
 
     class ItemOrigin:
-        _Literal = Literal["brute", "stealer", "fishing", "autoreg", "personal", "resale", "dummy"]
+        _Literal = Literal["brute", "stealer", "fishing", "autoreg", "personal", "resale", "dummy", "self_registration"]
         brute = "brute"
         stealer = "stealer"
         fishing = "fishing"
@@ -107,6 +107,7 @@ class Market:
         personal = "personal"
         resale = "resale"
         dummy = "dummy"      # Only for steam (Пустышки)
+        self_reg = "self_registration"
 
     class Guarantee:
         _Literal = Literal[-1, 0, 1]
@@ -126,16 +127,17 @@ class Market:
         pre_active = "pre_active"
 
     class ItemOrder:
-        _Literal = Literal["price_to_up", "price_to_down", "pdate_to_down", "pdate_to_up", "pdate_to_down_upload", "pdate_to_up_upload", "exp_auctions", "ddate_to_down", "ddate_to_up"]
+        _Literal = Literal["price_to_up", "price_to_down", "pdate_to_down", "pdate_to_up", "pdate_to_down_upload", "pdate_to_up_upload", "ddate_to_down", "ddate_to_up", "edate_to_down", "edate_to_up"]
         cheap = "price_to_up"
         expensive = "price_to_down"
         newest = "pdate_to_down"
         oldest = "pdate_to_up"
         newest_upload = "pdate_to_down_upload"
         oldest_upload = "pdate_to_up_upload"
-        auction_expiration = "exp_auctions"
         newest_deleted = "ddate_to_down",
         oldest_deleted = "ddate_to_up"
+        newest_edited = "edate_to_down",
+        oldest_edited = "edate_to_up"
 
     class AppID:
         _Literal = Literal[730, 578080, 753, 570, 440, 252490, 304930, 232090, 322330]

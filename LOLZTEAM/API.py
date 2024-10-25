@@ -3854,7 +3854,6 @@ class Market:
             title: str = None,
             telegram_client: dict = None,
             deauthorize_steam: bool = None,
-            hide_bids: bool = None,
         ) -> httpx.Response:
             """
             PUT https://api.lzt.market/me
@@ -3873,7 +3872,6 @@ class Market:
             - **title** (str): Market title.
             - **telegram_client** (dict): Telegram client. It should be {"telegram_api_id"
             - **deauthorize_steam** (bool): Finish all Steam sessions after purchase.
-            - **hide_bids** (bool): Hide your profile when bid on the auction.
 
             **Example:**
 
@@ -3891,7 +3889,6 @@ class Market:
                 "hide_favourites": int(hide_favorites) if hide_favorites else hide_favorites,
                 "market_custom_title": title,
                 "deauthorize_steam": int(deauthorize_steam) if deauthorize_steam else deauthorize_steam,
-                "hide_bids": int(hide_bids) if hide_bids else hide_bids,
             }
             if telegram_client:
                 for key, value in telegram_client.items():
@@ -3911,7 +3908,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -3935,7 +3931,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -3958,7 +3953,6 @@ class Market:
                 path = "/steam"
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4027,7 +4021,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4051,7 +4044,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4075,7 +4067,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4123,7 +4114,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4147,7 +4137,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4171,7 +4160,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4219,7 +4207,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4243,7 +4230,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4267,7 +4253,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4336,7 +4321,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4360,7 +4344,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4384,7 +4367,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4432,7 +4414,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4456,7 +4437,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4480,7 +4460,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4528,7 +4507,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4552,7 +4530,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4576,7 +4553,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4643,7 +4619,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4667,7 +4642,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4691,7 +4665,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4739,7 +4712,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4763,7 +4735,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4787,7 +4758,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4835,7 +4805,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4859,7 +4828,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4883,7 +4851,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -4931,7 +4898,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -4955,7 +4921,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -4979,7 +4944,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5046,7 +5010,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5070,7 +5033,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5094,7 +5056,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5142,7 +5103,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5166,7 +5126,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5190,7 +5149,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5257,7 +5215,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5281,7 +5238,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5305,7 +5261,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5372,7 +5327,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5396,7 +5350,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5420,7 +5373,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5468,7 +5420,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5492,7 +5443,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5516,7 +5466,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5564,7 +5513,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5588,7 +5536,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5612,7 +5559,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5660,7 +5606,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5684,7 +5629,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5708,7 +5652,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5756,7 +5699,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5780,7 +5722,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5804,7 +5745,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5871,7 +5811,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5895,7 +5834,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -5919,7 +5857,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -5967,7 +5904,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -5991,7 +5927,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -6015,7 +5950,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -6063,7 +5997,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -6087,7 +6020,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -6111,7 +6043,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -6159,7 +6090,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -6183,7 +6113,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -6207,7 +6136,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -6255,7 +6183,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -6279,7 +6206,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -6303,7 +6229,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -6351,7 +6276,6 @@ class Market:
             def get(
                 self,
                 page: int = None,
-                auction: str = None,
                 title: str = None,
                 pmin: int = None,
                 pmax: int = None,
@@ -6375,7 +6299,6 @@ class Market:
                 **Parameters:**
 
                 - **page** (int): The number of the page to display results from
-                - **auction** (bool): Auction.
                 - **title** (str): The word or words contained in the account title.
                 - **pmin** (float): Minimal price of account (Inclusive).
                 - **pmax** (float): Maximum price of account (Inclusive).
@@ -6399,7 +6322,6 @@ class Market:
 
                 params = {
                     "page": page,
-                    "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                     "title": title,
                     "pmin": pmin,
                     "pmax": pmax,
@@ -6472,7 +6394,6 @@ class Market:
             self,
             category_name: Constants.Market.Category._Literal,
             page: int = None,
-            auction: str = None,
             title: str = None,
             pmin: float = None,
             pmax: float = None,
@@ -6497,7 +6418,6 @@ class Market:
 
             - **category_name** (str): Category name.
             - **page** (int): The number of the page to display results from
-            - **auction** (bool): Auction.
             - **title** (str): The word or words contained in the account title.
             - **pmin** (float): Minimal price of account (Inclusive).
             - **pmax** (float): Maximum price of account (Inclusive).
@@ -6518,11 +6438,8 @@ class Market:
             ```
             """
             path = f"/{category_name}"
-            if True:  # Tweak market
-                auction = _MainTweaks.market_variable_fix(auction)
             params = {
                 "page": page,
-                "auction": _MainTweaks.market_variable_fix(auction),  # Tweak market
                 "title": title,
                 "pmin": pmin,
                 "pmax": pmax,
@@ -6951,7 +6868,7 @@ class Market:
                 "username": username,
                 "currency": currency,
                 "comment": comment,
-                "hold": transfer_hold,
+                "transfer_hold": transfer_hold,
                 "hold_length_value": hold_length_value,
                 "hold_length_option": hold_length_option,
             }
@@ -7372,14 +7289,12 @@ class Market:
         def get(
             self,
             item_id: int,
-            auction: bool = False,
             steam_preview: bool = False,
             preview_type: Literal["profiles", "games"] = None,
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/{item_id}
             GET https://api.lzt.market/{item_id}/steam-preview
-            GET https://api.lzt.market/{item_id}/auction
 
             *Displays account information or returns Steam account html code.*
 
@@ -7399,9 +7314,7 @@ class Market:
             ```
             """
             path = f"/{item_id}"
-            if auction:
-                path = f"/{item_id}/auction"
-            elif steam_preview:
+            if steam_preview:
                 path = f"/{item_id}/steam-preview"
             params = {"type": preview_type}
             return _send_request(self=self._api, method="GET", path=path, params=params)
@@ -7827,75 +7740,6 @@ class Market:
     class __Purchasing:
         def __init__(self, _api_self):
             self._api = _api_self
-            self.auction = self.__Auction(self._api)
-
-        class __Auction:
-            def __init__(self, _api_self):
-                self._api = _api_self
-
-            @_MainTweaks._CheckScopes(scopes=["market"])
-            def place_bid(
-                self, item_id: int, amount: float, currency: Constants.Market.Currency._Literal = None
-            ) -> httpx.Response:
-                """
-                POST https://api.lzt.market/{item_id}/auction/bid
-
-                *Create a new auction bid.*
-
-                Required scopes: *market*
-
-                **Parameters:**
-
-                - **item_id** (int): ID of item.
-                - **amount** (float): Amount bid.
-                - **currency** (str): Using currency.
-
-                **Example:**
-
-                ```python
-                response = market.purchasing.auction.place_bid(item_id=1000000, amount=1000)
-                print(response.json())
-                ```
-                """
-                params = {"amount": amount, "currency": currency}
-                path = f"/{item_id}/auction/bid"
-                return _send_request(
-                    self=self._api,
-                    method="POST",
-                    path=path,
-                    params=params,
-                )
-
-            @_MainTweaks._CheckScopes(scopes=["market"])
-            def delete_bid(self, item_id: int, bid_id: int) -> httpx.Response:
-                """
-                GET https://api.lzt.market/{item_id}/auction/bid
-
-                *Delete your auction bid.*
-
-                Required scopes: *market*
-
-                **Parameters:**
-
-                - **item_id** (int): ID of item.
-                - **bid_id** (int): ID of bid.
-
-                **Example:**
-
-                ```python
-                response = market.purchasing.auction.delete_bid(item_id=1000000, bid_id=1000)
-                print(response.json())
-                ```
-                """
-                params = {"bid_id": bid_id}
-                path = f"/{item_id}/auction/bid"
-                return _send_request(
-                    self=self._api,
-                    method="DELETE",
-                    path=path,
-                    params=params,
-                )
-
         @_MainTweaks._CheckScopes(scopes=["market"])
         def check(self, item_id: int) -> httpx.Response:
             """
@@ -8079,11 +7923,6 @@ class Market:
             allow_ask_discount: bool = None,
             proxy_id: int = None,
             random_proxy: bool = None,
-            auction: bool = False,
-            auction_duration_value: int = None,
-            auction_duration_option: Literal["minutes", "hours", "days"] = None,
-            instabuy_price: float = None,
-            not_bids_action: str = None,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/item/add
@@ -8110,12 +7949,8 @@ class Market:
             - **email_type** (str): Email type.
             - **allow_ask_discount** (bool): Allow users to ask discount for this account.
             - **proxy_id** (int): Using proxy id for account checking.
-            - **random_proxy** (bool): Pass True, if you get captcha in previous response
-            - **auction** (bool): Pass True if you want to create auction
-            - **auction_duration_value** (int): Duration auction value.
-            - **auction_duration_option** (str): Duration auction option.
+            - **random_proxy** (bool): Pass True, if you get captcha in previous response.
             - **instabuy_price** (float): The price for which you can instantly redeem your account.
-            - **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
             **Example:**
 
@@ -8127,11 +7962,6 @@ class Market:
             path = "/item/add"
             params = {
                 "category_id": category_id,
-                "type_sell": "auction" if auction else "price",
-                "duration_auction_value": auction_duration_value if auction else None,
-                "duration_auction_option": auction_duration_option if auction else None,
-                "instant_price": instabuy_price if auction else None,
-                "not_bids_action": not_bids_action if auction else None,
                 "price": price,
                 "currency": currency,
                 "item_origin": item_origin,
@@ -8173,11 +8003,6 @@ class Market:
             password: str = None,
             login_password: str = None,
             extra: dict = None,
-            auction: bool = False,
-            auction_duration_value: int = None,
-            auction_duration_option: Literal["minutes", "hours", "days"] = None,
-            instabuy_price: float = None,
-            not_bids_action: str = None,
             close_item: bool = None,
             proxy: str = None,
         ) -> httpx.Response:
@@ -8211,11 +8036,6 @@ class Market:
             - **password** (str): Account password.
             - **login_password** (str): Account login data format login:password.
             - **extra** (str): Extra params for account checking.
-            - **auction** (bool): Pass True if you want to create auction.
-            - **auction_duration_value** (int): Duration auction value.
-            - **auction_duration_option** (str): Duration auction option.
-            - **instabuy_price** (float): The price for which you can instantly redeem your account.
-            - **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
             - **close_item** (bool): If True, the item will be closed item_state = closed.
             - **proxy** (str): Proxy line format ip:port:user:pass (prioritize over proxy_id parameter).
 
@@ -8230,11 +8050,6 @@ class Market:
             params = {
                 "category_id": category_id,
                 "price": price,
-                "type_sell": "auction" if auction else "price",
-                "duration_auction_value": auction_duration_value if auction else None,
-                "duration_auction_option": auction_duration_option if auction else None,
-                "instant_price": instabuy_price if auction else None,
-                "not_bids_action": not_bids_action if auction else None,
                 "currency": currency,
                 "item_origin": item_origin,
                 "extended_guarantee": extended_guarantee,
