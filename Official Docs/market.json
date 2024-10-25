@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.48"
+    "version": "1.1.49"
   },
   "servers": [
     {
@@ -791,6 +791,7 @@
                   "12 Labours of Hercules II: The Cretan Bull_cis",
                   "12 Labours of Hercules III: Girl Power_cis",
                   "12 Labours of Hercules_cis",
+                  "6.0",
                   "7 Days to Die",
                   "7 Days to Die_cis",
                   "8-Bit Hordes - Soundtrack",
@@ -831,16 +832,16 @@
                   "Alien Breed 3: Descent",
                   "Alien Rage - Unlimited",
                   "Aliens versus Predator Classic 2000",
-                  "Aliens vs. Predator\u2122",
+                  "Aliens vs. Predator™",
                   "American Conquest",
                   "American Truck Simulator",
                   "Among Us",
                   "An Alternative Reality: The Football Manager Documentary",
                   "An Alternative Reality: The Football Manager Documentary_cis",
                   "Anno 2070 Complete Edition",
-                  "Anno 2070\u2122  - The Nordamark Complete Package",
-                  "Anno 2070\u2122 - Deep Ocean",
-                  "Anno 2070\u2122 - The Financial Crisis Package",
+                  "Anno 2070™  - The Nordamark Complete Package",
+                  "Anno 2070™ - Deep Ocean",
+                  "Anno 2070™ - The Financial Crisis Package",
                   "Anomaly 2",
                   "Apewar",
                   "Arena Wars 2",
@@ -856,10 +857,10 @@
                   "Arma X Gift Copy",
                   "Assassin's Creed 2",
                   "Assassin's Creed Freedom Cry",
-                  "Assassin's Creed\u00ae Odyssey",
-                  "Assassin\u2019s Creed\u00ae III",
-                  "Assassin\u2019s Creed\u00ae III - The Tyranny of King Washington: The Redemption",
-                  "Assassin\u2019s Creed\u00ae III: The Betrayal",
+                  "Assassin's Creed® Odyssey",
+                  "Assassin’s Creed® III",
+                  "Assassin’s Creed® III - The Tyranny of King Washington: The Redemption",
+                  "Assassin’s Creed® III: The Betrayal",
                   "Assetto Corsa",
                   "Assetto Corsa_cis",
                   "Asteria",
@@ -883,18 +884,18 @@
                   "Baldur's Gate 3",
                   "Banished",
                   "Banished_cis",
-                  "Barbie\u2122 Dreamhouse Party\u2122",
+                  "Barbie™ Dreamhouse Party™",
                   "Barony",
                   "Barony_cis",
                   "Barro",
                   "Barro GT",
                   "Barro T23",
                   "Batman: Arkham City - Game of the Year Edition",
-                  "Batman\u2122: Arkham Knight - A Matter of Family_cis",
-                  "Batman\u2122: Arkham Knight - Harley Quinn Story Pack_cis",
-                  "Batman\u2122: Arkham Origins",
-                  "BattleBlock Theater\u00ae",
-                  "BattleBlock Theater\u00ae_cis",
+                  "Batman™: Arkham Knight - A Matter of Family_cis",
+                  "Batman™: Arkham Knight - Harley Quinn Story Pack_cis",
+                  "Batman™: Arkham Origins",
+                  "BattleBlock Theater®",
+                  "BattleBlock Theater®_cis",
                   "Battlefield Bad Company 2: SPECACT Kit Upgrade",
                   "Battlepillars Gold Edition",
                   "Battlepillars Gold Edition_cis",
@@ -971,13 +972,14 @@
                   "Call of Duty: Black Ops III Beta GIFT",
                   "Call of Duty: Black Ops III Beta GIFT_cis",
                   "Call of Duty: World at War",
-                  "Call of Duty\u00ae: Black Ops - Rezurrection Content Pack",
-                  "Call of Duty\u00ae: Black Ops First Strike Content Pack_cis",
-                  "Call of Duty\u00ae: Black Ops II - Party Rock Personalization Pack",
-                  "Call of Duty\u00ae: Black Ops II - Weaponized 115 Personalization Pack",
-                  "Call of Duty\u00ae: Modern Warfare\u00ae 2 (2009)",
-                  "Call of Duty\u00ae: Modern Warfare\u00ae 2 Resurgence Pack",
-                  "Call of Duty\u00ae: Modern Warfare\u00ae 2 Stimulus Package",
+                  "Call of Duty®: Black Ops - Rezurrection Content Pack",
+                  "Call of Duty®: Black Ops First Strike Content Pack_cis",
+                  "Call of Duty®: Black Ops II - Party Rock Personalization Pack",
+                  "Call of Duty®: Black Ops II - Weaponized 115 Personalization Pack",
+                  "Call of Duty®: Modern Warfare® 2 (2009)",
+                  "Call of Duty®: Modern Warfare® 2 Resurgence Pack",
+                  "Call of Duty®: Modern Warfare® 2 Stimulus Package",
+                  "Cannon Brawl",
                   "Car Mechanic Simulator 2014",
                   "Carmageddon 1 and 2",
                   "Carmageddon 1 and 2_cis",
@@ -987,8 +989,9 @@
                   "Caster_cis",
                   "Castle Crashers - Blacksmith Pack",
                   "Castle Crashers - Pink Knight Pack",
-                  "Castle Crashers\u00ae",
-                  "Castle Crashers\u00ae_cis",
+                  "Castle Crashers®",
+                  "Castle Crashers®_cis",
+                  "Castle of Illusion",
                   "CastleMiner Z",
                   "CastleMiner Z_cis",
                   "Chained Together",
@@ -1004,7 +1007,7 @@
                   "Chivalry: Medieval Warfare",
                   "Chivalry: Medieval Warfare_cis",
                   "Cities XL 2012",
-                  "Civilization IV\u00ae: Warlords",
+                  "Civilization IV®: Warlords",
                   "Civilization V - Civ and Scenario Double Pack: Spain and Inca",
                   "Civilization V - Scenario Pack: Wonders of the Ancient World",
                   "Civilization V: Cradle of Civilization - DLC Bundle",
@@ -1022,7 +1025,7 @@
                   "Company of Heroes Complete Pack",
                   "Company of Heroes: Opposing Fronts",
                   "Company of Heroes: Tales of Valor",
-                  "Concord\u2122 Beta",
+                  "Concord™ Beta",
                   "Congo",
                   "Congo_cis",
                   "Contagion",
@@ -1046,12 +1049,13 @@
                   "Crosshair X",
                   "Crusader Kings II Gift",
                   "Crypt of the NecroDancer",
-                  "Crysis Warhead\u00ae",
+                  "Crysis Warhead®",
+                  "Cthulhu Saves the World",
                   "Cube Destroyer",
                   "Cubicle Quest",
                   "Cubicle Quest_cis",
                   "D.W.A.R.F.S.",
-                  "DARK SOULS\u2122: Prepare To Die\u2122 Edition_cis",
+                  "DARK SOULS™: Prepare To Die™ Edition_cis",
                   "DEADCRAFT",
                   "DEFCON",
                   "DETOUR",
@@ -1067,7 +1071,8 @@
                   "Damned_cis",
                   "Dark Forester",
                   "Dark Frame",
-                  "Darkest Dungeon\u00ae_cis",
+                  "Dark Messiah of Might & Magic",
+                  "Darkest Dungeon®_cis",
                   "Darksiders II",
                   "Darksiders II Deathinitive Edition Soundtrack",
                   "Darwinia",
@@ -1092,7 +1097,7 @@
                   "Dead Sky",
                   "Dead by Daylight",
                   "Dead by Daylight - Sadako Rising Chapter",
-                  "Dead by Daylight - The Halloween\u00ae Chapter",
+                  "Dead by Daylight - The Halloween® Chapter",
                   "Dead by Daylight: BETA Gift - Expired",
                   "Dead by Daylight: BETA Gift - Expired_cis",
                   "Dead by Daylight_cis",
@@ -1117,6 +1122,7 @@
                   "Depth",
                   "Depth_cis",
                   "Despair",
+                  "Desperados 2: Cooper's Revenge",
                   "Destiny 2: The Final Shape + Annual Pass",
                   "Detroit: Become Human",
                   "Deus Ex: Game of the Year Edition",
@@ -1153,7 +1159,7 @@
                   "Dragon Age: Origins - Ultimate Edition",
                   "DreadOut Soundtrack & Manga DLC",
                   "Drift racing car",
-                  "Driver\u00ae Parallel Lines",
+                  "Driver® Parallel Lines",
                   "Drunken Robot Pornography",
                   "Duck Game",
                   "Duck Game_cis",
@@ -1171,6 +1177,7 @@
                   "Dungeon Defenders: Assault Mission Pack",
                   "Dungeon Defenders: Summoner Hero DLC_cis",
                   "Dungeonland Gift",
+                  "Dungeons",
                   "Dungeons & Dragons: Chronicles of Mystara",
                   "Dungeons 2",
                   "Dungeons 2 - A Chance of Dragons",
@@ -1187,14 +1194,14 @@
                   "E.T. Armies",
                   "E.Y.E: Divine Cybermancy",
                   "EDGE",
-                  "ENDLESS\u2122 Dungeon \u2013 Closed Beta",
-                  "ENDLESS\u2122 Space - Definitive Edition",
+                  "ENDLESS™ Dungeon – Closed Beta",
+                  "ENDLESS™ Space - Definitive Edition",
                   "Edge of Space",
                   "Electronic Super Joy: Groove City",
                   "Elite Dangerous",
-                  "Empire: Total War\u2122 - Elite Units of America",
-                  "Empire: Total War\u2122 - Elite Units of the East",
-                  "Empire: Total War\u2122 - The Warpath Campaign",
+                  "Empire: Total War™ - Elite Units of America",
+                  "Empire: Total War™ - Elite Units of the East",
+                  "Empire: Total War™ - The Warpath Campaign",
                   "Empyrion - Galactic Survival",
                   "Enter the Gungeon",
                   "Epic Showdown",
@@ -1217,8 +1224,8 @@
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack",
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack_cis",
                   "Excalibur Sim Bundle",
-                  "F1 2012\u2122",
-                  "F1 RACE STARS\u2122",
+                  "F1 2012™",
+                  "F1 RACE STARS™",
                   "FEZ",
                   "FINAL FANTASY VII",
                   "FORCED: Slightly Better Edition",
@@ -1233,14 +1240,15 @@
                   "Fallout 4 - Wasteland Workshop",
                   "Fallout 4 Far Harbor",
                   "Fallout 4 Season Pass",
+                  "Fallout Classic Collection",
                   "Fallout New Vegas Courier's Stash",
                   "Fallout New Vegas Ultimate",
                   "Fallout New Vegas Ultimate PCR",
-                  "Fallout New Vegas\u00ae: Lonesome Road\u2122",
+                  "Fallout New Vegas®: Lonesome Road™",
                   "Fantasy Grounds Classic",
                   "Fantasy Wars",
                   "Far Cry 3",
-                  "Far Cry\u00ae",
+                  "Far Cry®",
                   "Farming Simulator 17 - KUHN Equipment Pack",
                   "Feign",
                   "Fields of Mistria",
@@ -1255,8 +1263,8 @@
                   "FlatOut",
                   "FlatOut 2",
                   "FlatOut 2_cis",
-                  "FlatOut 2\u2122",
-                  "FlatOut 2\u2122_cis",
+                  "FlatOut 2™",
+                  "FlatOut 2™_cis",
                   "FlatOut: Ultimate Carnage Collector's Edition",
                   "FlatOut_cis",
                   "Flower",
@@ -1270,7 +1278,7 @@
                   "Frankenstein: Master of Death",
                   "Frankenstein: Master of Death_cis",
                   "Freddi Fish and the Case of the Missing Kelp Seeds",
-                  "Frontlines\u2122: Fuel of War\u2122",
+                  "Frontlines™: Fuel of War™",
                   "Frozen Cortex",
                   "Frozen Synapse",
                   "Frozen Synapse Prime",
@@ -1279,7 +1287,7 @@
                   "Furry Killer",
                   "Furry Love",
                   "Furry Orgasm",
-                  "Furry Reich \ud83d\udc3a",
+                  "Furry Reich 🐺",
                   "Fury Unleashed",
                   "Future Wars",
                   "GRID Autosport",
@@ -1291,12 +1299,14 @@
                   "Garry's Mod_cis",
                   "Gas Guzzlers Extreme",
                   "Gas Guzzlers Extreme_cis",
-                  "Gauntlet\u2122 Slayer Edition",
+                  "Gauntlet™ Slayer Edition",
                   "Geometry Dash",
                   "Getting Over It with Bennett Foddy",
+                  "GiAnt - A GiAnt Soundtrack",
                   "Giana Sisters: Twisted Dreams",
                   "Girl Amazon Survival",
                   "Girls! Girls! Girls!?",
+                  "Global Ops: Commando Libya",
                   "Goat Simulator: GoatZ",
                   "God Mode",
                   "Gomo",
@@ -1330,10 +1340,9 @@
                   "Guns of Icarus Online",
                   "Guns of Icarus Online_cis",
                   "Gunsmith Simulator",
-                  "HELLDIVERS\u2122 2",
+                  "HELLDIVERS™ 2",
                   "HOARD",
                   "Hack 'n' Slash",
-                  "Hacker Evolution Duality",
                   "Hacker Evolution: Untold",
                   "Half Dead",
                   "Half Minute Hero: The Second Coming",
@@ -1352,6 +1361,7 @@
                   "Hammerwatch",
                   "Hand Simulator",
                   "Hearts of Iron III: Semper Fi",
+                  "Heileen 3: New Horizons",
                   "Hell Let Loose",
                   "Hentai Furry",
                   "Hentai Shooter 3D",
@@ -1420,14 +1430,16 @@
                   "Knight Adventure",
                   "Knights and Merchants",
                   "Kopanito All-Stars Soccer",
-                  "LARA CROFT AND THE TEMPLE OF OSIRIS\u2122",
-                  "LARA CROFT AND THE TEMPLE OF OSIRIS\u2122_cis",
+                  "LARA CROFT AND THE TEMPLE OF OSIRIS™",
+                  "LARA CROFT AND THE TEMPLE OF OSIRIS™_cis",
                   "LEGO Jurassic World: Jurassic Park Trilogy DLC Pack 1",
                   "LEGO Jurassic World: Jurassic World DLC Pack",
-                  "LEGO\u00ae Batman\u2122 2: DC Super Heroes",
-                  "LEGO\u00ae Batman\u2122: The Videogame",
-                  "LEGO\u00ae Batman\u2122: The Videogame_cis",
-                  "LEGO\u00ae Worlds",
+                  "LEGO® Batman™ 2: DC Super Heroes",
+                  "LEGO® Batman™: The Videogame",
+                  "LEGO® Batman™: The Videogame_cis",
+                  "LEGO® The Hobbit™_cis",
+                  "LEGO® The Lord of the Rings™_cis",
+                  "LEGO® Worlds",
                   "LIMBO",
                   "LIZARDS MUST DIE",
                   "LOCKDOWN Protocol",
@@ -1456,7 +1468,7 @@
                   "Little Inferno",
                   "Little Racers STREET",
                   "Lords of the Fallen - The Arcane Boost",
-                  "Lost Planet\u2122: Extreme Condition",
+                  "Lost Planet™: Extreme Condition",
                   "Lucius_cis",
                   "Lucy Got Problems - Artbook and Wallpapers (Silver Edition)",
                   "Lunar Flight",
@@ -1469,7 +1481,7 @@
                   "METAL SLUG X",
                   "METAL SLUG X_cis",
                   "METAL SLUG_cis",
-                  "MONOPOLY\u00ae PLUS",
+                  "MONOPOLY® PLUS",
                   "MQEL Founders Pack Gift",
                   "MX vs. ATV Unleashed",
                   "MXGP - The Official Motocross Videogame",
@@ -1484,6 +1496,7 @@
                   "Magicka_cis",
                   "Magnetis ",
                   "Mainframe Defenders",
+                  "Make America Great Again: The Trump Presidency",
                   "Manhunter_cis",
                   "Marble Mayhem: Fragile Ball",
                   "Marine Sharpshooter II: Jungle Warfare",
@@ -1495,14 +1508,14 @@
                   "Medieval Engineers_cis",
                   "Men of War: Assault Squad 2_cis",
                   "Men of War: Vietnam",
-                  "Men of War\u2122",
+                  "Men of War™",
                   "Mercenary Kings: Reloaded Edition",
                   "Meridian: New World",
                   "Metal Drift",
                   "Metro 2033",
                   "Metro 2033 Redux",
                   "Microsoft Flight Simulator X: Steam Edition_cis",
-                  "Middle-earth\u2122: Shadow of War\u2122",
+                  "Middle-earth™: Shadow of War™",
                   "Minimon",
                   "Minimum",
                   "Minion Masters",
@@ -1510,7 +1523,7 @@
                   "Mirage: Arcane Warfare Beta",
                   "Miscreated",
                   "Mister Furry",
-                  "Modern Warfare\u00ae III or Call of Duty\u00ae: Warzone\u2122 Points",
+                  "Modern Warfare® III or Call of Duty®: Warzone™ Points",
                   "Monaco: What's Yours Is Mine",
                   "Monday Night Combat",
                   "Monster Hunter Rise + Sunbreak",
@@ -1527,6 +1540,7 @@
                   "Mount & Blade: Warband",
                   "Mount & Blade: Warband - Napoleonic Wars",
                   "Mount & Blade: Warband - Viking Conquest Reforged Edition",
+                  "Mount & Blade: With Fire & Sword",
                   "Mount Your Friends",
                   "Mount Your Friends_cis",
                   "Mountain",
@@ -1548,7 +1562,7 @@
                   "NARUTO SHIPPUDEN: Ultimate Ninja STORM Revolution_cis",
                   "NBA 2K16",
                   "NEStalgia Gift",
-                  "Napoleon: Total War\u2122 - The Peninsular Campaign",
+                  "Napoleon: Total War™ - The Peninsular Campaign",
                   "Narco Terror Gift",
                   "Nation Red",
                   "Nation Red_cis",
@@ -1556,10 +1570,10 @@
                   "Natural Selection 2_cis",
                   "Naval Warfare",
                   "Ne no Kami - The Two Princess Knights of Kyoto Extra Story",
-                  "Need for Speed\u2122 Heat",
+                  "Need for Speed™ Heat",
                   "Nexuiz",
                   "Nidhogg",
-                  "NieR:Automata\u2122",
+                  "NieR:Automata™",
                   "Nikopol: Secrets of the Immortals",
                   "No Man's Sky",
                   "No Time to Relax",
@@ -1607,12 +1621,13 @@
                   "Overkill's The Walking Dead - BETA Gift - Retired",
                   "Overkill's The Walking Dead - BETA Gift - Retired_cis",
                   "Overlord: Fellowship of Evil",
-                  "Overlord\u2122: Raising Hell",
+                  "Overlord™: Raising Hell",
                   "Overture",
-                  "Overwatch\u00ae 2 - Ultimate Battle Pass Bundle: Season 11",
-                  "Overwatch\u00ae 2 Starter Pack: Season 11",
+                  "Overwatch® 2 - Ultimate Battle Pass Bundle: Season 11",
+                  "Overwatch® 2 Starter Pack: Season 11",
                   "Oxenfree",
                   "Oxygen Not Included",
+                  "PAC-MAN Championship Edition DX+ All You Can Eat Edition Bundle",
                   "PANICORE",
                   "PARTICLE MACE",
                   "PAYDAY 2",
@@ -1639,10 +1654,10 @@
                   "PAYDAY 2: The OVERKILL Pack_cis",
                   "PAYDAY 2: The Official Soundtrack",
                   "PAYDAY 2: The Point Break Heists",
-                  "PAYDAY\u2122 The Heist",
-                  "PAYDAY\u2122 The Heist: Wolfpack DLC",
-                  "PAYDAY\u2122 The Heist: Wolfpack DLC_cis",
-                  "PAYDAY\u2122 The Heist_cis",
+                  "PAYDAY™ The Heist",
+                  "PAYDAY™ The Heist: Wolfpack DLC",
+                  "PAYDAY™ The Heist: Wolfpack DLC_cis",
+                  "PAYDAY™ The Heist_cis",
                   "POSTAL 2",
                   "Pacify",
                   "Painkiller Hell & Damnation",
@@ -1661,14 +1676,16 @@
                   "Phasmophobia",
                   "Placid Plastic Duck Simulator",
                   "Plague Inc: Evolved_cis",
+                  "Planetary Annihilation: TITANS",
                   "Plants vs. Zombies GOTY Edition",
-                  "Plants vs. Zombies\u2122 Garden Warfare 2: Deluxe Edition",
+                  "Plants vs. Zombies™ Garden Warfare 2: Deluxe Edition",
                   "Plazma Being_cis",
                   "Plug & Play",
                   "Poker Night 2",
                   "Poker Night at the Inventory",
                   "Polarity",
                   "Polarity_cis",
+                  "Port Royale 3",
                   "Port Royale 3 Gold and Patrician IV Gold - Double Pack",
                   "Portal",
                   "Portal 2",
@@ -1685,7 +1702,7 @@
                   "Primal Carnage_cis",
                   "Prime Status Upgrade",
                   "Prime Status Upgrade_cis",
-                  "Prince of Persia\u00ae: The Sands of Time",
+                  "Prince of Persia®: The Sands of Time",
                   "Project Zomboid",
                   "Project Zomboid_cis",
                   "Psi Cards - Soundtrack",
@@ -1698,7 +1715,7 @@
                   "Pyre_cis",
                   "RIFT",
                   "RIPD: The Game (ROW) Gift",
-                  "RISK\u2122: Factions",
+                  "RISK™: Factions",
                   "RPG Maker VX Ace",
                   "RUSH",
                   "RUSH_cis",
@@ -1722,7 +1739,7 @@
                   "Resident Evil 6",
                   "Resident Evil Re:Verse - Hunk Skin: Grim Reaper (The Mercenaries 3D)",
                   "Resident Evil Revelations 2",
-                  "Retro City Rampage\u2122 DX",
+                  "Retro City Rampage™ DX",
                   "Retrovirus_cis",
                   "Revolution Ace",
                   "Revolution Ace_cis",
@@ -1748,12 +1765,12 @@
                   "Rochard: Hard Times",
                   "Rocket League Gift",
                   "Rocket League&amp;reg;",
-                  "Rocket League\u00ae - Batman v Superman: Dawn of Justice Car Pack",
-                  "Rocket League\u00ae - Hot Wheels\u00ae Bone Shaker\u2122",
-                  "Rocket League\u00ae - Hot Wheels\u00ae Twin Mill\u2122 III",
-                  "Rocket League\u00ae - Supersonic Fury DLC Pack",
+                  "Rocket League® - Batman v Superman: Dawn of Justice Car Pack",
+                  "Rocket League® - Hot Wheels® Bone Shaker™",
+                  "Rocket League® - Hot Wheels® Twin Mill™ III",
+                  "Rocket League® - Supersonic Fury DLC Pack",
                   "Rogue Stormers",
-                  "Rome: Total War\u2122 - Collection",
+                  "Rome: Total War™ - Collection",
                   "Rubber Bandits",
                   "Rust",
                   "Rust - Instruments Pack",
@@ -1768,19 +1785,19 @@
                   "SCUM Supporter Pack 2",
                   "SCUM Weapon Skins pack",
                   "SCUM: Danny Trejo Character Pack",
-                  "SMITE\u00ae - Ultimate God Pack",
+                  "SMITE® - Ultimate God Pack",
                   "SNOW - The Ultimate Edition",
                   "SPACECOM",
                   "SPACECOM_cis",
-                  "SPORE\u2122 Creepy & Cute Parts Pack",
+                  "SPORE™ Creepy & Cute Parts Pack",
                   "SSHDSE ROW Gift",
-                  "STAR WARS\u2122 Jedi Knight - Mysteries of the Sith\u2122",
-                  "STAR WARS\u2122 Jedi Knight II - Jedi Outcast\u2122",
+                  "STAR WARS™ Jedi Knight - Mysteries of the Sith™",
+                  "STAR WARS™ Jedi Knight II - Jedi Outcast™",
                   "Sable",
                   "Sacred Citadel",
                   "Saints Row 2",
                   "Saints Row IV: Commander-In-Chief Pack",
-                  "Saints Row: Gat out of Hell - Devil\u2019s Workshop pack",
+                  "Saints Row: Gat out of Hell - Devil’s Workshop pack",
                   "Saints Row: The Third - The Full Package",
                   "Saints Row: The Third Season Pass DLC Pack",
                   "Sanctum",
@@ -1825,14 +1842,15 @@
                   "Sid Meier's Civilization IV",
                   "Sid Meier's Civilization V: Gods and Kings",
                   "Sid Meier's Civilization: Beyond Earth Exoplanets Map Pack",
-                  "Sid Meier's Civilization\u00ae III Complete",
-                  "Sid Meier's Civilization\u00ae V",
-                  "Sid Meier's Civilization\u00ae VI: Gathering Storm",
-                  "Sid Meier's Civilization\u00ae V_cis",
-                  "Sid Meier\u2019s Civilization\u00ae VI: Rise and Fall",
+                  "Sid Meier's Civilization® III Complete",
+                  "Sid Meier's Civilization® V",
+                  "Sid Meier's Civilization® VI: Gathering Storm",
+                  "Sid Meier's Civilization® V_cis",
+                  "Sid Meier’s Civilization® VI: Rise and Fall",
                   "Silver Chains",
                   "Sins of a Dark Age - Early Access Gift",
-                  "Sins of a Solar Empire\u00ae: Rebellion",
+                  "Sins of a Solar Empire®: Rebellion",
+                  "Sir, You Are Being Hunted",
                   "Skullgirls 2nd Encore",
                   "Skullgirls 2nd Encore_cis",
                   "Skullgirls: Beowulf",
@@ -1856,16 +1874,17 @@
                   "Sniper Ghost Warrior Gold (base + 2 DLC) Gift",
                   "Sniper: Ghost Warrior 2",
                   "Soccer Online: Ball 3D",
+                  "Sol Survivor",
                   "Sonic & SEGA All-Stars Racing",
                   "Sonic 3D Blast",
                   "Sonic The Hedgehog Gift Copy",
                   "Sonic and All-Stars Racing Transformed: Metal Sonic & Outrun DLC",
                   "Soul Gambler: Dark Arts Edition",
                   "Soundpad",
-                  "South Park\u2122: The Stick of Truth\u2122",
-                  "South Park\u2122: The Stick of Truth\u2122 - Super Samurai Spaceman Pack",
-                  "South Park\u2122: The Stick of Truth\u2122 - Ultimate Fellowship Pack",
-                  "South Park\u2122: The Stick of Truth\u2122_cis",
+                  "South Park™: The Stick of Truth™",
+                  "South Park™: The Stick of Truth™ - Super Samurai Spaceman Pack",
+                  "South Park™: The Stick of Truth™ - Ultimate Fellowship Pack",
+                  "South Park™: The Stick of Truth™_cis",
                   "Space Beast Terror Fright",
                   "Space Engineers",
                   "Space Engineers_cis",
@@ -1912,7 +1931,7 @@
                   "Stranded Deep_cis",
                   "Stray",
                   "Street Fighter V Beta Gift",
-                  "Street Fighter\u2122 6",
+                  "Street Fighter™ 6",
                   "Strike Vector",
                   "Stronghold Crusader 2",
                   "Stronghold Crusader 2_cis",
@@ -1929,6 +1948,7 @@
                   "Super Monday Night Combat",
                   "Super Monday Night Combat Gift",
                   "Super Monday Night Combat Gift_cis",
+                  "Super Panda Adventures",
                   "Supermarket Together - The Cool Pack",
                   "Supreme Commander: Forged Alliance",
                   "Surgeon Simulator",
@@ -1975,7 +1995,7 @@
                   "The Chaos Engine",
                   "The Crew Wild Run - Beta Gift Copy",
                   "The Crew Wild Run - Beta Gift Copy_cis",
-                  "The Crew\u2122 2",
+                  "The Crew™ 2",
                   "The Daedalic Armageddon Bundle",
                   "The Darkness II",
                   "The Deed: Dynasty",
@@ -1991,6 +2011,7 @@
                   "The Haunted: Hells Reach",
                   "The Howler_cis",
                   "The I of the Dragon",
+                  "The Journey Down: Chapter One",
                   "The Long Dark_cis",
                   "The Long Drive",
                   "The Odyssey: Winds of Athena_cis",
@@ -2002,11 +2023,12 @@
                   "The Secret of Monkey Island: Special Edition",
                   "The Ship - 2 Pack Gift",
                   "The Ship Gift",
+                  "The Silent Age",
                   "The Sims 3 - Movie Stuff",
                   "The Sims 3: Island Paradise",
-                  "The Sims\u2122 3 Generations",
-                  "The Sims\u2122 3 Showtime",
-                  "The Sims\u2122 4",
+                  "The Sims™ 3 Generations",
+                  "The Sims™ 3 Showtime",
+                  "The Sims™ 4",
                   "The Survivalists",
                   "The Testament of Sherlock Holmes",
                   "The Walking Dead",
@@ -2034,18 +2056,18 @@
                   "Toilet Tycoon",
                   "Toki Tori",
                   "Toki Tori_cis",
-                  "Tom Clancy's  The Division\u2122 -  Military Specialists Outfits Pack",
-                  "Tom Clancy's EndWar\u2122",
+                  "Tom Clancy's  The Division™ -  Military Specialists Outfits Pack",
+                  "Tom Clancy's EndWar™",
                   "Tom Clancy's Rainbow Six Siege - Beta Gift",
                   "Tom Clancy's Rainbow Six Siege - Beta Gift_cis",
-                  "Tom Clancy's Rainbow Six\u00ae 3 Gold",
-                  "Tom Clancy's Rainbow Six\u00ae Siege",
-                  "Tom Clancy's Rainbow Six\u00ae Vegas",
-                  "Tom Clancy's Rainbow Six\u00ae Vegas 2",
-                  "Tom Clancy's Rainbow Six\u00ae Vegas_cis",
-                  "Tom Clancy's Splinter Cell\u00ae_cis",
-                  "Tom Clancy\u2019s Splinter Cell Blacklist",
-                  "Tom Clancy\u2019s The Division\u2122",
+                  "Tom Clancy's Rainbow Six® 3 Gold",
+                  "Tom Clancy's Rainbow Six® Siege",
+                  "Tom Clancy's Rainbow Six® Vegas",
+                  "Tom Clancy's Rainbow Six® Vegas 2",
+                  "Tom Clancy's Rainbow Six® Vegas_cis",
+                  "Tom Clancy's Splinter Cell®_cis",
+                  "Tom Clancy’s Splinter Cell Blacklist",
+                  "Tom Clancy’s The Division™",
                   "Tomb Raider",
                   "Tomb Raider VI: The Angel of Darkness",
                   "Tomb Raider: Anniversary",
@@ -2055,20 +2077,20 @@
                   "Tomb Raider_cis",
                   "Torchlight",
                   "Torchlight II",
-                  "Total War Saga: FALL OF THE SAMURAI \u2013 The Tsu Faction Pack",
+                  "Total War Saga: FALL OF THE SAMURAI – The Tsu Faction Pack",
                   "Total War: PHARAOH",
                   "Total War: ROME II - Caesar in Gaul Campaign Pack",
                   "Total War: ROME II - Greek States Culture Pack",
                   "Total War: SHOGUN 2 - Rise of the Samurai Campaign",
                   "Total War: SHOGUN 2 - The Hattori Clan Pack",
                   "Total War: Shogun 2 - Blood Pack DLC",
-                  "Total War: WARHAMMER III - Elspeth \u2013 Thrones of Decay",
+                  "Total War: WARHAMMER III - Elspeth – Thrones of Decay",
                   "Totally Accurate Battle Simulator",
                   "Tower Wars",
                   "Town of Salem",
                   "Toybox Turbos",
-                  "TrackMania\u00b2 Stadium",
-                  "Trainz\u2122 Simulator 12",
+                  "TrackMania² Stadium",
+                  "Trainz™ Simulator 12",
                   "Transistor",
                   "Trapped Dead",
                   "Trapped Dead: Lockdown",
@@ -2085,7 +2107,7 @@
                   "Two Worlds II HD",
                   "UNO",
                   "USFIV: All-in 2011 Costume Pack",
-                  "Ultra Street Fighter\u00ae IV Digital Upgrade",
+                  "Ultra Street Fighter® IV Digital Upgrade",
                   "Ultratron",
                   "Undertale",
                   "Unknown package 101060",
@@ -2094,14 +2116,19 @@
                   "Unknown package 11664",
                   "Unknown package 11754",
                   "Unknown package 118358",
+                  "Unknown package 123216",
+                  "Unknown package 12670",
                   "Unknown package 12671",
                   "Unknown package 12696",
                   "Unknown package 12704",
                   "Unknown package 12721",
+                  "Unknown package 12736",
                   "Unknown package 12754",
                   "Unknown package 12764",
+                  "Unknown package 12766",
                   "Unknown package 12797",
                   "Unknown package 12893",
+                  "Unknown package 12897",
                   "Unknown package 12898",
                   "Unknown package 13093",
                   "Unknown package 13094",
@@ -2116,6 +2143,7 @@
                   "Unknown package 1580",
                   "Unknown package 16535",
                   "Unknown package 17741",
+                  "Unknown package 17881",
                   "Unknown package 17881_cis",
                   "Unknown package 18246",
                   "Unknown package 18251",
@@ -2147,6 +2175,7 @@
                   "Unknown package 40649",
                   "Unknown package 41305_cis",
                   "Unknown package 42337_cis",
+                  "Unknown package 42480",
                   "Unknown package 43381",
                   "Unknown package 44220",
                   "Unknown package 45019",
@@ -2161,6 +2190,7 @@
                   "Unknown package 54030_cis",
                   "Unknown package 54109",
                   "Unknown package 54471",
+                  "Unknown package 54909",
                   "Unknown package 55833",
                   "Unknown package 55834",
                   "Unknown package 56486_cis",
@@ -2207,8 +2237,8 @@
                   "Urban Trial Freestyle",
                   "VEGAS Pro 14 Edit Steam Edition",
                   "VVVVVV",
-                  "Valkyria Chronicles\u2122",
-                  "Vegas: Make It Big\u2122",
+                  "Valkyria Chronicles™",
+                  "Vegas: Make It Big™",
                   "Velvet Assassin",
                   "Verdun",
                   "Verdun_cis",
@@ -2231,8 +2261,8 @@
                   "Warhammer 40,000: Eternal Crusade_cis",
                   "Warhammer 40,000: Rogue Trader",
                   "Warhammer 40,000: Space Marine - Chaos Unleashed Map Pack",
-                  "Warhammer 40,000: Space Marine - Emperor\u2019s Elite Pack",
-                  "Watch_Dogs\u2122",
+                  "Warhammer 40,000: Space Marine - Emperor’s Elite Pack",
+                  "Watch_Dogs™",
                   "Waveform",
                   "Wayout",
                   "We Were Here Expeditions: The FriendShip",
@@ -2276,7 +2306,7 @@
                   "ibb & obb",
                   "ibb & obb_cis",
                   "ibb &amp; obb - Gift  Luxurious Friends Forever",
-                  "\u6015\u4e0d\u6015\u8db4\u55b5\u9738\u9738 Ghost Party Nyanbaba"
+                  "怕不怕趴喵霸霸 Ghost Party Nyanbaba"
                 ]
               }
             }
@@ -5869,6 +5899,7 @@
                   "character_ironblaze",
                   "character_ironclash",
                   "character_ivycross",
+                  "character_jazzshoes",
                   "character_jonesyorangefncs",
                   "character_joyfulgrin",
                   "character_jumpsuit_mutable",
@@ -7390,6 +7421,7 @@
                   "pickaxe_ironblaze",
                   "pickaxe_ironclash",
                   "pickaxe_ivycross",
+                  "pickaxe_jazzshoes",
                   "pickaxe_jollytroll",
                   "pickaxe_joyfulgrin",
                   "pickaxe_keytracker",
@@ -8851,6 +8883,7 @@
                   "jaywalking",
                   "jazzdance",
                   "jazzhands",
+                  "jazzshoes",
                   "jellyfrog",
                   "jiggle",
                   "jingle",
@@ -8978,6 +9011,8 @@
                   "megatoof",
                   "melancholy",
                   "melody",
+                  "memory",
+                  "memory_follower",
                   "mercurialstorm",
                   "mesmerize",
                   "meticulous",
@@ -9549,8 +9584,7 @@
                   "Live",
                   "Nintendo",
                   "PSN",
-                  "Samsung",
-                  "xbl"
+                  "Samsung"
                 ]
               }
             }
@@ -14876,7 +14910,8 @@
                   "personal",
                   "resale",
                   "autoreg",
-                  "dummy"
+                  "dummy",
+                  "self_registration"
                 ]
               }
             }
@@ -42753,7 +42788,7 @@
         ],
         "summary": "Get Account",
         "description": "Displays account information.",
-        "operationId": "accountsList.getInformation",
+        "operationId": "accountsManaging.GetAccount",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -42859,7 +42894,7 @@
                   "post_body": {
                     "title": "Post Body",
                     "type": "string",
-                    "description": "You should describe what's happened.\n- describe the situation in a nutshell. If you wish, you can describe the situation in more detail using the \"Spoiler\" function.\n- attach screenshots of correspondence. You must upload to the site [Imgur](https://imgur.com/upload) - for convenience, use Ctrl + V when uploading screenshots to the album.\n- other evidence;\n- notify the respondent about the complaint you created, familiarize him with hidden content\n\nDescribe the situation in as much detail as possible."
+                    "description": "You should describe what's happened.\n- describe the situation in a nutshell. If you wish, you can describe the situation in more detail using the \"Spoiler\" function.\n- attach screenshots of correspondence. You must upload to the site [Imgur](https://imgur.com/upload)\n- other evidence;\n- notify the respondent about the complaint you created, familiarize him with hidden content\n\nDescribe the situation in as much detail as possible."
                   }
                 }
               }
@@ -43513,7 +43548,7 @@
           "Accounts managing"
         ],
         "summary": "Bulk Get Accounts",
-        "description": "Bulk get up to 250 accounts.",
+        "description": "Bulk get up to 250 accounts.\nYou can get only your accounts or those you have purchased.",
         "operationId": "accountsManaging.BulkItems",
         "requestBody": {
           "required": true,
@@ -43527,8 +43562,7 @@
                     "type": "array",
                     "items": {
                       "type": "integer",
-                      "minimum": 1,
-                      "maxItems": 250
+                      "minimum": 1
                     }
                   }
                 }
@@ -43822,7 +43856,7 @@
           "Accounts managing"
         ],
         "summary": "Get Steam Inventory Value",
-        "description": "Gets steam inventory value.\n> \u0440\u045f\u0459\u00a7 This method is rate limited. You can send 20 requests per minute (3s delay between requests)",
+        "description": "Gets steam inventory value.\n> 📘 This method is rate limited. You can send 20 requests per minute (3s delay between requests)",
         "operationId": "accountsManaging.getSteamInventoryValue",
         "parameters": [
           {
@@ -44058,7 +44092,7 @@
           "Accounts managing"
         ],
         "summary": "Get Steam HTML",
-        "description": "Returns Steam account html code.",
+        "description": "Returns Steam account profile/games preview.",
         "operationId": "accountsList.getSteamHtml",
         "parameters": [
           {
@@ -44119,14 +44153,24 @@
           "Accounts managing"
         ],
         "summary": "Edit Account",
-        "description": "Edits any details of account.\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)",
+        "description": "Edits any details of account.",
         "operationId": "accountsManaging.edit",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
           },
           {
-            "$ref": "#/components/parameters/title"
+            "name": "title",
+            "in": "query",
+            "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Title Ru",
+              "type": "string",
+              "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language."
+            }
           },
           {
             "name": "title_en",
@@ -44169,14 +44213,14 @@
           {
             "name": "item_origin",
             "in": "query",
-            "description": "Account origin. Where did you get it from.",
+            "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Item Origin",
               "type": "string",
-              "description": "Account origin. Where did you get it from.",
+              "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
               "enum": [
                 "brute",
                 "fishing",
@@ -44204,14 +44248,14 @@
           {
             "name": "information",
             "in": "query",
-            "description": "Account private information (visible for buyer only if purchased).",
+            "description": "Account private information (visible only for buyer).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Information",
               "type": "string",
-              "description": "Account private information (visible for buyer only if purchased)."
+              "description": "Account private information (visible only for buyer)."
             }
           },
           {
@@ -44468,22 +44512,6 @@
               "description": "Current price of account in your currency.",
               "minimum": 1
             }
-          },
-          {
-            "name": "buy_without_validation",
-            "in": "query",
-            "description": "Put **1** if you want to buy account without account data validation (not safe).",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Buy Without Validation",
-              "type": "integer",
-              "enum": [
-                1
-              ],
-              "description": "Put **1** if you want to buy account without account data validation (not safe)."
-            }
           }
         ],
         "responses": {
@@ -44515,7 +44543,7 @@
           "Account purchasing"
         ],
         "summary": "Check Account",
-        "description": "Checking account for validity. If the account is invalid, the purchase will be canceled automatically.",
+        "description": "Checking account for validity.",
         "operationId": "accountsPurchasing.check",
         "parameters": [
           {
@@ -44551,7 +44579,7 @@
           "Account purchasing"
         ],
         "summary": "Confirm Buy",
-        "description": "Confirm buy.\n\n> \u0440\u045f\u0459\u00a7 This method doesn't check account for validity. If you want to confirm validity before buying, you should use [FastBuy](https://lzt-market.readme.io/reference/accountspurchasingcheckbuy) method",
+        "description": "Confirm buy.\n\n> ❗️ This method doesn't check account for validity. If you want to confirm validity before buying, you should use [FastBuy](https://lzt-market.readme.io/reference/accountspurchasingcheckbuy) method",
         "operationId": "accountsPurchasing.confirmBuy",
         "parameters": [
           {
@@ -44679,12 +44707,22 @@
         "tags": [
           "Account publishing"
         ],
-        "summary": "Fast Sell Account",
-        "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"captcha\" error, that you should send same request again.**\n\nAccount origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
+        "summary": "Fast Account Upload",
+        "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"captcha\" error, that you should send same request again.**",
         "operationId": "accountPublishing.fastSell",
         "parameters": [
           {
-            "$ref": "#/components/parameters/title"
+            "name": "title",
+            "in": "query",
+            "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Title Ru",
+              "type": "string",
+              "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language."
+            }
           },
           {
             "name": "title_en",
@@ -44719,12 +44757,12 @@
           {
             "name": "item_origin",
             "in": "query",
-            "description": "Account origin. Where did you get it from.",
+            "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
-              "description": "Account origin. Where did you get it from.",
+              "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
               "type": "string",
               "enum": [
                 "brute",
@@ -44772,14 +44810,14 @@
           {
             "name": "proxy_id",
             "in": "query",
-            "description": "Using proxy id for account checking.",
+            "description": "Proxy id that will be used to check account.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Proxy Id",
               "type": "integer",
-              "description": "Using proxy id for account checking."
+              "description": "Proxy id that will be used to check account."
             }
           },
           {
@@ -44798,7 +44836,7 @@
                     "type": "string"
                   },
                   "information": {
-                    "description": "Account private information (visible for buyer only if purchased).",
+                    "description": "Account private information (visible only for buyer).",
                     "title": "Information",
                     "type": "string"
                   },
@@ -44916,11 +44954,21 @@
           "Account publishing"
         ],
         "summary": "Add Account",
-        "description": "Adds account on the market.\n\nAccount origin. Where did you get it from.\n\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
+        "description": "Adds account on the market.\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
         "operationId": "accountPublishing.addItem",
         "parameters": [
           {
-            "$ref": "#/components/parameters/title"
+            "name": "title",
+            "in": "query",
+            "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Title Ru",
+              "type": "string",
+              "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language."
+            }
           },
           {
             "name": "title_en",
@@ -44962,7 +45010,7 @@
             "schema": {
               "title": "Item Origin",
               "type": "string",
-              "description": "Account origin. Where did you get it from.",
+              "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
               "enum": [
                 "brute",
                 "fishing",
@@ -45009,14 +45057,14 @@
           {
             "name": "information",
             "in": "query",
-            "description": "Account private information (visible for buyer only if purchased).",
+            "description": "Account private information (visible only for buyer).",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Information",
               "type": "string",
-              "description": "Account private information (visible for buyer only if purchased)."
+              "description": "Account private information (visible only for buyer)."
             }
           },
           {
@@ -45078,14 +45126,14 @@
           {
             "name": "proxy_id",
             "in": "query",
-            "description": "Using proxy id for account checking.",
+            "description": "Proxy id that will be used to check account.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Proxy Id",
               "type": "integer",
-              "description": "Using proxy id for account checking."
+              "description": "Proxy id that will be used to check account."
             }
           },
           {
@@ -45140,9 +45188,9 @@
         "tags": [
           "Account publishing"
         ],
-        "summary": "Check Not Published Account",
+        "summary": "Check Account Details",
         "description": "Check and put up to sale not published account OR update account information existing account.\n\n**If you receive a \"captcha\" error, that you should send same request again.**",
-        "operationId": "accountsPublishing.checkNotPublic",
+        "operationId": "accountsPublishing.CheckDetails",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -45237,8 +45285,8 @@
         "tags": [
           "Account publishing"
         ],
-        "summary": "Get Info Not Published Account (Get temp email for account)",
-        "description": "Get info about not published item. For categories, which required temporary email (Steam, Social Club), you will get temporary email in response.",
+        "summary": "Get Temporary Mail",
+        "description": "Get info about not published item. For categories, which required temporary email, you will get temporary email in response.",
         "operationId": "accountsPublishing.getInfoNotPublic",
         "parameters": [
           {
@@ -45399,7 +45447,7 @@
           "Accounts managing"
         ],
         "summary": "Get Mafile Json",
-        "description": "Returns mafile in JSON. **Warning: this action is cancelling active account guarantee.**",
+        "description": "Returns steam mafile.\n> ❗️ this action is cancelling active account guarantee",
         "operationId": "accountsManaging.getMafileJSON",
         "parameters": [
           {
@@ -46120,7 +46168,7 @@
           "Accounts managing"
         ],
         "summary": "Unstick Account",
-        "description": "Unstick account of the top of search.",
+        "description": "Unstick account from the top of search.",
         "operationId": "accountsManaging.unstick",
         "parameters": [
           {
@@ -46156,7 +46204,7 @@
           "Accounts managing"
         ],
         "summary": "Change Account Owner",
-        "description": "Change of account owner.",
+        "description": "Transfer account to another user.",
         "operationId": "accountsManaging.changeOwner",
         "parameters": [
           {
@@ -46407,6 +46455,19 @@
               "title": "Hide Favourites",
               "type": "boolean",
               "description": "Hide your profile info when you add an account to favorites."
+            }
+          },
+          {
+            "name": "show_too_low_price_change_warning",
+            "in": "query",
+            "description": "Show a warning when you reduce the price of an account too much.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Show Price Change Warnings",
+              "type": "boolean",
+              "description": "Show a warning when you reduce the price of an account too much."
             }
           },
           {
@@ -47512,7 +47573,7 @@
             "type": "boolean"
           },
           "region": {
-            "description": "Region. Required if you want to upload WoT, Riot, Escape From Tarkov account. Optional if you want to upload Genshin Impact account.",
+            "description": "Region. Required if you want to upload WoT account. Optional if you want to upload miHoYo or Riot account.",
             "title": "Region",
             "type": "string"
           },
@@ -47541,7 +47602,7 @@
             ]
           },
           "system": {
-            "description": "System. Required if you want to upload Supercell account.",
+            "description": "Supercell system. Required if you want to upload Supercell account.\n+ laser - Brawl Stars\n+ scroll - Clash Royale\n+ magic - Clash of Clans",
             "title": "System",
             "type": "string",
             "enum": [
@@ -47573,11 +47634,6 @@
           "cookie_login": {
             "description": "Cookie login. Optional. Used only if you want to upload TikTok account.",
             "title": "Cookie login",
-            "type": "boolean"
-          },
-          "sc": {
-            "description": "Required if you want to upload Epic Games account.",
-            "title": "sc",
             "type": "boolean"
           },
           "mfa_file": {
@@ -47621,17 +47677,17 @@
             "type": "boolean"
           },
           "genshin_currency": {
-            "description": "Genshin primogems count. Optional. Used only if you want to upload Mihoyo account.",
+            "description": "Genshin Impact Primogems count. Optional. Used only if you want to upload miHoYo account.",
             "title": "Ark Ascended",
             "type": "integer"
           },
           "honkai_currency": {
-            "description": "Honkai Stellar Jade count. Optional. Used only if you want to upload Mihoyo account.",
+            "description": "Honkai Star Rail Stellar Jade count. Optional. Used only if you want to upload miHoYo account.",
             "title": "Stellar Jade",
             "type": "integer"
           },
           "zenless_currency": {
-            "description": "Zenless Zone Zero Polychrome count. Optional. Used only if you want to upload Mihoyo account.",
+            "description": "Zenless Zone Zero Polychrome count. Optional. Used only if you want to upload miHoYo account.",
             "title": "Polychrome",
             "type": "integer"
           },
@@ -48027,80 +48083,453 @@
         }
       },
       "ItemModel": {
-        "title": "Item",
-        "required": [
-          "description",
-          "information",
-          "item_id",
-          "item_origin",
-          "item_state",
-          "login",
-          "price",
-          "published_date",
-          "refreshed_date",
-          "temp_email",
-          "title",
-          "update_stat_date",
-          "view_count",
-          "category_id"
-        ],
         "type": "object",
+        "required": [
+          "items",
+          "totalItems",
+          "totalItemsPrice",
+          "hasNextPage",
+          "perPage",
+          "page",
+          "wasCached",
+          "cacheTTL",
+          "lastModified",
+          "serverTime",
+          "searchUrl",
+          "stickyItems",
+          "system_info"
+        ],
         "properties": {
-          "item_id": {
-            "title": "Item Id",
+          "items": {
+            "title": "Items",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "item_id": {
+                  "title": "Item",
+                  "type": "integer"
+                },
+                "item_state": {
+                  "title": "Item",
+                  "type": "string"
+                },
+                "category_id": {
+                  "title": "Category",
+                  "type": "integer"
+                },
+                "published_date": {
+                  "title": "Published",
+                  "type": "integer"
+                },
+                "title": {
+                  "title": "Title",
+                  "type": "string"
+                },
+                "description": {
+                  "title": "Description",
+                  "type": "string"
+                },
+                "price": {
+                  "title": "Price",
+                  "type": "integer"
+                },
+                "update_stat_date": {
+                  "title": "Update",
+                  "type": "integer"
+                },
+                "refreshed_date": {
+                  "title": "Refreshed",
+                  "type": "integer"
+                },
+                "edit_date": {
+                  "title": "Edit",
+                  "type": "integer"
+                },
+                "view_count": {
+                  "title": "View",
+                  "type": "integer"
+                },
+                "is_sticky": {
+                  "title": "Is",
+                  "type": "integer"
+                },
+                "item_origin": {
+                  "title": "Item",
+                  "type": "string"
+                },
+                "extended_guarantee": {
+                  "title": "Extended",
+                  "type": "integer"
+                },
+                "nsb": {
+                  "title": "Nsb",
+                  "type": "integer"
+                },
+                "allow_ask_discount": {
+                  "title": "Allow",
+                  "type": "integer"
+                },
+                "title_en": {
+                  "title": "Title",
+                  "type": "string"
+                },
+                "description_en": {
+                  "title": "Description",
+                  "type": "string"
+                },
+                "email_type": {
+                  "title": "Email",
+                  "type": "string"
+                },
+                "email_provider": {
+                  "title": "Email"
+                },
+                "item_domain": {
+                  "title": "Item",
+                  "type": "string"
+                },
+                "resale_item_origin": {
+                  "title": "Resale",
+                  "type": "string"
+                },
+                "gifts_item_id": {
+                  "title": "Gifts",
+                  "type": "integer"
+                },
+                "gifts_service": {
+                  "title": "Gifts",
+                  "type": "string"
+                },
+                "gifts_duration": {
+                  "title": "Gifts",
+                  "type": "integer"
+                },
+                "gifts_type": {
+                  "title": "Gifts",
+                  "type": "string"
+                },
+                "feedback_data": {
+                  "title": "Feedback",
+                  "type": "string"
+                },
+                "isIgnored": {
+                  "title": "Is Ignored",
+                  "type": "boolean"
+                },
+                "priceWithSellerFee": {
+                  "title": "Price With Seller Fee",
+                  "type": "integer"
+                },
+                "guarantee": {
+                  "title": "Guarantee"
+                },
+                "canViewLoginData": {
+                  "title": "Can View Login Data",
+                  "type": "boolean"
+                },
+                "canUpdateItemStats": {
+                  "title": "Can Update Item Stats",
+                  "type": "boolean"
+                },
+                "canReportItem": {
+                  "title": "Can Report Item",
+                  "type": "boolean"
+                },
+                "canViewEmailLoginData": {
+                  "title": "Can View Email Login Data",
+                  "type": "boolean"
+                },
+                "showGetEmailCodeButton": {
+                  "title": "Show Get Email Code Button",
+                  "type": "boolean"
+                },
+                "canOpenItem": {
+                  "title": "Can Open Item",
+                  "type": "boolean"
+                },
+                "canCloseItem": {
+                  "title": "Can Close Item",
+                  "type": "boolean"
+                },
+                "canEditItem": {
+                  "title": "Can Edit Item",
+                  "type": "boolean"
+                },
+                "canDeleteItem": {
+                  "title": "Can Delete Item",
+                  "type": "boolean"
+                },
+                "canStickItem": {
+                  "title": "Can Stick Item",
+                  "type": "boolean"
+                },
+                "canUnstickItem": {
+                  "title": "Can Unstick Item",
+                  "type": "boolean"
+                },
+                "bumpSettings": {
+                  "title": "Bump Settings",
+                  "type": "object",
+                  "properties": {
+                    "canBumpItem": {
+                      "title": "Can Bump Item",
+                      "type": "boolean"
+                    },
+                    "canBumpItemGlobally": {
+                      "title": "Can Bump Item Globally",
+                      "type": "boolean"
+                    },
+                    "shortErrorPhrase": {
+                      "title": "Short Error Phrase"
+                    },
+                    "errorPhrase": {
+                      "title": "Error Phrase"
+                    }
+                  },
+                  "required": [
+                    "canBumpItem",
+                    "canBumpItemGlobally",
+                    "shortErrorPhrase",
+                    "errorPhrase"
+                  ]
+                },
+                "canBumpItem": {
+                  "title": "Can Bump Item",
+                  "type": "boolean"
+                },
+                "canBuyItem": {
+                  "title": "Can Buy Item",
+                  "type": "boolean"
+                },
+                "rub_price": {
+                  "title": "Rub",
+                  "type": "integer"
+                },
+                "price_currency": {
+                  "title": "Price",
+                  "type": "string"
+                },
+                "canValidateAccount": {
+                  "title": "Can Validate Account",
+                  "type": "boolean"
+                },
+                "canResellItemAfterPurchase": {
+                  "title": "Can Resell Item After Purchase",
+                  "type": "boolean"
+                },
+                "giftsSubscriptionName": {
+                  "title": "Gifts Subscription Name",
+                  "type": "string"
+                },
+                "giftsServiceName": {
+                  "title": "Gifts Service Name",
+                  "type": "string"
+                },
+                "canViewAccountLink": {
+                  "title": "Can View Account Link",
+                  "type": "boolean"
+                },
+                "canChangePassword": {
+                  "title": "Can Change Password",
+                  "type": "boolean"
+                },
+                "itemOriginPhrase": {
+                  "title": "Item Origin Phrase",
+                  "type": "string"
+                },
+                "tags": {
+                  "title": "Tags",
+                  "type": "array",
+                  "items": {}
+                },
+                "note_text": {
+                  "title": "Note"
+                },
+                "hasPendingAutoBuy": {
+                  "title": "Has Pending Auto Buy",
+                  "type": "boolean"
+                },
+                "descriptionHtml": {
+                  "title": "Description Html",
+                  "type": "string"
+                },
+                "descriptionEnHtml": {
+                  "title": "Description En Html",
+                  "type": "string"
+                },
+                "descriptionPlain": {
+                  "title": "Description Plain",
+                  "type": "string"
+                },
+                "descriptionEnPlain": {
+                  "title": "Description En Plain",
+                  "type": "string"
+                },
+                "seller": {
+                  "title": "Seller",
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "title": "User",
+                      "type": "integer"
+                    },
+                    "sold_items_count": {
+                      "title": "Sold",
+                      "type": "integer"
+                    },
+                    "active_items_count": {
+                      "title": "Active",
+                      "type": "integer"
+                    },
+                    "restore_data": {
+                      "title": "Restore",
+                      "type": "string"
+                    },
+                    "username": {
+                      "title": "Username",
+                      "type": "string"
+                    },
+                    "avatar_date": {
+                      "title": "Avatar",
+                      "type": "integer"
+                    },
+                    "is_banned": {
+                      "title": "Is",
+                      "type": "integer"
+                    },
+                    "display_style_group_id": {
+                      "title": "Display",
+                      "type": "integer"
+                    },
+                    "restore_percents": {
+                      "title": "Restore"
+                    }
+                  },
+                  "required": [
+                    "user_id",
+                    "sold_items_count",
+                    "active_items_count",
+                    "restore_data",
+                    "username",
+                    "avatar_date",
+                    "is_banned",
+                    "display_style_group_id",
+                    "restore_percents"
+                  ]
+                }
+              },
+              "required": [
+                "item_id",
+                "item_state",
+                "category_id",
+                "published_date",
+                "title",
+                "description",
+                "price",
+                "update_stat_date",
+                "refreshed_date",
+                "edit_date",
+                "view_count",
+                "is_sticky",
+                "item_origin",
+                "extended_guarantee",
+                "nsb",
+                "allow_ask_discount",
+                "title_en",
+                "description_en",
+                "email_type",
+                "email_provider",
+                "item_domain",
+                "resale_item_origin",
+                "gifts_item_id",
+                "gifts_service",
+                "gifts_duration",
+                "gifts_type",
+                "feedback_data",
+                "isIgnored",
+                "priceWithSellerFee",
+                "guarantee",
+                "canViewLoginData",
+                "canUpdateItemStats",
+                "canReportItem",
+                "canViewEmailLoginData",
+                "showGetEmailCodeButton",
+                "canOpenItem",
+                "canCloseItem",
+                "canEditItem",
+                "canDeleteItem",
+                "canStickItem",
+                "canUnstickItem",
+                "bumpSettings",
+                "canBumpItem",
+                "canBuyItem",
+                "rub_price",
+                "price_currency",
+                "canValidateAccount",
+                "canResellItemAfterPurchase",
+                "giftsSubscriptionName",
+                "giftsServiceName",
+                "canViewAccountLink",
+                "canChangePassword",
+                "itemOriginPhrase",
+                "tags",
+                "note_text",
+                "hasPendingAutoBuy",
+                "descriptionHtml",
+                "descriptionEnHtml",
+                "descriptionPlain",
+                "descriptionEnPlain",
+                "seller"
+              ]
+            }
+          },
+          "totalItems": {
+            "title": "Total Items",
             "type": "integer"
           },
-          "item_state": {
-            "title": "Item State",
-            "type": "string"
+          "totalItemsPrice": {
+            "title": "Total Items Price"
           },
-          "category_id": {
-            "title": "Category id",
+          "hasNextPage": {
+            "title": "Has Next Page",
+            "type": "boolean"
+          },
+          "perPage": {
+            "title": "Per Page",
             "type": "integer"
           },
-          "published_date": {
-            "title": "Published Date",
-            "type": "string"
-          },
-          "title": {
-            "title": "Title",
-            "type": "string"
-          },
-          "description": {
-            "title": "Description",
-            "type": "string"
-          },
-          "price": {
-            "title": "Price",
+          "page": {
+            "title": "Page",
             "type": "integer"
           },
-          "update_stat_date": {
-            "title": "Update Stat Date",
+          "wasCached": {
+            "title": "Was Cached",
+            "type": "boolean"
+          },
+          "cacheTTL": {
+            "title": "Cache Ttl",
             "type": "integer"
           },
-          "refreshed_date": {
-            "title": "Refreshed Date",
+          "lastModified": {
+            "title": "Last Modified",
             "type": "integer"
           },
-          "login": {
-            "title": "Login",
-            "type": "string"
-          },
-          "temp_email": {
-            "title": "Temp Email",
-            "type": "string"
-          },
-          "view_count": {
-            "title": "View Count",
+          "serverTime": {
+            "title": "Server Time",
             "type": "integer"
           },
-          "information": {
-            "title": "Information",
+          "searchUrl": {
+            "title": "Search Url",
             "type": "string"
           },
-          "item_origin": {
-            "title": "Item Origin",
-            "type": "string"
+          "stickyItems": {
+            "title": "Sticky Items",
+            "type": "array",
+            "items": {}
+          },
+          "system_info": {
+            "$ref": "#/components/schemas/SystemInfo"
           }
         }
       },
@@ -49925,7 +50354,7 @@
       "category_id": {
         "name": "category_id",
         "in": "query",
-        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 16 - WOT Blitz\n+ 15 - Supercell\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft",
+        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 15 - Supercell\n+ 16 - WOT Blitz\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft\n+ 30 - Gifts\n+ 31 - Roblox",
         "required": false,
         "style": "form",
         "explode": true,
@@ -49956,7 +50385,9 @@
             24,
             26,
             27,
-            29
+            29,
+            30,
+            31
           ]
         }
       },
@@ -50039,9 +50470,11 @@
             "price_to_up",
             "price_to_down",
             "pdate_to_down",
-            "pdate_to_down_upload",
             "pdate_to_up",
-            "pdate_to_up_upload"
+            "pdate_to_down_upload",
+            "pdate_to_up_upload",
+            "edate_to_up",
+            "edate_to_down"
           ]
         }
       },
