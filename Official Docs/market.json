@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.49a"
+    "version": "1.1.50"
   },
   "servers": [
     {
@@ -836,6 +836,7 @@
                   "Aliens vs. Predator™",
                   "American Conquest",
                   "American Truck Simulator",
+                  "Amnesia: The Dark Descent",
                   "Among Us",
                   "An Alternative Reality: The Football Manager Documentary",
                   "An Alternative Reality: The Football Manager Documentary_cis",
@@ -866,6 +867,7 @@
                   "Assetto Corsa_cis",
                   "Asteria",
                   "Asteroid Bounty Hunter",
+                  "Astray",
                   "AudioSurf",
                   "Avadon: The Black Fortress",
                   "Avernum Bundle",
@@ -883,7 +885,6 @@
                   "Bad Rats: the Rats' Revenge",
                   "Bad Rats: the Rats' Revenge_cis",
                   "Baldur's Gate 3",
-                  "Banished",
                   "Banished_cis",
                   "Barbie™ Dreamhouse Party™",
                   "Barony",
@@ -998,7 +999,6 @@
                   "Castle of Illusion",
                   "CastleMiner Z",
                   "CastleMiner Z_cis",
-                  "Cave Story+",
                   "Chained Together",
                   "Chaos on Deponia",
                   "Chasing Tails ~A Promise in the Snow~",
@@ -1025,6 +1025,7 @@
                   "Commandos 2: Men of Courage",
                   "Commandos 3: Destination Berlin_cis",
                   "Commandos Pack",
+                  "Commandos: Behind Enemy Lines",
                   "Company of Heroes",
                   "Company of Heroes 2 - Ardennes Assault_cis",
                   "Company of Heroes Complete Pack",
@@ -1233,12 +1234,14 @@
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack",
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack_cis",
                   "Excalibur Sim Bundle",
+                  "Expansion - Europa Universalis IV: Rights of Man_cis",
                   "F1 2012™",
                   "F1 RACE STARS™",
                   "FEZ",
                   "FINAL FANTASY VII",
                   "FORCED: Slightly Better Edition",
                   "FTL: Faster Than Light",
+                  "FTL: Faster Than Light_cis",
                   "Fable - The Lost Chapters",
                   "Fable Anniversary_cis",
                   "Fabula Mortis",
@@ -1501,6 +1504,7 @@
                   "METAL SLUG X",
                   "METAL SLUG X_cis",
                   "METAL SLUG_cis",
+                  "MIND: Path to Thalamus Enhanced Edition",
                   "MONOPOLY® PLUS",
                   "MQEL Founders Pack Gift",
                   "MX vs. ATV Unleashed",
@@ -1525,6 +1529,7 @@
                   "Max Payne 3",
                   "Max Payne 3: Classic Max Payne Character",
                   "McDROID",
+                  "Medieval Engineers",
                   "Medieval Engineers Deluxe Gift",
                   "Medieval Engineers_cis",
                   "Men of War: Assault Squad 2_cis",
@@ -1702,6 +1707,7 @@
                   "Payday 2 Gift from John Wick",
                   "Peekaboo",
                   "Penny Arcade's On the Rain-Slick Precipice of Darkness 3_cis",
+                  "Penumbra Collectors Pack",
                   "Phasmophobia",
                   "Placid Plastic Duck Simulator",
                   "Plague Inc: Evolved_cis",
@@ -1727,6 +1733,7 @@
                   "Pressured",
                   "Pride of Nations: The Scramble for Africa",
                   "Primal Carnage",
+                  "Primal Carnage Skin Bundle",
                   "Primal Carnage: Extinction",
                   "Primal Carnage_cis",
                   "Prime Status Upgrade",
@@ -1914,6 +1921,7 @@
                   "Sonic 3D Blast",
                   "Sonic The Hedgehog Gift Copy",
                   "Sonic and All-Stars Racing Transformed: Metal Sonic & Outrun DLC",
+                  "Sons Of The Forest",
                   "Soul Gambler: Dark Arts Edition",
                   "Soundpad",
                   "South Park™: The Stick of Truth™",
@@ -1921,6 +1929,7 @@
                   "South Park™: The Stick of Truth™ - Ultimate Fellowship Pack",
                   "South Park™: The Stick of Truth™_cis",
                   "Space Beast Terror Fright",
+                  "Space Empires V",
                   "Space Engineers",
                   "Space Engineers_cis",
                   "Space Farmers",
@@ -1951,6 +1960,7 @@
                   "Starpoint Gemini 2",
                   "State of Decay - Breakdown",
                   "State of Decay - Lifeline",
+                  "State of Decay 2: Juggernaut Edition",
                   "State of Decay: YOSE",
                   "State of Decay_cis",
                   "Steam Community Beta Access",
@@ -2000,6 +2010,7 @@
                   "THE KING OF FIGHTERS 2002 UNLIMITED MATCH",
                   "THE KING OF FIGHTERS XIII STEAM EDITION",
                   "THIEF: The Bank Heist",
+                  "TOXIKK - Triple Gift",
                   "TOXIKK Gift",
                   "TRISTOY",
                   "TRON RUN/r Ultimate Edition - Gift Base Game",
@@ -2051,6 +2062,7 @@
                   "The Long Dark_cis",
                   "The Long Drive",
                   "The Odyssey: Winds of Athena_cis",
+                  "The Orange Box",
                   "The Past Within",
                   "The Path",
                   "The Planet Crafter",
@@ -2148,6 +2160,8 @@
                   "Ultra Street Fighter® IV Digital Upgrade",
                   "Ultratron",
                   "Undertale",
+                  "Universe at War",
+                  "Unknown package (66117)",
                   "Unknown package 101060",
                   "Unknown package 1065",
                   "Unknown package 11274",
@@ -2168,6 +2182,7 @@
                   "Unknown package 12893",
                   "Unknown package 12897",
                   "Unknown package 12898",
+                  "Unknown package 129360",
                   "Unknown package 13093",
                   "Unknown package 13094",
                   "Unknown package 13499",
@@ -2209,15 +2224,18 @@
                   "Unknown package 33495",
                   "Unknown package 34431",
                   "Unknown package 36075",
+                  "Unknown package 36631",
                   "Unknown package 391",
                   "Unknown package 39646",
                   "Unknown package 39877",
                   "Unknown package 40649",
                   "Unknown package 41305_cis",
+                  "Unknown package 42337",
                   "Unknown package 42337_cis",
                   "Unknown package 42480",
                   "Unknown package 43381",
                   "Unknown package 44220",
+                  "Unknown package 4433",
                   "Unknown package 45019",
                   "Unknown package 45320",
                   "Unknown package 459",
@@ -2228,6 +2246,7 @@
                   "Unknown package 49728_cis",
                   "Unknown package 51149",
                   "Unknown package 52597",
+                  "Unknown package 52597_cis",
                   "Unknown package 54030",
                   "Unknown package 54030_cis",
                   "Unknown package 54109",
@@ -2239,6 +2258,7 @@
                   "Unknown package 57675_cis",
                   "Unknown package 58514_cis",
                   "Unknown package 59393_cis",
+                  "Unknown package 62896_cis",
                   "Unknown package 6346",
                   "Unknown package 65204",
                   "Unknown package 6639",
@@ -2264,6 +2284,7 @@
                   "Unknown package 83256",
                   "Unknown package 83886_cis",
                   "Unknown package 84206",
+                  "Unknown package 8672",
                   "Unknown package 86905",
                   "Unknown package 89583",
                   "Unknown package 90424",
@@ -5757,6 +5778,7 @@
                   "character_citadel",
                   "character_citrusspoon",
                   "character_clawedraven",
+                  "character_clayplug",
                   "character_clearradius",
                   "character_cleveredge",
                   "character_coatcheck",
@@ -6501,6 +6523,7 @@
                   "pickaxe_cirrusvine",
                   "pickaxe_citadel",
                   "pickaxe_citrusspoon",
+                  "pickaxe_clayplug",
                   "pickaxe_clearradius",
                   "pickaxe_cleveredge",
                   "pickaxe_coatcheck",
@@ -8601,6 +8624,7 @@
                   "clappapayacomms",
                   "clapperboard",
                   "clash_jlk96",
+                  "clayplug_graffiti",
                   "clearradius",
                   "clearradius_follower",
                   "clearradius_follower_sync",
@@ -8739,6 +8763,7 @@
                   "energize",
                   "energizestoic",
                   "engagedwalk",
+                  "enrapture",
                   "epicyarn",
                   "everytime",
                   "exaggerated",
@@ -11619,6 +11644,7 @@
                   23030,
                   23031,
                   23032,
+                  23033,
                   24000,
                   24001,
                   24002,
@@ -11855,6 +11881,7 @@
                   1181,
                   1191,
                   1211,
+                  1221,
                   1241,
                   1251,
                   1261,
@@ -39887,8 +39914,7 @@
                   "Premium Duo",
                   "Premium Fallback",
                   "Premium Family",
-                  "Premium Individual",
-                  "Premium Student"
+                  "Premium Individual"
                 ]
               }
             }
@@ -45579,9 +45605,9 @@
         "tags": [
           "Accounts managing"
         ],
-        "summary": "Get Mafile Json",
-        "description": "Returns steam mafile.\n> ❗️ this action is cancelling active account guarantee",
-        "operationId": "accountsManaging.getMafileJSON",
+        "summary": "Get Mafile",
+        "description": "Returns steam mafile.\n> ❗️ This action is cancelling active account guarantee",
+        "operationId": "accountsManaging.getMafile",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -45593,15 +45619,727 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "MaFileModel",
-                  "required": [
-                    "maFile"
-                  ],
                   "type": "object",
+                  "required": [
+                    "maFile",
+                    "system_info"
+                  ],
                   "properties": {
                     "maFile": {
-                      "title": "Mafile",
-                      "type": "object"
+                      "title": "Ma File",
+                      "type": "object",
+                      "properties": {
+                        "shared_secret": {
+                          "title": "Shared",
+                          "type": "string"
+                        },
+                        "serial_number": {
+                          "title": "Serial",
+                          "type": "integer"
+                        },
+                        "revocation_code": {
+                          "title": "Revocation",
+                          "type": "string"
+                        },
+                        "uri": {
+                          "title": "Uri",
+                          "type": "string"
+                        },
+                        "account_name": {
+                          "title": "Account",
+                          "type": "string"
+                        },
+                        "token_gid": {
+                          "title": "Token",
+                          "type": "string"
+                        },
+                        "identity_secret": {
+                          "title": "Identity",
+                          "type": "string"
+                        },
+                        "secret_1": {
+                          "title": "Secret",
+                          "type": "string"
+                        },
+                        "device_id": {
+                          "title": "Device",
+                          "type": "string"
+                        },
+                        "fully_enrolled": {
+                          "title": "Fully",
+                          "type": "boolean"
+                        },
+                        "Session": {
+                          "title": "Session",
+                          "type": "object",
+                          "properties": {
+                            "SessionID": {
+                              "title": "Session Id",
+                              "type": "string"
+                            },
+                            "AccessToken": {
+                              "title": "Access Token",
+                              "type": "string"
+                            },
+                            "RefreshToken": {
+                              "title": "Refresh Token",
+                              "type": "string"
+                            },
+                            "SteamID": {
+                              "title": "Steam Id",
+                              "type": "string"
+                            },
+                            "SteamLoginSecure": {
+                              "title": "Steam Login Secure",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "SessionID",
+                            "AccessToken",
+                            "RefreshToken",
+                            "SteamID",
+                            "SteamLoginSecure"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "shared_secret",
+                        "serial_number",
+                        "revocation_code",
+                        "uri",
+                        "account_name",
+                        "token_gid",
+                        "identity_secret",
+                        "secret_1",
+                        "device_id",
+                        "fully_enrolled",
+                        "Session"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermissionModel"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Remove Mafile",
+        "description": "Remove steam mafile.\n> ❗️ This will unlink the authenticator from the account and remove mafile from the item",
+        "operationId": "accountsManaging.removeMafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/itemId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "item",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "item": {
+                      "title": "Item",
+                      "type": "object",
+                      "properties": {
+                        "item_id": {
+                          "title": "Item",
+                          "type": "integer"
+                        },
+                        "item_state": {
+                          "title": "Item",
+                          "type": "string"
+                        },
+                        "category_id": {
+                          "title": "Category",
+                          "type": "integer"
+                        },
+                        "published_date": {
+                          "title": "Published",
+                          "type": "integer"
+                        },
+                        "title": {
+                          "title": "Title",
+                          "type": "string"
+                        },
+                        "description": {
+                          "title": "Description",
+                          "type": "string"
+                        },
+                        "price": {
+                          "title": "Price",
+                          "type": "integer"
+                        },
+                        "update_stat_date": {
+                          "title": "Update",
+                          "type": "integer"
+                        },
+                        "refreshed_date": {
+                          "title": "Refreshed",
+                          "type": "integer"
+                        },
+                        "edit_date": {
+                          "title": "Edit",
+                          "type": "integer"
+                        },
+                        "view_count": {
+                          "title": "View",
+                          "type": "integer"
+                        },
+                        "is_sticky": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "item_origin": {
+                          "title": "Item",
+                          "type": "string"
+                        },
+                        "proxy_id": {
+                          "title": "Proxy",
+                          "type": "integer"
+                        },
+                        "extended_guarantee": {
+                          "title": "Extended",
+                          "type": "integer"
+                        },
+                        "nsb": {
+                          "title": "Nsb",
+                          "type": "integer"
+                        },
+                        "allow_ask_discount": {
+                          "title": "Allow",
+                          "type": "integer"
+                        },
+                        "title_en": {
+                          "title": "Title",
+                          "type": "string"
+                        },
+                        "description_en": {
+                          "title": "Description",
+                          "type": "string"
+                        },
+                        "email_type": {
+                          "title": "Email",
+                          "type": "string"
+                        },
+                        "email_provider": {
+                          "title": "Email",
+                          "type": "string"
+                        },
+                        "item_domain": {
+                          "title": "Item",
+                          "type": "string"
+                        },
+                        "resale_item_origin": {
+                          "title": "Resale",
+                          "type": "string"
+                        },
+                        "category_title": {
+                          "title": "Category",
+                          "type": "string"
+                        },
+                        "category_url": {
+                          "title": "Category",
+                          "type": "string"
+                        },
+                        "require_temp_email": {
+                          "title": "Require",
+                          "type": "integer"
+                        },
+                        "available_temp_email": {
+                          "title": "Available",
+                          "type": "integer"
+                        },
+                        "check_button_enabled": {
+                          "title": "Check",
+                          "type": "integer"
+                        },
+                        "checker_enabled": {
+                          "title": "Checker",
+                          "type": "integer"
+                        },
+                        "buy_without_validation": {
+                          "title": "Buy",
+                          "type": "integer"
+                        },
+                        "has_guarantee": {
+                          "title": "Has",
+                          "type": "integer"
+                        },
+                        "require_video_recording": {
+                          "title": "Require",
+                          "type": "integer"
+                        },
+                        "can_be_resold": {
+                          "title": "Can",
+                          "type": "integer"
+                        },
+                        "login_type": {
+                          "title": "Login",
+                          "type": "string"
+                        },
+                        "require_email_login_data": {
+                          "title": "Require",
+                          "type": "integer"
+                        },
+                        "category_prefix_id": {
+                          "title": "Category",
+                          "type": "integer"
+                        },
+                        "steam_item_id": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_id": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_country": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_register_date": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_last_activity": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_games": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_full_games": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_community_ban": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_bans": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_cs2_profile_rank": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_balance": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_cs2_rank_id": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_is_limited": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_level": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_friend_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_data": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_cs2_last_activity": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_dota2_solo_mmr": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cs2_ban_date": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_converted_balance": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cards_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cards_games": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_pubg_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cs2_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_dota2_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_tf2_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_rust_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cs2_wingman_rank_id": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_game_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_steam_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cs2_medals": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_cs2_win_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_dota2_game_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_dota2_lose_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_dota2_win_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_hours_played_recently": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_faceit_level": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_points": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_transactions": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_last_transaction_date": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_relevant_game_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_gift_count": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_gifts": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_limit_spent": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_dota2_behavior": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_trust_factor": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_mfa": {
+                          "title": "Steam",
+                          "type": "boolean"
+                        },
+                        "steam_mfa_file": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_refresh_token": {
+                          "title": "Steam"
+                        },
+                        "steam_market": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_market_restrictions": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_market_ban_end_date": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_unturned_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cs2_last_launched": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_kf2_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_dst_inv_value": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cs2_premier_elo": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_has_activated_keys": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_cs2_ban_type": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_external_accounts": {
+                          "title": "Steam",
+                          "type": "string"
+                        },
+                        "steam_rust_kill_player": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_rust_deaths": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_total_gifts_rub": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_total_refunds_rub": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_total_ingame_rub": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_total_games_rub": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_total_purchased_rub": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "steam_dota2_last_match_date": {
+                          "title": "Steam",
+                          "type": "integer"
+                        },
+                        "descriptionHtml": {
+                          "title": "Description Html",
+                          "type": "string"
+                        },
+                        "descriptionEnHtml": {
+                          "title": "Description En Html",
+                          "type": "string"
+                        },
+                        "descriptionPlain": {
+                          "title": "Description Plain",
+                          "type": "string"
+                        },
+                        "descriptionEnPlain": {
+                          "title": "Description En Plain",
+                          "type": "string"
+                        },
+                        "seller": {
+                          "title": "Seller",
+                          "type": "object",
+                          "properties": {
+                            "user_id": {
+                              "title": "User",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "user_id"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "item_id",
+                        "item_state",
+                        "category_id",
+                        "published_date",
+                        "title",
+                        "description",
+                        "price",
+                        "update_stat_date",
+                        "refreshed_date",
+                        "edit_date",
+                        "view_count",
+                        "is_sticky",
+                        "item_origin",
+                        "proxy_id",
+                        "extended_guarantee",
+                        "nsb",
+                        "allow_ask_discount",
+                        "title_en",
+                        "description_en",
+                        "email_type",
+                        "email_provider",
+                        "item_domain",
+                        "resale_item_origin",
+                        "category_title",
+                        "category_url",
+                        "require_temp_email",
+                        "available_temp_email",
+                        "check_button_enabled",
+                        "checker_enabled",
+                        "buy_without_validation",
+                        "has_guarantee",
+                        "require_video_recording",
+                        "can_be_resold",
+                        "login_type",
+                        "require_email_login_data",
+                        "category_prefix_id",
+                        "steam_item_id",
+                        "steam_id",
+                        "steam_country",
+                        "steam_register_date",
+                        "steam_last_activity",
+                        "steam_games",
+                        "steam_full_games",
+                        "steam_community_ban",
+                        "steam_bans",
+                        "steam_cs2_profile_rank",
+                        "steam_balance",
+                        "steam_cs2_rank_id",
+                        "steam_is_limited",
+                        "steam_level",
+                        "steam_friend_count",
+                        "steam_data",
+                        "steam_cs2_last_activity",
+                        "steam_dota2_solo_mmr",
+                        "steam_cs2_ban_date",
+                        "steam_converted_balance",
+                        "steam_cards_count",
+                        "steam_cards_games",
+                        "steam_pubg_inv_value",
+                        "steam_cs2_inv_value",
+                        "steam_dota2_inv_value",
+                        "steam_tf2_inv_value",
+                        "steam_rust_inv_value",
+                        "steam_cs2_wingman_rank_id",
+                        "steam_game_count",
+                        "steam_steam_inv_value",
+                        "steam_inv_value",
+                        "steam_cs2_medals",
+                        "steam_cs2_win_count",
+                        "steam_dota2_game_count",
+                        "steam_dota2_lose_count",
+                        "steam_dota2_win_count",
+                        "steam_hours_played_recently",
+                        "steam_faceit_level",
+                        "steam_points",
+                        "steam_transactions",
+                        "steam_last_transaction_date",
+                        "steam_relevant_game_count",
+                        "steam_gift_count",
+                        "steam_gifts",
+                        "steam_limit_spent",
+                        "steam_dota2_behavior",
+                        "steam_trust_factor",
+                        "steam_mfa",
+                        "steam_mfa_file",
+                        "steam_refresh_token",
+                        "steam_market",
+                        "steam_market_restrictions",
+                        "steam_market_ban_end_date",
+                        "steam_unturned_inv_value",
+                        "steam_cs2_last_launched",
+                        "steam_kf2_inv_value",
+                        "steam_dst_inv_value",
+                        "steam_cs2_premier_elo",
+                        "steam_has_activated_keys",
+                        "steam_cs2_ban_type",
+                        "steam_external_accounts",
+                        "steam_rust_kill_player",
+                        "steam_rust_deaths",
+                        "steam_total_gifts_rub",
+                        "steam_total_refunds_rub",
+                        "steam_total_ingame_rub",
+                        "steam_total_games_rub",
+                        "steam_total_purchased_rub",
+                        "steam_dota2_last_match_date",
+                        "descriptionHtml",
+                        "descriptionEnHtml",
+                        "descriptionPlain",
+                        "descriptionEnPlain",
+                        "seller"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
                     }
                   }
                 }
