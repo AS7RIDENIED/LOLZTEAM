@@ -23,6 +23,10 @@ _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
 
 
 class _MainTweaks:
+    class NonePlaceholder:
+        pass
+    NONE = NonePlaceholder()
+
     @staticmethod
     def market_variable_fix(variable):
         if variable is None:
@@ -147,12 +151,12 @@ class _MainTweaks:
                         if not any(
                             _scope in main_self._scopes for _scope in scope_parsed
                         ):
-                            logging.warn(
+                            logging.warning(
                                 msg=f'{Exceptions.MISSING_SCOPE.__name__}: One of [{joined}] scope is required to use "{path}" but not provided in your token.\nYou should recreate token with at least one of these scopes.',
                                 stack_info=False,
                             )
                     elif scope_parsed[0] not in main_self._scopes:
-                        logging.warn(
+                        logging.warning(
                             msg=f'{Exceptions.MISSING_SCOPE.__name__}: "{joined}" scope is required to use "{path}" but not provided in your token.\nYou should recreate token with "{joined}" scope.',
                             stack_info=False,
                         )
@@ -184,10 +188,18 @@ class _MainTweaks:
                     continue
         return _wrapper
 
+    def _TrimNONE(dictionary: dict) -> dict:
+        for key, value in dictionary.copy().items():
+            if isinstance(value, _MainTweaks.NonePlaceholder):
+                dictionary.pop(key)
+            if type(value) is dict:
+                dictionary[key] = _MainTweaks._TrimNONE(value)
+        return dictionary
+
     async def _ExecCode(func, loc, cur_kwargs):  # Смотрите на свой страх и риск. Никому не стоит сюда суваться
         SEND_AS_ASYNC = loc.get("SEND_AS_ASYNC", False)
         CREATE_JOB = loc.get("CREATE_JOB", False)
-
+        loc["NONE"] = _MainTweaks.NonePlaceholder()
         self = functools.partial(func).func.__self__
         if "scope" in functools.partial(func).func.__code__.co_varnames:
             func = next((c for c in (c.cell_contents for c in func.__closure__) if isinstance(c, types.FunctionType)), None,)
@@ -200,7 +212,7 @@ class _MainTweaks:
         arguments = func.__code__.co_varnames
         for arg in arguments:
             if arg != "self":
-                exec(f"{arg} = None", loc)
+                exec(f"{arg} = NONE", loc)
             if arg == "kwargs":
                 exec("kwargs = {}", loc)
         for arg, value in cur_kwargs.items():  # Чек на левые кварги
@@ -208,11 +220,10 @@ class _MainTweaks:
                 raise Exceptions.INVALID_ARG(
                     f'Function "{func.__name__}" don\'t have "{arg}" parameter'
                 )
+            if arg not in arguments:
+                loc["kwargs"][arg] = value
             else:
-                if arg not in arguments:
-                    loc["kwargs"][arg] = value
-                else:
-                    loc[arg] = value
+                loc[arg] = value
 
         # Не придумал пока лучшего испольнения чека скопов
         if SEND_AS_ASYNC:
@@ -286,9 +297,9 @@ class _MainTweaks:
                     joined = ", ".join(scope_parsed)
                     if len(scope_parsed) > 1:
                         if not any(_scope in self._scopes for _scope in scope_parsed):
-                            logging.warn(msg=f'{Exceptions.MISSING_SCOPE.__name__}: One of [{joined}] scope is required to use "{path}" but not provided in your token.\nYou should recreate token with at least one of these scopes.', stack_info=False,)
+                            logging.warning(msg=f'{Exceptions.MISSING_SCOPE.__name__}: One of [{joined}] scope is required to use "{path}" but not provided in your token.\nYou should recreate token with at least one of these scopes.', stack_info=False,)
                         elif scope_parsed[0] not in self._scopes:
-                            logging.warn(msg=f'{Exceptions.MISSING_SCOPE.__name__}: "{joined}" scope is required to use "{path}" but not provided in your token.\nYou should recreate token with "{joined}" scope.', stack_info=False,)
+                            logging.warning(msg=f'{Exceptions.MISSING_SCOPE.__name__}: "{joined}" scope is required to use "{path}" but not provided in your token.\nYou should recreate token with "{joined}" scope.', stack_info=False,)
 
         #  Огромная ебанина, которая находит код функции, парсит и выполняет его
         func_code = str(inspect.getsource(func)).replace(" -> httpx.Response", "")
@@ -301,6 +312,7 @@ class _MainTweaks:
         lines = [line.replace(indent, "", 1) for line in lines.copy()]
         return_code = "\n".join(lines).split('"""')[2].split("return ")[-1]
         func_code = "\n".join(lines).split('"""')[2].split("return ")[0]
+
         exec(func_code, globals(), loc)
 
         # Получаем переменные из локали, в которой отработал exec
@@ -308,6 +320,11 @@ class _MainTweaks:
         params = loc.get("params", {})
         files = loc.get("files")  # Если вы файлы передаете в batch, то вы плохие люди
         dataJ = loc.get("dataJ", {})
+
+        # Тримаем NONE
+        params = _MainTweaks._TrimNONE(params)
+        if type(dataJ) is dict:
+            dataJ = _MainTweaks._TrimNONE(dataJ)
 
         if CREATE_JOB:  # Фикс для job'а
             path = self.base_url + path  # Полный путь кушает
@@ -341,7 +358,7 @@ class _MainTweaks:
             if type(value) is dict:
                 self.__params = value
             else:
-                _WarningsLogger.warn(" Params must be dict")
+                _WarningsLogger.warning(" Params must be dict")
 
         @property
         def json(self):
@@ -354,7 +371,7 @@ class _MainTweaks:
             elif type(value) is dict:
                 self.__dataJ = value
             else:
-                _WarningsLogger.warn(" Json must be str or dict")
+                _WarningsLogger.warning(" Json must be str or dict")
 
         @property
         def headers(self):
@@ -365,7 +382,7 @@ class _MainTweaks:
             if type(value) is dict:
                 self.__headers = value
             else:
-                _WarningsLogger.warn(" Headers must be dict")
+                _WarningsLogger.warning(" Headers must be dict")
 
         def reset(self):
             self.__params = {}
@@ -463,7 +480,7 @@ class Debug:
             self.DebugLogger.addHandler(self.DebugHandler)
             _DebugLogger.debug(f"Debug started | LOLZTEAM {version('LOLZTEAM')}")
         else:
-            _WarningsLogger.warn(" Debug logger already enabled")
+            _WarningsLogger.warning(" Debug logger already enabled")
 
     def disable(self):
         if self._status:
@@ -471,7 +488,7 @@ class Debug:
             self.DebugLogger.removeHandler(self.DebugHandler)
             _DebugLogger.debug(f"Debug stopped | LOLZTEAM {version('LOLZTEAM')}")
         else:
-            _WarningsLogger.warn(" Debug logger already disabled")
+            _WarningsLogger.warning(" Debug logger already disabled")
 
 
 def CreateJob(func, job_name, **cur_kwargs) -> dict:

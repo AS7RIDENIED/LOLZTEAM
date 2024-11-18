@@ -23,36 +23,29 @@ _DebugLogger = logging.getLogger("LOLZTEAM.Debug")
 _DebugLogger.setLevel(level=100)
 
 
-def _send_request(self, method: str, path: dict, params: dict = None, dataJ=None, files=None) -> httpx.Response:
+def _send_request(self, method: str, path: dict, params: dict = {}, dataJ=None, files=None) -> httpx.Response:
     return _MainTweaks._AsyncExecutor(_send_async_request(self=self, method=method, path=path, params=params, dataJ=dataJ, files=files))
 
 
 @_MainTweaks._RetryWrapper
-async def _send_async_request(self, method: str, path: dict, params: dict = None, dataJ=None, files=None) -> httpx.Response:
+async def _send_async_request(self, method: str, path: dict, params: dict = {}, dataJ=None, files=None) -> httpx.Response:
     url = self.base_url + path
-    if type(self) is Antipublic:
-        if params:
-            params["key"] = self.token
-        else:
-            params = {"key": self.token}
+    if isinstance(self, Antipublic):
+        params["key"] = self.token
     method = method.upper()
     if re.search(self.base_url + self._delay_pattern, url):
         await _MainTweaks._auto_delay_async(self=self)
-    elif type(self) is Market:
+    elif isinstance(self, Market):
         await _MainTweaks._auto_delay_async(self=self, delay=0.5)
 
     if params:
         if not params.get("locale"):  # Фикс для какого-то метода. Там коллизия параметра locale
             params["locale"] = self._locale
+        params = _MainTweaks._TrimNONE(params)  # Трим хуйни
         params.update(self.custom.params)
-        ptd = []
-        for key in params.keys():  # Убираем None
-            if params.get(key) is None:
-                ptd.append(key)
-        for key in ptd:
-            del params[key]
     elif dataJ:
         if type(dataJ) is dict:
+            dataJ = _MainTweaks._TrimNONE(dataJ)  # Трим хуйни
             dataJ.update(self.custom.json)
 
     headers = self._main_headers.copy()
@@ -71,7 +64,7 @@ async def _send_async_request(self, method: str, path: dict, params: dict = None
         "DELETE",
     ]
     proxy = None
-    if self._proxy_type is not None:
+    if self._proxy_type:
         if self._proxy_type in proxy_schemes:
             proxy = f"{proxy_schemes[self._proxy_type]}://{self._proxy}"
         else:
@@ -122,7 +115,7 @@ class Forum:
         - **timeout** (int): Request timeout.
         """
         self.base_url = "https://api.zelenka.guru"
-        if proxy_type is not None:
+        if proxy_type:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
@@ -186,7 +179,7 @@ class Forum:
         :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
-        if proxy_type is not None:
+        if proxy_type:
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
             else:
@@ -212,9 +205,9 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def list(
             self,
-            parent_category_id: int = None,
-            parent_forum_id: int = None,
-            order: Literal["natural", "list"] = None,
+            parent_category_id: int = _MainTweaks.NONE,
+            parent_forum_id: int = _MainTweaks.NONE,
+            order: Literal["natural", "list"] = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/categories
@@ -273,9 +266,9 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def list(
             self,
-            parent_category_id: int = None,
-            parent_forum_id: int = None,
-            order: Literal["natural", "list"] = None,
+            parent_category_id: int = _MainTweaks.NONE,
+            parent_forum_id: int = _MainTweaks.NONE,
+            order: Literal["natural", "list"] = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums
@@ -332,11 +325,11 @@ class Forum:
         def follow(
             self,
             forum_id: int,
-            prefix_ids: builtins.list = None,
-            minimal_contest_amount: int = None,
-            post: bool = None,
-            alert: bool = None,
-            email: bool = None,
+            prefix_ids: builtins.list = _MainTweaks.NONE,
+            minimal_contest_amount: int = _MainTweaks.NONE,
+            post: bool = _MainTweaks.NONE,
+            alert: bool = _MainTweaks.NONE,
+            email: bool = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/forums/{forum_id}/followers
@@ -364,9 +357,9 @@ class Forum:
             """
             path = f"/forums/{forum_id}/followers"
             params = {
-                "post": int(post) if post else post,
-                "alert": int(alert) if alert else alert,
-                "email": int(email) if email else email,
+                "post": int(post) if not isinstance(post, _MainTweaks.NonePlaceholder) else post,
+                "alert": int(alert) if not isinstance(alert, _MainTweaks.NonePlaceholder) else alert,
+                "email": int(email) if not isinstance(email, _MainTweaks.NonePlaceholder) else email,
                 "minimal_contest_amount": minimal_contest_amount,
                 "prefix_ids[]": prefix_ids,
             }
@@ -421,7 +414,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def followed(self, total: bool = None) -> httpx.Response:
+        def followed(self, total: bool = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.zelenka.guru/forums/followed
 
@@ -441,7 +434,7 @@ class Forum:
             ```
             """
             path = "/forums/followed"
-            params = {"total": int(total) if total else total}
+            params = {"total": int(total) if not isinstance(total, _MainTweaks.NonePlaceholder) else total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
     class __Pages:
@@ -450,7 +443,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def list(
-            self, parent_page_id: int = None, order: Literal["natural", "list"] = None
+            self, parent_page_id: int = _MainTweaks.NONE, order: Literal["natural", "list"] = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/pages
@@ -505,7 +498,7 @@ class Forum:
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["read"])
-            def get(self, post_id: int, before: int = None) -> httpx.Response:
+            def get(self, post_id: int, before: int = _MainTweaks.NONE) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/posts/{post_id}/comments
 
@@ -535,7 +528,7 @@ class Forum:
                 )
 
             @_MainTweaks._CheckScopes(scopes=["post"])
-            def create(self, post_id: int, comment_body: str = None) -> httpx.Response:
+            def create(self, post_id: int, comment_body: str) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/posts/{post_id}/comments
 
@@ -568,11 +561,11 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def list(
             self,
-            thread_id: int = None,
-            page_of_post_id: int = None,
-            page: int = None,
-            limit: int = None,
-            order: Constants.Forum.PostOrder._Literal = None,
+            thread_id: int = _MainTweaks.NONE,
+            page_of_post_id: int = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
+            order: Constants.Forum.PostOrder._Literal = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/posts
@@ -632,7 +625,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["post"])
         def create(
-            self, post_body: str, thread_id: int = None, quote_post_id: int = None
+            self, post_body: str, thread_id: int = _MainTweaks.NONE, quote_post_id: int = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/posts
@@ -670,7 +663,7 @@ class Forum:
             )
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def edit(self, post_id: int, post_body: str = None) -> httpx.Response:
+        def edit(self, post_id: int, post_body: str = _MainTweaks.NONE) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/posts/{post_id}
 
@@ -700,7 +693,7 @@ class Forum:
             )
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def delete(self, post_id: int, reason: str = None) -> httpx.Response:
+        def delete(self, post_id: int, reason: str = _MainTweaks.NONE) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/posts/{post_id}
 
@@ -726,7 +719,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def likes(
-            self, post_id: int, page: int = None, limit: int = None
+            self, post_id: int, page: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/posts/{post_id}/likes
@@ -851,13 +844,13 @@ class Forum:
                     require_total_like_count: int,
                     secret_answer: str,
                     reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = None,
-                    title_en: str = None,
-                    prefix_ids: list = None,
-                    tags: list = None,
-                    allow_ask_hidden_content: bool = None,
-                    comment_ignore_group: bool = None,
-                    dont_alert_followers: bool = None,
+                    title: str = _MainTweaks.NONE,
+                    title_en: str = _MainTweaks.NONE,
+                    prefix_ids: list = _MainTweaks.NONE,
+                    tags: list = _MainTweaks.NONE,
+                    allow_ask_hidden_content: bool = _MainTweaks.NONE,
+                    comment_ignore_group: bool = _MainTweaks.NONE,
+                    dont_alert_followers: bool = _MainTweaks.NONE,
                     forum_notifications: bool = True,
                     email_notifications: bool = False,
                 ) -> httpx.Response:
@@ -910,13 +903,13 @@ class Forum:
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
-                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
-                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
-                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
-                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
-                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
+                        "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
+                        "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else email_notifications,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
+                        "dont_alert_followers": int(dont_alert_followers) if not isinstance(dont_alert_followers, _MainTweaks.NonePlaceholder) else dont_alert_followers,
                         "reply_group": reply_group,
-                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
                         "count_winners": count_winners,
                         "length_value": length_value,
                         "length_option": length_option,
@@ -956,13 +949,13 @@ class Forum:
                     require_total_like_count: int,
                     secret_answer: str,
                     reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = None,
-                    title_en: str = None,
-                    prefix_ids: list = None,
-                    tags: list = None,
-                    allow_ask_hidden_content: bool = None,
-                    comment_ignore_group: bool = None,
-                    dont_alert_followers: bool = None,
+                    title: str = _MainTweaks.NONE,
+                    title_en: str = _MainTweaks.NONE,
+                    prefix_ids: list = _MainTweaks.NONE,
+                    tags: list = _MainTweaks.NONE,
+                    allow_ask_hidden_content: bool = _MainTweaks.NONE,
+                    comment_ignore_group: bool = _MainTweaks.NONE,
+                    dont_alert_followers: bool = _MainTweaks.NONE,
                     forum_notifications: bool = True,
                     email_notifications: bool = False,
                 ) -> httpx.Response:
@@ -1011,13 +1004,13 @@ class Forum:
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
-                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
-                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
-                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
-                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
-                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
+                        "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
+                        "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else email_notifications,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
+                        "dont_alert_followers": int(dont_alert_followers) if not isinstance(dont_alert_followers, _MainTweaks.NonePlaceholder) else dont_alert_followers,
                         "reply_group": reply_group,
-                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
@@ -1061,13 +1054,13 @@ class Forum:
                     require_total_like_count: int,
                     secret_answer: str,
                     reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = None,
-                    title_en: str = None,
-                    prefix_ids: list = None,
-                    tags: list = None,
-                    allow_ask_hidden_content: bool = None,
-                    comment_ignore_group: bool = None,
-                    dont_alert_followers: bool = None,
+                    title: str = _MainTweaks.NONE,
+                    title_en: str = _MainTweaks.NONE,
+                    prefix_ids: list = _MainTweaks.NONE,
+                    tags: list = _MainTweaks.NONE,
+                    allow_ask_hidden_content: bool = _MainTweaks.NONE,
+                    comment_ignore_group: bool = _MainTweaks.NONE,
+                    dont_alert_followers: bool = _MainTweaks.NONE,
                     forum_notifications: bool = True,
                     email_notifications: bool = False,
                 ) -> httpx.Response:
@@ -1120,18 +1113,18 @@ class Forum:
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
-                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
-                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
-                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
-                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                        "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
+                        "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else email_notifications,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
                         "reply_group": reply_group,
-                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
                         "prize_type": prize_type,
                         "contest_type": contest_type,
-                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
+                        "dont_alert_followers": int(dont_alert_followers) if not isinstance(dont_alert_followers, _MainTweaks.NonePlaceholder) else dont_alert_followers,
                         "prize_data_upgrade": prize_data_upgrade,
                         "length_value": length_value,
                         "length_option": length_option,
@@ -1166,13 +1159,13 @@ class Forum:
                     require_total_like_count: int,
                     secret_answer: str,
                     reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = None,
-                    title_en: str = None,
-                    prefix_ids: list = None,
-                    tags: list = None,
-                    allow_ask_hidden_content: bool = None,
-                    comment_ignore_group: bool = None,
-                    dont_alert_followers: bool = None,
+                    title: str = _MainTweaks.NONE,
+                    title_en: str = _MainTweaks.NONE,
+                    prefix_ids: list = _MainTweaks.NONE,
+                    tags: list = _MainTweaks.NONE,
+                    allow_ask_hidden_content: bool = _MainTweaks.NONE,
+                    comment_ignore_group: bool = _MainTweaks.NONE,
+                    dont_alert_followers: bool = _MainTweaks.NONE,
                     forum_notifications: bool = True,
                     email_notifications: bool = False,
                 ) -> httpx.Response:
@@ -1219,19 +1212,19 @@ class Forum:
                         "prefix_id[]": prefix_ids,
                         "tags": ",".join(tags) if tags else tags,
                         "hide_contacts": 0,
-                        "watch_thread_state": int(any([forum_notifications, email_notifications])),
-                        "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
-                        "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
-                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                        "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
+                        "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
+                        "watch_thread_email": int(email_notifications) if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else email_notifications,
+                        "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
                         "reply_group": reply_group,
-                        "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                        "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
                         "count_winners": count_winners,
                         "require_like_count": require_like_count,
                         "require_total_like_count": require_total_like_count,
                         "prize_type": "upgrades",
                         "contest_type": "by_needed_members",
                         "needed_members": needed_members,
-                        "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
+                        "dont_alert_followers": int(dont_alert_followers) if not isinstance(dont_alert_followers, _MainTweaks.NonePlaceholder) else dont_alert_followers,
                         "prize_data_upgrade": prize_data_upgrade,
                     }
 
@@ -1265,13 +1258,13 @@ class Forum:
                 item_id: Union[str, int],
                 amount: float,
                 post_body: str,
-                currency: Constants.Market.Currency._Literal = None,
+                currency: Constants.Market.Currency._Literal = _MainTweaks.NONE,
                 conversation_screenshot: str = "no",
-                tags: list = None,
-                hide_contacts: bool = None,
-                allow_ask_hidden_content: bool = None,
-                comment_ignore_group: bool = None,
-                dont_alert_followers: bool = None,
+                tags: list = _MainTweaks.NONE,
+                hide_contacts: bool = _MainTweaks.NONE,
+                allow_ask_hidden_content: bool = _MainTweaks.NONE,
+                comment_ignore_group: bool = _MainTweaks.NONE,
+                dont_alert_followers: bool = _MainTweaks.NONE,
                 reply_group: Constants.Forum.ReplyGroups._Literal = 2,
                 forum_notifications: bool = True,
                     email_notifications: bool = False,
@@ -1319,14 +1312,14 @@ class Forum:
                     "as_funds_receipt": "no",
                     "as_tg_login_screenshot": conversation_screenshot,
                     "tags": ",".join(tags) if tags else tags,
-                    "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
-                    "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
-                    "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
-                    "dont_alert_followers": int(dont_alert_followers) if dont_alert_followers is not None else dont_alert_followers,
+                    "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
+                    "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
+                    "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
+                    "dont_alert_followers": int(dont_alert_followers) if not isinstance(dont_alert_followers, _MainTweaks.NonePlaceholder) else dont_alert_followers,
                     "reply_group": reply_group,
-                    "watch_thread_state": int(any([forum_notifications, email_notifications])),
-                    "watch_thread": int(forum_notifications) if forum_notifications is not None else forum_notifications,
-                    "watch_thread_email": int(email_notifications) if email_notifications is not None else email_notifications,
+                    "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
+                    "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
+                    "watch_thread_email": int(email_notifications) if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else email_notifications,
                 }
                 return _send_request(
                     self=self._api, method="POST", path=path, dataJ=dataJ
@@ -1341,14 +1334,14 @@ class Forum:
                 post_body: str,
                 pay_claim: bool,
                 conversation_screenshot: str = "no",
-                responder_data: str = None,
-                currency: Constants.Market.Currency._Literal = None,
+                responder_data: str = _MainTweaks.NONE,
+                currency: Constants.Market.Currency._Literal = _MainTweaks.NONE,
                 transfer_type: Constants.Forum.Arbitrage.TransferType._Literal = "notsafe",
-                tags: list = None,
-                hide_contacts: bool = None,
-                allow_ask_hidden_content: bool = None,
-                comment_ignore_group: bool = None,
-                dont_alert_followers: bool = None,
+                tags: list = _MainTweaks.NONE,
+                hide_contacts: bool = _MainTweaks.NONE,
+                allow_ask_hidden_content: bool = _MainTweaks.NONE,
+                comment_ignore_group: bool = _MainTweaks.NONE,
+                dont_alert_followers: bool = _MainTweaks.NONE,
                 reply_group: Constants.Forum.ReplyGroups._Literal = 2,
             ) -> httpx.Response:
                 """
@@ -1399,9 +1392,9 @@ class Forum:
                     "as_funds_receipt": receipt,
                     "as_tg_login_screenshot": conversation_screenshot,
                     "tags": ",".join(tags) if tags else tags,
-                    "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
-                    "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
-                    "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                    "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
+                    "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
+                    "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
                     "dont_alert_followers": dont_alert_followers,
                     "reply_group": reply_group,
                 }
@@ -1412,14 +1405,14 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def list(
             self,
-            forum_id: int = None,
-            creator_user_id: Union[int, str] = None,
-            sticky: bool = None,
-            thread_prefix_id: int = None,
-            thread_tag_id: int = None,
-            page: int = None,
-            limit: int = None,
-            order: Constants.Forum.ThreadOrder._Literal = None,
+            forum_id: int = _MainTweaks.NONE,
+            creator_user_id: Union[int, str] = _MainTweaks.NONE,
+            sticky: bool = _MainTweaks.NONE,
+            thread_prefix_id: int = _MainTweaks.NONE,
+            thread_tag_id: int = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
+            order: Constants.Forum.ThreadOrder._Literal = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads
@@ -1452,7 +1445,7 @@ class Forum:
             params = {
                 "forum_id": forum_id,
                 "creator_user_id": creator_user_id,
-                "sticky": int(sticky) if sticky else sticky,
+                "sticky": int(sticky) if not isinstance(sticky, _MainTweaks.NonePlaceholder) else sticky,
                 "thread_prefix_id": thread_prefix_id,
                 "thread_tag_id": thread_tag_id,
                 "page": page,
@@ -1490,14 +1483,14 @@ class Forum:
             forum_id: int,
             post_body: str,
             reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-            title: str = None,
-            title_en: str = None,
-            prefix_ids: builtins.list = None,
-            tags: builtins.list = None,
-            hide_contacts: bool = None,
-            allow_ask_hidden_content: bool = None,
-            comment_ignore_group: bool = None,
-            dont_alert_followers: bool = None,
+            title: str = _MainTweaks.NONE,
+            title_en: str = _MainTweaks.NONE,
+            prefix_ids: builtins.list = _MainTweaks.NONE,
+            tags: builtins.list = _MainTweaks.NONE,
+            hide_contacts: bool = _MainTweaks.NONE,
+            allow_ask_hidden_content: bool = _MainTweaks.NONE,
+            comment_ignore_group: bool = _MainTweaks.NONE,
+            dont_alert_followers: bool = _MainTweaks.NONE,
             **kwargs,
         ) -> httpx.Response:
             """
@@ -1534,10 +1527,10 @@ class Forum:
             params = {
                 "prefix_id[]": prefix_ids,
                 "tags": ",".join(tags) if tags else tags,
-                "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
-                "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
+                "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
                 "reply_group": reply_group,
-                "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
                 "dont_alert_followers": dont_alert_followers,
             }
             dataJ = {
@@ -1562,15 +1555,15 @@ class Forum:
         def edit(
             self,
             thread_id: int,
-            title: str = None,
-            title_en: str = None,
-            prefix_ids: builtins.list = None,
-            tags: builtins.list = None,
-            discussion_open: bool = None,
-            hide_contacts: bool = None,
-            allow_ask_hidden_content: bool = None,
-            reply_group: Constants.Forum.ReplyGroups._Literal = None,
-            comment_ignore_group: bool = None,
+            title: str = _MainTweaks.NONE,
+            title_en: str = _MainTweaks.NONE,
+            prefix_ids: builtins.list = _MainTweaks.NONE,
+            tags: builtins.list = _MainTweaks.NONE,
+            discussion_open: bool = _MainTweaks.NONE,
+            hide_contacts: bool = _MainTweaks.NONE,
+            allow_ask_hidden_content: bool = _MainTweaks.NONE,
+            reply_group: Constants.Forum.ReplyGroups._Literal = _MainTweaks.NONE,
+            comment_ignore_group: bool = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/threads/{thread_id}
@@ -1607,11 +1600,11 @@ class Forum:
                 "title_en": title_en,
                 "prefix_id[]": prefix_ids,
                 "tags": ",".join(tags) if tags else tags,
-                "discussion_open": int(discussion_open) if discussion_open is not None else discussion_open,
-                "hide_contacts": int(hide_contacts) if hide_contacts is not None else hide_contacts,
-                "allow_ask_hidden_content": int(allow_ask_hidden_content) if allow_ask_hidden_content is not None else allow_ask_hidden_content,
+                "discussion_open": int(discussion_open) if not isinstance(discussion_open, _MainTweaks.NonePlaceholder) else discussion_open,
+                "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
+                "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
                 "reply_group": reply_group,
-                "comment_ignore_group": int(comment_ignore_group) if comment_ignore_group is not None else comment_ignore_group,
+                "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
             }
             return _send_request(self=self._api, method="PUT", path=path, dataJ=dataJ)
 
@@ -1620,10 +1613,10 @@ class Forum:
             self,
             thread_id: int,
             forum_id: int,
-            title: str = None,
-            title_en: str = None,
-            prefix_ids: builtins.list = None,
-            send_alert: bool = None
+            title: str = _MainTweaks.NONE,
+            title_en: str = _MainTweaks.NONE,
+            prefix_ids: builtins.list = _MainTweaks.NONE,
+            send_alert: bool = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/{thread_id}/move
@@ -1654,13 +1647,13 @@ class Forum:
                 "title": title,
                 "title_en": title_en,
                 "prefix_id[]": prefix_ids,
-                "apply_thread_prefix": 1 if prefix_ids else None,
-                "send_alert": int(send_alert) if send_alert else send_alert
+                "apply_thread_prefix": 1 if prefix_ids else _MainTweaks.NONE,
+                "send_alert": int(send_alert) if not isinstance(send_alert, _MainTweaks.NonePlaceholder) else send_alert
             }
             return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def delete(self, thread_id: int, reason: str = None) -> httpx.Response:
+        def delete(self, thread_id: int, reason: str = _MainTweaks.NONE) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/threads/{thread_id}
 
@@ -1710,7 +1703,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def followed(self, total: bool = None) -> httpx.Response:
+        def followed(self, total: bool = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/followed
 
@@ -1730,11 +1723,11 @@ class Forum:
             ```
             """
             path = "/threads/followed"
-            params = {"total": int(total) if total else total}
+            params = {"total": int(total) if not isinstance(total, _MainTweaks.NonePlaceholder) else total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def follow(self, thread_id: int, email: bool = None) -> httpx.Response:
+        def follow(self, thread_id: int, email: bool = _MainTweaks.NONE) -> httpx.Response:
             """
             POST https://api.zelenka.guru/threads/{thread_id}/followers
 
@@ -1755,7 +1748,7 @@ class Forum:
             ```
             """
             path = f"/threads/{thread_id}/followers"
-            params = {"email": int(email) if email else email}
+            params = {"email": int(email) if not isinstance(email, _MainTweaks.NonePlaceholder) else email}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -1859,7 +1852,7 @@ class Forum:
             if type(response_ids) is list:
                 for element in response_ids:
                     if not isinstance(element, int):
-                        _WarningsLogger.warn(f"{FutureWarning.__name__} All response_ids elements should be integer")
+                        _WarningsLogger.warning(f"{FutureWarning.__name__} All response_ids elements should be integer")
             elif type(response_ids) is int:
                 response_ids = [response_ids]
             params = {"response_id": response_ids[0]} if len(response_ids) == 1 else {
@@ -1870,7 +1863,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def new(
-            self, forum_id: int = None, limit: int = None, data_limit: int = None
+            self, forum_id: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE, data_limit: int = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/new
@@ -1905,10 +1898,10 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read"])
         def recent(
             self,
-            days: int = None,
-            forum_id: int = None,
-            limit: int = None,
-            data_limit: int = None,
+            days: int = _MainTweaks.NONE,
+            forum_id: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
+            data_limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/threads/recent
@@ -1989,7 +1982,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def list(self, page: int = None, limit: int = None) -> httpx.Response:
+        def list(self, page: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.zelenka.guru/tags/list
 
@@ -2015,7 +2008,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def tagged(
-            self, tag_id: int, page: int = None, limit: int = None
+            self, tag_id: int, page: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/tags/{tag_id}
@@ -2071,7 +2064,7 @@ class Forum:
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
-            def upload(self, image: bytes, user_id: Union[int, str] = "me", size: int = None, x: int = None, y: int = None) -> httpx.Response:
+            def upload(self, image: bytes, user_id: Union[int, str] = "me", size: int = _MainTweaks.NONE, x: int = _MainTweaks.NONE, y: int = _MainTweaks.NONE) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/{user_id}/avatar
 
@@ -2083,7 +2076,7 @@ class Forum:
 
                 - **user_id** (int): ID of user.
                     > If you do not specify the user_id, then you will change the avatar of the current user
-                - **avatar** (binary): Binary data of the avatar.
+                - **image** (binary): Binary data of the avatar.
                 - **x** (int): The starting point of the selection by width.
                 - **y** (int): The starting point of the selection by height
                 - **size** (int): Selection size.
@@ -2098,7 +2091,7 @@ class Forum:
                 ```
                 """
                 if "CREATE_JOB" in locals():
-                    _WarningsLogger.warn(
+                    _WarningsLogger.warning(
                         msg=f"{FutureWarning.__name__}: You can't upload avatar using batch")
                 path = f"/users/{user_id}/avatar"
                 files = {"avatar": image}
@@ -2133,7 +2126,7 @@ class Forum:
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
             def crop(
-                self, user_id: Union[int, str] = "me", size: int = 16, x: int = None, y: int = None
+                self, user_id: Union[int, str] = "me", size: int = 16, x: int = _MainTweaks.NONE, y: int = _MainTweaks.NONE
             ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/{user_id}/avatar-crop
@@ -2171,7 +2164,7 @@ class Forum:
                 self._api = _api_self
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
-            def upload(self, image: bytes, user_id: Union[int, str] = "me", size: int = None, x: int = None, y: int = None) -> httpx.Response:
+            def upload(self, image: bytes, user_id: Union[int, str] = "me", size: int = _MainTweaks.NONE, x: int = _MainTweaks.NONE, y: int = _MainTweaks.NONE) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/{user_id}/background
 
@@ -2198,7 +2191,7 @@ class Forum:
                 ```
                 """
                 if "CREATE_JOB" in locals():
-                    _WarningsLogger.warn(
+                    _WarningsLogger.warning(
                         msg=f"{FutureWarning.__name__}: You can't upload avatar using batch")
                 path = f"/users/{user_id}/background"
                 files = {"background": image}
@@ -2233,7 +2226,7 @@ class Forum:
 
             @_MainTweaks._CheckScopes(scopes=["post?admincp"])
             def crop(
-                self, user_id: Union[int, str] = "me", size: int = 100, x: int = None, y: int = None
+                self, user_id: Union[int, str] = "me", size: int = 100, x: int = _MainTweaks.NONE, y: int = _MainTweaks.NONE
             ) -> httpx.Response:
                 """
                 POST https://api.zelenka.guru/users/{user_id}/background/crop
@@ -2272,7 +2265,7 @@ class Forum:
             self.background = self.__Background(self._api)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def list(self, page: int = None, limit: int = None) -> httpx.Response:
+        def list(self, page: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users
 
@@ -2319,9 +2312,9 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["read?admincp"])
         def search(
             self,
-            username: str = None,
-            user_email: str = None,
-            custom_fields: dict = None,
+            username: str = _MainTweaks.NONE,
+            user_email: str = _MainTweaks.NONE,
+            custom_fields: dict = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/find
@@ -2350,7 +2343,7 @@ class Forum:
                 "username": username,
                 "user_email": user_email,
             }
-            if custom_fields is not None:
+            if custom_fields:
                 if "CREATE_JOB" in locals():
                     # Костыль CreateJob
                     params["custom_fields"] = custom_fields
@@ -2386,7 +2379,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def timeline(
-            self, user_id: Union[int, str] = "me", page: int = None, limit: int = None
+            self, user_id: Union[int, str] = "me", page: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/timeline
@@ -2417,19 +2410,14 @@ class Forum:
         def edit(
             self,
             user_id: Union[int, str] = "me",
-            password: str = None,
-            password_old: str = None,
-            password_algo: str = None,
-            user_email: str = None,
-            username: str = None,
-            user_title: str = None,
-            primary_group_id: int = None,
-            secondary_group_ids: builtins.list[int] = None,
-            user_dob_day: int = None,
-            user_dob_month: int = None,
-            user_dob_year: int = None,
-            fields: dict = None,
-            display_group_id: int = None,
+            user_title: str = _MainTweaks.NONE,
+            primary_group_id: int = _MainTweaks.NONE,
+            secondary_group_ids: builtins.list[int] = _MainTweaks.NONE,
+            user_dob_day: int = _MainTweaks.NONE,
+            user_dob_month: int = _MainTweaks.NONE,
+            user_dob_year: int = _MainTweaks.NONE,
+            fields: dict = _MainTweaks.NONE,
+            display_group_id: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             PUT https://api.zelenka.guru/users/{user_id}
@@ -2442,12 +2430,6 @@ class Forum:
 
             - **user_id** (int): ID of user.
                 > If you do not specify the user_id, you will edit current user
-            - **password** (str): New password.
-            - **password_old** (str): Data of the existing password, it is not required if (1) the current authenticated user has user admin permission, (2) the admincp scope is granted and (3) the user being edited is not the current authenticated user.
-            - **password_algo** (str): Algorithm used to encrypt the password and password_old parameters.
-            - **user_email** (str): New email of the user.
-            - **username** (str): New username of the user.
-                > Changing username requires Administrator permission.
             - **user_title** (str): New custom title of the user.
             - **primary_group_id** (int): ID of new primary group.
             - **secondary_group_ids** (list): Array of ID's of new secondary groups.
@@ -2466,22 +2448,16 @@ class Forum:
             """
             path = f"/users/{user_id}"
             params = {
-                "user_email": user_email,
-                "username": username,
                 "primary_group_id": primary_group_id,
                 "secondary_group_ids[]": secondary_group_ids,
                 "user_dob_day": user_dob_day,
                 "user_dob_month": user_dob_month,
                 "user_dob_year": user_dob_year,
                 "display_group_id": display_group_id,
+                "user_title": user_title
             }
-            dataJ = {
-                "user_title": user_title,
-                "password": password,
-                "password_old": password_old,
-                "password_algo": password_algo,
-            }
-            if fields is not None:
+            dataJ = {}
+            if fields:
                 if "CREATE_JOB" in locals():
                     dataJ["fields"] = fields  # Костыль CreateJob
                 else:
@@ -2546,9 +2522,9 @@ class Forum:
         def followers(
             self,
             user_id: Union[int, str] = "me",
-            order: Literal["natural", "follow_date", "follow_date_reverse"] = None,
-            page: int = None,
-            limit: int = None,
+            order: Literal["natural", "follow_date", "follow_date_reverse"] = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/followers
@@ -2580,9 +2556,9 @@ class Forum:
         def followings(
             self,
             user_id: Union[int, str] = "me",
-            order: Literal["natural", "follow_date", "follow_date_reverse"] = None,
-            page: int = None,
-            limit: int = None,
+            order: Literal["natural", "follow_date", "follow_date_reverse"] = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/followings
@@ -2611,7 +2587,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["read"])
-        def ignored(self, total: bool = None) -> httpx.Response:
+        def ignored(self, total: bool = _MainTweaks.NONE) -> httpx.Response:
             """
              GET https://api.zelenka.guru/users/ignored
 
@@ -2631,7 +2607,7 @@ class Forum:
             ```
             """
             path = "/users/ignored"
-            params = {"total": int(total) if total else total}
+            params = {"total": int(total) if not isinstance(total, _MainTweaks.NonePlaceholder) else total}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
@@ -2713,7 +2689,7 @@ class Forum:
 
             @_MainTweaks._CheckScopes(scopes=["read"])
             def list(
-                self, profile_post_id: int, before: int = None, limit: int = None
+                self, profile_post_id: int, before: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE
             ) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/profile-posts/{profile_post_id}/comments
@@ -2803,7 +2779,7 @@ class Forum:
 
         @_MainTweaks._CheckScopes(scopes=["read"])
         def list(
-            self, user_id: int, page: int = None, limit: int = None
+            self, user_id: int, page: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/profile-posts
@@ -2874,7 +2850,7 @@ class Forum:
             print(response.json())
             ```
             """
-            path = "/users/me/timeline"
+            path = f"/users/{user_id}/timeline"
             dataJ = {"post_body": post_body}
             return _send_request(self=self._api, method="POST", path=path, dataJ=dataJ)
 
@@ -2905,7 +2881,7 @@ class Forum:
             return _send_request(self=self._api, method="PUT", path=path, dataJ=dataJ)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def delete(self, profile_post_id: int, reason: str = None) -> httpx.Response:
+        def delete(self, profile_post_id: int, reason: str = _MainTweaks.NONE) -> httpx.Response:
             """
             DELETE https://api.zelenka.guru/profile-posts/{profile_post_id}
 
@@ -3031,12 +3007,12 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def all(
             self,
-            q: str = None,
-            tag: str = None,
-            forum_id: int = None,
-            user_id: Union[int, str] = None,
-            page: int = None,
-            limit: int = None,
+            q: str = _MainTweaks.NONE,
+            tag: str = _MainTweaks.NONE,
+            forum_id: int = _MainTweaks.NONE,
+            user_id: Union[int, str] = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search
@@ -3077,13 +3053,13 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def thread(
             self,
-            q: str = None,
-            tag: str = None,
-            forum_id: int = None,
-            user_id: Union[int, str] = None,
-            page: int = None,
-            limit: int = None,
-            data_limit: int = None,
+            q: str = _MainTweaks.NONE,
+            tag: str = _MainTweaks.NONE,
+            forum_id: int = _MainTweaks.NONE,
+            user_id: Union[int, str] = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
+            data_limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/threads
@@ -3128,13 +3104,13 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def post(
             self,
-            q: str = None,
-            tag: str = None,
-            forum_id: int = None,
-            user_id: Union[int, str] = None,
-            page: int = None,
-            limit: int = None,
-            data_limit: int = None,
+            q: str = _MainTweaks.NONE,
+            tag: str = _MainTweaks.NONE,
+            forum_id: int = _MainTweaks.NONE,
+            user_id: Union[int, str] = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
+            data_limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/posts
@@ -3179,9 +3155,9 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def tag(
             self,
-            tags: Union[list[str], str] = None,
-            page: int = None,
-            limit: int = None,
+            tags: Union[list[str], str] = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/tagged
@@ -3218,10 +3194,10 @@ class Forum:
         @_MainTweaks._CheckScopes(scopes=["post"])
         def profile_posts(
             self,
-            q: str = None,
-            user_id: Union[int, str] = None,
-            page: int = None,
-            limit: int = None,
+            q: str = _MainTweaks.NONE,
+            user_id: Union[int, str] = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            limit: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.zelenka.guru/search/profile-posts
@@ -3298,7 +3274,7 @@ class Forum:
             return _send_request(self=self._api, method="GET", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["post"])
-        def read(self, notification_id: int = None) -> httpx.Response:
+        def read(self, notification_id: int = _MainTweaks.NONE) -> httpx.Response:
             """
             POST https://api.zelenka.guru/notifications/read
 
@@ -3333,11 +3309,11 @@ class Forum:
             def list(
                 self,
                 conversation_id: int,
-                page: int = None,
-                limit: int = None,
-                order: Literal["natural", "natural_reverse"] = None,
-                before: int = None,
-                after: int = None,
+                page: int = _MainTweaks.NONE,
+                limit: int = _MainTweaks.NONE,
+                order: Literal["natural", "natural_reverse"] = _MainTweaks.NONE,
+                before: int = _MainTweaks.NONE,
+                after: int = _MainTweaks.NONE,
             ) -> httpx.Response:
                 """
                 GET https://api.zelenka.guru/conversation-messages
@@ -3465,7 +3441,7 @@ class Forum:
             self.messages = self.__Conversations_messages(self._api)
 
         @_MainTweaks._CheckScopes(scopes=["conversate", "read"])
-        def list(self, page: int = None, limit: int = None) -> httpx.Response:
+        def list(self, page: int = _MainTweaks.NONE, limit: int = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.zelenka.guru/conversations
 
@@ -3576,9 +3552,9 @@ class Forum:
             params = {
                 "recipient_id": recipient_id,
                 "is_group": 0,
-                "open_invite": int(open_invite) if open_invite else open_invite,
-                "conversation_locked": int(conversation_locked) if conversation_locked else conversation_locked,
-                "allow_edit_messages": int(allow_edit_messages) if allow_edit_messages else allow_edit_messages,
+                "open_invite": int(open_invite) if not isinstance(open_invite, _MainTweaks.NonePlaceholder) else open_invite,
+                "conversation_locked": int(conversation_locked) if not isinstance(conversation_locked, _MainTweaks.NonePlaceholder) else conversation_locked,
+                "allow_edit_messages": int(allow_edit_messages) if not isinstance(allow_edit_messages, _MainTweaks.NonePlaceholder) else allow_edit_messages,
             }
             dataJ = {"message_body": message}
             return _send_request(
@@ -3594,7 +3570,7 @@ class Forum:
             self,
             recipients: builtins.list,
             title: str,
-            message: str = None,
+            message: str = _MainTweaks.NONE,
             open_invite: bool = True,
             conversation_locked: bool = False,
             allow_edit_messages: bool = True,
@@ -3628,9 +3604,9 @@ class Forum:
                 "recipients": ",".join(recipients),
                 "title": title,
                 "is_group": 1,
-                "open_invite": int(open_invite) if open_invite else open_invite,
-                "conversation_locked": int(conversation_locked) if conversation_locked else conversation_locked,
-                "allow_edit_messages": int(allow_edit_messages) if allow_edit_messages else allow_edit_messages,
+                "open_invite": int(open_invite) if not isinstance(open_invite, _MainTweaks.NonePlaceholder) else open_invite,
+                "conversation_locked": int(conversation_locked) if not isinstance(conversation_locked, _MainTweaks.NonePlaceholder) else conversation_locked,
+                "allow_edit_messages": int(allow_edit_messages) if not isinstance(allow_edit_messages, _MainTweaks.NonePlaceholder) else allow_edit_messages,
             }
             dataJ = {"message_body": message}
             return _send_request(
@@ -3642,7 +3618,7 @@ class Forum:
             )
 
     @_MainTweaks._CheckScopes(scopes=["read"])
-    def navigation(self, parent: int = None) -> httpx.Response:
+    def navigation(self, parent: int = _MainTweaks.NONE) -> httpx.Response:
         """
         GET https://api.zelenka.guru/navigation
 
@@ -3731,7 +3707,7 @@ class Market:
         - **timeout** (int): Request timeout.
         """
         self.base_url = "https://api.lzt.market"
-        if proxy_type is not None:
+        if proxy_type:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
@@ -3801,7 +3777,7 @@ class Market:
         :param proxy_type: Your proxy type. You can use types ( Constants.Proxy.socks5 or socks4,https,http )
         :param proxy: Proxy string. Example -> ip:port or login:password@ip:port
         """
-        if proxy_type is not None:
+        if proxy_type:
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
             else:
@@ -3846,14 +3822,14 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def edit(
             self,
-            disable_steam_guard: bool = None,
-            user_allow_ask_discount: bool = None,
-            max_discount_percent: int = None,
-            allow_accept_accounts: str = None,
-            hide_favorites: bool = None,
-            title: str = None,
-            telegram_client: dict = None,
-            deauthorize_steam: bool = None,
+            disable_steam_guard: bool = _MainTweaks.NONE,
+            user_allow_ask_discount: bool = _MainTweaks.NONE,
+            max_discount_percent: int = _MainTweaks.NONE,
+            allow_accept_accounts: str = _MainTweaks.NONE,
+            hide_favorites: bool = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
+            telegram_client: dict = _MainTweaks.NONE,
+            deauthorize_steam: bool = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             PUT https://api.lzt.market/me
@@ -3870,7 +3846,8 @@ class Market:
             - **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
             - **hide_favorites** (bool): Hide your profile info when you add an account to favorites
             - **title** (str): Market title.
-            - **telegram_client** (dict): Telegram client. It should be {"telegram_api_id"
+            - **telegram_client** (dict): Telegram client.
+                > {"telegram_api_id": ..., "telegram_api_hash": ..., "telegram_device_model": ..., "telegram_system_version": ..., "telegram_app_version": ...}
             - **deauthorize_steam** (bool): Finish all Steam sessions after purchase.
 
             **Example:**
@@ -3882,18 +3859,18 @@ class Market:
             """
             path = "/me"
             params = {
-                "disable_steam_guard": int(disable_steam_guard) if disable_steam_guard else disable_steam_guard,
-                "user_allow_ask_discount": int(user_allow_ask_discount) if user_allow_ask_discount else user_allow_ask_discount,
+                "disable_steam_guard": int(disable_steam_guard) if not isinstance(disable_steam_guard, _MainTweaks.NonePlaceholder) else disable_steam_guard,
+                "user_allow_ask_discount": int(user_allow_ask_discount) if not isinstance(user_allow_ask_discount, _MainTweaks.NonePlaceholder) else user_allow_ask_discount,
                 "max_discount_percent": max_discount_percent,
                 "allow_accept_accounts": allow_accept_accounts,
-                "hide_favourites": int(hide_favorites) if hide_favorites else hide_favorites,
+                "hide_favourites": int(hide_favorites) if not isinstance(hide_favorites, _MainTweaks.NonePlaceholder) else hide_favorites,
                 "market_custom_title": title,
-                "deauthorize_steam": int(deauthorize_steam) if deauthorize_steam else deauthorize_steam,
+                "deauthorize_steam": int(deauthorize_steam) if not isinstance(deauthorize_steam, _MainTweaks.NonePlaceholder) else deauthorize_steam,
             }
             if telegram_client:
                 for key, value in telegram_client.items():
                     if key not in ["telegram_api_id", "telegram_api_hash", "telegram_device_model", "telegram_system_version", "telegram_app_version"]:
-                        _WarningsLogger.warn(
+                        _WarningsLogger.warning(
                             f'{FutureWarning.__name__} Unknown param in telegram_client - "{key}"')
                     else:
                         params[key] = value
@@ -3907,17 +3884,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4020,17 +3997,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4113,17 +4090,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4206,17 +4183,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4292,27 +4269,6 @@ class Market:
                 path = "/riot/params"
                 return _send_request(self=self._api, method="GET", path=path)
 
-            @_MainTweaks._CheckScopes(scopes=["market"])
-            def valorant_data(self, data_type: Literal["Agent", "Buddy", "WeaponSkins"], language: Literal["en-US", "ru-RU"] = None) -> httpx.Response:
-                """
-                GET https://api.lzt.market/data/valorant
-
-                *Displays data for specified type in valorant category.*
-
-                **Example:**
-
-                ```python
-                response = market.category.riot.valorant_data(data_type="Agent")
-                print(response.json())
-                ```
-                """
-                path = "/data/valorant"
-                params = {
-                    "type": data_type,
-                    "locale": language
-                }
-                return _send_request(self=self._api, method="GET", path=path, params=params)
-
         class __Telegram:
             def __init__(self, _api_self):
                 self._api = _api_self
@@ -4320,17 +4276,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4413,17 +4369,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4506,17 +4462,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4618,17 +4574,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4711,17 +4667,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4804,17 +4760,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -4897,17 +4853,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5009,17 +4965,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5102,17 +5058,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5214,17 +5170,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5326,17 +5282,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5419,17 +5375,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5512,17 +5468,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5605,17 +5561,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5698,17 +5654,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5810,17 +5766,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5903,17 +5859,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -5996,17 +5952,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -6089,17 +6045,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -6182,17 +6138,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -6275,17 +6231,17 @@ class Market:
             @_MainTweaks._CheckScopes(scopes=["market"])
             def get(
                 self,
-                page: int = None,
-                title: str = None,
-                pmin: int = None,
-                pmax: int = None,
-                origin: Union[str, list] = None,
-                not_origin: Union[str, list] = None,
-                order_by: Constants.Market.ItemOrder._Literal = None,
-                sold_before: bool = None,
-                sold_before_by_me: bool = None,
-                not_sold_before: bool = None,
-                not_sold_before_by_me: bool = None,
+                page: int = _MainTweaks.NONE,
+                title: str = _MainTweaks.NONE,
+                pmin: int = _MainTweaks.NONE,
+                pmax: int = _MainTweaks.NONE,
+                origin: Union[str, list] = _MainTweaks.NONE,
+                not_origin: Union[str, list] = _MainTweaks.NONE,
+                order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+                sold_before: bool = _MainTweaks.NONE,
+                sold_before_by_me: bool = _MainTweaks.NONE,
+                not_sold_before: bool = _MainTweaks.NONE,
+                not_sold_before_by_me: bool = _MainTweaks.NONE,
 
                 **kwargs,
             ) -> httpx.Response:
@@ -6393,17 +6349,17 @@ class Market:
         def get(
             self,
             category_name: Constants.Market.Category._Literal,
-            page: int = None,
-            title: str = None,
-            pmin: float = None,
-            pmax: float = None,
-            origin: Union[str, list] = None,
-            not_origin: Union[str, list] = None,
-            order_by: Constants.Market.ItemOrder._Literal = None,
-            sold_before: bool = None,
-            sold_before_by_me: bool = None,
-            not_sold_before: bool = None,
-            not_sold_before_by_me: bool = None,
+            page: int = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
+            pmin: float = _MainTweaks.NONE,
+            pmax: float = _MainTweaks.NONE,
+            origin: Union[str, list] = _MainTweaks.NONE,
+            not_origin: Union[str, list] = _MainTweaks.NONE,
+            order_by: Constants.Market.ItemOrder._Literal = _MainTweaks.NONE,
+            sold_before: bool = _MainTweaks.NONE,
+            sold_before_by_me: bool = _MainTweaks.NONE,
+            not_sold_before: bool = _MainTweaks.NONE,
+            not_sold_before_by_me: bool = _MainTweaks.NONE,
 
             **kwargs,
         ) -> httpx.Response:
@@ -6463,7 +6419,7 @@ class Market:
             )
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def list(self, top_queries: bool = None) -> httpx.Response:
+        def list(self, top_queries: bool = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.lzt.market/category
 
@@ -6532,8 +6488,8 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def latest(
             self,
-            page: int = None,
-            title: str = None,
+            page: int = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
 
             **kwargs,
         ) -> httpx.Response:
@@ -6568,13 +6524,13 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def owned(
             self,
-            user_id: int = None,
-            page: int = None,
-            category_id: Constants.Market.CategoryId._Literal = None,
-            pmin: float = None,
-            pmax: float = None,
-            title: str = None,
-            status: Constants.Market.ItemStatus._Literal = None,
+            user_id: int = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            category_id: Constants.Market.CategoryId._Literal = _MainTweaks.NONE,
+            pmin: float = _MainTweaks.NONE,
+            pmax: float = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
+            status: Constants.Market.ItemStatus._Literal = _MainTweaks.NONE,
 
             **kwargs,
         ) -> httpx.Response:
@@ -6622,13 +6578,13 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def purchased(
             self,
-            user_id: int = None,
-            page: int = None,
-            category_id: Constants.Market.CategoryId._Literal = None,
-            pmin: float = None,
-            pmax: float = None,
-            title: str = None,
-            status: Constants.Market.ItemStatus._Literal = None,
+            user_id: int = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            category_id: Constants.Market.CategoryId._Literal = _MainTweaks.NONE,
+            pmin: float = _MainTweaks.NONE,
+            pmax: float = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
+            status: Constants.Market.ItemStatus._Literal = _MainTweaks.NONE,
 
             **kwargs,
         ) -> httpx.Response:
@@ -6676,9 +6632,9 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def favorite(
             self,
-            page: int = None,
-            status: Constants.Market.ItemStatus._Literal = None,
-            title: str = None,
+            page: int = _MainTweaks.NONE,
+            status: Constants.Market.ItemStatus._Literal = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
 
             **kwargs,
         ) -> httpx.Response:
@@ -6714,9 +6670,9 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def viewed(
             self,
-            page: int = None,
-            status: Constants.Market.ItemStatus._Literal = None,
-            title: str = None,
+            page: int = _MainTweaks.NONE,
+            status: Constants.Market.ItemStatus._Literal = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
 
             **kwargs,
         ) -> httpx.Response:
@@ -6756,20 +6712,20 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def history(
             self,
-            user_id: int = None,
-            operation_type: Constants.Market.OperationTypes._Literal = None,
-            pmin: float = None,
-            pmax: float = None,
-            page: int = None,
-            operation_id_lt: int = None,
-            receiver: str = None,
-            sender: str = None,
-            start_date: str = None,
-            end_date: str = None,
-            wallet: str = None,
-            comment: str = None,
-            is_hold: bool = None,
-            show_payments_stats: bool = None,
+            user_id: int = _MainTweaks.NONE,
+            operation_type: Constants.Market.OperationTypes._Literal = _MainTweaks.NONE,
+            pmin: float = _MainTweaks.NONE,
+            pmax: float = _MainTweaks.NONE,
+            page: int = _MainTweaks.NONE,
+            operation_id_lt: int = _MainTweaks.NONE,
+            receiver: str = _MainTweaks.NONE,
+            sender: str = _MainTweaks.NONE,
+            start_date: str = _MainTweaks.NONE,
+            end_date: str = _MainTweaks.NONE,
+            wallet: str = _MainTweaks.NONE,
+            comment: str = _MainTweaks.NONE,
+            is_hold: bool = _MainTweaks.NONE,
+            show_payments_stats: bool = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/user/payments
@@ -6816,8 +6772,8 @@ class Market:
                 "end_date": end_date,
                 "wallet": wallet,
                 "comment": comment,
-                "is_hold": int(is_hold) if is_hold else is_hold,
-                "show_payments_stats": int(show_payments_stats) if show_payments_stats else show_payments_stats,
+                "is_hold": int(is_hold) if not isinstance(is_hold, _MainTweaks.NonePlaceholder) else is_hold,
+                "show_payments_stats": int(show_payments_stats) if not isinstance(show_payments_stats, _MainTweaks.NonePlaceholder) else show_payments_stats,
             }
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
@@ -6827,12 +6783,12 @@ class Market:
             amount: float,
             secret_answer: str,
             currency: Constants.Market.Currency._Literal = "rub",
-            user_id: int = None,
-            username: str = None,
-            comment: str = None,
-            transfer_hold: bool = None,
-            hold_length_option: Constants.Market.HoldPeriod._Literal = None,
-            hold_length_value: int = None,
+            user_id: int = _MainTweaks.NONE,
+            username: str = _MainTweaks.NONE,
+            comment: str = _MainTweaks.NONE,
+            transfer_hold: bool = _MainTweaks.NONE,
+            hold_length_option: Constants.Market.HoldPeriod._Literal = _MainTweaks.NONE,
+            hold_length_value: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/balance/transfer
@@ -6879,7 +6835,7 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def fee(
             self,
-            amount: float = None
+            amount: float = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/balance/transfer/fee
@@ -6941,14 +6897,14 @@ class Market:
         @staticmethod
         def generate_link(
             amount: float,
-            user_id: int = None,
-            username: str = None,
-            comment: str = None,
-            redirect_url: str = None,
-            currency: Constants.Market.Currency._Literal = None,
-            hold: bool = None,
-            hold_length: int = None,
-            hold_option: Literal["hours", "days", "weeks", "months"] = None,
+            user_id: int = _MainTweaks.NONE,
+            username: str = _MainTweaks.NONE,
+            comment: str = _MainTweaks.NONE,
+            redirect_url: str = _MainTweaks.NONE,
+            currency: Constants.Market.Currency._Literal = _MainTweaks.NONE,
+            hold: bool = _MainTweaks.NONE,
+            hold_length: int = _MainTweaks.NONE,
+            hold_option: Literal["hours", "days", "weeks", "months"] = _MainTweaks.NONE,
         ) -> str:
             """
             *Generate payment link.*
@@ -6983,7 +6939,7 @@ class Market:
                 "comment": comment,
                 "redirect": redirect_url,
                 "currency": currency,
-                "hold": int(hold) if hold else hold,
+                "hold": int(hold) if not isinstance(hold, _MainTweaks.NonePlaceholder) else hold,
                 "hold_length_value": hold_length,
                 "hold_length_option": hold_option,
             }
@@ -7115,6 +7071,29 @@ class Market:
                 return _send_request(self=self._api, method="GET", path=path)
 
             @_MainTweaks._CheckScopes(scopes=["market"])
+            def remove_mafile(self, item_id: int) -> httpx.Response:
+                """
+                DELETE https://api.lzt.market/{item_id}/mafile
+
+                *Remove steam mafile.*
+
+                Required scopes: *market*
+
+                **Parameters:**
+
+                - **item_id** (int): ID of item.
+
+                **Example:**
+
+                ```python
+                response = market.managing.steam.remove_mafile(item_id=1000000)
+                print(response.json())
+                ```
+                """
+                path = f"/{item_id}/mafile"
+                return _send_request(self=self._api, method="DELETE", path=path)
+
+            @_MainTweaks._CheckScopes(scopes=["market"])
             def update_inventory(self, item_id: int, app_id: Constants.Market.AppID._Literal) -> httpx.Response:
                 """
                 POST https://api.lzt.market/{item_id}/update-inventory
@@ -7143,7 +7122,7 @@ class Market:
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def inventory_value(
-                self, url: str = None, item_id: int = None, app_id: int = 730, currency: Constants.Market.Currency._Literal = None, ignore_cache: bool = None
+                self, url: str = _MainTweaks.NONE, item_id: int = _MainTweaks.NONE, app_id: int = 730, currency: Constants.Market.Currency._Literal = _MainTweaks.NONE, ignore_cache: bool = _MainTweaks.NONE
             ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/steam-value
@@ -7180,7 +7159,7 @@ class Market:
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def confirm_sda(
-                self, item_id: int, id: int = None, nonce: int = None
+                self, item_id: int, id: int = _MainTweaks.NONE, nonce: int = _MainTweaks.NONE
             ) -> httpx.Response:
                 """
                 POST https://api.lzt.market/{item_id}/confirm-sda
@@ -7290,7 +7269,7 @@ class Market:
             self,
             item_id: int,
             steam_preview: bool = False,
-            preview_type: Literal["profiles", "games"] = None,
+            preview_type: Literal["profiles", "games"] = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             GET https://api.lzt.market/{item_id}
@@ -7374,7 +7353,7 @@ class Market:
             )
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def email(self, item_id: int = None, email: str = None, login: str = None) -> httpx.Response:
+        def email(self, item_id: int = _MainTweaks.NONE, email: str = _MainTweaks.NONE, login: str = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.lzt.market/email-code
 
@@ -7446,7 +7425,7 @@ class Market:
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def change_password(self, item_id: int, _cancel: bool = None) -> httpx.Response:
+        def change_password(self, item_id: int, _cancel: bool = _MainTweaks.NONE) -> httpx.Response:
             """
             POST https://api.lzt.market/{item_id}/change-password
 
@@ -7467,7 +7446,7 @@ class Market:
             ```
             """
             path = f"/{item_id}/change-password"
-            params = {"_cancel": int(_cancel) if _cancel else _cancel}
+            params = {"_cancel": int(_cancel) if not isinstance(_cancel, _MainTweaks.NonePlaceholder) else _cancel}
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
             )
@@ -7521,7 +7500,7 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def favorite(self, item_id: int) -> httpx.Response:
             """
-             POST https://api.lzt.market/{item_id}/star
+            POST https://api.lzt.market/{item_id}/star
 
             *Adds account to favourites.*
 
@@ -7588,7 +7567,7 @@ class Market:
             return _send_request(self=self._api, method="POST", path=path)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def note(self, item_id: int, text: str = None) -> httpx.Response:
+        def note(self, item_id: int, text: str = _MainTweaks.NONE) -> httpx.Response:
             """
             POST https://api.lzt.market/{item_id}/note-save
 
@@ -7646,17 +7625,17 @@ class Market:
         def edit(
             self,
             item_id: int,
-            price: float = None,
-            currency: Constants.Market.Currency._Literal = None,
-            item_origin: Constants.Market.ItemOrigin._Literal = None,
-            title: str = None,
-            title_en: str = None,
-            description: str = None,
-            information: str = None,
-            email_login_data: str = None,
-            email_type: str = None,
-            allow_ask_discount: bool = None,
-            proxy_id: int = None,
+            price: float = _MainTweaks.NONE,
+            currency: Constants.Market.Currency._Literal = _MainTweaks.NONE,
+            item_origin: Constants.Market.ItemOrigin._Literal = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
+            title_en: str = _MainTweaks.NONE,
+            description: str = _MainTweaks.NONE,
+            information: str = _MainTweaks.NONE,
+            email_login_data: str = _MainTweaks.NONE,
+            email_type: str = _MainTweaks.NONE,
+            allow_ask_discount: bool = _MainTweaks.NONE,
+            proxy_id: int = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             PUT https://api.lzt.market/{item_id}/edit
@@ -7740,6 +7719,7 @@ class Market:
     class __Purchasing:
         def __init__(self, _api_self):
             self._api = _api_self
+
         @_MainTweaks._CheckScopes(scopes=["market"])
         def check(self, item_id: int) -> httpx.Response:
             """
@@ -7784,7 +7764,7 @@ class Market:
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def fast_buy(
-            self, item_id: int, price: float = None, buy_without_validation: bool = None
+            self, item_id: int, price: float = _MainTweaks.NONE, buy_without_validation: bool = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/{item_id}/fast-buy
@@ -7809,7 +7789,7 @@ class Market:
             path = f"/{item_id}/fast-buy"
             params = {
                 "price": price,
-                "buy_without_validation": int(buy_without_validation) if buy_without_validation else buy_without_validation,
+                "buy_without_validation": int(buy_without_validation) if not isinstance(buy_without_validation, _MainTweaks.NonePlaceholder) else buy_without_validation,
             }
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
@@ -7820,7 +7800,7 @@ class Market:
             self._api = _api_self
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def info(self, item_id: int, resell_item_id: int = None) -> httpx.Response:
+        def info(self, item_id: int, resell_item_id: int = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.lzt.market/{item_id}/goods/add
 
@@ -7848,14 +7828,14 @@ class Market:
         def check(
             self,
             item_id: int,
-            login: str = None,
-            password: str = None,
-            login_password: str = None,
-            close_item: bool = None,
-            extra: dict = None,
-            resell_item_id: int = None,
-            random_proxy: bool = None,
-            proxy: str = None,
+            login: str = _MainTweaks.NONE,
+            password: str = _MainTweaks.NONE,
+            login_password: str = _MainTweaks.NONE,
+            close_item: bool = _MainTweaks.NONE,
+            extra: dict = _MainTweaks.NONE,
+            resell_item_id: int = _MainTweaks.NONE,
+            random_proxy: bool = _MainTweaks.NONE,
+            proxy: str = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/{item_id}/goods/check
@@ -7889,13 +7869,15 @@ class Market:
                 "password": password,
                 "login_password": login_password,
                 "resell_item_id": resell_item_id,
-                "random_proxy": int(random_proxy) if random_proxy else random_proxy,
+                "random_proxy": int(random_proxy) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else random_proxy,
             }
             dataJ = {"extra": {}}
             if extra:
                 dataJ["extra"].update(extra)
-            dataJ["extra"]["close_item"] = int(close_item) if close_item else close_item
-            dataJ["extra"]["proxy"] = proxy
+            if not dataJ["extra"].get("close_item"):
+                dataJ["extra"]["close_item"] = int(close_item) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else close_item
+            if not dataJ["extra"].get("proxy"):
+                dataJ["extra"]["proxy"] = proxy
 
             return _send_request(
                 self=self._api,
@@ -7912,17 +7894,17 @@ class Market:
             price: float,
             currency: Constants.Market.Currency._Literal,
             item_origin: Constants.Market.ItemOrigin._Literal,
-            extended_guarantee: Constants.Market.Guarantee._Literal = None,
-            title: str = None,
-            title_en: str = None,
-            description: str = None,
-            information: str = None,
-            has_email_login_data: bool = None,
-            email_login_data: str = None,
-            email_type: str = None,
-            allow_ask_discount: bool = None,
-            proxy_id: int = None,
-            random_proxy: bool = None,
+            extended_guarantee: Constants.Market.Guarantee._Literal = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
+            title_en: str = _MainTweaks.NONE,
+            description: str = _MainTweaks.NONE,
+            information: str = _MainTweaks.NONE,
+            has_email_login_data: bool = _MainTweaks.NONE,
+            email_login_data: str = _MainTweaks.NONE,
+            email_type: str = _MainTweaks.NONE,
+            allow_ask_discount: bool = _MainTweaks.NONE,
+            proxy_id: int = _MainTweaks.NONE,
+            random_proxy: bool = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/item/add
@@ -7975,7 +7957,7 @@ class Market:
                 "email_type": email_type,
                 "allow_ask_discount": allow_ask_discount,
                 "proxy_id": proxy_id,
-                "random_proxy": int(random_proxy) if random_proxy else random_proxy,
+                "random_proxy": int(random_proxy) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else random_proxy,
             }
             return _send_request(
                 self=self._api, method="POST", path=path, params=params
@@ -7988,23 +7970,23 @@ class Market:
             price: float,
             currency: Constants.Market.Currency._Literal,
             item_origin: Constants.Market.ItemOrigin._Literal,
-            extended_guarantee: Constants.Market.Guarantee._Literal = None,
-            title: str = None,
-            title_en: str = None,
-            description: str = None,
-            information: str = None,
-            has_email_login_data: bool = None,
-            email_login_data: str = None,
-            email_type: str = None,
-            allow_ask_discount: bool = None,
-            proxy_id: int = None,
-            random_proxy: bool = None,
-            login: str = None,
-            password: str = None,
-            login_password: str = None,
-            extra: dict = None,
-            close_item: bool = None,
-            proxy: str = None,
+            extended_guarantee: Constants.Market.Guarantee._Literal = _MainTweaks.NONE,
+            title: str = _MainTweaks.NONE,
+            title_en: str = _MainTweaks.NONE,
+            description: str = _MainTweaks.NONE,
+            information: str = _MainTweaks.NONE,
+            has_email_login_data: bool = _MainTweaks.NONE,
+            email_login_data: str = _MainTweaks.NONE,
+            email_type: str = _MainTweaks.NONE,
+            allow_ask_discount: bool = _MainTweaks.NONE,
+            proxy_id: int = _MainTweaks.NONE,
+            random_proxy: bool = _MainTweaks.NONE,
+            login: str = _MainTweaks.NONE,
+            password: str = _MainTweaks.NONE,
+            login_password: str = _MainTweaks.NONE,
+            extra: dict = _MainTweaks.NONE,
+            close_item: bool = _MainTweaks.NONE,
+            proxy: str = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/item/fast-sell
@@ -8062,7 +8044,7 @@ class Market:
                 "email_type": email_type,
                 "allow_ask_discount": allow_ask_discount,
                 "proxy_id": proxy_id,
-                "random_proxy": int(random_proxy) if random_proxy else random_proxy,
+                "random_proxy": int(random_proxy) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else random_proxy,
                 "login": login,
                 "password": password,
                 "login_password": login_password
@@ -8070,8 +8052,10 @@ class Market:
             dataJ = {"extra": {}}
             if extra:
                 dataJ["extra"].update(extra)
-            dataJ["extra"]["close_item"] = int(close_item) if close_item else close_item
-            dataJ["extra"]["proxy"] = proxy
+            if not dataJ["extra"].get("close_item"):
+                dataJ["extra"]["close_item"] = int(close_item) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else close_item
+            if not dataJ["extra"].get("proxy"):
+                dataJ["extra"]["proxy"] = proxy
 
             return _send_request(
                 self=self._api,
@@ -8106,7 +8090,7 @@ class Market:
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def delete(
-            self, proxy_id: int = None, delete_all: bool = None
+            self, proxy_id: int = _MainTweaks.NONE, delete_all: bool = _MainTweaks.NONE
         ) -> httpx.Response:
             """
             DELETE https://api.lzt.market/proxy
@@ -8136,11 +8120,11 @@ class Market:
         @_MainTweaks._CheckScopes(scopes=["market"])
         def add(
             self,
-            proxy_ip: str = None,
-            proxy_port: int = None,
-            proxy_user: str = None,
-            proxy_pass: str = None,
-            proxy_row: str = None,
+            proxy_ip: str = _MainTweaks.NONE,
+            proxy_port: int = _MainTweaks.NONE,
+            proxy_user: str = _MainTweaks.NONE,
+            proxy_pass: str = _MainTweaks.NONE,
+            proxy_row: str = _MainTweaks.NONE,
         ) -> httpx.Response:
             """
             POST https://api.lzt.market/proxy
@@ -8198,8 +8182,6 @@ class Market:
         :param jobs: List of batch jobs. (Check example above)
         :return: httpx Response object
         """
-        import json
-
         path = "/batch"
         dataJ = jobs
         return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
@@ -8224,7 +8206,7 @@ class Antipublic:
         - **timeout** (int): Request timeout.
         """
         self.base_url = "https://antipublic.one"
-        if proxy_type is not None:
+        if proxy_type:
             proxy_type = proxy_type.upper()
             if proxy_type in ["HTTPS", "HTTP", "SOCKS4", "SOCKS5"]:
                 self._proxy_type = proxy_type
@@ -8344,7 +8326,7 @@ class Antipublic:
             path = "/api/v2/availableQueries"
             return _send_request(self=self._api, method="GET", path=path)
 
-    def check(self, lines: list[str], insert: bool = None) -> httpx.Response:
+    def check(self, lines: list[str], insert: bool = _MainTweaks.NONE) -> httpx.Response:
         """
         POST https://antipublic.one/api/v2/checkLines
 
@@ -8366,7 +8348,7 @@ class Antipublic:
         path = "/api/v2/checkLines"
         return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
-    def search(self, search_by: Constants.Antipublic.SearchBy._Literal, query: str, direction: Constants.Antipublic.SearchDirection._Literal = None, page_token: Optional[str] = None) -> httpx.Response:
+    def search(self, search_by: Constants.Antipublic.SearchBy._Literal, query: str, direction: Constants.Antipublic.SearchDirection._Literal = _MainTweaks.NONE, page_token: Optional[str] = _MainTweaks.NONE) -> httpx.Response:
         """
         POST https://antipublic.one/api/v2/search
 
@@ -8388,19 +8370,19 @@ class Antipublic:
         """
         path = "/api/v2/search"
         if search_by not in ["email", "password", "domain"]:
-            _WarningsLogger.warn("Search type has invalid value. It can be only \"email\", \"password\" or \"domain\"")
+            _WarningsLogger.warning("Search type has invalid value. It can be only \"email\", \"password\" or \"domain\"")
         dataJ = {
             "searchBy": search_by,
             "query": {str(search_by): query},
         }
-        if direction:
+        if not isinstance(direction, _MainTweaks.NonePlaceholder):
             dataJ["direction"] = {str(search_by): direction}
-        if page_token:
+        if not isinstance(page_token, _MainTweaks.NonePlaceholder):
             dataJ["pageToken"] = page_token
         return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
     def email_passwords(
-        self, emails: list[str] = None, limit: int = None
+        self, emails: list[str] = _MainTweaks.NONE, limit: int = _MainTweaks.NONE
     ) -> httpx.Response:
         """
         POST https://antipublic.one/api/v2/emailPasswords

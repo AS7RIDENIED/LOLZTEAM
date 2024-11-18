@@ -1,17 +1,23 @@
-from .Tweaks import SendAsAsync
+from .Tweaks import SendAsAsync, _MainTweaks
 from .Models import Payment
 
 
 async def CheckPayment(
     self,
     amount,
-    comment: str = None,
-    user_id: int = None,
-    allow_hold: bool = None,
+    comment: str = _MainTweaks.NONE,
+    user_id: int = _MainTweaks.NONE,
+    allow_hold: bool = _MainTweaks.NONE,
     include_payment_data: bool = False,
 ) -> Payment:
     """
     A function to check payment status based on given parameters.
+
+    ## Status codes:
+    - 0 - Payment not found
+    - 1 - Paid
+    - 2 - Paid by incorrect user
+    - 3 - Paid in hold
 
     :param amount: The amount to check for payment. Not recomended to use it without comment
     :param comment: Optional comment for the payment
@@ -33,11 +39,6 @@ async def CheckPayment(
     )
     payments_json = payments.json()
     response = {}
-    # Status codes:
-    # 0 - Payment not found
-    # 1 - Paid
-    # 2 - Paid by incorrect user
-    # 3 - Paid in hold
     if payments_json["payments"]:
         for payment in reversed(payments_json["payments"].values()):
             response["status"] = "success"

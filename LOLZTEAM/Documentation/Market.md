@@ -134,13 +134,11 @@
   * [Favorite](#favorite-1)
   * [Unfavorite](#unfavorite)
   * [Bump](#bump)
+  * [Note](#note)
   * [Change Owner](#change-owner)
   * [Edit](#edit-1)
   * [Arbitrage](#arbitrage)
 * [Purchasing](#purchasing)
-  * [Auction](#auction)
-    * [Place Bid](#place-bid)
-    * [Delete Bid](#delete-bid)
   * [Check](#check)
   * [Confirm](#confirm)
   * [Fast Buy](#fast-buy)
@@ -221,7 +219,6 @@ Required scopes: *market*
 - **title** (str): Market title.
 - **telegram_client** (dict): Telegram client. It should be {"telegram_api_id"
 - **deauthorize_steam** (bool): Finish all Steam sessions after purchase.
-- **hide_bids** (bool): Hide your profile when bid on the auction.
 
 **Example:**
 
@@ -246,7 +243,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -312,7 +308,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -360,7 +355,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -408,7 +402,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -470,7 +463,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -518,7 +510,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -566,7 +557,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -630,7 +620,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -678,7 +667,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -726,7 +714,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -774,7 +761,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -838,7 +824,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -886,7 +871,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -950,7 +934,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1014,7 +997,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1062,7 +1044,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1110,7 +1091,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1158,7 +1138,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1206,7 +1185,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1270,7 +1248,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1318,7 +1295,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1366,7 +1342,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1414,7 +1389,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1462,7 +1436,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1510,7 +1483,6 @@ Required scopes: *market*
 **Parameters:**
 
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1557,7 +1529,6 @@ Required scopes: *market*
 
 - **category_name** (str): Category name.
 - **page** (int): The number of the page to display results from
-- **auction** (bool): Auction.
 - **title** (str): The word or words contained in the account title.
 - **pmin** (float): Minimal price of account (Inclusive).
 - **pmax** (float): Maximum price of account (Inclusive).
@@ -1745,7 +1716,7 @@ print(response.json())
 
 ## History
 
-GET https://api.lzt.market/user/{user_id}/payments
+GET https://api.lzt.market/user/payments
 
 *Displays info about your profile.*
 
@@ -2092,7 +2063,6 @@ print(response.json())
 
 GET https://api.lzt.market/{item_id}
 GET https://api.lzt.market/{item_id}/steam-preview
-GET https://api.lzt.market/{item_id}/auction
 
 *Displays account information or returns Steam account html code.*
 
@@ -2278,23 +2248,23 @@ print(response.json())
 
 ## Favorite
 
- POST https://api.lzt.market/{item_id}/star
+POST https://api.lzt.market/{item_id}/star
 
-*Adds account to favourites.*
+            *Adds account to favourites.*
 
-Required scopes: *market*
+            Required scopes: *market*
 
-**Parameters:**
+            **Parameters:**
 
-- **item_id** (int): ID of item.
+            - **item_id** (int): ID of item.
 
-**Example:**
+            **Example:**
 
-```python
-response = market.managing.favorite(item_id=1000000)
-print(response.json())
-```
-
+            ```python
+            response = market.managing.favorite(item_id=1000000)
+            print(response.json())
+            ```
+            
 
 ## Unfavorite
 
@@ -2332,6 +2302,27 @@ Required scopes: *market*
 
 ```python
 response = market.managing.bump(item_id=1000000)
+print(response.json())
+```
+
+
+## Note
+
+POST https://api.lzt.market/{item_id}/note-save
+
+*Edits a note for the account.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (int): ID of item.
+- **text** (str): Text of note.
+
+**Example:**
+
+```python
+response = market.managing.note(item_id=1000000, text="Good account")
 print(response.json())
 ```
 
@@ -2412,51 +2403,6 @@ print(response.json())
 
 
 # Purchasing
-
-## Auction
-
-### Place Bid
-
-POST https://api.lzt.market/{item_id}/auction/bid
-
-*Create a new auction bid.*
-
-Required scopes: *market*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **amount** (float): Amount bid.
-- **currency** (str): Using currency.
-
-**Example:**
-
-```python
-response = market.purchasing.auction.place_bid(item_id=1000000, amount=1000)
-print(response.json())
-```
-
-
-### Delete Bid
-
-GET https://api.lzt.market/{item_id}/auction/bid
-
-*Delete your auction bid.*
-
-Required scopes: *market*
-
-**Parameters:**
-
-- **item_id** (int): ID of item.
-- **bid_id** (int): ID of bid.
-
-**Example:**
-
-```python
-response = market.purchasing.auction.delete_bid(item_id=1000000, bid_id=1000)
-print(response.json())
-```
-
 
 ## Check
 
@@ -2557,6 +2503,7 @@ Required scopes: *market*
 - **extra** (str): Extra params for account checking.
 - **resell_item_id** (int): Put item id, if you are trying to resell item.
 - **random_proxy** (bool): Pass True, if you get captcha in previous response.
+- **proxy** (str): Proxy line format ip:port:user:pass (prioritize over proxy_id parameter).
 
 **Example:**
 
@@ -2592,12 +2539,8 @@ Required scopes: *market*
 - **email_type** (str): Email type.
 - **allow_ask_discount** (bool): Allow users to ask discount for this account.
 - **proxy_id** (int): Using proxy id for account checking.
-- **random_proxy** (bool): Pass True, if you get captcha in previous response
-- **auction** (bool): Pass True if you want to create auction
-- **auction_duration_value** (int): Duration auction value.
-- **auction_duration_option** (str): Duration auction option.
+- **random_proxy** (bool): Pass True, if you get captcha in previous response.
 - **instabuy_price** (float): The price for which you can instantly redeem your account.
-- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 
 **Example:**
 
@@ -2638,17 +2581,13 @@ Required scopes: *market*
 - **password** (str): Account password.
 - **login_password** (str): Account login data format login:password.
 - **extra** (str): Extra params for account checking.
-- **auction** (bool): Pass True if you want to create auction.
-- **auction_duration_value** (int): Duration auction value.
-- **auction_duration_option** (str): Duration auction option.
-- **instabuy_price** (float): The price for which you can instantly redeem your account.
-- **not_bids_action** (str): If you set cancel, at the end of the auction with 0 bids, the account can be purchased at the price you specified as the minimum bid. Can be [close, cancel]
 - **close_item** (bool): If True, the item will be closed item_state = closed.
+- **proxy** (str): Proxy line format ip:port:user:pass (prioritize over proxy_id parameter).
 
 **Example:**
 
 ```python
-response = market.publishing.add(category_id=24, price=100, currency="rub", item_origin="stealer", login="auth_key", password="dc_id", title="Telegram")
+response = market.publishing.fast_sell(category_id=24, price=100, currency="rub", item_origin="stealer", login="auth_key", password="dc_id", title="Telegram")
 print(response.json())
 ```
 

@@ -431,8 +431,6 @@ Required scopes: *read*
 - **thread_id** (int): ID of the containing thread.
 - **page_of_post_id** (int): ID of a post, posts that are in the same page with the specified post will be returned.
     > If this parameter is set, thread_id may be skipped.
-- **post_ids** (list): ID's of needed posts.
-    > If this parameter is set, all other filtering parameters will be ignored.
 - **page** (int): Page number of posts.
 - **limit** (int): Number of posts in a page.
 - **order** (str): Ordering of posts.
@@ -657,8 +655,8 @@ Required scopes: *post*
 
 ```python
 response = forum.threads.contests.money.create_by_time(post_body="Contest",prize_data_money=500, count_winners=1,
-               length_value=3, length_option="days", require_like_count=1,
-               require_total_like_count=50, secret_answer="My secret answer", title="Contest")
+                                                       length_value=3, length_option="days", require_like_count=1,
+                                                       require_total_like_count=50, secret_answer="My secret answer", title="Contest")
 print(response.json())
 ```
 
@@ -697,8 +695,8 @@ Required scopes: *post*
 
 ```python
 response = forum.threads.contests.money.create_by_count(post_body="Contest",prize_data_money=500, count_winners=1,
-               needed_members=300, require_like_count=1, require_total_like_count=50,
-               secret_answer="My secret answer", title="Contest")
+                                                       needed_members=300, require_like_count=1, require_total_like_count=50,
+                                                       secret_answer="My secret answer", title="Contest")
 print(response.json())
 ```
 
@@ -743,8 +741,8 @@ Required scopes: *post*
 
 ```python
 response = forum.threads.contests.upgrade.create_by_time(post_body="Contest",prize_data_upgrade=1, count_winners=1,
-               length_value=3, length_option="days", require_like_count=1,
-               require_total_like_count=50, secret_answer="My secret answer", title="Contest")
+                                                       length_value=3, length_option="days", require_like_count=1,
+                                                       require_total_like_count=50, secret_answer="My secret answer", title="Contest")
 print(response.json())
 ```
 
@@ -784,8 +782,8 @@ Required scopes: *post*
 
 ```python
 response = forum.threads.contests.money.create_by_count(post_body="Contest",prize_data_upgrade=1, count_winners=1,
-               needed_members=300, require_like_count=1, require_total_like_count=50,
-               secret_answer="My secret answer", title="Contest")
+                                                       needed_members=300, require_like_count=1, require_total_like_count=50,
+                                                       secret_answer="My secret answer", title="Contest")
 print(response.json())
 ```
 
@@ -821,7 +819,7 @@ Required scopes: *post*
 
 ```python
 response = forum.threads.arbitrage.market(responder="AS7RID", item_id=1000000, amount=1000,
-          post_body="Arbitrage test", currency="rub")
+                                          post_body="Arbitrage test", currency="rub")
 print(response.json())
 ```
 
@@ -857,7 +855,7 @@ Required scopes: *post*
 
 ```python
 response = forum.threads.arbitrage.non_market(responder="AS7RID", amount=100, currency="rub", receipt="no",
-              post_body="Non market arbitrage", pay_claim=True, transfer_type="safe")
+                                              post_body="Non market arbitrage", pay_claim=True, transfer_type="safe")
 print(response.json())
 ```
 
@@ -873,9 +871,6 @@ Required scopes: *read*
 **Parameters:**
 
 - **forum_id** (int): ID of the containing forum.
-    > Can be skipped if thread_ids set.
-- **thread_ids** (list): ID's of needed threads (separated by comma).
-    > If this parameter is set, all other filtering parameters will be ignored.
 - **creator_user_id** (int): Filter to get only threads created by the specified user.
 - **sticky** (bool): Filter to get only sticky or non-sticky threads.
     > By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards threads_total and does not affect pagination.
@@ -927,9 +922,9 @@ Required scopes: *post*
 - **forum_id** (int): ID of the target forum.
 - **post_body** (str): Content of the new thread.
 - **title** (str): Thread title.
-> Can be skipped if title_en set.
+            > Can be skipped if title_en set.
 - **title_en** (str): Thread title in english.
-> Can be skipped if title set.
+            > Can be skipped if title set.
 - **prefix_ids** (list): Thread prefixes.
 - **tags** (list): Thread tags.
 - **hide_contacts** (bool): Hide contacts.
@@ -1331,7 +1326,7 @@ Required scopes: *post*
 
 - **user_id** (int): ID of user.
     > If you do not specify the user_id, then you will change the avatar of the current user
-- **image** (binary): Binary data of the avatar.
+- **avatar** (binary): Binary data of the avatar.
 - **x** (int): The starting point of the selection by width.
 - **y** (int): The starting point of the selection by height
 - **size** (int): Selection size.
@@ -1695,23 +1690,23 @@ print(response.json())
 
 ## Ignored
 
- GET https://api.zelenka.guru/users/ignored
+GET https://api.zelenka.guru/users/ignored
 
-*List of ignored users of current user.*
+            *List of ignored users of current user.*
 
-Required scopes: *read*
+            Required scopes: *read*
 
-**Parameters:**
+            **Parameters:**
 
-- **total** (bool): If included in the request, only the user count is returned as users_total.
+            - **total** (bool): If included in the request, only the user count is returned as users_total.
 
-**Example:**
+            **Example:**
 
-```python
-response = forum.users.ignored()
-print(response.json())
-```
-
+            ```python
+            response = forum.users.ignored()
+            print(response.json())
+            ```
+            
 
 ## Ignore
 
@@ -1886,25 +1881,25 @@ print(response.json())
 
 ## Create
 
-           POST https://api.zelenka.guru/users/{user_id}/timeline
+POST https://api.zelenka.guru/users/{user_id}/timeline
 
-*Create a new profile post on a user timeline.*
+ *Create a new profile post on a user timeline.*
 
-Required scopes: *post*
+ Required scopes: *post*
 
-**Parameters:**
+ **Parameters:**
 
-- **user_id** (int): ID of user.
-    > If you do not specify the user_id, you will create profile post in current user's timeline
-- **post_body** (str): Content of the new profile post.
+ - **user_id** (int): ID of user.
+     > If you do not specify the user_id, you will create profile post in current user's timeline
+ - **post_body** (str): Content of the new profile post.
 
-**Example:**
+ **Example:**
 
-```python
-response = forum.profile_posts.create(user_id=2410024, post_body="Profile post text")
-print(response.json())
-```
-
+ ```python
+ response = forum.profile_posts.create(user_id=2410024, post_body="Profile post text")
+ print(response.json())
+ ```
+ 
 
 ## Edit
 
