@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.50a"
+    "version": "1.1.50b"
   },
   "servers": [
     {
@@ -878,6 +878,7 @@
                   "Awesomenauts - Cynical Vinnie & Total Spike Skin",
                   "Awesomenauts Gift",
                   "Axis Game Factory's AGFPRO + PREMIUM Bundle",
+                  "BBQ Simulator: The Squad",
                   "BEEP",
                   "BIT.TRIP BEAT",
                   "BIT.TRIP RUNNER",
@@ -976,6 +977,7 @@
                   "Buckshot Roulette",
                   "Bully: Scholarship Edition",
                   "Bunch of Heroes",
+                  "Burnout Paradise: The Ultimate Box",
                   "Call of Duty: Black Ops III - Multiplayer Starter Pack",
                   "Call of Duty: Black Ops III Beta GIFT",
                   "Call of Duty: Black Ops III Beta GIFT_cis",
@@ -1332,6 +1334,7 @@
                   "Gauntlet™ Slayer Edition_cis",
                   "Geometry Dash",
                   "Getting Over It with Bennett Foddy",
+                  "Ghost Master®",
                   "GiAnt - A GiAnt Soundtrack",
                   "Giana Sisters: Twisted Dreams",
                   "Girl Amazon Survival",
@@ -1522,6 +1525,7 @@
                   "METAL GEAR SOLID V: GROUND ZEROES",
                   "METAL GEAR SOLID V: THE PHANTOM PAIN",
                   "METAL GEAR SOLID V: THE PHANTOM PAIN_cis",
+                  "METAL GEAR SOLID V: The Definitive Experience",
                   "METAL SLUG",
                   "METAL SLUG 3",
                   "METAL SLUG X",
@@ -1620,6 +1624,7 @@
                   "Natural Selection 2",
                   "Natural Selection 2_cis",
                   "Naval Warfare",
+                  "Naviros Samurai Pack",
                   "Ne no Kami - The Two Princess Knights of Kyoto Extra Story",
                   "Need for Speed™ Heat",
                   "New kind of adventure",
@@ -1640,6 +1645,7 @@
                   "Oddworld: Munch's Oddysee",
                   "Offworld Trading Company Gift Copy",
                   "Oh Deer",
+                  "Oh...Sir!! The Insult Simulator",
                   "Omerta - City of Gangsters",
                   "Omerta - City of Gangsters - GOLD EDITION",
                   "Omerta City of Gangsters Gift Package (KR)",
@@ -1784,6 +1790,7 @@
                   "RUSH",
                   "RUSH_cis",
                   "RUSSIAPHOBIA",
+                  "RWBY: Grimm Eclipse",
                   "RWBY: Grimm Eclipse - JNPR",
                   "Raft",
                   "Rain Blood Chronicles: Mirage",
@@ -2102,6 +2109,7 @@
                   "The Secret of Monkey Island: Special Edition",
                   "The Ship - 2 Pack Gift",
                   "The Ship Gift",
+                  "The Showdown Effect Digital Deluxe Gift",
                   "The Silent Age",
                   "The Sims 3 - Movie Stuff",
                   "The Sims 3: Island Paradise",
@@ -2109,6 +2117,7 @@
                   "The Sims™ 3 Pets",
                   "The Sims™ 3 Showtime",
                   "The Sims™ 4",
+                  "The Stanley Parable",
                   "The Survivalists",
                   "The Testament of Sherlock Holmes",
                   "The Walking Dead",
@@ -2210,6 +2219,7 @@
                   "Unknown package 12704",
                   "Unknown package 12721",
                   "Unknown package 12736",
+                  "Unknown package 12749",
                   "Unknown package 12754",
                   "Unknown package 12764",
                   "Unknown package 12766",
@@ -30643,7 +30653,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "integer",
+              "type": "number",
               "description": "Maximum rewards balance.",
               "minimum": 0
             }
@@ -41205,7 +41215,6 @@
               ]
             }
           },
-          
           {
             "name": "autorenewal",
             "in": "query",
@@ -42414,10 +42423,6 @@
                           "title": "Can",
                           "type": "integer"
                         },
-                        "proxy_type": {
-                          "title": "Proxy",
-                          "type": "string"
-                        },
                         "support_temp_email": {
                           "title": "Support",
                           "type": "integer"
@@ -42479,7 +42484,6 @@
                         "top_queries",
                         "require_eld_for_native_accs",
                         "can_be_resold",
-                        "proxy_type",
                         "support_temp_email",
                         "cookies",
                         "login_type",
@@ -48664,6 +48668,17 @@
             "title": "Polychrome",
             "type": "integer"
           },
+          "telegramClient": {
+            "description": "Telegram client. Optional. Used only if you want to upload Telegram account.",
+            "title": "Telegram client",
+            "type": "string",
+            "example": "{\"telegram_api_id\": integer, \"telegram_api_hash\": string, \"telegram_device_model\": string, \"telegram_system_version\": string, \"telegram_app_version\": string}"
+          },
+          "telegramJson": {
+            "description": "Contents of session.json file. Optional. Used only if you want to upload Telegram account.",
+            "title": "Telegram Json",
+            "type": "string"
+          },
           "checkChannels": {
             "description": "Check channels. Optional. Used only if you want to upload Telegram account.",
             "title": "Check Channels",
@@ -51198,15 +51213,16 @@
       "app_id": {
         "name": "app_id",
         "in": "query",
-        "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+        "description": "Application id.\n1 - All games\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
         "required": false,
         "style": "form",
         "explode": true,
         "schema": {
           "title": "App Id",
           "type": "integer",
-          "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+          "description": "Application id.\n1 - All games\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
           "enum": [
+            1,
             730,
             578080,
             753,
@@ -51217,7 +51233,7 @@
             232090,
             322330
           ],
-          "default": 730
+          "default": 1
         }
       },
       "bidId": {
