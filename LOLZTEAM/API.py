@@ -901,7 +901,7 @@ class Forum:
                     forum_id = 766
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": ",".join(tags) if tags else tags,
+                        "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                         "hide_contacts": 0,
                         "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
                         "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
@@ -1002,7 +1002,7 @@ class Forum:
                     forum_id = 766
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": ",".join(tags) if tags else tags,
+                        "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                         "hide_contacts": 0,
                         "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
                         "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
@@ -1111,7 +1111,7 @@ class Forum:
                     forum_id = 766
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": ",".join(tags) if tags else tags,
+                        "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                         "hide_contacts": 0,
                         "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
                         "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
@@ -1210,7 +1210,7 @@ class Forum:
                     """
                     params = {
                         "prefix_id[]": prefix_ids,
-                        "tags": ",".join(tags) if tags else tags,
+                        "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                         "hide_contacts": 0,
                         "watch_thread_state": int(any([forum_notifications if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else None, email_notifications if not isinstance(email_notifications, _MainTweaks.NonePlaceholder) else None])),
                         "watch_thread": int(forum_notifications) if not isinstance(forum_notifications, _MainTweaks.NonePlaceholder) else forum_notifications,
@@ -1311,7 +1311,7 @@ class Forum:
                     "currency": currency,
                     "as_funds_receipt": "no",
                     "as_tg_login_screenshot": conversation_screenshot,
-                    "tags": ",".join(tags) if tags else tags,
+                    "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                     "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
                     "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
                     "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
@@ -1391,7 +1391,7 @@ class Forum:
                     "transfer_type": transfer_type,
                     "as_funds_receipt": receipt,
                     "as_tg_login_screenshot": conversation_screenshot,
-                    "tags": ",".join(tags) if tags else tags,
+                    "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                     "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
                     "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
                     "comment_ignore_group": int(comment_ignore_group) if not isinstance(comment_ignore_group, _MainTweaks.NonePlaceholder) else comment_ignore_group,
@@ -1526,7 +1526,7 @@ class Forum:
             path = "/threads"
             params = {
                 "prefix_id[]": prefix_ids,
-                "tags": ",".join(tags) if tags else tags,
+                "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                 "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
                 "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
                 "reply_group": reply_group,
@@ -1599,7 +1599,7 @@ class Forum:
                 "title": title,
                 "title_en": title_en,
                 "prefix_id[]": prefix_ids,
-                "tags": ",".join(tags) if tags else tags,
+                "tags": ",".join(tags) if not isinstance(tags, _MainTweaks.NonePlaceholder) else tags,
                 "discussion_open": int(discussion_open) if not isinstance(discussion_open, _MainTweaks.NonePlaceholder) else discussion_open,
                 "hide_contacts": int(hide_contacts) if not isinstance(hide_contacts, _MainTweaks.NonePlaceholder) else hide_contacts,
                 "allow_ask_hidden_content": int(allow_ask_hidden_content) if not isinstance(allow_ask_hidden_content, _MainTweaks.NonePlaceholder) else allow_ask_hidden_content,
@@ -2344,8 +2344,7 @@ class Forum:
                 "user_email": user_email,
             }
             if custom_fields:
-                if "CREATE_JOB" in locals():
-                    # Костыль CreateJob
+                if "CREATE_JOB" in locals():  # Костыль CreateJob
                     params["custom_fields"] = custom_fields
                 else:
                     for key, value in custom_fields.items():
@@ -3867,7 +3866,7 @@ class Market:
                 "market_custom_title": title,
                 "deauthorize_steam": int(deauthorize_steam) if not isinstance(deauthorize_steam, _MainTweaks.NonePlaceholder) else deauthorize_steam,
             }
-            if telegram_client:
+            if isinstance(telegram_client, dict):
                 for key, value in telegram_client.items():
                     if key not in ["telegram_api_id", "telegram_api_hash", "telegram_device_model", "telegram_system_version", "telegram_app_version"]:
                         _WarningsLogger.warning(
@@ -6929,9 +6928,6 @@ class Market:
             print(payment_link)
             ```
             """
-            if hold:
-                if hold_option in ["hour", "day", "week", "month"]:
-                    hold_option += "s"
             params = {
                 "user_id": user_id,
                 "username": username,
@@ -7122,7 +7118,7 @@ class Market:
 
             @_MainTweaks._CheckScopes(scopes=["market"])
             def inventory_value(
-                self, url: str = _MainTweaks.NONE, item_id: int = _MainTweaks.NONE, app_id: int = 730, currency: Constants.Market.Currency._Literal = _MainTweaks.NONE, ignore_cache: bool = _MainTweaks.NONE
+                self, url: str = _MainTweaks.NONE, item_id: int = _MainTweaks.NONE, app_id: Constants.Market.AppID._Literal = 1, currency: Constants.Market.Currency._Literal = _MainTweaks.NONE, ignore_cache: bool = _MainTweaks.NONE
             ) -> httpx.Response:
                 """
                 GET https://api.lzt.market/steam-value
@@ -7150,11 +7146,13 @@ class Market:
                     "currency": currency,
                     "ignore_cache": ignore_cache,
                 }
-                if url:
+                if not isinstance(url, _MainTweaks.NonePlaceholder):
                     params["link"] = url
                     path = "/steam-value"
-                elif item_id:
+                elif not isinstance(item_id, _MainTweaks.NonePlaceholder):
                     path = f"/{item_id}/inventory-value"
+                else:
+                    raise Exceptions.PATH_NOT_DEFINED("Path not defined. You must set \"url\" or \"item_id\"")
                 return _send_request(self=self._api, method="GET", path=path, params=params)
 
             @_MainTweaks._CheckScopes(scopes=["market"])
@@ -7872,13 +7870,14 @@ class Market:
                 "random_proxy": int(random_proxy) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else random_proxy,
             }
             dataJ = {"extra": {}}
-            if extra:
+            if not isinstance(extra, _MainTweaks.NonePlaceholder):
                 dataJ["extra"].update(extra)
-            if not dataJ["extra"].get("close_item"):
-                dataJ["extra"]["close_item"] = int(close_item) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else close_item
-            if not dataJ["extra"].get("proxy"):
+            if not dataJ["extra"].get("close_item") and not isinstance(close_item, _MainTweaks.NonePlaceholder):
+                dataJ["extra"]["close_item"] = int(close_item)
+            if not dataJ["extra"].get("proxy") and not isinstance(proxy, _MainTweaks.NonePlaceholder):
                 dataJ["extra"]["proxy"] = proxy
-
+            if len(dataJ.get("extra")) == 0 and isinstance(extra, _MainTweaks.NonePlaceholder):
+                dataJ.pop("extra")
             return _send_request(
                 self=self._api,
                 method="POST",
@@ -8050,13 +8049,14 @@ class Market:
                 "login_password": login_password
             }
             dataJ = {"extra": {}}
-            if extra:
+            if not isinstance(extra, _MainTweaks.NonePlaceholder):
                 dataJ["extra"].update(extra)
-            if not dataJ["extra"].get("close_item"):
-                dataJ["extra"]["close_item"] = int(close_item) if not isinstance(random_proxy, _MainTweaks.NonePlaceholder) else close_item
-            if not dataJ["extra"].get("proxy"):
+            if not dataJ["extra"].get("close_item") and not isinstance(close_item, _MainTweaks.NonePlaceholder):
+                dataJ["extra"]["close_item"] = int(close_item)
+            if not dataJ["extra"].get("proxy") and not isinstance(proxy, _MainTweaks.NonePlaceholder):
                 dataJ["extra"]["proxy"] = proxy
-
+            if len(dataJ.get("extra")) == 0 and isinstance(extra, _MainTweaks.NonePlaceholder):
+                dataJ.pop("extra")
             return _send_request(
                 self=self._api,
                 method="POST",

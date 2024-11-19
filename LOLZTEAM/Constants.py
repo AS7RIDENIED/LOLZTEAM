@@ -140,7 +140,8 @@ class Market:
         oldest_edited = "edate_to_up"
 
     class AppID:
-        _Literal = Literal[730, 578080, 753, 570, 440, 252490, 304930, 232090, 322330]
+        _Literal = Literal[1, 730, 578080, 753, 570, 440, 252490, 304930, 232090, 322330]
+        ALL = 1
         CS2 = 730
         PUBG = 578080
         Steam = 753

@@ -28,3 +28,6 @@ class MISSING_SCOPE(Exception):
 
 class BAD_TOKEN(Exception):
     pass
+
+class PATH_NOT_DEFINED(Exception):
+    pass
