@@ -6,6 +6,7 @@ import json
 import re
 
 from importlib.metadata import version
+from urllib.parse import parse_qs, urlparse
 from typing import Union, Literal, Optional
 
 from . import Exceptions
@@ -38,12 +39,11 @@ async def _send_async_request(self, method: str, path: dict, params: dict = {}, 
     elif isinstance(self, Market):
         await _MainTweaks._auto_delay_async(self=self, delay=0.5)
 
-    if params:
-        if not params.get("locale"):  # Фикс для какого-то метода. Там коллизия параметра locale
-            params["locale"] = self._locale
-        params = _MainTweaks._TrimNONE(params)  # Трим хуйни
-        params.update(self.custom.params)
-    elif dataJ:
+    if not params.get("locale"):  # Фикс для какого-то метода. Там коллизия параметра locale
+        params["locale"] = self._locale
+    params = _MainTweaks._TrimNONE(params)  # Трим хуйни
+    params.update(self.custom.params)
+    if dataJ:
         if type(dataJ) is dict:
             dataJ = _MainTweaks._TrimNONE(dataJ)  # Трим хуйни
             dataJ.update(self.custom.json)
@@ -79,7 +79,7 @@ async def _send_async_request(self, method: str, path: dict, params: dict = {}, 
             body = None
         _DebugLogger.debug(f"{method} {url} | Params: {json.dumps(params)} | Data: {body} | Files: {files} | Headers: {json.dumps(censored_headers)} | Proxy: {json.dumps(proxy)} | Timeout: {self.timeout}")
         tbr = time.time()
-        async with httpx.AsyncClient(proxies=proxy) as client:
+        async with httpx.AsyncClient(proxy=proxy) as client:
             response = await client.request(method=method, url=url, params=params, json=dataJ, files=files, headers=headers, timeout=self.timeout)
             _DebugLogger.debug(f"Response: {response} | Plain response: {response.content}")
             if self.reset_custom_variables:
@@ -6481,8 +6481,10 @@ class Market:
                 raise Exceptions.URL_IS_DIFFERENT_FROM_BASE_MARKET(
                     f"Unknown link. It should be \"{base_api.base_url}\" or \"{base_api.base_url.replace('api.','')}\""
                 )
-            path = f"{url}"
-            return _send_request(self=self._api, method="GET", path=path)
+            url = urlparse(url)
+            params = parse_qs(url.query)
+            path = url.path
+            return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
         def latest(

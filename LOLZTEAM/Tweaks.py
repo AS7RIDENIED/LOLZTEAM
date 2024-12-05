@@ -14,6 +14,7 @@ import os
 
 from . import Exceptions
 from .API import version
+from .API import parse_qs, urlparse  # _ExecCode
 from multiprocessing import Value, Lock
 from binascii import Error as binasciiError
 from concurrent.futures import ThreadPoolExecutor
