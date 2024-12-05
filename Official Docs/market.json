@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.50c"
+    "version": "1.1.50d"
   },
   "servers": [
     {
@@ -729,7 +729,8 @@
                   304,
                   305,
                   306,
-                  307
+                  307,
+                  308
                 ]
               }
             }
@@ -901,6 +902,7 @@
                   "Barro",
                   "Barro GT",
                   "Barro T23",
+                  "Bastion",
                   "Batman: Arkham City - Game of the Year Edition",
                   "Batman™: Arkham Knight - A Matter of Family_cis",
                   "Batman™: Arkham Knight - Harley Quinn Story Pack_cis",
@@ -1006,6 +1008,7 @@
                   "Call of Duty®: Modern Warfare® 2 Stimulus Package",
                   "Cannon Brawl",
                   "Car Mechanic Simulator 2014",
+                  "CarX Street - DLC Sunset Speedway",
                   "Carmageddon 1 and 2",
                   "Carmageddon 1 and 2_cis",
                   "Carmageddon TDR 2000",
@@ -1062,7 +1065,6 @@
                   "Construction Simulator 2 US - Pocket Edition",
                   "Contagion",
                   "Content Warning",
-                  "Continent of the Ninth Seal: Starter Pack",
                   "Contraption Maker",
                   "Contraption Maker_cis",
                   "Control Ultimate Edition",
@@ -1463,6 +1465,7 @@
                   "How to Survive",
                   "How to Survive - Storm Warning Edition",
                   "Human Fall Flat",
+                  "HuniePop",
                   "Hunted: One Step Too Far - Reborn Edition_cis",
                   "Hurtworld_cis",
                   "I Have No Mouth, and I Must Scream",
@@ -1611,6 +1614,7 @@
                   "Metro 2033 Redux",
                   "Microsoft Flight Simulator X: Steam Edition_cis",
                   "Middle-earth™: Shadow of War™",
+                  "Minecraft Legends",
                   "Minimon",
                   "Minimum",
                   "Minion Masters",
@@ -1681,6 +1685,7 @@
                   "No Time to Relax",
                   "Nuclear Dawn",
                   "Nuclear Dawn_cis",
+                  "Nuclear Nightmare",
                   "Nuclear Throne",
                   "OMORI",
                   "OMSI 2 Add-on Citybus o530",
@@ -1703,6 +1708,7 @@
                   "Orbital Gear",
                   "Orcs Must Die 2 - Complete Pack 2 Gift",
                   "Orcs Must Die! - Lost Adventures",
+                  "Orcs Must Die! 2",
                   "Orcs Must Die! 2 - Are We There Yeti?",
                   "Orcs Must Die! 2 - Family Ties Booster Pack",
                   "Orcs Must Die! 2 - Fire and Water Booster Pack",
@@ -1834,6 +1840,7 @@
                   "Puzzler World 2",
                   "Pyre",
                   "Pyre_cis",
+                  "Quake Live",
                   "RIFT",
                   "RIPD: The Game (ROW) Gift",
                   "RISK™: Factions",
@@ -2010,6 +2017,7 @@
                   "Sniper Elite 3 - Camouflage Weapons Pack",
                   "Sniper Elite 3 Season Pass",
                   "Sniper Elite 3_cis",
+                  "Sniper Elite 5: Target Führer - Wolf Mountain",
                   "Sniper Elite: Nazi Zombie Army",
                   "Sniper Elite: Nazi Zombie Army 2",
                   "Sniper Ghost Warrior (LV) + 2 DLC Gift",
@@ -2024,6 +2032,7 @@
                   "Sonic and All-Stars Racing Transformed: Metal Sonic & Outrun DLC",
                   "Sons Of The Forest",
                   "Soul Gambler: Dark Arts Edition",
+                  "Soulmask",
                   "Soundpad",
                   "South Park™: The Stick of Truth™",
                   "South Park™: The Stick of Truth™ - Super Samurai Spaceman Pack",
@@ -2349,6 +2358,7 @@
                   "Unknown package 33495",
                   "Unknown package 33961",
                   "Unknown package 34431",
+                  "Unknown package 36009",
                   "Unknown package 36075",
                   "Unknown package 391",
                   "Unknown package 39646",
@@ -2445,6 +2455,7 @@
                   "Viscera Cleanup Detail: Santa's Rampage",
                   "Vlad the Impaler",
                   "VoidExpanse",
+                  "WEBFISHING",
                   "WRC 7 FIA World Rally Championship",
                   "Wallpaper Engine",
                   "Wanderlust: Rebirth",
@@ -2473,6 +2484,7 @@
                   "Windborne",
                   "Windward",
                   "Woodle Tree Adventures",
+                  "World War Z",
                   "World of Diving",
                   "World of Goo",
                   "Worlds Adrift - Standard Edition GIFT",
@@ -9770,6 +9782,7 @@
                   "sunmelt",
                   "sunrise_rpz6m",
                   "superherobackflip",
+                  "supernova",
                   "survivorsault_nj7wc",
                   "suspenders",
                   "swatch",
@@ -11760,6 +11773,7 @@
                   1309,
                   1310,
                   1312,
+                  1313,
                   1314,
                   1315,
                   1317,
@@ -12200,6 +12214,7 @@
                   14107,
                   14110,
                   14114,
+                  14116,
                   14117,
                   14118,
                   14119,
@@ -44842,6 +44857,19 @@
             "$ref": "#/components/parameters/itemId"
           },
           {
+            "name": "all",
+            "in": "query",
+            "description": "Update the entire Steam inventory.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "title": "All",
+              "type": "boolean",
+              "description": "Update the entire Steam inventory."
+            }
+          },
+          {
             "$ref": "#/components/parameters/app_id"
           }
         ],
@@ -45266,16 +45294,16 @@
             "$ref": "#/components/parameters/random_proxy"
           },
           {
-            "name":"paid_mail",
-            "in":"query",
-            "description":"Use paid mail instead of regular. Optional if you want to upload Steam account.",
-            "required":false,
-            "style":"form",
-            "explode":true,
-            "schema":{
-              "title":"Paid Mail",
-              "type":"boolean",
-              "description":"Use paid mail instead of regular. Optional if you want to upload Steam account."
+            "name": "paid_mail",
+            "in": "query",
+            "description": "Use paid mail instead of regular. Optional if you want to upload Steam account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Paid Mail",
+              "type": "boolean",
+              "description": "Use paid mail instead of regular. Optional if you want to upload Steam account."
             }
           }
         ],
@@ -45595,16 +45623,16 @@
             "$ref": "#/components/parameters/random_proxy"
           },
           {
-            "name":"paid_mail",
-            "in":"query",
-            "description":"Use paid mail instead of regular. Optional if you want to upload Steam account.",
-            "required":false,
-            "style":"form",
-            "explode":true,
-            "schema":{
-              "title":"Paid Mail",
-              "type":"boolean",
-              "description":"Use paid mail instead of regular. Optional if you want to upload Steam account."
+            "name": "paid_mail",
+            "in": "query",
+            "description": "Use paid mail instead of regular. Optional if you want to upload Steam account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Paid Mail",
+              "type": "boolean",
+              "description": "Use paid mail instead of regular. Optional if you want to upload Steam account."
             }
           }
         ],
@@ -47625,7 +47653,7 @@
             }
           },
           {
-            "name":"change_password_on_purchase",
+            "name": "change_password_on_purchase",
             "in": "query",
             "description": "Change Steam password after purchase.",
             "required": false,
@@ -51429,16 +51457,15 @@
       "app_id": {
         "name": "app_id",
         "in": "query",
-        "description": "Application id.\n1 - All games\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+        "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
         "required": false,
         "style": "form",
         "explode": true,
         "schema": {
           "title": "App Id",
           "type": "integer",
-          "description": "Application id.\n1 - All games\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+          "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
           "enum": [
-            1,
             730,
             578080,
             753,
@@ -51448,21 +51475,7 @@
             304930,
             232090,
             322330
-          ],
-          "default": 1
-        }
-      },
-      "bidId": {
-        "name": "bid_id",
-        "in": "query",
-        "description": "Bid id.",
-        "required": true,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Bid Id",
-          "type": "integer",
-          "description": "Bid id."
+          ]
         }
       },
       "currency": {
