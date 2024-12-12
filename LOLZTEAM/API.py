@@ -3829,6 +3829,8 @@ class Market:
             title: str = _MainTweaks.NONE,
             telegram_client: dict = _MainTweaks.NONE,
             deauthorize_steam: bool = _MainTweaks.NONE,
+            change_password_on_purchase: bool = _MainTweaks.NONE,
+            
         ) -> httpx.Response:
             """
             PUT https://api.lzt.market/me
@@ -3846,8 +3848,9 @@ class Market:
             - **hide_favorites** (bool): Hide your profile info when you add an account to favorites
             - **title** (str): Market title.
             - **telegram_client** (dict): Telegram client.
-                > {"telegram_api_id": ..., "telegram_api_hash": ..., "telegram_device_model": ..., "telegram_system_version": ..., "telegram_app_version": ...}
+                > {"telegram_api_id": ..., "telegram_api_hash": ..., "telegram_device_model": ..., "telegram_system_version": ..., "telegram_app_version": ..., "telegram_lang_pack": ..., "telegram_lang_code": ..., "telegram_system_lang_code": ...}
             - **deauthorize_steam** (bool): Finish all Steam sessions after purchase.
+            - **change_password_on_purchase** (bool): Change Steam password after purchase.
 
             **Example:**
 
@@ -3865,10 +3868,11 @@ class Market:
                 "hide_favourites": int(hide_favorites) if not isinstance(hide_favorites, _MainTweaks.NonePlaceholder) else hide_favorites,
                 "market_custom_title": title,
                 "deauthorize_steam": int(deauthorize_steam) if not isinstance(deauthorize_steam, _MainTweaks.NonePlaceholder) else deauthorize_steam,
+                "change_password_on_purchase": int(change_password_on_purchase) if not isinstance(change_password_on_purchase, _MainTweaks.NonePlaceholder) else change_password_on_purchase,
             }
             if isinstance(telegram_client, dict):
                 for key, value in telegram_client.items():
-                    if key not in ["telegram_api_id", "telegram_api_hash", "telegram_device_model", "telegram_system_version", "telegram_app_version"]:
+                    if key not in ["telegram_api_id", "telegram_api_hash", "telegram_device_model", "telegram_system_version", "telegram_app_version", "telegram_lang_pack", "telegram_lang_code", "telegram_system_lang_code"]:
                         _WarningsLogger.warning(
                             f'{FutureWarning.__name__} Unknown param in telegram_client - "{key}"')
                     else:
@@ -6451,7 +6455,7 @@ class Market:
             self._api = _api_self
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def from_url(self, url: str) -> httpx.Response:
+        def from_url(self, url: str, params: dict = {}) -> httpx.Response:
             """
             Displays a list of the latest accounts from your market url with search params
 
@@ -6460,8 +6464,9 @@ class Market:
             **Parameters:**
 
             - **url** (str): Your market search url.
-                > It can be *https://lzt.market/search_params* or *https://api.lzt.market/search_params*
-
+                > It can be *https://lzt.market/?some_param=some_value&...* or *https://api.lzt.market/?some_param=some_value&...*
+            - **params** (dict): Params dict.
+                > This param overrides url query params.
             **Example:**
 
             ```python
@@ -6482,7 +6487,10 @@ class Market:
                     f"Unknown link. It should be \"{base_api.base_url}\" or \"{base_api.base_url.replace('api.','')}\""
                 )
             url = urlparse(url)
-            params = parse_qs(url.query)
+            parsed_params = parse_qs(url.query)
+            if isinstance(params, dict):
+                parsed_params.update(params)
+            params = parsed_params
             path = url.path
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
@@ -7092,7 +7100,7 @@ class Market:
                 return _send_request(self=self._api, method="DELETE", path=path)
 
             @_MainTweaks._CheckScopes(scopes=["market"])
-            def update_inventory(self, item_id: int, app_id: Constants.Market.AppID._Literal) -> httpx.Response:
+            def update_inventory(self, item_id: int, app_id: Constants.Market.AppID._Literal = _MainTweaks.NONE, all: bool = _MainTweaks.NONE) -> httpx.Response:
                 """
                 POST https://api.lzt.market/{item_id}/update-inventory
 
@@ -7104,15 +7112,16 @@ class Market:
 
                 - **item_id** (int): ID of item.
                 - **app_id** (int): App id.
+                - **all** (bool): Update the entire Steam inventory.
 
                 **Example:**
 
                 ```python
-                response = market.managing.steam.update_inventory(item_id=1000000, app_id=730)
+                response = market.managing.steam.update_inventory(item_id=1000000, all=True)
                 print(response.json())
                 ```
                 """
-                params = {"app_id": app_id}
+                params = {"app_id": app_id, "all": all}
                 path = f"/{item_id}/update-inventory"
                 return _send_request(
                     self=self._api, method="POST", path=path, params=params
@@ -7800,7 +7809,7 @@ class Market:
             self._api = _api_self
 
         @_MainTweaks._CheckScopes(scopes=["market"])
-        def info(self, item_id: int, resell_item_id: int = _MainTweaks.NONE) -> httpx.Response:
+        def info(self, item_id: int, resell_item_id: int = _MainTweaks.NONE, paid_mail: bool = _MainTweaks.NONE) -> httpx.Response:
             """
             GET https://api.lzt.market/{item_id}/goods/add
 
@@ -7812,6 +7821,7 @@ class Market:
 
             - **item_id** (int): ID of item.
             - **resell_item_id** (int): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
+            - **paid_mail** (bool): Use paid mail instead of regular. Optional if you want to upload Steam account.
 
             **Example:**
 
@@ -7821,7 +7831,7 @@ class Market:
             ```
             """
             path = f"/{item_id}/goods/add"
-            params = {"resell_item_id": resell_item_id}
+            params = {"resell_item_id": resell_item_id, "paid_mail": paid_mail}
             return _send_request(self=self._api, method="GET", path=path, params=params)
 
         @_MainTweaks._CheckScopes(scopes=["market"])
@@ -8230,7 +8240,8 @@ class Antipublic:
 
         self.reset_custom_variables = reset_custom_variables
         self.custom = _MainTweaks._Custom()
-        self._main_headers = {"User-Agent": f"LOLZTEAM v{version('LOLZTEAM')}"}
+        self._main_headers = {"User-Agent": f"LOLZTEAM v{version('LOLZTEAM')}",
+                              "x-antipublic-version": f"{version('LOLZTEAM')} (api) AS7RIDENIED/LOLZTEAM"}
 
         self.info = self.__Info(self)
         self.account = self.__Account(self)
@@ -8350,7 +8361,7 @@ class Antipublic:
         path = "/api/v2/checkLines"
         return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
-    def search(self, search_by: Constants.Antipublic.SearchBy._Literal, query: str, direction: Constants.Antipublic.SearchDirection._Literal = _MainTweaks.NONE, page_token: Optional[str] = _MainTweaks.NONE) -> httpx.Response:
+    def search(self, search_by: Constants.Antipublic.SearchBy._Literal, query: str, direction: dict[Constants.Antipublic.SearchBy._Literal: Constants.Antipublic.SearchDirection._Literal] = _MainTweaks.NONE, page_token: Optional[str] = _MainTweaks.NONE) -> httpx.Response:
         """
         POST https://antipublic.one/api/v2/search
 
@@ -8366,21 +8377,17 @@ class Antipublic:
         **Example:**
 
         ```python
-        response = antipublic.search(search_by="email", query="email7357@example.com")
+        response = antipublic.search(search_by="email", query="email7357", direction={"email":"strict"})
         print(response.json())
         ```
         """
         path = "/api/v2/search"
-        if search_by not in ["email", "password", "domain"]:
-            _WarningsLogger.warning("Search type has invalid value. It can be only \"email\", \"password\" or \"domain\"")
         dataJ = {
             "searchBy": search_by,
             "query": {str(search_by): query},
+            "direction": direction,
+            "pageToken": page_token
         }
-        if not isinstance(direction, _MainTweaks.NonePlaceholder):
-            dataJ["direction"] = {str(search_by): direction}
-        if not isinstance(page_token, _MainTweaks.NonePlaceholder):
-            dataJ["pageToken"] = page_token
         return _send_request(self=self, method="POST", path=path, dataJ=dataJ)
 
     def email_passwords(
