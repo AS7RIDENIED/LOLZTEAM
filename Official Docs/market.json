@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.50d"
+    "version": "1.1.51"
   },
   "servers": [
     {
@@ -730,7 +730,8 @@
                   305,
                   306,
                   307,
-                  308
+                  308,
+                  309
                 ]
               }
             }
@@ -810,6 +811,7 @@
                   "A Story About My Uncle",
                   "A Year Of Rain 2Pack Gift",
                   "A.R.E.S.: Berzerker Suit",
+                  "ACE COMBAT™ 7: SKIES UNKNOWN",
                   "ARK: Scorched Earth - Expansion Pack",
                   "ARK: Survival Evolved",
                   "ARMA: Cold War Assault",
@@ -828,6 +830,7 @@
                   "Age of Empires II (2013): The African Kingdoms",
                   "Age of Empires II (2013): The Forgotten",
                   "Age of Empires II (Retired)",
+                  "Age of Empires II (Retired)_cis",
                   "Age of Empires II: Definitive Edition",
                   "Age of Mythology: Extended Edition",
                   "Air Conflicts: Pacific Carriers",
@@ -835,6 +838,7 @@
                   "Air Conflicts: Secret Wars",
                   "AirMech 2 [NO LONGER VALID]",
                   "Airscape - The Fall of Gravity_cis",
+                  "Alan Wake's American Nightmare",
                   "Alice: Madness Returns",
                   "Alien Breed 2: Assault",
                   "Alien Breed 3: Descent",
@@ -854,6 +858,7 @@
                   "Anno 2070™ - The Financial Crisis Package",
                   "Anomaly 2",
                   "Apewar",
+                  "Apollo Justice: Ace Attorney Trilogy",
                   "Arena Wars 2",
                   "Arma 2",
                   "Arma 2 Complete Collection",
@@ -887,6 +892,7 @@
                   "BBQ Simulator: The Squad",
                   "BEEP",
                   "BIT.TRIP BEAT",
+                  "BIT.TRIP Presents... Runner2: Future Legend of Rhythm Alien",
                   "BIT.TRIP RUNNER",
                   "BOKURA",
                   "Back 4 Blood",
@@ -900,9 +906,11 @@
                   "Barony",
                   "Barony_cis",
                   "Barro",
+                  "Barro F22",
                   "Barro GT",
                   "Barro T23",
                   "Bastion",
+                  "Bastion_cis",
                   "Batman: Arkham City - Game of the Year Edition",
                   "Batman™: Arkham Knight - A Matter of Family_cis",
                   "Batman™: Arkham Knight - Harley Quinn Story Pack_cis",
@@ -952,6 +960,7 @@
                   "Bloody Trapland",
                   "Bloody Trapland_cis",
                   "Bloons TD 6",
+                  "Boid Gift",
                   "Bombernauts",
                   "Bombernauts_cis",
                   "Booster Trooper",
@@ -965,6 +974,8 @@
                   "Borderlands 2: Commando Haggard Hunter Pack",
                   "Borderlands 2: Commando Madness Pack",
                   "Borderlands 2: Commando Supremacy Pack",
+                  "Borderlands 2: Headhunter 1: Bloody Harvest",
+                  "Borderlands 2: Headhunter 2: Wattle Gobbler",
                   "Borderlands 2: Headhunter 5: Son of Crawmerax",
                   "Borderlands 2: Mechromancer Domination Pack",
                   "Borderlands 2: Mechromancer Madness Pack",
@@ -1003,9 +1014,11 @@
                   "Call of Duty®: Black Ops II - Revolution_cis",
                   "Call of Duty®: Black Ops II - Vengeance_cis",
                   "Call of Duty®: Black Ops II - Weaponized 115 Personalization Pack",
+                  "Call of Duty®: Black Ops III - Der Eisendrache Zombies Map",
                   "Call of Duty®: Modern Warfare® 2 (2009)",
                   "Call of Duty®: Modern Warfare® 2 Resurgence Pack",
                   "Call of Duty®: Modern Warfare® 2 Stimulus Package",
+                  "Call of Tomsk-7",
                   "Cannon Brawl",
                   "Car Mechanic Simulator 2014",
                   "CarX Street - DLC Sunset Speedway",
@@ -1031,6 +1044,7 @@
                   "Child of Light_cis",
                   "Children of the Nile: Alexandria",
                   "Chivalry: Complete Pack",
+                  "Chivalry: Complete Pack_cis",
                   "Chivalry: Deadliest Warrior",
                   "Chivalry: Medieval Warfare",
                   "Chivalry: Medieval Warfare_cis",
@@ -1089,7 +1103,6 @@
                   "Crysis Warhead®",
                   "Cthulhu Saves the World & Breath of Death VII Double Pack",
                   "Cube Destroyer",
-                  "Cubemen",
                   "Cubicle Quest",
                   "Cubicle Quest_cis",
                   "D.W.A.R.F.S.",
@@ -1107,6 +1120,8 @@
                   "Daedalus - No Escape",
                   "Damned",
                   "Damned_cis",
+                  "Danganronpa 2: Goodbye Despair",
+                  "Danganronpa S: Ultimate Summer Camp",
                   "Dark Forester",
                   "Dark Frame",
                   "Dark Messiah of Might & Magic",
@@ -1126,6 +1141,7 @@
                   "Dead Cells",
                   "Dead Cells: Fatal Falls",
                   "Dead Cells: The Bad Seed",
+                  "Dead Effect",
                   "Dead Horde",
                   "Dead Island (JP)",
                   "Dead Island (RoW)",
@@ -1141,6 +1157,7 @@
                   "Dead by Daylight: BETA Gift - Expired",
                   "Dead by Daylight: BETA Gift - Expired_cis",
                   "Dead by Daylight_cis",
+                  "Deadlight",
                   "Deadlight Original Soundtrack",
                   "Deadly Days",
                   "Deathgarden: BLOODHARVEST Gift",
@@ -1157,12 +1174,14 @@
                   "Defy Gravity Extended_cis",
                   "Delve Deeper: Treasures and Tunnels",
                   "Demigod",
+                  "Demigod_cis",
                   "Deponia",
                   "Deponia Doomsday_cis",
                   "Deponia_cis",
                   "Depth",
                   "Depth_cis",
                   "Despair",
+                  "Despair_cis",
                   "Desperados 2: Cooper's Revenge",
                   "Destiny 2: The Final Shape + Annual Pass",
                   "Detroit: Become Human",
@@ -1197,6 +1216,7 @@
                   "Don't Starve: Reign of Giants",
                   "Don't Starve: Shipwrecked",
                   "Dota 2",
+                  "Double Dragon: Neon",
                   "Down To One",
                   "Down To One_cis",
                   "Dracula's Legacy_cis",
@@ -1301,6 +1321,7 @@
                   "Fallout New Vegas Courier's Stash",
                   "Fallout New Vegas Ultimate",
                   "Fallout New Vegas Ultimate PCR",
+                  "Fallout New Vegas: Courier's Stash",
                   "Fallout New Vegas®: Lonesome Road™",
                   "Fallout: New Vegas",
                   "Fantasy Grounds Classic",
@@ -1310,6 +1331,7 @@
                   "Far Cry® Primal",
                   "FarSky",
                   "Farming Simulator 17 - KUHN Equipment Pack",
+                  "Fear & Hunger 2: Termina",
                   "Feign",
                   "Fields of Mistria",
                   "Fight The Dragon",
@@ -1381,6 +1403,7 @@
                   "Gomo",
                   "Gothic 3: Forsaken Gods Enhanced Edition",
                   "Gothic II: Gold Edition",
+                  "Gothic® 3",
                   "Grand Pigeon's Duty_cis",
                   "Grand Theft Auto IV: The Complete Edition_cis",
                   "Grand Theft Auto V",
@@ -1427,7 +1450,6 @@
                   "Half-Life 2: Episode 1_cis",
                   "Half-Life 2: Episode One",
                   "Half-Life 2: Episode Two",
-                  "Half-Life 2: Episode Two - Gamescon",
                   "Half-Life 2_cis",
                   "Half-Life: Blue Shift",
                   "Hamilton's Great Adventure",
@@ -1453,6 +1475,7 @@
                   "Heroes of Might & Magic V: Hammers of Fate_cis",
                   "Heroes of Might & Magic V_cis",
                   "Hitler My Friend",
+                  "Hitman: Blood Money_cis",
                   "Hive With Pillbug, Ladybug, Mosquito DLC Gift",
                   "Hollow Knight",
                   "Holodrive",
@@ -1468,9 +1491,12 @@
                   "HuniePop",
                   "Hunted: One Step Too Far - Reborn Edition_cis",
                   "Hurtworld_cis",
+                  "Hydrophobia: Prophecy",
                   "I Have No Mouth, and I Must Scream",
                   "I am Weapon: Revival",
+                  "INDIKA",
                   "Ichi",
+                  "Iesabel",
                   "If My Heart Had Wings",
                   "Immune - True Survival",
                   "Impire: Black and White Demons",
@@ -1488,6 +1514,7 @@
                   "Interplanetary GIFT",
                   "Interstellar Marines",
                   "Interstellar Marines_cis",
+                  "Invite the Dwarves to Dinner_cis",
                   "Iron Brigade",
                   "Iron Grip: Warlord",
                   "Iron Warriors: T - 72 Tank Command ",
@@ -1533,6 +1560,7 @@
                   "LIMBO",
                   "LIZARDS MUST DIE",
                   "LOCKDOWN Protocol",
+                  "LYNE",
                   "Labyronia RPG",
                   "Landmark - Trailblazer Buddy Gift",
                   "Lara Croft GoL: Raziel and Kain Character Pack",
@@ -1548,6 +1576,7 @@
                   "Legend of Dungeon",
                   "Legend of Grimrock",
                   "Legend of Mysteria RPG",
+                  "Legendary",
                   "Legendary_cis",
                   "Lethal Company",
                   "Lethal League",
@@ -1559,6 +1588,7 @@
                   "Little Inferno",
                   "Little Misfortune",
                   "Little Racers STREET",
+                  "Little Racers STREET_cis",
                   "Lords of the Fallen - The Arcane Boost",
                   "Lost Planet™: Extreme Condition",
                   "Lucius",
@@ -1588,6 +1618,7 @@
                   "Magicka 2",
                   "Magicka 2 Sneak Peek Gift",
                   "Magicka 2 Sneak Peek Gift_cis",
+                  "Magicka: Aspiring Musician Robes",
                   "Magicka: Wizard Wars - Alpha Gift",
                   "Magicka: Wizard's Survival Kit",
                   "Magicka_cis",
@@ -1596,6 +1627,7 @@
                   "Make America Great Again: The Trump Presidency",
                   "Manhunter_cis",
                   "Marble Mayhem: Fragile Ball",
+                  "Marble Mayhem: Fragile Ball_cis",
                   "Marine Sharpshooter II: Jungle Warfare",
                   "Master of Orion, Collector's Edition Upgrade",
                   "Max Payne 3",
@@ -1615,6 +1647,7 @@
                   "Microsoft Flight Simulator X: Steam Edition_cis",
                   "Middle-earth™: Shadow of War™",
                   "Minecraft Legends",
+                  "Miniature Gods_cis",
                   "Minimon",
                   "Minimum",
                   "Minion Masters",
@@ -1650,6 +1683,7 @@
                   "Mr. Prepper",
                   "Multiwinia",
                   "Murder Miners",
+                  "Murder Miners_cis",
                   "Murky Divers",
                   "Muse Dash",
                   "My Dream Setup",
@@ -1675,6 +1709,7 @@
                   "Naviros Samurai Pack",
                   "Ne no Kami - The Two Princess Knights of Kyoto Extra Story",
                   "Need for Speed™ Heat",
+                  "Never Alone (Kisima Ingitchuna)",
                   "New kind of adventure",
                   "Nexuiz",
                   "Nidhogg",
@@ -1682,6 +1717,7 @@
                   "Nightingale",
                   "Nikopol: Secrets of the Immortals",
                   "No Man's Sky",
+                  "No Time To Live",
                   "No Time to Relax",
                   "Nuclear Dawn",
                   "Nuclear Dawn_cis",
@@ -1697,6 +1733,7 @@
                   "Oddworld: Stranger's Wrath HD",
                   "Offworld Trading Company Gift Copy",
                   "Oh Deer",
+                  "Oh...Sir!! The Insult Simulator",
                   "Omerta - City of Gangsters",
                   "Omerta - City of Gangsters - GOLD EDITION",
                   "Omerta City of Gangsters Gift Package (KR)",
@@ -1712,6 +1749,7 @@
                   "Orcs Must Die! 2 - Are We There Yeti?",
                   "Orcs Must Die! 2 - Family Ties Booster Pack",
                   "Orcs Must Die! 2 - Fire and Water Booster Pack",
+                  "Orcs Must Die! 3",
                   "Orcs Must Die! Unchained - Starter Bundle",
                   "Ori and the Will of the Wisps",
                   "Original War",
@@ -1827,6 +1865,7 @@
                   "Prime Status Upgrade",
                   "Prime Status Upgrade_cis",
                   "Prince of Persia®: The Sands of Time",
+                  "Prison Architect",
                   "Project CARS - Limited Edition Upgrade",
                   "Project Zomboid",
                   "Project Zomboid_cis",
@@ -1876,6 +1915,7 @@
                   "Revolution Ace",
                   "Revolution Ace_cis",
                   "Ricochet",
+                  "Ring Runner: Flight of the Sages",
                   "Rise of Nations: Extended Edition",
                   "Rise of the Tomb Raider - Season Pass_cis",
                   "Rise of the Triad",
@@ -1925,6 +1965,7 @@
                   "SPACECOM_cis",
                   "SPORE™ Creepy & Cute Parts Pack",
                   "SSHDSE ROW Gift",
+                  "STAR WARS Jedi: Fallen Order™",
                   "STAR WARS™ Battlefront II (Classic, 2005)",
                   "STAR WARS™ Jedi Knight - Mysteries of the Sith™",
                   "STAR WARS™ Jedi Knight II - Jedi Outcast™",
@@ -1952,6 +1993,7 @@
                   "Scrap Mechanic_cis",
                   "Screencheat",
                   "Scribblenauts Unlimited",
+                  "Sea of Thieves: 2024 Edition",
                   "Secret Ponchos",
                   "Secret World Legends",
                   "Section 8: Prejudice",
@@ -1971,7 +2013,9 @@
                   "Sex with Stalin",
                   "Sex with the Devil",
                   "Shadowgrounds",
+                  "Shadowgrounds Pack",
                   "Shadowrun Returns",
+                  "Shank 2",
                   "Shark Attack Deathmatch 2",
                   "Shark Attack Deathmatch 2_cis",
                   "Shattered Horizon",
@@ -2028,6 +2072,7 @@
                   "Sol Survivor",
                   "Sonic & SEGA All-Stars Racing",
                   "Sonic 3D Blast",
+                  "Sonic Mania",
                   "Sonic The Hedgehog Gift Copy",
                   "Sonic and All-Stars Racing Transformed: Metal Sonic & Outrun DLC",
                   "Sons Of The Forest",
@@ -2125,6 +2170,9 @@
                   "THE KING OF FIGHTERS '98 ULTIMATE MATCH FINAL EDITION",
                   "THE KING OF FIGHTERS 2002 UNLIMITED MATCH",
                   "THE KING OF FIGHTERS XIII STEAM EDITION",
+                  "THIEF DLC: Booster Pack - Opportunist",
+                  "THIEF DLC: Booster Pack - Predator",
+                  "THIEF DLC: The Forsaken - Challenge Map",
                   "THIEF: The Bank Heist",
                   "TOXIKK - Triple Gift",
                   "TOXIKK Gift",
@@ -2135,6 +2183,7 @@
                   "Tabletop Simulator_cis",
                   "Takedown: Red Sabre",
                   "Tales of Maj'Eyal",
+                  "Tales of Zestiria",
                   "Tales of Zestiria - School Costume Set",
                   "Talisman: Digital Classic Edition",
                   "Talisman: Digital Edition",
@@ -2190,6 +2239,7 @@
                   "The Ship - 2 Pack Gift",
                   "The Ship Gift",
                   "The Showdown Effect Digital Deluxe Gift",
+                  "The Showdown Effect Standard Gift",
                   "The Silent Age",
                   "The Sims 3 - Movie Stuff",
                   "The Sims 3: Island Paradise",
@@ -2199,6 +2249,7 @@
                   "The Sims™ 3 Showtime",
                   "The Sims™ 4",
                   "The Survivalists",
+                  "The Talos Principle_cis",
                   "The Testament of Sherlock Holmes",
                   "The Walking Dead",
                   "The Walking Dead: 400 Days",
@@ -2281,6 +2332,7 @@
                   "Tropico 4 Collector's Bundle",
                   "Tropico 5",
                   "Two Worlds II HD",
+                  "UBERMOSH + Original Soundtrack",
                   "UFO 50",
                   "UNO",
                   "USFIV: All-in 2011 Costume Pack",
@@ -2294,13 +2346,11 @@
                   "Unknown package 11274",
                   "Unknown package 11443",
                   "Unknown package 11664",
-                  "Unknown package 11704",
                   "Unknown package 11754",
                   "Unknown package 118358",
                   "Unknown package 123216",
                   "Unknown package 12670",
                   "Unknown package 12671",
-                  "Unknown package 12696",
                   "Unknown package 12704",
                   "Unknown package 12721",
                   "Unknown package 12749",
@@ -2320,6 +2370,7 @@
                   "Unknown package 135549_cis",
                   "Unknown package 13900",
                   "Unknown package 140146",
+                  "Unknown package 14270",
                   "Unknown package 148686",
                   "Unknown package 14907",
                   "Unknown package 15190",
@@ -2358,6 +2409,7 @@
                   "Unknown package 33495",
                   "Unknown package 33961",
                   "Unknown package 34431",
+                  "Unknown package 34680_cis",
                   "Unknown package 36009",
                   "Unknown package 36075",
                   "Unknown package 391",
@@ -2398,9 +2450,10 @@
                   "Unknown package 59393_cis",
                   "Unknown package 6003_cis",
                   "Unknown package 62896_cis",
+                  "Unknown package 63446",
                   "Unknown package 6346",
-                  "Unknown package 6381",
                   "Unknown package 64902_cis",
+                  "Unknown package 65039_cis",
                   "Unknown package 65204",
                   "Unknown package 6639",
                   "Unknown package 66404",
@@ -2416,6 +2469,7 @@
                   "Unknown package 72159_cis",
                   "Unknown package 72161",
                   "Unknown package 72593_cis",
+                  "Unknown package 73706",
                   "Unknown package 74582",
                   "Unknown package 74582_cis",
                   "Unknown package 783",
@@ -2511,6 +2565,7 @@
                   "Zombie Army Trilogy",
                   "Zombie Driver HD",
                   "Zombie Driver HD_cis",
+                  "Zombie Kill of the Week - Reborn",
                   "Zombie Tycoon 2: Brainhov's Revenge",
                   "Zombie Tycoon 2: Brainhov's Revenge_cis",
                   "Zueirama",
@@ -6092,6 +6147,13 @@
                   "character_groovyreader",
                   "character_grumblecroak",
                   "character_guineapig",
+                  "character_habitsecurity",
+                  "character_habitsecurity_b",
+                  "character_habitsecurity_c",
+                  "character_habitsecurity_d",
+                  "character_habitsecurity_e",
+                  "character_habitsecurity_f",
+                  "character_habitsecurity_g",
                   "character_hauntkoi",
                   "character_haybrush",
                   "character_hazardedge",
@@ -6134,6 +6196,7 @@
                   "character_inspirespell",
                   "character_instantgravel",
                   "character_instantgravelnoble",
+                  "character_intensecello",
                   "character_ionvial",
                   "character_ironblaze",
                   "character_ironclash",
@@ -6307,6 +6370,7 @@
                   "character_prodigyhaughty",
                   "character_prodigysage",
                   "character_psychicaphid",
+                  "character_puffinsmile",
                   "character_pumpkinpunk_glitch",
                   "character_pumpkinskeleton",
                   "character_qualitycreek",
@@ -6369,6 +6433,7 @@
                   "character_sesameseed",
                   "character_shadeangel_npc",
                   "character_shadenyx_npc",
+                  "character_shakecrunch",
                   "character_sharpfang",
                   "character_sharpmagnet",
                   "character_shiitakeshaolin_rouge",
@@ -6387,6 +6452,7 @@
                   "character_slowburn",
                   "character_smarthyena",
                   "character_smokeyalias",
+                  "character_snailaisle",
                   "character_snakecrest",
                   "character_snapfreeze_hunt",
                   "character_snowknight_helm",
@@ -6511,6 +6577,13 @@
                   "character_voltaichuntress",
                   "character_warmshadewagon",
                   "character_warmshadeweasel",
+                  "character_waterfallcharm",
+                  "character_waterfallcharm_b",
+                  "character_waterfallcharm_c",
+                  "character_waterfallcharm_d",
+                  "character_waterfallcharm_e",
+                  "character_waterfallcharm_f",
+                  "character_waterfallcharm_g",
                   "character_watermolecules",
                   "character_waywardrebel",
                   "character_weaveharbor",
@@ -6537,6 +6610,7 @@
                   "character_zebrascramble_npc",
                   "character_zirconsweep",
                   "creative_mannequin_m_default",
+                  "defaultoutfit",
                   "jonesy3l",
                   "juno_minifig_commonknighta",
                   "juno_minifig_commonknightb",
@@ -7700,6 +7774,7 @@
                   "pickaxe_innovatorsand",
                   "pickaxe_inspirespell",
                   "pickaxe_instantgravelnoble",
+                  "pickaxe_intensecello",
                   "pickaxe_ionvial",
                   "pickaxe_ironblaze",
                   "pickaxe_ironclash",
@@ -7751,6 +7826,7 @@
                   "pickaxe_millionairegem",
                   "pickaxe_millionairetuna",
                   "pickaxe_mindpinch",
+                  "pickaxe_minionblossom",
                   "pickaxe_miragehike",
                   "pickaxe_missusmind",
                   "pickaxe_mistmylar",
@@ -7800,6 +7876,7 @@
                   "pickaxe_plantstand",
                   "pickaxe_plottwist",
                   "pickaxe_polishedjade",
+                  "pickaxe_poolswirl",
                   "pickaxe_popbucket",
                   "pickaxe_possession",
                   "pickaxe_potterywheel",
@@ -7814,6 +7891,7 @@
                   "pickaxe_prodigyhaughty",
                   "pickaxe_prodigysage",
                   "pickaxe_psychicaphid",
+                  "pickaxe_puffinsmile",
                   "pickaxe_punkdevilvibe",
                   "pickaxe_qualitycreek",
                   "pickaxe_quartz",
@@ -7887,6 +7965,7 @@
                   "pickaxe_slowburn",
                   "pickaxe_smarthyena",
                   "pickaxe_smokeyalias",
+                  "pickaxe_snailaisle",
                   "pickaxe_snakecrest",
                   "pickaxe_snapfreeze",
                   "pickaxe_snowknight",
@@ -8523,6 +8602,7 @@
                   "glider_silenttempo",
                   "glider_skullbrite_cotton",
                   "glider_slicevine",
+                  "glider_snailaisle",
                   "glider_snapfreeze",
                   "glider_snowsoldierfashion",
                   "glider_solartheory",
@@ -8709,6 +8789,7 @@
                   "bass_jumps",
                   "bass_kylethrowbass",
                   "bass_leafblower",
+                  "bass_letemcook",
                   "bass_shootkickjump",
                   "bass_sidekicks",
                   "bass_spotlight_capt",
@@ -9093,6 +9174,7 @@
                   "guitar_kneessolo",
                   "guitar_roundhousespin",
                   "guitar_rundancing",
+                  "guitar_shakecrunch",
                   "guitar_spotlight_crossed_arms",
                   "guitar_spotlight_knee_slide",
                   "guitar_spotlight_rundancing",
@@ -9439,6 +9521,7 @@
                   "oilpaint",
                   "olivestomp",
                   "onearmfloss",
+                  "oneinchpunch",
                   "onthehook",
                   "onward",
                   "orbitteal_1xlao",
@@ -9742,6 +9825,17 @@
                   "springbreak",
                   "springrider",
                   "sprinkler",
+                  "sprout_confused",
+                  "sprout_giveitem",
+                  "sprout_giveitem_sync",
+                  "sprout_giveitem_sync_follower",
+                  "sprout_happy",
+                  "sprout_headnod",
+                  "sprout_headshake",
+                  "sprout_laydown",
+                  "sprout_point",
+                  "sprout_sad",
+                  "sprout_wave",
                   "spyglass",
                   "spymale",
                   "squishydance",
@@ -11909,6 +12003,7 @@
                   23031,
                   23032,
                   23033,
+                  23034,
                   24000,
                   24001,
                   24002,
@@ -16450,6 +16545,7 @@
                   "BULL",
                   "BUSTER",
                   "BUZZ",
+                  "BUZZ LIGHTYEAR",
                   "BYRON",
                   "CARL",
                   "CHARLIE",
@@ -16491,6 +16587,7 @@
                   "MAISIE",
                   "MANDY",
                   "MAX",
+                  "MEEPLE",
                   "MEG",
                   "MELODIE",
                   "MICO",
@@ -16499,6 +16596,7 @@
                   "MR. P",
                   "NANI",
                   "NITA",
+                  "OLLIE",
                   "OTIS",
                   "PAM",
                   "PEARL",
@@ -35086,6 +35184,71 @@
                 "type": "string"
               }
             }
+          },
+          {
+            "name": "clans",
+            "in": "query",
+            "description": "Has clans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Has clans.",
+              "title": "Clans",
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "min_admin_clans",
+            "in": "query",
+            "description": "Minimum number of clans, where account is administrator.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum number of clans, where account is administrator.",
+              "title": "Min Admin Clans",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_admin_clans",
+            "in": "query",
+            "description": "Maximum number of clans, where account is administrator.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum number of clans, where account is administrator.",
+              "title": "Max Admin Clans",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_owner_clans",
+            "in": "query",
+            "description": "Minimum number of clans, where account is owner.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum number of clans, where account is owner.",
+              "title": "Min Owner Clans",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_owner_clans",
+            "in": "query",
+            "description": "Maximum number of clans, where account is owner.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum number of clans, where account is owner.",
+              "title": "Max Owner Clans",
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -37141,6 +37304,19 @@
             "schema": {
               "title": "Parent Control",
               "description": "Has disabled parent control.",
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "no_bans",
+            "in": "query",
+            "description": "Has no bans.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Has no bans.",
+              "title": "No Bans",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -40760,6 +40936,32 @@
           },
           {
             "$ref": "#/components/parameters/daybreak"
+          },
+          {
+            "name": "kredits_min",
+            "in": "query",
+            "description": "Minimum amount of Kredits.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum amount of Kredits.",
+              "title": "Kredits Min",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "kredits_max",
+            "in": "query",
+            "description": "Maximum amount of Kredits.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum amount of Kredits.",
+              "title": "Kredits Max",
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -41417,12 +41619,7 @@
             "schema": {
               "description": "Is auto renewal enabled.",
               "title": "Autorenewal",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme",
-              "enum": [
-                "yes",
-                "no",
-                "nomatter"
-              ]
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -41575,12 +41772,7 @@
             "schema": {
               "description": "Is API enabled in Hypixel Skyblock.",
               "title": "Hypixel Skyblock Api Enabled",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme",
-              "enum": [
-                "yes",
-                "no",
-                "nomatter"
-              ]
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
           {
@@ -44860,7 +45052,7 @@
             "name": "all",
             "in": "query",
             "description": "Update the entire Steam inventory.",
-            "required": true,
+            "required": false,
             "style": "form",
             "explode": false,
             "schema": {
@@ -45292,19 +45484,6 @@
           },
           {
             "$ref": "#/components/parameters/random_proxy"
-          },
-          {
-            "name": "paid_mail",
-            "in": "query",
-            "description": "Use paid mail instead of regular. Optional if you want to upload Steam account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Paid Mail",
-              "type": "boolean",
-              "description": "Use paid mail instead of regular. Optional if you want to upload Steam account."
-            }
           }
         ],
         "requestBody": {
@@ -45621,19 +45800,6 @@
           },
           {
             "$ref": "#/components/parameters/random_proxy"
-          },
-          {
-            "name": "paid_mail",
-            "in": "query",
-            "description": "Use paid mail instead of regular. Optional if you want to upload Steam account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Paid Mail",
-              "type": "boolean",
-              "description": "Use paid mail instead of regular. Optional if you want to upload Steam account."
-            }
           }
         ],
         "responses": {
@@ -45787,6 +45953,19 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
+          },
+          {
+            "name": "paid_mail",
+            "in": "query",
+            "description": "Use paid mail instead of regular. Optional if you want to upload Steam account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Paid Mail",
+              "type": "boolean",
+              "description": "Use paid mail instead of regular. Optional if you want to upload Steam account."
+            }
           },
           {
             "name": "resell_item_id",
@@ -47784,6 +47963,45 @@
               "type": "string",
               "description": "Telegram app version."
             }
+          },
+          {
+            "name": "telegram_lang_pack",
+            "in": "query",
+            "description": "Telegram lang pack.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Telegram lang pack.",
+              "type": "string",
+              "description": "Telegram lang pack."
+            }
+          },
+          {
+            "name": "telegram_lang_code",
+            "in": "query",
+            "description": "Telegram lang code.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Telegram lang code.",
+              "type": "string",
+              "description": "Telegram lang code."
+            }
+          },
+          {
+            "name": "telegram_system_lang_code",
+            "in": "query",
+            "description": "Telegram system lang code.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Telegram system lang code.",
+              "type": "string",
+              "description": "Telegram system lang code."
+            }
           }
         ],
         "responses": {
@@ -48916,7 +49134,7 @@
             "description": "Telegram client. Optional. Used only if you want to upload Telegram account.",
             "title": "Telegram client",
             "type": "string",
-            "example": "{\"telegram_api_id\": integer, \"telegram_api_hash\": string, \"telegram_device_model\": string, \"telegram_system_version\": string, \"telegram_app_version\": string}"
+            "example": "{\"telegram_api_id\": integer, \"telegram_api_hash\": string, \"telegram_device_model\": string, \"telegram_system_version\": string, \"telegram_app_version\": string, \"telegram_lang_pack\": string, \"telegram_lang_code\": string, \"telegram_system_lang_code\": string}"
           },
           "telegramJson": {
             "description": "Contents of session.json file. Optional. Used only if you want to upload Telegram account.",
