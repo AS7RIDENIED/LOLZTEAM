@@ -3,7 +3,7 @@
   "info": {
     "title": "AntiPublic.One API",
     "description": "Official API documentation for AntiPublic MYRZ.\n\nLinks:\n+ Download [AntiPublic](https://antipublic.one/dl/AntiPublic.zip).\n+ AntiPublic [Management](https://lolz.live/account/antipublic).",
-    "version": "1.0.8a"
+    "version": "1.0.9"
   },
   "servers": [
     {
@@ -580,6 +580,12 @@
   "x-readme": {
     "explorer-enabled": true,
     "proxy-enabled": true,
-    "samples-enabled": true
+    "samples-enabled": true,
+    "headers": [
+      {
+        "key": "x-antipublic-version",
+        "value": "1.0.x (docs) antipublic.readme.io"
+      }
+    ]
   }
 }
