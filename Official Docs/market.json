@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.51a"
+    "version": "1.1.51b"
   },
   "servers": [
     {
@@ -731,7 +731,8 @@
                   306,
                   307,
                   308,
-                  309
+                  309,
+                  310
                 ]
               }
             }
@@ -814,6 +815,8 @@
                   "A Year Of Rain 2Pack Gift",
                   "A.R.E.S.: Berzerker Suit",
                   "ACE COMBAT™ 7: SKIES UNKNOWN",
+                  "AMOK",
+                  "ARK: Genesis Season Pass",
                   "ARK: Scorched Earth - Expansion Pack",
                   "ARK: Survival Evolved",
                   "ARMA: Cold War Assault",
@@ -912,7 +915,6 @@
                   "Barbie™ Dreamhouse Party™",
                   "Barony",
                   "Barony_cis",
-                  "Barricade! DLC",
                   "Barro",
                   "Barro F",
                   "Barro F22",
@@ -990,6 +992,7 @@
                   "Borderlands 2: Headhunter 5: Son of Crawmerax",
                   "Borderlands 2: Mechromancer Domination Pack",
                   "Borderlands 2: Mechromancer Madness Pack",
+                  "Borderlands 2: Mechromancer Pack",
                   "Borderlands 2: Mechromancer Steampunk Slayer Pack",
                   "Borderlands 2: Mechromancer Supremacy Pack",
                   "Borderlands 2: Tiny Tina's Assault on Dragon Keep",
@@ -1021,6 +1024,7 @@
                   "Call of Duty®: Advanced Warfare - Season Pass",
                   "Call of Duty®: Black Ops - Rezurrection Content Pack",
                   "Call of Duty®: Black Ops First Strike Content Pack_cis",
+                  "Call of Duty®: Black Ops II - Nuketown Zombies Map",
                   "Call of Duty®: Black Ops II - Party Rock Personalization Pack",
                   "Call of Duty®: Black Ops II - Revolution_cis",
                   "Call of Duty®: Black Ops II - Vengeance_cis",
@@ -1050,6 +1054,7 @@
                   "Chained Together",
                   "Chaos on Deponia",
                   "Chasing Tails ~A Promise in the Snow~",
+                  "Cheap Golf",
                   "Chess 2: The Sequel",
                   "Chicken Shoot Gold",
                   "Child of Light",
@@ -1115,12 +1120,12 @@
                   "Crypt of the NecroDancer",
                   "Crysis 2 - Maximum Edition",
                   "Crysis Warhead®",
-                  "Cthulhu Saves the World",
                   "Cthulhu Saves the World & Breath of Death VII Double Pack",
                   "Cube Destroyer",
                   "Cubicle Quest",
                   "Cubicle Quest_cis",
                   "D.W.A.R.F.S.",
+                  "DARK SOULS™: Prepare To Die™ Edition",
                   "DARK SOULS™: Prepare To Die™ Edition_cis",
                   "DEADCRAFT",
                   "DEFCON",
@@ -1282,8 +1287,8 @@
                   "ELDEN RING Shadow of the Erdtree",
                   "ENDLESS™ Dungeon – Closed Beta",
                   "ENDLESS™ Space - Definitive Edition",
+                  "EVE Online",
                   "Edge of Space",
-                  "El Diablo Islands - Host",
                   "Electronic Super Joy: Groove City",
                   "Elite Dangerous",
                   "Emily Wants To Play",
@@ -1345,9 +1350,12 @@
                   "Far Cry 3",
                   "Far Cry®",
                   "Far Cry® 2",
+                  "Far Cry® 4 – Overrun",
                   "Far Cry® Primal",
                   "FarSky",
+                  "Farming Simulator 15_cis",
                   "Farming Simulator 17 - KUHN Equipment Pack",
+                  "Farming Simulator 2013: DLCs Pack",
                   "Fear & Hunger 2: Termina",
                   "Feign",
                   "Fields of Mistria",
@@ -1382,6 +1390,7 @@
                   "Frankenstein: Master of Death",
                   "Frankenstein: Master of Death_cis",
                   "Freddi Fish and the Case of the Missing Kelp Seeds",
+                  "Freedom Force",
                   "From Dust",
                   "Frontlines™: Fuel of War™",
                   "Frozen Cortex",
@@ -1393,6 +1402,7 @@
                   "Furry Love",
                   "Furry Orgasm",
                   "Furry Reich 🐺",
+                  "Furry Shades of Gay 3: Still Gayer",
                   "Fury Unleashed",
                   "Future Wars",
                   "GRID Autosport",
@@ -1417,6 +1427,7 @@
                   "Girls! Girls! Girls!?",
                   "Goat Simulator: GoatZ",
                   "God Mode",
+                  "God of War Ragnarök",
                   "Gomo",
                   "Gothic 3: Forsaken Gods Enhanced Edition",
                   "Gothic II: Gold Edition",
@@ -1477,10 +1488,8 @@
                   "Hand Simulator",
                   "Hard Reset Redux",
                   "Hearts of Iron III: Semper Fi",
-                  "Heat Wave DLC - x 3 pack",
                   "Heileen 3: New Horizons",
                   "Hell Let Loose",
-                  "Hello my name is... Nina. DLC",
                   "Hentai Furry",
                   "Hentai Furry 2",
                   "Hentai Furry 3",
@@ -1498,6 +1507,7 @@
                   "Heroes of Might & Magic V: Hammers of Fate_cis",
                   "Heroes of Might & Magic V_cis",
                   "Hitler My Friend",
+                  "Hitman: Absolution: Deus Ex (Adam Jensen) Disguise",
                   "Hitman: Blood Money_cis",
                   "Hitman: Contracts",
                   "Hive With Pillbug, Ladybug, Mosquito DLC Gift",
@@ -1514,6 +1524,7 @@
                   "How to Survive - Storm Warning Edition",
                   "Human Fall Flat",
                   "HuniePop",
+                  "Hunt the Night",
                   "Hunted: One Step Too Far - Reborn Edition_cis",
                   "Hurtworld_cis",
                   "Hydrophobia: Prophecy",
@@ -1579,6 +1590,7 @@
                   "LEGO® Batman™: The Videogame",
                   "LEGO® Batman™: The Videogame_cis",
                   "LEGO® Marvel Super Heroes DLC: Super Pack",
+                  "LEGO® Star Wars™ III - The Clone Wars™",
                   "LEGO® Star Wars™: The Skywalker Saga",
                   "LEGO® The Hobbit™_cis",
                   "LEGO® The Lord of the Rings™_cis",
@@ -1664,6 +1676,7 @@
                   "Medieval Engineers",
                   "Medieval Engineers Deluxe Gift",
                   "Medieval Engineers_cis",
+                  "Mega Man Legacy Collection",
                   "Men of War: Assault Squad 2_cis",
                   "Men of War: Vietnam",
                   "Men of War™",
@@ -1737,6 +1750,7 @@
                   "Naviros Samurai Pack",
                   "Ne no Kami - The Two Princess Knights of Kyoto Extra Story",
                   "Need for Speed™ Heat",
+                  "Nether: Resurrected",
                   "Never Alone (Kisima Ingitchuna)",
                   "New kind of adventure",
                   "Nexuiz",
@@ -1787,6 +1801,7 @@
                   "Out There Somewhere",
                   "Out There Somewhere_cis",
                   "Out of Reach",
+                  "Outer Wilds",
                   "Outlast",
                   "Outlast 2",
                   "Outlast: Whistleblower DLC",
@@ -1865,6 +1880,7 @@
                   "Phasmophobia",
                   "Placid Plastic Duck Simulator",
                   "Plague Inc: Evolved_cis",
+                  "Planet Explorers",
                   "Planetary Annihilation: TITANS",
                   "Plants vs. Zombies GOTY Edition",
                   "Plants vs. Zombies™ Garden Warfare 2: Deluxe Edition",
@@ -1899,6 +1915,7 @@
                   "Project CARS - Limited Edition Upgrade",
                   "Project Zomboid",
                   "Project Zomboid_cis",
+                  "Propagation VR - Co-op",
                   "Psi Cards - Soundtrack",
                   "Psychonauts",
                   "Punch Club",
@@ -2004,6 +2021,7 @@
                   "STAR WARS™ Battlefront™ II",
                   "STAR WARS™ Jedi Knight - Mysteries of the Sith™",
                   "STAR WARS™ Jedi Knight II - Jedi Outcast™",
+                  "STAR WARS™ Knights of the Old Republic™ II - The Sith Lords™",
                   "SURVIVAL: Postapocalypse Now",
                   "Sable",
                   "Sacred Citadel",
@@ -2111,6 +2129,7 @@
                   "Sonic 3D Blast",
                   "Sonic Mania",
                   "Sonic The Hedgehog Gift Copy",
+                  "Sonic and All-Stars Racing Transformed Gift",
                   "Sonic and All-Stars Racing Transformed: Metal Sonic & Outrun DLC",
                   "Sons Of The Forest",
                   "Soul Gambler: Dark Arts Edition",
@@ -2130,6 +2149,7 @@
                   "Space Hack",
                   "Space Hulk",
                   "Space Pilgrim Episode I: Alpha Centauri",
+                  "Space Pirates and Zombies",
                   "SpaceChem",
                   "SpaceChem: 63 Corvi",
                   "Spacebase DF-9",
@@ -2218,6 +2238,7 @@
                   "TRON RUN/r Ultimate Edition - Gift Base Game",
                   "Tabletop Simulator",
                   "Tabletop Simulator_cis",
+                  "Tactical Breach Wizards",
                   "Takedown: Red Sabre",
                   "Tales of Maj'Eyal",
                   "Tales of Zestiria",
@@ -2264,6 +2285,7 @@
                   "The Howler_cis",
                   "The I of the Dragon",
                   "The Journey Down: Chapter One",
+                  "The Last of Us™ Part I",
                   "The Long Dark_cis",
                   "The Long Drive",
                   "The Odyssey: Winds of Athena_cis",
@@ -2288,6 +2310,7 @@
                   "The Sims™ 4",
                   "The Survivalists",
                   "The Talos Principle_cis",
+                  "The Technomancer",
                   "The Testament of Sherlock Holmes",
                   "The Walking Dead",
                   "The Walking Dead: 400 Days",
@@ -2347,6 +2370,7 @@
                   "Total War: SHOGUN 2 - Rise of the Samurai Campaign",
                   "Total War: SHOGUN 2 - The Hattori Clan Pack",
                   "Total War: Shogun 2 - Blood Pack DLC",
+                  "Total War: WARHAMMER - Chaos Warriors",
                   "Total War: WARHAMMER III - Elspeth – Thrones of Decay",
                   "Totally Accurate Battle Simulator",
                   "Tower Wars",
@@ -2433,6 +2457,7 @@
                   "Unknown package 28188_cis",
                   "Unknown package 2832",
                   "Unknown package 28637",
+                  "Unknown package 28637_cis",
                   "Unknown package 2916",
                   "Unknown package 29177",
                   "Unknown package 29177_cis",
@@ -2567,6 +2592,7 @@
                   "Warhammer 40,000: Rogue Trader",
                   "Warhammer 40,000: Space Marine - Chaos Unleashed Map Pack",
                   "Warhammer 40,000: Space Marine - Emperor’s Elite Pack",
+                  "Warhammer 40,000: Space Marine 2",
                   "Warhammer: Vermintide 2",
                   "Watch_Dogs™",
                   "Waveform",
@@ -2602,6 +2628,7 @@
                   "XCOM: Enemy Unknown - Slingshot Pack",
                   "XCOM: Enemy Within",
                   "XCOM: Enemy Within_cis",
+                  "YOU DON'T KNOW JACK Vol. 6 The Lost Gold_cis",
                   "Yet Another Zombie Defense",
                   "Yet Another Zombie Defense_cis",
                   "Your Only Move Is HUSTLE",
@@ -3155,6 +3182,45 @@
               "minimum": 1,
               "maximum": 18,
               "description": "Maximum rank in CS2 on a certain map."
+            }
+          },
+          {
+            "name": "has_faceit",
+            "in": "query",
+            "description": "Has FACEIT account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Has FACEIT account.",
+              "title": "Has Faceit",
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "faceit_csgo_lvl_min",
+            "in": "query",
+            "description": "Minimum FACEIT level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum FACEIT level.",
+              "title": "Faceit Csgo Lvl Min",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "faceit_csgo_lvl_max",
+            "in": "query",
+            "description": "Maximum FACEIT level.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum FACEIT level.",
+              "title": "Faceit Csgo Lvl Max",
+              "type": "integer"
             }
           },
           {
@@ -4493,6 +4559,7 @@
                   "015_athena_commando_f",
                   "016_athena_commando_f",
                   "017_athena_commando_m",
+                  "017_athena_commando_m_og",
                   "018_athena_commando_m",
                   "019_athena_commando_m",
                   "020_athena_commando_m",
@@ -4504,6 +4571,7 @@
                   "026_athena_commando_m",
                   "027_athena_commando_f",
                   "028_athena_commando_f",
+                  "028_athena_commando_f_og",
                   "029_athena_commando_f_halloween",
                   "029_athena_commando_f_halloween_og",
                   "030_athena_commando_m_halloween",
@@ -5946,6 +6014,7 @@
                   "character_akimboenvoy",
                   "character_alien_robot",
                   "character_allknowing",
+                  "character_almondsplash",
                   "character_amour",
                   "character_anglepatch_lodge",
                   "character_anglepatch_royal_npc",
@@ -6051,6 +6120,7 @@
                   "character_contaminate",
                   "character_coppertoll",
                   "character_coralnumber",
+                  "character_cordsyrup",
                   "character_corkfloor",
                   "character_corkfloorswim",
                   "character_cosmicsquatter",
@@ -6162,6 +6232,7 @@
                   "character_folkevening",
                   "character_fossilmech",
                   "character_freedrive",
+                  "character_freightcalf",
                   "character_freshwave",
                   "character_frostmystery",
                   "character_frozenreality",
@@ -6334,6 +6405,7 @@
                   "character_mouse",
                   "character_mummy",
                   "character_musketslinger",
+                  "character_mustardtoast",
                   "character_muteribbon",
                   "character_nebula",
                   "character_nebulaburden",
@@ -6350,6 +6422,7 @@
                   "character_orinchai",
                   "character_outergarment",
                   "character_oysterknock",
+                  "character_pagetruffle",
                   "character_palmtree",
                   "character_paperblaze",
                   "character_paperglow",
@@ -6358,6 +6431,7 @@
                   "character_pastasaucemarinara",
                   "character_pastasaucespice",
                   "character_pastelglazegift",
+                  "character_pastelglazegrain",
                   "character_patches",
                   "character_patronpoppet",
                   "character_peacefulpoem",
@@ -6584,6 +6658,7 @@
                   "character_swampknight",
                   "character_sweetcuddle",
                   "character_sweetletter",
+                  "character_swisskale",
                   "character_tacticalred_disco",
                   "character_tactickale",
                   "character_tactickale_b",
@@ -6796,6 +6871,7 @@
                   "pickaxe_airkringle",
                   "pickaxe_akimboenvoy",
                   "pickaxe_allknowing",
+                  "pickaxe_almondsplash",
                   "pickaxe_amour",
                   "pickaxe_angel_fncs",
                   "pickaxe_anglepatch",
@@ -6870,6 +6946,7 @@
                   "pickaxe_contaminate",
                   "pickaxe_coppertoll",
                   "pickaxe_coralnumber",
+                  "pickaxe_cordsyrup",
                   "pickaxe_cosmicsquatter",
                   "pickaxe_cowboyhat",
                   "pickaxe_coyotear",
@@ -6960,6 +7037,7 @@
                   "pickaxe_forsake_fncs",
                   "pickaxe_fossilmech",
                   "pickaxe_freedrive",
+                  "pickaxe_freightcalf",
                   "pickaxe_freshwave",
                   "pickaxe_frozenreality",
                   "pickaxe_fuzzyclaw",
@@ -7883,6 +7961,7 @@
                   "pickaxe_livelydomino",
                   "pickaxe_localzilla",
                   "pickaxe_lockjaw",
+                  "pickaxe_lockjaw_og",
                   "pickaxe_looper",
                   "pickaxe_lopexsnow",
                   "pickaxe_loudphoenix",
@@ -7917,6 +7996,7 @@
                   "pickaxe_mouse",
                   "pickaxe_mummy",
                   "pickaxe_musketslinger",
+                  "pickaxe_mustardtoast",
                   "pickaxe_muteribbon",
                   "pickaxe_nebula",
                   "pickaxe_nighthawk",
@@ -7931,6 +8011,7 @@
                   "pickaxe_orinchai",
                   "pickaxe_outergarment",
                   "pickaxe_oysterknock",
+                  "pickaxe_pagetruffle",
                   "pickaxe_palmtree",
                   "pickaxe_paper",
                   "pickaxe_parrotpen",
@@ -8093,6 +8174,7 @@
                   "pickaxe_supernovataro",
                   "pickaxe_sweetcuddle",
                   "pickaxe_sweetletter",
+                  "pickaxe_swisskale",
                   "pickaxe_tactickale",
                   "pickaxe_talonhime",
                   "pickaxe_taxiupgraded_vista",
@@ -8229,6 +8311,7 @@
                   "glider_highbeam",
                   "glider_hornedjudgment",
                   "glider_id_001",
+                  "glider_id_001_og",
                   "glider_id_002_medieval",
                   "glider_id_003_district",
                   "glider_id_004_disco",
@@ -8812,6 +8895,7 @@
                   "alien",
                   "aliensupport",
                   "alliteration",
+                  "almondsplash",
                   "aloha_c82xx",
                   "amazingforever_q68w0",
                   "ancientgladiator",
@@ -9633,6 +9717,7 @@
                   "partyjazztwinkletoes",
                   "partyjazzwigglydance",
                   "pastasauce",
+                  "pastelglaze",
                   "patpat",
                   "patpat_sync",
                   "patpat_sync_follower",
@@ -9981,6 +10066,7 @@
                   "swingdance",
                   "swipeit",
                   "swish",
+                  "swisskale",
                   "switchthewitch",
                   "swoosh",
                   "tacotimedance",
@@ -12329,6 +12415,7 @@
                   1061,
                   1071,
                   1081,
+                  1091,
                   1101,
                   1111,
                   1121,
@@ -12339,6 +12426,7 @@
                   1171,
                   1181,
                   1191,
+                  1201,
                   1211,
                   1221,
                   1241,
@@ -12406,6 +12494,7 @@
                   14102,
                   14104,
                   14107,
+                  14109,
                   14110,
                   14114,
                   14116,
@@ -33500,6 +33589,32 @@
             "schema": {
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
+          },
+          {
+            "name": "balance_min",
+            "in": "query",
+            "description": "Minimum balance.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum balance.",
+              "title": "Balance Min",
+              "type": "number"
+            }
+          },
+          {
+            "name": "balance_max",
+            "in": "query",
+            "description": "Maximum balance.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum balance.",
+              "title": "Balance Max",
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -35360,6 +35475,77 @@
               "description": "Maximum number of clans, where account is owner.",
               "title": "Max Owner Clans",
               "type": "integer"
+            }
+          },
+          {
+            "name": "country[]",
+            "in": "query",
+            "description": "List of allowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "List of allowed countries.",
+              "title": "Country",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "not_country[]",
+            "in": "query",
+            "description": "List of disallowed countries.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "List of disallowed countries.",
+              "title": "Not Country",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "min_servers",
+            "in": "query",
+            "description": "Minimum count of servers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum count of servers.",
+              "title": "Min Servers",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_servers",
+            "in": "query",
+            "description": "Maximum count of servers.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum count of servers.",
+              "title": "Max Servers",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "2fa",
+            "in": "query",
+            "description": "Has two-factor authentication.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Has two-factor authentication.",
+              "title": "2fa",
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
         ],
@@ -40466,7 +40652,6 @@
                 "type": "string",
                 "enum": [
                   "Basic Family",
-                  "Premium Basic",
                   "Premium Duo",
                   "Premium Fallback",
                   "Premium Family",
@@ -46079,6 +46264,19 @@
               "title": "Paid Mail",
               "type": "boolean",
               "description": "Use paid mail instead of regular. Optional if you want to upload Steam account."
+            }
+          },
+          {
+            "name": "forceTempEmail",
+            "in": "query",
+            "description": "Force temp mail. Optional if you want to upload Supercell account.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Paid Mail",
+              "type": "boolean",
+              "description": "Force temp mail. Optional if you want to upload Supercell account."
             }
           },
           {
