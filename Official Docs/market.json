@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.52"
+    "version": "1.1.52a"
   },
   "servers": [
     {
@@ -732,7 +732,8 @@
                   307,
                   308,
                   309,
-                  310
+                  310,
+                  311
                 ]
               }
             }
@@ -813,6 +814,7 @@
                   "A New Beginning - Final Cut",
                   "A New Beginning - Final Cut_cis",
                   "A Story About My Uncle",
+                  "A Way Out",
                   "A Year Of Rain 2Pack Gift",
                   "A.R.E.S.: Berzerker Suit",
                   "ACE COMBAT™ 7: SKIES UNKNOWN",
@@ -838,6 +840,10 @@
                   "Age of Empires II (Retired)",
                   "Age of Empires II (Retired)_cis",
                   "Age of Empires II: Definitive Edition",
+                  "Age of Empires III: DE - The African Royals",
+                  "Age of Empires III: Definitive Edition - Knights of the Mediterranean",
+                  "Age of Empires III: Definitive Edition - Mexico Civilization",
+                  "Age of Empires III: Definitive Edition - United States Civilization",
                   "Age of Mythology: Extended Edition",
                   "Air Conflicts: Pacific Carriers",
                   "Air Conflicts: Pacific Carriers_cis",
@@ -845,6 +851,7 @@
                   "AirMech 2 [NO LONGER VALID]",
                   "Airscape - The Fall of Gravity",
                   "Airscape - The Fall of Gravity_cis",
+                  "Alan Wake",
                   "Alan Wake's American Nightmare",
                   "Alice: Madness Returns",
                   "Alien Breed 2: Assault",
@@ -1060,6 +1067,7 @@
                   "CastleMiner Z_cis",
                   "Caveman World: Mountains of Unga Boonga",
                   "Chained Together",
+                  "Chantelise - A Tale of Two Sisters",
                   "Chaos on Deponia",
                   "Chasing Tails ~A Promise in the Snow~",
                   "Cheap Golf",
@@ -1088,6 +1096,7 @@
                   "Clue/Cluedo: Classic Edition",
                   "CoH 2 - German Commander: Elite Troops Doctrine",
                   "CoH 2 - Soviet Commander: Soviet Industry Tactics",
+                  "Cobi Treasure Deluxe",
                   "Coconut Simulator",
                   "Codename Panzers Phase Two Soundtrack",
                   "Command & Conquer 3 Tiberium Wars™_cis",
@@ -1398,8 +1407,10 @@
                   "FlatOut 3: Chaos & Destruction",
                   "FlatOut: Ultimate Carnage Collector's Edition",
                   "FlatOut_cis",
+                  "Flesh Eaters",
                   "Flower",
                   "Flower_cis",
+                  "FootLOL: Epic Soccer League",
                   "Foreign Legion: Multi Massacre",
                   "Forge - Starter Pack",
                   "FortressCraft Evolved!_cis",
@@ -1430,7 +1441,6 @@
                   "GRID Autosport",
                   "GTFO Alpha Gift",
                   "GTFO Alpha Gift_cis",
-                  "GTR Evolution Expansion Pack for RACE 07",
                   "Game Builder Tycoon",
                   "Game of Thrones",
                   "Garfield Kart",
@@ -1569,6 +1579,7 @@
                   "If My Heart Had Wings",
                   "Immune - True Survival",
                   "Impire: Black and White Demons",
+                  "Impossible Creatures Steam Edition",
                   "Infestation: Survivor Stories 2020",
                   "Infestation: The New Beginning",
                   "Initial Drift Online",
@@ -1703,6 +1714,7 @@
                   "Make America Great Again: The Trump Presidency",
                   "Making History: The Calm & the Storm",
                   "Manhunter_cis",
+                  "Manor Lords",
                   "Marble Mayhem: Fragile Ball",
                   "Marble Mayhem: Fragile Ball_cis",
                   "Marine Sharpshooter II: Jungle Warfare",
@@ -1888,7 +1900,9 @@
                   "PAYDAY 2: Gage Weapon Pack #02_cis",
                   "PAYDAY 2: Hotline Miami",
                   "PAYDAY 2: John Wick Heists",
+                  "PAYDAY 2: The Alesso Heist",
                   "PAYDAY 2: The Big Bank Heist",
+                  "PAYDAY 2: The Butcher's BBQ Pack",
                   "PAYDAY 2: The Diamond Heist",
                   "PAYDAY 2: The OVERKILL B-Sides Soundtrack",
                   "PAYDAY 2: The OVERKILL Pack",
@@ -2486,6 +2500,7 @@
                   "Unknown package 12766",
                   "Unknown package 12797",
                   "Unknown package 12799",
+                  "Unknown package 12825",
                   "Unknown package 12893",
                   "Unknown package 12897",
                   "Unknown package 12898",
@@ -2513,6 +2528,8 @@
                   "Unknown package 18246",
                   "Unknown package 18251",
                   "Unknown package 18261",
+                  "Unknown package 18844",
+                  "Unknown package 18845",
                   "Unknown package 219",
                   "Unknown package 2487",
                   "Unknown package 25601",
@@ -2577,6 +2594,7 @@
                   "Unknown package 54030",
                   "Unknown package 54030_cis",
                   "Unknown package 54109",
+                  "Unknown package 54408",
                   "Unknown package 54408_cis",
                   "Unknown package 54471",
                   "Unknown package 54909",
@@ -2642,6 +2660,8 @@
                   "VVVVVV",
                   "Valiant Hearts: The Great War™ / Soldats Inconnus : Mémoires de la Grande Guerre™_cis",
                   "Valkyria Chronicles™",
+                  "Vampire Survivors",
+                  "Vampire Survivors: Ode to Castlevania",
                   "Van Helsing II : Complete Pack",
                   "Vegas: Make It Big™",
                   "Velvet Assassin",
@@ -11655,8 +11675,43 @@
                   10000103,
                   10000104,
                   10000105,
-                  10000106
+                  10000106,
+                  10000107
                 ]
+              }
+            }
+          },
+          {
+            "name": "genshin_character_constellations",
+            "in": "query",
+            "description": "List of minimum constellations on characters.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "description": "List of minimum constellations on characters.",
+              "title": "Genshin Character Constellations",
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - character id\nValue - minimun constellations"
+              }
+            }
+          },
+          {
+            "name": "genshin_character_constellations_max",
+            "in": "query",
+            "description": "List of maximum constellations on characters.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "description": "List of maximum constellations on characters.",
+              "title": "Genshin Character Constellations Max",
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - character id\nValue - maximum constellations"
               }
             }
           },
@@ -11759,6 +11814,7 @@
                   12511,
                   12512,
                   12513,
+                  12514,
                   13101,
                   13201,
                   13301,
@@ -11834,6 +11890,7 @@
                   14514,
                   14515,
                   14516,
+                  14517,
                   15101,
                   15201,
                   15301,
@@ -12156,6 +12213,40 @@
                   8005,
                   8006
                 ]
+              }
+            }
+          },
+          {
+            "name": "honkai_character_eidolons",
+            "in": "query",
+            "description": "List of minimum eidolons on characters.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "description": "List of minimum eidolons on characters.",
+              "title": "Honkai Character Eidolons",
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - character id\nValue - minimun eidolons"
+              }
+            }
+          },
+          {
+            "name": "honkai_character_eidolons_max",
+            "in": "query",
+            "description": "List of maximum eidolons on characters.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "description": "List of maximum eidolons on characters.",
+              "title": "Honkai Character Eidolons Max",
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - character id\nValue - maximum eidolons"
               }
             }
           },
@@ -12529,6 +12620,40 @@
                   1271,
                   1281
                 ]
+              }
+            }
+          },
+          {
+            "name": "zenless_character_cinemas",
+            "in": "query",
+            "description": "List of minimum cinemas on characters.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "description": "List of minimum cinemas on characters.",
+              "title": "Zenless Character Cinemas",
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - character id\nValue - minimun cinemas"
+              }
+            }
+          },
+          {
+            "name": "zenless_character_cinemas_max",
+            "in": "query",
+            "description": "List of maximum cinemas on characters.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "description": "List of maximum cinemas on characters.",
+              "title": "Zenless Character Cinemas Max",
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - character id\nValue - maximum cinemas"
               }
             }
           },
@@ -40839,6 +40964,7 @@
                 "type": "string",
                 "enum": [
                   "Basic Family",
+                  "Basic Individual",
                   "Premium Duo",
                   "Premium Fallback",
                   "Premium Family",
@@ -42435,6 +42561,32 @@
             "explode": true,
             "schema": {
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "nickname_length_min",
+            "in": "query",
+            "description": "Minimum number of characters in nickname.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum number of characters in nickname.",
+              "title": "Nickname Length Min",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "nickname_length_max",
+            "in": "query",
+            "description": "Maximum number of characters in nickname.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum number of characters in nickname.",
+              "title": "Nickname Length Max",
+              "type": "integer"
             }
           }
         ],
