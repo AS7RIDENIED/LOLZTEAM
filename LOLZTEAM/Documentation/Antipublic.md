@@ -158,7 +158,7 @@ POST https://antipublic.one/api/v2/search
 **Example:**
 
 ```python
-response = antipublic.search(search_by="email", query="email7357@example.com")
+response = antipublic.search(search_by="email", query="email7357", direction={"email":"strict"})
 print(response.json())
 ```
 

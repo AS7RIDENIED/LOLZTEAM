@@ -24,7 +24,6 @@
   * [Riot](#riot)
     * [Get](#get-4)
     * [Params](#params-3)
-    * [Valorant Data](#valorant-data)
   * [Telegram](#telegram)
     * [Get](#get-5)
     * [Params](#params-4)
@@ -115,6 +114,7 @@
   * [Steam](#steam-1)
     * [Guard](#guard)
     * [Mafile](#mafile)
+    * [Remove Mafile](#remove-mafile)
     * [Update Inventory](#update-inventory)
     * [Inventory Value](#inventory-value)
     * [Confirm Sda](#confirm-sda)
@@ -217,8 +217,10 @@ Required scopes: *market*
 - **allow_accept_accounts** (str): Usernames who can transfer market accounts to you. Separate values with a comma.
 - **hide_favorites** (bool): Hide your profile info when you add an account to favorites
 - **title** (str): Market title.
-- **telegram_client** (dict): Telegram client. It should be {"telegram_api_id"
+- **telegram_client** (dict): Telegram client.
+    > {"telegram_api_id": ..., "telegram_api_hash": ..., "telegram_device_model": ..., "telegram_system_version": ..., "telegram_app_version": ..., "telegram_lang_pack": ..., "telegram_lang_code": ..., "telegram_system_lang_code": ...}
 - **deauthorize_steam** (bool): Finish all Steam sessions after purchase.
+- **change_password_on_purchase** (bool): Change Steam password after purchase.
 
 **Example:**
 
@@ -432,20 +434,6 @@ GET https://api.lzt.market/riot/params
 
 ```python
 response = market.category.riot.params()
-print(response.json())
-```
-
-
-### Valorant Data
-
-GET https://api.lzt.market/data/valorant
-
-*Displays data for specified type in valorant category.*
-
-**Example:**
-
-```python
-response = market.category.riot.valorant_data(data_type="Agent")
 print(response.json())
 ```
 
@@ -1580,8 +1568,9 @@ Required scopes: *market**
 **Parameters:**
 
 - **url** (str): Your market search url.
-    > It can be *https://lzt.market/search_params* or *https://api.lzt.market/search_params*
-
+    > It can be *https://lzt.market/?some_param=some_value&...* or *https://api.lzt.market/?some_param=some_value&...*
+- **params** (dict): Params dict.
+    > This param overrides url query params.
 **Example:**
 
 ```python
@@ -1930,6 +1919,26 @@ print(response.json())
 ```
 
 
+### Remove Mafile
+
+DELETE https://api.lzt.market/{item_id}/mafile
+
+*Remove steam mafile.*
+
+Required scopes: *market*
+
+**Parameters:**
+
+- **item_id** (int): ID of item.
+
+**Example:**
+
+```python
+response = market.managing.steam.remove_mafile(item_id=1000000)
+print(response.json())
+```
+
+
 ### Update Inventory
 
 POST https://api.lzt.market/{item_id}/update-inventory
@@ -1942,11 +1951,12 @@ Required scopes: *market*
 
 - **item_id** (int): ID of item.
 - **app_id** (int): App id.
+- **all** (bool): Update the entire Steam inventory.
 
 **Example:**
 
 ```python
-response = market.managing.steam.update_inventory(item_id=1000000, app_id=730)
+response = market.managing.steam.update_inventory(item_id=1000000, all=True)
 print(response.json())
 ```
 
@@ -2250,21 +2260,21 @@ print(response.json())
 
 POST https://api.lzt.market/{item_id}/star
 
-            *Adds account to favourites.*
+*Adds account to favourites.*
 
-            Required scopes: *market*
+Required scopes: *market*
 
-            **Parameters:**
+**Parameters:**
 
-            - **item_id** (int): ID of item.
+- **item_id** (int): ID of item.
 
-            **Example:**
+**Example:**
 
-            ```python
-            response = market.managing.favorite(item_id=1000000)
-            print(response.json())
-            ```
-            
+```python
+response = market.managing.favorite(item_id=1000000)
+print(response.json())
+```
+
 
 ## Unfavorite
 
@@ -2476,6 +2486,7 @@ Required scopes: *market*
 
 - **item_id** (int): ID of item.
 - **resell_item_id** (int): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
+- **paid_mail** (bool): Use paid mail instead of regular. Optional if you want to upload Steam account.
 
 **Example:**
 

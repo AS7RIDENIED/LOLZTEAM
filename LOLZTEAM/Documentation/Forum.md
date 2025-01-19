@@ -1326,7 +1326,7 @@ Required scopes: *post*
 
 - **user_id** (int): ID of user.
     > If you do not specify the user_id, then you will change the avatar of the current user
-- **avatar** (binary): Binary data of the avatar.
+- **image** (binary): Binary data of the avatar.
 - **x** (int): The starting point of the selection by width.
 - **y** (int): The starting point of the selection by height
 - **size** (int): Selection size.
@@ -1577,12 +1577,6 @@ Required scopes: *post*
 
 - **user_id** (int): ID of user.
     > If you do not specify the user_id, you will edit current user
-- **password** (str): New password.
-- **password_old** (str): Data of the existing password, it is not required if (1) the current authenticated user has user admin permission, (2) the admincp scope is granted and (3) the user being edited is not the current authenticated user.
-- **password_algo** (str): Algorithm used to encrypt the password and password_old parameters.
-- **user_email** (str): New email of the user.
-- **username** (str): New username of the user.
-    > Changing username requires Administrator permission.
 - **user_title** (str): New custom title of the user.
 - **primary_group_id** (int): ID of new primary group.
 - **secondary_group_ids** (list): Array of ID's of new secondary groups.
