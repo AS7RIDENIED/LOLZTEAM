@@ -24,7 +24,7 @@ async def CheckPayment(
     :param user_id: Optional forum user_id to check payment
     :param allow_hold: Allow payments with hold. True to allow, False to disallow. Allowed by default
     :param include_payment_data: Include detailed payment data
-    :return: a dictionary containing the status, status code, message, and payment data
+    :return: a object instance containing the status, status code, message, and payment data
     """
     from .API import Market
     if type(self) is not Market:

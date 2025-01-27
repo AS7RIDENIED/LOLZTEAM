@@ -173,9 +173,9 @@ class Forum:
         _Literal = Literal["natural", "natural_reverse", "thread_create_date", "thread_create_date_reverse", "thread_update_date", "thread_update_date_reverse", "thread_view_count", "thread_view_count_reverse", "thread_post_count", "thread_post_count_reverse", "first_post_likes", "first_post_likes_reverse"]
         default = "natural"
         oldest = "thread_create_date"
+        oldest_bumped = "thread_update_date_reverse"
         newest = "thread_create_date_reverse"
         newest_bumped = "thread_update_date"
-        oldest_bumped = "thread_update_date_reverse"
         min_views = "thread_view_count"
         max_views = "thread_view_count_reverse"
         min_posts = "thread_post_count"

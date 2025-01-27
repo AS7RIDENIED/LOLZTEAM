@@ -44,7 +44,7 @@ async def _send_async_request(self, method: str, path: dict, params: dict = {}, 
     params = _MainTweaks._TrimNONE(params)  # Трим хуйни
     params.update(self.custom.params)
     if dataJ:
-        if type(dataJ) is dict:
+        if isinstance(dataJ, dict):
             dataJ = _MainTweaks._TrimNONE(dataJ)  # Трим хуйни
             dataJ.update(self.custom.json)
 
@@ -1849,11 +1849,11 @@ class Forum:
             """
             path = f"/threads/{thread_id}/pool/votes"
 
-            if type(response_ids) is list:
+            if isinstance(response_ids, list):
                 for element in response_ids:
                     if not isinstance(element, int):
                         _WarningsLogger.warning(f"{FutureWarning.__name__} All response_ids elements should be integer")
-            elif type(response_ids) is int:
+            elif isinstance(response_ids, int):
                 response_ids = [response_ids]
             params = {"response_id": response_ids[0]} if len(response_ids) == 1 else {
                 "response_ids[]": response_ids}
@@ -3179,7 +3179,7 @@ class Forum:
             ```
             """
             path = "/search/tagged"
-            if type(tags) is str:
+            if isinstance(tags, str):
                 tags = list(tags)
             params = {
                 "tags[]": tags,
@@ -3732,8 +3732,6 @@ class Market:
         self._delay_synchronizer = None
         self._lock = None
 
-        from . import Constants
-
         _categories = "|".join(
             [
                 category
@@ -3830,7 +3828,6 @@ class Market:
             telegram_client: dict = _MainTweaks.NONE,
             deauthorize_steam: bool = _MainTweaks.NONE,
             change_password_on_purchase: bool = _MainTweaks.NONE,
-            
         ) -> httpx.Response:
             """
             PUT https://api.lzt.market/me
