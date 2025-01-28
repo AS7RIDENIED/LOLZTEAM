@@ -1,0 +1,24 @@
+[project]
+name = "lolzteam"
+version = "2.0.0"
+description = "Python API Client for https://zelenka.guru & https://lzt.market & https://antipublic.one"
+authors = [
+    {name = "AS7RID", email = "as7ridwork@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "httpx[socks]"
+]
+keywords = ["LZT", "LOLZTEAM", "API", "Client", "Market", "Forum", "Antipublic"]
+
+[project.urls]
+homepage = "https://zelenka.guru/threads/5523020/"
+repository = "https://github.com/AS7RIDENIED/LOLZTEAM"
+documentation = "https://github.com/AS7RIDENIED/LOLZTEAM/tree/main/Documentation"
+"Bug Tracker" = "https://github.com/AS7RIDENIED/LOLZTEAM/issues"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
