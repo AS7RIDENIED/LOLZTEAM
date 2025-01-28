@@ -39,7 +39,7 @@ class APIClient:
 
         if self.settings._isAntipublic:
             self.settings.async_client.headers.update({"x-antipublic-version": f"{version('LOLZTEAM')} (API Client) pypi.org/project/LOLZTEAM/"})
-        self.settings.async_client.headers.update({"User-Agent": f"Python (API Client) pypi.org/project/LOLZTEAM/ {version('LOLZTEAM')} dev"})
+        self.settings.async_client.headers.update({"User-Agent": f"Python (API Client) pypi.org/project/LOLZTEAM/ v{version('LOLZTEAM')}"})
 
     async def __get_async_client(self: "APIClient") -> httpx.AsyncClient:
         current_loop = asyncio.get_event_loop()
@@ -128,11 +128,10 @@ class APIClient:
         client = await self.__get_async_client()
 
         def mask(obj, mask_: dict[str, str]):
-            obj = obj.copy()
             if isinstance(obj, dict) and mask_:
-                keys = obj.keys()
+                obj = obj.copy()
                 for k, v in mask_.items():
-                    if k in keys:
+                    if k in obj.keys():
                         obj[k] = v
             return obj
 
@@ -140,7 +139,7 @@ class APIClient:
             "\n".join(
                 filter(None, [
                     f"Request:  {method} {endpoint}",
-                    f"Headers: {mask(obj=client.headers.items(), mask_={'authorization': 'Bearer ***'})}",
+                    f"Headers: {mask(obj=dict(client.headers), mask_={'authorization': 'Bearer ****************'})}",
                     f"Params: {mask(obj=kwargs.get('params', {}), mask_={'key': '********', 'secret_answer': '********'})}",
                     f"Data: {json.dumps(mask(obj=kwargs.get('data', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('data') else None,
                     f"Json: {json.dumps(mask(obj=kwargs.get('json', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('json') else None,
