@@ -1,5 +1,8 @@
-<div style="display: flex; gap: 5px; justify-content: center;">
-<a href="https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Forum docs</a><a href="https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Antipublic Docs</a>
+<div align="center">
+
+[![Forum API Client](https://img.shields.io/badge/Forum_API_Client-2bad72?style=for-the-badge)](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md)
+[![Antipublic API Client](https://img.shields.io/badge/Antipublic_API_Client-2bad72?style=for-the-badge)](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md)
+
 </div>
 
 <details>

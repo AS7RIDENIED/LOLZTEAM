@@ -88,16 +88,12 @@ forum.settings.logger.disable()                                       # 📝 Sto
 
 ### Package Documentation:
 
-<div style="display: flex; gap: 5px;">
-  <a href="https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Forum API Client</a>
-  <a href="https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Market API Client</a>
-  <a href="https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Antipublic API Client</a>
-</div>
+[![Forum API Client](https://img.shields.io/badge/Forum_API_Client-2bad72?style=for-the-badge)](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md)
+[![Market API Client](https://img.shields.io/badge/Market_API_Client-2bad72?style=for-the-badge)](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)
+[![Antipublic API Client](https://img.shields.io/badge/Antipublic_API_Client-2bad72?style=for-the-badge)](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md)
 
 ### Official API Documentation:
 
-<div style="display: flex; gap: 5px;">
-  <a href="https://docs.api.zelenka.guru/?forum" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Forum API</a>
-  <a href="https://docs.api.zelenka.guru/?market" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Market API</a>
-  <a href="https://antipublic.one/docs/" style="background-color: #2bad72; color: white; padding: 5px 10px; text-decoration: none; border-radius: 7px; font-weight: bold; transition: all 0.3s ease;">Antipublic API</a>
-</div>
+[![Forum API](https://img.shields.io/badge/Forum_API-2bad72?style=for-the-badge)](https://docs.api.zelenka.guru/?forum)
+[![Market API](https://img.shields.io/badge/Market_API-2bad72?style=for-the-badge)](https://docs.api.zelenka.guru/?market)
+[![Antipublic API](https://img.shields.io/badge/Antipublic_API-2bad72?style=for-the-badge)](https://antipublic.one/docs/)
