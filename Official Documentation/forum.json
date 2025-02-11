@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.6"
+    "version": "1.1.7"
   },
   "servers": [
     {
@@ -923,19 +923,13 @@
                   },
                   "alert": {
                     "title": "Alert",
-                    "type": "integer",
-                    "description": "Whether to receive notification as alert.",
-                    "enum": [
-                      1
-                    ]
+                    "type": "boolean",
+                    "description": "Whether to receive notification as alert."
                   },
                   "email": {
                     "title": "Email",
-                    "type": "integer",
-                    "description": "Whether to receive notification as email.",
-                    "enum": [
-                      1
-                    ]
+                    "type": "boolean",
+                    "description": "Whether to receive notification as email."
                   },
                   "prefix_ids": {
                     "title": "Prefix ids",
@@ -1023,11 +1017,8 @@
             "explode": true,
             "schema": {
               "title": "Total",
-              "type": "string",
-              "description": "If included in the request, only the forum count is returned as **forums_total**.",
-              "enum": [
-                "true"
-              ]
+              "type": "boolean",
+              "description": "If included in the request, only the forum count is returned as **forums_total**."
             }
           }
         ],
@@ -1711,14 +1702,14 @@
           {
             "name": "forum_id",
             "in": "query",
-            "description": "Id of the containing forum. Can be skipped if **thread_ids** set.",
+            "description": "Id of the containing forum.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Forum Id",
               "type": "integer",
-              "description": "Id of the containing forum. Can be skipped if **thread_ids** set."
+              "description": "Id of the containing forum."
             }
           },
           {
@@ -1737,18 +1728,14 @@
           {
             "name": "sticky",
             "in": "query",
-            "description": "Filter to get only sticky **sticky=1** or non-sticky **sticky=0** threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards **threads_total** and does not affect pagination.",
+            "description": "Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards **threads_total** and does not affect pagination.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Sticky",
-              "type": "integer",
-              "description": "Filter to get only sticky **sticky=1** or non-sticky **sticky=0** threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards **threads_total** and does not affect pagination.",
-              "enum": [
-                1,
-                0
-              ]
+              "type": "boolean",
+              "description": "Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards **threads_total** and does not affect pagination."
             }
           },
           {
@@ -2624,43 +2611,34 @@
             "explode": true,
             "schema": {
               "title": "Watch thread state",
-              "type": "integer",
-              "enum": [
-                1
-              ],
+              "type": "boolean",
               "description": "Watch thread state."
             }
           },
           {
             "name": "watch_thread",
             "in": "query",
-            "description": "Receive forum notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\"",
+            "description": "Receive forum notifications of new posts in this thread.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Watch thread",
               "type": "integer",
-              "enum": [
-                1
-              ],
-              "description": "Receive forum notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\""
+              "description": "Receive forum notifications of new posts in this thread."
             }
           },
           {
             "name": "watch_thread_email",
             "in": "query",
-            "description": "Receive email notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\"",
+            "description": "Receive email notifications of new posts in this thread.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Watch thread email",
-              "type": "integer",
-              "enum": [
-                1
-              ],
-              "description": "Receive email notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\""
+              "type": "boolean",
+              "description": "Receive email notifications of new posts in this thread."
             }
           }
         ],
@@ -2857,11 +2835,8 @@
             "explode": true,
             "schema": {
               "title": "Count Winners",
-              "type": "integer",
-              "description": "Enable the distribution of money prizes by places. Optional if **prize_type** is **money**.",
-              "enum": [
-                1
-              ]
+              "type": "boolean",
+              "description": "Enable the distribution of money prizes by places. Optional if **prize_type** is **money**."
             }
           },
           {
@@ -3040,43 +3015,34 @@
             "explode": true,
             "schema": {
               "title": "Watch thread state",
-              "type": "integer",
-              "enum": [
-                1
-              ],
+              "type": "boolean",
               "description": "Watch thread state."
             }
           },
           {
             "name": "watch_thread",
             "in": "query",
-            "description": "Receive forum notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\"",
+            "description": "Receive forum notifications of new posts in this thread.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Watch thread",
-              "type": "integer",
-              "enum": [
-                1
-              ],
-              "description": "Receive forum notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\""
+              "type": "boolean",
+              "description": "Receive forum notifications of new posts in this thread."
             }
           },
           {
             "name": "watch_thread_email",
             "in": "query",
-            "description": "Receive email notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\"",
+            "description": "Receive email notifications of new posts in this thread.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Watch thread email",
-              "type": "integer",
-              "enum": [
-                1
-              ],
-              "description": "Receive email notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\""
+              "type": "boolean",
+              "description": "Receive email notifications of new posts in this thread."
             }
           }
         ],
@@ -3380,43 +3346,34 @@
             "explode": true,
             "schema": {
               "title": "Watch thread state",
-              "type": "integer",
-              "enum": [
-                1
-              ],
+              "type": "boolean",
               "description": "Watch thread state."
             }
           },
           {
             "name": "watch_thread",
             "in": "query",
-            "description": "Receive forum notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\"",
+            "description": "Receive forum notifications of new posts in this thread.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Watch thread",
-              "type": "integer",
-              "enum": [
-                1
-              ],
-              "description": "Receive forum notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\""
+              "type": "boolean",
+              "description": "Receive forum notifications of new posts in this thread."
             }
           },
           {
             "name": "watch_thread_email",
             "in": "query",
-            "description": "Receive email notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\"",
+            "description": "Receive email notifications of new posts in this thread.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Watch thread email",
-              "type": "integer",
-              "enum": [
-                1
-              ],
-              "description": "Receive email notifications of new posts in this thread. To receive notifications **watch_thread_state** must be \"1\""
+              "type": "boolean",
+              "description": "Receive email notifications of new posts in this thread."
             }
           }
         ],
@@ -3794,11 +3751,8 @@
             "explode": false,
             "schema": {
               "title": "Apply thread prefix.",
-              "type": "integer",
-              "description": "Apply thread prefix. (Set **1** if you want to edit thread prefixes on move)",
-              "enum": [
-                1
-              ]
+              "type": "boolean",
+              "description": "Apply thread prefix."
             }
           },
           {
@@ -3981,11 +3935,8 @@
             "explode": true,
             "schema": {
               "title": "Email",
-              "type": "integer",
-              "description": "Whether to receive notification as email.",
-              "enum": [
-                1
-              ]
+              "type": "boolean",
+              "description": "Whether to receive notification as email."
             }
           }
         ],
@@ -4046,11 +3997,8 @@
             "explode": true,
             "schema": {
               "title": "Total",
-              "type": "string",
-              "description": "If included in the request, only the thread count is returned as **threads_total**.",
-              "enum": [
-                "true"
-              ]
+              "type": "boolean",
+              "description": "If included in the request, only the thread count is returned as **threads_total**."
             }
           }
         ],
@@ -6433,14 +6381,14 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "Number of posts in a page. Default value depends on the system configuration.",
+            "description": "Number of posts in a page.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Limit",
               "type": "integer",
-              "description": "Number of posts in a page. Default value depends on the system configuration."
+              "description": "Number of posts in a page."
             }
           },
           {
@@ -7215,14 +7163,14 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "Number of users in a page. Default value depends on the system configuration.",
+            "description": "Number of users in a page.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Limit",
               "type": "integer",
-              "description": "Number of users in a page. Default value depends on the system configuration."
+              "description": "Number of users in a page."
             }
           }
         ],
@@ -8388,24 +8336,11 @@
             }
           },
           {
-            "name": "user_email",
-            "in": "query",
-            "description": "Email to filter. Requires **admincp** scope.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "User Email",
-              "type": "string",
-              "description": "Email to filter. Requires **admincp** scope."
-            }
-          },
-          {
             "name": "custom_fields",
             "in": "query",
             "description": "Custom fields to filter. Example: **custom_fields[telegram]=telegramLogin**.",
             "required": false,
-            "style": "form",
+            "style": "deepObject",
             "explode": true,
             "schema": {
               "title": "Custom Fields",
@@ -8414,201 +8349,6 @@
               "additionalProperties": {
                 "type": "string"
               }
-            }
-          },
-          {
-            "name": "custom_fields[location]",
-            "in": "query",
-            "description": "User location field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Location",
-              "type": "string",
-              "description": "User location field."
-            }
-          },
-          {
-            "name": "custom_fields[occupation]",
-            "in": "query",
-            "description": "User occupation field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Occupation",
-              "type": "string",
-              "description": "User occupation field."
-            }
-          },
-          {
-            "name": "custom_fields[homepage]",
-            "in": "query",
-            "description": "User homepage field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Occupation",
-              "type": "string",
-              "description": "User homepage field."
-            }
-          },
-          {
-            "name": "custom_fields[_4]",
-            "in": "query",
-            "description": "User interests field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Interests",
-              "type": "string",
-              "description": "User interests field."
-            }
-          },
-          {
-            "name": "custom_fields[lztInnovationLink]",
-            "in": "query",
-            "description": "User thread link for \"innovator\" trophy.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Lzt Innovation Link",
-              "type": "string",
-              "description": "User thread link for \"innovator\" trophy."
-            }
-          },
-          {
-            "name": "custom_fields[lztInnovation20Link]",
-            "in": "query",
-            "description": "User thread link for \"innovator 2.0\" trophy.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Lzt Innovation Link 2",
-              "type": "string",
-              "description": "User thread link for \"innovator 2.0\" trophy."
-            }
-          },
-          {
-            "name": "custom_fields[lztInnovation30Link]",
-            "in": "query",
-            "description": "User thread link for \"innovator 3.0\" trophy.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Lzt Innovation Link 3",
-              "type": "string",
-              "description": "User thread link for \"innovator 3.0\" trophy."
-            }
-          },
-          {
-            "name": "custom_fields[scamURL]",
-            "in": "query",
-            "description": "User scam url field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Scam Url",
-              "type": "string",
-              "description": "User scamURL field."
-            }
-          },
-          {
-            "name": "custom_fields[maecenasValue]",
-            "in": "query",
-            "description": "User maecenas value field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Maecenas Value",
-              "type": "integer",
-              "description": "User maecenas alue field."
-            }
-          },
-          {
-            "name": "custom_fields[telegram]",
-            "in": "query",
-            "description": "User telegram field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram",
-              "type": "string",
-              "description": "User telegram field."
-            }
-          },
-          {
-            "name": "custom_fields[vk]",
-            "in": "query",
-            "description": "User vk field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "VK",
-              "type": "string",
-              "description": "User vk field."
-            }
-          },
-          {
-            "name": "custom_fields[steam]",
-            "in": "query",
-            "description": "User steam field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Steam",
-              "type": "string",
-              "description": "User steam field."
-            }
-          },
-          {
-            "name": "custom_fields[jabber]",
-            "in": "query",
-            "description": "User jabber field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Jabber",
-              "type": "string",
-              "description": "User jabber field."
-            }
-          },
-          {
-            "name": "custom_fields[lztDeposit]",
-            "in": "query",
-            "description": "User lztDeposit field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "LZT Deposit",
-              "type": "integer",
-              "description": "User lztDeposit field."
-            }
-          },
-          {
-            "name": "custom_fields[ban_reason]",
-            "in": "query",
-            "description": "User ban_reason field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Ban Reason",
-              "type": "string",
-              "description": "User ban_reason field."
             }
           }
         ],
@@ -9445,35 +9185,6 @@
             }
           },
           {
-            "name": "primary_group_id",
-            "in": "query",
-            "description": "Id of new primary group. (Require admincp scope)",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Primary Group Id",
-              "type": "integer",
-              "description": "Id of new primary group. (Require admincp scope)"
-            }
-          },
-          {
-            "name": "secondary_group_ids[]",
-            "in": "query",
-            "description": "Array of ids of new secondary groups. (Require admincp scope)",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Secondary Group Ids",
-              "type": "array",
-              "description": "Array of ids of new secondary groups. (Require admincp scope)",
-              "items": {
-                "type": "integer"
-              }
-            }
-          },
-          {
             "name": "display_group_id",
             "in": "query",
             "description": "Id of group you want to display.",
@@ -9724,6 +9435,45 @@
                   "description": "User shortlink. Use \"me\" to interact with your own profile."
                 }
               ]
+            }
+          },
+          {
+            "name": "x",
+            "in": "query",
+            "description": "The starting point of the selection by width. Default value - 0",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "X",
+              "type": "integer",
+              "description": "The starting point of the selection by width. Default value - 0"
+            }
+          },
+          {
+            "name": "y",
+            "in": "query",
+            "description": "The starting point of the selection by height. Default value - 0",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Y",
+              "type": "integer",
+              "description": "The starting point of the selection by height. Default value - 0"
+            }
+          },
+          {
+            "name": "crop",
+            "in": "query",
+            "description": "Selection size. Minimum value - 16.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Crop",
+              "type": "integer",
+              "description": "Selection size. Minimum value - 16."
             }
           }
         ],
@@ -11140,11 +10890,8 @@
             "explode": true,
             "schema": {
               "title": "Total",
-              "type": "string",
-              "description": "If included in the request, only the user count is returned as **users_total**.",
-              "enum": [
-                "true"
-              ]
+              "type": "boolean",
+              "description": "If included in the request, only the user count is returned as **users_total**."
             }
           }
         ],
@@ -13262,7 +13009,7 @@
         ]
       }
     },
-    "/profile-posts/": {
+    "/profile-posts/{user_id}": {
       "post": {
         "tags": [
           "Profile Posts"
@@ -13273,10 +13020,10 @@
         "parameters": [
           {
             "name": "user_id",
-            "in": "query",
+            "in": "path",
             "description": "User id.",
             "required": true,
-            "style": "form",
+            "style": "simple",
             "explode": false,
             "schema": {
               "title": "Userid",
@@ -14633,56 +14380,6 @@
           {
             "HTTPBearer": [
               "read"
-            ]
-          }
-        ]
-      }
-    },
-    "/profile-posts/{profilePostId}/report": {
-      "post": {
-        "tags": [
-          "Profile Posts"
-        ],
-        "summary": "Report Profile Post",
-        "description": "Report a profile post.\n\nRequired scopes:\n+ **post**",
-        "operationId": "ProfilePosts.Comments.Report",
-        "parameters": [
-          {
-            "name": "profilePostId",
-            "in": "path",
-            "description": "Id of profile post.",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "title": "Profilepostid",
-              "type": "integer",
-              "description": "Id of profile post."
-            }
-          },
-          {
-            "name": "message",
-            "in": "query",
-            "description": "Reason of the report.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Message",
-              "type": "string",
-              "description": "Reason of the report."
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/SaveChanges"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "post"
             ]
           }
         ]
