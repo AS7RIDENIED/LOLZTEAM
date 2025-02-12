@@ -714,6 +714,7 @@ GET https://api.zelenka.guru/threads
 - **page** (int): Page.
 - **limit** (int): Limit of threads.
 - **order** (str): Order of threads.
+- **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. 
 
 **Example:**
 
@@ -2173,6 +2174,12 @@ response = forum.batch(jobs=[{"method": "GET", "url": "/users/2410024", "params"
 #  Also you can create jobs for almost all functions like this:
 #  job = forum.users.get.job(user_id=2410024)
 print(response.json())
+
+#  You also can use executor to ease work with batch requests while you have a lot of jobs:
+jobs = [forum.users.get.job(user_id=i*1000) for i in range(42)]
+while jobs:  # It will be running until all jobs will be executed
+    jobs, response = forum.batch.executor(jobs=jobs)
+    print(response.json())
 ```
 
 

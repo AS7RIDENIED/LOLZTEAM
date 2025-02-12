@@ -16,7 +16,8 @@ class Forum(APIClient):
 
     ## 💛Made with love💛
     """
-    def __init__(self, token: str, language: Literal["ru", "en"] = None, delay_min: float = 0, proxy: str = None, timeout: float = 90):
+
+    def __init__(self, token: str, language: Literal["ru", "en"] = None, delay_min: float = 0, proxy: str = None, timeout: float = 90, verify: bool = True):
         """
         LOLZTEAM Forum API Client
 
@@ -74,7 +75,8 @@ class Forum(APIClient):
             delay_min=delay_min,
             logger_name=Forum.__qualname__,
             proxy=proxy,
-            timeout=timeout
+            timeout=timeout,
+            verify=verify
         )
         self.categories = self.__Categories(self)
         self.forums = self.__Forums(self)
@@ -952,6 +954,7 @@ class Forum(APIClient):
                        tag_id: int = NONE,
                        page: int = NONE,
                        limit: int = NONE,
+                       sticky: bool = NONE,
                        order: Constants.Forum.ThreadOrder._Literal = NONE) -> Response:
             """
             GET https://api.zelenka.guru/threads
@@ -967,6 +970,7 @@ class Forum(APIClient):
             - **page** (int): Page.
             - **limit** (int): Limit of threads.
             - **order** (str): Order of threads.
+            - **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. 
 
             **Example:**
             """
@@ -977,6 +981,7 @@ class Forum(APIClient):
                 "thread_tag_id": tag_id,
                 "page": page,
                 "limit": limit,
+                "sticky": sticky,
                 "order": order
             }
             return await self.core.request("GET", "/threads", params=params)
@@ -2823,6 +2828,12 @@ class Forum(APIClient):
         #  Also you can create jobs for almost all functions like this:
         #  job = forum.users.get.job(user_id=2410024)
         print(response.json())
+
+        #  You also can use executor to ease work with batch requests while you have a lot of jobs:
+        jobs = [forum.users.get.job(user_id=i*1000) for i in range(42)]
+        while jobs:  # It will be running until all jobs will be executed
+            jobs, response = forum.batch.executor(jobs=jobs)
+            print(response.json())
         ```
         """
         return await self.core.request("POST", "/batch", json=jobs)

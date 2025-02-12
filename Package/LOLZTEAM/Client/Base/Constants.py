@@ -23,6 +23,7 @@ class Market:
         tiktok = "tiktok"
         instagram = "instagram"
         battlenet = "battlenet"
+        chatgpt = "chatgpt"
         vpn = "vpn"
         cinema = "cinema"
         roblox = "roblox"
@@ -31,7 +32,7 @@ class Market:
         minecraft = "minecraft"
 
     class CategoryID:
-        _Literal = Literal["1", "3", "4", "5", "7", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "26", "27", "28", "30", "31"]
+        _Literal = Literal["1", "3", "4", "5", "6", "7", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "26", "27", "28", "30", "31"]
         steam = 1
         fortnite = 9
         mihoyo = 17
@@ -51,6 +52,7 @@ class Market:
         tiktok = 20
         instagram = 10
         battlenet = 11
+        chatgpt = 6
         vpn = 19
         cinema = 23
         roblox = 31
@@ -103,7 +105,7 @@ class Market:
         autoreg = "autoreg"
         personal = "personal"
         resale = "resale"
-        dummy = "dummy"      # Only for steam (Пустышки)
+        dummy = "dummy"
         self_reg = "self_registration"
 
     class Guarantee:
@@ -292,7 +294,7 @@ class Forum:
                 mammoth2023 = "mamont2023"
                 mammoth2024 = "mamonth_24"
 
-                # Game tournament trophies
+                # <- Game tournament trophies ->
                 # Valorant
                 valorant_member = "valorant_member"
                 valorant_finalist = "valorant_finalist"

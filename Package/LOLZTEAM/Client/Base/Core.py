@@ -11,7 +11,7 @@ from httpx import Response
 from typing import Union, Literal
 from dataclasses import dataclass
 from httpx._utils import URLPattern
-from importlib.metadata import version
+from importlib.metadata import version, PackageNotFoundError
 from binascii import Error as binasciiError
 from urllib.parse import parse_qs, urlparse
 from ..Base.Wrappers import RETRY, UNIVERSAL, wraps
@@ -23,12 +23,12 @@ class APIClient:
     Base API Client class
     """
 
-    def __init__(self, base_url: str, token: str, language: str = None, delay_min: float = 0, logger_name: str = "APIClient", proxy: str = None, timeout: float = 90):
+    def __init__(self, base_url: str, token: str, language: str = None, delay_min: float = 0, logger_name: str = "APIClient", proxy: str = None, timeout: float = 90, verify: bool = True):
         self.core = self
         from ..__init__ import Antipublic
         self.settings = Settings(core=self)
         self.settings._isAntipublic = isinstance(self, Antipublic)
-        self.settings.async_client = httpx.AsyncClient(timeout=timeout)
+        self.settings.async_client = httpx.AsyncClient(timeout=timeout, verify=verify)
         self.settings.delay = AutoDelay(delay_min=delay_min)
         self.settings.logger = Logger(core=self, logger_name=logger_name)
         self.settings.current_loop = asyncio.get_event_loop()
@@ -37,9 +37,14 @@ class APIClient:
         self.settings.proxy = proxy
         self.settings.base_url = base_url
 
+        try:
+            self.settings.version = version("LOLZTEAM")
+        except PackageNotFoundError:
+            self.settings.version = "2.0.x.Local"
         if self.settings._isAntipublic:
-            self.settings.async_client.headers.update({"x-antipublic-version": f"{version('LOLZTEAM')} (API Client) pypi.org/project/LOLZTEAM/"})
-        self.settings.async_client.headers.update({"User-Agent": f"Python (API Client) pypi.org/project/LOLZTEAM/ v{version('LOLZTEAM')}"})
+            self.settings.async_client.headers.update({"x-antipublic-version": f"{self.settings.version} (API Client) pypi.org/project/LOLZTEAM/"})
+
+        self.settings.async_client.headers.update({"User-Agent": f"Python (API Client) pypi.org/project/LOLZTEAM/ v{self.settings.version}"})
 
     async def __get_async_client(self: "APIClient") -> httpx.AsyncClient:
         current_loop = asyncio.get_event_loop()
@@ -52,6 +57,8 @@ class APIClient:
                 'headers': self.settings.async_client.headers,
                 'timeout': self.settings.async_client.timeout,
                 'base_url': self.settings.async_client.base_url,
+                "verify": bool(self.settings.async_client._transport._pool._ssl_context.verify_mode),  # TODO: Add verify as changeable parameter to settings?
+                "proxy": self.settings.proxy,  # Maybe copy mounts instead?
             }
             self.settings.async_client = httpx.AsyncClient(**client_params)
             self.settings.current_loop = current_loop
@@ -88,9 +95,9 @@ class APIClient:
 
         if not kwargs.get("params"):
             kwargs["params"] = {}
-        if endpoint.startswith(self.settings.base_url.replace("api.", "")):  # Fix endpoint to correct one
+        if endpoint.startswith(self.settings.base_url.replace("api.", "")):  # Remove baseurl from endpoint path
             endpoint = endpoint.replace(self.settings.base_url.replace("api.", ""), "")
-        if not (endpoint.startswith('/') or endpoint.startswith(f"{self.settings.base_url}/")):  # Check for valid endpoint
+        if not (endpoint.startswith('/') or endpoint.startswith(f"{self.settings.base_url}/")):  # Check for valid endpoint to prevent token leaks and other shit
             raise BAD_ENDPOINT(f"You can't send request to \"{endpoint}\" because it's domain is different from \"{self.settings.base_url}\"")
 
         kwargs["params"] = _NONE.TrimNONE(kwargs["params"])
@@ -98,6 +105,20 @@ class APIClient:
             kwargs["data"] = _NONE.TrimNONE(kwargs["data"])
         if kwargs.get("json"):
             kwargs["json"] = _NONE.TrimNONE(kwargs["json"])
+
+        parsed_url = urlparse(endpoint)
+        if parsed_url.query:  # Fix params collision
+            parsed_params = {
+                k: v[0] if len(v) == 1 and not k.endswith('[]') else v
+                for k, v in parse_qs(parsed_url.query).items()
+            }
+            for k, v in parsed_params.items():
+                if k not in kwargs["params"]:  # User params will override url params
+                    kwargs["params"][k] = v
+
+        if parsed_url.path != endpoint:
+            endpoint = parsed_url.path
+
 
         for k, v in kwargs["params"].copy().items():
             if isinstance(v, (list, tuple)) and not k.endswith("[]"):  # Parse list params
@@ -107,18 +128,6 @@ class APIClient:
                 for kk, vv in v.items():
                     kwargs["params"][f"{k}[{kk}]"] = vv
                 del kwargs["params"][k]
-
-        if urlparse(endpoint).query:  # Fix params collision
-            url = urlparse(endpoint)
-            parsed_params = {
-                k: v[0] if len(v) == 1 and not k.endswith('[]') else v
-                for k, v in parse_qs(url.query).items()
-            }
-            for k, v in parsed_params.items():
-                if k not in kwargs["params"]:
-                    kwargs["params"][k] = v
-            endpoint = url.path
-            del url
 
         if self.settings._isAntipublic and not kwargs["params"].get("key"):  # Add key to antipublic requests
             kwargs["params"]["key"] = self.settings.token
@@ -316,9 +325,14 @@ class Settings:
     """
     Settings for API Client
     """
+    version: str
+    """
+    API Client Package Version.
+    """
     _isAntipublic: str
 
     async_client: httpx.AsyncClient
+
     """
     Async httpx client.
     """

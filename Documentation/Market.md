@@ -91,32 +91,36 @@
     * [Get](#get-19)
     * [Params](#params-19)
     * [Games](#games-19)
-  * [Vpn](#vpn)
+  * [Chatgpt](#chatgpt)
     * [Get](#get-20)
     * [Params](#params-20)
     * [Games](#games-20)
-  * [Cinema](#cinema)
+  * [Vpn](#vpn)
     * [Get](#get-21)
     * [Params](#params-21)
     * [Games](#games-21)
-  * [Roblox](#roblox)
+  * [Cinema](#cinema)
     * [Get](#get-22)
     * [Params](#params-22)
     * [Games](#games-22)
-  * [Spotify](#spotify)
+  * [Roblox](#roblox)
     * [Get](#get-23)
     * [Params](#params-23)
     * [Games](#games-23)
-  * [Warface](#warface)
+  * [Spotify](#spotify)
     * [Get](#get-24)
     * [Params](#params-24)
     * [Games](#games-24)
-  * [Minecraft](#minecraft)
+  * [Warface](#warface)
     * [Get](#get-25)
     * [Params](#params-25)
     * [Games](#games-25)
+  * [Minecraft](#minecraft)
+    * [Get](#get-26)
+    * [Params](#params-26)
+    * [Games](#games-26)
   * [List](#list)
-  * [Get](#get-26)
+  * [Get](#get-27)
 * [List](#list-1)
   * [Owned](#owned)
   * [Purchased](#purchased)
@@ -137,7 +141,7 @@
   * [Guarantee](#guarantee)
     * [Cancel](#cancel)
     * [Check](#check)
-  * [Get](#get-27)
+  * [Get](#get-28)
   * [Bulk](#bulk)
   * [Edit](#edit)
   * [Delete](#delete)
@@ -164,7 +168,7 @@
   * [Check](#check-2)
   * [Mail](#mail)
 * [Profile](#profile)
-  * [Get](#get-28)
+  * [Get](#get-29)
   * [Edit](#edit-1)
 * [Payments](#payments)
   * [Transfer](#transfer-1)
@@ -173,7 +177,7 @@
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-29)
+  * [Get](#get-30)
   * [Add](#add-1)
   * [Delete](#delete-1)
 * [Batch](#batch)
@@ -1410,6 +1414,65 @@ GET https://api.lzt.market/CATEGORY_NAME/games
 
 ```python
 response = market.categories.battlenet.games()
+print(response.json())
+```
+
+
+## Chatgpt
+
+### Get
+
+GET https://api.lzt.market/CATEGORY_NAME
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- **page** (int): The number of the page to display results from
+- **title** (str): The word or words contained in the account title.
+- **pmin** (float): Minimal price of account (Inclusive).
+- **pmax** (float): Maximum price of account (Inclusive).
+- **origin** (list): List of account origins.
+- **not_origin** (list): List of account origins that won't be included.
+- **order_by** (str): Item order.
+- **sold_before** (bool): Sold before.
+- **sold_before_by_me** (bool): Sold before by me.
+- **not_sold_before** (bool): Not sold before.
+- **not_sold_before_by_me** (bool): Not sold before by me.
+- ****kwargs** (any): Any additional search parameters.
+
+**Example:**
+
+```python
+response = market.categories.chatgpt.get(pmin=100, pmax=500)
+print(response.json())
+```
+
+
+### Params
+
+GET https://api.lzt.market/CATEGORY_NAME/params
+
+*Displays a list of parameters for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.chatgpt.params()
+print(response.json())
+```
+
+
+### Games
+
+GET https://api.lzt.market/CATEGORY_NAME/games
+
+*Displays a list of games for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.chatgpt.games()
 print(response.json())
 ```
 
@@ -2881,6 +2944,12 @@ response = market.batch(jobs=[{"method": "GET", "url": "/1234567890", params: {}
 #  Also you can create jobs for almost all functions like this:
 #  job = market.managing.get.job(item_id=1234567890)
 print(response.json())
+
+#  You also can use executor to ease work with batch requests while you have a lot of jobs:
+jobs = [market.managing.get.job(item_id=1234567890) for _ in range(42)]
+while jobs:  # It will be running until all jobs will be executed
+    jobs, response = market.batch.executor(jobs=jobs)
+    print(response.json())
 ```
 
 

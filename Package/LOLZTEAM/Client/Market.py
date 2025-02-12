@@ -15,7 +15,8 @@ class Market(APIClient):
 
     ## 💛Made with love💛
     """
-    def __init__(self, token: str, language: Literal["ru", "en"] = None, delay_min: float = 0, proxy: str = None, timeout: float = 90):
+
+    def __init__(self, token: str, language: Literal["ru", "en"] = None, delay_min: float = 0, proxy: str = None, timeout: float = 90, verify: bool = True):
         """
         LOLZTEAM Market API Client
 
@@ -72,7 +73,8 @@ class Market(APIClient):
             delay_min=delay_min,
             logger_name=Market.__qualname__,
             proxy=proxy,
-            timeout=timeout
+            timeout=timeout,
+            verify=verify
         )
         self.categories = self.__Categories(self)
         self.list = self.__List(self)
@@ -238,6 +240,10 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/battlenet")
 
+        class __ChatGPT(__BaseCategory):
+            def __init__(self, core: "Market"):
+                super().__init__(core, "/chatgpt")
+
         class __VPN(__BaseCategory):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/vpn")
@@ -284,6 +290,7 @@ class Market(APIClient):
             self.tiktok = self.__Tiktok(self.core)
             self.instagram = self.__Instagram(self.core)
             self.battlenet = self.__BattleNet(self.core)
+            self.chatgpt = self.__ChatGPT(self.core)
             self.vpn = self.__VPN(self.core)
             self.cinema = self.__Cinema(self.core)
             self.roblox = self.__Roblox(self.core)
@@ -1905,6 +1912,12 @@ class Market(APIClient):
         #  Also you can create jobs for almost all functions like this:
         #  job = market.managing.get.job(item_id=1234567890)
         print(response.json())
+
+        #  You also can use executor to ease work with batch requests while you have a lot of jobs:
+        jobs = [market.managing.get.job(item_id=1234567890) for _ in range(42)]
+        while jobs:  # It will be running until all jobs will be executed
+            jobs, response = market.batch.executor(jobs=jobs)
+            print(response.json())
         ```
         """
         return await self.core.request("POST", "/batch", json=jobs)
