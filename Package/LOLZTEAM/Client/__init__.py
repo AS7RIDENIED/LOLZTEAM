@@ -1,9 +1,9 @@
 """
 API Clients for LOLZTEAM Forum, Market and Antipublic
 """
-from .Forum import Forum
-from .Market import Market
-from .Antipublic import Antipublic
-from .Base import Constants
+from LOLZTEAM.Client.Forum import Forum
+from LOLZTEAM.Client.Market import Market
+from LOLZTEAM.Client.Antipublic import Antipublic
+from LOLZTEAM.Client.Base import Constants
 
 __all__ = ["Forum", "Market", "Antipublic", "Constants"]
