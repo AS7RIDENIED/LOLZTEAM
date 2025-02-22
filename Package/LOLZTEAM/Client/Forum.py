@@ -88,6 +88,7 @@ class Forum(APIClient):
         self.notifications = self.__Notifications(self)
         self.tags = self.__Tags(self)
         self.search = self.__Search(self)
+        self.chat = self.__Chat(self)
 
     class __Categories:
         def __init__(self, core: "Forum"):
@@ -970,7 +971,7 @@ class Forum(APIClient):
             - **page** (int): Page.
             - **limit** (int): Limit of threads.
             - **order** (str): Order of threads.
-            - **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. 
+            - **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
 
             **Example:**
             """
@@ -2786,6 +2787,214 @@ class Forum(APIClient):
             """
             params = {"tag": tag, "tags": tags, "page": page, "limit": limit}
             return await self.core.request("POST", "/search/tagged", params=params)
+
+    class __Chat:
+        class __Messages:
+            def __init__(self, core: "Forum"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(3)
+            async def list(self, room_id: int) -> Response:
+                """
+                GET https://api.zelenka.guru/chatbox/messages
+
+                *Get chat messages.*
+
+                **Parameters:**
+
+                - **room_id** (int): Room ID.
+
+                **Example:**
+
+                ```python
+                response = forum.chat.messages.list(room_id=1)
+                print(response.json())
+                ```
+                """
+                params = {"room_id": room_id}
+                return await self.core.request("GET", "/chatbox/messages", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(3)
+            async def create(self, room_id: int, message: str) -> Response:
+                """
+                POST https://api.zelenka.guru/chatbox/message
+
+                *Create a chat message.*
+
+                **Parameters:**
+
+                - **room_id** (int): Room ID.
+                - **message** (str): Message.
+
+                **Example:**
+
+                ```python
+                response = forum.chat.messages.create(room_id=1, message="Hello, world!")
+                print(response.json())
+                ```
+                """
+                params = {"room_id": room_id}
+                json = {"message": message}
+                return await self.core.request("POST", "/chatbox/message", params=params, json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(3)
+            async def edit(self, message_id: int, message: str) -> Response:
+                """
+                PUT https://api.zelenka.guru/chatbox/message
+
+                *Edit a chat message.*
+
+                **Parameters:**
+
+                - **message_id** (int): Message ID.
+                - **message** (str): Message.
+
+                **Example:**
+
+                ```python
+                response = forum.chat.messages.edit(message_id=1234567890, message="Hello, world!")
+                print(response.json())
+                ```
+                """
+                params = {"message_id": message_id}
+                json = {"message": message}
+                return await self.core.request("PUT", "/chatbox/message", params=params, json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(3)
+            async def delete(self, message_id: int) -> Response:
+                """
+                DELETE https://api.zelenka.guru/chatbox/message
+
+                *Delete a chat message.*
+
+                **Parameters:**
+
+                - **message_id** (int): Message ID.
+
+                **Example:**
+
+                ```python
+                response = forum.chat.messages.delete(message_id=1234567890)
+                print(response.json())
+                ```
+                """
+                params = {"message_id": message_id}
+                return await self.core.request("DELETE", "/chatbox/message", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(3)
+            async def report(self, message_id: int, reason: str) -> Response:
+                """
+                POST https://api.zelenka.guru/chatbox/report
+
+                *Report a chat message.*
+
+                **Parameters:**
+
+                - **message_id** (int): Message ID.
+                - **reason** (str): Reason.
+
+                **Example:**
+
+                ```python
+                response = forum.chat.messages.report(message_id=1234567890, reason="Report reason.")
+                print(response.json())
+                ```
+                """
+                params = {"message_id": message_id}
+                json = {"reason": reason}
+                return await self.core.request("POST", "/chatbox/report", params=params, json=json)
+
+        def __init__(self, core: "Forum"):
+            self.core = core
+            self.messages = self.__Messages(core)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(3)
+        async def get(self, room_id: int = NONE) -> Response:
+            """
+            GET https://api.zelenka.guru/chatbox
+
+            *Get Chats.*
+
+            **Parameters:**
+
+            - **parent** (int): Parent ID.
+
+            **Example:**
+
+            ```python
+            response = forum.chat.get()
+            print(response.json())
+            ```
+            """
+            params = {"room_id": room_id}
+            return await self.core.request("GET", "/chatbox", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(3)
+        async def ignored(self) -> Response:
+            """
+            GET https://api.zelenka.guru/chatbox/ignored
+
+            *Get ignored users.*
+
+            **Example:**
+
+            ```python
+            response = forum.chat.ignored()
+            print(response.json())
+            ```
+            """
+            return await self.core.request("GET", "/chatbox/ignored")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(3)
+        async def ignore(self, user_id: int = NONE) -> Response:
+            """
+            POST https://api.zelenka.guru/chatbox/ignore
+
+            *Ignore chat user.*
+
+            **Parameters:**
+
+            - **user_id** (int): User ID.
+
+            **Example:**
+
+            ```python
+            response = forum.chat.ignore(user_id=2410024)
+            print(response.json())
+            ```
+            """
+            params = {"user_id": user_id}
+            return await self.core.request("POST", "/chatbox/ignore", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(3)
+        async def unignore(self, user_id: int = NONE) -> Response:
+            """
+            DELETE https://api.zelenka.guru/chatbox/ignore
+
+            *Unignore chat user.*
+
+            **Parameters:**
+
+            - **user_id** (int): User ID.
+
+            **Example:**
+
+            ```python
+            response = forum.chat.unignore(user_id=2410024)
+            print(response.json())
+            ```
+            """
+            params = {"user_id": user_id}
+            return await self.core.request("DELETE", "/chatbox/ignore", params=params)
 
     @UNIVERSAL(batchable=True)
     @AutoDelay.WrapperSet(3)

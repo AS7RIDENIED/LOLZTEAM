@@ -135,6 +135,7 @@
     * [Mafile](#mafile)
     * [Mafile Remove](#mafile-remove)
     * [Sda](#sda)
+    * [Guard](#guard)
   * [Telegram](#telegram-1)
     * [Code](#code)
     * [Reset Auth](#reset-auth)
@@ -147,6 +148,7 @@
   * [Delete](#delete)
   * [Bump](#bump)
   * [Note](#note)
+  * [Image](#image)
   * [Arbitrage](#arbitrage)
   * [Email Code](#email-code)
   * [Email Password](#email-password)
@@ -155,7 +157,7 @@
   * [Untag](#untag)
   * [Favorite](#favorite-1)
   * [Unfavorite](#unfavorite)
-  * [Sticky](#sticky)
+  * [Stick](#stick)
   * [Unstick](#unstick)
   * [Transfer](#transfer)
 * [Purchasing](#purchasing)
@@ -2086,6 +2088,20 @@ print(response.json())
 ```
 
 
+### Guard
+
+get https://api.lzt.market/{item_id}/guard-code
+
+*Gets confirmation code from MaFile.*
+
+**Example:**
+
+```python
+response = market.managing.steam.guard(item_id=1234567890)
+print(response.json())
+```
+
+
 ## Telegramman
 
 ### Code
@@ -2290,6 +2306,27 @@ print(response.json())
 ```
 
 
+## Image
+
+GET https://api.lzt.market/{item_id}/image
+
+*Get item image.*
+
+**Parameters:**
+
+- **item_id** (int): Item ID.
+- **image_type** (str): Image type.
+
+**Example:**
+
+```python
+response = market.managing.image(item_id=1234567890, image_type="skins")
+# Response is a bytes
+with open("image.png", "wb") as f:
+    f.write(response.content)
+```
+
+
 ## Arbitrage
 
 POST https://api.lzt.market/{item_id}/claims
@@ -2311,7 +2348,7 @@ print(response.json())
 
 ## Email Code
 
-POST https://api.lzt.market/email-code
+GET https://api.lzt.market/email-code
 
 *Gets an email code from the item.*
 
@@ -2440,7 +2477,7 @@ print(response.json())
 ```
 
 
-## Sticky
+## Stick
 
 POST https://api.lzt.market/{item_id}/stick
 
@@ -2682,7 +2719,6 @@ GET https://api.lzt.market/{item_id}/goods/add
 **Parameters:**
 
 - **item_id** (int): Item ID.
-- **paid_mail** (bool): Paid mail.
 - **force_mail** (bool): Force mail.
 - **resell_item_id** (int): Resell item ID.
 

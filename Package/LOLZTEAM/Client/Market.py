@@ -466,7 +466,7 @@ class Market(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.5)
-            async def item_value(self, item_id: str, app_id: Constants.Market.AppID._Literal) -> Response:
+            async def item_value(self, item_id: str, app_id: Constants.Market.AppID._Literal, currency: Constants.Market.Currency._Literal = NONE, ignore_cache: bool = NONE) -> Response:
                 """
                 GET https://api.lzt.market/{item_id}/inventory-value
 
@@ -485,7 +485,9 @@ class Market(APIClient):
                 ```
                 """
                 params = {
-                    "app_id": app_id
+                    "app_id": app_id,
+                    "currency": currency,
+                    "ignore_cache": ignore_cache
                 }
                 return await self.core.request("GET", f"/{item_id}/inventory-value", params=params)
 
@@ -639,6 +641,23 @@ class Market(APIClient):
                     "nonce": nonce
                 }
                 return await self.core.request("POST", f"/{item_id}/confirm-sda", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def guard(self, item_id: int) -> Response:
+                """
+                get https://api.lzt.market/{item_id}/guard-code
+
+                *Gets confirmation code from MaFile.*
+
+                **Example:**
+
+                ```python
+                response = market.managing.steam.guard(item_id=1234567890)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", f"/{item_id}/guard-code")
 
         class __TelegramMan:
             def __init__(self, core: "Market"):
@@ -852,7 +871,7 @@ class Market(APIClient):
                 "allow_ask_discount": allow_ask_discount,
                 "proxy_id": proxy_id
             }
-            return await self.core.request("PUT", f"/{item_id}", json=json)
+            return await self.core.request("PUT", f"/{item_id}/edit", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
@@ -920,6 +939,30 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
+        async def image(self, item_id: int, image_type: Literal["skins", "pickaxes", "dances", "gliders", "WeaponSkins", "Agent", "Buddy"]) -> Response:
+            """
+            GET https://api.lzt.market/{item_id}/image
+
+            *Get item image.*
+
+            **Parameters:**
+
+            - **item_id** (int): Item ID.
+            - **image_type** (str): Image type.
+
+            **Example:**
+
+            ```python
+            response = market.managing.image(item_id=1234567890, image_type="skins")
+            # Response is a bytes
+            with open("image.png", "wb") as f:
+                f.write(response.content)
+            ```
+            """
+            return await self.core.request("GET", f"/{item_id}/image", params={"type": image_type})
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
         async def arbitrage(self, item_id: int, post_body: str) -> Response:
             """
             POST https://api.lzt.market/{item_id}/claims
@@ -947,7 +990,7 @@ class Market(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def email_code(self, item_id: int = NONE, email: str = NONE, login: str = NONE) -> Response:
             """
-            POST https://api.lzt.market/email-code
+            GET https://api.lzt.market/email-code
 
             *Gets an email code from the item.*
 
@@ -969,7 +1012,7 @@ class Market(APIClient):
                 "email": email,
                 "login": login
             }
-            return await self.core.request("POST", "/email-code", json=json)
+            return await self.core.request("GET", "/email-code", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
@@ -1019,7 +1062,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
-        async def tag(self, item_id: int, tag_id: int = NONE) -> Response:
+        async def tag(self, item_id: int, tag_id: Union[int, list[int]]) -> Response:
             """
             POST https://api.lzt.market/{item_id}/tag
 
@@ -1038,13 +1081,13 @@ class Market(APIClient):
             ```
             """
             json = {
-                "tag_id": tag_id
+                "tag_id[]": tag_id
             }
             return await self.core.request("POST", f"/{item_id}/tag", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
-        async def untag(self, item_id: int, tag_id: int = NONE) -> Response:
+        async def untag(self, item_id: int, tag_id: Union[int, list[int]]) -> Response:
             """
             DELETE https://api.lzt.market/{item_id}/tag
 
@@ -1063,7 +1106,7 @@ class Market(APIClient):
             ```
             """
             json = {
-                "tag_id": tag_id
+                "tag_id[]": tag_id
             }
             return await self.core.request("DELETE", f"/{item_id}/tag", json=json)
 
@@ -1111,7 +1154,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
-        async def sticky(self, item_id: int) -> Response:
+        async def stick(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/stick
 
@@ -1479,7 +1522,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
-        async def mail(self, item_id: int, paid_mail: bool = NONE, force_mail: bool = NONE, resell_item_id: int = NONE) -> Response:
+        async def mail(self, item_id: int, force_mail: bool = NONE, resell_item_id: int = NONE) -> Response:
             """
             GET https://api.lzt.market/{item_id}/goods/add
 
@@ -1488,7 +1531,6 @@ class Market(APIClient):
             **Parameters:**
 
             - **item_id** (int): Item ID.
-            - **paid_mail** (bool): Paid mail.
             - **force_mail** (bool): Force mail.
             - **resell_item_id** (int): Resell item ID.
 
@@ -1500,7 +1542,6 @@ class Market(APIClient):
             ```
             """
             params = {
-                "paid_mail": paid_mail,
                 "forceTempEmail": force_mail,
                 "resell_item_id": resell_item_id
             }

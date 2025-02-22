@@ -125,6 +125,17 @@
   * [Posts](#posts-1)
   * [Profile Posts](#profile-posts-1)
   * [Tagged](#tagged)
+* [Chat](#chat)
+  * [Messages](#messages-1)
+    * [List](#list-13)
+    * [Create](#create-7)
+    * [Edit](#edit-5)
+    * [Delete](#delete-5)
+    * [Report](#report-1)
+  * [Get](#get-13)
+  * [Ignored](#ignored-1)
+  * [Ignore](#ignore-1)
+  * [Unignore](#unignore-1)
 * [Navigation](#navigation-1)
 * [Batch](#batch)
 
@@ -2135,6 +2146,171 @@ POST https://api.zelenka.guru/search/tagged
 
 ```python
 response = forum.search.tagged(tag="example", tags=["example", "example2"], page=1, limit=10)
+print(response.json())
+```
+
+
+# Chat
+
+## Messages
+
+### List
+
+GET https://api.zelenka.guru/chatbox/messages
+
+*Get chat messages.*
+
+**Parameters:**
+
+- **room_id** (int): Room ID.
+
+**Example:**
+
+```python
+response = forum.chat.messages.list(room_id=1)
+print(response.json())
+```
+
+
+### Create
+
+POST https://api.zelenka.guru/chatbox/message
+
+*Create a chat message.*
+
+**Parameters:**
+
+- **room_id** (int): Room ID.
+- **message** (str): Message.
+
+**Example:**
+
+```python
+response = forum.chat.messages.create(room_id=1, message="Hello, world!")
+print(response.json())
+```
+
+
+### Edit
+
+PUT https://api.zelenka.guru/chatbox/message
+
+*Edit a chat message.*
+
+**Parameters:**
+
+- **message_id** (int): Message ID.
+- **message** (str): Message.
+
+**Example:**
+
+```python
+response = forum.chat.messages.edit(message_id=1234567890, message="Hello, world!")
+print(response.json())
+```
+
+
+### Delete
+
+DELETE https://api.zelenka.guru/chatbox/message
+
+*Delete a chat message.*
+
+**Parameters:**
+
+- **message_id** (int): Message ID.
+
+**Example:**
+
+```python
+response = forum.chat.messages.delete(message_id=1234567890)
+print(response.json())
+```
+
+
+### Report
+
+POST https://api.zelenka.guru/chatbox/report
+
+*Report a chat message.*
+
+**Parameters:**
+
+- **message_id** (int): Message ID.
+- **reason** (str): Reason.
+
+**Example:**
+
+```python
+response = forum.chat.messages.report(message_id=1234567890, reason="Report reason.")
+print(response.json())
+```
+
+
+## Get
+
+GET https://api.zelenka.guru/chatbox
+
+*Get Chats.*
+
+**Parameters:**
+
+- **parent** (int): Parent ID.
+
+**Example:**
+
+```python
+response = forum.chat.get()
+print(response.json())
+```
+
+
+## Ignored
+
+GET https://api.zelenka.guru/chatbox/ignored
+
+*Get ignored users.*
+
+**Example:**
+
+```python
+response = forum.chat.ignored()
+print(response.json())
+```
+
+
+## Ignore
+
+POST https://api.zelenka.guru/chatbox/ignore
+
+*Ignore chat user.*
+
+**Parameters:**
+
+- **user_id** (int): User ID.
+
+**Example:**
+
+```python
+response = forum.chat.ignore(user_id=2410024)
+print(response.json())
+```
+
+
+## Unignore
+
+DELETE https://api.zelenka.guru/chatbox/ignore
+
+*Unignore chat user.*
+
+**Parameters:**
+
+- **user_id** (int): User ID.
+
+**Example:**
+
+```python
+response = forum.chat.unignore(user_id=2410024)
 print(response.json())
 ```
 
