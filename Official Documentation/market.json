@@ -2,8 +2,8 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Lolzteam Public API: Market",
-    "description": "## [Forum API](https://lolzteam.readme.io/)\n\n**API free libraries**\n\n- [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)\n- [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[\\<https://lzt.market/113509951/tag/add?tag_id=10>](https://lzt.market/113509951/tag/add?tag_id=10)  \nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)  \nIf you exceed the limit, the response code 429 will be returned to you.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).  \nIf you exceed the limit, you will receive an error message.\n\n## Authorization\n\nFor using this api you need to create API Client and get Access Token with **market** scope.\n\n## Content-Type\n\napplication/x-www-form-urlencoded.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://lolz.live/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/market.json) file.",
-    "version": "1.1.54"
+    "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
+    "version": "1.1.55"
   },
   "servers": [
     {
@@ -25,58 +25,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
-            "name": "origin[]",
-            "in": "query",
-            "description": "List of account origins.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Origin",
-              "type": "array",
-              "description": "List of account origins.",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "brute",
-                  "fishing",
-                  "stealer",
-                  "personal",
-                  "resale",
-                  "autoreg",
-                  "dummy",
-                  "self_registration"
-                ]
-              }
-            }
-          },
-          {
-            "$ref": "#/components/parameters/not_origin"
+            "$ref": "#/components/parameters/title"
           },
           {
             "$ref": "#/components/parameters/order_by"
           },
           {
-            "$ref": "#/components/parameters/sb"
+            "$ref": "#/components/parameters/show"
           },
           {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/origin"
+          },
+          {
+            "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           }
         ],
         "responses": {
@@ -109,19 +115,58 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
           },
           {
             "name": "email_type[]",
@@ -147,22 +192,13 @@
             }
           },
           {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
+          },
+          {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/game_int"
@@ -1058,6 +1094,7 @@
                   "Call of Duty®: Advanced Warfare - Season Pass",
                   "Call of Duty®: Black Ops - Rezurrection Content Pack",
                   "Call of Duty®: Black Ops First Strike Content Pack_cis",
+                  "Call of Duty®: Black Ops II - Kawaii Personalization Pack",
                   "Call of Duty®: Black Ops II - Nuketown Zombies Map",
                   "Call of Duty®: Black Ops II - Octane Personalization Pack",
                   "Call of Duty®: Black Ops II - Party Rock Personalization Pack",
@@ -1074,6 +1111,7 @@
                   "Camera Obscura Soundtrack",
                   "Cannon Brawl",
                   "Car Mechanic Simulator 2014",
+                  "Car Mechanic Simulator 2015",
                   "CarX Street - DLC Sunset Speedway",
                   "Carmageddon 1 and 2",
                   "Carmageddon 1 and 2_cis",
@@ -1220,6 +1258,7 @@
                   "Dawn of War II - Retribution - The Last Standalone_cis",
                   "Day of Defeat: Source",
                   "Day of Dragons",
+                  "Day of the Tentacle Remastered",
                   "DayZ",
                   "Dead Bits",
                   "Dead Bits_cis",
@@ -1396,6 +1435,7 @@
                   "Euro Truck Simulator 2 - UK Paint Jobs Pack",
                   "Euro Truck Simulator 2 - USA Paint Jobs Pack",
                   "Europa Universalis III: Enlightenment SpritePack",
+                  "Europa Universalis III: Heir to the Throne",
                   "Europa Universalis III: Revolution SpritePack",
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack",
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack_cis",
@@ -1412,6 +1452,7 @@
                   "Fable - The Lost Chapters",
                   "Fable Anniversary_cis",
                   "Fabula Mortis",
+                  "FaceRig Live2D Module",
                   "Faerie Solitaire",
                   "Faerie Solitaire_cis",
                   "Fallen: A2P Protocol",
@@ -1494,6 +1535,7 @@
                   "Frozen Synapse_cis",
                   "Frozenheim",
                   "Full Mojo Rampage",
+                  "Furry Feet",
                   "Furry Killer",
                   "Furry Love",
                   "Furry Orgasm",
@@ -1508,6 +1550,7 @@
                   "GTFO Alpha Gift_cis",
                   "Game Builder Tycoon",
                   "Game of Thrones",
+                  "Game of Thrones - A Telltale Games Series",
                   "Game of Thrones - Dog Pack DLC",
                   "Garfield Kart",
                   "Garry's Mod",
@@ -1535,6 +1578,7 @@
                   "Goofy Gorillas",
                   "Gothic 3: Forsaken Gods Enhanced Edition",
                   "Gothic II: Gold Edition",
+                  "Gothic Universe Edition",
                   "Gothic® 3",
                   "Granblue Fantasy: Relink",
                   "Grand Pigeon's Duty_cis",
@@ -1594,6 +1638,7 @@
                   "Half-Life 2: Episode Two - Gamescon",
                   "Half-Life 2_cis",
                   "Half-Life: Blue Shift",
+                  "Half-Life: Opposing Force_cis",
                   "Hamilton's Great Adventure",
                   "Hamilton's Great Adventure - Retro Fever DLC",
                   "Hammerwatch",
@@ -1652,6 +1697,7 @@
                   "Hunted: One Step Too Far - Reborn Edition_cis",
                   "Hurtworld_cis",
                   "Hydrophobia: Prophecy",
+                  "Hyperdimension Neptunia Re;Birth1",
                   "I Have No Mouth, and I Must Scream",
                   "I am Weapon: Revival",
                   "I, Zombie",
@@ -1693,6 +1739,7 @@
                   "Just Cause 2: Monster Truck DLC",
                   "Just Cause 2: Rico's Signature Gun DLC",
                   "Just Cause 2_cis",
+                  "KAMI",
                   "Kandidatos",
                   "Kane & Lynch 2: Dog Days",
                   "Keep Talking and Nobody Explodes",
@@ -1738,6 +1785,7 @@
                   "LIMBO",
                   "LIZARDS MUST DIE",
                   "LOCKDOWN Protocol",
+                  "LOST PLANET® 3 - Assault Pack",
                   "LYNE",
                   "Labyronia RPG",
                   "Landmark - Trailblazer Buddy Gift",
@@ -1793,6 +1841,7 @@
                   "MXGP - The Official Motocross Videogame",
                   "Machinarium",
                   "Madballs in Babo:Invasion",
+                  "Mafia",
                   "Magical Battle Festa",
                   "Magicite",
                   "Magicite_cis",
@@ -1817,7 +1866,6 @@
                   "Max Payne 3",
                   "Max Payne 3: Classic Max Payne Character",
                   "McDROID",
-                  "McPixel",
                   "Medieval Engineers",
                   "Medieval Engineers Deluxe Gift",
                   "Medieval Engineers_cis",
@@ -2079,6 +2127,7 @@
                   "Portal 2_cis",
                   "Post Apocalyptic Mayhem",
                   "Post Apocalyptic Mayhem: DLC - Chaos Pack",
+                  "Post Master",
                   "Postal 2 Complete",
                   "Postal 2 Complete_cis",
                   "Power of Love",
@@ -2193,6 +2242,7 @@
                   "Rocksmith® 2014 – Poison - “Every Rose Has Its Thorn”",
                   "Rocksmith® 2014 – R.E.M. - “Everybody Hurts”",
                   "Rogue Stormers",
+                  "Rome: Total War™ - Alexander",
                   "Rome: Total War™ - Collection",
                   "Rubber Bandits",
                   "Rush Bros.",
@@ -2342,6 +2392,7 @@
                   "Sniper Ghost Warrior (LV) + 2 DLC Gift",
                   "Sniper Ghost Warrior 2: Siberian Strike",
                   "Sniper Ghost Warrior Gold (base + 2 DLC) Gift",
+                  "Sniper Ghost Warrior Gold Edition",
                   "Sniper: Ghost Warrior - Map Pack",
                   "Sniper: Ghost Warrior - Second Strike",
                   "Sniper: Ghost Warrior 2",
@@ -2371,6 +2422,7 @@
                   "Space Farmers_cis",
                   "Space Forerunner Fleet Pack Gift",
                   "Space Hack",
+                  "Space Hack_cis",
                   "Space Hulk",
                   "Space Pilgrim Episode I: Alpha Centauri",
                   "Space Pirates and Zombies",
@@ -2510,9 +2562,11 @@
                   "The Crew™ 2",
                   "The Daedalic Armageddon Bundle",
                   "The Darkness II",
+                  "The Deed",
                   "The Deed: Dynasty",
                   "The Elder Scrolls V: Skyrim",
                   "The Elder Scrolls V: Skyrim Special Edition",
+                  "The Elder Scrolls® Online",
                   "The Escapists",
                   "The Escapists - Alcatraz",
                   "The Escapists - Duct Tapes are Forever",
@@ -2598,6 +2652,7 @@
                   "Tom Clancy's Rainbow Six Siege - Beta Gift_cis",
                   "Tom Clancy's Rainbow Six® 3 Gold",
                   "Tom Clancy's Rainbow Six® Siege",
+                  "Tom Clancy's Rainbow Six® Siege - The Safari Bundle",
                   "Tom Clancy's Rainbow Six® Vegas",
                   "Tom Clancy's Rainbow Six® Vegas 2",
                   "Tom Clancy's Rainbow Six® Vegas_cis",
@@ -2680,6 +2735,7 @@
                   "Unknown package 123216",
                   "Unknown package 12323",
                   "Unknown package 12529",
+                  "Unknown package 12624",
                   "Unknown package 12670",
                   "Unknown package 12671",
                   "Unknown package 12704",
@@ -2829,6 +2885,7 @@
                   "Unknown package 58514_cis",
                   "Unknown package 593",
                   "Unknown package 59393_cis",
+                  "Unknown package 594",
                   "Unknown package 6003_cis",
                   "Unknown package 62896_cis",
                   "Unknown package 63446",
@@ -2847,6 +2904,7 @@
                   "Unknown package 67652_cis",
                   "Unknown package 68616",
                   "Unknown package 68943",
+                  "Unknown package 6970",
                   "Unknown package 72017",
                   "Unknown package 72159_cis",
                   "Unknown package 72161",
@@ -2895,6 +2953,7 @@
                   "Verdun",
                   "Verdun_cis",
                   "Victor Vran 4- pack gift",
+                  "Victoria II",
                   "Viscera Cleanup Detail - House of Horror",
                   "Viscera Cleanup Detail Gift",
                   "Viscera Cleanup Detail Gift_cis",
@@ -2910,6 +2969,7 @@
                   "War of the Roses Gift Sub",
                   "War of the Vikings: Bonus Coins",
                   "Wargame: Airland Battle",
+                  "Wargame: Red Dragon_cis",
                   "Warhammer 40,000: Dawn of War - Master Collection",
                   "Warhammer 40,000: Dawn of War II",
                   "Warhammer 40,000: Dawn of War II - Retribution",
@@ -2976,6 +3036,7 @@
                   "Zombie Kill of the Week - Reborn",
                   "Zombie Tycoon 2: Brainhov's Revenge",
                   "Zombie Tycoon 2: Brainhov's Revenge_cis",
+                  "Zort",
                   "Zueirama",
                   "ibb & obb",
                   "ibb & obb_cis",
@@ -4755,19 +4816,58 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
           },
           {
             "name": "email_type[]",
@@ -4793,25 +4893,16 @@
             }
           },
           {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
+          },
+          {
             "$ref": "#/components/parameters/temp_email"
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "name": "eg",
@@ -6459,6 +6550,7 @@
                   "character_clearradius",
                   "character_cleveredge",
                   "character_coatcheck",
+                  "character_coconutshell",
                   "character_cometdeer",
                   "character_cometholiday",
                   "character_cometwinter",
@@ -6562,6 +6654,7 @@
                   "character_felinewarrior",
                   "character_feraltrash",
                   "character_fiercebraid",
+                  "character_finecheek",
                   "character_firework",
                   "character_firstclass",
                   "character_firstclass_b",
@@ -7349,6 +7442,7 @@
                   "pickaxe_clearradius",
                   "pickaxe_cleveredge",
                   "pickaxe_coatcheck",
+                  "pickaxe_coconutshell",
                   "pickaxe_cometholiday",
                   "pickaxe_comicpop_bass",
                   "pickaxe_comicpop_mic",
@@ -7457,6 +7551,7 @@
                   "pickaxe_feraltrash",
                   "pickaxe_fiercebraid",
                   "pickaxe_filigree_guitar",
+                  "pickaxe_finecheek",
                   "pickaxe_fireblock_drum",
                   "pickaxe_fireworkfemale1h",
                   "pickaxe_firstclass",
@@ -8856,6 +8951,7 @@
                   "glider_citadel",
                   "glider_cleveredge",
                   "glider_coatcheck",
+                  "glider_coconutshell",
                   "glider_coyotetrail",
                   "glider_crisprover",
                   "glider_cubicvice",
@@ -9695,6 +9791,7 @@
                   "cloudfloat",
                   "coatcheck",
                   "cobbler",
+                  "coconutshell",
                   "cointoss",
                   "collectable",
                   "competitor",
@@ -11963,19 +12060,61 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
           },
           {
             "name": "email_type[]",
@@ -12000,22 +12139,10 @@
             }
           },
           {
+            "$ref": "#/components/parameters/parse_same_item_ids"
+          },
+          {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/email"
@@ -12185,7 +12312,8 @@
                   10000105,
                   10000106,
                   10000107,
-                  10000108
+                  10000108,
+                  10000109
                 ]
               }
             }
@@ -12349,6 +12477,7 @@
                   13427,
                   13430,
                   13431,
+                  13432,
                   13501,
                   13502,
                   13504,
@@ -13139,7 +13268,8 @@
                   1261,
                   1271,
                   1281,
-                  1311
+                  1311,
+                  1321
                 ]
               }
             }
@@ -13248,7 +13378,8 @@
                   14124,
                   14125,
                   14126,
-                  14131
+                  14131,
+                  14132
                 ]
               }
             }
@@ -14830,19 +14961,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -14868,21 +15044,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "name": "rmin",
@@ -16290,13 +16451,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "name": "origin[]",
@@ -16326,22 +16499,64 @@
             }
           },
           {
-            "$ref": "#/components/parameters/not_origin"
+            "name": "not_origin[]",
+            "in": "query",
+            "description": "List of account origins that won't be included.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Not Origin",
+              "description": "List of account origins that won't be included.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "brute",
+                  "fishing",
+                  "stealer",
+                  "personal",
+                  "resale",
+                  "autoreg",
+                  "dummy",
+                  "self_registration"
+                ]
+              }
+            }
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "spam",
@@ -17387,19 +17602,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "$ref": "#/components/parameters/daybreak"
@@ -17428,21 +17688,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "name": "eg",
@@ -18789,19 +19034,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -18827,21 +19117,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/game"
@@ -19666,19 +19941,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -19704,21 +20024,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/tel"
@@ -21000,19 +21305,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -21038,21 +21388,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/tel"
@@ -31412,13 +31747,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -31427,7 +31774,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "subscription",
@@ -31940,19 +32317,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -31979,21 +32401,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "name": "eg",
@@ -32786,19 +33193,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -32824,21 +33276,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "name": "region",
@@ -33526,13 +33963,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -33541,19 +33990,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "rdr2",
@@ -34227,19 +34694,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -34265,21 +34777,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/game"
@@ -35230,19 +35727,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -35268,21 +35810,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/daybreak"
@@ -36011,19 +36538,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -36049,21 +36621,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/tel"
@@ -37035,19 +37592,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -37073,21 +37675,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/tel"
@@ -37180,17 +37767,7 @@
             }
           },
           {
-            "name": "verified",
-            "in": "query",
-            "description": "Has a verified badge.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Verified",
-              "description": "Has a verified badge.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
+            "$ref": "#/components/parameters/verified"
           },
           {
             "$ref": "#/components/parameters/email"
@@ -37789,19 +38366,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -37827,21 +38449,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "$ref": "#/components/parameters/tel"
@@ -38435,19 +39042,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -38474,31 +39126,15 @@
             "$ref": "#/components/parameters/item_domain"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
-          },
-          {
             "name": "eg",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+            "description": "Guarantee type.\n+ **0** - 24 hours\n+ **1** - 3 days",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **0** - 24 hours\n+ **1** - 3 days",
               "enum": [
                 0,
                 1
@@ -39276,19 +39912,64 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
           },
           {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
             "$ref": "#/components/parameters/origin"
           },
           {
             "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email_type[]",
@@ -39313,21 +39994,6 @@
           },
           {
             "$ref": "#/components/parameters/item_domain"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
           },
           {
             "name": "subscription[]",
@@ -39398,11 +40064,11 @@
               "items": {
                 "type": "string",
                 "enum": [
-                  "Tier 1",
-                  "Tier 2",
-                  "Tier 3",
-                  "Tier 4",
-                  "Tier 5"
+                  "tier1",
+                  "tier2",
+                  "tier3",
+                  "tier4",
+                  "tier5"
                 ]
               }
             }
@@ -39974,13 +40640,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -39989,19 +40667,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "service",
@@ -40535,13 +41231,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -40550,19 +41258,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "service[]",
@@ -41084,13 +41810,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -41099,19 +41837,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "email",
@@ -41215,17 +41971,6 @@
             }
           },
           {
-            "name": "username",
-            "in": "query",
-            "description": "Has free username change.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
             "$ref": "#/components/parameters/reg"
           },
           {
@@ -41285,15 +42030,7 @@
             }
           },
           {
-            "name": "verified",
-            "in": "query",
-            "description": "Has verified badge.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
+            "$ref": "#/components/parameters/verified"
           },
           {
             "name": "age_verified",
@@ -42157,13 +42894,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -42172,19 +42921,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "$ref": "#/components/parameters/country"
@@ -42799,13 +43566,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -42814,19 +43593,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "$ref": "#/components/parameters/rank_min"
@@ -43463,13 +44260,25 @@
             "$ref": "#/components/parameters/page"
           },
           {
-            "$ref": "#/components/parameters/title"
-          },
-          {
             "$ref": "#/components/parameters/pmin"
           },
           {
             "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/show"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
           },
           {
             "$ref": "#/components/parameters/origin"
@@ -43478,19 +44287,37 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
+            "$ref": "#/components/parameters/user_id"
           },
           {
             "$ref": "#/components/parameters/nsb"
           },
           {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
             "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/hide_viewed"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           },
           {
             "name": "subscription",
@@ -49326,17 +50153,7 @@
             "$ref": "#/components/parameters/itemId"
           },
           {
-            "name": "tag_id",
-            "in": "query",
-            "description": "Tag id (Tag list is available via **GET /me**).",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Tag Id",
-              "type": "integer",
-              "description": "Tag id (Tag list is available via **GET /me**)."
-            }
+            "$ref": "#/components/parameters/tag_id"
           }
         ],
         "responses": {
@@ -49393,17 +50210,7 @@
             "$ref": "#/components/parameters/itemId"
           },
           {
-            "name": "tag_id",
-            "in": "query",
-            "description": "Tag id (Tag list is available via **GET /me**).",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Tag Id",
-              "type": "integer",
-              "description": "Tag id (Tag list is available via **GET /me**)."
-            }
+            "$ref": "#/components/parameters/tag_id"
           }
         ],
         "responses": {
@@ -53643,186 +54450,83 @@
       }
     },
     "parameters": {
-      "random_proxy": {
-        "name": "random_proxy",
+      "page": {
+        "name": "page",
         "in": "query",
-        "description": "Set this parameter to **true** so that the Market will take a random proxy from its pool for each of your requests.\nOtherwise, if this parameter is set to **false** or not set, the Market will take a specific proxy from its pool, which is predefined for each item.\n> This parameter only works with proxies from the Market pool. If you want to use your own proxies, use the proxy_id or extra[proxy] parameter.",
+        "description": "The number of the page to display results from.",
         "required": false,
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Random Proxy",
-          "type": "boolean",
-          "description": "Set this parameter to **true** so that the Market will take a random proxy from its pool for each of your requests.\nOtherwise, if this parameter is set to **false** or not set, the Market will take a specific proxy from its pool, which is predefined for each item.\n> This parameter only works with proxies from the Market pool. If you want to use your own proxies, use the proxy_id or extra[proxy] parameter."
-        }
-      },
-      "price": {
-        "name": "price",
-        "in": "query",
-        "description": "Current price of account in your currency.",
-        "required": true,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Price",
-          "type": "number",
-          "description": "Current price of account in your currency.",
-          "minimum": 1
-        }
-      },
-      "app_id": {
-        "name": "app_id",
-        "in": "query",
-        "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "App Id",
+          "title": "Page",
           "type": "integer",
-          "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
-          "enum": [
-            730,
-            578080,
-            753,
-            570,
-            440,
-            252490,
-            304930,
-            232090,
-            322330
-          ]
+          "description": "The number of the page to display results from.",
+          "minimum": 1
         }
       },
-      "currency": {
-        "name": "currency",
+      "pmin": {
+        "name": "pmin",
         "in": "query",
-        "description": "Using currency.",
+        "description": "Minimal price of account (Inclusive).",
         "required": false,
         "style": "form",
         "explode": true,
         "schema": {
-          "$ref": "#/components/schemas/CurrencyModel"
+          "title": "Pmin",
+          "type": "integer",
+          "minimum": 1,
+          "description": "Minimal price of account (Inclusive)."
         }
       },
-      "amount": {
-        "name": "amount",
+      "pmax": {
+        "name": "pmax",
         "in": "query",
-        "description": "Amount bid.",
-        "required": true,
+        "description": "Maximum price of account (Inclusive).",
+        "required": false,
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Amount",
-          "type": "number",
-          "description": "Amount bid.",
-          "minimum": 1
+          "title": "Pmax",
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum price of account (Inclusive)."
         }
       },
-      "categoryName": {
-        "name": "categoryName",
-        "in": "path",
-        "description": "Category name.",
-        "required": true,
-        "style": "simple",
-        "explode": false,
+      "title": {
+        "name": "title",
+        "in": "query",
+        "description": "The word or words contained in the account title.",
+        "required": false,
+        "style": "form",
+        "explode": true,
         "schema": {
-          "title": "Categoryname",
+          "title": "Title",
           "type": "string",
-          "description": "Category name.",
-          "default": "steam",
-          "enum": [
-            "steam",
-            "fortnite",
-            "genshin-impact",
-            "riot",
-            "telegram",
-            "supercell",
-            "origin",
-            "world-of-tanks",
-            "wot-blitz",
-            "gifts",
-            "epicgames",
-            "escape-from-tarkov",
-            "socialclub",
-            "uplay",
-            "war-thunder",
-            "discord",
-            "tiktok",
-            "instagram",
-            "battlenet",
-            "vpn",
-            "cinema",
-            "spotify",
-            "warface",
-            "minecraft"
-          ]
+          "description": "The word or words contained in the account title."
         }
       },
-      "itemId": {
-        "name": "itemId",
-        "in": "path",
-        "description": "Item id.",
-        "required": true,
-        "style": "simple",
-        "explode": false,
-        "schema": {
-          "title": "Itemid",
-          "type": "integer",
-          "description": "Item id."
-        }
-      },
-      "userId": {
-        "name": "userId",
-        "in": "path",
-        "description": "User id.",
-        "required": true,
-        "style": "simple",
-        "explode": false,
-        "schema": {
-          "title": "Userid",
-          "type": "integer",
-          "description": "User id."
-        }
-      },
-      "category_id": {
-        "name": "category_id",
+      "order_by": {
+        "name": "order_by",
         "in": "query",
-        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 6 - ChatGPT\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 15 - Supercell\n+ 16 - WOT Blitz\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft\n+ 30 - Gifts\n+ 31 - Roblox",
+        "description": "Order by.",
         "required": false,
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Category Id",
-          "type": "integer",
-          "description": "Accounts category.",
+          "title": "Order By",
+          "description": "Order by.",
+          "type": "string",
           "enum": [
-            1,
-            3,
-            4,
-            5,
-            6,
-            7,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            16,
-            15,
-            17,
-            18,
-            19,
-            20,
-            22,
-            23,
-            24,
-            26,
-            27,
-            29,
-            30,
-            31
+            "price_to_up",
+            "price_to_down",
+            "pdate_to_down",
+            "pdate_to_up",
+            "pdate_to_down_upload",
+            "pdate_to_up_upload",
+            "edate_to_up",
+            "edate_to_down",
+            "ddate_to_up",
+            "ddate_to_down"
           ]
         }
       },
@@ -53849,133 +54553,34 @@
           "description": "Account Status."
         }
       },
-      "delete_reason": {
-        "name": "delete_reason",
+      "tag_id": {
+        "name": "tag_id[]",
         "in": "query",
-        "description": "Delete reason. (Only if **show** is set to **deleted**)",
-        "required": false,
+        "description": "List of tag ids (Tag list is available via **GET /me**).",
+        "required": true,
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Delete reason",
-          "type": "string",
-          "description": "Delete reason. (Only if **show** is set to **deleted**)"
+          "title": "List of tag ids",
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
         }
       },
-      "smin": {
-        "name": "smin",
+      "not_tag_id": {
+        "name": "not_tag_id[]",
         "in": "query",
-        "description": "Minimum number of skins.",
-        "required": false,
+        "description": "List of tag ids that won't be included (Tag list is available via **GET /me**).",
+        "required": true,
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Smin",
-          "type": "integer",
-          "minimum": 0,
-          "description": "Minimum number of skins."
-        }
-      },
-      "smax": {
-        "name": "smax",
-        "in": "query",
-        "description": "Maximum number of skins.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Smax",
-          "type": "integer",
-          "minimum": 0,
-          "description": "Maximum number of skins."
-        }
-      },
-      "order_by": {
-        "name": "order_by",
-        "in": "query",
-        "description": "Order by.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Order By",
-          "description": "Order by.",
-          "type": "string",
-          "enum": [
-            "price_to_up",
-            "price_to_down",
-            "pdate_to_down",
-            "pdate_to_up",
-            "pdate_to_down_upload",
-            "pdate_to_up_upload",
-            "edate_to_up",
-            "edate_to_down"
-          ]
-        }
-      },
-      "title": {
-        "name": "title",
-        "in": "query",
-        "description": "The word or words contained in the account title.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Title",
-          "type": "string",
-          "description": "The word or words contained in the account title."
-        }
-      },
-      "nsb_by_me": {
-        "name": "nsb_by_me",
-        "in": "query",
-        "description": "Not sold by me before.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Not Sold By Me",
-          "type": "boolean",
-          "description": "Not sold by me before."
-        }
-      },
-      "sb_by_me": {
-        "name": "sb_by_me",
-        "in": "query",
-        "description": "Sold by me before.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Sold By Me",
-          "type": "boolean",
-          "description": "Sold by me before."
-        }
-      },
-      "nsb": {
-        "name": "nsb",
-        "in": "query",
-        "description": "Not sold before.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Not Sold Before",
-          "type": "boolean",
-          "description": "Not sold before."
-        }
-      },
-      "sb": {
-        "name": "sb",
-        "in": "query",
-        "description": "Sold before.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Sold Before",
-          "type": "boolean",
-          "description": "Sold before."
+          "title": "Not Tag Ids",
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
         }
       },
       "origin": {
@@ -54030,6 +54635,358 @@
           }
         }
       },
+      "user_id": {
+        "name": "user_id",
+        "in": "query",
+        "description": "Search accounts of user.",
+        "required": true,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "User Id",
+          "type": "integer"
+        }
+      },
+      "nsb": {
+        "name": "nsb",
+        "in": "query",
+        "description": "Not sold before.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Not Sold Before",
+          "type": "boolean",
+          "description": "Not sold before."
+        }
+      },
+      "sb": {
+        "name": "sb",
+        "in": "query",
+        "description": "Sold before.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Sold Before",
+          "type": "boolean",
+          "description": "Sold before."
+        }
+      },
+      "nsb_by_me": {
+        "name": "nsb_by_me",
+        "in": "query",
+        "description": "Not sold by me before.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Not Sold By Me",
+          "type": "boolean",
+          "description": "Not sold by me before."
+        }
+      },
+      "sb_by_me": {
+        "name": "sb_by_me",
+        "in": "query",
+        "description": "Sold by me before.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Sold By Me",
+          "type": "boolean",
+          "description": "Sold by me before."
+        }
+      },
+      "hide_viewed": {
+        "name": "hide_viewed",
+        "in": "query",
+        "description": "Hide viewed accounts.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Hide Viewed",
+          "type": "boolean"
+        }
+      },
+      "currency": {
+        "name": "currency",
+        "in": "query",
+        "description": "Using currency.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Currency",
+          "type": "string",
+          "description": "Using currency.",
+          "enum": [
+            "rub",
+            "uah",
+            "kzt",
+            "byn",
+            "usd",
+            "eur",
+            "gbp",
+            "cny",
+            "try"
+          ]
+        }
+      },
+      "email_login_data": {
+        "name": "email_login_data",
+        "in": "query",
+        "description": "Email login data (email:password format).",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Email Login Data",
+          "type": "string",
+          "description": "Email login data (email:password format)."
+        }
+      },
+      "email_provider": {
+        "name": "email_provider",
+        "in": "query",
+        "description": "Email provider.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Email Provider",
+          "type": "string",
+          "enum": [
+            "other",
+            "rambler",
+            "outlook",
+            "firstmail",
+            "notletters",
+            "mail_ru"
+          ]
+        }
+      },
+      "not_email_provider": {
+        "name": "not_email_provider",
+        "in": "query",
+        "description": "Email provider.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Email Provider",
+          "type": "string",
+          "enum": [
+            "other",
+            "rambler",
+            "outlook",
+            "firstmail",
+            "notletters",
+            "mail_ru"
+          ]
+        }
+      },
+      "parse_same_item_ids": {
+        "name": "parse_same_item_ids",
+        "in": "query",
+        "description": "Parse same item ids.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Parse Same Item Ids",
+          "type": "boolean",
+          "description": "Parse same item ids."
+        }
+      },
+      "random_proxy": {
+        "name": "random_proxy",
+        "in": "query",
+        "description": "Set this parameter to **true** so that the Market will take a random proxy from its pool for each of your requests.\nOtherwise, if this parameter is set to **false** or not set, the Market will take a specific proxy from its pool, which is predefined for each item.\n> This parameter only works with proxies from the Market pool. If you want to use your own proxies, use the proxy_id or extra[proxy] parameter.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Random Proxy",
+          "type": "boolean",
+          "description": "Set this parameter to **true** so that the Market will take a random proxy from its pool for each of your requests.\nOtherwise, if this parameter is set to **false** or not set, the Market will take a specific proxy from its pool, which is predefined for each item.\n> This parameter only works with proxies from the Market pool. If you want to use your own proxies, use the proxy_id or extra[proxy] parameter."
+        }
+      },
+      "price": {
+        "name": "price",
+        "in": "query",
+        "description": "Current price of account in your currency.",
+        "required": true,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Price",
+          "type": "number",
+          "description": "Current price of account in your currency.",
+          "minimum": 1
+        }
+      },
+      "app_id": {
+        "name": "app_id",
+        "in": "query",
+        "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "App Id",
+          "type": "integer",
+          "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+          "enum": [
+            730,
+            578080,
+            753,
+            570,
+            440,
+            252490,
+            304930,
+            232090,
+            322330
+          ]
+        }
+      },
+      "categoryName": {
+        "name": "categoryName",
+        "in": "path",
+        "description": "Category name.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "title": "Category Name",
+          "type": "string",
+          "default": "steam",
+          "enum": [
+            "steam",
+            "fortnite",
+            "genshin-impact",
+            "riot",
+            "telegram",
+            "supercell",
+            "origin",
+            "world-of-tanks",
+            "wot-blitz",
+            "gifts",
+            "epicgames",
+            "escape-from-tarkov",
+            "socialclub",
+            "uplay",
+            "war-thunder",
+            "discord",
+            "tiktok",
+            "instagram",
+            "battlenet",
+            "chatgpt",
+            "vpn",
+            "cinema",
+            "spotify",
+            "warface",
+            "minecraft"
+          ]
+        }
+      },
+      "itemId": {
+        "name": "itemId",
+        "in": "path",
+        "description": "Item id.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "title": "Itemid",
+          "type": "integer",
+          "description": "Item id."
+        }
+      },
+      "category_id": {
+        "name": "category_id",
+        "in": "query",
+        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 6 - ChatGPT\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 15 - Supercell\n+ 16 - WOT Blitz\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft\n+ 30 - Gifts\n+ 31 - Roblox",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Category Id",
+          "type": "integer",
+          "description": "Accounts category.",
+          "enum": [
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            16,
+            15,
+            17,
+            18,
+            19,
+            20,
+            22,
+            23,
+            24,
+            26,
+            27,
+            29,
+            30,
+            31
+          ]
+        }
+      },
+      "delete_reason": {
+        "name": "delete_reason",
+        "in": "query",
+        "description": "Delete reason. (Only if **show** is set to **deleted**)",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Delete reason",
+          "type": "string",
+          "description": "Delete reason. (Only if **show** is set to **deleted**)"
+        }
+      },
+      "smin": {
+        "name": "smin",
+        "in": "query",
+        "description": "Minimum number of skins.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Smin",
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum number of skins."
+        }
+      },
+      "smax": {
+        "name": "smax",
+        "in": "query",
+        "description": "Maximum number of skins.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "title": "Smax",
+          "type": "integer",
+          "minimum": 0,
+          "description": "Maximum number of skins."
+        }
+      },
       "item_domain": {
         "name": "item_domain",
         "in": "query",
@@ -54041,72 +54998,6 @@
           "title": "Item Domain",
           "type": "string",
           "description": "Domain of native/autoreg email."
-        }
-      },
-      "email_type": {
-        "name": "email_type[]",
-        "in": "query",
-        "description": "Email type.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Email Type",
-          "description": "Email type.",
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "enum": [
-              "market",
-              "autoreg",
-              "native",
-              "no_market",
-              "no"
-            ]
-          }
-        }
-      },
-      "page": {
-        "name": "page",
-        "in": "query",
-        "description": "The number of the page to display results from.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Page",
-          "type": "integer",
-          "description": "The number of the page to display results from.",
-          "minimum": 1
-        }
-      },
-      "pmin": {
-        "name": "pmin",
-        "in": "query",
-        "description": "Minimal price of account (Inclusive).",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Pmin",
-          "type": "integer",
-          "minimum": 1,
-          "description": "Minimal price of account (Inclusive)."
-        }
-      },
-      "pmax": {
-        "name": "pmax",
-        "in": "query",
-        "description": "Maximum price of account (Inclusive).",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Pmax",
-          "type": "integer",
-          "minimum": 1,
-          "description": "Maximum price of account (Inclusive)."
         }
       },
       "game": {
@@ -54401,33 +55292,6 @@
         "schema": {
           "title": "Verified",
           "description": "Has verified.",
-          "$ref": "#/components/schemas/YesNoNoMatterScheme"
-        }
-      },
-      "mihoyo_level_max": {
-        "name": "level_max",
-        "in": "query",
-        "description": "Maximum level.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Level Max",
-          "type": "integer",
-          "description": "Maximum level.",
-          "minimum": 1
-        }
-      },
-      "changeable_email": {
-        "name": "changeable_email",
-        "in": "query",
-        "description": "Can change email.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Changeable Email",
-          "description": "Can change email.",
           "type": "string",
           "enum": [
             "yes",
@@ -54527,7 +55391,12 @@
         "schema": {
           "description": "Is auto renewal enabled.",
           "title": "Autorenewal",
-          "$ref": "#/components/schemas/YesNoNoMatterScheme"
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "nomatter"
+          ]
         }
       },
       "wargaming_top_min": {
