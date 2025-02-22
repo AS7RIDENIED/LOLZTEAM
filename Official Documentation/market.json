@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.55"
+    "version": "1.1.56"
   },
   "servers": [
     {
@@ -756,21 +756,14 @@
                   270,
                   271,
                   280,
-                  298,
-                  299,
-                  300,
-                  301,
-                  302,
-                  303,
                   304,
-                  305,
-                  306,
                   307,
                   308,
                   309,
                   310,
                   311,
-                  312
+                  312,
+                  313
                 ]
               }
             }
@@ -855,6 +848,7 @@
                   "A Year Of Rain 2Pack Gift",
                   "A.R.E.S.: Berzerker Suit",
                   "ACE COMBAT™ 7: SKIES UNKNOWN",
+                  "AI2U: With You 'Til The End",
                   "AMOK",
                   "ARK: Genesis Season Pass",
                   "ARK: Scorched Earth - Expansion Pack",
@@ -902,6 +896,7 @@
                   "Aliens vs. Predator™",
                   "Aliens: Colonial Marines Collection",
                   "Aliens: Colonial Marines Limited Edition Pack",
+                  "Amazing Frog?",
                   "American Conquest",
                   "American Conquest: Fight Back",
                   "American Truck Simulator",
@@ -937,9 +932,11 @@
                   "Assassin's Creed 2",
                   "Assassin's Creed Freedom Cry",
                   "Assassin's Creed® Odyssey",
+                  "Assassin’s Creed® Brotherhood",
                   "Assassin’s Creed® III",
                   "Assassin’s Creed® III - The Tyranny of King Washington: The Redemption",
                   "Assassin’s Creed® III: The Betrayal",
+                  "Assassin’s Creed® IV Black Flag™",
                   "Assassin’s Creed® IV Black Flag™ – Freedom Cry",
                   "Assetto Corsa",
                   "Assetto Corsa_cis",
@@ -991,6 +988,7 @@
                   "BattleBlock Theater®_cis",
                   "Battlefield 4™",
                   "Battlefield Bad Company 2: SPECACT Kit Upgrade",
+                  "Battlefield™ 1",
                   "Battlepillars Gold Edition",
                   "Battlepillars Gold Edition_cis",
                   "Beat Hazard Ultra",
@@ -1145,6 +1143,9 @@
                   "Chivalry: Medieval Warfare_cis",
                   "Cities XL 2012",
                   "Cities XXL",
+                  "Cities in Motion: Design Classics",
+                  "Cities in Motion: Design Marvels",
+                  "Cities in Motion: Design Now",
                   "Cities: Skylines",
                   "Cities: Skylines - Content Creator Pack: Art Deco",
                   "Civilization IV®: Warlords",
@@ -1386,7 +1387,13 @@
                   "Dust: An Elysian Tail",
                   "Dustoff Heli Rescue",
                   "Dying Light",
+                  "Dying Light - Crash Test Skin Bundle",
+                  "Dying Light - Gun Psycho Bundle",
+                  "Dying Light - Harran Ranger Bundle",
+                  "Dying Light - The Bozak Horde",
+                  "Dying Light - Ultimate Survivor Bundle",
                   "Dying Light - Ultimate Survivor Bundle_cis",
+                  "Dying Light - Volatile Hunter Bundle",
                   "Dying Light Definitive Edition",
                   "Dying Light: Bad Blood",
                   "Dying Light: Bad Blood_cis",
@@ -1703,6 +1710,7 @@
                   "I, Zombie",
                   "ICARUS",
                   "INDIKA",
+                  "Ib",
                   "Ichi",
                   "Iesabel",
                   "If My Heart Had Wings",
@@ -1977,6 +1985,7 @@
                   "Nuclear Nightmare",
                   "Nuclear Throne",
                   "OBEY",
+                  "OCEAN CITY RACING",
                   "OMORI",
                   "OMSI 2 Add-on Citybus o530",
                   "OMSI 2 Add-on Three Generations",
@@ -2162,6 +2171,7 @@
                   "Pyre_cis",
                   "Quadrober Simulator",
                   "Quake Live",
+                  "Quantum Conundrum: IKE-aramba!",
                   "RIFT",
                   "RIPD: The Game (ROW) Gift",
                   "RISK™: Factions",
@@ -2187,6 +2197,7 @@
                   "Red Faction: Armageddon Path to War DLC",
                   "Red Orchestra 2: Heroes of Stalingrad with Rising Storm",
                   "Red Orchestra 2: Heroes of Stalingrad with Rising Storm_cis",
+                  "Reflex Arena",
                   "Reign Of Kings",
                   "Reign Of Kings_cis",
                   "Rekoil Gift",
@@ -2253,6 +2264,7 @@
                   "Rust_cis",
                   "Rusty Lake Hotel_cis",
                   "Ryse: Son of Rome",
+                  "Ryse: Son of Rome_cis",
                   "S.T.A.L.K.E.R.: Shadow of Chernobyl",
                   "SAMOLIOTIK_cis",
                   "SCUM Charms pack",
@@ -2344,6 +2356,7 @@
                   "ShellShock Live_cis",
                   "Shelter 2 Mountains",
                   "Shenmue I & II",
+                  "Shift Happens",
                   "Ship Simulator Extremes: Ferry Pack",
                   "Ship of Fools",
                   "ShipLord",
@@ -2490,6 +2503,7 @@
                   "Super Hexagon",
                   "Super Hipster Lumberjack",
                   "Super House of Dead Ninjas",
+                  "Super Kaiju",
                   "Super Lolicon Puzzle Simulator 2019",
                   "Super Meat Boy",
                   "Super Monday Night Combat",
@@ -2760,6 +2774,7 @@
                   "Unknown package 140146",
                   "Unknown package 14221",
                   "Unknown package 14270",
+                  "Unknown package 14455",
                   "Unknown package 148686",
                   "Unknown package 14907",
                   "Unknown package 15190",
@@ -3004,6 +3019,7 @@
                   "World of Diving",
                   "World of Goo",
                   "Worlds Adrift - Standard Edition GIFT",
+                  "Worms Armageddon",
                   "Worms Clan Wars",
                   "Worms Crazy Golf",
                   "Worms Reloaded",
@@ -9676,6 +9692,7 @@
                   "birdsnestblue",
                   "bistrostyle_p0xfd",
                   "bites",
+                  "blacklight",
                   "blackmondayfemale_6ho4l",
                   "blackmondaymale2",
                   "blackmondaymale_e0vsb",
@@ -12529,6 +12546,7 @@
                   14515,
                   14516,
                   14517,
+                  14518,
                   15101,
                   15201,
                   15301,
@@ -47898,6 +47916,70 @@
         ]
       }
     },
+    "/{itemId}/image": {
+      "get": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Get Account Image",
+        "description": "Get account image.",
+        "operationId": "accountsManaging.image",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/itemId"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type of image.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "skins",
+                "pickaxes",
+                "dances",
+                "gliders",
+                "WeaponSkins",
+                "Agent",
+                "Buddy"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermissionModel"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/{itemId}/fast-buy": {
       "post": {
         "tags": [
@@ -50145,7 +50227,7 @@
         "tags": [
           "Accounts managing"
         ],
-        "summary": "Add Tag Account",
+        "summary": "Tag Account",
         "description": "Adds tag for the account.",
         "operationId": "accountsManaging.addTag",
         "parameters": [
@@ -50202,8 +50284,8 @@
         "tags": [
           "Accounts managing"
         ],
-        "summary": "Delete Tag Account",
-        "description": "Deletes tag for the account.",
+        "summary": "Untag Account",
+        "description": "Deletes tag from the account.",
         "operationId": "accountsManaging.deleteTag",
         "parameters": [
           {
