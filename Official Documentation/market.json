@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.56"
+    "version": "1.1.56a"
   },
   "servers": [
     {
@@ -66,9 +66,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -156,9 +154,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -4873,9 +4869,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -12118,9 +12112,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -15020,9 +15012,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -16558,9 +16548,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -17661,9 +17649,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -19093,9 +19079,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -20000,9 +19984,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -21364,9 +21346,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -31806,9 +31786,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -32376,9 +32354,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -33252,9 +33228,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -34022,9 +33996,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -34753,9 +34725,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -35786,9 +35756,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -36597,9 +36565,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -37651,9 +37617,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -38425,9 +38389,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -39101,9 +39063,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -39971,9 +39931,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -40699,9 +40657,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -41290,9 +41246,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -41869,9 +41823,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -42953,9 +42905,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -43625,9 +43575,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -44319,9 +44267,7 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          {
-            "$ref": "#/components/parameters/hide_viewed"
-          },
+          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -51399,39 +51345,366 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "HistoryPaymentsModel",
+                  "type": "object",
                   "required": [
+                    "payments",
+                    "perPage",
+                    "page",
+                    "pageNavLink",
+                    "pageNavParams",
+                    "periodLabel",
+                    "periodLabelPhrase",
+                    "filterDatesDefault",
+                    "input",
+                    "paymentStats",
                     "hasNextPage",
                     "lastOperationId",
                     "nextPageHref",
-                    "payments",
                     "system_info"
                   ],
-                  "type": "object",
                   "properties": {
                     "payments": {
                       "title": "Payments",
-                      "required": [
-                        "payment"
-                      ],
                       "type": "object",
                       "properties": {
-                        "payment": {
-                          "title": "Payment",
+                        "1234567890": {
+                          "title": "",
+                          "type": "object",
+                          "properties": {
+                            "operation_id": {
+                              "title": "Operation",
+                              "type": "integer"
+                            },
+                            "operation_date": {
+                              "title": "Operation",
+                              "type": "integer"
+                            },
+                            "operation_type": {
+                              "title": "Operation",
+                              "type": "string"
+                            },
+                            "outgoing_sum": {
+                              "title": "Outgoing",
+                              "type": "string"
+                            },
+                            "incoming_sum": {
+                              "title": "Incoming",
+                              "type": "string"
+                            },
+                            "item_id": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "wallet": {
+                              "title": "Wallet",
+                              "type": "string"
+                            },
+                            "is_finished": {
+                              "title": "Is",
+                              "type": "integer"
+                            },
+                            "is_hold": {
+                              "title": "Is",
+                              "type": "integer"
+                            },
+                            "payment_system": {
+                              "title": "Payment",
+                              "type": "string"
+                            },
+                            "data": {
+                              "title": "Data",
+                              "type": "object",
+                              "properties": {
+                                "thread_id": {
+                                  "title": "Thread",
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "thread_id"
+                              ]
+                            },
+                            "hold_end_date": {
+                              "title": "Hold",
+                              "type": "integer"
+                            },
+                            "operation_end_date": {
+                              "title": "Operation",
+                              "type": "integer"
+                            },
+                            "api": {
+                              "title": "Api",
+                              "type": "integer"
+                            },
+                            "sum": {
+                              "title": "Sum",
+                              "type": "string"
+                            },
+                            "payment_status": {
+                              "title": "Payment",
+                              "type": "string"
+                            },
+                            "supportLink": {
+                              "title": "Support Link"
+                            },
+                            "paymentSystemIcons": {
+                              "title": "Payment System Icons",
+                              "type": "array",
+                              "items": {}
+                            },
+                            "canCancelBalanceTransfer": {
+                              "title": "Can Cancel Balance Transfer",
+                              "type": "boolean"
+                            },
+                            "canCancelBalancePayout": {
+                              "title": "Can Cancel Balance Payout",
+                              "type": "boolean"
+                            },
+                            "canCancelBalanceHold": {
+                              "title": "Can Cancel Balance Hold",
+                              "type": "boolean"
+                            },
+                            "canFinishBalanceTransfer": {
+                              "title": "Can Finish Balance Transfer",
+                              "type": "boolean"
+                            },
+                            "canFinishBalancePayout": {
+                              "title": "Can Finish Balance Payout",
+                              "type": "boolean"
+                            },
+                            "canFinishBalanceHold": {
+                              "title": "Can Finish Balance Hold",
+                              "type": "boolean"
+                            },
+                            "label": {
+                              "title": "Label",
+                              "type": "object",
+                              "properties": {
+                                "title": {
+                                  "title": "Title",
+                                  "type": "string"
+                                },
+                                "comment": {
+                                  "title": "Comment",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "title",
+                                "comment"
+                              ]
+                            },
+                            "user": {
+                              "title": "User",
+                              "type": "object",
+                              "properties": {
+                                "user_id": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_balance": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_hold": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_balance_with_hold": {
+                                  "title": "User",
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "user_id",
+                                "user_balance",
+                                "user_hold",
+                                "user_balance_with_hold"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "operation_id",
+                            "operation_date",
+                            "operation_type",
+                            "outgoing_sum",
+                            "incoming_sum",
+                            "item_id",
+                            "wallet",
+                            "is_finished",
+                            "is_hold",
+                            "payment_system",
+                            "data",
+                            "hold_end_date",
+                            "operation_end_date",
+                            "api",
+                            "sum",
+                            "payment_status",
+                            "supportLink",
+                            "paymentSystemIcons",
+                            "canCancelBalanceTransfer",
+                            "canCancelBalancePayout",
+                            "canCancelBalanceHold",
+                            "canFinishBalanceTransfer",
+                            "canFinishBalancePayout",
+                            "canFinishBalanceHold",
+                            "label",
+                            "user"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "1234567890"
+                      ]
+                    },
+                    "perPage": {
+                      "title": "Per Page",
+                      "type": "string"
+                    },
+                    "page": {
+                      "title": "Page",
+                      "type": "integer"
+                    },
+                    "pageNavLink": {
+                      "title": "Page Nav Link",
+                      "type": "string"
+                    },
+                    "pageNavParams": {
+                      "title": "Page Nav Params",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "title": "Type",
+                          "type": "string"
+                        },
+                        "startDate": {
+                          "title": "Start Date",
+                          "type": "string"
+                        },
+                        "endDate": {
+                          "title": "End Date",
                           "type": "string"
                         }
-                      }
+                      },
+                      "required": [
+                        "type",
+                        "startDate",
+                        "endDate"
+                      ]
+                    },
+                    "periodLabel": {
+                      "title": "Period Label",
+                      "type": "string"
+                    },
+                    "periodLabelPhrase": {
+                      "title": "Period Label Phrase",
+                      "type": "string"
+                    },
+                    "filterDatesDefault": {
+                      "title": "Filter Dates Default",
+                      "type": "boolean"
+                    },
+                    "input": {
+                      "title": "Input",
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "type": {
+                          "title": "Type",
+                          "type": "string"
+                        },
+                        "startDate": {
+                          "title": "Start Date",
+                          "type": "string"
+                        },
+                        "endDate": {
+                          "title": "End Date",
+                          "type": "string"
+                        },
+                        "page": {
+                          "title": "Page",
+                          "type": "integer"
+                        },
+                        "period_label": {
+                          "title": "Period",
+                          "type": "string"
+                        },
+                        "receiver": {
+                          "title": "Receiver",
+                          "type": "string"
+                        },
+                        "sender": {
+                          "title": "Sender",
+                          "type": "string"
+                        },
+                        "comment": {
+                          "title": "Comment",
+                          "type": "string"
+                        },
+                        "pmin": {
+                          "title": "Pmin",
+                          "type": "string"
+                        },
+                        "pmax": {
+                          "title": "Pmax",
+                          "type": "string"
+                        },
+                        "category_id": {
+                          "title": "Category",
+                          "type": "integer"
+                        },
+                        "wallet": {
+                          "title": "Wallet",
+                          "type": "string"
+                        },
+                        "is_hold": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "currency": {
+                          "title": "Currency",
+                          "type": "string"
+                        },
+                        "operation_id_lt": {
+                          "title": "Operation",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "type",
+                        "startDate",
+                        "endDate",
+                        "page",
+                        "period_label",
+                        "receiver",
+                        "sender",
+                        "comment",
+                        "pmin",
+                        "pmax",
+                        "category_id",
+                        "wallet",
+                        "is_hold",
+                        "currency",
+                        "operation_id_lt"
+                      ]
+                    },
+                    "paymentStats": {
+                      "title": "Payment Stats"
                     },
                     "hasNextPage": {
-                      "title": "Hasnextpage",
+                      "title": "Has Next Page",
                       "type": "boolean"
                     },
                     "lastOperationId": {
-                      "title": "Lastoperationid",
+                      "title": "Last Operation Id",
                       "type": "integer"
                     },
                     "nextPageHref": {
-                      "title": "Nextpagehref",
+                      "title": "Next Page Href",
                       "type": "string"
                     },
                     "system_info": {
@@ -54386,11 +54659,16 @@
                     "type": "string"
                   }
                 }
-              },
-              "example": {
-                "errors": [
-                  "Invalid or expired access token."
-                ]
+              }
+            },
+            "examples": {
+              "Unauthorized": {
+                "summary": "Unauthorized",
+                "value": {
+                  "errors": [
+                    "Invalid or expired access token."
+                  ]
+                }
               }
             }
           }
@@ -54779,18 +55057,6 @@
           "title": "Sold By Me",
           "type": "boolean",
           "description": "Sold by me before."
-        }
-      },
-      "hide_viewed": {
-        "name": "hide_viewed",
-        "in": "query",
-        "description": "Hide viewed accounts.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Hide Viewed",
-          "type": "boolean"
         }
       },
       "currency": {
