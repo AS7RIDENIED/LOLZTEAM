@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.56a"
+    "version": "1.1.56b"
   },
   "servers": [
     {
@@ -66,7 +66,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -154,7 +153,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -759,7 +757,8 @@
                   310,
                   311,
                   312,
-                  313
+                  313,
+                  314
                 ]
               }
             }
@@ -862,6 +861,7 @@
                   "Ace of Spades: Battle Builder_cis",
                   "Achron",
                   "Action Henk",
+                  "Action! - Gameplay Recording and Streaming",
                   "Aerena",
                   "Afterfall Insanity -  Dirty Arena Edition",
                   "Age of Empires II (2013)",
@@ -907,6 +907,7 @@
                   "Anno 2070™ - Deep Ocean",
                   "Anno 2070™ - The Financial Crisis Package",
                   "Anomaly 2",
+                  "Anomaly 2_cis",
                   "Apewar",
                   "Apollo Justice: Ace Attorney Trilogy",
                   "Arena Wars 2",
@@ -1031,6 +1032,7 @@
                   "Bloody Trapland_cis",
                   "Bloons TD 6",
                   "Blue Estate The Game",
+                  "Blue Toad Murder Files™: The Mysteries of Little Riddle",
                   "Bodycam",
                   "Boid Gift",
                   "Bombernauts",
@@ -1144,6 +1146,7 @@
                   "Cities in Motion: Design Now",
                   "Cities: Skylines",
                   "Cities: Skylines - Content Creator Pack: Art Deco",
+                  "Cities: Skylines - Snowfall",
                   "Civilization IV®: Warlords",
                   "Civilization V - Civ and Scenario Double Pack: Spain and Inca",
                   "Civilization V - Civ and Scenario Pack: Korea",
@@ -1343,6 +1346,7 @@
                   "Double Dragon: Neon",
                   "Down To One",
                   "Down To One_cis",
+                  "Dracula's Legacy",
                   "Dracula's Legacy_cis",
                   "Dragon Age II: Ultimate Edition",
                   "Dragon Age: Origins - Ultimate Edition",
@@ -1437,6 +1441,7 @@
                   "Euro Truck Simulator 2 - Scandinavia_cis",
                   "Euro Truck Simulator 2 - UK Paint Jobs Pack",
                   "Euro Truck Simulator 2 - USA Paint Jobs Pack",
+                  "Euro Truck Simulator 2_cis",
                   "Europa Universalis III: Enlightenment SpritePack",
                   "Europa Universalis III: Heir to the Throne",
                   "Europa Universalis III: Revolution SpritePack",
@@ -1515,6 +1520,7 @@
                   "Flower_cis",
                   "FootLOL: Epic Soccer League",
                   "Foreign Legion: Multi Massacre",
+                  "Foreskin Fury",
                   "Forge - Starter Pack",
                   "Forge Quest",
                   "Fortix",
@@ -1655,6 +1661,7 @@
                   "Hentai Furry 2",
                   "Hentai Furry 3",
                   "Hentai Furry Soundtrack",
+                  "Hentai Killer",
                   "Hentai Police",
                   "Hentai Shooter 3D",
                   "Hentai Vs Furries",
@@ -1678,6 +1685,7 @@
                   "Holodrive",
                   "Home Design 3D Ultimate",
                   "Homefront: Express 870 Shotgun",
+                  "Homeworld Remastered Collection_cis",
                   "Horror inside the forest",
                   "Hot Hentai",
                   "Hot Lava",
@@ -1971,6 +1979,7 @@
                   "Nidhogg",
                   "NieR:Automata™",
                   "Nightingale",
+                  "Nightmares from the Deep: The Cursed Heart",
                   "Nikopol: Secrets of the Immortals",
                   "No Man's Sky",
                   "No Time To Live",
@@ -2309,6 +2318,7 @@
                   "Savage Lands",
                   "Savage Lands_cis",
                   "Save Jesus",
+                  "Sayonara Wild Hearts",
                   "Scourge: Outbreak Gift",
                   "Scrap Mechanic_cis",
                   "Screencheat",
@@ -2701,6 +2711,7 @@
                   "Town of Salem",
                   "Toybox Turbos",
                   "TrackMania² Stadium",
+                  "TrackMania² Valley",
                   "Trailmakers",
                   "Trainz™ Simulator 12",
                   "Transistor",
@@ -2778,6 +2789,7 @@
                   "Unknown package 1580",
                   "Unknown package 16429",
                   "Unknown package 16535",
+                  "Unknown package 16540",
                   "Unknown package 16917",
                   "Unknown package 16919",
                   "Unknown package 1693",
@@ -2794,6 +2806,7 @@
                   "Unknown package 17741",
                   "Unknown package 17881",
                   "Unknown package 17881_cis",
+                  "Unknown package 18192",
                   "Unknown package 18246",
                   "Unknown package 18251",
                   "Unknown package 18261",
@@ -2810,6 +2823,7 @@
                   "Unknown package 2573",
                   "Unknown package 2574",
                   "Unknown package 26017",
+                  "Unknown package 26486",
                   "Unknown package 27281",
                   "Unknown package 27281_cis",
                   "Unknown package 27282",
@@ -2910,6 +2924,7 @@
                   "Unknown package 6685",
                   "Unknown package 66904",
                   "Unknown package 66904_cis",
+                  "Unknown package 67071",
                   "Unknown package 67613",
                   "Unknown package 67613_cis",
                   "Unknown package 67652_cis",
@@ -4869,7 +4884,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -6464,6 +6478,7 @@
                   "character_apprentice",
                   "character_arcticiceblue",
                   "character_arcticicetalus",
+                  "character_auracop_bullet",
                   "character_autumndelivery",
                   "character_avocadoseal",
                   "character_badbear",
@@ -6527,6 +6542,7 @@
                   "character_calavera",
                   "character_camerashake",
                   "character_candor",
+                  "character_caneaxl",
                   "character_canvasprint",
                   "character_cardboardcrew_holiday",
                   "character_carminefae",
@@ -6534,6 +6550,7 @@
                   "character_carrotcake",
                   "character_cashewroll",
                   "character_cashmerescarf",
+                  "character_casinoreaper_die",
                   "character_casualcherie",
                   "character_catspace",
                   "character_cattlejar",
@@ -6684,6 +6701,7 @@
                   "character_flamingocountry",
                   "character_floodplain",
                   "character_flowervase",
+                  "character_fluffwoof",
                   "character_folkevening",
                   "character_forestbath",
                   "character_fossilmech",
@@ -6716,6 +6734,7 @@
                   "character_goodmood",
                   "character_gothdevil",
                   "character_gourdriddance",
+                  "character_graffitifry",
                   "character_grandscheme",
                   "character_grandscheme_blue",
                   "character_grandscheme_grey",
@@ -6728,6 +6747,7 @@
                   "character_greenjacketfncs",
                   "character_groovyreader",
                   "character_grumblecroak",
+                  "character_grumblewoof",
                   "character_guineapig",
                   "character_gumoutlaw",
                   "character_habitsecurity",
@@ -6737,6 +6757,7 @@
                   "character_habitsecurity_e",
                   "character_habitsecurity_f",
                   "character_habitsecurity_g",
+                  "character_hastybandit",
                   "character_hauntkoi",
                   "character_haybrush",
                   "character_hazardedge",
@@ -6862,6 +6883,7 @@
                   "character_mistmylar_claw",
                   "character_mistresssombre",
                   "character_mochi",
+                  "character_mochiwoof",
                   "character_modernmilitary_crisp",
                   "character_moonsatellite",
                   "character_moonshock",
@@ -6884,6 +6906,7 @@
                   "character_nutmegmayo",
                   "character_oceanbreeze",
                   "character_olivestomp",
+                  "character_omegaangel",
                   "character_openended",
                   "character_orinchai",
                   "character_outergarment",
@@ -6943,6 +6966,8 @@
                   "character_plottwist",
                   "character_plumedstare",
                   "character_pocketscrunchie",
+                  "character_pointsmoke",
+                  "character_pointwoof",
                   "character_pointytemper",
                   "character_polishedjade_mind",
                   "character_poolswirl",
@@ -6980,6 +7005,7 @@
                   "character_quickburst_plains",
                   "character_quietpeanuts",
                   "character_radiumfox_flame",
+                  "character_ragedebris",
                   "character_raiderpink_sherbert",
                   "character_rainbowstraps",
                   "character_rankedolympus",
@@ -7009,6 +7035,8 @@
                   "character_rhombpatrol_npc",
                   "character_rippedharvester",
                   "character_robedmentor_cross_npc",
+                  "character_robedminer_gold_npc",
+                  "character_robedminer_ruby_npc",
                   "character_robedsledge_cross_npc",
                   "character_robot_hologram_npc",
                   "character_rockerpunkalt",
@@ -7019,6 +7047,7 @@
                   "character_rosedust",
                   "character_roseform",
                   "character_roundthumb_nail",
+                  "character_royalangst_tote",
                   "character_royaldusk",
                   "character_ruins",
                   "character_rushrustle",
@@ -7044,6 +7073,7 @@
                   "character_shakecrunch",
                   "character_sharpfang",
                   "character_sharpmagnet",
+                  "character_sherwolf_gnash",
                   "character_shiitakeshaolin_rouge",
                   "character_shimmerzen",
                   "character_shinystar",
@@ -7106,6 +7136,7 @@
                   "character_sportsfashion_winter",
                   "character_springbreak",
                   "character_springbreaktrip",
+                  "character_sprocketpoppy_boat",
                   "character_spyhandler",
                   "character_stagecue_chalk",
                   "character_stallionaviator",
@@ -7153,6 +7184,7 @@
                   "character_tacticmushroom_d",
                   "character_tacticmushroom_e",
                   "character_talonhime",
+                  "character_tealmink_pelt",
                   "character_technoawaken",
                   "character_tennisleash",
                   "character_theherald",
@@ -7172,6 +7204,7 @@
                   "character_tofuresort",
                   "character_tollbridge",
                   "character_tractorfair",
+                  "character_traffichat_boba",
                   "character_traininggroundbot_npc",
                   "character_treasurehunterfashionsfncs",
                   "character_troops",
@@ -7204,6 +7237,7 @@
                   "character_voltaichuntress",
                   "character_warmshadewagon",
                   "character_warmshadeweasel",
+                  "character_wartybrine_sus",
                   "character_waterfallcharm",
                   "character_waterfallcharm_b",
                   "character_waterfallcharm_c",
@@ -7212,6 +7246,7 @@
                   "character_waterfallcharm_f",
                   "character_waterfallcharm_g",
                   "character_watermolecules",
+                  "character_wavetrail",
                   "character_waywardrebel",
                   "character_weaveharbor",
                   "character_weepingwoodsfestive",
@@ -7432,6 +7467,7 @@
                   "pickaxe_carolinachili",
                   "pickaxe_carrotcake",
                   "pickaxe_cashmerescarf",
+                  "pickaxe_casinoreaper",
                   "pickaxe_catspace",
                   "pickaxe_cattlejar",
                   "pickaxe_cattree_drum",
@@ -7570,6 +7606,7 @@
                   "pickaxe_flakewhomp",
                   "pickaxe_flamingo",
                   "pickaxe_flowervase",
+                  "pickaxe_fluffwoof",
                   "pickaxe_fnbirthday5",
                   "pickaxe_fnbirthday6",
                   "pickaxe_fnbirthday7",
@@ -7602,11 +7639,13 @@
                   "pickaxe_goodmood",
                   "pickaxe_gothdevil",
                   "pickaxe_gourdriddance",
+                  "pickaxe_graffitifry",
                   "pickaxe_greatpool_guitar",
                   "pickaxe_greenjacketpoison",
                   "pickaxe_groovyreaderpierce",
                   "pickaxe_groovyreaderpoke",
                   "pickaxe_grumblecroak",
+                  "pickaxe_grumblewoof",
                   "pickaxe_guineapig",
                   "pickaxe_gumoutlaw",
                   "pickaxe_hauntkoi",
@@ -8578,6 +8617,7 @@
                   "pickaxe_mistmylar",
                   "pickaxe_mistresssombre",
                   "pickaxe_mochi",
+                  "pickaxe_mochiwoof",
                   "pickaxe_moonsatellite",
                   "pickaxe_moonshock",
                   "pickaxe_mooseporch",
@@ -8657,6 +8697,8 @@
                   "pickaxe_plumedstare",
                   "pickaxe_pocketscrunchie",
                   "pickaxe_pocketscrunchie_guitar",
+                  "pickaxe_pointsmoke",
+                  "pickaxe_pointwoof",
                   "pickaxe_pointytemper",
                   "pickaxe_polishedjade",
                   "pickaxe_poolswirl",
@@ -8685,9 +8727,11 @@
                   "pickaxe_quietpeanuts",
                   "pickaxe_quietpeanuts_guitar",
                   "pickaxe_radiumfox",
+                  "pickaxe_ragedebris",
                   "pickaxe_raiderpinksherbert",
                   "pickaxe_rainbowstraps",
                   "pickaxe_random",
+                  "pickaxe_rankedaurum",
                   "pickaxe_rankeddefender",
                   "pickaxe_rankedfaction",
                   "pickaxe_rankedfirth",
@@ -8719,6 +8763,7 @@
                   "pickaxe_roseform",
                   "pickaxe_roundend_guitar",
                   "pickaxe_roundthumb",
+                  "pickaxe_royalangst",
                   "pickaxe_royaldusk",
                   "pickaxe_ruins",
                   "pickaxe_rushrustle",
@@ -8743,6 +8788,7 @@
                   "pickaxe_sharpfang",
                   "pickaxe_sharpmagnet",
                   "pickaxe_sharpsilver",
+                  "pickaxe_sherwolf",
                   "pickaxe_shiitakeshaolin_rouge",
                   "pickaxe_shinystar",
                   "pickaxe_shiverflame",
@@ -8796,6 +8842,8 @@
                   "pickaxe_springbreak",
                   "pickaxe_springbreak_keytar",
                   "pickaxe_springbreakstraw",
+                  "pickaxe_sprocketpoppy_boat",
+                  "pickaxe_sprocketpoppy_boatcircus",
                   "pickaxe_spymale_fncs_22",
                   "pickaxe_spymalefncs",
                   "pickaxe_stagecue",
@@ -8830,6 +8878,7 @@
                   "pickaxe_tactickale",
                   "pickaxe_talonhime",
                   "pickaxe_taxiupgraded_vista",
+                  "pickaxe_tealmink",
                   "pickaxe_tech_guitar",
                   "pickaxe_technoawaken",
                   "pickaxe_tennisleash",
@@ -8852,6 +8901,7 @@
                   "pickaxe_toxic_keytar",
                   "pickaxe_tracepaper",
                   "pickaxe_tractorfair",
+                  "pickaxe_traffichat",
                   "pickaxe_troops",
                   "pickaxe_troublemaker",
                   "pickaxe_troutwrist",
@@ -8884,7 +8934,9 @@
                   "pickaxe_wafer_keytar",
                   "pickaxe_warmshadewagon",
                   "pickaxe_warmshadeweasel",
+                  "pickaxe_wartybrine",
                   "pickaxe_watermolecules",
+                  "pickaxe_wavetrail",
                   "pickaxe_waywardrebel",
                   "pickaxe_weaveharbor",
                   "pickaxe_wideplane",
@@ -8953,6 +9005,7 @@
                   "glider_buffcatcruise",
                   "glider_burntbagel",
                   "glider_candor",
+                  "glider_casinoreaper",
                   "glider_ceremonialguard",
                   "glider_chainmail",
                   "glider_chillcat",
@@ -9441,6 +9494,7 @@
                   "glider_rosedepth",
                   "glider_rosedust",
                   "glider_roundthumb",
+                  "glider_royalangst",
                   "glider_rushrustle",
                   "glider_rustyraider_spark",
                   "glider_sacredcuddle",
@@ -9449,6 +9503,7 @@
                   "glider_scribble",
                   "glider_selenecobra",
                   "glider_shark_fncs",
+                  "glider_sherwolf",
                   "glider_silenttempo",
                   "glider_skullbrite_cotton",
                   "glider_slicevine",
@@ -9460,6 +9515,8 @@
                   "glider_speedypeas",
                   "glider_spring",
                   "glider_springbreak",
+                  "glider_sprocketpoppy_boat",
+                  "glider_sprocketpoppy_yacht",
                   "glider_stagecue",
                   "glider_stallionsmoke",
                   "glider_stealth",
@@ -9473,6 +9530,7 @@
                   "glider_teststaticparts",
                   "glider_tideking",
                   "glider_tiltedparrot",
+                  "glider_traffichat",
                   "glider_troutwrist",
                   "glider_venice",
                   "glider_venom",
@@ -9480,12 +9538,14 @@
                   "glider_voidredemption",
                   "glider_voyager",
                   "glider_warthog",
+                  "glider_wartybrine",
                   "glider_wingedmedieval",
                   "glider_zebrascramble_bacon",
                   "glider_zirconsweep",
                   "preseasonglider",
                   "preseasonglider_elite",
                   "solo_umbrella",
+                  "solo_umbrella_markii",
                   "squad_umbrella",
                   "umbrella_assassinsuit",
                   "umbrella_blastberry_season_30",
@@ -9502,6 +9562,7 @@
                   "umbrella_ogvault",
                   "umbrella_paperparasol",
                   "umbrella_platinum",
+                  "umbrella_rankedaurum",
                   "umbrella_rankeddefender",
                   "umbrella_rankedfaction",
                   "umbrella_rankedfury",
@@ -9538,6 +9599,7 @@
                   "umbrella_season_31",
                   "umbrella_season_32",
                   "umbrella_season_33",
+                  "umbrella_season_34",
                   "umbrella_silver",
                   "umbrella_snowflake",
                   "umbrella_storm",
@@ -9614,6 +9676,7 @@
                   "asteroid",
                   "astral",
                   "astray",
+                  "auracop",
                   "autumntea",
                   "avian",
                   "avocadoseal",
@@ -9734,6 +9797,7 @@
                   "bythefire_sync",
                   "cactustpose",
                   "cadaver",
+                  "caddie",
                   "cadence",
                   "cadet",
                   "caffeine",
@@ -9751,6 +9815,7 @@
                   "carrotcake",
                   "cartwheel",
                   "cashier_hgq8x",
+                  "casinoreaper",
                   "cattlejar",
                   "cattusroar",
                   "cauldron",
@@ -10582,6 +10647,7 @@
                   "roundthumb",
                   "rover_98bfx",
                   "roving",
+                  "royalangst",
                   "ruckus",
                   "ruckus_follower",
                   "ruckusmini_hw9yf",
@@ -10647,6 +10713,7 @@
                   "shaolinsipup",
                   "sharpfang",
                   "sharpmagnet",
+                  "sherwolf",
                   "sherwood",
                   "sherwoodforest",
                   "shimmy",
@@ -10724,6 +10791,7 @@
                   "springbreak",
                   "springrider",
                   "sprinkler",
+                  "sprocketpoppy",
                   "sprout_confused",
                   "sprout_giveitem",
                   "sprout_giveitem_sync",
@@ -10741,6 +10809,7 @@
                   "squishymedley",
                   "stagebow",
                   "stagecue",
+                  "stalemate",
                   "stallion",
                   "standoff",
                   "starstray",
@@ -10805,6 +10874,7 @@
                   "tapestry",
                   "tapshuffle",
                   "tar_s9yve",
+                  "tealmink",
                   "teammonster",
                   "teamrobot",
                   "tempertantrum",
@@ -10851,6 +10921,7 @@
                   "trademark_owned_follower",
                   "trademark_sync",
                   "trademark_sync_follower",
+                  "traffichat",
                   "trajectory",
                   "treadmilldance",
                   "treelightpose",
@@ -10903,6 +10974,7 @@
                   "warehouse",
                   "warmshade",
                   "warmshadewagon",
+                  "wartybrine",
                   "watchthis",
                   "wave",
                   "wavedance",
@@ -12112,7 +12184,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -12856,6 +12927,7 @@
                   1317,
                   1401,
                   1402,
+                  1403,
                   8001,
                   8002,
                   8003,
@@ -15012,7 +15084,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -16548,7 +16619,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -17649,7 +17719,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -17842,7 +17911,6 @@
                   "BULL",
                   "BUSTER",
                   "BUZZ",
-                  "BUZZ LIGHTYEAR",
                   "BYRON",
                   "CARL",
                   "CHARLIE",
@@ -17862,6 +17930,7 @@
                   "EMZ",
                   "EVE",
                   "FANG",
+                  "FINX",
                   "FRANK",
                   "GALE",
                   "GENE",
@@ -17881,6 +17950,7 @@
                   "LILY",
                   "LOLA",
                   "LOU",
+                  "LUMI",
                   "MAISIE",
                   "MANDY",
                   "MAX",
@@ -19079,7 +19149,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -19984,7 +20053,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -21346,7 +21414,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -31786,7 +31853,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -32354,7 +32420,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -33228,7 +33293,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -33996,7 +34060,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -34725,7 +34788,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -35756,7 +35818,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -35819,28 +35880,28 @@
             "$ref": "#/components/parameters/rank_max"
           },
           {
-            "name": "eliteUnits_min",
+            "name": "elite_units_min",
             "in": "query",
             "description": "Minimum number of elite units.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "EliteUnits Min",
+              "title": "Elite Units Min",
               "type": "integer",
               "description": "Minimum number of elite units.",
               "minimum": 0
             }
           },
           {
-            "name": "eliteUnits_max",
+            "name": "elite_units_max",
             "in": "query",
             "description": "Maximum number of elite units.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "EliteUnits Max",
+              "title": "Elite Units Max",
               "type": "integer",
               "description": "Maximum number of elite units.",
               "minimum": 0
@@ -36565,7 +36626,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -36626,7 +36686,8 @@
                   "basic",
                   "classic",
                   "full",
-                  "none"
+                  "none",
+                  "trial"
                 ]
               }
             }
@@ -37617,7 +37678,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -38389,7 +38449,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -39063,7 +39122,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -39931,7 +39989,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -40657,7 +40714,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -41246,7 +41302,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -41823,7 +41878,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -42905,7 +42959,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -43575,7 +43628,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
@@ -44267,7 +44319,6 @@
           {
             "$ref": "#/components/parameters/sb_by_me"
           },
-          
           {
             "$ref": "#/components/parameters/currency"
           },
