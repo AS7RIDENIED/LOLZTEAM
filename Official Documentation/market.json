@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.56b"
+    "version": "1.1.57"
   },
   "servers": [
     {
@@ -906,6 +906,7 @@
                   "Anno 2070™  - The Nordamark Complete Package",
                   "Anno 2070™ - Deep Ocean",
                   "Anno 2070™ - The Financial Crisis Package",
+                  "Anno 2070™: The Keeper Package",
                   "Anomaly 2",
                   "Anomaly 2_cis",
                   "Apewar",
@@ -1124,6 +1125,7 @@
                   "CastleMiner Z",
                   "CastleMiner Z_cis",
                   "Caveman World: Mountains of Unga Boonga",
+                  "Celebrat10n TrackMania Complete Pack",
                   "Chained Together",
                   "Chantelise - A Tale of Two Sisters",
                   "Chaos on Deponia",
@@ -1354,6 +1356,7 @@
                   "Draw a Stickman: EPIC",
                   "DreadOut Soundtrack & Manga DLC",
                   "Drift racing car",
+                  "Drift86",
                   "Driver® Parallel Lines",
                   "Drunken Robot Pornography",
                   "Duck Game",
@@ -1376,6 +1379,7 @@
                   "Dungeon Defenders: Assault Mission Pack",
                   "Dungeon Defenders: Barbarian Hero DLC",
                   "Dungeon Defenders: Summoner Hero DLC_cis",
+                  "Dungeon Siege II",
                   "Dungeonland Gift",
                   "Dungeons",
                   "Dungeons & Dragons: Chronicles of Mystara",
@@ -1483,6 +1487,7 @@
                   "Far Cry®",
                   "Far Cry® 2",
                   "Far Cry® 4 – Overrun",
+                  "Far Cry® New Dawn",
                   "Far Cry® Primal",
                   "FarSky",
                   "Farming Simulator 15 - ITRunner",
@@ -1609,6 +1614,7 @@
                   "Grim Dawn",
                   "Grim Dawn_cis",
                   "Grotesque Tactics: Evil Heroes",
+                  "Guardians of Middle-earth",
                   "Guardians of Orion",
                   "Gumboy Tournament",
                   "Gun Done_cis",
@@ -1799,6 +1805,7 @@
                   "LOCKDOWN Protocol",
                   "LOST PLANET® 3 - Assault Pack",
                   "LYNE",
+                  "Labyrinthine",
                   "Labyronia RPG",
                   "Landmark - Trailblazer Buddy Gift",
                   "Lara Croft GoL: Raziel and Kain Character Pack",
@@ -2099,7 +2106,6 @@
                   "Painkiller Hell & Damnation",
                   "Painkiller Redemption",
                   "Painkiller: Black Edition",
-                  "Paint the Town Red",
                   "Paintball 707",
                   "Palworld",
                   "Pandemic Express - Zombie Escape",
@@ -2451,6 +2457,7 @@
                   "Sparkle 2 Evo",
                   "Spec Ops: The Line",
                   "Spectraball",
+                  "Spectral Scream",
                   "SpeedRunners",
                   "SpeedRunners - Youtuber Pack 2",
                   "SpeedRunners_cis",
@@ -2622,6 +2629,7 @@
                   "The Silent Age",
                   "The Sims 3 - Movie Stuff",
                   "The Sims 3: Island Paradise",
+                  "The Sims 3: Seasons",
                   "The Sims™ 3",
                   "The Sims™ 3 Generations",
                   "The Sims™ 3 Pets",
@@ -2729,6 +2737,8 @@
                   "Tropico 4",
                   "Tropico 4 Collector's Bundle",
                   "Tropico 5",
+                  "Twin Sector",
+                  "Two Worlds Collection",
                   "Two Worlds II HD",
                   "UBERMOSH + Original Soundtrack",
                   "UBERMOSH Collection",
@@ -2852,6 +2862,7 @@
                   "Unknown package 33961",
                   "Unknown package 34431",
                   "Unknown package 34680_cis",
+                  "Unknown package 35969",
                   "Unknown package 36009",
                   "Unknown package 36075",
                   "Unknown package 38003",
@@ -2875,6 +2886,7 @@
                   "Unknown package 45019",
                   "Unknown package 45320",
                   "Unknown package 459",
+                  "Unknown package 46504",
                   "Unknown package 47509",
                   "Unknown package 47804",
                   "Unknown package 4829",
@@ -6823,6 +6835,7 @@
                   "character_kettlepress",
                   "character_keychain",
                   "character_keytracker",
+                  "character_kneelens",
                   "character_knight_boss_npc",
                   "character_knightcatracket",
                   "character_knishclamp_npc",
@@ -7156,6 +7169,7 @@
                   "character_streetgothsummer",
                   "character_stronghibiscus",
                   "character_strontiumspark",
+                  "character_studybench",
                   "character_stunningmountain_armor",
                   "character_sugarbubble",
                   "character_sunbeamquest",
@@ -8556,6 +8570,7 @@
                   "pickaxe_keytracker",
                   "pickaxe_kintsugi_guitar",
                   "pickaxe_kintsugi_keytar",
+                  "pickaxe_kneelens",
                   "pickaxe_knightcatracket",
                   "pickaxe_lasthour",
                   "pickaxe_lastvoicedive",
@@ -8859,6 +8874,7 @@
                   "pickaxe_stormaviator",
                   "pickaxe_strategicspur",
                   "pickaxe_strontiumspark",
+                  "pickaxe_studybench",
                   "pickaxe_stunningmountain",
                   "pickaxe_stunningmountain_guitar",
                   "pickaxe_sugarbubble",
@@ -10308,6 +10324,7 @@
                   "kisskiss",
                   "kitchennavigator",
                   "kittycat",
+                  "kneelens",
                   "knightcat",
                   "kpopdance01",
                   "kpopdance02",
@@ -10824,6 +10841,7 @@
                   "streamline",
                   "stringdance",
                   "studious",
+                  "studybench",
                   "stumble",
                   "stunningmountain",
                   "sublime",
@@ -13105,11 +13123,13 @@
                   23035,
                   23036,
                   23037,
+                  23038,
                   24000,
                   24001,
                   24002,
                   24003,
-                  24004
+                  24004,
+                  24005
                 ]
               }
             }
@@ -50905,6 +50925,1805 @@
         ]
       }
     },
+    "/currency": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Get Currency",
+        "description": "Get currency list.",
+        "operationId": "Balance.Payments.GetCurrency",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "currencyList",
+                    "lastUpdate",
+                    "visitorCurrency",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "currencyList": {
+                      "title": "Currency List",
+                      "type": "object",
+                      "properties": {
+                        "BTC": {
+                          "title": "Btc",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "ETH": {
+                          "title": "Eth",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "BNB": {
+                          "title": "Bnb",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "BCH": {
+                          "title": "Bch",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "XMR": {
+                          "title": "Xmr",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "SOL": {
+                          "title": "Sol",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "LTC": {
+                          "title": "Ltc",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "DASH": {
+                          "title": "Dash",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "TON": {
+                          "title": "Ton",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "USDT": {
+                          "title": "Usdt",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "MATIC": {
+                          "title": "Matic",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "TRX": {
+                          "title": "Trx",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "DOGE": {
+                          "title": "Doge",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "KWD": {
+                          "title": "Kwd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "GBP": {
+                          "title": "Gbp",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "CHF": {
+                          "title": "Chf",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "EUR": {
+                          "title": "Eur",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "USD": {
+                          "title": "Usd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "SGD": {
+                          "title": "Sgd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "CAD": {
+                          "title": "Cad",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "AUD": {
+                          "title": "Aud",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "NZD": {
+                          "title": "Nzd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "BGN": {
+                          "title": "Bgn",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "GEL": {
+                          "title": "Gel",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "ILS": {
+                          "title": "Ils",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "QAR": {
+                          "title": "Qar",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "PEN": {
+                          "title": "Pen",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "AED": {
+                          "title": "Aed",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "SAR": {
+                          "title": "Sar",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "PLN": {
+                          "title": "Pln",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "MYR": {
+                          "title": "Myr",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "RON": {
+                          "title": "Ron",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "BRL": {
+                          "title": "Brl",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "DKK": {
+                          "title": "Dkk",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "CNY": {
+                          "title": "Cny",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "HKD": {
+                          "title": "Hkd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "SEK": {
+                          "title": "Sek",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "NOK": {
+                          "title": "Nok",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "ZAR": {
+                          "title": "Zar",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "MXN": {
+                          "title": "Mxn",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "CZK": {
+                          "title": "Czk",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "TWD": {
+                          "title": "Twd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "THB": {
+                          "title": "Thb",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "TRY": {
+                          "title": "Try",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "UAH": {
+                          "title": "Uah",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "UYU": {
+                          "title": "Uyu",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "PHP": {
+                          "title": "Php",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "INR": {
+                          "title": "Inr",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "RUB": {
+                          "title": "Rub",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "integer"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "RSD": {
+                          "title": "Rsd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "JPY": {
+                          "title": "Jpy",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "HUF": {
+                          "title": "Huf",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "KZT": {
+                          "title": "Kzt",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "CRC": {
+                          "title": "Crc",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "CLP": {
+                          "title": "Clp",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "ARS": {
+                          "title": "Ars",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "KRW": {
+                          "title": "Krw",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "COP": {
+                          "title": "Cop",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "IDR": {
+                          "title": "Idr",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        },
+                        "VND": {
+                          "title": "Vnd",
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "rate": {
+                              "title": "Rate",
+                              "type": "number"
+                            },
+                            "formattedRate": {
+                              "title": "Formatted Rate",
+                              "type": "string"
+                            },
+                            "symbol": {
+                              "title": "Symbol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "rate",
+                            "formattedRate",
+                            "symbol"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "BTC",
+                        "ETH",
+                        "BNB",
+                        "BCH",
+                        "XMR",
+                        "SOL",
+                        "LTC",
+                        "DASH",
+                        "TON",
+                        "USDT",
+                        "MATIC",
+                        "TRX",
+                        "DOGE",
+                        "KWD",
+                        "GBP",
+                        "CHF",
+                        "EUR",
+                        "USD",
+                        "SGD",
+                        "CAD",
+                        "AUD",
+                        "NZD",
+                        "BGN",
+                        "GEL",
+                        "ILS",
+                        "QAR",
+                        "PEN",
+                        "AED",
+                        "SAR",
+                        "PLN",
+                        "MYR",
+                        "RON",
+                        "BRL",
+                        "DKK",
+                        "CNY",
+                        "HKD",
+                        "SEK",
+                        "NOK",
+                        "ZAR",
+                        "MXN",
+                        "CZK",
+                        "TWD",
+                        "THB",
+                        "TRY",
+                        "UAH",
+                        "UYU",
+                        "PHP",
+                        "INR",
+                        "RUB",
+                        "RSD",
+                        "JPY",
+                        "HUF",
+                        "KZT",
+                        "CRC",
+                        "CLP",
+                        "ARS",
+                        "KRW",
+                        "COP",
+                        "IDR",
+                        "VND"
+                      ]
+                    },
+                    "lastUpdate": {
+                      "title": "Last Update",
+                      "type": "integer"
+                    },
+                    "visitorCurrency": {
+                      "title": "Visitor Currency",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/balance/transfer": {
       "post": {
         "tags": [
@@ -51133,15 +52952,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Successful Response",
                   "type": "object",
+                  "required": [
+                    "commission_percentage",
+                    "spentCurrentMonth",
+                    "calculator",
+                    "system_info"
+                  ],
                   "properties": {
                     "commission_percentage": {
                       "title": "Commission",
                       "type": "integer"
                     },
-                    "spentIn30Days": {
-                      "title": "Spent in days",
+                    "spentCurrentMonth": {
+                      "title": "Spent Current Month",
                       "type": "integer"
                     },
                     "calculator": {
@@ -51149,15 +52973,15 @@
                       "type": "object",
                       "properties": {
                         "inputAmount": {
-                          "title": "Input amount",
+                          "title": "Input Amount",
                           "type": "integer"
                         },
                         "commissionAmount": {
-                          "title": "Commission amount",
+                          "title": "Commission Amount",
                           "type": "integer"
                         },
                         "totalOutputAmount": {
-                          "title": "Total output amount",
+                          "title": "Total Output Amount",
                           "type": "integer"
                         }
                       },
