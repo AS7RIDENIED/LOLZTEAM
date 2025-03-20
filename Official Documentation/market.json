@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.57b"
+    "version": "1.1.58"
   },
   "servers": [
     {
@@ -19,7 +19,7 @@
         ],
         "summary": "Get Last Accounts",
         "description": "Displays a list of latest accounts.",
-        "operationId": "Category.Latest",
+        "operationId": "Category.All",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -234,19 +234,24 @@
           {
             "name": "eg",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
+            "description": "Guarantee type.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
-              "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
+              "type": "integer", 
+              "description": "Guarantee type.",
               "enum": [
                 -1,
                 0,
                 1
-              ]
+              ],
+              "x-enumDescriptions": {
+                "-1": "12 hours",
+                "0": "24 hours", 
+                "1": "3 days"
+              }
             }
           },
           {
@@ -3681,7 +3686,8 @@
           {
             "name": "cs2_map_rank",
             "in": "query",
-            "description": "Map for rank in CS2.\n+ 1 - Dust II\n+ 2 - Mirage\n+ 3 - Train\n+ 4 - Nuke\n+ 5 - Overpass\n+ 6 - Inferno\n+ 7 - Ancient\n+ 8 - Vertigo\n+ 9 - Anubis\n+ 10 - Office\n+ 11 - Thera\n+ 12 - Mills\n+ 12 - Italy",
+            "description": "Map for rank in CS2.",
+            
             "required": false,
             "style": "form",
             "explode": true,
@@ -3702,7 +3708,22 @@
                 11,
                 12,
                 13
-              ]
+              ],
+              "x-enumDescriptions": {
+              "1": "Dust II",
+              "2": "Mirage", 
+              "3": "Train",
+              "4": "Nuke",
+              "5": "Overpass",
+              "6": "Inferno",
+              "7": "Ancient",
+              "8": "Vertigo",
+              "9": "Anubis",
+              "10": "Office",
+              "11": "Thera",
+              "12": "Mills",
+              "13": "Italy"
+            }
             }
           },
           {
@@ -5055,20 +5076,27 @@
           {
             "name": "eg",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+            "description": "Guarantee type.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+              "description": "Guarantee type.",
+              "x-enumDescriptions": {
+                "-1": "12 hours",
+                "0": "24 hours",
+                "1": "3 days", 
+                "2": "Guarantee at the time of purchase"
+              },
               "enum": [
                 -1,
                 0,
                 1,
                 2
               ]
+              
             }
           },
           {
@@ -11522,7 +11550,7 @@
           },
           {
             "name": "xbox_linkable",
-            "in": "query",  
+            "in": "query",
             "description": "Can be linked to Xbox.",
             "required": false,
             "style": "form",
@@ -12452,7 +12480,7 @@
         ],
         "summary": "miHoYo",
         "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.MiHoYo",
+        "operationId": "Category.Mihoyo",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -15448,14 +15476,41 @@
           {
             "name": "rmin",
             "in": "query",
-            "description": "Minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "description": "Minimum valorant rank.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "R Min",
               "type": "integer",
-              "description": "Minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+              "description": "Minimum valorant rank.",
+              "x-enumDescriptions": {
+                "3": "Iron 1",
+                "4": "Iron 2", 
+                "5": "Iron 3",
+                "6": "Bronze 1",
+                "7": "Bronze 2",
+                "8": "Bronze 3", 
+                "9": "Silver 1",
+                "10": "Silver 2",
+                "11": "Silver 3",
+                "12": "Gold 1",
+                "13": "Gold 2",
+                "14": "Gold 3",
+                "15": "Platinum 1",
+                "16": "Platinum 2",
+                "17": "Platinum 3",
+                "18": "Diamond 1",
+                "19": "Diamond 2",
+                "20": "Diamond 3",
+                "21": "Ascendant 1",
+                "22": "Ascendant 2",
+                "23": "Ascendant 3",
+                "24": "Immortal 1",
+                "25": "Immortal 2",
+                "26": "Immortal 3",
+                "27": "Radiant"
+              },
               "minimum": 3,
               "maximum": 27
             }
@@ -15463,72 +15518,202 @@
           {
             "name": "rmax",
             "in": "query",
-            "description": "Maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "description": "Maximum valorant rank.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "R Max",
               "type": "integer",
-              "description": "Maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-              "minimum": 3,
+              "description": "Maximum valorant rank.",
+              "x-enumDescriptions": {
+                "3": "Iron 1",
+                "4": "Iron 2", 
+                "5": "Iron 3",
+                "6": "Bronze 1",
+                "7": "Bronze 2",
+                "8": "Bronze 3", 
+                "9": "Silver 1",
+                "10": "Silver 2",
+                "11": "Silver 3",
+                "12": "Gold 1",
+                "13": "Gold 2",
+                "14": "Gold 3",
+                "15": "Platinum 1",
+                "16": "Platinum 2",
+                "17": "Platinum 3",
+                "18": "Diamond 1",
+                "19": "Diamond 2",
+                "20": "Diamond 3",
+                "21": "Ascendant 1",
+                "22": "Ascendant 2",
+                "23": "Ascendant 3",
+                "24": "Immortal 1",
+                "25": "Immortal 2",
+                "26": "Immortal 3",
+                "27": "Radiant"
+              },"minimum": 3,
               "maximum": 27
             }
           },
           {
             "name": "last_rmin",
             "in": "query",
-            "description": "Last minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "description": "Last minimum valorant rank.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Last R Min",
               "type": "integer",
-              "description": "Last minimum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-              "minimum": 3,
+              "description": "Last minimum valorant rank.",
+              "x-enumDescriptions": {
+                "3": "Iron 1",
+                "4": "Iron 2", 
+                "5": "Iron 3",
+                "6": "Bronze 1",
+                "7": "Bronze 2",
+                "8": "Bronze 3", 
+                "9": "Silver 1",
+                "10": "Silver 2",
+                "11": "Silver 3",
+                "12": "Gold 1",
+                "13": "Gold 2",
+                "14": "Gold 3",
+                "15": "Platinum 1",
+                "16": "Platinum 2",
+                "17": "Platinum 3",
+                "18": "Diamond 1",
+                "19": "Diamond 2",
+                "20": "Diamond 3",
+                "21": "Ascendant 1",
+                "22": "Ascendant 2",
+                "23": "Ascendant 3",
+                "24": "Immortal 1",
+                "25": "Immortal 2",
+                "26": "Immortal 3",
+                "27": "Radiant"
+              },"minimum": 3,
               "maximum": 27
             }
           },
           {
             "name": "last_rmax",
             "in": "query",
-            "description": "Last maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "description": "Last maximum valorant rank.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Last R Max",
               "type": "integer",
-              "description": "Last maximum valorant rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
-              "minimum": 3,
+              "description": "Last maximum valorant rank.",
+              "x-enumDescriptions": {
+                "3": "Iron 1",
+                "4": "Iron 2", 
+                "5": "Iron 3",
+                "6": "Bronze 1",
+                "7": "Bronze 2",
+                "8": "Bronze 3", 
+                "9": "Silver 1",
+                "10": "Silver 2",
+                "11": "Silver 3",
+                "12": "Gold 1",
+                "13": "Gold 2",
+                "14": "Gold 3",
+                "15": "Platinum 1",
+                "16": "Platinum 2",
+                "17": "Platinum 3",
+                "18": "Diamond 1",
+                "19": "Diamond 2",
+                "20": "Diamond 3",
+                "21": "Ascendant 1",
+                "22": "Ascendant 2",
+                "23": "Ascendant 3",
+                "24": "Immortal 1",
+                "25": "Immortal 2",
+                "26": "Immortal 3",
+                "27": "Radiant"
+              },"minimum": 3,
               "maximum": 27
             }
           },
           {
             "name": "previous_rmin",
             "in": "query",
-            "description": "Previous minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "description": "Previous minimum rank.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Previous Rmin",
               "type": "integer",
-              "description": "Previous minimum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant"
+              "x-enumDescriptions": {
+                "3": "Iron 1",
+                "4": "Iron 2", 
+                "5": "Iron 3",
+                "6": "Bronze 1",
+                "7": "Bronze 2",
+                "8": "Bronze 3", 
+                "9": "Silver 1",
+                "10": "Silver 2",
+                "11": "Silver 3",
+                "12": "Gold 1",
+                "13": "Gold 2",
+                "14": "Gold 3",
+                "15": "Platinum 1",
+                "16": "Platinum 2",
+                "17": "Platinum 3",
+                "18": "Diamond 1",
+                "19": "Diamond 2",
+                "20": "Diamond 3",
+                "21": "Ascendant 1",
+                "22": "Ascendant 2",
+                "23": "Ascendant 3",
+                "24": "Immortal 1",
+                "25": "Immortal 2",
+                "26": "Immortal 3",
+                "27": "Radiant"
+              },"description": "Previous minimum rank."
             }
           },
           {
             "name": "previous_rmax",
             "in": "query",
-            "description": "Previous maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant",
+            "description": "Previous maximum rank.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Previous Rmax",
               "type": "integer",
-              "description": "Previous maximum rank.\n+ 3/4/5 - Iron 1/2/3\n+ 6/7/8 - Bronze 1/2/3\n+ 9/10/11 - Silver 1/2/3\n+ 12/13/14 - Gold 1/2/3\n+ 15/16/17 - Platinum 1/2/3\n+ 18/19/20 - Diamond 1/2/3\n+ 21/22/23 - Ascendant 1/2/3\n+ 24/25/26 - Immortal 1/2/3\n+ 27 - Radiant"
+              "x-enumDescriptions": {
+                "3": "Iron 1",
+                "4": "Iron 2", 
+                "5": "Iron 3",
+                "6": "Bronze 1",
+                "7": "Bronze 2",
+                "8": "Bronze 3", 
+                "9": "Silver 1",
+                "10": "Silver 2",
+                "11": "Silver 3",
+                "12": "Gold 1",
+                "13": "Gold 2",
+                "14": "Gold 3",
+                "15": "Platinum 1",
+                "16": "Platinum 2",
+                "17": "Platinum 3",
+                "18": "Diamond 1",
+                "19": "Diamond 2",
+                "20": "Diamond 3",
+                "21": "Ascendant 1",
+                "22": "Ascendant 2",
+                "23": "Ascendant 3",
+                "24": "Immortal 1",
+                "25": "Immortal 2",
+                "26": "Immortal 3",
+                "27": "Radiant"
+              },"description": "Previous maximum rank."
             }
           },
           {
@@ -18086,14 +18271,20 @@
           {
             "name": "eg",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+            "description": "Guarantee type.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+              "description": "Guarantee type.",
+              "x-enumDescriptions": {
+                "-1": "12 hours",
+                "0": "24 hours",
+                "1": "3 days",
+                "2": "Guarantee at the time of purchase"
+              },
               "enum": [
                 -1,
                 0,
@@ -20327,7 +20518,7 @@
         ],
         "summary": "World of Tanks",
         "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.WoT",
+        "operationId": "Category.Wot",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -21688,7 +21879,7 @@
         ],
         "summary": "WoT Blitz",
         "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.WoTBlitz",
+        "operationId": "Category.WotBlitz",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -32785,14 +32976,20 @@
           {
             "name": "eg",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+            "description": "Guarantee type.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days\n+ **2** - Guarantee at the time of purchase",
+              "description": "Guarantee type.",
+              "x-enumDescriptions": {
+                "-1": "12 hours",
+                "0": "24 hours", 
+                "1": "3 days",
+                "2": "Guarantee at the time of purchase"
+              },
               "enum": [
                 -1,
                 0,
@@ -39554,13 +39751,17 @@
           {
             "name": "eg",
             "in": "query",
-            "description": "Guarantee type.\n+ **0** - 24 hours\n+ **1** - 3 days",
+            "description": "Guarantee type.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
+              "x-enumDescriptions":{
+                "0":"24 hours",
+                "1":"3 days"
+              },
               "enum": [
                 0,
                 1
@@ -46215,7 +46416,7 @@
         ],
         "summary": "Get All Owned Accounts",
         "description": "Displays a list of owned accounts.",
-        "operationId": "accountsList.getOwned",
+        "operationId": "List.Owned",
         "parameters": [
           {
             "name": "user_id",
@@ -46349,7 +46550,7 @@
         ],
         "summary": "Get All Purchased Accounts",
         "description": "Displays a list of purchased accounts.",
-        "operationId": "accountsList.getPurchased",
+        "operationId": "List.Orders",
         "parameters": [
           {
             "name": "user_id",
@@ -46451,7 +46652,7 @@
         ],
         "summary": "Get All Favourites Accounts",
         "description": "Displays a list of favourites accounts.",
-        "operationId": "accountsList.getFavorite",
+        "operationId": "List.Favorites",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -46521,7 +46722,7 @@
         ],
         "summary": "Get All Viewed Accounts",
         "description": "Displays a list of viewed accounts.",
-        "operationId": "accountsList.getViewed",
+        "operationId": "List.Viewed",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -46591,7 +46792,7 @@
         ],
         "summary": "Get Account",
         "description": "Displays account information.",
-        "operationId": "accountsManaging.GetAccount",
+        "operationId": "Managing.Get",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -46629,7 +46830,7 @@
         ],
         "summary": "Delete Account",
         "description": "Deletes your account from public search. Deletion type is soft. You can restore account after deletion if you want.",
-        "operationId": "accountsManaging.delete",
+        "operationId": "Manging.Delete",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -46678,7 +46879,7 @@
         ],
         "summary": "Create Arbitrage",
         "description": "Create a Arbitrage.",
-        "operationId": "accountsManaging.Arbitrage",
+        "operationId": "Managing.Arbitrage",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -47352,7 +47553,7 @@
         ],
         "summary": "Bulk Get Accounts",
         "description": "Bulk get up to 250 accounts.\nYou can get only your accounts or those you have purchased.",
-        "operationId": "accountsManaging.BulkItems",
+        "operationId": "Managing.BulkGet",
         "requestBody": {
           "required": true,
           "content": {
@@ -47434,7 +47635,7 @@
         ],
         "summary": "Get Account Steam Inventory Value",
         "description": "Gets Account steam inventory value.",
-        "operationId": "Managing.SteamValueItem",
+        "operationId": "Managing.SteamInventoryValue",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -47443,7 +47644,15 @@
             "$ref": "#/components/parameters/app_id"
           },
           {
-            "$ref": "#/components/parameters/currency"
+            "name": "currency",
+            "in": "query",
+            "description": "Currency in which the inventory value will be returned",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
           },
           {
             "name": "ignore_cache",
@@ -47660,7 +47869,7 @@
         ],
         "summary": "Get Steam Inventory Value",
         "description": "Gets steam inventory value.\n> 📘 This method is rate limited. You can send 20 requests per minute (3s delay between requests)",
-        "operationId": "accountsManaging.getSteamInventoryValue",
+        "operationId": "Managing.SteamValue",
         "parameters": [
           {
             "name": "link",
@@ -47679,7 +47888,15 @@
             "$ref": "#/components/parameters/app_id"
           },
           {
-            "$ref": "#/components/parameters/currency"
+            "name": "currency",
+            "in": "query",
+            "description": "Currency in which the inventory value will be returned",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
           },
           {
             "name": "ignore_cache",
@@ -47896,7 +48113,7 @@
         ],
         "summary": "Get Steam HTML",
         "description": "Returns Steam account profile/games preview.",
-        "operationId": "accountsList.getSteamHtml",
+        "operationId": "Managing.SteamPreview",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -47957,7 +48174,7 @@
         ],
         "summary": "Edit Account",
         "description": "Edits any details of account.",
-        "operationId": "accountsManaging.edit",
+        "operationId": "Managing.Edit",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48016,14 +48233,24 @@
           {
             "name": "item_origin",
             "in": "query",
-            "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
+            "description": "Account origin. Where did you get it from.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Item Origin",
               "type": "string",
-              "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
+              "description": "Account origin. Where did you get it from.",
+              "x-enumDescriptions": {
+                "brute": "Account received using Bruteforce",
+                "fishing": "Account received from fishing page", 
+                "stealer": "Account received from stealer logs",
+                "autoreg": "Account is automatically registered by a tool",
+                "personal": "Account is yours. You created it yourself",
+                "resale": "Account received from another seller",
+                "dummy": "Dummy (empty) account (only for Steam category)",
+                "self_registration": "Self registered account (only fot Telegram category)"
+              },
               "enum": [
                 "brute",
                 "fishing",
@@ -48148,7 +48375,7 @@
         ],
         "summary": "Edit Note",
         "description": "Edits a note for the account.",
-        "operationId": "accountsManaging.NoteSave",
+        "operationId": "Managing.Note",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48197,7 +48424,7 @@
         ],
         "summary": "Update Inventory Value",
         "description": "Update inventory value.",
-        "operationId": "accountsManaging.updateInventoryValue",
+        "operationId": "Managing.SteamUpdateValue",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48274,7 +48501,7 @@
         ],
         "summary": "Bump Account",
         "description": "Bumps account in the search.",
-        "operationId": "accountsManaging.bump",
+        "operationId": "Managing.Bump",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48310,7 +48537,7 @@
         ],
         "summary": "Get Account Image",
         "description": "Get account image.",
-        "operationId": "accountsManaging.image",
+        "operationId": "Managing.Image",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48374,7 +48601,7 @@
         ],
         "summary": "Fast Buy Account",
         "description": "Check and buy account.",
-        "operationId": "accountsPurchasing.checkBuy",
+        "operationId": "Purchasing.FastBuy",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48424,7 +48651,7 @@
         ],
         "summary": "Check Account",
         "description": "Checking account for validity.",
-        "operationId": "accountsPurchasing.check",
+        "operationId": "Purchasing.Check",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48460,7 +48687,7 @@
         ],
         "summary": "Confirm Buy",
         "description": "Confirm buy.\n\n> ❗️ This method doesn't check account for validity. If you want to confirm validity before buying, you should use [FastBuy](https://lzt-market.readme.io/reference/accountspurchasingcheckbuy) method",
-        "operationId": "accountsPurchasing.confirmBuy",
+        "operationId": "Purchasing.Confirm",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -48589,7 +48816,7 @@
         ],
         "summary": "Fast Account Upload",
         "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"captcha\" error, that you should send same request again.**",
-        "operationId": "accountPublishing.fastSell",
+        "operationId": "Publishing.FastSell",
         "parameters": [
           {
             "name": "title",
@@ -48623,7 +48850,7 @@
           {
             "name": "category_id",
             "in": "query",
-            "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 6 - ChatGPT\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 15 - Supercell\n+ 16 - WOT Blitz\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft\n+ 30 - Gifts\n+ 31 - Roblox",
+            "description": "Accounts category.",
             "required": true,
             "style": "form",
             "explode": true,
@@ -48631,6 +48858,34 @@
               "title": "Category Id",
               "type": "integer",
               "description": "Accounts category.",
+              "x-enumDescriptions": {
+                "1": "Steam",
+                "3": "Origin",
+                "4": "Warface",
+                "5": "Uplay",
+                "6": "ChatGPT",
+                "7": "Social Club",
+                "9": "Fortnite",
+                "10": "Instagram",
+                "11": "Battlenet",
+                "12": "Epic Games",
+                "13": "Riot",
+                "14": "World Of Tanks",
+                "15": "Supercell",
+                "16": "WOT Blitz",
+                "17": "miHoYo",
+                "18": "Escape From Tarkov",
+                "19": "VPN",
+                "20": "Tiktok",
+                "22": "Discord",
+                "23": "Cinema",
+                "24": "Telegram",
+                "26": "Spotify",
+                "27": "War Thunder",
+                "28": "Minecraft",
+                "30": "Gifts",
+                "31": "Roblox"
+              },
               "enum": [
                 1,
                 3,
@@ -48675,12 +48930,12 @@
           {
             "name": "item_origin",
             "in": "query",
-            "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
+            "description": "Account origin. Where did you get it from.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
-              "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
+              "description": "Account origin. Where did you get it from.",
               "type": "string",
               "enum": [
                 "brute",
@@ -48691,20 +48946,35 @@
                 "autoreg",
                 "dummy",
                 "self_registration"
-              ]
+              ],
+              "x-enumDescriptions": {
+                "brute": "Account received using Bruteforce",
+                "fishing": "Account received from fishing page",
+                "stealer": "Account received from stealer logs",
+                "personal": "Account is yours. You created it yourself",
+                "resale": "Account received from another seller",
+                "autoreg": "Account is automatically registered by a tool",
+                "dummy": "Dummy (empty) account (only for Steam category)",
+                "self_registration": "Self registered account (only fot Telegram category)"
+              }
             }
           },
           {
             "name": "extended_guarantee",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
+            "description": "Guarantee type.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
+              "description": "Guarantee type.",
+              "x-enumDescriptions": {
+                "-1": "12 hours",
+                "0": "24 hours",
+                "1": "3 days"
+              },
               "enum": [
                 -1,
                 0,
@@ -48873,7 +49143,7 @@
         ],
         "summary": "Add Account",
         "description": "Adds account on the market.\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
-        "operationId": "accountPublishing.addItem",
+        "operationId": "Publishing.Add",
         "parameters": [
           {
             "name": "title",
@@ -48907,7 +49177,7 @@
           {
             "name": "category_id",
             "in": "query",
-            "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 6 - ChatGPT\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 15 - Supercell\n+ 16 - WOT Blitz\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft\n+ 30 - Gifts\n+ 31 - Roblox",
+            "description": "Accounts category.",
             "required": true,
             "style": "form",
             "explode": true,
@@ -48942,7 +49212,35 @@
                 29,
                 30,
                 31
-              ]
+              ],
+              "x-enumDescriptions": {
+                "1": "Steam",
+                "3": "Origin",
+                "4": "Warface",
+                "5": "Uplay",
+                "6": "ChatGPT",
+                "7": "Social Club",
+                "9": "Fortnite",
+                "10": "Instagram",
+                "11": "Battlenet",
+                "12": "Epic Games",
+                "13": "Riot",
+                "14": "World Of Tanks",
+                "15": "Supercell",
+                "16": "WOT Blitz",
+                "17": "miHoYo",
+                "18": "Escape From Tarkov",
+                "19": "VPN",
+                "20": "Tiktok",
+                "22": "Discord",
+                "23": "Cinema",
+                "24": "Telegram",
+                "26": "Spotify",
+                "27": "War Thunder",
+                "28": "Minecraft",
+                "30": "Gifts",
+                "31": "Roblox"
+              }
             }
           },
           {
@@ -48966,7 +49264,17 @@
             "schema": {
               "title": "Item Origin",
               "type": "string",
-              "description": "Account origin. Where did you get it from.\n+ brute - Account received using Bruteforce\n+ fishing - Account received from fishing page\n+ stealer - Account received from stealer logs\n+ autoreg - Account is automatically registered by a tool\n+ personal - Account is yours. You created it yourself\n+ resale - Account received from another seller\n+ dummy - Dummy (empty) account (only for Steam category)\n+ self_registration - Self registered account (only fot Telegram category)",
+              "description": "Account origin. Where did you get it from.",
+              "x-enumDescriptions": {
+                "brute": "Account received using Bruteforce",
+                "fishing": "Account received from fishing page", 
+                "stealer": "Account received from stealer logs",
+                "autoreg": "Account is automatically registered by a tool",
+                "personal": "Account is yours. You created it yourself",
+                "resale": "Account received from another seller",
+                "dummy": "Dummy (empty) account (only for Steam category)",
+                "self_registration": "Self registered account (only fot Telegram category)"
+              },
               "enum": [
                 "brute",
                 "fishing",
@@ -48982,14 +49290,19 @@
           {
             "name": "extended_guarantee",
             "in": "query",
-            "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
+            "description": "Guarantee type.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "description": "Guarantee type.\n+ **-1** - 12 hours\n+ **0** - 24 hours\n+ **1** - 3 days",
+              "description": "Guarantee type.",
+              "x-enumDescriptions": {
+                "-1": "12 hours",
+                "0": "24 hours",
+                "1": "3 days"
+              },
               "enum": [
                 -1,
                 0,
@@ -49146,7 +49459,7 @@
         ],
         "summary": "Check Account Details",
         "description": "Check and put up to sale not published account OR update account information existing account.\n\n**If you receive a \"captcha\" error, that you should send same request again.**",
-        "operationId": "accountsPublishing.CheckDetails",
+        "operationId": "Publishing.Check",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -49243,7 +49556,7 @@
         ],
         "summary": "Get Temporary Mail",
         "description": "Get info about not published item. For categories, which required temporary email, you will get temporary email in response.",
-        "operationId": "accountsPublishing.getInfoNotPublic",
+        "operationId": "Publishing.Mail",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -49338,7 +49651,7 @@
         ],
         "summary": "Get Email Confirmation Code",
         "description": "Gets confirmation code or link.",
-        "operationId": "accountsManaging.getEmailCode",
+        "operationId": "Managing.EmailCode",
         "parameters": [
           {
             "name": "item_id",
@@ -49417,7 +49730,7 @@
         ],
         "summary": "Get Mafile",
         "description": "Returns steam mafile.\n> ❗️ This action is cancelling active account guarantee",
-        "operationId": "accountsManaging.getMafile",
+        "operationId": "Managing.SteamMafile",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -49559,7 +49872,7 @@
         ],
         "summary": "Remove Mafile",
         "description": "Remove steam mafile.\n> ❗️ This will unlink the authenticator from the account and remove mafile from the item",
-        "operationId": "accountsManaging.removeMafile",
+        "operationId": "Managing.SteamRemoveMafile",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50182,7 +50495,7 @@
         ],
         "summary": "Get Mafile Confirmation Code",
         "description": "Gets confirmation code from MaFile (Only for Steam accounts).",
-        "operationId": "accountsManaging.getMafileCode",
+        "operationId": "Managing.SteamMafileCode",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50225,7 +50538,7 @@
         ],
         "summary": "Confirm SDA",
         "description": "Confirm steam action. \n\n Don't set **id** and **nonce** parameters to get list of available confirmation requests. \n\n> ❗️ This action is cancelling active account guarantee",
-        "operationId": "accountsManaging.confirmSDA",
+        "operationId": "Managing.SteamSDA",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50279,7 +50592,7 @@
         ],
         "summary": "Get Telegram Confirmation Code",
         "description": "Gets confirmation code from Telegram.",
-        "operationId": "accountsManaging.getTelegramCode",
+        "operationId": "Managing.TelegramCode",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50346,7 +50659,7 @@
         ],
         "summary": "Telegram Reset Auth",
         "description": "Resets Telegram authorizations.",
-        "operationId": "accountsManaging.telegramResetAuth",
+        "operationId": "Managing.TelegramResetAuth",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50382,7 +50695,7 @@
         ],
         "summary": "Cancel Guarantee",
         "description": "Cancel guarantee of account. It can be useful for account reselling.",
-        "operationId": "accountsManaging.cancelGuarantee",
+        "operationId": "Managing.RefuseGuarantee",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50418,7 +50731,7 @@
         ],
         "summary": "Check Guarantee",
         "description": "Checks the guarantee and cancels it if there are reasons to cancel it.",
-        "operationId": "accountsManaging.checkGuarantee",
+        "operationId": "Managing.CheckGuarantee",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50475,7 +50788,7 @@
         ],
         "summary": "Change Password",
         "description": "Changes password of account.",
-        "operationId": "accountsManaging.changePassword",
+        "operationId": "Managing.ChangePassword",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50554,7 +50867,7 @@
         ],
         "summary": "Get Temp Email Password",
         "description": "Gets password from temp email of account. After calling of this method, the warranty will be cancelled and you cannot automatically resell account.",
-        "operationId": "accountsManaging.getPasswordEmail",
+        "operationId": "Managing.TempEmailPassword",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50616,7 +50929,7 @@
         ],
         "summary": "Tag Account",
         "description": "Adds tag for the account.",
-        "operationId": "accountsManaging.addTag",
+        "operationId": "Managing.Tag",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50673,7 +50986,7 @@
         ],
         "summary": "Untag Account",
         "description": "Deletes tag from the account.",
-        "operationId": "accountsManaging.deleteTag",
+        "operationId": "Managing.Untag",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50732,7 +51045,7 @@
         ],
         "summary": "Favorite",
         "description": "Adds account to favorites.",
-        "operationId": "accountsManaging.favorite",
+        "operationId": "Managing.Favorite",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50763,7 +51076,7 @@
         ],
         "summary": "Unfavorite",
         "description": "Delete account from favorites.",
-        "operationId": "accountsManaging.unfavorite",
+        "operationId": "Managing.Unfavorite",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50796,7 +51109,7 @@
         ],
         "summary": "Stick Account",
         "description": "Stick account in the top of search.",
-        "operationId": "accountsManaging.stick",
+        "operationId": "Managing.Stick",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50830,7 +51143,7 @@
         ],
         "summary": "Unstick Account",
         "description": "Unstick account from the top of search.",
-        "operationId": "accountsManaging.unstick",
+        "operationId": "Managing.Unstick",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50866,7 +51179,7 @@
         ],
         "summary": "Change Account Owner",
         "description": "Transfer account to another user.",
-        "operationId": "accountsManaging.changeOwner",
+        "operationId": "Managing.Transfer",
         "parameters": [
           {
             "$ref": "#/components/parameters/itemId"
@@ -50928,7 +51241,7 @@
         ],
         "summary": "Get Profile",
         "description": "Displays info about your profile.",
-        "operationId": "marketProfileSettings.getInfo",
+        "operationId": "Profile.Get",
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -51051,7 +51364,7 @@
         ],
         "summary": "Edit Market Settings",
         "description": "Change settings about your profile on the market.",
-        "operationId": "marketProfileSettings.getSettings",
+        "operationId": "Profile.Edit",
         "parameters": [
           {
             "name": "user_allow_ask_discount",
@@ -51295,6 +51608,624 @@
         ]
       }
     },
+    "/invoice": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get invoice",
+        "description": "Get invoice.",
+        "operationId": "Payments.Invoice.Get",
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "query",
+            "description": "Invoice ID.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "description": "Invoice ID."
+            }
+          },
+          {
+            "name": "payment_id",
+            "in": "query",
+            "description": "Payment ID.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "data": {
+                      "title": "Data",
+                      "type": "object",
+                      "properties": {
+                        "invoice_id": {
+                          "title": "Invoice",
+                          "type": "integer"
+                        },
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "merchant_id": {
+                          "title": "Merchant",
+                          "type": "integer"
+                        },
+                        "invoice_date": {
+                          "title": "Invoice",
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "title": "Expires",
+                          "type": "integer"
+                        },
+                        "amount": {
+                          "title": "Amount",
+                          "type": "integer"
+                        },
+                        "currency": {
+                          "title": "Currency",
+                          "type": "string"
+                        },
+                        "status": {
+                          "title": "Status",
+                          "type": "string"
+                        },
+                        "paid_date": {
+                          "title": "Paid",
+                          "type": "integer"
+                        },
+                        "payment_id": {
+                          "title": "Payment",
+                          "type": "string"
+                        },
+                        "additional_data": {
+                          "title": "Additional",
+                          "type": "string"
+                        },
+                        "comment": {
+                          "title": "Comment",
+                          "type": "string"
+                        },
+                        "url_success": {
+                          "title": "Url",
+                          "type": "string"
+                        },
+                        "url_callback": {
+                          "title": "Url",
+                          "type": "string"
+                        },
+                        "url": {
+                          "title": "Url",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "invoice_id",
+                        "user_id",
+                        "merchant_id",
+                        "invoice_date",
+                        "expires_at",
+                        "amount",
+                        "currency",
+                        "status",
+                        "paid_date",
+                        "payment_id",
+                        "additional_data",
+                        "comment",
+                        "url_success",
+                        "url_callback",
+                        "url"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "Invoice Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "title": "Errors",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Create invoice",
+        "description": "Create invoice.\nWhen an invoice is paid, a **POST** request with invoice data will be sent to the `url_callback` specified during invoice creation. This request includes an `x-secret-key` header containing your merchant token, which you **<u>must</u>** verify.",
+        "operationId": "Payments.Invoice.Create",
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency that will be used to create the invoice.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Invoice amount.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Amount",
+              "type": "number",
+              "description": "Invoice amount.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "payment_id",
+            "in": "query",
+            "description": "Payment ID in your system (must be unique within the merchant / invoices).",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Amount",
+              "type": "string",
+              "description": "Payment ID in your system (must be unique within the merchant / invoices)."
+            }
+          },
+          {
+            "name": "comment",
+            "in": "query",
+            "description": "Comment to the invoice.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Comment",
+              "type": "string",
+              "description": "Comment to the invoice."
+            }
+          },
+          {
+            "name": "url_success",
+            "in": "query",
+            "description": "URL to redirect to after successful payment.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "URL Success",
+              "type": "string",
+              "description": "URL to redirect to after successful payment."
+            }
+          },
+          {
+            "name": "url_callback",
+            "in": "query",
+            "description": "Callback url.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Callback URL",
+              "type": "string",
+              "description": "Callback url."
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "description": "Merchant ID.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Merchant ID",
+              "type": "integer",
+              "description": "Merchant ID."
+            }
+          },
+          {
+            "name": "lifetime",
+            "in": "query",
+            "description": "Invoice lifetime.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Lifetime",
+              "type": "number",
+              "description": "Invoice lifetime.",
+              "minimum": 300,
+              "maximum": 43200,
+              "default": 3600
+            }
+          },
+          {
+            "name": "additional_data",
+            "in": "query",
+            "description": "Additional information for you.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Additional Data",
+              "type": "string",
+              "description": "Additional information for you."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "invoice",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "invoice": {
+                      "title": "Invoice",
+                      "type": "object",
+                      "properties": {
+                        "invoice_id": {
+                          "title": "Invoice",
+                          "type": "integer"
+                        },
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "merchant_id": {
+                          "title": "Merchant",
+                          "type": "integer"
+                        },
+                        "invoice_date": {
+                          "title": "Invoice",
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "title": "Expires",
+                          "type": "integer"
+                        },
+                        "amount": {
+                          "title": "Amount",
+                          "type": "integer"
+                        },
+                        "currency": {
+                          "title": "Currency",
+                          "type": "string"
+                        },
+                        "status": {
+                          "title": "Status",
+                          "type": "string"
+                        },
+                        "paid_date": {
+                          "title": "Paid",
+                          "type": "integer"
+                        },
+                        "payment_id": {
+                          "title": "Payment",
+                          "type": "string"
+                        },
+                        "additional_data": {
+                          "title": "Additional",
+                          "type": "string"
+                        },
+                        "comment": {
+                          "title": "Comment",
+                          "type": "string"
+                        },
+                        "url_success": {
+                          "title": "Url",
+                          "type": "string"
+                        },
+                        "url_callback": {
+                          "title": "Url",
+                          "type": "string"
+                        },
+                        "url": {
+                          "title": "Url",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "invoice_id",
+                        "user_id",
+                        "merchant_id",
+                        "invoice_date",
+                        "expires_at",
+                        "amount",
+                        "currency",
+                        "status",
+                        "paid_date",
+                        "payment_id",
+                        "additional_data",
+                        "comment",
+                        "url_success",
+                        "url_callback",
+                        "url"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/invoice/list": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get invoice list",
+        "description": "Get invoice list.",
+        "operationId": "Payments.Invoice.List",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency of the created invoice.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status of the invoice.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "paid",
+                "not_paid"
+              ]
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Invoice amount.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Amount",
+              "type": "number",
+              "description": "Invoice amount.",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "description": "Merchant ID.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Merchant ID",
+              "type": "integer",
+              "description": "Merchant ID."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "invoices",
+                    "count",
+                    "page",
+                    "perPage",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "invoices": {
+                      "title": "Invoices",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "invoice_id": {
+                            "title": "Invoice",
+                            "type": "integer"
+                          },
+                          "user_id": {
+                            "title": "User",
+                            "type": "integer"
+                          },
+                          "merchant_id": {
+                            "title": "Merchant",
+                            "type": "integer"
+                          },
+                          "invoice_date": {
+                            "title": "Invoice",
+                            "type": "integer"
+                          },
+                          "expires_at": {
+                            "title": "Expires",
+                            "type": "integer"
+                          },
+                          "amount": {
+                            "title": "Amount",
+                            "type": "integer"
+                          },
+                          "currency": {
+                            "title": "Currency",
+                            "type": "string"
+                          },
+                          "status": {
+                            "title": "Status",
+                            "type": "string"
+                          },
+                          "paid_date": {
+                            "title": "Paid",
+                            "type": "integer"
+                          },
+                          "payment_id": {
+                            "title": "Payment",
+                            "type": "string"
+                          },
+                          "additional_data": {
+                            "title": "Additional",
+                            "type": "string"
+                          },
+                          "comment": {
+                            "title": "Comment",
+                            "type": "string"
+                          },
+                          "url_success": {
+                            "title": "Url",
+                            "type": "string"
+                          },
+                          "url_callback": {
+                            "title": "Url",
+                            "type": "string"
+                          },
+                          "url": {
+                            "title": "Url",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "invoice_id",
+                          "user_id",
+                          "merchant_id",
+                          "invoice_date",
+                          "expires_at",
+                          "amount",
+                          "currency",
+                          "status",
+                          "paid_date",
+                          "payment_id",
+                          "additional_data",
+                          "comment",
+                          "url_success",
+                          "url_callback",
+                          "url"
+                        ]
+                      }
+                    },
+                    "count": {
+                      "title": "Count",
+                      "type": "integer"
+                    },
+                    "page": {
+                      "title": "Page",
+                      "type": "integer"
+                    },
+                    "perPage": {
+                      "title": "Per Page",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/currency": {
       "get": {
         "tags": [
@@ -51302,7 +52233,7 @@
         ],
         "summary": "Get Currency",
         "description": "Get currency list.",
-        "operationId": "Balance.Payments.GetCurrency",
+        "operationId": "Payments.Currency",
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -53101,7 +54032,7 @@
         ],
         "summary": "Send Money",
         "description": "Send money to any user.\n\nThe web version additionally has a **redirect** parameter (After payment, there will be a redirect to the specified link).",
-        "operationId": "Balance.Payments.Send",
+        "operationId": "Payments.Transfer",
         "parameters": [
           {
             "name": "user_id",
@@ -53299,7 +54230,7 @@
         ],
         "summary": "Check Transfer Fee",
         "description": "Get transfer limits and get fee amount for transfer.",
-        "operationId": "Balance.Payments.Fee",
+        "operationId": "Payments.Fee",
         "parameters": [
           {
             "name": "amount",
@@ -53389,7 +54320,7 @@
         ],
         "summary": "Cancel Transfer",
         "description": "Cancels a transfer with a hold that was sent to your account.",
-        "operationId": "Balance.Payments.Cancel",
+        "operationId": "Payments.Cancel",
         "parameters": [
           {
             "name": "payment_id",
@@ -53429,7 +54360,7 @@
         ],
         "summary": "Payments History",
         "description": "Displays list of your payments.",
-        "operationId": "Balance.Payments.History",
+        "operationId": "Payments.History",
         "parameters": [
           {
             "name": "type",
@@ -53453,7 +54384,8 @@
                 "receiving_money",
                 "internal_purchase",
                 "claim_hold",
-                "insurance_deposit"
+                "insurance_deposit",
+                "invoice"
               ]
             }
           },
@@ -53983,7 +54915,7 @@
         ],
         "summary": "Get Proxy",
         "description": "Gets your proxy list.",
-        "operationId": "proxySettings.get",
+        "operationId": "Proxy.Get",
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -54079,7 +55011,7 @@
         ],
         "summary": "Add Proxy",
         "description": "Add single proxy or proxy list.\n\n\nTo add single proxy use this parameters:\n\n\n+ **proxy_ip** (required) - proxy ip or host\n+ **proxy_port** (required) - proxy port\n+ **proxy_user** (optional) - proxy username\n+ **proxy_pass** (optional) - proxy password\n\nTo add proxy list use this parameters:\n\n\n+ **proxy_row** (required) - proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\n separator)",
-        "operationId": "proxySettings.add",
+        "operationId": "Proxy.Add",
         "parameters": [
           {
             "name": "proxy_ip",
@@ -54192,7 +55124,7 @@
         ],
         "summary": "Delete Proxy",
         "description": "Delete single or all proxies.",
-        "operationId": "proxySettings.delete",
+        "operationId": "Proxy.Delete",
         "parameters": [
           {
             "name": "proxy_id",
@@ -54268,7 +55200,7 @@
         ],
         "summary": "Batch",
         "description": "Execute multiple API requests at once (Separated by comma). Maximum batch jobs is 10.",
-        "operationId": "batchRequests.execute",
+        "operationId": "Batch",
         "requestBody": {
           "content": {
             "application/json": {
@@ -54446,7 +55378,12 @@
             ]
           },
           "system": {
-            "description": "Supercell system. Required if you want to upload Supercell account.\n+ laser - Brawl Stars\n+ scroll - Clash Royale\n+ magic - Clash of Clans",
+            "description": "Supercell system. Required if you want to upload Supercell account.",
+            "x-enumDescriptions": {
+              "laser": "Brawl Stars",
+              "scroll": "Clash Royale",
+              "magic": "Clash of Clans"
+            },
             "title": "System",
             "type": "string",
             "enum": [
@@ -54603,7 +55540,6 @@
       "CurrencyModel": {
         "title": "Currency",
         "type": "string",
-        "description": "Using currency.",
         "enum": [
           "rub",
           "uah",
@@ -54613,7 +55549,9 @@
           "eur",
           "gbp",
           "cny",
-          "try"
+          "try",
+          "jpy",
+          "brl"
         ]
       },
       "DatePeriodModel": {
@@ -57239,6 +58177,9 @@
               "personal",
               "resale",
               "autoreg",
+              "self_registration",
+              "retrieve",
+              "retrieve_via_support",
               "dummy"
             ]
           }
@@ -57316,20 +58257,7 @@
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Currency",
-          "type": "string",
-          "description": "Currency in which the cost of the account will be searched.",
-          "enum": [
-            "rub",
-            "uah",
-            "kzt",
-            "byn",
-            "usd",
-            "eur",
-            "gbp",
-            "cny",
-            "try"
-          ]
+          "$ref": "#/components/schemas/CurrencyModel"
         }
       },
       "email_login_data": {
@@ -57428,14 +58356,25 @@
       "app_id": {
         "name": "app_id",
         "in": "query",
-        "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+        "description": "Application id.",
         "required": false,
         "style": "form",
         "explode": true,
         "schema": {
           "title": "App Id",
           "type": "integer",
-          "description": "Application id.\n+ 730 - CS2\n+ 578080 - PUBG\n+ 753 - Steam\n+ 570 - Dota 2\n+ 440 - Team Fortress 2\n+ 252490 - Rust\n+ 304930 - Unturned\n+ 232090 - Killing Floor 2\n+ 322330 - Don't Starve Together",
+          "description": "Application id.",
+          "x-enumDescriptions": {
+            "730": "CS2",
+            "578080": "PUBG",
+            "753": "Steam",
+            "570": "Dota 2",
+            "440": "Team Fortress 2",
+            "252490": "Rust",
+            "304930": "Unturned",
+            "232090": "Killing Floor 2",
+            "322330": "Don't Starve Together"
+          },
           "enum": [
             730,
             578080,
@@ -57505,7 +58444,7 @@
       "category_id": {
         "name": "category_id",
         "in": "query",
-        "description": "Accounts category.\n+ 1 - Steam\n+ 3 - Origin\n+ 4 - Warface\n+ 5 - Uplay\n+ 6 - ChatGPT\n+ 7 - Social Club\n+ 9 - Fortnite\n+ 10 - Instagram\n+ 11 - Battlenet\n+ 12 - Epic Games\n+ 13 - Riot\n+ 14 - World Of Tanks\n+ 15 - Supercell\n+ 16 - WOT Blitz\n+ 17 - miHoYo\n+ 18 - Escape From Tarkov\n+ 19 - VPN\n+ 20 - Tiktok\n+ 22 - Discord\n+ 23 - Cinema\n+ 24 - Telegram\n+ 26 - Spotify\n+ 27 - War Thunder\n+ 28 - Minecraft\n+ 30 - Gifts\n+ 31 - Roblox",
+        "description": "Accounts category.",
         "required": false,
         "style": "form",
         "explode": true,
@@ -57513,6 +58452,34 @@
           "title": "Category Id",
           "type": "integer",
           "description": "Accounts category.",
+          "x-enumDescriptions": {
+            "1": "Steam",
+            "3": "Origin",
+            "4": "Warface",
+            "5": "Uplay",
+            "6": "ChatGPT",
+            "7": "Social Club",
+            "9": "Fortnite",
+            "10": "Instagram",
+            "11": "Battlenet",
+            "12": "Epic Games",
+            "13": "Riot",
+            "14": "World Of Tanks",
+            "15": "Supercell",
+            "16": "WOT Blitz",
+            "17": "miHoYo",
+            "18": "Escape From Tarkov",
+            "19": "VPN",
+            "20": "Tiktok",
+            "22": "Discord",
+            "23": "Cinema",
+            "24": "Telegram",
+            "26": "Spotify",
+            "27": "War Thunder",
+            "28": "Minecraft",
+            "30": "Gifts",
+            "31": "Roblox"
+          },
           "enum": [
             1,
             3,
