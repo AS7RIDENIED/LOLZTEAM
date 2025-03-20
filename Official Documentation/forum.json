@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.8a"
+    "version": "1.1.9"
   },
   "servers": [
     {
@@ -914,12 +914,8 @@
                 "properties": {
                   "post": {
                     "title": "Post",
-                    "type": "integer",
-                    "description": "Whether to receive notification for post **1** or just thread **0**.",
-                    "enum": [
-                      1,
-                      0
-                    ]
+                    "type": "boolean",
+                    "description": "Whether to receive notification for post."
                   },
                   "alert": {
                     "title": "Alert",
@@ -2556,14 +2552,23 @@
           {
             "name": "reply_group",
             "in": "query",
-            "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+            "description": "Allow to reply only users with chosen or higher group.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Reply group",
               "type": "integer",
-              "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+              "description": "Allow to reply only users with chosen or higher group.",
+              "x-enumDescriptions": {
+                "0": "Only staff members and curators can reply in thread",
+                "2": "Everyone can reply in thread",
+                "21": "Local and higher can reply in thread",
+                "22": "Resident or higher can reply in thread",
+                "23": "Expert or higher can reply in thread",
+                "60": "Guru and higher can reply in thread",
+                "351": "Artificial Intelligence and higher can reply in thread"
+              },
               "default": 2,
               "enum": [
                 0,
@@ -2858,14 +2863,22 @@
           {
             "name": "prize_data_upgrade",
             "in": "query",
-            "description": "Which upgrade will each winner receive. Required if **prize_type** is **upgrades**.\n+ 1 - Supreme - 3 months.\n+ 6 - Legend - 12 months.\n+ 12 - AntiPublic.One Plus subscription - 1 month.\n+ 14 - Uniq - lifetime.\n+ 17 - 18+ Photo leaks - 6 months.\n+ 19 - Auto giveaway participation - 1 month.",
+            "description": "Which upgrade will each winner receive. Required if **prize_type** is **upgrades**.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Prize Data Upgrade",
               "type": "integer",
-              "description": "Which upgrade will each winner receive. Required if **prize_type** is **upgrades**.\n+ 1 - Supreme - 3 months.\n+ 6 - Legend - 12 months.\n+ 12 - AntiPublic.One Plus subscription - 1 month.\n+ 14 - Uniq - lifetime.\n+ 17 - 18+ Photo leaks - 6 months.\n+ 19 - Auto giveaway participation - 1 month.",
+              "description": "Which upgrade will each winner receive. Required if **prize_type** is **upgrades**.",
+              "x-enumDescriptions": {
+                "1": "Supreme - 3 months",
+                "6": "Legend - 12 months",
+                "12": "AntiPublic.One Plus subscription - 1 month",
+                "14": "Uniq - lifetime",
+                "17": "18+ Photo leaks - 6 months",
+                "19": "Auto giveaway participation - 1 month"
+              },
               "enum": [
                 1,
                 6,
@@ -2934,14 +2947,23 @@
           {
             "name": "reply_group",
             "in": "query",
-            "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+            "description": "Allow to reply only users with chosen or higher group.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Reply group",
               "type": "integer",
-              "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+              "description": "Allow to reply only users with chosen or higher group.",
+              "x-enumDescriptions": {
+                "0": "Only staff members and curators can reply in thread",
+                "2": "Everyone can reply in thread",
+                "21": "Local and higher can reply in thread",
+                "22": "Resident or higher can reply in thread",
+                "23": "Expert or higher can reply in thread",
+                "60": "Guru and higher can reply in thread",
+                "351": "Artificial Intelligence and higher can reply in thread"
+              },
               "default": 2,
               "enum": [
                 0,
@@ -3291,14 +3313,23 @@
           {
             "name": "reply_group",
             "in": "query",
-            "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+            "description": "Allow to reply only users with chosen or higher group.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Reply group",
               "type": "integer",
-              "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+              "description": "Allow to reply only users with chosen or higher group.",
+              "x-enumDescriptions": {
+                "0": "Only staff members and curators can reply in thread",
+                "2": "Everyone can reply in thread",
+                "21": "Local and higher can reply in thread",
+                "22": "Resident or higher can reply in thread",
+                "23": "Expert or higher can reply in thread",
+                "60": "Guru and higher can reply in thread",
+                "351": "Artificial Intelligence and higher can reply in thread"
+              },
               "default": 2,
               "enum": [
                 0,
@@ -3573,14 +3604,23 @@
           {
             "name": "reply_group",
             "in": "query",
-            "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+            "description": "Allow to reply only users with chosen or higher group.",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Reply group",
               "type": "integer",
-              "description": "Allow to reply only users with chosen or higher group.\n+ **0** - Only staff members and curators can reply in thread.\n+ **2** - Everyone can reply in thread.\n+ **21** - Local and higher can reply in thread.\n+ **22** - Resident or higher can reply in thread.\n+ **23** - Expert or higher can reply in thread.\n+ **60** -  Guru and higher can reply in thread.\n+ **351** - Artificial Intelligence and higher can reply in thread.",
+              "description": "Allow to reply only users with chosen or higher group.",
+              "x-enumDescriptions": {
+                "0": "Only staff members and curators can reply in thread",
+                "2": "Everyone can reply in thread",
+                "21": "Local and higher can reply in thread",
+                "22": "Resident or higher can reply in thread",
+                "23": "Expert or higher can reply in thread",
+                "60": "Guru and higher can reply in thread",
+                "351": "Artificial Intelligence and higher can reply in thread"
+              },
               "enum": [
                 0,
                 2,
@@ -21439,6 +21479,18 @@
             "explode": false,
             "schema": {
               "type": "integer",
+              "x-enumDescriptions": {
+                "1": "[Russian] Chat",
+                "2": "General chat",
+                "3": "[Russian] Market chat",
+                "4": "Market chat",
+                "8": "Newbie chat",
+                "9": "[Russian] Marketplace",
+                "10": "Marketplace",
+                "11": "[Russian] ChatGPT",
+                "12": "ChatGPT",
+                "13": "No whiners"
+              },
               "enum": [
                 1,
                 2,
@@ -21448,7 +21500,8 @@
                 9,
                 10,
                 11,
-                12
+                12,
+                13
               ]
             }
           }
@@ -21603,6 +21656,18 @@
             "explode": false,
             "schema": {
               "type": "integer",
+              "x-enumDescriptions": {
+                "1": "[Russian] Chat",
+                "2": "General chat",
+                "3": "[Russian] Market chat",
+                "4": "Market chat",
+                "8": "Newbie chat",
+                "9": "[Russian] Marketplace",
+                "10": "Marketplace",
+                "11": "[Russian] ChatGPT",
+                "12": "ChatGPT",
+                "13": "No whiners"
+              },
               "enum": [
                 1,
                 2,
@@ -21779,6 +21844,18 @@
             "explode": false,
             "schema": {
               "type": "integer",
+              "x-enumDescriptions": {
+                "1": "[Russian] Chat",
+                "2": "General chat",
+                "3": "[Russian] Market chat",
+                "4": "Market chat",
+                "8": "Newbie chat",
+                "9": "[Russian] Marketplace",
+                "10": "Marketplace",
+                "11": "[Russian] ChatGPT",
+                "12": "ChatGPT",
+                "13": "No whiners"
+              },
               "enum": [
                 1,
                 2,
@@ -22151,7 +22228,7 @@
         },
         "responses": {
           "200": {
-            "$ref":"#/components/responses/SaveChanges"
+            "$ref": "#/components/responses/SaveChanges"
           }
         },
         "security": [
@@ -22186,7 +22263,7 @@
         ],
         "responses": {
           "200": {
-            "$ref":"#/components/responses/SaveChanges"
+            "$ref": "#/components/responses/SaveChanges"
           }
         },
         "security": [
@@ -22219,7 +22296,7 @@
         ],
         "responses": {
           "200": {
-            "$ref":"#/components/responses/SaveChanges"
+            "$ref": "#/components/responses/SaveChanges"
           }
         },
         "security": [
@@ -22462,6 +22539,784 @@
           {
             "HTTPBearer": [
               "read"
+            ]
+          }
+        ]
+      }
+    },
+    "/forms": {
+      "get": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "Get Forms List",
+        "description": "Get Forms List",
+        "operationId": "Forms.List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of forms.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Page",
+              "type": "integer",
+              "description": "Page number of forms."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "forms",
+                    "formsPerPage",
+                    "page",
+                    "totalForms",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "forms": {
+                      "title": "Forms",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "form_id": {
+                            "title": "Form",
+                            "type": "integer"
+                          },
+                          "title": {
+                            "title": "Title",
+                            "type": "string"
+                          },
+                          "description": {
+                            "title": "Description",
+                            "type": "string"
+                          },
+                          "fields": {
+                            "title": "Fields",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "field_id": {
+                                  "title": "Field",
+                                  "type": "integer"
+                                },
+                                "title": {
+                                  "title": "Title",
+                                  "type": "string"
+                                },
+                                "fieldChoices": {
+                                  "title": "Field Choices",
+                                  "type": "object",
+                                  "properties": {
+                                    "buy": {
+                                      "title": "Buy",
+                                      "type": "string"
+                                    },
+                                    "sell": {
+                                      "title": "Sell",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "buy",
+                                    "sell"
+                                  ]
+                                },
+                                "required": {
+                                  "title": "Required",
+                                  "type": "integer"
+                                },
+                                "max_length": {
+                                  "title": "Max",
+                                  "type": "integer"
+                                },
+                                "default_value": {
+                                  "title": "Default",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "field_id",
+                                "title",
+                                "fieldChoices",
+                                "required",
+                                "max_length",
+                                "default_value"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "form_id",
+                          "title",
+                          "description",
+                          "fields"
+                        ]
+                      }
+                    },
+                    "formsPerPage": {
+                      "title": "Forms Per Page",
+                      "type": "integer"
+                    },
+                    "page": {
+                      "title": "Page",
+                      "type": "integer"
+                    },
+                    "totalForms": {
+                      "title": "Total Forms",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read"
+            ]
+          }
+        ]
+      }
+    },
+    "/forms/save": {
+      "post": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "Create Form",
+        "description": "Create Form",
+        "operationId": "Forms.Create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "description": "P2P trade",
+                    "properties": {
+                      "fields": {
+                        "type": "object",
+                        "properties": {
+                          "8": {
+                            "type": "number",
+                            "description": "Amount to be sent."
+                          },
+                          "11": {
+                            "type": "number",
+                            "description": "Amount to be received."
+                          },
+                          "15": {
+                            "type": "string",
+                            "enum": [
+                              "market",
+                              "ru_1",
+                              "ru_2",
+                              "ru_3",
+                              "ru_4",
+                              "ru_5",
+                              "ru_6",
+                              "ru_7",
+                              "ru_8",
+                              "ru_9",
+                              "ru_10",
+                              "ru_11",
+                              "ua_1",
+                              "ua_2",
+                              "ua_3",
+                              "ua_4",
+                              "ua_5",
+                              "ua_6",
+                              "ua_7",
+                              "ua_8",
+                              "kz_1",
+                              "kz_2",
+                              "kz_3",
+                              "kz_4",
+                              "kz_5",
+                              "kz_6",
+                              "kz_7",
+                              "kz_8",
+                              "by_1",
+                              "by_2",
+                              "by_3",
+                              "by_4",
+                              "by_5",
+                              "by_6",
+                              "by_7",
+                              "by_8",
+                              "by_9",
+                              "sbp",
+                              "cr_1",
+                              "cr_2",
+                              "cr_3",
+                              "cr_4",
+                              "cr_5",
+                              "cr_6",
+                              "cr_7",
+                              "cr_8",
+                              "cr_12",
+                              "cr_9",
+                              "cr_10",
+                              "cr_11",
+                              "ot_1",
+                              "ot_2",
+                              "ot_3",
+                              "ot_4",
+                              "cr_13",
+                              "by_10"
+                            ],
+                            "x-enumDescriptions": {
+                              "market": "Market",
+                              "ru_1": "T-Bank",
+                              "ru_2": "Sberbank",
+                              "ru_3": "Alfa-Bank",
+                              "ru_4": "VTB Bank",
+                              "ru_5": "Raiffeisenbank",
+                              "ru_6": "MTS Bank",
+                              "ru_7": "Rosselkhozbank",
+                              "ru_8": "Gazprombank",
+                              "ru_9": "Sovcombank",
+                              "ru_10": "Promsvyazbank",
+                              "ru_11": "YooMoney",
+                              "ua_1": "PrivatBank",
+                              "ua_2": "Monobank",
+                              "ua_3": "PUMB",
+                              "ua_4": "Oschadbank",
+                              "ua_5": "A-Bank",
+                              "ua_6": "Raiffeisen Bank",
+                              "ua_7": "IziBank",
+                              "ua_8": "AccordBank",
+                              "kz_1": "Kaspi Bank",
+                              "kz_2": "Halyk Bank",
+                              "kz_3": "CenterCredit Bank",
+                              "kz_4": "Jysan Bank",
+                              "kz_5": "Forte Bank",
+                              "kz_6": "Altyn Bank",
+                              "kz_7": "Bank RBK",
+                              "kz_8": "Bereke Bank",
+                              "by_1": "MTBank",
+                              "by_2": "Priorbank",
+                              "by_3": "Paritetbank",
+                              "by_4": "CashU",
+                              "by_5": "Bank Solution",
+                              "by_6": "BSB Bank",
+                              "by_7": "BTA Bank",
+                              "by_8": "Statusbank",
+                              "by_9": "Belarusbank",
+                              "sbp": "SBP",
+                              "cr_1": "CryptoBot",
+                              "cr_2": "Ethereum",
+                              "cr_3": "Bitcoin",
+                              "cr_4": "TRON",
+                              "cr_5": "TON",
+                              "cr_6": "Litecoin",
+                              "cr_7": "USDT TRC20",
+                              "cr_8": "USDT ERC20",
+                              "cr_12": "USDT BEP20",
+                              "cr_9": "Monero",
+                              "cr_10": "Solana",
+                              "cr_11": "BNB",
+                              "ot_1": "PayPal",
+                              "ot_2": "Payoneer",
+                              "ot_3": "Payeer",
+                              "ot_4": "WebMoney",
+                              "cr_13": "Bitpapa",
+                              "by_10": "Alfa-Bank"
+                            },
+                            "description": "Where from."
+                          },
+                          "16": {
+                            "type": "string",
+                            "enum": [
+                              "rub",
+                              "dollar",
+                              "euro",
+                              "uah",
+                              "tenge",
+                              "byn"
+                            ],
+                            "description": "Currency where from."
+                          },
+                          "17": {
+                            "type": "string",
+                            "enum": [
+                              "market",
+                              "ru_1",
+                              "ru_2",
+                              "ru_3",
+                              "ru_4",
+                              "ru_5",
+                              "ru_6",
+                              "ru_7",
+                              "ru_8",
+                              "ru_9",
+                              "ru_10",
+                              "ru_11",
+                              "ua_1",
+                              "ua_2",
+                              "ua_3",
+                              "ua_4",
+                              "ua_5",
+                              "ua_6",
+                              "ua_7",
+                              "ua_8",
+                              "kz_1",
+                              "kz_2",
+                              "kz_3",
+                              "kz_4",
+                              "kz_5",
+                              "kz_6",
+                              "kz_7",
+                              "kz_8",
+                              "by_1",
+                              "by_2",
+                              "by_3",
+                              "by_4",
+                              "by_5",
+                              "by_6",
+                              "by_7",
+                              "by_8",
+                              "by_9",
+                              "sbp",
+                              "cr_1",
+                              "cr_2",
+                              "cr_3",
+                              "cr_4",
+                              "cr_5",
+                              "cr_6",
+                              "cr_7",
+                              "cr_8",
+                              "cr_12",
+                              "cr_9",
+                              "cr_10",
+                              "cr_11",
+                              "ot_1",
+                              "ot_2",
+                              "ot_3",
+                              "ot_4",
+                              "cr_13",
+                              "by_10"
+                            ],
+                            "x-enumDescriptions": {
+                              "market": "Market",
+                              "ru_1": "T-Bank",
+                              "ru_2": "Sberbank",
+                              "ru_3": "Alfa-Bank",
+                              "ru_4": "VTB Bank",
+                              "ru_5": "Raiffeisenbank",
+                              "ru_6": "MTS Bank",
+                              "ru_7": "Rosselkhozbank",
+                              "ru_8": "Gazprombank",
+                              "ru_9": "Sovcombank",
+                              "ru_10": "Promsvyazbank",
+                              "ru_11": "YooMoney",
+                              "ua_1": "PrivatBank",
+                              "ua_2": "Monobank",
+                              "ua_3": "PUMB",
+                              "ua_4": "Oschadbank",
+                              "ua_5": "A-Bank",
+                              "ua_6": "Raiffeisen Bank",
+                              "ua_7": "IziBank",
+                              "ua_8": "AccordBank",
+                              "kz_1": "Kaspi Bank",
+                              "kz_2": "Halyk Bank",
+                              "kz_3": "CenterCredit Bank",
+                              "kz_4": "Jysan Bank",
+                              "kz_5": "Forte Bank",
+                              "kz_6": "Altyn Bank",
+                              "kz_7": "Bank RBK",
+                              "kz_8": "Bereke Bank",
+                              "by_1": "MTBank",
+                              "by_2": "Priorbank",
+                              "by_3": "Paritetbank",
+                              "by_4": "CashU",
+                              "by_5": "Bank Solution",
+                              "by_6": "BSB Bank",
+                              "by_7": "BTA Bank",
+                              "by_8": "Statusbank",
+                              "by_9": "Belarusbank",
+                              "sbp": "SBP",
+                              "cr_1": "CryptoBot",
+                              "cr_2": "Ethereum",
+                              "cr_3": "Bitcoin",
+                              "cr_4": "TRON",
+                              "cr_5": "TON",
+                              "cr_6": "Litecoin",
+                              "cr_7": "USDT TRC20",
+                              "cr_8": "USDT ERC20",
+                              "cr_12": "USDT BEP20",
+                              "cr_9": "Monero",
+                              "cr_10": "Solana",
+                              "cr_11": "BNB",
+                              "ot_1": "PayPal",
+                              "ot_2": "Payoneer",
+                              "ot_3": "Payeer",
+                              "ot_4": "WebMoney",
+                              "cr_13": "Bitpapa",
+                              "by_10": "Alfa-Bank"
+                            },
+                            "description": "Where to."
+                          },
+                          "18": {
+                            "type": "string",
+                            "enum": [
+                              "rub",
+                              "dollar",
+                              "euro",
+                              "uah",
+                              "tenge",
+                              "byn"
+                            ],
+                            "description": "Currency where to."
+                          }
+                        },
+                        "required": [
+                          "8",
+                          "11",
+                          "15",
+                          "16",
+                          "17",
+                          "18"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "description": "Complaint",
+                    "properties": {
+                      "fields": {
+                        "type": "object",
+                        "properties": {
+                          "22": {
+                            "type": "string",
+                            "description": "Offender's nickname"
+                          },
+                          "23": {
+                            "type": "string",
+                            "enum": [
+                              "cp_re_1",
+                              "cp_re_2",
+                              "cp_re_3",
+                              "cp_re_4",
+                              "cp_re_5",
+                              "cp_re_6",
+                              "cp_re_7",
+                              "cp_re_8",
+                              "cp_re_9",
+                              "cp_re_10",
+                              "cp_re_11",
+                              "cp_re_12",
+                              "cp_re_13",
+                              "cp_re_other"
+                            ],
+                            "x-enumDescriptions": {
+                              "cp_re_1": "Scammer's multi-account",
+                              "cp_re_2": "Farm",
+                              "cp_re_3": "Spam",
+                              "cp_re_4": "Report abuse",
+                              "cp_re_5": "Rejection of middleman",
+                              "cp_re_6": "Inadequate behavior",
+                              "cp_re_7": "Sympathy cheating",
+                              "cp_re_8": "Hacked",
+                              "cp_re_9": "Harmful Software",
+                              "cp_re_10": "Fake review",
+                              "cp_re_11": "Deanonymization",
+                              "cp_re_12": "Scam attempt",
+                              "cp_re_13": "Arbitration",
+                              "cp_re_other": "Other"
+                            },
+                            "description": "Complaint reason"
+                          },
+                          "24": {
+                            "type": "string",
+                            "description": "Complaint description"
+                          },
+                          "27": {
+                            "type": "string",
+                            "description": "Complaint reason / Other"
+                          },
+                          "28": {
+                            "type": "string",
+                            "description": "Moderator's nickname"
+                          },
+                          "29": {
+                            "type": "string",
+                            "description": "Link to appealed complaint"
+                          },
+                          "30": {
+                            "type": "string",
+                            "description": "Thread title"
+                          }
+                        },
+                        "required": [
+                          "24"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "content",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "content": {
+                      "title": "Content",
+                      "type": "object",
+                      "properties": {
+                        "thread_id": {
+                          "title": "Thread",
+                          "type": "integer"
+                        },
+                        "forum_id": {
+                          "title": "Forum",
+                          "type": "integer"
+                        },
+                        "thread_title": {
+                          "title": "Thread",
+                          "type": "string"
+                        },
+                        "thread_view_count": {
+                          "title": "Thread",
+                          "type": "integer"
+                        },
+                        "creator_user_id": {
+                          "title": "Creator",
+                          "type": "integer"
+                        },
+                        "creator_username": {
+                          "title": "Creator",
+                          "type": "string"
+                        },
+                        "creator_username_html": {
+                          "title": "Creator",
+                          "type": "string"
+                        },
+                        "thread_create_date": {
+                          "title": "Thread",
+                          "type": "integer"
+                        },
+                        "thread_update_date": {
+                          "title": "Thread",
+                          "type": "integer"
+                        },
+                        "user_is_ignored": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "thread_post_count": {
+                          "title": "Thread",
+                          "type": "integer"
+                        },
+                        "thread_is_published": {
+                          "title": "Thread",
+                          "type": "boolean"
+                        },
+                        "thread_is_deleted": {
+                          "title": "Thread",
+                          "type": "boolean"
+                        },
+                        "thread_is_sticky": {
+                          "title": "Thread",
+                          "type": "boolean"
+                        },
+                        "thread_is_closed": {
+                          "title": "Thread",
+                          "type": "boolean"
+                        },
+                        "thread_is_followed": {
+                          "title": "Thread",
+                          "type": "boolean"
+                        },
+                        "thread_prefixes": {
+                          "title": "Thread",
+                          "type": "array",
+                          "items": {}
+                        },
+                        "thread_tags": {
+                          "title": "Thread",
+                          "type": "array",
+                          "items": {}
+                        },
+                        "links": {
+                          "title": "Links",
+                          "type": "object",
+                          "properties": {
+                            "permalink": {
+                              "title": "Permalink",
+                              "type": "string"
+                            },
+                            "detail": {
+                              "title": "Detail",
+                              "type": "string"
+                            },
+                            "followers": {
+                              "title": "Followers",
+                              "type": "string"
+                            },
+                            "forum": {
+                              "title": "Forum",
+                              "type": "string"
+                            },
+                            "posts": {
+                              "title": "Posts",
+                              "type": "string"
+                            },
+                            "first_poster": {
+                              "title": "First",
+                              "type": "string"
+                            },
+                            "first_poster_avatar": {
+                              "title": "First",
+                              "type": "string"
+                            },
+                            "first_post": {
+                              "title": "First",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "permalink",
+                            "detail",
+                            "followers",
+                            "forum",
+                            "posts",
+                            "first_poster",
+                            "first_poster_avatar",
+                            "first_post"
+                          ]
+                        },
+                        "permissions": {
+                          "title": "Permissions",
+                          "type": "object",
+                          "properties": {
+                            "view": {
+                              "title": "View",
+                              "type": "boolean"
+                            },
+                            "delete": {
+                              "title": "Delete",
+                              "type": "boolean"
+                            },
+                            "follow": {
+                              "title": "Follow",
+                              "type": "boolean"
+                            },
+                            "post": {
+                              "title": "Post",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "view",
+                            "delete",
+                            "follow",
+                            "post"
+                          ]
+                        },
+                        "node_title": {
+                          "title": "Node",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "thread_id",
+                        "forum_id",
+                        "thread_title",
+                        "thread_view_count",
+                        "creator_user_id",
+                        "creator_username",
+                        "creator_username_html",
+                        "thread_create_date",
+                        "thread_update_date",
+                        "user_is_ignored",
+                        "thread_post_count",
+                        "thread_is_published",
+                        "thread_is_deleted",
+                        "thread_is_sticky",
+                        "thread_is_closed",
+                        "thread_is_followed",
+                        "thread_prefixes",
+                        "thread_tags",
+                        "links",
+                        "permissions",
+                        "node_title"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Form Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "title": "Errors",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
             ]
           }
         ]
