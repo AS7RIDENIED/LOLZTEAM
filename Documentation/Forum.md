@@ -136,6 +136,9 @@
   * [Ignored](#ignored-1)
   * [Ignore](#ignore-1)
   * [Unignore](#unignore-1)
+* [Forms](#forms)
+  * [List](#list-14)
+  * [Create](#create-8)
 * [Navigation](#navigation-1)
 * [Batch](#batch)
 
@@ -725,7 +728,7 @@ GET https://api.zelenka.guru/threads
 - **page** (int): Page.
 - **limit** (int): Limit of threads.
 - **order** (str): Order of threads.
-- **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. 
+- **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
 
 **Example:**
 
@@ -2311,6 +2314,53 @@ DELETE https://api.zelenka.guru/chatbox/ignore
 
 ```python
 response = forum.chat.unignore(user_id=2410024)
+print(response.json())
+```
+
+
+# Forms
+
+## List
+
+GET https://api.zelenka.guru/forms
+
+*Get Forms list.*
+
+**Parameters:**
+
+- **page** (int): Page.
+
+**Example:**
+
+```python
+response = forum.forms.list()
+print(response.json())
+```
+
+
+## Create
+
+GET https://api.zelenka.guru/forms/save
+
+*Create thread by form.*
+
+**Parameters:**
+
+- **form_id** (int): Form ID.
+- **fields** (dict[str, str]): Form fields.
+
+**Example:**
+
+```python
+response = forum.forms.create(form_id=1, fields={
+    "7": "sell",
+    "8": 0,
+    "11": 0,
+    "15": "market",
+    "16": "rub",
+    "17": "market",
+    "18": "rub"
+})
 print(response.json())
 ```
 

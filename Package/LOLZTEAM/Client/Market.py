@@ -108,10 +108,10 @@ class Market(APIClient):
                 - **origin** (list): List of account origins.
                 - **not_origin** (list): List of account origins that won't be included.
                 - **order_by** (str): Item order.
-                - **sold_before** (bool): Sold before.
-                - **sold_before_by_me** (bool): Sold before by me.
-                - **not_sold_before** (bool): Not sold before.
-                - **not_sold_before_by_me** (bool): Not sold before by me.
+                - **sb** (bool): Sold before.
+                - **sb_by_me** (bool): Sold before by me.
+                - **nsb** (bool): Not sold before.
+                - **nsb_by_me** (bool): Not sold before by me.
                 - ****kwargs** (any): Any additional search parameters.
 
                 **Example:**
@@ -139,8 +139,7 @@ class Market(APIClient):
                 print(response.json())
                 ```
                 """
-                self.core.__categoryEndpoint = self.endpoint
-                return await self.core.request("GET", self.core.__categoryEndpoint + "/params")
+                return await self.core.request("GET", self.endpoint + "/params")
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(3)
@@ -157,8 +156,7 @@ class Market(APIClient):
                 print(response.json())
                 ```
                 """
-                self.core.__categoryEndpoint = self.endpoint
-                return await self.core.request("GET", self.core.__categoryEndpoint + "/games")
+                return await self.core.request("GET", self.endpoint + "/games")
 
         class __Latest(__BaseCategory):
             def __init__(self, core: "Market"):
@@ -1595,7 +1593,7 @@ class Market(APIClient):
             - **max_discount_percent** (float): Max discount percent.
             - **disable_steam_guard** (bool): Disable steam guard.
             - **deauthorize_steam** (bool): Deauthorize steam.
-            - **change_password_on_purchase** (bool): Change password on purchase.
+            - **change_password_on_purchase** (bool): Change Steam password after purchase (voids warranty on items with .maFile if disabled).
             - **hide_favorites** (bool): Hide favorites.
             - **show_too_low_price_change_warning** (bool): Show too low price change warning.
             - **allow_transfer_accounts_from** (list[str]): Allow transfer accounts from.
@@ -1637,8 +1635,153 @@ class Market(APIClient):
             return await self.core.request("POST", "/me", json=json)
 
     class __Payments:
+        class __Invoice:
+            def __init__(self, core: "Market"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def list(self,
+                           amount: float = NONE,
+                           status: Literal["paid", "not_paid"] = NONE,
+                           currency: Constants.Market.Currency._Literal = NONE,
+                           merchant_id: int = NONE,
+                           page: int = NONE) -> Response:
+                """
+                GET https://api.lzt.market/invoice/list
+
+                *Get list of your invoices.*
+
+                **Parameters:**
+
+                - **amount** (float): Invoice amount.
+                - **status** (str): Invoice status.
+                - **currency** (str): Invoice currency.
+                - **merchant_id** (int): Merchant ID.
+                - **page** (int): Page.
+
+                **Example:**
+
+                ```python
+                response = market.payments.invoice.list(status="paid")
+                print(response.json())
+                ```
+                """
+                params = {
+                    "amount": amount,
+                    "status": status,
+                    "currency": currency,
+                    "merchant_id": merchant_id,
+                    "page": page
+                }
+                return await self.core.request("GET", "/invoice/list", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def get(self, invoice_id: int = NONE, payment_id: str = NONE) -> Response:
+                """
+                GET https://api.lzt.market/invoice
+
+                *Get invoice.*
+
+                **Parameters:**
+
+                - **invoice_id** (int): Invoice ID.
+                - **payment_id** (str): Payment ID.
+
+                **Example:**
+
+                ```python
+                response = market.payments.invoice.get(invoice_id=1)
+                print(response.json())
+                ```
+                """
+                params = {
+                    "invoice_id": invoice_id,
+                    "payment_id": payment_id
+                }
+                return await self.core.request("GET", "/invoice", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def create(
+                    self,
+                    amount: float,
+                    currency: Constants.Market.Currency._Literal,
+                    payment_id: str,
+                    comment: str,
+                    url_success: str,
+                    merchant_id: int,
+                    url_callback: str = NONE,
+                    lifetime: int = NONE,
+                    additional_data: str = NONE
+            ) -> Response:
+                """
+                POST https://api.lzt.market/invoice
+
+                *Create invoice.*
+
+                **Parameters:**
+
+                - **currency** (str): Currency that will be used to create the invoice.
+                - **amount** (float): Invoice amount (≥ 0).
+                - **payment_id** (str): Payment ID in your system (must be unique within the merchant / invoices).
+                - **comment** (str): Comment to the invoice.
+                - **url_success** (str): URL to redirect to after successful payment.
+                - **merchant_id** (int): Merchant ID.
+                - **url_callback** (str): Callback url.
+                - **lifetime** (int): Invoice lifetime (300 to 43200, defaults to 3600).
+                - **additional_data** (str): Additional information for you.
+
+                **Example:**
+
+                ```python
+                response = market.payments.invoice.create(
+                    currency="rub",
+                    amount=150,
+                    payment_id="0000001",
+                    comment="10x amount of some goods | #0000001",
+                    url_success="https://lolz.live/account/ban",
+                    url_callback="https://yourweb.site/callback/0000001",
+                    lifetime=300,
+                    merchant_id=1
+                )
+                print(response.json())
+                ```
+                """
+                params = {
+                    "currency": currency,
+                    "amount": amount,
+                    "payment_id": payment_id,
+                    "comment": comment,
+                    "url_success": url_success,
+                    "url_callback": url_callback,
+                    "merchant_id": merchant_id,
+                    "lifetime": lifetime,
+                    "additional_data": additional_data
+                }
+                return await self.core.request("POST", "/invoice", params=params)
+
         def __init__(self, core: "Market"):
             self.core = core
+            self.invoice = self.__Invoice(self)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
+        async def currency(self) -> Response:
+            """
+            GET https://api.lzt.market/currency
+
+            *Get currency.*
+
+            **Example:**
+
+            ```python
+            response = market.payments.currency()
+            print(response.json())
+            ```
+            """
+            return await self.core.request("GET", "/currency")
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)

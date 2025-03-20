@@ -173,13 +173,18 @@
   * [Get](#get-29)
   * [Edit](#edit-1)
 * [Payments](#payments)
+  * [Invoice](#invoice)
+    * [List](#list-2)
+    * [Get](#get-30)
+    * [Create](#create)
+  * [Currency](#currency)
   * [Transfer](#transfer-1)
   * [Fee](#fee)
   * [Cancel](#cancel-1)
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-30)
+  * [Get](#get-31)
   * [Add](#add-1)
   * [Delete](#delete-1)
 * [Batch](#batch)
@@ -257,10 +262,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -316,10 +321,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -375,10 +380,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -434,10 +439,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -493,10 +498,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -552,10 +557,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -611,10 +616,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -670,10 +675,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -729,10 +734,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -788,10 +793,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -847,10 +852,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -906,10 +911,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -965,10 +970,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1024,10 +1029,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1083,10 +1088,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1142,10 +1147,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1201,10 +1206,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1260,10 +1265,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1319,10 +1324,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1378,10 +1383,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1437,10 +1442,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1496,10 +1501,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1555,10 +1560,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1614,10 +1619,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1673,10 +1678,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1732,10 +1737,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -1791,10 +1796,10 @@ GET https://api.lzt.market/CATEGORY_NAME
 - **origin** (list): List of account origins.
 - **not_origin** (list): List of account origins that won't be included.
 - **order_by** (str): Item order.
-- **sold_before** (bool): Sold before.
-- **sold_before_by_me** (bool): Sold before by me.
-- **not_sold_before** (bool): Not sold before.
-- **not_sold_before_by_me** (bool): Not sold before by me.
+- **sb** (bool): Sold before.
+- **sb_by_me** (bool): Sold before by me.
+- **nsb** (bool): Not sold before.
+- **nsb_by_me** (bool): Not sold before by me.
 - ****kwargs** (any): Any additional search parameters.
 
 **Example:**
@@ -2759,7 +2764,7 @@ POST https://api.lzt.market/me
 - **max_discount_percent** (float): Max discount percent.
 - **disable_steam_guard** (bool): Disable steam guard.
 - **deauthorize_steam** (bool): Deauthorize steam.
-- **change_password_on_purchase** (bool): Change password on purchase.
+- **change_password_on_purchase** (bool): Change Steam password after purchase (voids warranty on items with .maFile if disabled).
 - **hide_favorites** (bool): Hide favorites.
 - **show_too_low_price_change_warning** (bool): Show too low price change warning.
 - **allow_transfer_accounts_from** (list[str]): Allow transfer accounts from.
@@ -2779,6 +2784,98 @@ print(response.json())
 
 
 # Payments
+
+## Invoice
+
+### List
+
+GET https://api.lzt.market/invoice/list
+
+*Get list of your invoices.*
+
+**Parameters:**
+
+- **amount** (float): Invoice amount.
+- **status** (str): Invoice status.
+- **currency** (str): Invoice currency.
+- **merchant_id** (int): Merchant ID.
+- **page** (int): Page.
+
+**Example:**
+
+```python
+response = market.payments.invoice.list(status="paid")
+print(response.json())
+```
+
+
+### Get
+
+GET https://api.lzt.market/invoice
+
+*Get invoice.*
+
+**Parameters:**
+
+- **invoice_id** (int): Invoice ID.
+- **payment_id** (str): Payment ID.
+
+**Example:**
+
+```python
+response = market.payments.invoice.get(invoice_id=1)
+print(response.json())
+```
+
+
+### Create
+
+POST https://api.lzt.market/invoice
+
+*Create invoice.*
+
+**Parameters:**
+
+- **currency** (str): Currency that will be used to create the invoice.
+- **amount** (float): Invoice amount (≥ 0).
+- **payment_id** (str): Payment ID in your system (must be unique within the merchant / invoices).
+- **comment** (str): Comment to the invoice.
+- **url_success** (str): URL to redirect to after successful payment.
+- **merchant_id** (int): Merchant ID.
+- **url_callback** (str): Callback url.
+- **lifetime** (int): Invoice lifetime (300 to 43200, defaults to 3600).
+- **additional_data** (str): Additional information for you.
+
+**Example:**
+
+```python
+response = market.payments.invoice.create(
+    currency="rub",
+    amount=150,
+    payment_id="0000001",
+    comment="10x amount of some goods | #0000001",
+    url_success="https://lolz.live/account/ban",
+    url_callback="https://yourweb.site/callback/0000001",
+    lifetime=300,
+    merchant_id=1
+)
+print(response.json())
+```
+
+
+## Currency
+
+GET https://api.lzt.market/currency
+
+*Get currency.*
+
+**Example:**
+
+```python
+response = market.payments.currency()
+print(response.json())
+```
+
 
 ## Transfer
 

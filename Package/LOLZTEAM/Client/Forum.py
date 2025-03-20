@@ -89,6 +89,7 @@ class Forum(APIClient):
         self.tags = self.__Tags(self)
         self.search = self.__Search(self)
         self.chat = self.__Chat(self)
+        self.forms = self.__Forms(self)
 
     class __Categories:
         def __init__(self, core: "Forum"):
@@ -2995,6 +2996,64 @@ class Forum(APIClient):
             """
             params = {"user_id": user_id}
             return await self.core.request("DELETE", "/chatbox/ignore", params=params)
+
+    class __Forms:
+        def __init__(self, core: "Forum"):
+            self.core = core
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(3)
+        async def list(self, page: int = NONE) -> Response:
+            """
+            GET https://api.zelenka.guru/forms
+
+            *Get Forms list.*
+
+            **Parameters:**
+
+            - **page** (int): Page.
+
+            **Example:**
+
+            ```python
+            response = forum.forms.list()
+            print(response.json())
+            ```
+            """
+            params = {"page": page}
+            return await self.core.request("GET", "/forms", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(3)
+        async def create(self, form_id: int, fields: dict[str, str]) -> Response:
+            """
+            GET https://api.zelenka.guru/forms/save
+
+            *Create thread by form.*
+
+            **Parameters:**
+
+            - **form_id** (int): Form ID.
+            - **fields** (dict[str, str]): Form fields.
+
+            **Example:**
+
+            ```python
+            response = forum.forms.create(form_id=1, fields={
+                "7": "sell",
+                "8": 0,
+                "11": 0,
+                "15": "market",
+                "16": "rub",
+                "17": "market",
+                "18": "rub"
+            })
+            print(response.json())
+            ```
+            """
+            params = {"form_id": form_id}
+            json = {"fields": fields}
+            return await self.core.request("GET", "/forms/save", params=params, json=json)
 
     @UNIVERSAL(batchable=True)
     @AutoDelay.WrapperSet(3)
