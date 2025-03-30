@@ -69,7 +69,7 @@ class Forum(APIClient):
         ```
         """
         super().__init__(
-            base_url="https://api.zelenka.guru",
+            base_url="https://prod-api.zelenka.guru",
             token=token,
             language=language,
             delay_min=delay_min,
@@ -96,7 +96,7 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
             GET https://api.zelenka.guru/categories
@@ -120,7 +120,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/categories", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, category_id: int) -> Response:
             """
             GET https://api.zelenka.guru/categories/{category_id}
@@ -145,7 +145,7 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
             GET https://api.zelenka.guru/forums
@@ -169,7 +169,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forums", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, forum_id: int) -> Response:
             """
             GET https://api.zelenka.guru/forums/{forum_id}
@@ -190,7 +190,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/forums/{forum_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def followers(self, forum_id: int) -> Response:
             """
             GET https://api.zelenka.guru/forums/{forum_id}/followers
@@ -211,7 +211,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/forums/{forum_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def followed(self, total: bool = NONE) -> Response:
             """
             GET https://api.zelenka.guru/forums/followed
@@ -233,7 +233,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forums/followed", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def follow(self, forum_id: int,
                          post: bool = NONE,
                          alert: bool = NONE,
@@ -264,7 +264,7 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/forums/{forum_id}/followers", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def unfollow(self, forum_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/forums/{forum_id}/followers
@@ -289,7 +289,7 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self) -> Response:
             """
             GET https://api.zelenka.guru/pages
@@ -306,7 +306,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/pages")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, page_id: int) -> Response:
             """
             GET https://api.zelenka.guru/pages/{page_id}
@@ -339,7 +339,7 @@ class Forum(APIClient):
                     self.core = core
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(3)
+                @AutoDelay.WrapperSet(0.5)
                 async def create_by_time(
                     self,
                     post_body: str,
@@ -436,7 +436,7 @@ class Forum(APIClient):
                     return await self.core.request("POST", "/threads", json=json)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(3)
+                @AutoDelay.WrapperSet(0.5)
                 async def create_by_count(
                     self,
                     post_body: str,
@@ -523,7 +523,7 @@ class Forum(APIClient):
                     self.core = core
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(3)
+                @AutoDelay.WrapperSet(0.5)
                 async def create_by_time(
                     self,
                     post_body: str,
@@ -613,7 +613,7 @@ class Forum(APIClient):
                     return await self.core.request("POST", "/threads", json=json)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(3)
+                @AutoDelay.WrapperSet(0.5)
                 async def create_by_count(
                     self,
                     post_body: str,
@@ -701,7 +701,7 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def market(
                 self,
                 responder: str,
@@ -765,7 +765,7 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/claims", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def non_market(
                 self,
                 responder: str,
@@ -845,7 +845,7 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def get(self, thread_id: int) -> Response:
                 """
                 GET https://api.zelenka.guru/threads/{thread_id}/poll
@@ -866,7 +866,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/threads/{thread_id}/poll")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def vote(self, thread_id: int, option_ids: Union[builtins.list[int], int]) -> Response:
                 """
                 POST https://api.zelenka.guru/threads/{thread_id}/poll/votes
@@ -895,7 +895,7 @@ class Forum(APIClient):
             self.arbitrage = self.__Arbitrage(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list_unread(self, forum_id: int = NONE,
                               limit: int = NONE,
                               data_limit: int = NONE) -> Response:
@@ -921,7 +921,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/threads/new", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list_recent(self, days: int = NONE,
                               forum_id: int = NONE,
                               limit: int = NONE,
@@ -949,7 +949,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/threads/recent", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, forum_id: int,
                        user_id: int = NONE,
                        prefix_id: int = NONE,
@@ -989,7 +989,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/threads", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, thread_id: int) -> Response:
             """
             GET https://api.zelenka.guru/threads/{thread_id}
@@ -1010,7 +1010,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/threads/{thread_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def create(self, forum_id: int,
                          post_body: str,
                          title: str = NONE,
@@ -1084,7 +1084,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/threads", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def edit(self, thread_id: int,
                        title: str = NONE,
                        title_en: str = NONE,
@@ -1146,7 +1146,7 @@ class Forum(APIClient):
             return await self.core.request("PUT", f"/threads/{thread_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def delete(self, thread_id: int, reason: str = NONE) -> Response:
             """
             DELETE https://api.zelenka.guru/threads/{thread_id}
@@ -1169,7 +1169,7 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/threads/{thread_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def bump(self, thread_id: int) -> Response:
             """
             POST https://api.zelenka.guru/threads/{thread_id}/bump
@@ -1190,7 +1190,7 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/threads/{thread_id}/bump")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def move(self, thread_id: int, forum_id: int, title: str = NONE, title_en: str = NONE, prefix_ids: builtins.list[int] = NONE, send_alert: bool = NONE) -> Response:
             """
             POST https://api.zelenka.guru/threads/{thread_id}/move
@@ -1224,7 +1224,7 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/threads/{thread_id}/move", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def followers(self, thread_id: int) -> Response:
             """
             GET https://api.zelenka.guru/threads/{thread_id}/followers
@@ -1245,7 +1245,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/threads/{thread_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def followed(self, thread_id: int, total: bool = NONE) -> Response:
             """
             GET https://api.zelenka.guru/threads/{thread_id}/followed
@@ -1268,7 +1268,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/threads/{thread_id}/followed", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def follow(self, thread_id: int, email: bool = NONE) -> Response:
             """
             POST https://api.zelenka.guru/threads/{thread_id}/followers
@@ -1291,7 +1291,7 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/threads/{thread_id}/followers", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def unfollow(self, thread_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/threads/{thread_id}/followers
@@ -1312,7 +1312,7 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/threads/{thread_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def navigation(self, thread_id: int) -> Response:
             """
             GET https://api.zelenka.guru/threads/{thread_id}/navigation
@@ -1338,7 +1338,7 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def list(self, post_id: int, before_comment: int = NONE, before: int = NONE) -> Response:
                 """
                 GET https://api.zelenka.guru/posts/{post_id}/comments
@@ -1362,7 +1362,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/posts/{post_id}/comments", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def create(self, post_id: int, post_body: str) -> Response:
                 """
                 POST https://api.zelenka.guru/posts/{post_id}/comments
@@ -1389,7 +1389,7 @@ class Forum(APIClient):
             self.comments = self.__Comments(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, thread_id: int = NONE, post_id: int = NONE, page: int = NONE, limit: int = NONE, order: Constants.Forum.PostOrder._Literal = NONE) -> Response:
             """
             GET https://api.zelenka.guru/posts
@@ -1415,7 +1415,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/posts", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, post_id: int) -> Response:
             """
             GET https://api.zelenka.guru/posts/{post_id}
@@ -1436,7 +1436,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/posts/{post_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def create(self, post_body: str, thread_id: int = NONE, quote_post_id: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/posts
@@ -1460,7 +1460,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/posts", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def edit(self, post_id: int, post_body: str = NONE) -> Response:
             """
             PUT https://api.zelenka.guru/posts/{post_id}
@@ -1483,7 +1483,7 @@ class Forum(APIClient):
             return await self.core.request("PUT", f"/posts/{post_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def delete(self, post_id: int, reason: str = NONE) -> Response:
             """
             DELETE https://api.zelenka.guru/posts/{post_id}
@@ -1506,7 +1506,7 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/posts/{post_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def likes(self, post_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/posts/{post_id}/likes
@@ -1530,7 +1530,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/posts/{post_id}/likes", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def like(self, post_id: int) -> Response:
             """
             POST https://api.zelenka.guru/posts/{post_id}/likes
@@ -1551,7 +1551,7 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/posts/{post_id}/likes")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def unlike(self, post_id: int) -> Response:
             """
             DELETE https://api.zelenka.guru/posts/{post_id}/likes
@@ -1572,7 +1572,7 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/posts/{post_id}/likes")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def report(self, post_id: int, reason: str = NONE) -> Response:
             """
             POST https://api.zelenka.guru/posts/{post_id}/report
@@ -1600,7 +1600,7 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=False)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
                 POST https://api.zelenka.guru/users/me/avatar
@@ -1629,7 +1629,7 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/users/me/avatar", files=files, json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def delete(self) -> Response:
                 """
                 DELETE https://api.zelenka.guru/users/me/avatar
@@ -1646,7 +1646,7 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", "/users/me/avatar")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
                 POST https://api.zelenka.guru/users/me/avatar/crop
@@ -1675,7 +1675,7 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=False)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
                 POST https://api.zelenka.guru/users/me/background
@@ -1704,7 +1704,7 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/users/me/background", files=files, json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def delete(self) -> Response:
                 """
                 DELETE https://api.zelenka.guru/users/me/background
@@ -1721,7 +1721,7 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", "/users/me/background")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
                 POST https://api.zelenka.guru/users/me/background/crop
@@ -1751,7 +1751,7 @@ class Forum(APIClient):
                     self.core = core
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(3)
+                @AutoDelay.WrapperSet(0.5)
                 async def list(self, post_id: int, before: int = NONE, limit: int = NONE) -> Response:
                     """
                     GET https://api.zelenka.guru/profile-posts/{post_id}/comments
@@ -1775,7 +1775,7 @@ class Forum(APIClient):
                     return await self.core.request("GET", f"/profile-posts/{post_id}/comments", params=params)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(3)
+                @AutoDelay.WrapperSet(0.5)
                 async def get(self, post_id: int, comment_id: int) -> Response:
                     """
                     GET https://api.zelenka.guru/profile-posts/{post_id}/comments/{comment_id}
@@ -1797,7 +1797,7 @@ class Forum(APIClient):
                     return await self.core.request("GET", f"/profile-posts/{post_id}/comments/{comment_id}")
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(3)
+                @AutoDelay.WrapperSet(0.5)
                 async def create(self, post_id: int, post_body: str) -> Response:
                     """
                     POST https://api.zelenka.guru/profile-posts/{post_id}/comments
@@ -1824,7 +1824,7 @@ class Forum(APIClient):
                 self.comments = self.__Comments(self.core)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def list(self, user_id: Union[int, str], page: int = NONE, limit: int = NONE) -> Response:
                 """
                 GET https://api.zelenka.guru/users/{user_id}/profile-posts
@@ -1848,7 +1848,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/users/{user_id}/profile-posts", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def get(self, post_id: int) -> Response:
                 """
                 GET https://api.zelenka.guru/profile-posts/{post_id}
@@ -1869,7 +1869,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/profile-posts/{post_id}")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def create(self, user_id: Union[int, str], post_body: str) -> Response:
                 """
                 POST https://api.zelenka.guru/users/{user_id}/profile-posts
@@ -1892,7 +1892,7 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/users/{user_id}/profile-posts", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def edit(self, post_id: int, post_body: str = NONE) -> Response:
                 """
                 PUT https://api.zelenka.guru/profile-posts/{post_id}
@@ -1915,7 +1915,7 @@ class Forum(APIClient):
                 return await self.core.request("PUT", f"/profile-posts/{post_id}", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def delete(self, post_id: int, reason: str = NONE) -> Response:
                 """
                 DELETE https://api.zelenka.guru/profile-posts/{post_id}
@@ -1938,7 +1938,7 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", f"/profile-posts/{post_id}", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def likes(self, post_id: int) -> Response:
                 """
                 GET https://api.zelenka.guru/profile-posts/{post_id}/likes
@@ -1959,7 +1959,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/profile-posts/{post_id}/likes")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def like(self, post_id: int) -> Response:
                 """
                 POST https://api.zelenka.guru/profile-posts/{post_id}/likes
@@ -1976,7 +1976,7 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/profile-posts/{post_id}/likes")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def unlike(self, post_id: int) -> Response:
                 """
                 DELETE https://api.zelenka.guru/profile-posts/{post_id}/likes
@@ -1999,7 +1999,7 @@ class Forum(APIClient):
             self.profile_posts = self.__Profile_Posts(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/users
@@ -2022,7 +2022,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def search(self, username: str = NONE, fields: dict[str, str] = NONE) -> Response:
             """
             GET https://api.zelenka.guru/users/find
@@ -2048,7 +2048,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users/find", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, user_id: Union[int, str] = "me") -> Response:
             """
             GET https://api.zelenka.guru/users/{user_id}
@@ -2069,7 +2069,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def edit(self, title: str = NONE, display_group_id: Constants.Forum.User.GroupID._Literal = NONE, dob: tuple[int, int, int] = NONE, fields: dict[str, str] = NONE) -> Response:
             """
             PUT https://api.zelenka.guru/users/me
@@ -2098,7 +2098,7 @@ class Forum(APIClient):
             return await self.core.request("PUT", "/users/me", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def fields(self) -> Response:
             """
             GET https://api.zelenka.guru/users/fields
@@ -2115,7 +2115,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users/fields")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def followers(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/followers
@@ -2140,7 +2140,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}/followers", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def followed(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/followings
@@ -2165,7 +2165,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}/followings", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def follow(self, user_id: Union[int, str]) -> Response:
             """
             POST https://api.zelenka.guru/users/{user_id}/followers
@@ -2182,7 +2182,7 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/users/{user_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def unfollow(self, user_id: Union[int, str]) -> Response:
             """
             DELETE https://api.zelenka.guru/users/{user_id}/followers
@@ -2199,7 +2199,7 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/users/{user_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def ignored(self) -> Response:
             """
             GET https://api.zelenka.guru/users/ignored
@@ -2216,7 +2216,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users/ignored")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def ignore(self, user_id: Union[int, str]) -> Response:
             """
             POST https://api.zelenka.guru/users/{user_id}/ignore
@@ -2233,7 +2233,7 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/users/{user_id}/ignore")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def unignore(self, user_id: Union[int, str]) -> Response:
             """
             DELETE https://api.zelenka.guru/users/{user_id}/ignore
@@ -2250,7 +2250,7 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/users/{user_id}/ignore")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def content(self, user_id: Union[int, str] = "me", page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/users/{user_id}/timeline
@@ -2273,7 +2273,7 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def list(self,
                            conversation_id: int,
                            page: int = NONE,
@@ -2295,7 +2295,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/conversation-messages", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def get(self, message_id: int) -> Response:
                 """
                 GET https://api.zelenka.guru/conversation-messages/{message_id}
@@ -2316,7 +2316,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/conversation-messages/{message_id}")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def create(self, conversation_id: int, message: str) -> Response:
                 """
                 POST https://api.zelenka.guru/conversation-messages
@@ -2339,7 +2339,7 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/conversation-messages", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def edit(self, message_id: int, message: str) -> Response:
                 """
                 PUT https://api.zelenka.guru/conversation-messages/{message_id}
@@ -2366,7 +2366,7 @@ class Forum(APIClient):
             self.messages = self.__Messages(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/conversations
@@ -2389,7 +2389,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/conversations", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, conversation_id: int) -> Response:
             """
             GET https://api.zelenka.guru/conversations/{conversation_id}
@@ -2410,7 +2410,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/conversations/{conversation_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def create(self, user_id: int, message: str) -> Response:
             """
             POST https://api.zelenka.guru/conversations
@@ -2433,7 +2433,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/conversations", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def create_group(self,
                                usernames: builtins.list[str],
                                message: str,
@@ -2482,7 +2482,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/conversations", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def leave(self, conversation_id: int, leave_type: Literal["delete", "delete_ignore"] = "delete") -> Response:
             """
             DELETE https://api.zelenka.guru/conversations/{conversation_id}
@@ -2509,7 +2509,7 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self) -> Response:
             """
             GET https://api.zelenka.guru/notifications
@@ -2526,7 +2526,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/notifications")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, notification_id: int) -> Response:
             """
             GET https://api.zelenka.guru/notifications/{notification_id}
@@ -2547,7 +2547,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/notifications/{notification_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def read(self, notification_id: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/notifications/read
@@ -2573,7 +2573,7 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/tags/list
@@ -2596,7 +2596,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/tags/list", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, tag_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/tags/{tag_id}
@@ -2620,7 +2620,7 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/tags/{tag_id}", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def popular(self) -> Response:
             """
             GET https://api.zelenka.guru/tags/popular
@@ -2637,7 +2637,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/tags/popular")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def search(self, tag: str) -> Response:
             """
             GET https://api.zelenka.guru/tags/find
@@ -2663,7 +2663,7 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def all(self, query: str = NONE, user_id: int = NONE, tag: str = NONE, forum_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/search
@@ -2690,7 +2690,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def threads(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/search/threads
@@ -2715,7 +2715,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search/threads", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/search/posts
@@ -2740,7 +2740,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search/posts", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def profile_posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/search/profile-posts
@@ -2765,7 +2765,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search/profile-posts", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def tagged(self, tag: str = NONE, tags: list[str] = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/search/tagged
@@ -2795,7 +2795,7 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def list(self, room_id: int) -> Response:
                 """
                 GET https://api.zelenka.guru/chatbox/messages
@@ -2817,7 +2817,7 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/chatbox/messages", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def create(self, room_id: int, message: str) -> Response:
                 """
                 POST https://api.zelenka.guru/chatbox/message
@@ -2841,7 +2841,7 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/chatbox/message", params=params, json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def edit(self, message_id: int, message: str) -> Response:
                 """
                 PUT https://api.zelenka.guru/chatbox/message
@@ -2865,7 +2865,7 @@ class Forum(APIClient):
                 return await self.core.request("PUT", "/chatbox/message", params=params, json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def delete(self, message_id: int) -> Response:
                 """
                 DELETE https://api.zelenka.guru/chatbox/message
@@ -2887,7 +2887,7 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", "/chatbox/message", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.5)
             async def report(self, message_id: int, reason: str) -> Response:
                 """
                 POST https://api.zelenka.guru/chatbox/report
@@ -2915,7 +2915,7 @@ class Forum(APIClient):
             self.messages = self.__Messages(core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def get(self, room_id: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/chatbox
@@ -2937,7 +2937,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/chatbox", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def ignored(self) -> Response:
             """
             GET https://api.zelenka.guru/chatbox/ignored
@@ -2954,7 +2954,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/chatbox/ignored")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def ignore(self, user_id: int = NONE) -> Response:
             """
             POST https://api.zelenka.guru/chatbox/ignore
@@ -2976,7 +2976,7 @@ class Forum(APIClient):
             return await self.core.request("POST", "/chatbox/ignore", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def unignore(self, user_id: int = NONE) -> Response:
             """
             DELETE https://api.zelenka.guru/chatbox/ignore
@@ -3002,7 +3002,7 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE) -> Response:
             """
             GET https://api.zelenka.guru/forms
@@ -3024,7 +3024,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forms", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.5)
         async def create(self, form_id: int, fields: dict[str, str]) -> Response:
             """
             GET https://api.zelenka.guru/forms/save
@@ -3041,12 +3041,13 @@ class Forum(APIClient):
             ```python
             response = forum.forms.create(form_id=1, fields={
                 "7": "sell",
-                "8": 0,
-                "11": 0,
+                "8": 100,
+                "11": 99,
                 "15": "market",
                 "16": "rub",
-                "17": "market",
-                "18": "rub"
+                "17": "SBP",
+                "18": "rub",
+                "14": "Note to the exchange"
             })
             print(response.json())
             ```
@@ -3056,7 +3057,7 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forms/save", params=params, json=json)
 
     @UNIVERSAL(batchable=True)
-    @AutoDelay.WrapperSet(3)
+    @AutoDelay.WrapperSet(0.5)
     async def navigation(self, parent: int = NONE) -> Response:
         """
         GET https://api.zelenka.guru/navigation
@@ -3078,7 +3079,7 @@ class Forum(APIClient):
         return await self.core.request("GET", "/navigation", params=params)
 
     @UNIVERSAL(batchable=False)
-    @AutoDelay.WrapperSet(3)
+    @AutoDelay.WrapperSet(0.5)
     async def batch(self, jobs: list[dict[str, str]]) -> Response:
         """
         POST https://api.zelenka.guru/batch

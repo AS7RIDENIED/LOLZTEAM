@@ -67,7 +67,7 @@ class Market(APIClient):
         ```
         """
         super().__init__(
-            base_url="https://api.lzt.market",
+            base_url="https://prod-api.lzt.market",
             token=token,
             language=language,
             delay_min=delay_min,
