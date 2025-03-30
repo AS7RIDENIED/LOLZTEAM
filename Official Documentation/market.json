@@ -3,11 +3,11 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.58"
+    "version": "1.1.58a"
   },
   "servers": [
     {
-      "url": "https://api.lzt.market",
+      "url": "https://prod-api.lzt.market",
       "description": "Production."
     }
   ],
@@ -240,7 +240,7 @@
             "explode": true,
             "schema": {
               "title": "Extended Guarantee",
-              "type": "integer", 
+              "type": "integer",
               "description": "Guarantee type.",
               "enum": [
                 -1,
@@ -249,7 +249,7 @@
               ],
               "x-enumDescriptions": {
                 "-1": "12 hours",
-                "0": "24 hours", 
+                "0": "24 hours",
                 "1": "3 days"
               }
             }
@@ -3687,7 +3687,6 @@
             "name": "cs2_map_rank",
             "in": "query",
             "description": "Map for rank in CS2.",
-            
             "required": false,
             "style": "form",
             "explode": true,
@@ -3710,20 +3709,20 @@
                 13
               ],
               "x-enumDescriptions": {
-              "1": "Dust II",
-              "2": "Mirage", 
-              "3": "Train",
-              "4": "Nuke",
-              "5": "Overpass",
-              "6": "Inferno",
-              "7": "Ancient",
-              "8": "Vertigo",
-              "9": "Anubis",
-              "10": "Office",
-              "11": "Thera",
-              "12": "Mills",
-              "13": "Italy"
-            }
+                "1": "Dust II",
+                "2": "Mirage",
+                "3": "Train",
+                "4": "Nuke",
+                "5": "Overpass",
+                "6": "Inferno",
+                "7": "Ancient",
+                "8": "Vertigo",
+                "9": "Anubis",
+                "10": "Office",
+                "11": "Thera",
+                "12": "Mills",
+                "13": "Italy"
+              }
             }
           },
           {
@@ -5087,7 +5086,7 @@
               "x-enumDescriptions": {
                 "-1": "12 hours",
                 "0": "24 hours",
-                "1": "3 days", 
+                "1": "3 days",
                 "2": "Guarantee at the time of purchase"
               },
               "enum": [
@@ -5096,7 +5095,6 @@
                 1,
                 2
               ]
-              
             }
           },
           {
@@ -15486,11 +15484,11 @@
               "description": "Minimum valorant rank.",
               "x-enumDescriptions": {
                 "3": "Iron 1",
-                "4": "Iron 2", 
+                "4": "Iron 2",
                 "5": "Iron 3",
                 "6": "Bronze 1",
                 "7": "Bronze 2",
-                "8": "Bronze 3", 
+                "8": "Bronze 3",
                 "9": "Silver 1",
                 "10": "Silver 2",
                 "11": "Silver 3",
@@ -15528,11 +15526,11 @@
               "description": "Maximum valorant rank.",
               "x-enumDescriptions": {
                 "3": "Iron 1",
-                "4": "Iron 2", 
+                "4": "Iron 2",
                 "5": "Iron 3",
                 "6": "Bronze 1",
                 "7": "Bronze 2",
-                "8": "Bronze 3", 
+                "8": "Bronze 3",
                 "9": "Silver 1",
                 "10": "Silver 2",
                 "11": "Silver 3",
@@ -15552,7 +15550,8 @@
                 "25": "Immortal 2",
                 "26": "Immortal 3",
                 "27": "Radiant"
-              },"minimum": 3,
+              },
+              "minimum": 3,
               "maximum": 27
             }
           },
@@ -15569,11 +15568,11 @@
               "description": "Last minimum valorant rank.",
               "x-enumDescriptions": {
                 "3": "Iron 1",
-                "4": "Iron 2", 
+                "4": "Iron 2",
                 "5": "Iron 3",
                 "6": "Bronze 1",
                 "7": "Bronze 2",
-                "8": "Bronze 3", 
+                "8": "Bronze 3",
                 "9": "Silver 1",
                 "10": "Silver 2",
                 "11": "Silver 3",
@@ -15593,7 +15592,8 @@
                 "25": "Immortal 2",
                 "26": "Immortal 3",
                 "27": "Radiant"
-              },"minimum": 3,
+              },
+              "minimum": 3,
               "maximum": 27
             }
           },
@@ -15610,11 +15610,11 @@
               "description": "Last maximum valorant rank.",
               "x-enumDescriptions": {
                 "3": "Iron 1",
-                "4": "Iron 2", 
+                "4": "Iron 2",
                 "5": "Iron 3",
                 "6": "Bronze 1",
                 "7": "Bronze 2",
-                "8": "Bronze 3", 
+                "8": "Bronze 3",
                 "9": "Silver 1",
                 "10": "Silver 2",
                 "11": "Silver 3",
@@ -15634,7 +15634,8 @@
                 "25": "Immortal 2",
                 "26": "Immortal 3",
                 "27": "Radiant"
-              },"minimum": 3,
+              },
+              "minimum": 3,
               "maximum": 27
             }
           },
@@ -15650,11 +15651,11 @@
               "type": "integer",
               "x-enumDescriptions": {
                 "3": "Iron 1",
-                "4": "Iron 2", 
+                "4": "Iron 2",
                 "5": "Iron 3",
                 "6": "Bronze 1",
                 "7": "Bronze 2",
-                "8": "Bronze 3", 
+                "8": "Bronze 3",
                 "9": "Silver 1",
                 "10": "Silver 2",
                 "11": "Silver 3",
@@ -15674,7 +15675,8 @@
                 "25": "Immortal 2",
                 "26": "Immortal 3",
                 "27": "Radiant"
-              },"description": "Previous minimum rank."
+              },
+              "description": "Previous minimum rank."
             }
           },
           {
@@ -15689,11 +15691,11 @@
               "type": "integer",
               "x-enumDescriptions": {
                 "3": "Iron 1",
-                "4": "Iron 2", 
+                "4": "Iron 2",
                 "5": "Iron 3",
                 "6": "Bronze 1",
                 "7": "Bronze 2",
-                "8": "Bronze 3", 
+                "8": "Bronze 3",
                 "9": "Silver 1",
                 "10": "Silver 2",
                 "11": "Silver 3",
@@ -15713,7 +15715,8 @@
                 "25": "Immortal 2",
                 "26": "Immortal 3",
                 "27": "Radiant"
-              },"description": "Previous maximum rank."
+              },
+              "description": "Previous maximum rank."
             }
           },
           {
@@ -32986,7 +32989,7 @@
               "description": "Guarantee type.",
               "x-enumDescriptions": {
                 "-1": "12 hours",
-                "0": "24 hours", 
+                "0": "24 hours",
                 "1": "3 days",
                 "2": "Guarantee at the time of purchase"
               },
@@ -39758,9 +39761,9 @@
             "schema": {
               "title": "Extended Guarantee",
               "type": "integer",
-              "x-enumDescriptions":{
-                "0":"24 hours",
-                "1":"3 days"
+              "x-enumDescriptions": {
+                "0": "24 hours",
+                "1": "3 days"
               },
               "enum": [
                 0,
@@ -46472,26 +46475,7 @@
             "$ref": "#/components/parameters/not_origin"
           },
           {
-            "name": "order_by",
-            "in": "query",
-            "description": "Order by.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Order By",
-              "description": "Order by.",
-              "type": "string",
-              "enum": [
-                "price_to_up",
-                "price_to_down",
-                "pdate_to_down",
-                "pdate_to_down_upload",
-                "pdate_to_up",
-                "pdate_to_up_upload",
-                "ddate_to_down"
-              ]
-            }
+            "$ref": "#/components/parameters/order_by"
           },
           {
             "$ref": "#/components/parameters/sb"
@@ -46633,7 +46617,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           }
         },
         "security": [
@@ -46812,6 +46796,9 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
           }
@@ -46857,7 +46844,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -47533,6 +47520,9 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
           }
@@ -47849,6 +47839,9 @@
               }
             }
           },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           }
@@ -48093,6 +48086,9 @@
               }
             }
           },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           }
@@ -48152,7 +48148,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -48243,7 +48239,7 @@
               "description": "Account origin. Where did you get it from.",
               "x-enumDescriptions": {
                 "brute": "Account received using Bruteforce",
-                "fishing": "Account received from fishing page", 
+                "fishing": "Account received from fishing page",
                 "stealer": "Account received from stealer logs",
                 "autoreg": "Account is automatically registered by a tool",
                 "personal": "Account is yours. You created it yourself",
@@ -48353,7 +48349,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -48405,7 +48401,10 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
           }
         },
         "security": [
@@ -48479,7 +48478,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -48515,7 +48514,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -48579,7 +48578,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -49267,7 +49266,7 @@
               "description": "Account origin. Where did you get it from.",
               "x-enumDescriptions": {
                 "brute": "Account received using Bruteforce",
-                "fishing": "Account received from fishing page", 
+                "fishing": "Account received from fishing page",
                 "stealer": "Account received from stealer logs",
                 "autoreg": "Account is automatically registered by a tool",
                 "personal": "Account is yours. You created it yourself",
@@ -49441,6 +49440,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
           }
         },
         "security": [
@@ -49536,6 +49538,9 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
           }
@@ -49630,6 +49635,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -49852,7 +49860,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50473,7 +50481,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50516,7 +50524,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50570,7 +50578,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50637,7 +50645,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50673,7 +50681,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50709,7 +50717,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50766,7 +50774,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50845,7 +50853,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50907,7 +50915,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -50946,7 +50954,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "description": "Error Response.",
@@ -51003,7 +51011,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "description": "Error Response.",
@@ -51058,6 +51066,9 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
           }
@@ -51088,6 +51099,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -51123,7 +51137,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -51157,7 +51171,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -51219,7 +51233,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
@@ -51614,7 +51628,7 @@
           "Invoices"
         ],
         "summary": "Get invoice",
-        "description": "Get invoice.",
+        "description": "Get invoice.\n\nRequired scopes:\n+ **market** or **invoice**",
         "operationId": "Payments.Invoice.Get",
         "parameters": [
           {
@@ -51744,7 +51758,10 @@
               }
             }
           },
-          "404":{
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
             "description": "Invoice Not Found",
             "content": {
               "application/json": {
@@ -51769,15 +51786,13 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
           }
         },
         "security": [
           {
             "HTTPBearer": [
-              "market"
+              "market",
+              "invoice"
             ]
           }
         ]
@@ -51787,7 +51802,7 @@
           "Invoices"
         ],
         "summary": "Create invoice",
-        "description": "Create invoice.\nWhen an invoice is paid, a **POST** request with invoice data will be sent to the `url_callback` specified during invoice creation. This request includes an `x-secret-key` header containing your merchant token, which you **<u>must</u>** verify.",
+        "description": "Create invoice.\nWhen an invoice is paid, a **POST** request with invoice data will be sent to the `url_callback` specified during invoice creation. This request includes an `x-secret-key` header containing your merchant token, which you **<u>must</u>** verify.\n\nRequired scopes:\n+ **market** or **invoice**",
         "operationId": "Payments.Invoice.Create",
         "parameters": [
           {
@@ -52020,7 +52035,8 @@
         "security": [
           {
             "HTTPBearer": [
-              "market"
+              "market",
+              "invoice"
             ]
           }
         ]
@@ -52032,7 +52048,7 @@
           "Invoices"
         ],
         "summary": "Get invoice list",
-        "description": "Get invoice list.",
+        "description": "Get invoice list.\n\nRequired scopes:\n+ **market** or **invoice**",
         "operationId": "Payments.Invoice.List",
         "parameters": [
           {
@@ -52220,7 +52236,8 @@
         "security": [
           {
             "HTTPBearer": [
-              "market"
+              "market",
+              "invoice"
             ]
           }
         ]
@@ -54342,6 +54359,12 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
           }
         },
         "security": [
@@ -54359,7 +54382,7 @@
           "Payments"
         ],
         "summary": "Payments History",
-        "description": "Displays list of your payments.",
+        "description": "Displays list of your payments.\n\nRequired scopes:\n+ **market** or **payment**",
         "operationId": "Payments.History",
         "parameters": [
           {
@@ -54896,13 +54919,14 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermissionModel"
+            "$ref": "#/components/responses/NoPermission"
           }
         },
         "security": [
           {
             "HTTPBearer": [
-              "market"
+              "market",
+              "payment"
             ]
           }
         ]
@@ -55083,9 +55107,6 @@
           "200": {
             "$ref": "#/components/responses/SaveChanges"
           },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
           "400": {
             "description": "Error Response.",
             "content": {
@@ -55108,6 +55129,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         },
         "security": [
@@ -55173,6 +55197,32 @@
                       "items": {
                         "type": "string",
                         "default": "Requested proxy server not found."
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Proxy Not Found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "title": "Errors",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
                       }
                     },
                     "system_info": {
@@ -55295,9 +55345,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
           "400": {
             "description": "Error Response.",
             "content": {
@@ -55320,6 +55367,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         },
         "security": [
@@ -57906,7 +57956,7 @@
           }
         }
       },
-      "NoPermissionModel": {
+      "NoPermission": {
         "description": "Error Response.",
         "content": {
           "application/json": {
@@ -58071,7 +58121,19 @@
             "edate_to_down",
             "ddate_to_up",
             "ddate_to_down"
-          ]
+          ],
+          "x-enumDescriptions": {
+            "price_to_up": "Cheap first.",
+            "price_to_down": "Expensive first.",
+            "pdate_to_down": "Newest.",
+            "pdate_to_up": "Oldest.",
+            "pdate_to_down_upload": "Newest uploaded.",
+            "pdate_to_up_upload": "Oldest uploaded.",
+            "edate_to_up": "Newest edited.",
+            "edate_to_down": "Oldest edited.",
+            "ddate_to_up": "Newest deleted.",
+            "ddate_to_down": "Oldest deleted."
+          }
         }
       },
       "show": {
@@ -58101,7 +58163,7 @@
         "name": "tag_id[]",
         "in": "query",
         "description": "List of tag ids (Tag list is available via **GET /me**).",
-        "required": true,
+        "required": false,
         "style": "form",
         "explode": true,
         "schema": {
@@ -58116,7 +58178,7 @@
         "name": "not_tag_id[]",
         "in": "query",
         "description": "List of tag ids that won't be included (Tag list is available via **GET /me**).",
-        "required": true,
+        "required": false,
         "style": "form",
         "explode": true,
         "schema": {
@@ -58189,7 +58251,7 @@
         "name": "user_id",
         "in": "query",
         "description": "Search accounts of user.",
-        "required": true,
+        "required": false,
         "style": "form",
         "explode": true,
         "schema": {
