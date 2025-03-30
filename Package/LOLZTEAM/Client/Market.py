@@ -1474,11 +1474,12 @@ class Market(APIClient):
         async def check(
             self,
             item_id: int,
-            login: str,
-            password: str,
             resell_item_id: int = NONE,
+            login: str = NONE,
+            password: str = NONE,
             email: str = NONE,
             email_type: Literal["native", "autoreg"] = NONE,
+            proxy_random: bool = NONE,
             extra: dict[Constants.Market.Extra._Literal, str] = NONE
         ) -> Response:
             """
@@ -1511,6 +1512,7 @@ class Market(APIClient):
                 "login": login,
                 "password": password,
                 "resell_item_id": resell_item_id,
+                "random_proxy": proxy_random,
                 "has_email_login_data": bool(email) if email and not isinstance(email, _NONE) else email,
                 "email_login_data": email,
                 "email_type": email_type,
