@@ -17,6 +17,8 @@ from urllib.parse import parse_qs, urlparse
 from ..Base.Wrappers import RETRY, UNIVERSAL, wraps
 from ..Base.Exceptions import BAD_TOKEN, BAD_ENDPOINT
 
+# TODO: Shithead, implement fucking synchronizer
+
 
 class APIClient:
     """
@@ -25,7 +27,7 @@ class APIClient:
 
     def __init__(self, base_url: str, token: str, language: str = None, delay_min: float = 0, logger_name: str = "APIClient", proxy: str = None, timeout: float = 90, verify: bool = True):
         self.core = self
-        from ..__init__ import Antipublic
+        from ..__init__ import Antipublic  # Circular import issue
         self.settings = Settings(core=self)
         self.settings._isAntipublic = isinstance(self, Antipublic)
         self.settings.async_client = httpx.AsyncClient(timeout=timeout, verify=verify)
@@ -119,7 +121,6 @@ class APIClient:
         if parsed_url.path != endpoint:
             endpoint = parsed_url.path
 
-
         for k, v in kwargs["params"].copy().items():
             if isinstance(v, (list, tuple)) and not k.endswith("[]"):  # Parse list params
                 kwargs["params"][f"{k}[]"] = v
@@ -129,14 +130,11 @@ class APIClient:
                     kwargs["params"][f"{k}[{kk}]"] = vv
                 del kwargs["params"][k]
 
-        if self.settings._isAntipublic and not kwargs["params"].get("key"):  # Add key to antipublic requests
-            kwargs["params"]["key"] = self.settings.token
-
         if self.settings.language and not kwargs["params"].get("locale"):  # Add locale to requests
             kwargs["params"]["locale"] = self.settings.language
         client = await self.__get_async_client()
 
-        def mask(obj, mask_: dict[str, str]):
+        def mask(obj, mask_: dict[str, str]):  # TODO: Implement pattern replacement instead of that shit
             if isinstance(obj, dict) and mask_:
                 obj = obj.copy()
                 for k, v in mask_.items():
@@ -146,15 +144,16 @@ class APIClient:
 
         self.settings.logger.info(
             "\n".join(
-                filter(None, [
-                    f"Request:  {method} {endpoint}",
-                    f"Headers: {mask(obj=dict(client.headers), mask_={'authorization': 'Bearer ****************'})}",
-                    f"Params: {mask(obj=kwargs.get('params', {}), mask_={'key': '********', 'secret_answer': '********'})}",
-                    f"Data: {json.dumps(mask(obj=kwargs.get('data', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('data') else None,
-                    f"Json: {json.dumps(mask(obj=kwargs.get('json', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('json') else None,
-                    f"File: {kwargs.get('files')}" if kwargs.get('files') else None
-                ]
-                )
+                filter(None,
+                       [
+                           f"Request:  {method} {endpoint}",
+                           f"Headers: {mask(obj=dict(client.headers), mask_={'authorization': 'Bearer ****************'})}",
+                           f"Params: {mask(obj=kwargs.get('params', {}), mask_={'secret_answer': '********'})}",
+                           f"Data: {json.dumps(mask(obj=kwargs.get('data', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('data') else None,
+                           f"Json: {json.dumps(mask(obj=kwargs.get('json', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('json') else None,
+                           f"File: {kwargs.get('files')}" if kwargs.get('files') else None
+                       ]
+                       )
             )
         )
 
@@ -261,7 +260,7 @@ class Logger:
         # TODO: Maybe add setting user_id to Antipublic?
         # This will require sending request, so that's not good
         # Maybe sending that request only when logger is enabled and user_id is not set?
-        # TODO: Also need to add parsing user_id from response when endpoints is /checkAccess
+        # TODO: Also may add parsing user_id from response when endpoints is /checkAccess
         # Also should add printing antipublic user_id (on jti place) to first message when logger is enabled
         # Fuck scopes, instead just put subscription type to it's place
         if not self.core.settings._isAntipublic:
@@ -318,6 +317,12 @@ class Logger:
         """
         if self.__enabled:
             self.logger.error(message)
+
+
+class Sync:  # Placeholder
+    """
+    Delay Synchronizer
+    """
 
 
 @dataclass
@@ -423,7 +428,8 @@ class Settings:
     def token(self, token: str) -> None:
         self._token = token
         if self._isAntipublic:
-            self.user_id = None
+            self.async_client.headers.update({"authorization": f"{'Bearer' if '.' in self._token else 'Legacy'} {self._token}"})
+            self.user_id = None  # TODO: Unify this shit when legacy tokens will gone. Also don't forget to edit logger stuff.
             self.scopes = None
             self.jti = None
         else:
@@ -432,7 +438,7 @@ class Settings:
                 if "." not in self._token:
                     raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
                 payload = token.split(".")[1]
-                decoded_payload = json.loads(base64.b64decode(payload + "==" if payload[-2:] != "==" else payload).decode("utf-8"))
+                decoded_payload: dict = json.loads(base64.b64decode(payload + "==" if payload[-2:] != "==" else payload).decode("utf-8"))
                 user_id = decoded_payload.get("sub", 0)
                 if hasattr(self, "user_id"):
                     if self.user_id != user_id:  # pylint: disable=E0203

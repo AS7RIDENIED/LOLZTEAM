@@ -2354,12 +2354,13 @@ GET https://api.zelenka.guru/forms/save
 ```python
 response = forum.forms.create(form_id=1, fields={
     "7": "sell",
-    "8": 0,
-    "11": 0,
+    "8": 100,
+    "11": 99,
     "15": "market",
     "16": "rub",
-    "17": "market",
-    "18": "rub"
+    "17": "SBP",
+    "18": "rub",
+    "14": "Note to the exchange"
 })
 print(response.json())
 ```

@@ -912,6 +912,48 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
+        async def open(self, item_id: int) -> Response:
+            """
+            POST https://api.lzt.market/{item_id}/open
+
+            *Opens the item.*
+
+            **Parameters:**
+
+            - **item_id** (int): Item ID.
+
+            **Example:**
+
+            ```python
+            response = market.managing.open(item_id=1234567890)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("POST", f"/{item_id}/open")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
+        async def close(self, item_id: int) -> Response:
+            """
+            POST https://api.lzt.market/{item_id}/close
+
+            *Closes the item.*
+
+            **Parameters:**
+
+            - **item_id** (int): Item ID.
+
+            **Example:**
+
+            ```python
+            response = market.managing.close(item_id=1234567890)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("POST", f"/{item_id}/close")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
         async def note(self, item_id: int, text: str = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/note-save

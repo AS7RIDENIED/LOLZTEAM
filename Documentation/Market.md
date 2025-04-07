@@ -147,6 +147,8 @@
   * [Edit](#edit)
   * [Delete](#delete)
   * [Bump](#bump)
+  * [Open](#open)
+  * [Close](#close)
   * [Note](#note)
   * [Image](#image)
   * [Arbitrage](#arbitrage)
@@ -2288,6 +2290,42 @@ POST https://api.lzt.market/{item_id}/bump
 
 ```python
 response = market.managing.bump(item_id=1234567890)
+print(response.json())
+```
+
+
+## Open
+
+POST https://api.lzt.market/{item_id}/open
+
+*Opens the item.*
+
+**Parameters:**
+
+- **item_id** (int): Item ID.
+
+**Example:**
+
+```python
+response = market.managing.open(item_id=1234567890)
+print(response.json())
+```
+
+
+## Close
+
+POST https://api.lzt.market/{item_id}/close
+
+*Closes the item.*
+
+**Parameters:**
+
+- **item_id** (int): Item ID.
+
+**Example:**
+
+```python
+response = market.managing.close(item_id=1234567890)
 print(response.json())
 ```
 

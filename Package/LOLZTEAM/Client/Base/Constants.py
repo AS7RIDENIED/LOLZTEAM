@@ -98,10 +98,11 @@ class Market:
         real = "brl"
 
     class ItemOrigin:
-        _Literal = Literal["brute", "stealer", "fishing", "autoreg", "personal", "resale", "dummy", "self_registration"]
+        _Literal = Literal["brute", "stealer", "phishing", "autoreg", "personal", "resale", "dummy", "self_registration"]
         brute = "brute"
         stealer = "stealer"
-        fishing = "fishing"
+        phishing = "phishing"
+        fishing = "phishing"  # Deprecated, will be removed in future
         autoreg = "autoreg"
         personal = "personal"
         resale = "resale"
@@ -396,6 +397,7 @@ class Forum:
             expert = 23            # Эксперт
             guru = 60              # Гуру
             ai = 351               # Искусственный интеллект
+
             market_privilege = 65  # Привилении на маркете
             forum_seller = 11      # Продавец на форуме
             legend = 26            # Легенда

@@ -100,7 +100,7 @@ def UNIVERSAL(batchable=False, set_null_job=True):
                         params.update(_NONE.TrimNONE(captured.get("json", {})))
 
                         return {
-                            "id": str(kwargs.get("job_id", random.randint(1, 1000000))),
+                            "id": str(kwargs.get("job_id", random.randint(1000000, 9999999))),
                             "method": captured["method"],
                             "uri": captured["endpoint"],
                             "params": params,
