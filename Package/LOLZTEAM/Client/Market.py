@@ -1808,7 +1808,7 @@ class Market(APIClient):
 
         def __init__(self, core: "Market"):
             self.core = core
-            self.invoice = self.__Invoice(self)
+            self.invoice = self.__Invoice(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)

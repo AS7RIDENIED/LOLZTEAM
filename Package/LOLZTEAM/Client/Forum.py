@@ -1363,7 +1363,7 @@ class Forum(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.5)
-            async def create(self, post_id: int, post_body: str) -> Response:
+            async def create(self, post_id: int, comment_body: str) -> Response:
                 """
                 POST https://api.zelenka.guru/posts/{post_id}/comments
 
@@ -1372,7 +1372,7 @@ class Forum(APIClient):
                 **Parameters:**
 
                 - **post_id** (int): Post ID.
-                - **post_body** (str): Post body.
+                - **comment_body** (str): Post body.
 
                 **Example:**
 
@@ -1381,8 +1381,31 @@ class Forum(APIClient):
                 print(response.json())
                 ```
                 """
-                json = {"post_body": post_body}
+                json = {"comment_body": comment_body}
                 return await self.core.request("POST", f"/posts/{post_id}/comments", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def edit(self, comment_id: int, comment_body: str) -> Response:
+                """
+                PUT https://api.zelenka.guru/posts/comments
+
+                *Edit a comment.*
+
+                **Parameters:**
+
+                - **comment_id** (int): Comment ID.
+                - **comment_body** (str): Comment body.
+
+                **Example:**
+
+                ```python
+                response = forum.posts.comments.edit(comment_id=5523020, comment_body="Test comment")
+                print(response.json())
+                ```
+                """
+                json = {"comment_body": comment_body, "post_comment_id": comment_id}
+                return await self.core.request("PUT", "/posts/comments", json=json)
 
         def __init__(self, core: "Forum"):
             self.core = core
@@ -2113,6 +2136,23 @@ class Forum(APIClient):
             ```
             """
             return await self.core.request("GET", "/users/fields")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
+        async def trophies(self, user_id: Union[int, str] = "me") -> Response:
+            """
+            GET https://api.zelenka.guru/users/{user_id}/trophies
+
+            *Get user trophies.*
+
+            **Example:**
+
+            ```python
+            response = forum.users.trophies(user_id=2410024)
+            print(response.json())
+            ```/
+            """
+            return await self.core.request("GET", f"/users/{user_id}/trophies")
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)

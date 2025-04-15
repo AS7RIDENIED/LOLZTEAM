@@ -55,10 +55,11 @@
   * [Comments](#comments)
     * [List](#list-4)
     * [Create](#create-1)
+    * [Edit](#edit-1)
   * [List](#list-5)
   * [Get](#get-5)
   * [Create](#create-2)
-  * [Edit](#edit-1)
+  * [Edit](#edit-2)
   * [Delete](#delete-1)
   * [Likes](#likes)
   * [Like](#like)
@@ -81,7 +82,7 @@
     * [List](#list-7)
     * [Get](#get-7)
     * [Create](#create-4)
-    * [Edit](#edit-2)
+    * [Edit](#edit-3)
     * [Delete](#delete-4)
     * [Likes](#likes-1)
     * [Like](#like-1)
@@ -89,8 +90,9 @@
   * [List](#list-8)
   * [Search](#search)
   * [Get](#get-8)
-  * [Edit](#edit-3)
+  * [Edit](#edit-4)
   * [Fields](#fields)
+  * [Trophies](#trophies)
   * [Followers](#followers-2)
   * [Followed](#followed-2)
   * [Follow](#follow-2)
@@ -104,7 +106,7 @@
     * [List](#list-9)
     * [Get](#get-9)
     * [Create](#create-5)
-    * [Edit](#edit-4)
+    * [Edit](#edit-5)
   * [List](#list-10)
   * [Get](#get-10)
   * [Create](#create-6)
@@ -129,7 +131,7 @@
   * [Messages](#messages-1)
     * [List](#list-13)
     * [Create](#create-7)
-    * [Edit](#edit-5)
+    * [Edit](#edit-6)
     * [Delete](#delete-5)
     * [Report](#report-1)
   * [Get](#get-13)
@@ -1020,12 +1022,31 @@ POST https://api.zelenka.guru/posts/{post_id}/comments
 **Parameters:**
 
 - **post_id** (int): Post ID.
-- **post_body** (str): Post body.
+- **comment_body** (str): Post body.
 
 **Example:**
 
 ```python
 response = forum.posts.comments.create(post_id=5523020, post_body="Test comment")
+print(response.json())
+```
+
+
+### Edit
+
+PUT https://api.zelenka.guru/posts/comments
+
+*Edit a comment.*
+
+**Parameters:**
+
+- **comment_id** (int): Comment ID.
+- **comment_body** (str): Comment body.
+
+**Example:**
+
+```python
+response = forum.posts.comments.edit(comment_id=5523020, comment_body="Test comment")
 print(response.json())
 ```
 
@@ -1619,6 +1640,20 @@ GET https://api.zelenka.guru/users/fields
 response = forum.users.fields()
 print(response.json())
 ```
+
+
+## Trophies
+
+GET https://api.zelenka.guru/users/{user_id}/trophies
+
+*Get user trophies.*
+
+**Example:**
+
+```python
+response = forum.users.trophies(user_id=2410024)
+print(response.json())
+```/
 
 
 ## Followers
