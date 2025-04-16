@@ -1,8 +1,10 @@
-from .Base import Constants
-from .Base.Core import APIClient, AutoDelay, Response, _NONE, NONE
-from .Base.Wrappers import UNIVERSAL
 from typing import Literal, Union
+
 from httpx import URL
+
+from .Base import Constants
+from .Base.Core import _NONE, NONE, APIClient, AutoDelay, Response
+from .Base.Wrappers import UNIVERSAL
 
 
 class Market(APIClient):
@@ -1356,6 +1358,7 @@ class Market(APIClient):
             information: str = NONE,
             login: str = NONE,
             password: str = NONE,
+            login_password: str = NONE,
             email: str = NONE,
             email_type: Literal["native", "autoreg"] = NONE,
             extra: dict[Constants.Market.Extra._Literal, str] = NONE,
@@ -1382,6 +1385,7 @@ class Market(APIClient):
             - **information** (str): Information.
             - **login** (str): Login.
             - **password** (str): Password.
+            - **login_password** (str): Account login data format login:password.
             - **email** (str): Email.
             - **email_type** (str): Email type.
             - **extra** (dict[str, str]): Extra.
@@ -1423,6 +1427,7 @@ class Market(APIClient):
                 "information": information,
                 "login": login,
                 "password": password,
+                "login_password": login_password,
                 "has_email_login_data": bool(email) if email and not isinstance(email, _NONE) else email,
                 "email_login_data": email,
                 "email_type": email_type,
