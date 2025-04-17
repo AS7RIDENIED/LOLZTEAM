@@ -1,9 +1,9 @@
 {
-  "openapi": "3.0.2",
+  "openapi": "3.1.0",
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.9b"
+    "version": "1.1.10"
   },
   "servers": [
     {
@@ -16,6 +16,293 @@
     }
   ],
   "paths": {
+    "/oauth/token": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get Access Token",
+        "description": "Obtain an access token using various grant types.\n\nSupports the following grant types:\n- Client Credentials\n- Authorization Code\n- Refresh Token\n- Password",
+        "operationId": "OAuth.Token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "title": "Client Credentials",
+                    "required": [
+                      "grant_type",
+                      "client_id",
+                      "client_secret",
+                      "scope"
+                    ],
+                    "properties": {
+                      "grant_type": {
+                        "type": "string",
+                        "description": "Grant type.",
+                        "enum": [
+                          "client_credentials"
+                        ]
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID."
+                      },
+                      "client_secret": {
+                        "type": "string",
+                        "description": "Client secret."
+                      },
+                      "scope": {
+                        "type": "array",
+                        "description": "Scope.",
+                        "uniqueItems": true,
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "basic",
+                            "read",
+                            "post",
+                            "conversate",
+                            "market",
+                            "payment",
+                            "invoice"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "title": "Authorization Code",
+                    "required": [
+                      "code",
+                      "client_id",
+                      "client_secret",
+                      "redirect_uri",
+                      "grant_type",
+                      "scope"
+                    ],
+                    "properties": {
+                      "grant_type": {
+                        "type": "string",
+                        "description": "Grant type.",
+                        "enum": [
+                          "authorization_code"
+                        ]
+                      },
+                      "code": {
+                        "type": "string",
+                        "description": "Authorization code."
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID."
+                      },
+                      "client_secret": {
+                        "type": "string",
+                        "description": "Client secret."
+                      },
+                      "redirect_uri": {
+                        "type": "string",
+                        "description": "Redirect URI."
+                      },
+                      "scope": {
+                        "type": "array",
+                        "description": "Scope.",
+                          "uniqueItems": true,
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "basic",
+                            "read",
+                            "post",
+                            "conversate",
+                            "market",
+                            "payment",
+                            "invoice"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "title": "Refresh Token",
+                    "required": [
+                      "refresh_token",
+                      "client_id",
+                      "client_secret",
+                      "grant_type"
+                    ],
+                    "properties": {
+                      "grant_type": {
+                        "type": "string",
+                        "description": "Grant type.",
+                        "enum": [
+                          "refresh_token"
+                        ]
+                      },
+                      "refresh_token": {
+                        "type": "string",
+                        "description": "Refresh token."
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID."
+                      },
+                      "client_secret": {
+                        "type": "string",
+                        "description": "Client secret."
+                      }
+                    }
+                  },
+                  {
+                    "title": "Password",
+                    "required": [
+                      "username",
+                      "password",
+                      "client_id",
+                      "client_secret",
+                      "grant_type",
+                      "scope"
+                    ],
+                    "properties": {
+                      "grant_type": {
+                        "type": "string",
+                        "description": "Grant type.",
+                        "enum": [
+                          "password"
+                        ]
+                      },
+                      "username": {
+                        "type": "string",
+                        "description": "Account username/email."
+                      },
+                      "password": {
+                        "type": "string",
+                        "description": "Account password."
+                      },
+                      "client_id": {
+                        "type": "string",
+                        "description": "Client ID."
+                      },
+                      "client_secret": {
+                        "type": "string",
+                        "description": "Client secret."
+                      },
+                      "scope": {
+                        "type": "array",
+                        "description": "Scope.",
+                        "uniqueItems": true,
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "basic",
+                            "read",
+                            "post",
+                            "conversate",
+                            "market",
+                            "payment",
+                            "invoice"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "encoding": {
+                "scope": {
+                  "style": "spaceDelimited"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful token response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "description": "The access token issued by the authorization server"
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "description": "The type of the token",
+                      "example": "Bearer"
+                    },
+                    "expires_in": {
+                      "type": "integer",
+                      "description": "The lifetime in seconds of the access token"
+                    },
+                    "refresh_token": {
+                      "type": "string",
+                      "description": "The refresh token, which can be used to obtain new access tokens"
+                    },
+                    "scope": {
+                      "type": "string",
+                      "description": "The scope of the access token"
+                    }
+                  },
+                  "required": [
+                    "access_token",
+                    "token_type",
+                    "expires_in"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error code"
+                    },
+                    "error_description": {
+                      "type": "string",
+                      "description": "Human-readable error description"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error code"
+                    },
+                    "error_description": {
+                      "type": "string",
+                      "description": "Human-readable error description"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
     "/categories": {
       "get": {
         "tags": [
@@ -381,6 +668,13 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "forums",
+                    "forums_total",
+                    "tabs",
+                    "system_info"
+                  ],
                   "properties": {
                     "forums": {
                       "title": "Forums",
@@ -512,10 +806,6 @@
                                 "title": "Create",
                                 "type": "boolean"
                               },
-                              "upload_attachment": {
-                                "title": "Upload",
-                                "type": "boolean"
-                              },
                               "tag_thread": {
                                 "title": "Tag",
                                 "type": "boolean"
@@ -530,7 +820,6 @@
                               "edit",
                               "delete",
                               "create_thread",
-                              "upload_attachment",
                               "tag_thread",
                               "follow"
                             ]
@@ -559,15 +848,41 @@
                       "title": "Forums",
                       "type": "integer"
                     },
+                    "tabs": {
+                      "title": "Tabs",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "link_title": {
+                            "title": "Link",
+                            "type": "string"
+                          },
+                          "isDefault": {
+                            "title": "Is Default",
+                            "type": "boolean"
+                          },
+                          "title": {
+                            "title": "Title",
+                            "type": "string"
+                          },
+                          "isHidden": {
+                            "title": "Is Hidden",
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "link_title",
+                          "isDefault",
+                          "title",
+                          "isHidden"
+                        ]
+                      }
+                    },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "forums",
-                    "forums_total",
-                    "system_info"
-                  ]
+                  }
                 }
               }
             }
@@ -1779,6 +2094,28 @@
             }
           },
           {
+            "name": "tab",
+            "in": "query",
+            "description": "Tab to get threads from.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Tab",
+              "type": "string",
+              "description": "Tab to get threads from.",
+              "examples": [
+                "main",
+                "mythreads",
+                "viewedthreads",
+                "userthreads",
+                "fave",
+                "compilation",
+                "scheduledthreads"
+              ]
+            }
+          },
+          {
             "name": "creator_user_id",
             "in": "query",
             "description": "Filter to get only threads created by the specified user.",
@@ -2705,7 +3042,7 @@
             "explode": true,
             "schema": {
               "title": "Watch thread",
-              "type": "integer",
+              "type": "boolean",
               "description": "Receive forum notifications of new posts in this thread."
             }
           },
@@ -3924,6 +4261,12 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
           }
         },
         "security": [
@@ -7610,7 +7953,7 @@
         ]
       }
     },
-    "/posts/{postId}/comments": {
+    "/posts/comments": {
       "get": {
         "tags": [
           "Post comments"
@@ -7620,12 +7963,12 @@
         "operationId": "Posts.Comments.Get",
         "parameters": [
           {
-            "name": "postId",
-            "in": "path",
+            "name": "post_id",
+            "in": "query",
             "description": "Id of post.",
             "required": true,
-            "style": "simple",
-            "explode": false,
+            "style": "form",
+            "explode": true,
             "schema": {
               "title": "Postid",
               "type": "integer",
@@ -7871,12 +8214,12 @@
         "operationId": "Posts.Comments.Create",
         "parameters": [
           {
-            "name": "postId",
-            "in": "path",
+            "name": "post_id",
+            "in": "query",
             "description": "Id of post.",
             "required": true,
-            "style": "simple",
-            "explode": false,
+            "style": "form",
+            "explode": true,
             "schema": {
               "title": "Postid",
               "type": "integer",
@@ -8085,6 +8428,249 @@
                     "comment",
                     "system_info"
                   ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Post comments"
+        ],
+        "summary": "Edit Post Comment",
+        "description": "Edit a post comment.\n\nRequired scopes:\n+ **post**",
+        "operationId": "Posts.Comments.Edit",
+        "parameters": [
+          {
+            "name": "post_comment_id",
+            "in": "query",
+            "description": "Id of post.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Post Comment ID",
+              "type": "integer",
+              "description": "Id of post comment."
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "comment_body"
+                ],
+                "type": "object",
+                "properties": {
+                  "comment_body": {
+                    "title": "Comment Body",
+                    "type": "string",
+                    "description": "Content of the new post comment."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "comment",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "comment": {
+                      "title": "Comment",
+                      "type": "object",
+                      "properties": {
+                        "post_comment_id": {
+                          "title": "Post",
+                          "type": "integer"
+                        },
+                        "post_id": {
+                          "title": "Post",
+                          "type": "integer"
+                        },
+                        "thread_id": {
+                          "title": "Thread",
+                          "type": "integer"
+                        },
+                        "poster_user_id": {
+                          "title": "Poster",
+                          "type": "integer"
+                        },
+                        "poster_username": {
+                          "title": "Poster",
+                          "type": "string"
+                        },
+                        "poster_username_html": {
+                          "title": "Poster",
+                          "type": "string"
+                        },
+                        "post_comment_body": {
+                          "title": "Post",
+                          "type": "string"
+                        },
+                        "post_comment_body_html": {
+                          "title": "Post",
+                          "type": "string"
+                        },
+                        "post_comment_body_plain_text": {
+                          "title": "Post",
+                          "type": "string"
+                        },
+                        "post_comment_like_count": {
+                          "title": "Post",
+                          "type": "integer"
+                        },
+                        "user_is_ignored": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "post_comment_is_published": {
+                          "title": "Post",
+                          "type": "boolean"
+                        },
+                        "post_comment_is_deleted": {
+                          "title": "Post",
+                          "type": "boolean"
+                        },
+                        "post_comment_update_date": {
+                          "title": "Post",
+                          "type": "integer"
+                        },
+                        "links": {
+                          "title": "Links",
+                          "type": "object",
+                          "properties": {
+                            "permalink": {
+                              "title": "Permalink",
+                              "type": "string"
+                            },
+                            "detail": {
+                              "title": "Detail",
+                              "type": "string"
+                            },
+                            "post": {
+                              "title": "Post",
+                              "type": "string"
+                            },
+                            "thread": {
+                              "title": "Thread",
+                              "type": "string"
+                            },
+                            "poster": {
+                              "title": "Poster",
+                              "type": "string"
+                            },
+                            "likes": {
+                              "title": "Likes",
+                              "type": "string"
+                            },
+                            "report": {
+                              "title": "Report",
+                              "type": "string"
+                            },
+                            "poster_avatar": {
+                              "title": "Poster",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "permalink",
+                            "detail",
+                            "post",
+                            "thread",
+                            "poster",
+                            "likes",
+                            "report",
+                            "poster_avatar"
+                          ]
+                        },
+                        "permissions": {
+                          "title": "Permissions",
+                          "type": "object",
+                          "properties": {
+                            "view": {
+                              "title": "View",
+                              "type": "boolean"
+                            },
+                            "edit": {
+                              "title": "Edit",
+                              "type": "boolean"
+                            },
+                            "delete": {
+                              "title": "Delete",
+                              "type": "boolean"
+                            },
+                            "reply": {
+                              "title": "Reply",
+                              "type": "boolean"
+                            },
+                            "like": {
+                              "title": "Like",
+                              "type": "boolean"
+                            },
+                            "report": {
+                              "title": "Report",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "view",
+                            "edit",
+                            "delete",
+                            "reply",
+                            "like",
+                            "report"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "post_comment_id",
+                        "post_id",
+                        "thread_id",
+                        "poster_user_id",
+                        "poster_username",
+                        "poster_username_html",
+                        "post_comment_body",
+                        "post_comment_body_html",
+                        "post_comment_body_plain_text",
+                        "post_comment_like_count",
+                        "user_is_ignored",
+                        "post_comment_is_published",
+                        "post_comment_is_deleted",
+                        "post_comment_update_date",
+                        "links",
+                        "permissions"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
                 }
               }
             }
@@ -12278,6 +12864,104 @@
                     "links",
                     "system_info"
                   ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read"
+            ]
+          }
+        ]
+      }
+    },
+    "/users/{userId}/trophies": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get Trophies",
+        "description": "List of user trophies.\n\nRequired scopes:\n+ **read**",
+        "operationId": "Users.Trophies",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Userid",
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Id of user."
+                },
+                {
+                  "type": "string",
+                  "description": "User shortlink. Use \"me\" to interact with your own profile."
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "trophies",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "trophies": {
+                      "title": "Trophies",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "trophy_id": {
+                            "title": "Trophy",
+                            "type": "integer"
+                          },
+                          "title": {
+                            "title": "Title",
+                            "type": "string"
+                          },
+                          "description": {
+                            "title": "Description",
+                            "type": "string"
+                          },
+                          "trophy_url": {
+                            "title": "Trophy",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "trophy_id",
+                          "title",
+                          "description",
+                          "trophy_url"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
                 }
               }
             }
@@ -23324,7 +24008,7 @@
           "Forms"
         ],
         "summary": "Create Form",
-        "description": "Create Form",
+        "description": "Create Form.",
         "operationId": "Forms.Create",
         "requestBody": {
           "content": {
@@ -23332,6 +24016,7 @@
               "schema": {
                 "oneOf": [
                   {
+                    "title": "P2P trade",
                     "type": "object",
                     "description": "P2P trade",
                     "properties": {
@@ -23635,6 +24320,7 @@
                     ]
                   },
                   {
+                    "title": "Complaint",
                     "type": "object",
                     "description": "Complaint",
                     "properties": {
