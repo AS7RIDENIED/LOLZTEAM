@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.59a"
+    "version": "1.1.59b "
   },
   "servers": [
     {
@@ -46644,9 +46644,9 @@
         "tags": [
           "Accounts list"
         ],
-        "summary": "Get All Owned Accounts",
-        "description": "Displays a list of owned accounts.",
-        "operationId": "List.Owned",
+        "summary": "Get All User Accounts",
+        "description": "Displays a list of user accounts.",
+        "operationId": "List.User",
         "parameters": [
           {
             "name": "user_id",
@@ -46727,6 +46727,129 @@
               "title": "Username",
               "description": "Username of buyer. (If **show** is **paid**)",
               "type": "string"
+            }
+          },
+          {
+            "name": "published_startDate",
+            "in": "query",
+            "description": "Start date for filtering by publication date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Published Start Date",
+              "type": "string",
+              "description": "Start date for filtering by publication date.",
+              "example": "2025-01-01T00:00:00+00:00"
+            }
+          },
+          {
+            "name": "published_endDate",
+            "in": "query",
+            "description": "End date for filtering by publication date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Published End Date",
+              "type": "string",
+              "description": "End date for filtering by publication date.",
+              "example": "2025-01-01T00:00:00+00:00"
+            }
+          },
+          {
+            "name": "filter_by_published_date",
+            "in": "query",
+            "description": "Enable filtering by publication date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Filter By Published Date",
+              "type": "boolean",
+              "description": "Enable filtering by publication date."
+            }
+          },
+          {
+            "name": "buyer_operation_dateStart",
+            "in": "query",
+            "description": "Start date for filtering by buyer operation date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Buyer Operation Start Date",
+              "type": "string",
+              "description": "Start date for filtering by buyer operation date.",
+              "example": "2025-01-01T00:00:00+00:00"
+            }
+          },
+          {
+            "name": "buyer_operation_dateEnd",
+            "in": "query",
+            "description": "End date for filtering by buyer operation date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Buyer Operation End Date",
+              "type": "string",
+              "description": "End date for filtering by buyer operation date.",
+              "example": "2025-01-01T00:00:00+00:00"
+            }
+          },
+          {
+            "name": "filter_by_buyer_operation_date",
+            "in": "query",
+            "description": "Enable filtering by buyer operation date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Filter By Buyer Operation Date",
+              "type": "boolean",
+              "description": "Enable filtering by buyer operation date."
+            }
+          },
+          {
+            "name": "delete_dateStart",
+            "in": "query",
+            "description": "Start date for filtering by deletion date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Delete Start Date",
+              "type": "string",
+              "description": "Start date for filtering by deletion date.",
+              "example": "2025-01-01T00:00:00+00:00"
+            }
+          },
+          {
+            "name": "delete_dateEnd",
+            "in": "query",
+            "description": "End date for filtering by deletion date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Delete End Date",
+              "type": "string",
+              "description": "End date for filtering by deletion date.",
+              "example": "2025-01-01T00:00:00+00:00"
+            }
+          },
+          {
+            "name": "filter_by_delete_date",
+            "in": "query",
+            "description": "Enable filtering by deletion date.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Filter By Delete Date",
+              "type": "boolean",
+              "description": "Enable filtering by deletion date."
             }
           }
         ],
