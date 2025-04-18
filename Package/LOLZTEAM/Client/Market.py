@@ -1361,7 +1361,8 @@ class Market(APIClient):
             extra: dict[Constants.Market.Extra._Literal, str] = NONE,
             allow_ask_discount: bool = NONE,
             proxy_id: int = NONE,
-            proxy_random: bool = NONE
+            proxy_random: bool = NONE,
+            **kwargs,
         ) -> Response:
             """
             POST https://api.lzt.market/item/fast-sell
@@ -1388,6 +1389,7 @@ class Market(APIClient):
             - **allow_ask_discount** (bool): Allow ask discount.
             - **proxy_id** (int): Proxy ID.
             - **proxy_random** (bool): Proxy random.
+            - **kwargs** (dict[str, Any]): Kwargs.
 
             **Example:**
 
@@ -1401,8 +1403,8 @@ class Market(APIClient):
                 title="Telegram account",
                 description="Public description",
                 information="Private information",
-                login="dc_id",
-                password="auth_key",
+                login="auth_key",
+                password="dc_id",
                 extra={"checkSpam": True},
                 allow_ask_discount=True,
                 proxy_id=12345
@@ -1432,6 +1434,8 @@ class Market(APIClient):
                 "proxy_id": proxy_id,
                 "random_proxy": proxy_random
             }
+            if kwargs:
+                json.update(kwargs)
             return await self.core.request("POST", "/item/fast-sell", json=json)
 
         @UNIVERSAL(batchable=True)
@@ -1451,7 +1455,8 @@ class Market(APIClient):
             email_type: Literal["native", "autoreg"] = NONE,
             allow_ask_discount: bool = NONE,
             proxy_id: int = NONE,
-            proxy_random: bool = NONE
+            proxy_random: bool = NONE,
+            **kwargs,
         ) -> Response:
             """
             POST https://api.lzt.market/item/add
@@ -1474,6 +1479,7 @@ class Market(APIClient):
             - **allow_ask_discount** (bool): Allow ask discount.
             - **proxy_id** (int): Proxy ID.
             - **proxy_random** (bool): Proxy random.
+            - **kwargs** (dict[str, Any]): Kwargs.
 
             **Example:**
 
@@ -1509,6 +1515,8 @@ class Market(APIClient):
                 "proxy_id": proxy_id,
                 "random_proxy": proxy_random
             }
+            if kwargs:
+                json.update(kwargs)
             return await self.core.request("POST", "/item/add", json=json)
 
         @UNIVERSAL(batchable=True)
@@ -1522,7 +1530,8 @@ class Market(APIClient):
             email: str = NONE,
             email_type: Literal["native", "autoreg"] = NONE,
             proxy_random: bool = NONE,
-            extra: dict[Constants.Market.Extra._Literal, str] = NONE
+            extra: dict[Constants.Market.Extra._Literal, str] = NONE,
+            **kwargs,
         ) -> Response:
             """
             POST https://api.lzt.market/{item_id}/goods/check
@@ -1538,14 +1547,15 @@ class Market(APIClient):
             - **email** (str): Email.
             - **email_type** (str): Email type.
             - **extra** (dict[str, str]): Extra.
+            - **kwargs** (dict[str, Any]): Kwargs.
 
             **Example:**
 
             ```python
             response = market.publishing.check(
                 item_id=1234567890,
-                login="dc_id",
-                password="auth_key"
+                login="auth_key",
+                password="dc_id"
             )
             print(response.json())
             ```
@@ -1560,6 +1570,8 @@ class Market(APIClient):
                 "email_type": email_type,
                 "extra": extra
             }
+            if kwargs:
+                json.update(kwargs)
             return await self.core.request("POST", f"/{item_id}/goods/check", json=json)
 
         @UNIVERSAL(batchable=True)
@@ -1573,7 +1585,7 @@ class Market(APIClient):
             **Parameters:**
 
             - **item_id** (int): Item ID.
-            - **force_mail** (bool): Force mail.
+            - **force_mail** (bool): Force mail. Optional if you want to upload Supercell account.
             - **resell_item_id** (int): Resell item ID.
 
             **Example:**

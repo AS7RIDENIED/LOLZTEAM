@@ -2663,6 +2663,7 @@ POST https://api.lzt.market/item/fast-sell
 - **allow_ask_discount** (bool): Allow ask discount.
 - **proxy_id** (int): Proxy ID.
 - **proxy_random** (bool): Proxy random.
+- **kwargs** (dict[str, Any]): Kwargs.
 
 **Example:**
 
@@ -2676,8 +2677,8 @@ response = market.publishing.fast(
     title="Telegram account",
     description="Public description",
     information="Private information",
-    login="dc_id",
-    password="auth_key",
+    login="auth_key",
+    password="dc_id",
     extra={"checkSpam": True},
     allow_ask_discount=True,
     proxy_id=12345
@@ -2708,6 +2709,7 @@ POST https://api.lzt.market/item/add
 - **allow_ask_discount** (bool): Allow ask discount.
 - **proxy_id** (int): Proxy ID.
 - **proxy_random** (bool): Proxy random.
+- **kwargs** (dict[str, Any]): Kwargs.
 
 **Example:**
 
@@ -2740,14 +2742,15 @@ POST https://api.lzt.market/{item_id}/goods/check
 - **email** (str): Email.
 - **email_type** (str): Email type.
 - **extra** (dict[str, str]): Extra.
+- **kwargs** (dict[str, Any]): Kwargs.
 
 **Example:**
 
 ```python
 response = market.publishing.check(
     item_id=1234567890,
-    login="dc_id",
-    password="auth_key"
+    login="auth_key",
+    password="dc_id"
 )
 print(response.json())
 ```
@@ -2762,7 +2765,7 @@ GET https://api.lzt.market/{item_id}/goods/add
 **Parameters:**
 
 - **item_id** (int): Item ID.
-- **force_mail** (bool): Force mail.
+- **force_mail** (bool): Force mail. Optional if you want to upload Supercell account.
 - **resell_item_id** (int): Resell item ID.
 
 **Example:**

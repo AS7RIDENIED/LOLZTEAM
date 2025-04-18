@@ -4,6 +4,7 @@ from .Base.Wrappers import UNIVERSAL
 
 from typing import Literal
 
+
 class Antipublic(APIClient):
     """
     ### Antipublic API Client.
@@ -14,6 +15,7 @@ class Antipublic(APIClient):
 
     ## 💛Made with love💛
     """
+
     def __init__(self, token: str, delay_min: float = 0, timeout: float = 90, proxy: str = None):
         """
         Antipublic API Client
