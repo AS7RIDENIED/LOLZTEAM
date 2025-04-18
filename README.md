@@ -4,11 +4,9 @@
   </a>
   <br>
   <a href="https://pypi.org/project/LOLZTEAM">
-    <img src="https://img.shields.io/github/last-commit/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72" alt="GitHub last commit">
-    <img src="https://img.shields.io/pypi/dm/LOLZTEAM?style=for-the-badge&color=2bad72" alt="PyPI Downloads">
+    <img src="https://img.shields.io/github/last-commit/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72" alt="GitHub last commit"> <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72">
     <br>
-    <img src="https://img.shields.io/pypi/v/LOLZTEAM?style=for-the-badge&color=2bad72" alt="Package version">
-    <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72">
+    <img src="https://img.shields.io/pypi/dm/LOLZTEAM?style=for-the-badge&color=2bad72" alt="PyPI Downloads"> <img src="https://img.shields.io/pypi/v/LOLZTEAM?style=for-the-badge&color=2bad72" alt="Package version">
   </a>
 </div>
 
@@ -20,7 +18,7 @@ Install the package using pip:
 pip install LOLZTEAM
 ```
 
-Also you can download the package archive from [here](https://github.com/AS7RIDENIED/LOLZTEAM/releases/latest) and install it manually.
+Also you can download the package from [here](https://github.com/AS7RIDENIED/LOLZTEAM/releases/latest) and install it manually.
 
 `pip install LOLZTEAM-<version>.tar.gz` or `pip install LOLZTEAM-<version>.whl`
 
