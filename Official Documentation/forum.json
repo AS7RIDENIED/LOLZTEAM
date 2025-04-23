@@ -3,15 +3,15 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.10"
+    "version": "1.1.11"
   },
   "servers": [
     {
-      "url": "https://prod-api.zelenka.guru",
+      "url": "https://prod-api.lolz.live",
       "description": "Production."
     },
     {
-      "url": "https://prod-api.lolz.live",
+      "url": "https://prod-api.zelenka.guru",
       "description": "Alternative Production."
     }
   ],
@@ -27,7 +27,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "oneOf": [
@@ -464,6 +464,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -475,7 +478,7 @@
         ]
       }
     },
-    "/categories/{categoryId}": {
+    "/categories/{category_id}": {
       "get": {
         "tags": [
           "Categories"
@@ -485,7 +488,7 @@
         "operationId": "Categories.Get",
         "parameters": [
           {
-            "name": "categoryId",
+            "name": "category_id",
             "in": "path",
             "description": "Id of category.",
             "required": true,
@@ -598,6 +601,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -892,6 +898,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -903,7 +912,7 @@
         ]
       }
     },
-    "/forums/{forumId}": {
+    "/forums/{forum_id}": {
       "get": {
         "tags": [
           "Forums"
@@ -913,14 +922,14 @@
         "operationId": "Forums.Get",
         "parameters": [
           {
-            "name": "forumId",
+            "name": "forum_id",
             "in": "path",
             "description": "Id of forum.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Forumid",
+                "title": "Forum Id",
               "type": "integer",
               "description": "Id of forum."
             }
@@ -1120,6 +1129,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -1131,7 +1143,7 @@
         ]
       }
     },
-    "/forums/{forumId}/followers": {
+    "/forums/{forum_id}/followers": {
       "get": {
         "tags": [
           "Forums"
@@ -1141,14 +1153,14 @@
         "operationId": "Forums.Followers",
         "parameters": [
           {
-            "name": "forumId",
+            "name": "forum_id",
             "in": "path",
             "description": "Id of forum.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Forumid",
+              "title": "Forum Id",
               "type": "integer",
               "description": "Id of forum."
             }
@@ -1223,6 +1235,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -1242,14 +1257,14 @@
         "operationId": "Forums.Follow",
         "parameters": [
           {
-            "name": "forumId",
+            "name": "forum_id",
             "in": "path",
             "description": "Id of forum.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Forumid",
+              "title": "Forum Id",
               "type": "integer",
               "description": "Id of forum."
             }
@@ -1304,6 +1319,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -1323,14 +1341,14 @@
         "operationId": "Forums.Unfollow",
         "parameters": [
           {
-            "name": "forumId",
+            "name": "forum_id",
             "in": "path",
             "description": "Id of forum.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Forumid",
+                "title": "Forum Id",
               "type": "integer",
               "description": "Id of forum."
             }
@@ -1345,6 +1363,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -1754,6 +1775,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -1765,7 +1789,7 @@
         ]
       }
     },
-    "/pages/{pageId}": {
+    "/pages/{page_id}": {
       "get": {
         "tags": [
           "Pages"
@@ -1775,14 +1799,14 @@
         "operationId": "Pages.Get",
         "parameters": [
           {
-            "name": "pageId",
+            "name": "page_id",
             "in": "path",
             "description": "Id of page.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Pageid",
+              "title": "Page Id",
               "type": "integer",
               "description": "Id of page."
             }
@@ -1893,6 +1917,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -2113,6 +2140,19 @@
                 "compilation",
                 "scheduledthreads"
               ]
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Thread title.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Thread Title",
+              "type": "string",
+              "description": "Thread title."
             }
           },
           {
@@ -3881,7 +3921,7 @@
         ]
       }
     },
-    "/threads/{threadId}": {
+    "/threads/{thread_id}": {
       "get": {
         "tags": [
           "Threads"
@@ -3891,7 +3931,7 @@
         "operationId": "Threads.Get",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           }
         ],
         "responses": {
@@ -3910,6 +3950,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -3929,14 +3972,14 @@
         "operationId": "Threads.Edit",
         "parameters": [
           {
-            "name": "threadId",
+            "name": "thread_id",
             "in": "path",
             "description": "Id of thread.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "ThreadId",
+              "title": "thread_id",
               "type": "integer",
               "description": "Id of thread."
             }
@@ -4099,6 +4142,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -4118,7 +4164,7 @@
         "operationId": "Threads.Delete",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           },
           {
             "name": "reason",
@@ -4143,6 +4189,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -4154,7 +4203,7 @@
         ]
       }
     },
-    "/threads/{threadId}/move": {
+    "/threads/{thread_id}/move": {
       "post": {
         "tags": [
           "Threads"
@@ -4164,14 +4213,14 @@
         "operationId": "Threads.Move",
         "parameters": [
           {
-            "name": "threadId",
+            "name": "thread_id",
             "in": "path",
             "description": "Id of thread.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "ThreadId",
+              "title": "thread_id",
               "type": "integer",
               "description": "Id of thread."
             }
@@ -4267,6 +4316,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -4278,7 +4330,7 @@
         ]
       }
     },
-    "/threads/{threadId}/bump": {
+    "/threads/{thread_id}/bump": {
       "post": {
         "tags": [
           "Threads"
@@ -4288,7 +4340,7 @@
         "operationId": "Threads.Bump",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           }
         ],
         "responses": {
@@ -4324,6 +4376,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -4335,7 +4390,77 @@
         ]
       }
     },
-    "/threads/{threadId}/followers": {
+    "/threads/{thread_id}/star": {
+      "post": {
+        "tags": [
+          "Threads"
+        ],
+        "summary": "Bookmark Thread",
+        "description": "Bookmark a thread.\n\nRequired scopes:\n+ **post**",
+        "operationId": "Threads.Star",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/thread_id"
+          }
+        ],
+        "responses": {
+          "200": {
+           "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Threads"
+        ],
+        "summary": "Unbookmark Thread",
+        "description": "Unbookmark a thread.\n\nRequired scopes:\n+ **post**",
+        "operationId": "Threads.Unstar",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/thread_id"
+          }
+        ],
+        "responses": {
+          "200": {
+           "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      }
+    },
+    "/threads/{thread_id}/followers": {
       "get": {
         "tags": [
           "Threads"
@@ -4345,7 +4470,7 @@
         "operationId": "Threads.Followers",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           }
         ],
         "responses": {
@@ -4412,6 +4537,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -4431,7 +4559,7 @@
         "operationId": "Threads.Follow",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           },
           {
             "name": "email",
@@ -4456,6 +4584,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -4475,7 +4606,7 @@
         "operationId": "Threads.Unfollow",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           }
         ],
         "responses": {
@@ -4487,6 +4618,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -5181,7 +5315,7 @@
         ]
       }
     },
-    "/threads/{threadId}/navigation": {
+    "/threads/{thread_id}/navigation": {
       "get": {
         "tags": [
           "Threads"
@@ -5191,7 +5325,7 @@
         "operationId": "Threads.Navigation",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           }
         ],
         "responses": {
@@ -5332,6 +5466,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -5343,7 +5480,7 @@
         ]
       }
     },
-    "/threads/{threadId}/poll": {
+    "/threads/{thread_id}/poll": {
       "get": {
         "tags": [
           "Threads"
@@ -5353,7 +5490,7 @@
         "operationId": "Threads.Poll.Get",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           }
         ],
         "responses": {
@@ -5478,6 +5615,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -5489,7 +5629,7 @@
         ]
       }
     },
-    "/threads/{threadId}/poll/votes": {
+    "/threads/{thread_id}/poll/votes": {
       "post": {
         "tags": [
           "Threads"
@@ -5499,7 +5639,7 @@
         "operationId": "Threads.Poll.Vote",
         "parameters": [
           {
-            "$ref": "#/components/parameters/threadId"
+            "$ref": "#/components/parameters/thread_id"
           },
           {
             "name": "response_id",
@@ -5540,6 +5680,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7537,7 +7680,7 @@
         ]
       }
     },
-    "/posts/{postId}": {
+    "/posts/{post_id}": {
       "get": {
         "tags": [
           "Posts"
@@ -7547,14 +7690,14 @@
         "operationId": "Posts.Get",
         "parameters": [
           {
-            "name": "postId",
+            "name": "post_id",
             "in": "path",
             "description": "Id of post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -7576,6 +7719,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7595,14 +7741,14 @@
         "operationId": "Posts.Edit",
         "parameters": [
           {
-            "name": "postId",
+            "name": "post_id",
             "in": "path",
             "description": "Id of post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -7645,6 +7791,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7664,14 +7813,14 @@
         "operationId": "Posts.Delete",
         "parameters": [
           {
-            "name": "postId",
+            "name": "post_id",
             "in": "path",
             "description": "Id of post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -7699,6 +7848,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7710,7 +7862,7 @@
         ]
       }
     },
-    "/posts/{postId}/likes": {
+    "/posts/{post_id}/likes": {
       "get": {
         "tags": [
           "Posts"
@@ -7720,14 +7872,14 @@
         "operationId": "Posts.Likes",
         "parameters": [
           {
-            "name": "postId",
+            "name": "post_id",
             "in": "path",
             "description": "Id of post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -7804,6 +7956,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7823,14 +7978,14 @@
         "operationId": "Posts.Like",
         "parameters": [
           {
-            "name": "postId",
+            "name": "post_id",
             "in": "path",
             "description": "Id of post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -7845,6 +8000,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7864,14 +8022,14 @@
         "operationId": "Posts.Unlike",
         "parameters": [
           {
-            "name": "postId",
+            "name": "post_id",
             "in": "path",
             "description": "Id of post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -7886,6 +8044,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7897,7 +8058,7 @@
         ]
       }
     },
-    "/posts/{postId}/report": {
+    "/posts/{post_id}/report": {
       "post": {
         "tags": [
           "Posts"
@@ -7907,14 +8068,14 @@
         "operationId": "Posts.Report",
         "parameters": [
           {
-            "name": "postId",
+            "name": "post_id",
             "in": "path",
             "description": "Id of post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -7942,6 +8103,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -7970,7 +8134,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -8195,6 +8359,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -8221,7 +8388,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Postid",
+              "title": "post_id",
               "type": "integer",
               "description": "Id of post."
             }
@@ -8437,6 +8604,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -8680,6 +8850,53 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Post comments"
+        ],
+        "summary": "Delete Post Comment",
+        "description": "Delete a post comment.\n\nRequired scopes:\n+ **post**",
+        "operationId": "Posts.Comments.Delete",
+        "parameters": [
+          {
+            "name": "post_comment_id",
+            "in": "query",
+            "description": "Id of post comment to delete.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Post Comment ID",
+              "type": "integer",
+              "description": "Id of post comment."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -8735,6 +8952,13 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "users",
+                    "users_total",
+                    "links",
+                    "system_info"
+                  ],
                   "properties": {
                     "users": {
                       "title": "Users",
@@ -8911,119 +9135,46 @@
                             "title": "User",
                             "type": "integer"
                           },
-                          "custom_fields": {
-                            "title": "Custom",
-                            "type": "object",
-                            "properties": {
-                              "_4": {
-                                "title": "",
-                                "type": "string"
+                          "fields": {
+                            "title": "Fields",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "title": "Id",
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "title": "Title",
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "title": "Description",
+                                  "type": "string"
+                                },
+                                "position": {
+                                  "title": "Position",
+                                  "type": "string"
+                                },
+                                "is_required": {
+                                  "title": "Is",
+                                  "type": "boolean"
+                                },
+                                "value": {
+                                  "title": "Value",
+                                  "type": "string"
+                                }
                               },
-                              "allowSelfUnban": {
-                                "title": "Allow self unban",
-                                "type": "array",
-                                "items": {}
-                              },
-                              "discord": {
-                                "title": "Discord",
-                                "type": "string"
-                              },
-                              "github": {
-                                "title": "Github",
-                                "type": "string"
-                              },
-                              "jabber": {
-                                "title": "Jabber",
-                                "type": "string"
-                              },
-                              "lztAwardUserTrophy": {
-                                "title": "Lzt award user trophy",
-                                "type": "string"
-                              },
-                              "lztCuratorNodeTitle": {
-                                "title": "Lzt curator node title",
-                                "type": "string"
-                              },
-                              "lztCuratorNodeTitleEn": {
-                                "title": "Lzt curator node title en",
-                                "type": "string"
-                              },
-                              "lztDeposit": {
-                                "title": "Lzt deposit",
-                                "type": "string"
-                              },
-                              "lztInnovation20Link": {
-                                "title": "Lzt innovation link",
-                                "type": "string"
-                              },
-                              "lztInnovation30Link": {
-                                "title": "Lzt innovation link",
-                                "type": "string"
-                              },
-                              "lztInnovationLink": {
-                                "title": "Lzt innovation link",
-                                "type": "string"
-                              },
-                              "lztLikesIncreasing": {
-                                "title": "Lzt likes increasing",
-                                "type": "string"
-                              },
-                              "lztLikesZeroing": {
-                                "title": "Lzt likes zeroing",
-                                "type": "string"
-                              },
-                              "lztSympathyIncreasing": {
-                                "title": "Lzt sympathy increasing",
-                                "type": "string"
-                              },
-                              "lztSympathyZeroing": {
-                                "title": "Lzt sympathy zeroing",
-                                "type": "string"
-                              },
-                              "maecenasValue": {
-                                "title": "Maecenas value",
-                                "type": "string"
-                              },
-                              "scamURL": {
-                                "title": "Scam url",
-                                "type": "string"
-                              },
-                              "steam": {
-                                "title": "Steam",
-                                "type": "string"
-                              },
-                              "telegram": {
-                                "title": "Telegram",
-                                "type": "string"
-                              },
-                              "vk": {
-                                "title": "Vk",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "_4",
-                              "allowSelfUnban",
-                              "discord",
-                              "github",
-                              "jabber",
-                              "lztAwardUserTrophy",
-                              "lztCuratorNodeTitle",
-                              "lztCuratorNodeTitleEn",
-                              "lztDeposit",
-                              "lztInnovation20Link",
-                              "lztInnovation30Link",
-                              "lztInnovationLink",
-                              "lztLikesIncreasing",
-                              "lztLikesZeroing",
-                              "lztSympathyIncreasing",
-                              "lztSympathyZeroing",
-                              "maecenasValue",
-                              "scamURL",
-                              "steam",
-                              "telegram",
-                              "vk"
-                            ]
+                              "required": [
+                                "id",
+                                "title",
+                                "description",
+                                "position",
+                                "is_required",
+                                "value"
+                              ]
+                            }
                           }
                         },
                         "required": [
@@ -9051,7 +9202,7 @@
                           "user_is_ignored",
                           "user_is_visitor",
                           "user_group_id",
-                          "custom_fields"
+                          "fields"
                         ]
                       }
                     },
@@ -9085,13 +9236,7 @@
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "users",
-                    "users_total",
-                    "links",
-                    "system_info"
-                  ]
+                  }
                 }
               }
             }
@@ -9651,7 +9796,7 @@
         ]
       }
     },
-    "/users/{userId}": {
+    "/users/{user_id}": {
       "get": {
         "tags": [
           "Users"
@@ -9661,14 +9806,14 @@
         "operationId": "Users.Get",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "Id of user.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -9688,6 +9833,11 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "user",
+                    "system_info"
+                  ],
                   "properties": {
                     "user": {
                       "title": "User",
@@ -9862,118 +10012,87 @@
                           "title": "User",
                           "type": "integer"
                         },
-                        "custom_fields": {
-                          "title": "Custom",
+                        "fields": {
+                          "title": "Fields",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "title": "Id",
+                                "type": "string"
+                              },
+                              "title": {
+                                "title": "Title",
+                                "type": "string"
+                              },
+                              "description": {
+                                "title": "Description",
+                                "type": "string"
+                              },
+                              "position": {
+                                "title": "Position",
+                                "type": "string"
+                              },
+                              "is_required": {
+                                "title": "Is",
+                                "type": "boolean"
+                              },
+                              "value": {
+                                "title": "Value",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "description",
+                              "position",
+                              "is_required",
+                              "value"
+                            ]
+                          }
+                        },
+                        "birthday": {
+                          "title": "Birthday",
                           "type": "object",
                           "properties": {
-                            "_4": {
-                              "title": "",
-                              "type": "string"
+                            "age": {
+                              "title": "Age",
+                              "type": "boolean"
                             },
-                            "allowSelfUnban": {
-                              "title": "Allow self unban",
-                              "type": "array",
-                              "items": {}
+                            "timeStamp": {
+                              "title": "Time Stamp",
+                              "type": "object",
+                              "properties": {
+                                "date": {
+                                  "title": "Date",
+                                  "type": "string"
+                                },
+                                "timezone_type": {
+                                  "title": "Timezone",
+                                  "type": "integer"
+                                },
+                                "timezone": {
+                                  "title": "Timezone",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "date",
+                                "timezone_type",
+                                "timezone"
+                              ]
                             },
-                            "discord": {
-                              "title": "Discord",
-                              "type": "string"
-                            },
-                            "github": {
-                              "title": "Github",
-                              "type": "string"
-                            },
-                            "jabber": {
-                              "title": "Jabber",
-                              "type": "string"
-                            },
-                            "lztAwardUserTrophy": {
-                              "title": "Lzt award user trophy",
-                              "type": "string"
-                            },
-                            "lztCuratorNodeTitle": {
-                              "title": "Lzt curator node title",
-                              "type": "string"
-                            },
-                            "lztCuratorNodeTitleEn": {
-                              "title": "Lzt curator node title en",
-                              "type": "string"
-                            },
-                            "lztDeposit": {
-                              "title": "Lzt deposit",
-                              "type": "string"
-                            },
-                            "lztInnovation20Link": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztInnovation30Link": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztInnovationLink": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztLikesIncreasing": {
-                              "title": "Lzt likes increasing",
-                              "type": "string"
-                            },
-                            "lztLikesZeroing": {
-                              "title": "Lzt likes zeroing",
-                              "type": "string"
-                            },
-                            "lztSympathyIncreasing": {
-                              "title": "Lzt sympathy increasing",
-                              "type": "string"
-                            },
-                            "lztSympathyZeroing": {
-                              "title": "Lzt sympathy zeroing",
-                              "type": "string"
-                            },
-                            "maecenasValue": {
-                              "title": "Maecenas value",
-                              "type": "string"
-                            },
-                            "scamURL": {
-                              "title": "Scam url",
-                              "type": "string"
-                            },
-                            "steam": {
-                              "title": "Steam",
-                              "type": "string"
-                            },
-                            "telegram": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "vk": {
-                              "title": "Vk",
+                            "format": {
+                              "title": "Format",
                               "type": "string"
                             }
                           },
                           "required": [
-                            "_4",
-                            "allowSelfUnban",
-                            "discord",
-                            "github",
-                            "jabber",
-                            "lztAwardUserTrophy",
-                            "lztCuratorNodeTitle",
-                            "lztCuratorNodeTitleEn",
-                            "lztDeposit",
-                            "lztInnovation20Link",
-                            "lztInnovation30Link",
-                            "lztInnovationLink",
-                            "lztLikesIncreasing",
-                            "lztLikesZeroing",
-                            "lztSympathyIncreasing",
-                            "lztSympathyZeroing",
-                            "maecenasValue",
-                            "scamURL",
-                            "steam",
-                            "telegram",
-                            "vk"
+                            "age",
+                            "timeStamp",
+                            "format"
                           ]
                         }
                       },
@@ -10002,17 +10121,14 @@
                         "user_is_ignored",
                         "user_is_visitor",
                         "user_group_id",
-                        "custom_fields"
+                        "fields",
+                        "birthday"
                       ]
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "user",
-                    "system_info"
-                  ]
+                  }
                 }
               }
             }
@@ -10022,6 +10138,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -10041,14 +10160,14 @@
         "operationId": "Users.Edit",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -10056,7 +10175,8 @@
                 },
                 {
                   "type": "string",
-                  "description": "User shortlink. Use \"me\" to interact with your own profile."
+                  "description": "User shortlink. Use \"me\" to interact with your own profile.",
+                  "default":"me"
                 }
               ]
             }
@@ -10124,6 +10244,45 @@
               "title": "User Dob Year",
               "type": "integer",
               "description": "Your date of birth (year)."
+            }
+          },
+          {
+            "name": "secret_answer",
+            "in": "query",
+            "description": "Secret answer.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Secret Answer",
+              "type": "string",
+              "description": "Secret answer."
+            }
+          },
+          {
+            "name": "secret_answer_type",
+            "in": "query",
+            "description": "Secret answer type.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Secret Answer Type",
+              "type": "integer",
+              "description": "Secret answer type."
+            }
+          },
+          {
+            "name": "short_link",
+            "in": "query",
+            "description": "Profile short link.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Short Link",
+              "type": "string",
+              "description": "Profile short link."
             }
           },
           {
@@ -10293,6 +10452,10 @@
           "403": {
             "$ref": "#/components/responses/NoPermission"
           }
+          ,
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         },
         "security": [
           {
@@ -10303,7 +10466,7 @@
         ]
       }
     },
-    "/users/{userId}/avatar": {
+    "/users/{user_id}/avatar": {
       "post": {
         "tags": [
           "Users"
@@ -10313,14 +10476,14 @@
         "operationId": "Users.Avatar.Upload",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -10428,6 +10591,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -10447,14 +10613,14 @@
         "operationId": "Users.Avatar.Delete",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -10477,6 +10643,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -10488,7 +10657,7 @@
         ]
       }
     },
-    "/users/{userId}/avatar/crop": {
+    "/users/{user_id}/avatar/crop": {
       "post": {
         "tags": [
           "Users"
@@ -10498,14 +10667,14 @@
         "operationId": "Users.Avatar.Crop",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -10592,6 +10761,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -10603,7 +10775,7 @@
         ]
       }
     },
-    "/users/{userId}/background": {
+    "/users/{user_id}/background": {
       "post": {
         "tags": [
           "Users"
@@ -10613,14 +10785,14 @@
         "operationId": "Users.Background.Upload",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -10728,6 +10900,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -10747,14 +10922,14 @@
         "operationId": "Users.Background.Delete",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -10777,6 +10952,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -10788,7 +10966,7 @@
         ]
       }
     },
-    "/users/{userId}/background/crop": {
+    "/users/{user_id}/background/crop": {
       "post": {
         "tags": [
           "Users"
@@ -10798,14 +10976,14 @@
         "operationId": "Users.Background.Crop",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -10892,6 +11070,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -10903,7 +11084,7 @@
         ]
       }
     },
-    "/users/{userId}/followers": {
+    "/users/{user_id}/followers": {
       "get": {
         "tags": [
           "Users"
@@ -10913,14 +11094,14 @@
         "operationId": "Users.Followers",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -11274,6 +11455,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -11293,14 +11477,14 @@
         "operationId": "Users.Follow",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -11323,6 +11507,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -11342,14 +11529,14 @@
         "operationId": "Users.Unfollow",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -11372,6 +11559,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -11383,7 +11573,7 @@
         ]
       }
     },
-    "/users/{userId}/followings": {
+    "/users/{user_id}/followings": {
       "get": {
         "tags": [
           "Users"
@@ -11393,14 +11583,14 @@
         "operationId": "Users.Followings",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -11821,6 +12011,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -11911,7 +12104,7 @@
         ]
       }
     },
-    "/users/{userId}/ignore": {
+    "/users/{user_id}/ignore": {
       "post": {
         "tags": [
           "Users"
@@ -11921,20 +12114,22 @@
         "operationId": "Users.Ignore",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
+                  "title":"User ID",
                   "type": "integer",
                   "description": "Id of user."
                 },
                 {
+                  "title":"Shortlink",
                   "type": "string",
                   "description": "User shortlink. Use \"me\" to interact with your own profile."
                 }
@@ -11951,6 +12146,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -11970,14 +12168,14 @@
         "operationId": "Users.Unignore",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -12000,6 +12198,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -12011,7 +12212,7 @@
         ]
       }
     },
-    "/users/{userId}/timeline": {
+    "/users/{user_id}/timeline": {
       "get": {
         "tags": [
           "Users"
@@ -12021,14 +12222,14 @@
         "operationId": "ProfilePosts.Contents",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -12873,6 +13074,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -12884,7 +13088,7 @@
         ]
       }
     },
-    "/users/{userId}/trophies": {
+    "/users/{user_id}/trophies": {
       "get": {
         "tags": [
           "Users"
@@ -12894,14 +13098,14 @@
         "operationId": "Users.Trophies",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -12971,6 +13175,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -12982,7 +13189,69 @@
         ]
       }
     },
-    "/users/{userId}/profile-posts": {
+    "/users/secret-answer-types": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get Secret Answer Types",
+        "description": "Get available secret answer types for user account security.\n\nRequired scopes:\n+ **read**",
+        "operationId": "Users.SecretAnswerTypes",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "data": {
+                      "title": "Data",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "sa_id": {
+                            "title": "Sa",
+                            "type": "integer"
+                          },
+                          "renderedPhrase": {
+                            "title": "Rendered Phrase",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sa_id",
+                          "renderedPhrase"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read"
+            ]
+          }
+        ]
+      }
+    },
+    "/users/{user_id}/profile-posts": {
       "get": {
         "tags": [
           "Profile Posts"
@@ -12992,14 +13261,14 @@
         "operationId": "ProfilePosts.List",
         "parameters": [
           {
-            "name": "userId",
+            "name": "user_id",
             "in": "path",
             "description": "User id.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -13583,6 +13852,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -13594,7 +13866,7 @@
         ]
       }
     },
-    "/profile-posts/{profilePostId}": {
+    "/profile-posts/{profile_post_id}": {
       "get": {
         "tags": [
           "Profile Posts"
@@ -13604,14 +13876,14 @@
         "operationId": "ProfilePosts.Get",
         "parameters": [
           {
-            "name": "profilePostId",
+            "name": "profile_post_id",
             "in": "path",
             "description": "Id of profile post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profile Post Id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -13807,6 +14079,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -13826,14 +14101,14 @@
         "operationId": "ProfilePosts.Edit",
         "parameters": [
           {
-            "name": "profilePostId",
+            "name": "profile_post_id",
             "in": "path",
             "description": "Id of profile post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profile Post Id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -13843,7 +14118,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "title": "Body_edit_profile_post_profile_posts__profilePostId__put",
+                "title": "Body_edit_profile_post_profile_posts__profilepost_id__put",
                 "required": [
                   "post_body"
                 ],
@@ -14050,6 +14325,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -14069,14 +14347,14 @@
         "operationId": "ProfilePosts.Delete",
         "parameters": [
           {
-            "name": "profilePostId",
+            "name": "profile_post_id",
             "in": "path",
             "description": "Id of profile post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profile Post Id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -14104,6 +14382,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -14132,7 +14413,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "title": "Userid",
+              "title": "user_id",
               "oneOf": [
                 {
                   "type": "integer",
@@ -14356,6 +14637,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -14367,7 +14651,7 @@
         ]
       }
     },
-    "/profile-posts/{profilePostId}/likes": {
+    "/profile-posts/{profile_post_id}/likes": {
       "get": {
         "tags": [
           "Profile Posts"
@@ -14377,14 +14661,14 @@
         "operationId": "ProfilePosts.Likes",
         "parameters": [
           {
-            "name": "profilePostId",
+            "name": "profile_post_id",
             "in": "path",
             "description": "Id of profile post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profile Post Id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -14435,6 +14719,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -14454,14 +14741,14 @@
         "operationId": "ProfilePosts.Like",
         "parameters": [
           {
-            "name": "profilePostId",
+            "name": "profile_post_id",
             "in": "path",
             "description": "Id of profile post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profile Post Id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -14476,6 +14763,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -14495,14 +14785,14 @@
         "operationId": "ProfilePosts.Unlike",
         "parameters": [
           {
-            "name": "profilePostId",
+            "name": "profile_post_id",
             "in": "path",
             "description": "Id of profile post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profilepost_id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -14517,6 +14807,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -14528,7 +14821,7 @@
         ]
       }
     },
-    "/profile-posts/{profilePostId}/comments": {
+    "/profile-posts/comments": {
       "get": {
         "tags": [
           "Profile Post Comments"
@@ -14538,14 +14831,14 @@
         "operationId": "ProfilePosts.Comments.List",
         "parameters": [
           {
-            "name": "profilePostId",
-            "in": "path",
+            "name": "profile_post_id",
+            "in": "query",
             "description": "Id of profile post.",
             "required": true,
-            "style": "simple",
-            "explode": false,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profile Post Id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -15154,6 +15447,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -15173,14 +15469,14 @@
         "operationId": "ProfilePosts.Comments.Create",
         "parameters": [
           {
-            "name": "profilePostId",
-            "in": "path",
+            "name": "profile_post_id",
+            "in": "query",
             "description": "Id of profile post.",
             "required": true,
-            "style": "simple",
-            "explode": false,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profile Post Id",
               "type": "integer",
               "description": "Id of profile post."
             }
@@ -15340,6 +15636,243 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Profile Post Comments"
+        ],
+        "summary": "Edit Profile Post Comment",
+        "description": "Edit a profile post comment.\n\nRequired scopes:\n+ **post**",
+        "operationId": "ProfilePosts.Comments.Edit",
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "query",
+            "description": "Id of profile post comment.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Comment Id",
+              "type": "integer",
+              "description": "Id of profile post comment."
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "comment_body"
+                ],
+                "properties": {
+                  "comment_body": {
+                    "title": "Comment Body",
+                    "type": "string",
+                    "description": "New content for the profile post comment."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "comment",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "comment": {
+                      "title": "Comment",
+                      "type": "object",
+                      "properties": {
+                        "comment_id": {
+                          "title": "Comment",
+                          "type": "integer"
+                        },
+                        "profile_post_id": {
+                          "title": "Profile",
+                          "type": "integer"
+                        },
+                        "comment_user_id": {
+                          "title": "Comment",
+                          "type": "integer"
+                        },
+                        "comment_username": {
+                          "title": "Comment",
+                          "type": "string"
+                        },
+                        "comment_username_html": {
+                          "title": "Comment",
+                          "type": "string"
+                        },
+                        "comment_create_date": {
+                          "title": "Comment",
+                          "type": "integer"
+                        },
+                        "comment_body": {
+                          "title": "Comment",
+                          "type": "string"
+                        },
+                        "user_is_ignored": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "timeline_user_id": {
+                          "title": "Timeline",
+                          "type": "integer"
+                        },
+                        "links": {
+                          "title": "Links",
+                          "type": "object",
+                          "properties": {
+                            "detail": {
+                              "title": "Detail",
+                              "type": "string"
+                            },
+                            "profile_post": {
+                              "title": "Profile",
+                              "type": "string"
+                            },
+                            "timeline": {
+                              "title": "Timeline",
+                              "type": "string"
+                            },
+                            "timeline_user": {
+                              "title": "Timeline",
+                              "type": "string"
+                            },
+                            "poster": {
+                              "title": "Poster",
+                              "type": "string"
+                            },
+                            "poster_avatar": {
+                              "title": "Poster",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "detail",
+                            "profile_post",
+                            "timeline",
+                            "timeline_user",
+                            "poster",
+                            "poster_avatar"
+                          ]
+                        },
+                        "permissions": {
+                          "title": "Permissions",
+                          "type": "object",
+                          "properties": {
+                            "view": {
+                              "title": "View",
+                              "type": "boolean"
+                            },
+                            "delete": {
+                              "title": "Delete",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "view",
+                            "delete"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "comment_id",
+                        "profile_post_id",
+                        "comment_user_id",
+                        "comment_username",
+                        "comment_username_html",
+                        "comment_create_date",
+                        "comment_body",
+                        "user_is_ignored",
+                        "timeline_user_id",
+                        "links",
+                        "permissions"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Profile Post Comments"
+        ],
+        "summary": "Delete Profile Post Comment",
+        "description": "Delete a profile post comment.\n\nRequired scopes:\n+ **post**",
+        "operationId": "ProfilePosts.Comments.Delete",
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "query",
+            "description": "Id of profile post comment.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Comment Id",
+              "type": "integer",
+              "description": "Id of profile post comment."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -15351,7 +15884,7 @@
         ]
       }
     },
-    "/profile-posts/{profilePostId}/comments/{commentId}": {
+    "/profile-posts/{profile_post_id}/comments/{comment_id}": {
       "get": {
         "tags": [
           "Profile Post Comments"
@@ -15361,20 +15894,20 @@
         "operationId": "ProfilePosts.Comments.Get",
         "parameters": [
           {
-            "name": "profilePostId",
+            "name": "profile_post_id",
             "in": "path",
             "description": "Id of profile post.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Profilepostid",
+              "title": "Profilepost_id",
               "type": "integer",
               "description": "Id of profile post."
             }
           },
           {
-            "name": "commentId",
+            "name": "comment_id",
             "in": "path",
             "description": "Id of profile post comment.",
             "required": true,
@@ -15522,6 +16055,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -16235,6 +16771,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -16247,7 +16786,7 @@
         ]
       }
     },
-    "/conversations/{conversationId}": {
+    "/conversations/{conversation_id}": {
       "get": {
         "tags": [
           "Conversations"
@@ -16257,14 +16796,14 @@
         "operationId": "Conversations.Get",
         "parameters": [
           {
-            "name": "conversationId",
+            "name": "conversation_id",
             "in": "path",
             "description": "Id of conversation.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Conversationid",
+              "title": "conversation_id",
               "type": "integer",
               "description": "Id of conversation."
             }
@@ -16609,6 +17148,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -16629,14 +17171,14 @@
         "operationId": "Conversations.Delete",
         "parameters": [
           {
-            "name": "conversationId",
+            "name": "conversation_id",
             "in": "path",
             "description": "Id of conversation.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Conversationid",
+              "title": "conversation_id",
               "type": "integer",
               "description": "Id of conversation."
             }
@@ -16668,6 +17210,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -17091,6 +17636,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -17319,6 +17867,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -17331,7 +17882,7 @@
         ]
       }
     },
-    "/conversation-messages/{messageId}": {
+    "/conversation-messages/{message_id}": {
       "get": {
         "tags": [
           "Conversations"
@@ -17341,14 +17892,14 @@
         "operationId": "Conversations.Messages.Get",
         "parameters": [
           {
-            "name": "messageId",
+            "name": "message_id",
             "in": "path",
             "description": "Id of message.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Messageid",
+              "title": "message_id",
               "type": "integer",
               "description": "Id of message."
             }
@@ -17529,6 +18080,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -17549,14 +18103,14 @@
         "operationId": "Conversations.Messages.Edit",
         "parameters": [
           {
-            "name": "messageId",
+            "name": "message_id",
             "in": "path",
             "description": "Id of message.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Messageid",
+              "title": "message_id",
               "type": "integer",
               "description": "Id of message."
             }
@@ -17757,6 +18311,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -17926,7 +18483,7 @@
         ]
       }
     },
-    "/notifications/{notificationId}/content": {
+    "/notifications/{notification_id}/content": {
       "get": {
         "tags": [
           "Notifications"
@@ -17936,14 +18493,14 @@
         "operationId": "Notifications.Get",
         "parameters": [
           {
-            "name": "notificationId",
+            "name": "notification_id",
             "in": "path",
             "description": "Id of notification.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Notificationid",
+              "title": "notification_id",
               "type": "integer",
               "description": "Id of notification."
             }
@@ -18050,6 +18607,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -18093,6 +18653,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -18363,7 +18926,7 @@
         ]
       }
     },
-    "/tags/{tagId}": {
+    "/tags/{tag_id}": {
       "get": {
         "tags": [
           "Content Tagging"
@@ -18373,14 +18936,14 @@
         "operationId": "Tags.Get",
         "parameters": [
           {
-            "name": "tagId",
+            "name": "tag_id",
             "in": "path",
             "description": "Id of tag.",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "Tagid",
+              "title": "tag_id",
               "type": "integer",
               "description": "Id of tag."
             }
@@ -19111,6 +19674,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -22779,8 +23345,51 @@
                       }
                     },
                     "ban": {
-                      "title": "Ban",
-                      "type": "boolean"
+                      "type": ["object", "boolean"],
+                      "required": [
+                        "user_id",
+                        "username",
+                        "moderator_id",
+                        "moderator_username",
+                        "ban_date",
+                        "end_date",
+                        "reason",
+                        "user_message"
+                      ],
+                      "properties": {
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "username": {
+                          "title": "Username",
+                          "type": "string"
+                        },
+                        "moderator_id": {
+                          "title": "Moderator",
+                          "type": "integer"
+                        },
+                        "moderator_username": {
+                          "title": "Moderator",
+                          "type": "string"
+                        },
+                        "ban_date": {
+                          "title": "Ban",
+                          "type": "integer"
+                        },
+                        "end_date": {
+                          "title": "End",
+                          "type": "integer"
+                        },
+                        "reason": {
+                          "title": "Reason",
+                          "type": "string"
+                        },
+                        "user_message": {
+                          "title": "User",
+                          "type": "string"
+                        }
+                      }
                     },
                     "room": {
                       "title": "Room",
@@ -22956,15 +23565,59 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "ignoredUsers",
                     "ban",
-                    "room",
-                    "rooms",
-                    "roomCount",
-                    "permissions",
+                    "ignoredUsers",
+                    "messages",
                     "system_info"
                   ],
                   "properties": {
+                    "ban": {
+                      "type": ["object", "boolean"],
+                      "required": [
+                        "user_id",
+                        "username",
+                        "moderator_id",
+                        "moderator_username",
+                        "ban_date",
+                        "end_date",
+                        "reason",
+                        "user_message"
+                      ],
+                      "properties": {
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "username": {
+                          "title": "Username",
+                          "type": "string"
+                        },
+                        "moderator_id": {
+                          "title": "Moderator",
+                          "type": "integer"
+                        },
+                        "moderator_username": {
+                          "title": "Moderator",
+                          "type": "string"
+                        },
+                        "ban_date": {
+                          "title": "Ban",
+                          "type": "integer"
+                        },
+                        "end_date": {
+                          "title": "End",
+                          "type": "integer"
+                        },
+                        "reason": {
+                          "title": "Reason",
+                          "type": "string"
+                        },
+                        "user_message": {
+                          "title": "User",
+                          "type": "string"
+                        }
+                      }
+                    },
                     "ignoredUsers": {
                       "title": "Ignored Users",
                       "type": "array",
@@ -22972,95 +23625,90 @@
                         "type": "integer"
                       }
                     },
-                    "ban": {
-                      "title": "Ban",
-                      "type": "boolean"
-                    },
-                    "room": {
-                      "title": "Room",
-                      "type": "object",
-                      "properties": {
-                        "room_id": {
-                          "title": "Room",
-                          "type": "integer"
-                        },
-                        "post_cooldown": {
-                          "title": "Post",
-                          "type": "integer"
-                        },
-                        "title": {
-                          "title": "Title",
-                          "type": "string"
-                        },
-                        "canPostMessages": {
-                          "title": "Can Post Messages",
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "room_id",
-                        "post_cooldown",
-                        "title",
-                        "canPostMessages"
-                      ]
-                    },
-                    "rooms": {
-                      "title": "Rooms",
+                    "messages": {
+                      "title": "Messages",
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
+                          "message_id": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
                           "room_id": {
                             "title": "Room",
                             "type": "integer"
                           },
-                          "post_cooldown": {
-                            "title": "Post",
+                          "user_id": {
+                            "title": "User",
                             "type": "integer"
                           },
-                          "title": {
-                            "title": "Title",
+                          "username": {
+                            "title": "Username",
                             "type": "string"
                           },
-                          "canPostMessages": {
-                            "title": "Can Post Messages",
+                          "username_html": {
+                            "title": "Username",
+                            "type": "string"
+                          },
+                          "plain_message": {
+                            "title": "Plain",
+                            "type": "string"
+                          },
+                          "message_date": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
+                          "is_curator_message": {
+                            "title": "Is",
                             "type": "boolean"
+                          },
+                          "message": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "permissions": {
+                            "title": "Permissions",
+                            "type": "object",
+                            "properties": {
+                              "report": {
+                                "title": "Report",
+                                "type": "boolean"
+                              },
+                              "edit": {
+                                "title": "Edit",
+                                "type": "boolean"
+                              },
+                              "delete": {
+                                "title": "Delete",
+                                "type": "boolean"
+                              },
+                              "ban": {
+                                "title": "Ban",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "report",
+                              "edit",
+                              "delete",
+                              "ban"
+                            ]
                           }
                         },
                         "required": [
+                          "message_id",
                           "room_id",
-                          "post_cooldown",
-                          "title",
-                          "canPostMessages"
+                          "user_id",
+                          "username",
+                          "username_html",
+                          "plain_message",
+                          "message_date",
+                          "is_curator_message",
+                          "message",
+                          "permissions"
                         ]
                       }
-                    },
-                    "roomCount": {
-                      "title": "Room Count",
-                      "type": "integer"
-                    },
-                    "permissions": {
-                      "title": "Permissions",
-                      "type": "object",
-                      "properties": {
-                        "canPostMessage": {
-                          "title": "Can Post Message",
-                          "type": "boolean"
-                        },
-                        "canViewChatbox": {
-                          "title": "Can View Chatbox",
-                          "type": "boolean"
-                        },
-                        "canBanUser": {
-                          "title": "Can Ban User",
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "canPostMessage",
-                        "canViewChatbox",
-                        "canBanUser"
-                      ]
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -23075,6 +23723,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -23257,6 +23908,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -23413,6 +24067,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -23452,6 +24109,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -23513,6 +24173,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -23554,6 +24217,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -23593,6 +24259,9 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -24627,30 +25296,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "description": "Form Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "errors",
-                    "system_info"
-                  ],
-                  "properties": {
-                    "errors": {
-                      "title": "Errors",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/SystemInfo"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotFound"
           }
         },
         "security": [
@@ -24665,15 +25311,15 @@
   },
   "components": {
     "parameters": {
-      "threadId": {
-        "name": "threadId",
+      "thread_id": {
+        "name": "thread_id",
         "in": "path",
         "description": "Id of thread.",
         "required": true,
         "style": "simple",
         "explode": false,
         "schema": {
-          "title": "Threadid",
+          "title": "thread_id",
           "type": "integer",
           "description": "Id of thread."
         }
@@ -24771,6 +25417,47 @@
           }
         },
         "description": "Unauthorized"
+      },
+      "NotFound": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "title": "NotFound",
+              "type": "object",
+              "required": [
+                "errors",
+                "system_info"
+              ],
+              "properties": {
+                "errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "system_info": {
+                  "$ref": "#/components/schemas/SystemInfo"
+                }
+              }
+            },
+            "examples": {
+              "NotFound": {
+                "summary": "Not Found",
+                "value": {
+                  "errors": [
+                    "The requested ... could not be found."
+                  ],
+                  "system_info": {
+                    "visitor_id": 0,
+                    "time": 0
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "schemas": {
