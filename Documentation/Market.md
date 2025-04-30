@@ -149,6 +149,8 @@
   * [Bump](#bump)
   * [Open](#open)
   * [Close](#close)
+  * [Ai Price](#ai-price)
+  * [Auto Buy Price](#auto-buy-price)
   * [Note](#note)
   * [Image](#image)
   * [Arbitrage](#arbitrage)
@@ -175,10 +177,14 @@
   * [Get](#get-29)
   * [Edit](#edit-1)
 * [Payments](#payments)
-  * [Invoice](#invoice)
+  * [Auto](#auto)
     * [List](#list-2)
-    * [Get](#get-30)
     * [Create](#create)
+    * [Delete](#delete-1)
+  * [Invoice](#invoice)
+    * [List](#list-3)
+    * [Get](#get-30)
+    * [Create](#create-1)
   * [Currency](#currency)
   * [Transfer](#transfer-1)
   * [Fee](#fee)
@@ -188,7 +194,7 @@
 * [Proxy](#proxy)
   * [Get](#get-31)
   * [Add](#add-1)
-  * [Delete](#delete-1)
+  * [Delete](#delete-2)
 * [Batch](#batch)
 
 
@@ -2330,6 +2336,42 @@ print(response.json())
 ```
 
 
+## Ai Price
+
+GET https://api.lzt.market/{item_id}/ai-price
+
+*Get auto buy price for the account.*
+
+**Parameters:**
+
+- **item_id** (int): Item ID.
+
+**Example:**
+
+```python
+response = market.managing.ai_price(item_id=1234567890)
+print(response.json())
+```
+
+
+## Auto Buy Price
+
+GET https://api.lzt.market/{item_id}/auto-buy-price
+
+*Get the auto buy price for the item.*
+
+**Parameters:**
+
+- **item_id** (int): Item ID.
+
+**Example:**
+
+```python
+response = market.managing.auto_buy_price(item_id=1234567890)
+print(response.json())
+```
+
+
 ## Note
 
 POST https://api.lzt.market/{item_id}/note-save
@@ -2657,6 +2699,7 @@ POST https://api.lzt.market/item/fast-sell
 - **information** (str): Information.
 - **login** (str): Login.
 - **password** (str): Password.
+- **tag_id** (list): Tag IDs.
 - **email** (str): Email.
 - **email_type** (str): Email type.
 - **extra** (dict[str, str]): Extra.
@@ -2704,6 +2747,7 @@ POST https://api.lzt.market/item/add
 - **title_en** (str): Title in English.
 - **description** (str): Description.
 - **information** (str): Information.
+- **tag_id** (list): Tag IDs.
 - **email** (str): Email.
 - **email_type** (str): Email type.
 - **allow_ask_discount** (bool): Allow ask discount.
@@ -2825,6 +2869,70 @@ print(response.json())
 
 
 # Payments
+
+## Auto
+
+### List
+
+GET https://api.lzt.market/auto-payments
+
+*Get auto payments list.*
+
+**Example:**
+
+```python
+response = market.payments.auto.list()
+print(response.json())
+```
+
+
+### Create
+
+POST https://api.lzt.market/auto-payment
+
+*Creates auto payment.*
+
+**Parameters:**
+
+- **username_receiver** (str): Username of the payment receiver.
+- **day** (Union[str, int]): Day of the month for the payment (1-28 or "ld" for last day).
+- **amount** (float): Amount to be transferred.
+- **currency** (str): Currency for the payment.
+- **description** (str): Payment description.
+- **secret_answer** (str): Secret answer.
+
+**Example:**
+
+```python
+response = market.payments.auto_payments.create(
+    username_receiver="username",
+    day="ld",
+    amount=100,
+    currency="rub,
+    description="Monthly payment",
+    "secret_answer"="Top secret"
+)
+print(response.json())
+```
+
+
+### Delete
+
+DELETE https://api.lzt.market/auto-payment
+
+*Deletes an auto payment.*
+
+**Parameters:**
+
+- **auto_payment_id** (int): Auto payment ID.
+
+**Example:**
+
+```python
+response = market.payments.auto_payments.delete(auto_payment_id=12345)
+print(response.json())
+```
+
 
 ## Invoice
 

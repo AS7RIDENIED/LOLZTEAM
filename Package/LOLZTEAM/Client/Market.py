@@ -954,6 +954,48 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
+        async def ai_price(self, item_id: int) -> Response:
+            """
+            GET https://api.lzt.market/{item_id}/ai-price
+
+            *Get auto buy price for the account.*
+
+            **Parameters:**
+
+            - **item_id** (int): Item ID.
+
+            **Example:**
+
+            ```python
+            response = market.managing.ai_price(item_id=1234567890)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("GET", f"/{item_id}/ai-price")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
+        async def auto_buy_price(self, item_id: int) -> Response:
+            """
+            GET https://api.lzt.market/{item_id}/auto-buy-price
+
+            *Get the auto buy price for the item.*
+
+            **Parameters:**
+
+            - **item_id** (int): Item ID.
+
+            **Example:**
+
+            ```python
+            response = market.managing.auto_buy_price(item_id=1234567890)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("GET", f"/{item_id}/auto-buy-price")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
         async def note(self, item_id: int, text: str = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/note-save
@@ -1356,6 +1398,7 @@ class Market(APIClient):
             information: str = NONE,
             login: str = NONE,
             password: str = NONE,
+            tag_id: list = NONE,
             email: str = NONE,
             email_type: Literal["native", "autoreg"] = NONE,
             extra: dict[Constants.Market.Extra._Literal, str] = NONE,
@@ -1383,6 +1426,7 @@ class Market(APIClient):
             - **information** (str): Information.
             - **login** (str): Login.
             - **password** (str): Password.
+            - **tag_id** (list): Tag IDs.
             - **email** (str): Email.
             - **email_type** (str): Email type.
             - **extra** (dict[str, str]): Extra.
@@ -1425,6 +1469,7 @@ class Market(APIClient):
                 "information": information,
                 "login": login,
                 "password": password,
+                "tag_id": tag_id,
                 "has_email_login_data": bool(email) if email and not isinstance(email, _NONE) else email,
                 "email_login_data": email,
                 "email_type": email_type,
@@ -1451,6 +1496,7 @@ class Market(APIClient):
             title_en: str = NONE,
             description: str = NONE,
             information: str = NONE,
+            tag_id: list = NONE,
             email: str = NONE,
             email_type: Literal["native", "autoreg"] = NONE,
             allow_ask_discount: bool = NONE,
@@ -1474,6 +1520,7 @@ class Market(APIClient):
             - **title_en** (str): Title in English.
             - **description** (str): Description.
             - **information** (str): Information.
+            - **tag_id** (list): Tag IDs.
             - **email** (str): Email.
             - **email_type** (str): Email type.
             - **allow_ask_discount** (bool): Allow ask discount.
@@ -1507,6 +1554,7 @@ class Market(APIClient):
                 "title_en": title_en,
                 "description": description,
                 "information": information,
+                "tag_id": tag_id,
                 "has_email_login_data": bool(email) if email and not isinstance(email, _NONE) else email,
                 "email_login_data": email,
                 "email_type": email_type,
@@ -1691,6 +1739,92 @@ class Market(APIClient):
             return await self.core.request("POST", "/me", json=json)
 
     class __Payments:
+        class __Auto:
+            def __init__(self, core: "Market"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def list(self) -> Response:
+                """
+                GET https://api.lzt.market/auto-payments
+
+                *Get auto payments list.*
+
+                **Example:**
+
+                ```python
+                response = market.payments.auto.list()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", "/auto-payments")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def create(self, username_receiver: str, day: Union[str, int], amount: float,
+                             currency: Constants.Market.Currency._Literal = NONE,
+                             description: str = NONE, secret_answer: str = NONE) -> Response:
+                """
+                POST https://api.lzt.market/auto-payment
+
+                *Creates auto payment.*
+
+                **Parameters:**
+
+                - **username_receiver** (str): Username of the payment receiver.
+                - **day** (Union[str, int]): Day of the month for the payment (1-28 or "ld" for last day).
+                - **amount** (float): Amount to be transferred.
+                - **currency** (str): Currency for the payment.
+                - **description** (str): Payment description.
+                - **secret_answer** (str): Secret answer.
+
+                **Example:**
+
+                ```python
+                response = market.payments.auto_payments.create(
+                    username_receiver="username",
+                    day="ld",
+                    amount=100,
+                    currency="rub,
+                    description="Monthly payment",
+                    "secret_answer"="Top secret"
+                )
+                print(response.json())
+                ```
+                """
+                params = {
+                    "username_receiver": username_receiver,
+                    "day": day,
+                    "amount": amount,
+                    "currency": currency,
+                    "description": description,
+                    "secret_answer": secret_answer
+                }
+                return await self.core.request("POST", "/auto-payment", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def delete(self, auto_payment_id: int) -> Response:
+                """
+                DELETE https://api.lzt.market/auto-payment
+
+                *Deletes an auto payment.*
+
+                **Parameters:**
+
+                - **auto_payment_id** (int): Auto payment ID.
+
+                **Example:**
+
+                ```python
+                response = market.payments.auto_payments.delete(auto_payment_id=12345)
+                print(response.json())
+                ```
+                """
+                params = {"auto_payment_id": auto_payment_id}
+                return await self.core.request("DELETE", "/auto-payment", params=params)
+
         class __Invoice:
             def __init__(self, core: "Market"):
                 self.core = core
@@ -1821,6 +1955,7 @@ class Market(APIClient):
         def __init__(self, core: "Market"):
             self.core = core
             self.invoice = self.__Invoice(self.core)
+            self.auto = self.__Auto(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)

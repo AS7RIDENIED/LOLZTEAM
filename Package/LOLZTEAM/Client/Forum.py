@@ -1407,6 +1407,28 @@ class Forum(APIClient):
                 json = {"comment_body": comment_body, "post_comment_id": comment_id}
                 return await self.core.request("PUT", "/posts/comments", json=json)
 
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def delete(self, post_comment_id: int) -> Response:
+                """
+                DELETE https://api.zelenka.guru/posts/comments
+
+                *Delete a post comment.*
+
+                **Parameters:**
+
+                - **post_comment_id** (int): Id of post comment to delete.
+
+                **Example:**
+
+                ```python
+                response = forum.posts.comments.delete(post_comment_id=123456)
+                print(response.json())
+                ```
+                """
+                params = {"post_comment_id": post_comment_id}
+                return await self.core.request("DELETE", "/posts/comments", params=params)
+
         def __init__(self, core: "Forum"):
             self.core = core
             self.comments = self.__Comments(self.core)
@@ -1841,6 +1863,52 @@ class Forum(APIClient):
                     """
                     json = {"comment_body": post_body}
                     return await self.core.request("POST", f"/profile-posts/{post_id}/comments", json=json)
+
+                @UNIVERSAL(batchable=True)
+                @AutoDelay.WrapperSet(0.5)
+                async def edit(self, comment_id: int, comment_body: str) -> Response:
+                    """
+                    PUT https://api.zelenka.guru/profile-posts/comments
+
+                    *Edit a profile post comment.*
+
+                    **Parameters:**
+
+                    - **comment_id** (int): Id of profile post comment.
+                    - **comment_body** (str): New content for the profile post comment.
+
+                    **Example:**
+
+                    ```python
+                    response = forum.users.profile_posts.comments.edit(comment_id=123456, comment_body="Updated comment")
+                    print(response.json())
+                    ```
+                    """
+                    json = {"comment_body": comment_body}
+                    params = {"comment_id": comment_id}
+                    return await self.core.request("PUT", "/profile-posts/comments", json=json, params=params)
+
+                @UNIVERSAL(batchable=True)
+                @AutoDelay.WrapperSet(0.5)
+                async def delete(self, comment_id: int) -> Response:
+                    """
+                    DELETE https://api.zelenka.guru/profile-posts/comments
+
+                    *Delete a profile post comment.*
+
+                    **Parameters:**
+
+                    - **comment_id** (int): Id of profile post comment.
+
+                    **Example:**
+
+                    ```python
+                    response = forum.users.profile_posts.comments.delete(comment_id=123456)
+                    print(response.json())
+                    ```
+                    """
+                    params = {"comment_id": comment_id}
+                    return await self.core.request("DELETE", "/profile-posts/comments", params=params)
 
             def __init__(self, core: "Forum"):
                 self.core = core

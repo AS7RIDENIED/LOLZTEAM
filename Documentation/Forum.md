@@ -56,11 +56,12 @@
     * [List](#list-4)
     * [Create](#create-1)
     * [Edit](#edit-1)
+    * [Delete](#delete-1)
   * [List](#list-5)
   * [Get](#get-5)
   * [Create](#create-2)
   * [Edit](#edit-2)
-  * [Delete](#delete-1)
+  * [Delete](#delete-2)
   * [Likes](#likes)
   * [Like](#like)
   * [Unlike](#unlike)
@@ -68,29 +69,31 @@
 * [Users](#users)
   * [Avatar](#avatar)
     * [Upload](#upload)
-    * [Delete](#delete-2)
+    * [Delete](#delete-3)
     * [Crop](#crop)
   * [Background](#background)
     * [Upload](#upload-1)
-    * [Delete](#delete-3)
+    * [Delete](#delete-4)
     * [Crop](#crop-1)
   * [Profile Posts](#profile-posts)
     * [Comments](#comments-1)
       * [List](#list-6)
       * [Get](#get-6)
       * [Create](#create-3)
+      * [Edit](#edit-3)
+      * [Delete](#delete-5)
     * [List](#list-7)
     * [Get](#get-7)
     * [Create](#create-4)
-    * [Edit](#edit-3)
-    * [Delete](#delete-4)
+    * [Edit](#edit-4)
+    * [Delete](#delete-6)
     * [Likes](#likes-1)
     * [Like](#like-1)
     * [Unlike](#unlike-1)
   * [List](#list-8)
   * [Search](#search)
   * [Get](#get-8)
-  * [Edit](#edit-4)
+  * [Edit](#edit-5)
   * [Fields](#fields)
   * [Trophies](#trophies)
   * [Followers](#followers-2)
@@ -106,7 +109,7 @@
     * [List](#list-9)
     * [Get](#get-9)
     * [Create](#create-5)
-    * [Edit](#edit-5)
+    * [Edit](#edit-6)
   * [List](#list-10)
   * [Get](#get-10)
   * [Create](#create-6)
@@ -131,8 +134,8 @@
   * [Messages](#messages-1)
     * [List](#list-13)
     * [Create](#create-7)
-    * [Edit](#edit-6)
-    * [Delete](#delete-5)
+    * [Edit](#edit-7)
+    * [Delete](#delete-7)
     * [Report](#report-1)
   * [Get](#get-13)
   * [Ignored](#ignored-1)
@@ -1051,6 +1054,24 @@ print(response.json())
 ```
 
 
+### Delete
+
+DELETE https://api.zelenka.guru/posts/comments
+
+*Delete a post comment.*
+
+**Parameters:**
+
+- **post_comment_id** (int): Id of post comment to delete.
+
+**Example:**
+
+```python
+response = forum.posts.comments.delete(post_comment_id=123456)
+print(response.json())
+```
+
+
 ## List
 
 GET https://api.zelenka.guru/posts
@@ -1406,6 +1427,43 @@ POST https://api.zelenka.guru/profile-posts/{post_id}/comments
 
 ```python
 response = forum.users.profile_posts.comments.create(post_id=5523020, post_body="Test comment")
+print(response.json())
+```
+
+
+#### Edit
+
+PUT https://api.zelenka.guru/profile-posts/comments
+
+*Edit a profile post comment.*
+
+**Parameters:**
+
+- **comment_id** (int): Id of profile post comment.
+- **comment_body** (str): New content for the profile post comment.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.comments.edit(comment_id=123456, comment_body="Updated comment")
+print(response.json())
+```
+
+
+#### Delete
+
+DELETE https://api.zelenka.guru/profile-posts/comments
+
+*Delete a profile post comment.*
+
+**Parameters:**
+
+- **comment_id** (int): Id of profile post comment.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.comments.delete(comment_id=123456)
 print(response.json())
 ```
 
