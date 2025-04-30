@@ -1,9 +1,9 @@
 {
-  "openapi": "3.0.2",
+  "openapi": "3.1.0",
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.59b "
+    "version": "1.1.60"
   },
   "servers": [
     {
@@ -48714,6 +48714,118 @@
         ]
       }
     },
+    "/{itemId}/ai-price": {
+      "get": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Get AI Price",
+        "description": "Get AI-suggested price for the account.",
+        "operationId": "Managing.AIPrice",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/itemId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "price",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "price": {
+                      "title": "Price",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/{itemId}/auto-buy-price": {
+      "get": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Get Auto Buy Price",
+        "description": "Get auto buy price for the account.",
+        "operationId": "Managing.AutoBuyPrice",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/itemId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "price",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "price": {
+                      "title": "Price",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/{itemId}/note-save": {
       "post": {
         "tags": [
@@ -54488,7 +54600,7 @@
           "Payments"
         ],
         "summary": "Transfer Money",
-        "description": "Transfer money to any user.\n\nThe web version additionally has a **redirect** parameter (After payment, there will be a redirect to the specified link).",
+        "description": "Transfer money to any user.\n\nRequired scopes:\n+ **payment**",
         "operationId": "Payments.Transfer",
         "parameters": [
           {
@@ -54674,7 +54786,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "market"
+              "payment"
             ]
           }
         ]
@@ -54686,7 +54798,7 @@
           "Payments"
         ],
         "summary": "Check Transfer Fee",
-        "description": "Get transfer limits and get fee amount for transfer.",
+        "description": "Get transfer limits and get fee amount for transfer.\n\nRequired scopes:\n+ **payment**",
         "operationId": "Payments.Fee",
         "parameters": [
           {
@@ -54764,7 +54876,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "market"
+              "payment"
             ]
           }
         ]
@@ -54776,7 +54888,7 @@
           "Payments"
         ],
         "summary": "Cancel Transfer",
-        "description": "Cancels a transfer with a hold that was sent to your account.",
+        "description": "Cancels a transfer with a hold that was sent to your account.\n\nRequired scopes:\n+ **payment**",
         "operationId": "Payments.Cancel",
         "parameters": [
           {
@@ -54810,7 +54922,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "market"
+              "payment"
             ]
           }
         ]
@@ -55365,7 +55477,559 @@
         "security": [
           {
             "HTTPBearer": [
-              "market",
+              "payment"
+            ]
+          }
+        ]
+      }
+    },
+    "/auto-payments": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Get Auto Payments",
+        "description": "Get auto payments list.\n\nRequired scopes:\n+ **payment**",
+        "operationId": "AutoPayments.List",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "payments",
+                    "marketVisitor",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "payments": {
+                      "title": "Payments",
+                      "type": "object",
+                      "properties": {
+                        "1234567890": {
+                          "title": "",
+                          "type": "object",
+                          "properties": {
+                            "user_id": {
+                              "title": "User",
+                              "type": "integer"
+                            },
+                            "receiver_id": {
+                              "title": "Receiver",
+                              "type": "integer"
+                            },
+                            "amount": {
+                              "title": "Amount",
+                              "type": "string"
+                            },
+                            "description": {
+                              "title": "Description",
+                              "type": "string"
+                            },
+                            "next_payment": {
+                              "title": "Next",
+                              "type": "integer"
+                            },
+                            "next_alert_date": {
+                              "title": "Next",
+                              "type": "integer"
+                            },
+                            "auto_payment_id": {
+                              "title": "Auto",
+                              "type": "integer"
+                            },
+                            "day": {
+                              "title": "Day",
+                              "type": "string"
+                            },
+                            "receiver": {
+                              "title": "Receiver",
+                              "type": "object",
+                              "properties": {
+                                "user_id": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "username": {
+                                  "title": "Username",
+                                  "type": "string"
+                                },
+                                "username_html": {
+                                  "title": "Username",
+                                  "type": "string"
+                                },
+                                "user_message_count": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_register_date": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_like_count": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_like2_count": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "contest_count": {
+                                  "title": "Contest",
+                                  "type": "integer"
+                                },
+                                "trophy_count": {
+                                  "title": "Trophy",
+                                  "type": "integer"
+                                },
+                                "custom_title": {
+                                  "title": "Custom",
+                                  "type": "string"
+                                },
+                                "is_banned": {
+                                  "title": "Is",
+                                  "type": "integer"
+                                },
+                                "user_title": {
+                                  "title": "User",
+                                  "type": "string"
+                                },
+                                "user_is_valid": {
+                                  "title": "User",
+                                  "type": "boolean"
+                                },
+                                "user_is_verified": {
+                                  "title": "User",
+                                  "type": "boolean"
+                                },
+                                "user_is_followed": {
+                                  "title": "User",
+                                  "type": "boolean"
+                                },
+                                "user_last_seen_date": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_following_count": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "user_followers_count": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "links": {
+                                  "title": "Links",
+                                  "type": "object",
+                                  "properties": {
+                                    "permalink": {
+                                      "title": "Permalink",
+                                      "type": "string"
+                                    },
+                                    "detail": {
+                                      "title": "Detail",
+                                      "type": "string"
+                                    },
+                                    "avatar": {
+                                      "title": "Avatar",
+                                      "type": "string"
+                                    },
+                                    "avatar_big": {
+                                      "title": "Avatar",
+                                      "type": "string"
+                                    },
+                                    "avatar_small": {
+                                      "title": "Avatar",
+                                      "type": "string"
+                                    },
+                                    "followers": {
+                                      "title": "Followers",
+                                      "type": "string"
+                                    },
+                                    "followings": {
+                                      "title": "Followings",
+                                      "type": "string"
+                                    },
+                                    "ignore": {
+                                      "title": "Ignore",
+                                      "type": "string"
+                                    },
+                                    "timeline": {
+                                      "title": "Timeline",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "permalink",
+                                    "detail",
+                                    "avatar",
+                                    "avatar_big",
+                                    "avatar_small",
+                                    "followers",
+                                    "followings",
+                                    "ignore",
+                                    "timeline"
+                                  ]
+                                },
+                                "permissions": {
+                                  "title": "Permissions",
+                                  "type": "object",
+                                  "properties": {
+                                    "edit": {
+                                      "title": "Edit",
+                                      "type": "boolean"
+                                    },
+                                    "follow": {
+                                      "title": "Follow",
+                                      "type": "boolean"
+                                    },
+                                    "ignore": {
+                                      "title": "Ignore",
+                                      "type": "boolean"
+                                    },
+                                    "profile_post": {
+                                      "title": "Profile",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "edit",
+                                    "follow",
+                                    "ignore",
+                                    "profile_post"
+                                  ]
+                                },
+                                "user_is_ignored": {
+                                  "title": "User",
+                                  "type": "boolean"
+                                },
+                                "user_is_visitor": {
+                                  "title": "User",
+                                  "type": "boolean"
+                                },
+                                "user_group_id": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "fields": {
+                                  "title": "Fields",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "title": "Id",
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "title": "Title",
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "title": "Description",
+                                        "type": "string"
+                                      },
+                                      "position": {
+                                        "title": "Position",
+                                        "type": "string"
+                                      },
+                                      "is_required": {
+                                        "title": "Is",
+                                        "type": "boolean"
+                                      },
+                                      "value": {
+                                        "title": "Value",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "description",
+                                      "position",
+                                      "is_required",
+                                      "value"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "user_id",
+                                "username",
+                                "username_html",
+                                "user_message_count",
+                                "user_register_date",
+                                "user_like_count",
+                                "user_like2_count",
+                                "contest_count",
+                                "trophy_count",
+                                "custom_title",
+                                "is_banned",
+                                "user_title",
+                                "user_is_valid",
+                                "user_is_verified",
+                                "user_is_followed",
+                                "user_last_seen_date",
+                                "user_following_count",
+                                "user_followers_count",
+                                "links",
+                                "permissions",
+                                "user_is_ignored",
+                                "user_is_visitor",
+                                "user_group_id",
+                                "fields"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "user_id",
+                            "receiver_id",
+                            "amount",
+                            "description",
+                            "next_payment",
+                            "next_alert_date",
+                            "auto_payment_id",
+                            "day",
+                            "receiver"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "1234567890"
+                      ]
+                    },
+                    "marketVisitor": {
+                      "title": "Market Visitor",
+                      "type": "object",
+                      "properties": {},
+                      "required": []
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "payment"
+            ]
+          }
+        ]
+      }
+    },
+    "/auto-payment": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Create Auto Payment",
+        "description": "Creates auto payment.\n\nRequired scopes:\n+ **payment**",
+        "operationId": "AutoPayments.Create",
+        "parameters": [
+          {
+            "name": "secret_answer",
+            "in": "query",
+            "description": "Secret answer.",
+            "required": false,
+            "schema": {
+              "title": "Secret Answer",
+              "type": "string"
+            }
+          },
+          {
+            "name": "username_receiver",
+            "in": "query",
+            "description": "Username of the payment receiver.",
+            "required": true,
+            "schema": {
+              "title": "Username Receiver",
+              "type": "string"
+            }
+          },
+          {
+            "name": "day",
+            "in": "query",
+            "description": "Day of the month for the payment.",
+            "required": true,
+            "schema": {
+              "title": "Day",
+              "type": ["string", "integer"],
+              "enum": ["ld", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Amount to be transferred.",
+            "required": true,
+            "schema": {
+              "title": "Amount",
+              "type": "number"
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency for the payment.",
+            "required": false,
+            "schema": {
+              "title": "Currency",
+              "type": "string",
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Payment description.",
+            "required": false,
+            "schema": {
+              "title": "Description",
+              "type": "string",
+              "maxLength": 255
+            }
+          }
+          
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "auto_payment_id",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "auto_payment_id": {
+                      "title": "Auto",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "title": "Errors",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "payment"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Delete Auto Payment",
+        "description": "Deletes an auto payment.\n\nRequired scopes:\n+ **payment**",
+        "operationId": "AutoPayments.Delete",
+        "parameters": [
+          {
+            "name": "auto_payment_id",
+            "in": "query",
+            "description": "Auto payment ID.",
+            "required": true,
+            "schema": {
+              "title": "Auto Payment Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkStatus"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "description": "Auto payment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "NotFoundError",
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "title": "Error",
+                      "type": "string",
+                      "default": "Auto payment not found"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
               "payment"
             ]
           }
