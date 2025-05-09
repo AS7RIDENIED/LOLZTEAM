@@ -1070,6 +1070,36 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
+        async def letters(self, item_id: int = None, email: str = None, password: str = None, limit: int = None) -> Response:
+            """
+            GET https://api.lzt.market/letters2
+
+            *Returns account letters.*
+
+            **Parameters:**
+
+            - **item_id** (int): Item ID. Returns letters only from the sender of the selected account category.
+            - **email** (str): Email.
+            - **password** (str): Password.
+            - **limit** (int): Number of letters to return.
+
+            **Example:**
+
+            ```python
+            response = market.managing.letters(item_id=1234567890)
+            print(response.json())
+            ```
+            """
+            params = {
+                "item_id": item_id,
+                "email": email,
+                "password": password,
+                "limit": limit
+            }
+            return await self.core.request("GET", "/letters2", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
         async def email_code(self, item_id: int = NONE, email: str = NONE, login: str = NONE) -> Response:
             """
             GET https://api.lzt.market/email-code
@@ -1502,6 +1532,8 @@ class Market(APIClient):
             allow_ask_discount: bool = NONE,
             proxy_id: int = NONE,
             proxy_random: bool = NONE,
+            resell_item_id: int = NONE,
+            force_mail: bool = NONE,
             **kwargs,
         ) -> Response:
             """
@@ -1526,6 +1558,8 @@ class Market(APIClient):
             - **allow_ask_discount** (bool): Allow ask discount.
             - **proxy_id** (int): Proxy ID.
             - **proxy_random** (bool): Proxy random.
+            - **resell_item_id** (int): Put item id if you are trying to resell item. This is useful to pass temporary email from reselling item to new item.
+            - **force_mail** (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
             - **kwargs** (dict[str, Any]): Kwargs.
 
             **Example:**
@@ -1561,7 +1595,9 @@ class Market(APIClient):
                 # Other
                 "allow_ask_discount": allow_ask_discount,
                 "proxy_id": proxy_id,
-                "random_proxy": proxy_random
+                "random_proxy": proxy_random,
+                "resell_item_id": resell_item_id,
+                "forceTempEmail": force_mail
             }
             if kwargs:
                 json.update(kwargs)
@@ -1572,7 +1608,6 @@ class Market(APIClient):
         async def check(
             self,
             item_id: int,
-            resell_item_id: int = NONE,
             login: str = NONE,
             password: str = NONE,
             email: str = NONE,
@@ -1591,7 +1626,6 @@ class Market(APIClient):
             - **item_id** (int): Item ID.
             - **login** (str): Login.
             - **password** (str): Password.
-            - **resell_item_id** (int): Resell item ID.
             - **email** (str): Email.
             - **email_type** (str): Email type.
             - **extra** (dict[str, str]): Extra.
@@ -1611,7 +1645,6 @@ class Market(APIClient):
             json = {
                 "login": login,
                 "password": password,
-                "resell_item_id": resell_item_id,
                 "random_proxy": proxy_random,
                 "has_email_login_data": bool(email) if email and not isinstance(email, _NONE) else email,
                 "email_login_data": email,
@@ -1633,8 +1666,8 @@ class Market(APIClient):
             **Parameters:**
 
             - **item_id** (int): Item ID.
-            - **force_mail** (bool): Force mail. Optional if you want to upload Supercell account.
-            - **resell_item_id** (int): Resell item ID.
+            - **force_mail** (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
+            - **resell_item_id** (int): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
 
             **Example:**
 
@@ -1762,7 +1795,7 @@ class Market(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.5)
-            async def create(self, username_receiver: str, day: Union[str, int], amount: float,
+            async def create(self, username_receiver: str, day: int, amount: float,
                              currency: Constants.Market.Currency._Literal = NONE,
                              description: str = NONE, secret_answer: str = NONE) -> Response:
                 """
@@ -1773,7 +1806,7 @@ class Market(APIClient):
                 **Parameters:**
 
                 - **username_receiver** (str): Username of the payment receiver.
-                - **day** (Union[str, int]): Day of the month for the payment (1-28 or "ld" for last day).
+                - **day** (int): Day of the month for the payment (0-28).
                 - **amount** (float): Amount to be transferred.
                 - **currency** (str): Currency for the payment.
                 - **description** (str): Payment description.
@@ -1784,9 +1817,9 @@ class Market(APIClient):
                 ```python
                 response = market.payments.auto_payments.create(
                     username_receiver="username",
-                    day="ld",
+                    day=0,
                     amount=100,
-                    currency="rub,
+                    currency="rub",
                     description="Monthly payment",
                     "secret_answer"="Top secret"
                 )

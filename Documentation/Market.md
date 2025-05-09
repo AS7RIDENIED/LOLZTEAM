@@ -154,6 +154,7 @@
   * [Note](#note)
   * [Image](#image)
   * [Arbitrage](#arbitrage)
+  * [Letters](#letters)
   * [Email Code](#email-code)
   * [Email Password](#email-password)
   * [Change Password](#change-password)
@@ -2431,6 +2432,27 @@ print(response.json())
 ```
 
 
+## Letters
+
+GET https://api.lzt.market/letters2
+
+*Returns account letters.*
+
+**Parameters:**
+
+- **item_id** (int): Item ID. Returns letters only from the sender of the selected account category.
+- **email** (str): Email.
+- **password** (str): Password.
+- **limit** (int): Number of letters to return.
+
+**Example:**
+
+```python
+response = market.managing.letters(item_id=1234567890)
+print(response.json())
+```
+
+
 ## Email Code
 
 GET https://api.lzt.market/email-code
@@ -2753,6 +2775,8 @@ POST https://api.lzt.market/item/add
 - **allow_ask_discount** (bool): Allow ask discount.
 - **proxy_id** (int): Proxy ID.
 - **proxy_random** (bool): Proxy random.
+- **resell_item_id** (int): Put item id if you are trying to resell item. This is useful to pass temporary email from reselling item to new item.
+- **force_mail** (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
 - **kwargs** (dict[str, Any]): Kwargs.
 
 **Example:**
@@ -2782,7 +2806,6 @@ POST https://api.lzt.market/{item_id}/goods/check
 - **item_id** (int): Item ID.
 - **login** (str): Login.
 - **password** (str): Password.
-- **resell_item_id** (int): Resell item ID.
 - **email** (str): Email.
 - **email_type** (str): Email type.
 - **extra** (dict[str, str]): Extra.
@@ -2809,8 +2832,8 @@ GET https://api.lzt.market/{item_id}/goods/add
 **Parameters:**
 
 - **item_id** (int): Item ID.
-- **force_mail** (bool): Force mail. Optional if you want to upload Supercell account.
-- **resell_item_id** (int): Resell item ID.
+- **force_mail** (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
+- **resell_item_id** (int): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
 
 **Example:**
 
@@ -2895,7 +2918,7 @@ POST https://api.lzt.market/auto-payment
 **Parameters:**
 
 - **username_receiver** (str): Username of the payment receiver.
-- **day** (Union[str, int]): Day of the month for the payment (1-28 or "ld" for last day).
+- **day** (int): Day of the month for the payment (0-28).
 - **amount** (float): Amount to be transferred.
 - **currency** (str): Currency for the payment.
 - **description** (str): Payment description.
@@ -2906,9 +2929,9 @@ POST https://api.lzt.market/auto-payment
 ```python
 response = market.payments.auto_payments.create(
     username_receiver="username",
-    day="ld",
+    day=0,
     amount=100,
-    currency="rub,
+    currency="rub",
     description="Monthly payment",
     "secret_answer"="Top secret"
 )
