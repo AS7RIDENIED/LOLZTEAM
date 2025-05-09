@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Lolzteam Public API: Market",
-    "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{itemId}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{itemId}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.60"
+    "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
+    "version": "1.1.61"
   },
   "servers": [
     {
@@ -47119,7 +47119,7 @@
         ]
       }
     },
-    "/{itemId}": {
+    "/{item_id}": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -47129,7 +47129,7 @@
         "operationId": "Managing.Get",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -47170,7 +47170,7 @@
         "operationId": "Manging.Delete",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "reason",
@@ -47209,7 +47209,7 @@
         ]
       }
     },
-    "/{itemId}/claims": {
+    "/{item_id}/claims": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -47219,7 +47219,7 @@
         "operationId": "Managing.Arbitrage",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "requestBody": {
@@ -47968,7 +47968,7 @@
         ]
       }
     },
-    "/{itemId}/inventory-value": {
+    "/{item_id}/inventory-value": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -47978,7 +47978,7 @@
         "operationId": "Managing.SteamInventoryValue",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "$ref": "#/components/parameters/app_id"
@@ -48452,7 +48452,7 @@
         ]
       }
     },
-    "/{itemId}/steam-preview": {
+    "/{item_id}/steam-preview": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -48462,7 +48462,7 @@
         "operationId": "Managing.SteamPreview",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "type",
@@ -48513,7 +48513,7 @@
         ]
       }
     },
-    "/{itemId}/edit": {
+    "/{item_id}/edit": {
       "put": {
         "tags": [
           "Accounts managing"
@@ -48523,7 +48523,7 @@
         "operationId": "Managing.Edit",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "title",
@@ -48714,7 +48714,7 @@
         ]
       }
     },
-    "/{itemId}/ai-price": {
+    "/{item_id}/ai-price": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -48724,7 +48724,7 @@
         "operationId": "Managing.AIPrice",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -48770,7 +48770,7 @@
         ]
       }
     },
-    "/{itemId}/auto-buy-price": {
+    "/{item_id}/auto-buy-price": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -48780,7 +48780,7 @@
         "operationId": "Managing.AutoBuyPrice",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -48826,7 +48826,7 @@
         ]
       }
     },
-    "/{itemId}/note-save": {
+    "/{item_id}/note-save": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -48836,7 +48836,7 @@
         "operationId": "Managing.Note",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "requestBody": {
@@ -48878,7 +48878,7 @@
         ]
       }
     },
-    "/{itemId}/update-inventory": {
+    "/{item_id}/update-inventory": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -48888,7 +48888,7 @@
         "operationId": "Managing.SteamUpdateValue",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "all",
@@ -48955,7 +48955,7 @@
         ]
       }
     },
-    "/{itemId}/bump": {
+    "/{item_id}/bump": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -48965,7 +48965,7 @@
         "operationId": "Managing.Bump",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -48991,7 +48991,7 @@
         ]
       }
     },
-    "/{itemId}/open": {
+    "/{item_id}/open": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -49001,7 +49001,7 @@
         "operationId": "Managing.Open",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -49027,7 +49027,7 @@
         ]
       }
     },
-    "/{itemId}/close": {
+    "/{item_id}/close": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -49037,7 +49037,7 @@
         "operationId": "Managing.Close",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -49063,7 +49063,7 @@
         ]
       }
     },
-    "/{itemId}/image": {
+    "/{item_id}/image": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -49073,7 +49073,7 @@
         "operationId": "Managing.Image",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "type",
@@ -49127,7 +49127,7 @@
         ]
       }
     },
-    "/{itemId}/fast-buy": {
+    "/{item_id}/fast-buy": {
       "post": {
         "tags": [
           "Account purchasing"
@@ -49137,7 +49137,7 @@
         "operationId": "Purchasing.FastBuy",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "price",
@@ -49177,7 +49177,7 @@
         ]
       }
     },
-    "/{itemId}/check-account": {
+    "/{item_id}/check-account": {
       "post": {
         "tags": [
           "Account purchasing"
@@ -49187,7 +49187,7 @@
         "operationId": "Purchasing.Check",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -49213,7 +49213,7 @@
         ]
       }
     },
-    "/{itemId}/confirm-buy": {
+    "/{item_id}/confirm-buy": {
       "post": {
         "tags": [
           "Account purchasing"
@@ -49223,7 +49223,7 @@
         "operationId": "Purchasing.Confirm",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "price",
@@ -49988,7 +49988,7 @@
         ]
       }
     },
-    "/{itemId}/goods/check": {
+    "/{item_id}/goods/check": {
       "post": {
         "tags": [
           "Account publishing"
@@ -49998,7 +49998,7 @@
         "operationId": "Publishing.Check",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "resell_item_id",
@@ -50088,7 +50088,7 @@
         ]
       }
     },
-    "/{itemId}/goods/add": {
+    "/{item_id}/goods/add": {
       "get": {
         "tags": [
           "Account publishing"
@@ -50098,7 +50098,7 @@
         "operationId": "Publishing.Mail",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "forceTempEmail",
@@ -50203,7 +50203,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Itemid",
+              "title": "item_id",
               "type": "integer",
               "description": "Item id."
             }
@@ -50265,7 +50265,160 @@
         ]
       }
     },
-    "/{itemId}/mafile": {
+    "/letters2": {
+      "get": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Get Email Letters",
+        "description": "Returns account letters.",
+        "operationId": "Managing.GetLetters2",
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "query",
+            "description": "Item id. Allows to return letters only from the sender of the selected account category.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "item_id",
+              "type": "integer",
+              "description": "Item id. Allows to return letters only from the sender of the selected account category."
+            }
+          },
+          {
+            "name": "email_password",
+            "in": "query",
+            "description": "Email login data (email:password format). Required if both *email* and *password* are not provided.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Email Password",
+              "type": "string",
+              "description": "Email login data (email:password format). Required if both *email* and *password* are not provided."
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Email. Required if *email_password* is not provided.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Email",
+              "type": "string",
+              "description": "Email."
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Password. Required if *email_password* is not provided.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Password",
+              "type": "string",
+              "description": "Password."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of letters to return.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Limit",
+              "type": "integer",
+              "format": "uint",
+              "description": "Number of letters to return.",
+              "minimum": 10,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "email",
+                    "letters",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "email": {
+                      "title": "Email",
+                      "type": "string"
+                    },
+                    "letters": {
+                      "title": "Letters",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "textHtml": {
+                            "title": "Text Html",
+                            "type": "string"
+                          },
+                          "textPlain": {
+                            "title": "Text Plain",
+                            "type": "string"
+                          },
+                          "from": {
+                            "title": "From",
+                            "type": "string"
+                          },
+                          "date": {
+                            "title": "Date",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "textHtml",
+                          "textPlain",
+                          "from",
+                          "date"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorModel"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/{item_id}/mafile": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -50275,7 +50428,7 @@
         "operationId": "Managing.SteamMafile",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -50417,7 +50570,7 @@
         "operationId": "Managing.SteamRemoveMafile",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51030,7 +51183,7 @@
         ]
       }
     },
-    "/{itemId}/guard-code": {
+    "/{item_id}/guard-code": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -51040,7 +51193,7 @@
         "operationId": "Managing.SteamMafileCode",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51073,7 +51226,7 @@
         ]
       }
     },
-    "/{itemId}/confirm-sda": {
+    "/{item_id}/confirm-sda": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51083,7 +51236,7 @@
         "operationId": "Managing.SteamSDA",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "id",
@@ -51127,7 +51280,7 @@
         ]
       }
     },
-    "/{itemId}/telegram-login-code": {
+    "/{item_id}/telegram-login-code": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -51137,7 +51290,7 @@
         "operationId": "Managing.TelegramCode",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51194,7 +51347,7 @@
         ]
       }
     },
-    "/{itemId}/telegram-reset-authorizations": {
+    "/{item_id}/telegram-reset-authorizations": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51204,7 +51357,7 @@
         "operationId": "Managing.TelegramResetAuth",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51230,7 +51383,7 @@
         ]
       }
     },
-    "/{itemId}/refuse-guarantee": {
+    "/{item_id}/refuse-guarantee": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51240,7 +51393,7 @@
         "operationId": "Managing.RefuseGuarantee",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51266,7 +51419,7 @@
         ]
       }
     },
-    "/{itemId}/check-guarantee": {
+    "/{item_id}/check-guarantee": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51276,7 +51429,7 @@
         "operationId": "Managing.CheckGuarantee",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51323,7 +51476,7 @@
         ]
       }
     },
-    "/{itemId}/change-password": {
+    "/{item_id}/change-password": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51333,7 +51486,7 @@
         "operationId": "Managing.ChangePassword",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "_cancel",
@@ -51402,7 +51555,7 @@
         ]
       }
     },
-    "/{itemId}/temp-email-password": {
+    "/{item_id}/temp-email-password": {
       "get": {
         "tags": [
           "Accounts managing"
@@ -51412,7 +51565,7 @@
         "operationId": "Managing.TempEmailPassword",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51464,7 +51617,7 @@
         ]
       }
     },
-    "/{itemId}/tag": {
+    "/{item_id}/tag": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51474,7 +51627,7 @@
         "operationId": "Managing.Tag",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "tag_id",
@@ -51540,7 +51693,7 @@
         "operationId": "Managing.Untag",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "tag_id",
@@ -51598,7 +51751,7 @@
         ]
       }
     },
-    "/{itemId}/star": {
+    "/{item_id}/star": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51608,7 +51761,7 @@
         "operationId": "Managing.Favorite",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51642,7 +51795,7 @@
         "operationId": "Managing.Unfavorite",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51668,7 +51821,7 @@
         ]
       }
     },
-    "/{itemId}/stick": {
+    "/{item_id}/stick": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51678,7 +51831,7 @@
         "operationId": "Managing.Stick",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51712,7 +51865,7 @@
         "operationId": "Managing.Unstick",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           }
         ],
         "responses": {
@@ -51738,7 +51891,7 @@
         ]
       }
     },
-    "/{itemId}/change-owner": {
+    "/{item_id}/change-owner": {
       "post": {
         "tags": [
           "Accounts managing"
@@ -51748,7 +51901,7 @@
         "operationId": "Managing.Transfer",
         "parameters": [
           {
-            "$ref": "#/components/parameters/itemId"
+            "$ref": "#/components/parameters/item_id_path"
           },
           {
             "name": "username",
@@ -55863,8 +56016,8 @@
             "required": true,
             "schema": {
               "title": "Day",
-              "type": ["string", "integer"],
-              "enum": ["ld", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+              "type": "integer",
+              "enum": [0 , 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
             }
           },
           {
@@ -59608,8 +59761,8 @@
           ]
         }
       },
-      "itemId": {
-        "name": "itemId",
+      "item_id_path": {
+        "name": "item_id",
         "in": "path",
         "description": "Item id.",
         "required": true,
