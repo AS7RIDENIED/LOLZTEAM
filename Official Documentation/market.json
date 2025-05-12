@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.61a"
+    "version": "1.1.61b"
   },
   "servers": [
     {
@@ -47496,6 +47496,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
           }
         ],
         "responses": {
@@ -47504,7 +47507,115 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ItemModel"
+                  "type": "object",
+                  "required": [
+                    "item",
+                    "canStickItem",
+                    "canUnstickItem",
+                    "canBuyItem",
+                    "cannotBuyItemError",
+                    "canCloseItem",
+                    "canOpenItem",
+                    "canReportItem",
+                    "canEditItem",
+                    "canDeleteItem",
+                    "canCancelConfirmedBuy",
+                    "canViewItemHistory",
+                    "faveCount",
+                    "isVisibleItem",
+                    "canViewLoginData",
+                    "showToFavouritesButton",
+                    "itemLink",
+                    "canChangeOwner",
+                    "sameItemsIds",
+                    "sameItemsCount",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "item": {"$ref": "#/components/schemas/ItemModel"},
+                    "canStickItem": {
+                      "title": "Can Stick Item",
+                      "type": "boolean"
+                    },
+                    "canUnstickItem": {
+                      "title": "Can Unstick Item",
+                      "type": "boolean"
+                    },
+                    "canBuyItem": {
+                      "title": "Can Buy Item",
+                      "type": "boolean"
+                    },
+                    "cannotBuyItemError": {
+                      "title": "Cannot Buy Item Error",
+                      "type": "string"
+                    },
+                    "canCloseItem": {
+                      "title": "Can Close Item",
+                      "type": "boolean"
+                    },
+                    "canOpenItem": {
+                      "title": "Can Open Item",
+                      "type": "boolean"
+                    },
+                    "canReportItem": {
+                      "title": "Can Report Item",
+                      "type": "boolean"
+                    },
+                    "canEditItem": {
+                      "title": "Can Edit Item",
+                      "type": "boolean"
+                    },
+                    "canDeleteItem": {
+                      "title": "Can Delete Item",
+                      "type": "boolean"
+                    },
+                    "canCancelConfirmedBuy": {
+                      "title": "Can Cancel Confirmed Buy",
+                      "type": "boolean"
+                    },
+                    "canViewItemHistory": {
+                      "title": "Can View Item History",
+                      "type": "boolean"
+                    },
+                    "faveCount": {
+                      "title": "Fave Count",
+                      "type": "boolean"
+                    },
+                    "isVisibleItem": {
+                      "title": "Is Visible Item",
+                      "type": "boolean"
+                    },
+                    "canViewLoginData": {
+                      "title": "Can View Login Data",
+                      "type": "boolean"
+                    },
+                    "showToFavouritesButton": {
+                      "title": "Show To Favourites Button",
+                      "type": "boolean"
+                    },
+                    "itemLink": {
+                      "title": "Item Link",
+                      "type": "string"
+                    },
+                    "canChangeOwner": {
+                      "title": "Can Change Owner",
+                      "type": "boolean"
+                    },
+                    "sameItemsIds": {
+                      "title": "Same Items Ids",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "sameItemsCount": {
+                      "title": "Same Items Count",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
                 }
               }
             }
@@ -48274,6 +48385,11 @@
                       "type": "integer",
                       "minimum": 1
                     }
+                  },
+                  "parse_same_item_ids": {
+                    "description": "Parse same item ids.",
+                    "title": "Parse Same Item Ids",
+                    "type": "boolean"
                   }
                 }
               }
@@ -48975,32 +49091,6 @@
             }
           },
           {
-            "name": "description",
-            "in": "query",
-            "description": "Account public description.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Description",
-              "type": "string",
-              "description": "Account public description."
-            }
-          },
-          {
-            "name": "information",
-            "in": "query",
-            "description": "Account private information (visible only for buyer).",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Information",
-              "type": "string",
-              "description": "Account private information (visible only for buyer)."
-            }
-          },
-          {
             "name": "email_login_data",
             "in": "query",
             "description": "Email login data (email:password format).",
@@ -49057,6 +49147,29 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Account Information",
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "title": "Description",
+                    "type": "string",
+                    "description": "Account public description."
+                  },
+                  "information": {
+                    "title": "Information",
+                    "type": "string",
+                    "description": "Account private information (visible only for buyer)."
+                  }
+                },
+                "required": []
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/SaveChanges"
@@ -52478,6 +52591,17 @@
         "description": "Change settings about your profile on the market.",
         "operationId": "Profile.Edit",
         "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Account currency.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
+          },
           {
             "name": "user_allow_ask_discount",
             "in": "query",
@@ -57606,455 +57730,920 @@
         }
       },
       "ItemModel": {
+        "title": "Item",
         "type": "object",
-        "required": [
-          "items",
-          "totalItems",
-          "totalItemsPrice",
-          "hasNextPage",
-          "perPage",
-          "page",
-          "wasCached",
-          "cacheTTL",
-          "lastModified",
-          "serverTime",
-          "searchUrl",
-          "stickyItems",
-          "system_info"
-        ],
         "properties": {
-          "items": {
-            "title": "Items",
+          "item_id": {
+            "title": "Item",
+            "type": "integer"
+          },
+          "item_state": {
+            "title": "Item",
+            "type": "string"
+          },
+          "category_id": {
+            "title": "Category",
+            "type": "integer"
+          },
+          "published_date": {
+            "title": "Published",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          },
+          "update_stat_date": {
+            "title": "Update",
+            "type": "integer"
+          },
+          "refreshed_date": {
+            "title": "Refreshed",
+            "type": "integer"
+          },
+          "edit_date": {
+            "title": "Edit",
+            "type": "integer"
+          },
+          "pending_deletion_date": {
+            "title": "Pending",
+            "type": "integer"
+          },
+          "login": {
+            "title": "Login",
+            "type": "string"
+          },
+          "temp_email": {
+            "title": "Temp",
+            "type": "string"
+          },
+          "view_count": {
+            "title": "View",
+            "type": "integer"
+          },
+          "is_sticky": {
+            "title": "Is",
+            "type": "integer"
+          },
+          "information": {
+            "title": "Information",
+            "type": "string"
+          },
+          "item_origin": {
+            "title": "Item",
+            "type": "string"
+          },
+          "extended_guarantee": {
+            "title": "Extended",
+            "type": "integer"
+          },
+          "nsb": {
+            "title": "Nsb",
+            "type": "integer"
+          },
+          "allow_ask_discount": {
+            "title": "Allow",
+            "type": "integer"
+          },
+          "title_en": {
+            "title": "Title",
+            "type": "string"
+          },
+          "description_en": {
+            "title": "Description",
+            "type": "string"
+          },
+          "information_en": {
+            "title": "Information",
+            "type": "string"
+          },
+          "email_type": {
+            "title": "Email",
+            "type": "string"
+          },
+          "email_provider": {
+            "title": "Email",
+            "type": "string"
+          },
+          "item_domain": {
+            "title": "Item",
+            "type": "string"
+          },
+          "resale_item_origin": {
+            "title": "Resale",
+            "type": "string"
+          },
+          "note_text": {
+            "title": "Note",
+            "type": "string"
+          },
+          "content_type": {
+            "title": "Content"
+          },
+          "content_id": {
+            "title": "Content"
+          },
+          "delete_date": {
+            "title": "Delete",
+            "type": "integer"
+          },
+          "delete_user_id": {
+            "title": "Delete",
+            "type": "integer"
+          },
+          "delete_username": {
+            "title": "Delete",
+            "type": "string"
+          },
+          "delete_reason": {
+            "title": "Delete",
+            "type": "string"
+          },
+          "user_allow_ask_discount": {
+            "title": "User",
+            "type": "integer"
+          },
+          "max_discount_percent": {
+            "title": "Max",
+            "type": "integer"
+          },
+          "market_custom_title": {
+            "title": "Market",
+            "type": "string"
+          },
+          "feedback_data": {
+            "title": "Feedback",
+            "type": "string"
+          },
+          "buyer_display_icon_group_id": {
+            "title": "Buyer",
+            "type": "integer"
+          },
+          "buyer_uniq_banner": {
+            "title": "Buyer",
+            "type": "string"
+          },
+          "buyer_avatar_date": {
+            "title": "Buyer",
+            "type": "integer"
+          },
+          "buyer_user_group_id": {
+            "title": "Buyer",
+            "type": "integer"
+          },
+          "is_fave": {
+            "title": "Is"
+          },
+          "in_cart": {
+            "title": "In"
+          },
+          "cart_price": {
+            "title": "Cart"
+          },
+          "canResellItem": {
+            "title": "Can Resell Item",
+            "type": "boolean"
+          },
+          "priceWithSellerFee": {
+            "title": "Price With Seller Fee",
+            "type": "number"
+          },
+          "guarantee": {
+            "title": "Guarantee",
+            "type": "object",
+            "properties": {
+              "duration": {
+                "title": "Duration",
+                "type": "integer"
+              },
+              "class": {
+                "title": "Class",
+                "type": "string"
+              },
+              "durationPhrase": {
+                "title": "Duration Phrase",
+                "type": "string"
+              },
+              "endDate": {
+                "title": "End Date",
+                "type": "integer"
+              },
+              "active": {
+                "title": "Active",
+                "type": "boolean"
+              },
+              "cancelled": {
+                "title": "Cancelled",
+                "type": "boolean"
+              },
+              "remainingTime": {
+                "title": "Remaining Time",
+                "type": "integer"
+              },
+              "remainingTimePhrase": {
+                "title": "Remaining Time Phrase",
+                "type": "string"
+              },
+              "cancelledReason": {
+                "title": "Cancelled Reason",
+                "type": "string"
+              },
+              "cancelledReasonPhrase": {
+                "title": "Cancelled Reason Phrase",
+                "type": "string"
+              }
+            },
+            "required": [
+              "duration",
+              "class",
+              "durationPhrase",
+              "endDate",
+              "active",
+              "cancelled",
+              "remainingTime",
+              "remainingTimePhrase",
+              "cancelledReason",
+              "cancelledReasonPhrase"
+            ]
+          },
+          "canViewLoginData": {
+            "title": "Can View Login Data",
+            "type": "boolean"
+          },
+          "canUpdateItemStats": {
+            "title": "Can Update Item Stats",
+            "type": "boolean"
+          },
+          "canReportItem": {
+            "title": "Can Report Item",
+            "type": "boolean"
+          },
+          "canViewItemViews": {
+            "title": "Can View Item Views",
+            "type": "boolean"
+          },
+          "loginData": {
+            "title": "Login Data",
+            "type": "object",
+            "properties": {
+              "raw": {
+                "title": "Raw",
+                "type": "string"
+              },
+              "encodedRaw": {
+                "title": "Encoded Raw",
+                "type": "string"
+              },
+              "login": {
+                "title": "Login",
+                "type": "string"
+              },
+              "password": {
+                "title": "Password",
+                "type": "string"
+              },
+              "encodedPassword": {
+                "title": "Encoded Password",
+                "type": "string"
+              },
+              "oldPassword": {
+                "title": "Old Password",
+                "type": "string"
+              },
+              "encodedOldPassword": {
+                "title": "Encoded Old Password"
+              }
+            },
+            "required": [
+              "raw",
+              "encodedRaw",
+              "login",
+              "password",
+              "encodedPassword",
+              "oldPassword",
+              "encodedOldPassword"
+            ]
+          },
+          "canViewEmailLoginData": {
+            "title": "Can View Email Login Data",
+            "type": "boolean"
+          },
+          "copyFormatData": {
+            "title": "Copy Format Data",
+            "type": "object",
+            "properties": {
+              "title_link": {
+                "title": "Title",
+                "type": "string"
+              },
+              "login_data": {
+                "title": "Login",
+                "type": "string"
+              },
+              "full": {
+                "title": "Full",
+                "type": "string"
+              }
+            },
+            "required": [
+              "title_link",
+              "login_data",
+              "full"
+            ]
+          },
+          "showGetEmailCodeButton": {
+            "title": "Show Get Email Code Button",
+            "type": "boolean"
+          },
+          "getEmailCodeDisplayLogin": {
+            "title": "Get Email Code Display Login"
+          },
+          "buyer": {
+            "title": "Buyer",
+            "type": "object",
+            "properties": {
+              "user_id": {
+                "title": "User",
+                "type": "integer"
+              },
+              "operation_date": {
+                "title": "Operation",
+                "type": "integer"
+              },
+              "visitorIsBuyer": {
+                "title": "Visitor Is Buyer",
+                "type": "boolean"
+              },
+              "username": {
+                "title": "Username",
+                "type": "string"
+              },
+              "is_banned": {
+                "title": "Is",
+                "type": "integer"
+              },
+              "display_style_group_id": {
+                "title": "Display",
+                "type": "integer"
+              },
+              "display_icon_group_id": {
+                "title": "Display",
+                "type": "integer"
+              },
+              "uniq_username_css": {
+                "title": "Uniq",
+                "type": "string"
+              },
+              "uniq_banner": {
+                "title": "Uniq",
+                "type": "string"
+              },
+              "user_group_id": {
+                "title": "User",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "user_id",
+              "operation_date",
+              "visitorIsBuyer",
+              "username",
+              "is_banned",
+              "display_style_group_id",
+              "display_icon_group_id",
+              "uniq_username_css",
+              "uniq_banner",
+              "user_group_id"
+            ]
+          },
+          "isPersonalAccount": {
+            "title": "Is Personal Account",
+            "type": "boolean"
+          },
+          "rub_price": {
+            "title": "Rub",
+            "type": "integer"
+          },
+          "price_currency": {
+            "title": "Price",
+            "type": "string"
+          },
+          "priceWithSellerFeeLabel": {
+            "title": "Price With Seller Fee Label",
+            "type": "string"
+          },
+          "canValidateAccount": {
+            "title": "Can Validate Account",
+            "type": "boolean"
+          },
+          "canResellItemAfterPurchase": {
+            "title": "Can Resell Item After Purchase",
+            "type": "boolean"
+          },
+          "isSmallExf": {
+            "title": "Is Small Exf",
+            "type": "boolean"
+          },
+          "account_last_activity": {
+            "title": "Account",
+            "type": "integer"
+          },
+          "canViewAccountLink": {
+            "title": "Can View Account Link",
+            "type": "boolean"
+          },
+          "accountLinks": {
+            "title": "Account Links",
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "item_id": {
-                  "title": "Item",
-                  "type": "integer"
-                },
-                "item_state": {
-                  "title": "Item",
+                "link": {
+                  "title": "Link",
                   "type": "string"
                 },
-                "category_id": {
-                  "title": "Category",
-                  "type": "integer"
-                },
-                "published_date": {
-                  "title": "Published",
-                  "type": "integer"
-                },
-                "title": {
-                  "title": "Title",
+                "text": {
+                  "title": "Text",
                   "type": "string"
                 },
-                "description": {
-                  "title": "Description",
+                "iconClass": {
+                  "title": "Icon Class",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "link",
+                "text",
+                "iconClass"
+              ]
+            }
+          },
+          "accountLink": {
+            "title": "Account Link",
+            "type": "string"
+          },
+          "imagePreviewLinks": {
+            "title": "Image Preview Links",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "canChangePassword": {
+            "title": "Can Change Password",
+            "type": "boolean"
+          },
+          "canChangeEmailPassword": {
+            "title": "Can Change Email Password",
+            "type": "boolean"
+          },
+          "uniqueKeyExists": {
+            "title": "Unique Key Exists",
+            "type": "boolean"
+          },
+          "itemOriginPhrase": {
+            "title": "Item Origin Phrase",
+            "type": "string"
+          },
+          "visitorIsAuthor": {
+            "title": "Visitor Is Author",
+            "type": "boolean"
+          },
+          "canAskDiscount": {
+            "title": "Can Ask Discount",
+            "type": "boolean"
+          },
+          "tags": {
+            "title": "Tags",
+            "type": "object",
+            "properties": {
+              "1234567890": {
+                "title": "",
+                "type": "object",
+                "properties": {
+                  "tag_id": {
+                    "title": "Tag",
+                    "type": "integer"
+                  },
+                  "title": {
+                    "title": "Title",
+                    "type": "string"
+                  },
+                  "isDefault": {
+                    "title": "Is Default",
+                    "type": "boolean"
+                  },
+                  "forOwnedAccountsOnly": {
+                    "title": "For Owned Accounts Only",
+                    "type": "boolean"
+                  },
+                  "bc": {
+                    "title": "Bc",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "tag_id",
+                  "title",
+                  "isDefault",
+                  "forOwnedAccountsOnly",
+                  "bc"
+                ]
+              }
+            },
+            "required": [
+              "1234567890"
+            ]
+          },
+          "customFields": {
+            "title": "Custom Fields",
+            "type": "object",
+            "properties": {
+              "_4": {
+                "title": "",
+                "type": "string"
+              },
+              "allowSelfUnban": {
+                "title": "Allow Self Unban",
+                "type": "array",
+                "items": {}
+              },
+              "ban_reason": {
+                "title": "Ban",
+                "type": "string"
+              },
+              "discord": {
+                "title": "Discord",
+                "type": "string"
+              },
+              "github": {
+                "title": "Github",
+                "type": "string"
+              },
+              "jabber": {
+                "title": "Jabber",
+                "type": "string"
+              },
+              "lztUnbanAmount": {
+                "title": "Lzt Unban Amount",
+                "type": "string"
+              },
+              "steam": {
+                "title": "Steam",
+                "type": "string"
+              },
+              "telegram": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "vk": {
+                "title": "Vk",
+                "type": "string"
+              }
+            },
+            "required": [
+              "_4",
+              "allowSelfUnban",
+              "ban_reason",
+              "discord",
+              "github",
+              "jabber",
+              "lztUnbanAmount",
+              "steam",
+              "telegram",
+              "vk"
+            ]
+          },
+          "externalAuth": {
+            "title": "External Auth",
+            "type": "array",
+            "items": {}
+          },
+          "isTrusted": {
+            "title": "Is Trusted",
+            "type": "boolean"
+          },
+          "isBirthdayToday": {
+            "title": "Is Birthday Today",
+            "type": "boolean"
+          },
+          "isIgnored": {
+            "title": "Is Ignored",
+            "type": "boolean"
+          },
+          "deposit": {
+            "title": "Deposit",
+            "type": "integer"
+          },
+          "extraPrices": {
+            "title": "Extra Prices",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "title": "Currency",
                   "type": "string"
                 },
                 "price": {
                   "title": "Price",
-                  "type": "integer"
-                },
-                "update_stat_date": {
-                  "title": "Update",
-                  "type": "integer"
-                },
-                "refreshed_date": {
-                  "title": "Refreshed",
-                  "type": "integer"
-                },
-                "edit_date": {
-                  "title": "Edit",
-                  "type": "integer"
-                },
-                "view_count": {
-                  "title": "View",
-                  "type": "integer"
-                },
-                "is_sticky": {
-                  "title": "Is",
-                  "type": "integer"
-                },
-                "item_origin": {
-                  "title": "Item",
                   "type": "string"
                 },
-                "extended_guarantee": {
-                  "title": "Extended",
-                  "type": "integer"
-                },
-                "nsb": {
-                  "title": "Nsb",
-                  "type": "integer"
-                },
-                "allow_ask_discount": {
-                  "title": "Allow",
-                  "type": "integer"
-                },
-                "title_en": {
-                  "title": "Title",
-                  "type": "string"
-                },
-                "description_en": {
-                  "title": "Description",
-                  "type": "string"
-                },
-                "email_type": {
-                  "title": "Email",
-                  "type": "string"
-                },
-                "email_provider": {
-                  "title": "Email"
-                },
-                "item_domain": {
-                  "title": "Item",
-                  "type": "string"
-                },
-                "resale_item_origin": {
-                  "title": "Resale",
-                  "type": "string"
-                },
-                "gifts_item_id": {
-                  "title": "Gifts",
-                  "type": "integer"
-                },
-                "gifts_service": {
-                  "title": "Gifts",
-                  "type": "string"
-                },
-                "gifts_duration": {
-                  "title": "Gifts",
-                  "type": "integer"
-                },
-                "gifts_type": {
-                  "title": "Gifts",
-                  "type": "string"
-                },
-                "feedback_data": {
-                  "title": "Feedback",
-                  "type": "string"
-                },
-                "isIgnored": {
-                  "title": "Is Ignored",
-                  "type": "boolean"
-                },
-                "priceWithSellerFee": {
-                  "title": "Price With Seller Fee",
-                  "type": "integer"
-                },
-                "guarantee": {
-                  "title": "Guarantee"
-                },
-                "canViewLoginData": {
-                  "title": "Can View Login Data",
-                  "type": "boolean"
-                },
-                "canUpdateItemStats": {
-                  "title": "Can Update Item Stats",
-                  "type": "boolean"
-                },
-                "canReportItem": {
-                  "title": "Can Report Item",
-                  "type": "boolean"
-                },
-                "canViewEmailLoginData": {
-                  "title": "Can View Email Login Data",
-                  "type": "boolean"
-                },
-                "showGetEmailCodeButton": {
-                  "title": "Show Get Email Code Button",
-                  "type": "boolean"
-                },
-                "canOpenItem": {
-                  "title": "Can Open Item",
-                  "type": "boolean"
-                },
-                "canCloseItem": {
-                  "title": "Can Close Item",
-                  "type": "boolean"
-                },
-                "canEditItem": {
-                  "title": "Can Edit Item",
-                  "type": "boolean"
-                },
-                "canDeleteItem": {
-                  "title": "Can Delete Item",
-                  "type": "boolean"
-                },
-                "canStickItem": {
-                  "title": "Can Stick Item",
-                  "type": "boolean"
-                },
-                "canUnstickItem": {
-                  "title": "Can Unstick Item",
-                  "type": "boolean"
-                },
-                "bumpSettings": {
-                  "title": "Bump Settings",
-                  "type": "object",
-                  "properties": {
-                    "canBumpItem": {
-                      "title": "Can Bump Item",
-                      "type": "boolean"
-                    },
-                    "canBumpItemGlobally": {
-                      "title": "Can Bump Item Globally",
-                      "type": "boolean"
-                    },
-                    "shortErrorPhrase": {
-                      "title": "Short Error Phrase"
-                    },
-                    "errorPhrase": {
-                      "title": "Error Phrase"
-                    }
-                  },
-                  "required": [
-                    "canBumpItem",
-                    "canBumpItemGlobally",
-                    "shortErrorPhrase",
-                    "errorPhrase"
-                  ]
-                },
-                "canBumpItem": {
-                  "title": "Can Bump Item",
-                  "type": "boolean"
-                },
-                "canBuyItem": {
-                  "title": "Can Buy Item",
-                  "type": "boolean"
-                },
-                "rub_price": {
-                  "title": "Rub",
-                  "type": "integer"
-                },
-                "price_currency": {
-                  "title": "Price",
-                  "type": "string"
-                },
-                "canValidateAccount": {
-                  "title": "Can Validate Account",
-                  "type": "boolean"
-                },
-                "canResellItemAfterPurchase": {
-                  "title": "Can Resell Item After Purchase",
-                  "type": "boolean"
-                },
-                "giftsSubscriptionName": {
-                  "title": "Gifts Subscription Name",
-                  "type": "string"
-                },
-                "giftsServiceName": {
-                  "title": "Gifts Service Name",
-                  "type": "string"
-                },
-                "canViewAccountLink": {
-                  "title": "Can View Account Link",
-                  "type": "boolean"
-                },
-                "canChangePassword": {
-                  "title": "Can Change Password",
-                  "type": "boolean"
-                },
-                "itemOriginPhrase": {
-                  "title": "Item Origin Phrase",
-                  "type": "string"
-                },
-                "tags": {
-                  "title": "Tags",
-                  "type": "array",
-                  "items": {}
-                },
-                "note_text": {
-                  "title": "Note"
-                },
-                "hasPendingAutoBuy": {
-                  "title": "Has Pending Auto Buy",
-                  "type": "boolean"
-                },
-                "descriptionHtml": {
-                  "title": "Description Html",
-                  "type": "string"
-                },
-                "descriptionEnHtml": {
-                  "title": "Description En Html",
-                  "type": "string"
-                },
-                "descriptionPlain": {
-                  "title": "Description Plain",
-                  "type": "string"
-                },
-                "descriptionEnPlain": {
-                  "title": "Description En Plain",
-                  "type": "string"
-                },
-                "seller": {
-                  "title": "Seller",
-                  "type": "object",
-                  "properties": {
-                    "user_id": {
-                      "title": "User",
-                      "type": "integer"
-                    },
-                    "sold_items_count": {
-                      "title": "Sold",
-                      "type": "integer"
-                    },
-                    "active_items_count": {
-                      "title": "Active",
-                      "type": "integer"
-                    },
-                    "restore_data": {
-                      "title": "Restore",
-                      "type": "string"
-                    },
-                    "username": {
-                      "title": "Username",
-                      "type": "string"
-                    },
-                    "avatar_date": {
-                      "title": "Avatar",
-                      "type": "integer"
-                    },
-                    "is_banned": {
-                      "title": "Is",
-                      "type": "integer"
-                    },
-                    "display_style_group_id": {
-                      "title": "Display",
-                      "type": "integer"
-                    },
-                    "restore_percents": {
-                      "title": "Restore"
-                    }
-                  },
-                  "required": [
-                    "user_id",
-                    "sold_items_count",
-                    "active_items_count",
-                    "restore_data",
-                    "username",
-                    "avatar_date",
-                    "is_banned",
-                    "display_style_group_id",
-                    "restore_percents"
-                  ]
+                "priceValue": {
+                  "title": "Price Value",
+                  "type": "number"
                 }
               },
               "required": [
-                "item_id",
-                "item_state",
-                "category_id",
-                "published_date",
-                "title",
-                "description",
+                "currency",
                 "price",
-                "update_stat_date",
-                "refreshed_date",
-                "edit_date",
-                "view_count",
-                "is_sticky",
-                "item_origin",
-                "extended_guarantee",
-                "nsb",
-                "allow_ask_discount",
-                "title_en",
-                "description_en",
-                "email_type",
-                "email_provider",
-                "item_domain",
-                "resale_item_origin",
-                "gifts_item_id",
-                "gifts_service",
-                "gifts_duration",
-                "gifts_type",
-                "feedback_data",
-                "isIgnored",
-                "priceWithSellerFee",
-                "guarantee",
-                "canViewLoginData",
-                "canUpdateItemStats",
-                "canReportItem",
-                "canViewEmailLoginData",
-                "showGetEmailCodeButton",
-                "canOpenItem",
-                "canCloseItem",
-                "canEditItem",
-                "canDeleteItem",
-                "canStickItem",
-                "canUnstickItem",
-                "bumpSettings",
-                "canBumpItem",
-                "canBuyItem",
-                "rub_price",
-                "price_currency",
-                "canValidateAccount",
-                "canResellItemAfterPurchase",
-                "giftsSubscriptionName",
-                "giftsServiceName",
-                "canViewAccountLink",
-                "canChangePassword",
-                "itemOriginPhrase",
-                "tags",
-                "note_text",
-                "hasPendingAutoBuy",
-                "descriptionHtml",
-                "descriptionEnHtml",
-                "descriptionPlain",
-                "descriptionEnPlain",
-                "seller"
+                "priceValue"
               ]
             }
           },
-          "totalItems": {
-            "title": "Total Items",
-            "type": "integer"
-          },
-          "totalItemsPrice": {
-            "title": "Total Items Price"
-          },
-          "hasNextPage": {
-            "title": "Has Next Page",
+          "canViewAccountLoginAndTempEmail": {
+            "title": "Can View Account Login And Temp Email",
             "type": "boolean"
           },
-          "perPage": {
-            "title": "Per Page",
-            "type": "integer"
+          "bumpSettings": {
+            "title": "Bump Settings",
+            "type": "object",
+            "properties": {
+              "canBumpItem": {
+                "title": "Can Bump Item",
+                "type": "boolean"
+              },
+              "canBumpItemGlobally": {
+                "title": "Can Bump Item Globally",
+                "type": "boolean"
+              },
+              "shortErrorPhrase": {
+                "title": "Short Error Phrase"
+              },
+              "nextAllowedBumpDate": {
+                "title": "Next Allowed Bump Date"
+              },
+              "errorPhrase": {
+                "title": "Error Phrase"
+              }
+            },
+            "required": [
+              "canBumpItem",
+              "canBumpItemGlobally",
+              "shortErrorPhrase",
+              "nextAllowedBumpDate",
+              "errorPhrase"
+            ]
           },
-          "page": {
-            "title": "Page",
-            "type": "integer"
-          },
-          "wasCached": {
-            "title": "Was Cached",
+          "canCheckGuarantee": {
+            "title": "Can Check Guarantee",
             "type": "boolean"
           },
-          "cacheTTL": {
-            "title": "Cache Ttl",
+          "canShareItem": {
+            "title": "Can Share Item",
+            "type": "boolean"
+          },
+          "canCheckAiPrice": {
+            "title": "Can Check Ai Price",
+            "type": "boolean"
+          },
+          "aiPrice": {
+            "title": "Ai Price",
             "type": "integer"
           },
-          "lastModified": {
-            "title": "Last Modified",
+          "aiPriceCheckDate": {
+            "title": "Ai Price Check Date",
             "type": "integer"
           },
-          "serverTime": {
-            "title": "Server Time",
+          "needToRequireVideoToViewLoginData": {
+            "title": "Need To Require Video To View Login Data",
+            "type": "boolean"
+          },
+          "canCheckAutoBuyPrice": {
+            "title": "Can Check Auto Buy Price",
+            "type": "boolean"
+          },
+          "autoBuyPrice": {
+            "title": "Auto Buy Price",
             "type": "integer"
           },
-          "searchUrl": {
-            "title": "Search Url",
+          "autoBuyPriceCheckDate": {
+            "title": "Auto Buy Price Check Date",
+            "type": "integer"
+          },
+          "descriptionHtml": {
+            "title": "Description Html",
             "type": "string"
           },
-          "stickyItems": {
-            "title": "Sticky Items",
-            "type": "array",
-            "items": {}
+          "descriptionEnHtml": {
+            "title": "Description En Html",
+            "type": "string"
           },
-          "system_info": {
-            "$ref": "#/components/schemas/SystemInfo"
+          "descriptionPlain": {
+            "title": "Description Plain",
+            "type": "string"
+          },
+          "descriptionEnPlain": {
+            "title": "Description En Plain",
+            "type": "string"
+          },
+          "seller": {
+            "title": "Seller",
+            "type": "object",
+            "properties": {
+              "user_id": {
+                "title": "User",
+                "type": "integer"
+              },
+              "username": {
+                "title": "Username",
+                "type": "string"
+              },
+              "avatar_date": {
+                "title": "Avatar",
+                "type": "integer"
+              },
+              "is_banned": {
+                "title": "Is",
+                "type": "integer"
+              },
+              "display_style_group_id": {
+                "title": "Display",
+                "type": "integer"
+              },
+              "joined_date": {
+                "title": "Joined",
+                "type": "integer"
+              },
+              "sold_items_count": {
+                "title": "Sold",
+                "type": "integer"
+              },
+              "active_items_count": {
+                "title": "Active",
+                "type": "integer"
+              },
+              "restore_data": {
+                "title": "Restore",
+                "type": "string"
+              },
+              "effective_last_activity": {
+                "title": "Effective",
+                "type": "integer"
+              },
+              "restore_percents": {
+                "title": "Restore"
+              },
+              "isOnline": {
+                "title": "Is Online",
+                "type": "boolean"
+              },
+              "contacts": {
+                "title": "Contacts",
+                "type": "object",
+                "properties": {
+                  "ban_reason": {
+                    "title": "Ban",
+                    "type": "string"
+                  },
+                  "telegram": {
+                    "title": "Telegram",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ban_reason",
+                  "telegram"
+                ]
+              }
+            },
+            "required": [
+              "user_id",
+              "username",
+              "avatar_date",
+              "is_banned",
+              "display_style_group_id",
+              "joined_date",
+              "sold_items_count",
+              "active_items_count",
+              "restore_data",
+              "effective_last_activity",
+              "restore_percents",
+              "isOnline",
+              "contacts"
+            ]
           }
-        }
+        },
+        "required": [
+          "item_id",
+          "item_state",
+          "category_id",
+          "published_date",
+          "title",
+          "description",
+          "price",
+          "update_stat_date",
+          "refreshed_date",
+          "edit_date",
+          "pending_deletion_date",
+          "login",
+          "temp_email",
+          "view_count",
+          "is_sticky",
+          "information",
+          "item_origin",
+          "extended_guarantee",
+          "nsb",
+          "allow_ask_discount",
+          "title_en",
+          "description_en",
+          "information_en",
+          "email_type",
+          "email_provider",
+          "item_domain",
+          "resale_item_origin",
+          "note_text",
+          "content_type",
+          "content_id",
+          "delete_date",
+          "delete_user_id",
+          "delete_username",
+          "delete_reason",
+          "user_allow_ask_discount",
+          "max_discount_percent",
+          "market_custom_title",
+          "feedback_data",
+          "buyer_display_icon_group_id",
+          "buyer_uniq_banner",
+          "buyer_avatar_date",
+          "buyer_user_group_id",
+          "is_fave",
+          "in_cart",
+          "cart_price",
+          "canResellItem",
+          "priceWithSellerFee",
+          "guarantee",
+          "canViewLoginData",
+          "canUpdateItemStats",
+          "canReportItem",
+          "canViewItemViews",
+          "loginData",
+          "canViewEmailLoginData",
+          "copyFormatData",
+          "showGetEmailCodeButton",
+          "getEmailCodeDisplayLogin",
+          "buyer",
+          "isPersonalAccount",
+          "rub_price",
+          "price_currency",
+          "priceWithSellerFeeLabel",
+          "canValidateAccount",
+          "canResellItemAfterPurchase",
+          "isSmallExf",
+          "account_last_activity",
+          "canViewAccountLink",
+          "accountLinks",
+          "accountLink",
+          "imagePreviewLinks",
+          "canChangePassword",
+          "canChangeEmailPassword",
+          "uniqueKeyExists",
+          "itemOriginPhrase",
+          "visitorIsAuthor",
+          "canAskDiscount",
+          "tags",
+          "customFields",
+          "externalAuth",
+          "isTrusted",
+          "isBirthdayToday",
+          "isIgnored",
+          "deposit",
+          "extraPrices",
+          "canViewAccountLoginAndTempEmail",
+          "bumpSettings",
+          "canCheckGuarantee",
+          "canShareItem",
+          "canCheckAiPrice",
+          "aiPrice",
+          "aiPriceCheckDate",
+          "needToRequireVideoToViewLoginData",
+          "canCheckAutoBuyPrice",
+          "autoBuyPrice",
+          "autoBuyPriceCheckDate",
+          "descriptionHtml",
+          "descriptionEnHtml",
+          "descriptionPlain",
+          "descriptionEnPlain",
+          "seller"
+        ]
       },
       "SystemInfo": {
         "required": [
