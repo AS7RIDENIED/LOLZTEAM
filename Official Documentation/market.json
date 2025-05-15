@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.61b"
+    "version": "1.1.61c"
   },
   "servers": [
     {
@@ -848,6 +848,7 @@
                   "8BitBoy™",
                   "911 Operator",
                   "99 Levels to Hell Soundtrack",
+                  "A Druid's Duel",
                   "A Game About Digging A Hole",
                   "A Game of Dwarves",
                   "A Gay Love Story About Gay Love",
@@ -955,6 +956,7 @@
                   "Assassin's Creed 2",
                   "Assassin's Creed Freedom Cry",
                   "Assassin's Creed® Odyssey",
+                  "Assassin’s Creed Unity Revolutionary Armaments Pack",
                   "Assassin’s Creed® Brotherhood",
                   "Assassin’s Creed® III",
                   "Assassin’s Creed® III - The Tyranny of King Washington: The Redemption",
@@ -1025,6 +1027,7 @@
                   "Battlefield Bad Company 2: SPECACT Kit Upgrade",
                   "Battlefield: Bad Company™ 2_cis",
                   "Battlefield™ 1",
+                  "Battlefield™ V",
                   "Battlepillars Gold Edition",
                   "Battlepillars Gold Edition_cis",
                   "Bean Battles",
@@ -1048,6 +1051,7 @@
                   "Bit.Trip.Runner 2 Giftable",
                   "Black Desert",
                   "Black Ice",
+                  "Black Mesa",
                   "Black Myth: Wukong",
                   "Blackwake",
                   "Blade Symphony",
@@ -1107,6 +1111,7 @@
                   "Borderlands 2: Ultimate Vault Hunter Upgrade Pack 2",
                   "Borderlands 2: Ultimate Vault Hunters Upgrade Pack",
                   "Borderlands GOTY",
+                  "Borderlands: Mad Moxxi's Underdome Riot",
                   "Borderlands: The Pre-Sequel + Season Pass",
                   "Borderlands: The Pre-Sequel Season Pass_cis",
                   "Borderlands: The Zombie Island of Dr. Ned",
@@ -1116,6 +1121,7 @@
                   "Botology - Map \"Zerex\" for Survival Mode_cis",
                   "Boundel: The Second Era",
                   "Brawlhalla",
+                  "Brawlhalla - Spring Esports 2025 Pack",
                   "Breach - Four Gifts",
                   "Breath of Death VII",
                   "Brick Rigs",
@@ -1132,12 +1138,14 @@
                   "Bus World",
                   "CBT With Yuuka Kazami",
                   "CHUCHEL",
+                  "COH 2 - British Commander: Tactical Support Regiment",
                   "Call of Duty: Black Ops III - Multiplayer Starter Pack",
                   "Call of Duty: Black Ops III Beta GIFT",
                   "Call of Duty: Black Ops III Beta GIFT_cis",
                   "Call of Duty: World at War",
                   "Call of Duty® 2",
                   "Call of Duty® 4: Modern Warfare® (2007)",
+                  "Call of Duty®: Advanced Warfare - Havoc",
                   "Call of Duty®: Advanced Warfare - Season Pass",
                   "Call of Duty®: Black Ops - Rezurrection Content Pack",
                   "Call of Duty®: Black Ops - Rezurrection Content Pack_cis",
@@ -1281,6 +1289,7 @@
                   "Cossacks: Back to War_cis",
                   "Cossacks: European Wars",
                   "Cossacks: European Wars_cis",
+                  "Counter Spell",
                   "Counter-Strike",
                   "Counter-Strike 2",
                   "Counter-Strike Nexon: Zombies - Rivals DLC",
@@ -1291,6 +1300,7 @@
                   "Crash Drive 2",
                   "Crash Drive 2_cis",
                   "CrashMetal - Cyberpunk",
+                  "Crea",
                   "Creativerse",
                   "Cries of Rage Deck Unlock",
                   "Crime Boss: Rockay City",
@@ -1317,6 +1327,7 @@
                   "DARK SOULS™ III - The Ringed City™",
                   "DARK SOULS™: Prepare To Die™ Edition",
                   "DARK SOULS™: Prepare To Die™ Edition_cis",
+                  "DARK SOULS™: REMASTERED",
                   "DEADCRAFT",
                   "DEFCON",
                   "DETOUR",
@@ -1463,6 +1474,7 @@
                   "Dragon Age: Origins - Ultimate Edition",
                   "Dragon Age™: The Veilguard",
                   "Draw a Stickman: EPIC",
+                  "Drawful 2",
                   "Dread Templar",
                   "DreadOut Soundtrack & Manga DLC",
                   "Drift racing car",
@@ -1549,6 +1561,7 @@
                   "Epic Showdown",
                   "Epigenesis",
                   "Epistory - Typing Chronicles",
+                  "Escape Memoirs: Mini Stories - Bunker Scenario",
                   "Escape the Backrooms",
                   "Euro Truck Simulator",
                   "Euro Truck Simulator 2",
@@ -1863,6 +1876,7 @@
                   "How to Survive - Storm Warning Edition_cis",
                   "How to Survive_cis",
                   "Human Fall Flat",
+                  "Human Resource Machine",
                   "HuniePop",
                   "Hunt the Night",
                   "Hunted: One Step Too Far - Reborn Edition_cis",
@@ -1956,6 +1970,11 @@
                   "LEGO® Batman™ 2: DC Super Heroes",
                   "LEGO® Batman™: The Videogame",
                   "LEGO® Batman™: The Videogame_cis",
+                  "LEGO® MARVEL's Avengers - The Avengers Adventurer Character Pack",
+                  "LEGO® MARVEL's Avengers DLC - Classic Captain Marvel Pack",
+                  "LEGO® MARVEL's Avengers DLC - Marvel’s Agents of S.H.I.E.L.D. Pack",
+                  "LEGO® MARVEL's Avengers DLC - Marvel’s Captain America: Civil War Character Pack",
+                  "LEGO® MARVEL's Avengers Season Pass",
                   "LEGO® Marvel Super Heroes DLC: Super Pack",
                   "LEGO® Star Wars™ III - The Clone Wars™",
                   "LEGO® Star Wars™: The Skywalker Saga",
@@ -2188,6 +2207,7 @@
                   "Nightmares from the Deep: The Cursed Heart",
                   "Nihilumbra",
                   "Nikopol: Secrets of the Immortals",
+                  "Nimbus",
                   "No Man's Sky",
                   "No Time To Live",
                   "No Time to Relax",
@@ -2207,6 +2227,7 @@
                   "ORION: Prelude",
                   "ORION: Prelude_cis",
                   "OUTBRK",
+                  "Oblivion Game of the Year Deluxe",
                   "Octodad: Dadliest Catch + Soundtrack",
                   "Oddworld: Munch's Oddysee",
                   "Oddworld: Stranger's Wrath HD",
@@ -2225,6 +2246,7 @@
                   "Oozi: Earth Adventure",
                   "Operation Flashpoint: Dragon Rising",
                   "Orbital Gear",
+                  "Orc Attack: Flatulent Rebellion",
                   "Orcs Must Die 2 - Complete Pack 2 Gift",
                   "Orcs Must Die! - Lost Adventures",
                   "Orcs Must Die! 2",
@@ -2236,6 +2258,7 @@
                   "Ori and the Will of the Wisps",
                   "Original War",
                   "Orwell: Keeping an Eye On You",
+                  "Ostrich Island",
                   "Ostrich Island_cis",
                   "Our Wonderful World_cis",
                   "Out There Somewhere",
@@ -2454,6 +2477,7 @@
                   "Resident Evil: Revelations Jill's Samurai Edge + Custom Part:",
                   "Retro City Rampage™ DX",
                   "Retro Game Crunch",
+                  "Retrovirus",
                   "Retrovirus_cis",
                   "Return to Castle Wolfenstein",
                   "Revenge of the Titans",
@@ -2639,6 +2663,7 @@
                   "Sid Meier's Civilization® VI: Gathering Storm",
                   "Sid Meier's Civilization® V_cis",
                   "Sid Meier’s Civilization® VI: Rise and Fall",
+                  "Signal Ops",
                   "Silver Chains",
                   "SimCity™ 4 Deluxe Edition",
                   "Sins of a Dark Age - Early Access Gift",
@@ -2653,6 +2678,7 @@
                   "Skullgirls: Color Palette Bundle",
                   "Skullgirls: Eliza",
                   "Skullgirls: Robo-Fortune",
+                  "Skullgirls: Squigly",
                   "Skulls of the Shogun",
                   "SkyDrift: Extreme Fighters Premium Airplane Pack",
                   "Slain: Back from Hell",
@@ -2839,6 +2865,7 @@
                   "Talisman: Digital Edition",
                   "Talisman: Digital Edition_cis",
                   "Talisman: Prologue",
+                  "Tango Fiesta",
                   "Tattletail",
                   "Team Fortress 2",
                   "Team Fortress Classic",
@@ -2860,6 +2887,7 @@
                   "The Bureau: XCOM Declassified - Light Plasma Pistol",
                   "The Chaos Engine",
                   "The Chosen RPG",
+                  "The Collider",
                   "The Crew Wild Run - Beta Gift Copy",
                   "The Crew Wild Run - Beta Gift Copy_cis",
                   "The Crew™ 2",
@@ -2952,6 +2980,7 @@
                   "Thief™ Gold",
                   "This War of Mine",
                   "This War of Mine_cis",
+                  "ThreadSpace: Hyperbol",
                   "Three Heroes",
                   "Tick Tock: A Tale for Two",
                   "Tidalis",
@@ -3184,6 +3213,7 @@
                   "Unknown package 29177_cis",
                   "Unknown package 29197_cis",
                   "Unknown package 29360",
+                  "Unknown package 30033",
                   "Unknown package 30130",
                   "Unknown package 30182",
                   "Unknown package 30274",
@@ -3211,6 +3241,7 @@
                   "Unknown package 39877",
                   "Unknown package 40024_cis",
                   "Unknown package 40649",
+                  "Unknown package 4090",
                   "Unknown package 41305_cis",
                   "Unknown package 4193",
                   "Unknown package 42337",
@@ -3268,6 +3299,7 @@
                   "Unknown package 594",
                   "Unknown package 6003_cis",
                   "Unknown package 60639",
+                  "Unknown package 6219",
                   "Unknown package 62267_cis",
                   "Unknown package 6249",
                   "Unknown package 6250",
@@ -3307,6 +3339,7 @@
                   "Unknown package 74582_cis",
                   "Unknown package 75200",
                   "Unknown package 76760",
+                  "Unknown package 77059",
                   "Unknown package 783",
                   "Unknown package 79015",
                   "Unknown package 7926",
@@ -3435,12 +3468,14 @@
                   "XCOM: Enemy Unknown_cis",
                   "XCOM: Enemy Within",
                   "XCOM: Enemy Within_cis",
+                  "XenoRaptor",
                   "YOU DON'T KNOW JACK Vol. 6 The Lost Gold_cis",
                   "Yakuza 0",
                   "Yet Another Zombie Defense",
                   "Yet Another Zombie Defense_cis",
                   "Your Mother",
                   "Your Only Move Is HUSTLE",
+                  "Z_cis",
                   "Zeno Clash 2",
                   "Zero Gear",
                   "Zero Hour",
@@ -11444,6 +11479,7 @@
                   "scrolls",
                   "scrubdub",
                   "sculptor",
+                  "seagull",
                   "secrethandshake",
                   "secrethandshake_owned",
                   "secrethandshake_owned_follower",
@@ -33686,6 +33722,40 @@
           },
           {
             "$ref": "#/components/parameters/daybreak"
+          },
+          {
+            "name": "hours_played",
+            "in": "query",
+            "description": "List of minimum hours played by game.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "title": "Hours Played",
+              "type": "object",
+              "description": "List of minimum hours played by game.",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - game id\nValue - minimum hours played"
+              }
+            }
+          },
+          {
+            "name": "hours_played_max",
+            "in": "query",
+            "description": "List of maximum hours played by game.",
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "title": "Hours Played Max",
+              "type": "object",
+              "description": "List of maximum hours played by game.",
+              "additionalProperties": {
+                "type": "integer",
+                "description": "Key - game id\nValue - maximum hours played"
+              }
+            }
           }
         ],
         "responses": {
@@ -47532,7 +47602,9 @@
                     "system_info"
                   ],
                   "properties": {
-                    "item": {"$ref": "#/components/schemas/ItemModel"},
+                    "item": {
+                      "$ref": "#/components/schemas/ItemModel"
+                    },
                     "canStickItem": {
                       "title": "Can Stick Item",
                       "type": "boolean"
@@ -49568,9 +49640,9 @@
                 "pickaxes",
                 "dances",
                 "gliders",
-                "WeaponSkins",
-                "Agent",
-                "Buddy"
+                "weapons",
+                "agents",
+                "buddies"
               ]
             }
           }
@@ -49579,10 +49651,22 @@
           "200": {
             "description": "Successful Response.",
             "content": {
-              "image/png": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "type": "object",
+                  "required": [
+                    "base64",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "base64": {
+                      "title": "Base",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
                 }
               }
             }
@@ -50573,105 +50657,6 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/BuyItem"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/NoPermission"
-          },
-          "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
-    "/{item_id}/goods/add": {
-      "get": {
-        "tags": [
-          "Account publishing"
-        ],
-        "summary": "Get Temporary Mail",
-        "description": "Get info about not published item. For categories, which required temporary email, you will get temporary email in response.",
-        "operationId": "Publishing.Mail",
-        "deprecated": true,
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "forceTempEmail",
-            "in": "query",
-            "description": "Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Paid Mail",
-              "type": "boolean",
-              "description": "Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories."
-            }
-          },
-          {
-            "name": "resell_item_id",
-            "in": "query",
-            "description": "Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Resell Item Id",
-              "type": "integer",
-              "description": "Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account."
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "AddGoodsModel",
-                  "required": [
-                    "ignoreCookieUpload",
-                    "item",
-                    "sessionLoginData",
-                    "system_info",
-                    "temp_email"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "item": {
-                      "$ref": "#/components/schemas/ItemFromListModel"
-                    },
-                    "temp_email": {
-                      "title": "Temp Email",
-                      "type": "string"
-                    },
-                    "sessionLoginData": {
-                      "title": "Sessionlogindata",
-                      "type": "array",
-                      "items": {}
-                    },
-                    "ignoreCookieUpload": {
-                      "title": "Ignorecookieupload",
-                      "type": "boolean"
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/SystemInfo"
-                    }
-                  }
-                }
-              }
-            }
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -52929,6 +52914,10 @@
                           "title": "Paid",
                           "type": "integer"
                         },
+                        "payer_user_id": {
+                          "title": "Payer",
+                          "type": "integer"
+                        },
                         "payment_id": {
                           "title": "Payment",
                           "type": "string"
@@ -52949,6 +52938,10 @@
                           "title": "Url",
                           "type": "string"
                         },
+                        "resend_attempts": {
+                          "title": "Resend",
+                          "type": "integer"
+                        },
                         "url": {
                           "title": "Url",
                           "type": "string"
@@ -52964,11 +52957,13 @@
                         "currency",
                         "status",
                         "paid_date",
+                        "payer_user_id",
                         "payment_id",
                         "additional_data",
                         "comment",
                         "url_success",
                         "url_callback",
+                        "resend_attempts",
                         "url"
                       ]
                     },
@@ -53163,26 +53158,6 @@
                       "title": "Invoice",
                       "type": "object",
                       "properties": {
-                        "invoice_id": {
-                          "title": "Invoice",
-                          "type": "integer"
-                        },
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "merchant_id": {
-                          "title": "Merchant",
-                          "type": "integer"
-                        },
-                        "invoice_date": {
-                          "title": "Invoice",
-                          "type": "integer"
-                        },
-                        "expires_at": {
-                          "title": "Expires",
-                          "type": "integer"
-                        },
                         "amount": {
                           "title": "Amount",
                           "type": "integer"
@@ -53191,24 +53166,20 @@
                           "title": "Currency",
                           "type": "string"
                         },
-                        "status": {
-                          "title": "Status",
-                          "type": "string"
-                        },
-                        "paid_date": {
-                          "title": "Paid",
-                          "type": "integer"
-                        },
                         "payment_id": {
                           "title": "Payment",
                           "type": "string"
                         },
-                        "additional_data": {
-                          "title": "Additional",
-                          "type": "string"
+                        "merchant_id": {
+                          "title": "Merchant",
+                          "type": "integer"
                         },
                         "comment": {
                           "title": "Comment",
+                          "type": "string"
+                        },
+                        "additional_data": {
+                          "title": "Additional",
                           "type": "string"
                         },
                         "url_success": {
@@ -53219,26 +53190,60 @@
                           "title": "Url",
                           "type": "string"
                         },
+                        "expires_at": {
+                          "title": "Expires",
+                          "type": "integer"
+                        },
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "invoice_date": {
+                          "title": "Invoice",
+                          "type": "integer"
+                        },
+                        "status": {
+                          "title": "Status",
+                          "type": "string"
+                        },
+                        "paid_date": {
+                          "title": "Paid",
+                          "type": "integer"
+                        },
+                        "payer_user_id": {
+                          "title": "Payer",
+                          "type": "integer"
+                        },
+                        "resend_attempts": {
+                          "title": "Resend",
+                          "type": "integer"
+                        },
+                        "invoice_id": {
+                          "title": "Invoice",
+                          "type": "integer"
+                        },
                         "url": {
                           "title": "Url",
                           "type": "string"
                         }
                       },
                       "required": [
-                        "invoice_id",
-                        "user_id",
-                        "merchant_id",
-                        "invoice_date",
-                        "expires_at",
                         "amount",
                         "currency",
-                        "status",
-                        "paid_date",
                         "payment_id",
-                        "additional_data",
+                        "merchant_id",
                         "comment",
+                        "additional_data",
                         "url_success",
                         "url_callback",
+                        "expires_at",
+                        "user_id",
+                        "invoice_date",
+                        "status",
+                        "paid_date",
+                        "payer_user_id",
+                        "resend_attempts",
+                        "invoice_id",
                         "url"
                       ]
                     },
@@ -53387,6 +53392,10 @@
                             "title": "Paid",
                             "type": "integer"
                           },
+                          "payer_user_id": {
+                            "title": "Payer",
+                            "type": "integer"
+                          },
                           "payment_id": {
                             "title": "Payment",
                             "type": "string"
@@ -53407,6 +53416,10 @@
                             "title": "Url",
                             "type": "string"
                           },
+                          "resend_attempts": {
+                            "title": "Resend",
+                            "type": "integer"
+                          },
                           "url": {
                             "title": "Url",
                             "type": "string"
@@ -53422,11 +53435,13 @@
                           "currency",
                           "status",
                           "paid_date",
+                          "payer_user_id",
                           "payment_id",
                           "additional_data",
                           "comment",
                           "url_success",
                           "url_callback",
+                          "resend_attempts",
                           "url"
                         ]
                       }
