@@ -1021,7 +1021,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
-        async def image(self, item_id: int, image_type: Literal["skins", "pickaxes", "dances", "gliders", "WeaponSkins", "Agent", "Buddy"]) -> Response:
+        async def image(self, item_id: int, image_type: Literal["skins", "pickaxes", "dances", "gliders", "weapons", "agents", "buddies"]) -> Response:
             """
             GET https://api.lzt.market/{item_id}/image
 
@@ -1035,10 +1035,11 @@ class Market(APIClient):
             **Example:**
 
             ```python
+            import base64
             response = market.managing.image(item_id=1234567890, image_type="skins")
-            # Response is a bytes
+            image_data = base64.b64decode(response.json().get("base64"))
             with open("image.png", "wb") as f:
-                f.write(response.content)
+                f.write(image_data)
             ```
             """
             return await self.core.request("GET", f"/{item_id}/image", params={"type": image_type})
@@ -1655,33 +1656,6 @@ class Market(APIClient):
                 json.update(kwargs)
             return await self.core.request("POST", f"/{item_id}/goods/check", json=json)
 
-        @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
-        async def mail(self, item_id: int, force_mail: bool = NONE, resell_item_id: int = NONE) -> Response:
-            """
-            GET https://api.lzt.market/{item_id}/goods/add
-
-            *Get info about unpublished item. For categories that require temporary email, you will also get temporary email in response.*
-
-            **Parameters:**
-
-            - **item_id** (int): Item ID.
-            - **force_mail** (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
-            - **resell_item_id** (int): Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.
-
-            **Example:**
-
-            ```python
-            response = market.publishing.mail(item_id=1234567890)
-            print(response.json())
-            ```
-            """
-            params = {
-                "forceTempEmail": force_mail,
-                "resell_item_id": resell_item_id
-            }
-            return await self.core.request("GET", f"/{item_id}/goods/add", params=params)
-
     class __Profile:
         def __init__(self, core: "Market"):
             self.core = core
@@ -1716,7 +1690,8 @@ class Market(APIClient):
             hide_favorites: bool = NONE,
             show_too_low_price_change_warning: bool = NONE,
             allow_accept_accounts: list[str] = NONE,
-            telegram_client: dict[str, str] = NONE
+            telegram_client: dict[str, str] = NONE,
+            currency: Constants.Market.Currency._Literal = NONE
         ) -> Response:
             """
             POST https://api.lzt.market/me
@@ -1735,6 +1710,7 @@ class Market(APIClient):
             - **show_too_low_price_change_warning** (bool): Show too low price change warning.
             - **allow_transfer_accounts_from** (list[str]): Allow transfer accounts from.
             - **telegram_client** (dict[str, str]): Telegram client.
+            - **currency** (str): Account currency.
 
             **Example:**
 
@@ -1757,7 +1733,8 @@ class Market(APIClient):
                 "change_password_on_purchase": change_password_on_purchase,
                 "hide_favourites": hide_favorites,
                 "show_too_low_price_change_warning": show_too_low_price_change_warning,
-                "allow_accept_accounts": ",".join(allow_accept_accounts) if allow_accept_accounts else None
+                "allow_accept_accounts": ",".join(allow_accept_accounts) if allow_accept_accounts else None,
+                "currency": currency,
             }
             if not isinstance(telegram_client, _NONE):
                 json["telegram_api_id"] = telegram_client.get("telegram_api_id", NONE)
@@ -1768,7 +1745,6 @@ class Market(APIClient):
                 json["telegram_lang_pack"] = telegram_client.get("telegram_lang_pack", NONE)
                 json["telegram_lang_code"] = telegram_client.get("telegram_lang_code", NONE)
                 json["telegram_system_lang_code"] = telegram_client.get("telegram_system_lang_code", NONE)
-
             return await self.core.request("POST", "/me", json=json)
 
     class __Payments:
