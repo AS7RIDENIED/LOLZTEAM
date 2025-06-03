@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.61e"
+    "version": "1.1.62"
   },
   "servers": [
     {
@@ -55392,19 +55392,6 @@
             }
           },
           {
-            "name": "secret_answer",
-            "in": "query",
-            "description": "Secret answer of your account.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Secret Answer",
-              "type": "string",
-              "description": "Secret answer of your account."
-            }
-          },
-          {
             "name": "comment",
             "in": "query",
             "description": "Transfer comment.",
@@ -56802,6 +56789,450 @@
         ]
       }
     },
+    "/balance/payout/services": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Get Payout Services",
+        "description": "Get a list of available payout services.",
+        "operationId": "Payments.PayoutServices",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema":{
+                  "type": "object",
+                  "required": [
+                    "systems",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "systems": {
+                      "title": "Systems",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "system": {
+                            "title": "System",
+                            "type": "string"
+                          },
+                          "commission": {
+                            "title": "Commission",
+                            "type": "string"
+                          },
+                          "min": {
+                            "title": "Min",
+                            "type": "integer"
+                          },
+                          "max": {
+                            "title": "Max",
+                            "type": "integer"
+                          },
+                          "instant_payout": {
+                            "title": "Instant",
+                            "type": "boolean"
+                          },
+                          "problematic_payout": {
+                            "title": "Problematic",
+                            "type": "boolean"
+                          },
+                          "is_unavailable": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "p2p": {
+                            "title": "",
+                            "type": "boolean"
+                          },
+                          "has_wallet": {
+                            "title": "Has",
+                            "type": "boolean"
+                          },
+                          "providers": {
+                            "title": "Providers",
+                            "type": "object",
+                            "properties": {
+                              "BEP20": {
+                                "title": "Be",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "TRC20": {
+                                "title": "Tr",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "ERC20": {
+                                "title": "Er",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "TRX": {
+                                "title": "Trx",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "BTC": {
+                                "title": "Btc",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "TON": {
+                                "title": "Ton",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "ETH": {
+                                "title": "Eth",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "LTC": {
+                                "title": "Ltc",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "BNB": {
+                                "title": "Bnb",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "DASH": {
+                                "title": "Dash",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "DOGE": {
+                                "title": "Doge",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "XMR": {
+                                "title": "Xmr",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "SOL": {
+                                "title": "Sol",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              },
+                              "BCH": {
+                                "title": "Bch",
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  },
+                                  "isUnavailable": {
+                                    "title": "Is Unavailable",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "isUnavailable"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "BEP20",
+                              "TRC20",
+                              "ERC20",
+                              "TRX",
+                              "BTC",
+                              "TON",
+                              "ETH",
+                              "LTC",
+                              "BNB",
+                              "DASH",
+                              "DOGE",
+                              "XMR",
+                              "SOL",
+                              "BCH"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "system",
+                          "commission",
+                          "min",
+                          "max",
+                          "instant_payout",
+                          "problematic_payout",
+                          "is_unavailable",
+                          "p2p",
+                          "has_wallet",
+                          "providers"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+            }}
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "payment"
+            ]
+          }
+        ]
+      }
+    },
+    "/balance/payout": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Create Payout",
+        "description": "Creates a payout request.",
+        "operationId": "Payments.Payout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "payment_system",
+                "wallet",
+                "amount",
+                "currency"
+              ],
+              "properties": {
+                "payment_system": {
+                  "title": "Payment System",
+                  "type": "string"
+                },
+                "wallet": {
+                  "title": "Wallet",
+                  "type": "string"
+                },
+                "amount": {
+                  "title": "Amount",
+                  "type": "number"
+                },
+                "currency": {
+                  "title": "Currency",
+                  "type": "string"
+                },
+                "include_fee": {
+                  "title": "Include Fee",
+                  "type": "string",
+                  "enum": ["on"]
+                },
+                "extra": {
+                  "type": "object",
+                  "properties": {
+                    "provider": {
+                      "title": "Provider",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref":"#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "payment"
+            ]
+          }
+        ]
+      }
+    },
+    
     "/proxy": {
       "get": {
         "tags": [
