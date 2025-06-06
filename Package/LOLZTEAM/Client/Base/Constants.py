@@ -102,7 +102,6 @@ class Market:
         brute = "brute"
         stealer = "stealer"
         phishing = "phishing"
-        fishing = "phishing"  # Deprecated, will be removed in future
         autoreg = "autoreg"
         personal = "personal"
         resale = "resale"

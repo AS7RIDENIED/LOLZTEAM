@@ -22,14 +22,14 @@ class Market(APIClient):
 
         **Parameters:**
 
-        - **token** (str): Your token.
+        - token (str): Your token.
           > You can get it [there](https://zelenka.guru/account/api)
-        - **language** (Literal["ru", "en"]): Language of the API responses.
-        - **delay_min** (float): Minimal delay between requests.
+        - language (Literal["ru", "en"]): Language of the API responses.
+        - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests.
-        - **proxy** (str): Proxy string.
+        - proxy (str): Proxy string.
           > protocol://ip:port or protocol://login:password@ip:port (socks5://login:password@192.168.1.1:8080 or http://login:password@192.168.1.1:8080)
-        - **timeout** (float): Request timeout.
+        - timeout (float): Request timeout.
 
         ```python
         from LOLZTEAM.Client import Market
@@ -101,18 +101,18 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **page** (int): The number of the page to display results from
-                - **title** (str): The word or words contained in the account title.
-                - **pmin** (float): Minimal price of account (Inclusive).
-                - **pmax** (float): Maximum price of account (Inclusive).
-                - **origin** (list): List of account origins.
-                - **not_origin** (list): List of account origins that won't be included.
-                - **order_by** (str): Item order.
-                - **sb** (bool): Sold before.
-                - **sb_by_me** (bool): Sold before by me.
-                - **nsb** (bool): Not sold before.
-                - **nsb_by_me** (bool): Not sold before by me.
-                - ****kwargs** (any): Any additional search parameters.
+                - page (int): The number of the page to display results from
+                - title (str): The word or words contained in the account title.
+                - pmin (float): Minimal price of account (Inclusive).
+                - pmax (float): Maximum price of account (Inclusive).
+                - origin (list): List of account origins.
+                - not_origin (list): List of account origins that won't be included.
+                - order_by (str): Item order.
+                - sb (bool): Sold before.
+                - sb_by_me (bool): Sold before by me.
+                - nsb (bool): Not sold before.
+                - nsb_by_me (bool): Not sold before by me.
+                - kwargs (any): Any additional search parameters.
 
                 **Example:**
 
@@ -306,7 +306,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **top_queries** (bool): Display top queries.
+            - top_queries (bool): Display top queries.
 
             **Example:**
 
@@ -332,8 +332,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **category_name** (str): Category name.
-            - **kwargs** (any): Additional search parameters for your request.
+            - category_name (str): Category name.
+            - kwargs (any): Additional search parameters for your request.
 
             **Example:**
 
@@ -361,9 +361,9 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **category_id** (int): Category ID.
-            - **show** (str): Show status.
-            - **kwargs** (any): Any additional search parameters.
+            - category_id (int): Category ID.
+            - show (str): Show status.
+            - kwargs (any): Any additional search parameters.
 
             **Example:**
 
@@ -389,8 +389,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **category_id** (int): Category ID.
-            - **kwargs** (any): Any additional search parameters.
+            - category_id (int): Category ID.
+            - kwargs (any): Any additional search parameters.
 
             **Example:**
 
@@ -415,8 +415,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **category_id** (int): Category ID.
-            - **kwargs** (any): Any additional search parameters.
+            - category_id (int): Category ID.
+            - kwargs (any): Any additional search parameters.
 
             **Example:**
 
@@ -441,8 +441,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **category_id** (int): Category ID.
-            - **kwargs** (any): Any additional search parameters.
+            - category_id (int): Category ID.
+            - kwargs (any): Any additional search parameters.
 
             **Example:**
 
@@ -472,8 +472,8 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (str): Item ID.
-                - **app_id** (int): App ID.
+                - item_id (str): Item ID.
+                - app_id (int): App ID.
 
                 **Example:**
 
@@ -499,11 +499,11 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **url** (str): Link or id of account.
+                - url (str): Link or id of account.
                   > Can be [https://lzt.market/{item-id}/, https://steamcommunity.com/id/{steam-name}, https://steamcommunity.com/profiles/{steam-id}, {steam-id}].
-                - **app_id** (int): App ID.
-                - **currency** (str): Currency.
-                - **ignore_cache** (bool): Ignore cache.
+                - app_id (int): App ID.
+                - currency (str): Currency.
+                - ignore_cache (bool): Ignore cache.
 
                 **Example:**
                 """
@@ -525,8 +525,8 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (int): Item ID.
-                - **type** (str): Type of preview.
+                - item_id (int): Item ID.
+                - type (str): Type of preview.
                   > Can be ["profiles", "games"].
 
                 **Example:**
@@ -551,9 +551,9 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (int): Item ID.
-                - **app_id** (int): App ID.
-                - **all** (bool): Update entire inventory.
+                - item_id (int): Item ID.
+                - app_id (int): App ID.
+                - all (bool): Update entire inventory.
 
                 **Example:**
 
@@ -579,7 +579,7 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (int): Item ID.
+                - item_id (int): Item ID.
 
                 **Example:**
 
@@ -601,7 +601,7 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (int): Item ID.
+                - item_id (int): Item ID.
 
                 **Example:**
 
@@ -623,9 +623,9 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (int): Item ID.
-                - **id** (int): ID.
-                - **nonce** (int): Nonce.
+                - item_id (int): Item ID.
+                - id (int): ID.
+                - nonce (int): Nonce.
 
                 **Example:**
 
@@ -671,7 +671,7 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (str): Item ID.
+                - item_id (str): Item ID.
 
                 **Example:**
 
@@ -692,7 +692,7 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (str): Item ID.
+                - item_id (str): Item ID.
 
                 **Example:**
 
@@ -717,7 +717,7 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (int): Item ID.
+                - item_id (int): Item ID.
 
                 **Example:**
 
@@ -738,7 +738,7 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **item_id** (int): Item ID.
+                - item_id (int): Item ID.
 
                 **Example:**
 
@@ -765,7 +765,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -787,7 +787,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_ids** (list[int]): Item IDs.
+            - item_ids (list[int]): Item IDs.
               > Max 250 items.
 
             **Example:**
@@ -824,18 +824,18 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **title** (str): Title.
-            - **title_en** (str): Title in English.
-            - **price** (float): Price.
-            - **currency** (str): Currency.
-            - **origin** (str): Item origin.
-            - **description** (str): Description.
-            - **information** (str): Information.
-            - **email** (str): Email.
-            - **email_type** (str): Email type.
-            - **allow_ask_discount** (bool): Allow ask discount.
-            - **proxy_id** (int): Proxy ID.
+            - item_id (int): Item ID.
+            - title (str): Title.
+            - title_en (str): Title in English.
+            - price (float): Price.
+            - currency (str): Currency.
+            - origin (str): Item origin.
+            - description (str): Description.
+            - information (str): Information.
+            - email (str): Email.
+            - email_type (str): Email type.
+            - allow_ask_discount (bool): Allow ask discount.
+            - proxy_id (int): Proxy ID.
 
             **Example:**
 
@@ -881,8 +881,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **reason** (str): Reason.
+            - item_id (int): Item ID.
+            - reason (str): Reason.
             """
             json = {
                 "reason": reason
@@ -899,7 +899,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -920,7 +920,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -941,7 +941,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -962,7 +962,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -983,7 +983,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -1004,8 +1004,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **text** (str): Text.
+            - item_id (int): Item ID.
+            - text (str): Text.
 
             **Example:**
 
@@ -1029,8 +1029,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **image_type** (str): Image type.
+            - item_id (int): Item ID.
+            - image_type (str): Image type.
 
             **Example:**
 
@@ -1054,8 +1054,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **post_body** (str): Post body.
+            - item_id (int): Item ID.
+            - post_body (str): Post body.
 
             **Example:**
 
@@ -1079,10 +1079,10 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID. Returns letters only from the sender of the selected account category.
-            - **email** (str): Email.
-            - **password** (str): Password.
-            - **limit** (int): Number of letters to return.
+            - item_id (int): Item ID. Returns letters only from the sender of the selected account category.
+            - email (str): Email.
+            - password (str): Password.
+            - limit (int): Number of letters to return.
 
             **Example:**
 
@@ -1109,9 +1109,9 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **email** (str): Email.
-            - **login** (str): Login.
+            - item_id (int): Item ID.
+            - email (str): Email.
+            - login (str): Login.
 
             **Example:**
 
@@ -1137,7 +1137,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -1158,8 +1158,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **cancel** (bool): Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data.
+            - item_id (int): Item ID.
+            - cancel (bool): Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data.
 
             **Example:**
 
@@ -1183,8 +1183,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **tag_id** (int): Tag ID.
+            - item_id (int): Item ID.
+            - tag_id (int): Tag ID.
 
             **Example:**
 
@@ -1208,8 +1208,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **tag_id** (int): Tag ID.
+            - item_id (int): Item ID.
+            - tag_id (int): Tag ID.
 
             **Example:**
 
@@ -1233,7 +1233,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -1254,7 +1254,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -1275,7 +1275,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -1296,7 +1296,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -1317,9 +1317,9 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **username** (str): Username.
-            - **secret_answer** (str): Secret answer.
+            - item_id (int): Item ID.
+            - username (str): Username.
+            - secret_answer (str): Secret answer.
 
             **Example:**
 
@@ -1348,8 +1348,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **price** (float): Price.
+            - item_id (int): Item ID.
+            - price (float): Price.
 
             **Example:**
 
@@ -1373,7 +1373,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
+            - item_id (int): Item ID.
 
             **Example:**
 
@@ -1395,8 +1395,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **price** (float): Price.
+            - item_id (int): Item ID.
+            - price (float): Price.
 
             **Example:**
 
@@ -1446,25 +1446,25 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **price** (float): Price.
-            - **category_id** (int): Category ID.
-            - **origin** (str): Item origin.
-            - **currency** (str): Currency.
-            - **guarantee** (str): Guarantee.
-            - **title** (str): Title.
-            - **title_en** (str): Title in English.
-            - **description** (str): Description.
-            - **information** (str): Information.
-            - **login** (str): Login.
-            - **password** (str): Password.
-            - **tag_id** (list): Tag IDs.
-            - **email** (str): Email.
-            - **email_type** (str): Email type.
-            - **extra** (dict[str, str]): Extra.
-            - **allow_ask_discount** (bool): Allow ask discount.
-            - **proxy_id** (int): Proxy ID.
-            - **proxy_random** (bool): Proxy random.
-            - **kwargs** (dict[str, Any]): Kwargs.
+            - price (float): Price.
+            - category_id (int): Category ID.
+            - origin (str): Item origin.
+            - currency (str): Currency.
+            - guarantee (str): Guarantee.
+            - title (str): Title.
+            - title_en (str): Title in English.
+            - description (str): Description.
+            - information (str): Information.
+            - login (str): Login.
+            - password (str): Password.
+            - tag_id (list): Tag IDs.
+            - email (str): Email.
+            - email_type (str): Email type.
+            - extra (dict[str, str]): Extra.
+            - allow_ask_discount (bool): Allow ask discount.
+            - proxy_id (int): Proxy ID.
+            - proxy_random (bool): Proxy random.
+            - kwargs (dict[str, Any]): Kwargs.
 
             **Example:**
 
@@ -1544,24 +1544,24 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **price** (float): Price.
-            - **category_id** (int): Category ID.
-            - **origin** (str): Item origin.
-            - **currency** (str): Currency.
-            - **guarantee** (str): Guarantee.
-            - **title** (str): Title.
-            - **title_en** (str): Title in English.
-            - **description** (str): Description.
-            - **information** (str): Information.
-            - **tag_id** (list): Tag IDs.
-            - **email** (str): Email.
-            - **email_type** (str): Email type.
-            - **allow_ask_discount** (bool): Allow ask discount.
-            - **proxy_id** (int): Proxy ID.
-            - **proxy_random** (bool): Proxy random.
-            - **resell_item_id** (int): Put item id if you are trying to resell item. This is useful to pass temporary email from reselling item to new item.
-            - **force_mail** (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
-            - **kwargs** (dict[str, Any]): Kwargs.
+            - price (float): Price.
+            - category_id (int): Category ID.
+            - origin (str): Item origin.
+            - currency (str): Currency.
+            - guarantee (str): Guarantee.
+            - title (str): Title.
+            - title_en (str): Title in English.
+            - description (str): Description.
+            - information (str): Information.
+            - tag_id (list): Tag IDs.
+            - email (str): Email.
+            - email_type (str): Email type.
+            - allow_ask_discount (bool): Allow ask discount.
+            - proxy_id (int): Proxy ID.
+            - proxy_random (bool): Proxy random.
+            - resell_item_id (int): Put item id if you are trying to resell item. This is useful to pass temporary email from reselling item to new item.
+            - force_mail (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
+            - kwargs (dict[str, Any]): Kwargs.
 
             **Example:**
 
@@ -1624,13 +1624,13 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **item_id** (int): Item ID.
-            - **login** (str): Login.
-            - **password** (str): Password.
-            - **email** (str): Email.
-            - **email_type** (str): Email type.
-            - **extra** (dict[str, str]): Extra.
-            - **kwargs** (dict[str, Any]): Kwargs.
+            - item_id (int): Item ID.
+            - login (str): Login.
+            - password (str): Password.
+            - email (str): Email.
+            - email_type (str): Email type.
+            - extra (dict[str, str]): Extra.
+            - kwargs (dict[str, Any]): Kwargs.
 
             **Example:**
 
@@ -1700,17 +1700,17 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **title** (str): Your market title.
-            - **allow_ask_discount** (bool): Allow ask discount.
-            - **max_discount_percent** (float): Max discount percent.
-            - **disable_steam_guard** (bool): Disable steam guard.
-            - **deauthorize_steam** (bool): Deauthorize steam.
-            - **change_password_on_purchase** (bool): Change Steam password after purchase (voids warranty on items with .maFile if disabled).
-            - **hide_favorites** (bool): Hide favorites.
-            - **show_too_low_price_change_warning** (bool): Show too low price change warning.
-            - **allow_transfer_accounts_from** (list[str]): Allow transfer accounts from.
-            - **telegram_client** (dict[str, str]): Telegram client.
-            - **currency** (str): Account currency.
+            - title (str): Your market title.
+            - allow_ask_discount (bool): Allow ask discount.
+            - max_discount_percent (float): Max discount percent.
+            - disable_steam_guard (bool): Disable steam guard.
+            - deauthorize_steam (bool): Deauthorize steam.
+            - change_password_on_purchase (bool): Change Steam password after purchase (voids warranty on items with .maFile if disabled).
+            - hide_favorites (bool): Hide favorites.
+            - show_too_low_price_change_warning (bool): Show too low price change warning.
+            - allow_transfer_accounts_from (list[str]): Allow transfer accounts from.
+            - telegram_client (dict[str, str]): Telegram client.
+            - currency (str): Account currency.
 
             **Example:**
 
@@ -1781,12 +1781,12 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **username_receiver** (str): Username of the payment receiver.
-                - **day** (int): Day of the month for the payment (0-28).
-                - **amount** (float): Amount to be transferred.
-                - **currency** (str): Currency for the payment.
-                - **description** (str): Payment description.
-                - **secret_answer** (str): Secret answer.
+                - username_receiver (str): Username of the payment receiver.
+                - day (int): Day of the month for the payment (0-28).
+                - amount (float): Amount to be transferred.
+                - currency (str): Currency for the payment.
+                - description (str): Payment description.
+                - secret_answer (str): Secret answer.
 
                 **Example:**
 
@@ -1822,7 +1822,7 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **auto_payment_id** (int): Auto payment ID.
+                - auto_payment_id (int): Auto payment ID.
 
                 **Example:**
 
@@ -1853,11 +1853,11 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **amount** (float): Invoice amount.
-                - **status** (str): Invoice status.
-                - **currency** (str): Invoice currency.
-                - **merchant_id** (int): Merchant ID.
-                - **page** (int): Page.
+                - amount (float): Invoice amount.
+                - status (str): Invoice status.
+                - currency (str): Invoice currency.
+                - merchant_id (int): Merchant ID.
+                - page (int): Page.
 
                 **Example:**
 
@@ -1885,8 +1885,8 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **invoice_id** (int): Invoice ID.
-                - **payment_id** (str): Payment ID.
+                - invoice_id (int): Invoice ID.
+                - payment_id (str): Payment ID.
 
                 **Example:**
 
@@ -1922,15 +1922,15 @@ class Market(APIClient):
 
                 **Parameters:**
 
-                - **currency** (str): Currency that will be used to create the invoice.
-                - **amount** (float): Invoice amount (≥ 0).
-                - **payment_id** (str): Payment ID in your system (must be unique within the merchant / invoices).
-                - **comment** (str): Comment to the invoice.
-                - **url_success** (str): URL to redirect to after successful payment.
-                - **merchant_id** (int): Merchant ID.
-                - **url_callback** (str): Callback url.
-                - **lifetime** (int): Invoice lifetime (300 to 43200, defaults to 3600).
-                - **additional_data** (str): Additional information for you.
+                - currency (str): Currency that will be used to create the invoice.
+                - amount (float): Invoice amount (≥ 0).
+                - payment_id (str): Payment ID in your system (must be unique within the merchant / invoices).
+                - comment (str): Comment to the invoice.
+                - url_success (str): URL to redirect to after successful payment.
+                - merchant_id (int): Merchant ID.
+                - url_callback (str): Callback url.
+                - lifetime (int): Invoice lifetime (300 to 43200, defaults to 3600).
+                - additional_data (str): Additional information for you.
 
                 **Example:**
 
@@ -1961,10 +1961,64 @@ class Market(APIClient):
                 }
                 return await self.core.request("POST", "/invoice", params=params)
 
+        class __Payout:
+            def __init__(self, core: "Market"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def services(self) -> Response:
+                """
+                GET https://api.lzt.market/balance/payout/services
+
+                *Get payout services.*
+
+                **Example:**
+
+                ```python
+                response = market.payments.payout.services()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", "/balance/payout/services")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def create(self, service: str, wallet: str, amount: float, currency: Constants.Market.Currency._Literal, include_fee: bool = NONE, extra: dict = NONE) -> Response:
+                """
+                POST https://api.lzt.market/balance/payout/
+
+                *Create payout request.*
+
+                **Example:**
+
+                ```python
+                response = market.payments.payout.create(
+                    service="CryptoLove",
+                    extra={"provider":"TRX"},
+                    wallet="**crypto_wallet_address**",
+                    amount=1000,
+                    currency="rub",
+                    include_fee=True
+                )
+                print(response.json())
+                ```
+                """
+                json = {
+                    "payment_system": service,
+                    "extra": extra,
+                    "wallet": wallet,
+                    "amount": amount,
+                    "currency": currency,
+                    "include_fee": bool(include_fee) if not isinstance(include_fee, _NONE) else include_fee
+                }
+                return await self.core.request("POST", "/balance/payout/services", json=json)
+
         def __init__(self, core: "Market"):
             self.core = core
             self.invoice = self.__Invoice(self.core)
             self.auto = self.__Auto(self.core)
+            self.payout = self.__Payout(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
@@ -1988,7 +2042,6 @@ class Market(APIClient):
         async def transfer(
             self,
             amount: float,
-            secret_answer: str,
             currency: Constants.Market.Currency._Literal = "rub",
             user_id: int = NONE,
             username: str = NONE,
@@ -2003,14 +2056,14 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **amount** (float): Amount to send in your currency.
-            - **secret_answer** (str): Secret answer.
-            - **currency** (str): Using currency for amount.
-            - **user_id** (int): ID of user to transfer money.
-            - **username** (str): Username to transfer money.
-            - **comment** (str): Payment comment.
-            - **hold** (int): Hold length.
-            - **hold_option** (str): Hold option.
+            - amount (float): Amount to send in your currency.
+            - secret_answer (str): Secret answer.
+            - currency (str): Using currency for amount.
+            - user_id (int): ID of user to transfer money.
+            - username (str): Username to transfer money.
+            - comment (str): Payment comment.
+            - hold (int): Hold length.
+            - hold_option (str): Hold option.
 
             **Example:**
 
@@ -2032,7 +2085,6 @@ class Market(APIClient):
                 "username": username,
                 "amount": amount,
                 "currency": currency,
-                "secret_answer": secret_answer,
                 "comment": comment,
                 "transfer_hold": bool(hold) if not isinstance(hold, _NONE) else hold,
                 "hold_length_value": hold,
@@ -2050,7 +2102,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **amount** (float): Amount you want to send in your currency.
+            - amount (float): Amount you want to send in your currency.
 
             **Example:**
 
@@ -2075,7 +2127,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **payment_id** (int): Payment ID.
+            - payment_id (int): Payment ID.
 
             **Example:**
 
@@ -2112,18 +2164,18 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **operation_type** (str): Operation type.
-            - **page** (int): Page number.
-            - **min_amount** (float): Minimum amount.
-            - **max_amount** (float): Maximum amount.
-            - **operation_id_lt** (int): Operation ID less than.
-            - **receiver** (str): Receiver.
-            - **sender** (str): Sender.
-            - **comment** (str): Payment comment.
-            - **hold** (bool): Hold transfer or not.
-            - **start_date** (str): Start date.
-            - **end_date** (str): End date.
-            - **show_payment_stats** (bool): Show payment stats.
+            - operation_type (str): Operation type.
+            - page (int): Page number.
+            - min_amount (float): Minimum amount.
+            - max_amount (float): Maximum amount.
+            - operation_id_lt (int): Operation ID less than.
+            - receiver (str): Receiver.
+            - sender (str): Sender.
+            - comment (str): Payment comment.
+            - hold (bool): Hold transfer or not.
+            - start_date (str): Start date.
+            - end_date (str): End date.
+            - show_payment_stats (bool): Show payment stats.
 
             **Example:**
 
@@ -2168,17 +2220,17 @@ class Market(APIClient):
             """
             *Generate payment link.*
 
-            **Parameters:**
+            **Input**
 
-            - **amount** (float): Amount to send in your currency.
-            - **user_id** (int): ID of user to transfer money.
-            - **username** (str): Username to transfer money.
-            - **comment** (str): Payment comment.
-            - **redirect_url** (str): Redirect url. User who paid on this link will be redirected to this url.
-            - **currency** (str): Using currency for amount.
-            - **hold** (int): Hold length in days.
+            - amount (float): Amount to send in your currency.
+            - user_id (int): ID of user to transfer money.
+            - username (str): Username to transfer money.
+            - comment (str): Payment comment.
+            - redirect_url (str): Redirect url. User who paid on this link will be redirected to this url.
+            - currency (str): Using currency for amount.
+            - hold (int): Hold length in days.
               > Max length - 1 month.
-            - **hold_option** (str): Hold period option.
+            - hold_option (str): Hold period option.
 
             **Example:**
 
@@ -2235,7 +2287,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **proxy** (Union[list, str]): Single proxy or list of proxies.
+            - proxy (Union[list, str]): Single proxy or list of proxies.
 
             **Example:**
 
@@ -2261,8 +2313,8 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - **proxy_id** (int): Proxy ID.
-            - **all** (bool): Delete all proxies.
+            - proxy_id (int): Proxy ID.
+            - all (bool): Delete all proxies.
 
             **Example:**
 
@@ -2287,7 +2339,7 @@ class Market(APIClient):
 
         **Parameters:**
 
-        - **jobs** (list[dict[str, str]]): Batch jobs.
+        - jobs (list[dict[str, str]]): Batch jobs.
 
         **Example:**
 

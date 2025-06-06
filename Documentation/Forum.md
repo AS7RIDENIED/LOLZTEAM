@@ -110,11 +110,19 @@
     * [Get](#get-9)
     * [Create](#create-5)
     * [Edit](#edit-6)
+    * [Stick](#stick)
+    * [Unstick](#unstick)
+  * [Alerts](#alerts)
+    * [Enable](#enable)
+    * [Disable](#disable)
   * [List](#list-10)
   * [Get](#get-10)
   * [Create](#create-6)
   * [Create Group](#create-group)
   * [Leave](#leave)
+  * [Star](#star)
+  * [Unstar](#unstar)
+  * [Read All](#read-all)
 * [Notifications](#notifications)
   * [List](#list-11)
   * [Get](#get-11)
@@ -156,14 +164,14 @@ LOLZTEAM Forum API Client
 
 **Parameters:**
 
-- **token** (str): Your token.
+- token (str): Your token.
   > You can get it [there](https://zelenka.guru/account/api)
-- **language** (Literal["ru", "en"]): Language of the API responses.
-- **delay_min** (float): Minimal delay between requests.
+- language (Literal["ru", "en"]): Language of the API responses.
+- delay_min (float): Minimal delay between requests.
   > This parameter sets a strict minimal delay between your requests.
-- **proxy** (str): Proxy string.
+- proxy (str): Proxy string.
   > protocol://ip:port or protocol://login:password@ip:port (socks5://login:password@192.168.1.1:8080 or http://login:password@192.168.1.1:8080)
-- **timeout** (float): Request timeout.
+- timeout (float): Request timeout.
 
 ```python
 from LOLZTEAM.Client import Forum
@@ -206,15 +214,15 @@ forum.settings.logger.disable()                                       # <- Stop 
 
 ## List
 
-GET https://api.zelenka.guru/categories
+GET https://prod-api.lolz.live/categories
 
 *Get categories.*
 
 **Parameters:**
 
-- **parent_category_id** (int): Parent category ID.
-- **parent_forum_id** (int): Parent forum ID.
-- **order** (str): Order of the categories.
+- parent_category_id (int): Parent category ID.
+- parent_forum_id (int): Parent forum ID.
+- order (str): Order of the categories.
 
 **Example:**
 
@@ -226,13 +234,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/categories/{category_id}
+GET https://prod-api.lolz.live/categories/{category_id}
 
 *Get category.*
 
 **Parameters:**
 
-- **category_id** (int): Category ID.
+- category_id (int): Category ID.
 
 **Example:**
 
@@ -246,15 +254,15 @@ print(response.json())
 
 ## List
 
-GET https://api.zelenka.guru/forums
+GET https://prod-api.lolz.live/forums
 
 *Get forums.*
 
 **Parameters:**
 
-- **parent_category_id** (int): Parent category ID.
-- **parent_forum_id** (int): Parent forum ID.
-- **order** (str): Order of the forums.
+- parent_category_id (int): Parent category ID.
+- parent_forum_id (int): Parent forum ID.
+- order (str): Order of the forums.
 
 **Example:**
 
@@ -266,13 +274,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/forums/{forum_id}
+GET https://prod-api.lolz.live/forums/{forum_id}
 
 *Get forum.*
 
 **Parameters:**
 
-- **forum_id** (int): Forum ID.
+- forum_id (int): Forum ID.
 
 **Example:**
 
@@ -284,13 +292,13 @@ print(response.json())
 
 ## Followers
 
-GET https://api.zelenka.guru/forums/{forum_id}/followers
+GET https://prod-api.lolz.live/forums/{forum_id}/followers
 
 *Get forum followers.*
 
 **Parameters:**
 
-- **forum_id** (int): Forum ID.
+- forum_id (int): Forum ID.
 
 **Example:**
 
@@ -302,13 +310,13 @@ print(response.json())
 
 ## Followed
 
-GET https://api.zelenka.guru/forums/followed
+GET https://prod-api.lolz.live/forums/followed
 
 *Get followed forums.*
 
 **Parameters:**
 
-- **total** (bool): Get total count of followed forums.
+- total (bool): Get total count of followed forums.
 
 **Example:**
 
@@ -320,17 +328,17 @@ print(response.json())
 
 ## Follow
 
-POST https://api.zelenka.guru/forums/{forum_id}/followers
+POST https://prod-api.lolz.live/forums/{forum_id}/followers
 
 *Follow forum.*
 
 **Parameters:**
 
-- **post** (bool): Get post notifications.
-- **alert** (bool): Get alert notifications.
-- **email** (bool): Get email notifications.
-- **prefix_ids** (list[int]): Prefix IDs.
-- **minimal_contest_amount** (float): Minimal contest amount.
+- post (bool): Get post notifications.
+- alert (bool): Get alert notifications.
+- email (bool): Get email notifications.
+- prefix_ids (list[int]): Prefix IDs.
+- minimal_contest_amount (float): Minimal contest amount.
 
 **Example:**
 
@@ -342,13 +350,13 @@ print(response.json())
 
 ## Unfollow
 
-DELETE https://api.zelenka.guru/forums/{forum_id}/followers
+DELETE https://prod-api.lolz.live/forums/{forum_id}/followers
 
 *Unfollow forum.*
 
 **Parameters:**
 
-- **forum_id** (int): Forum ID.
+- forum_id (int): Forum ID.
 
 **Example:**
 
@@ -362,7 +370,7 @@ print(response.json())
 
 ## List
 
-GET https://api.zelenka.guru/pages
+GET https://prod-api.lolz.live/pages
 
 *Get pages.*
 
@@ -376,13 +384,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/pages/{page_id}
+GET https://prod-api.lolz.live/pages/{page_id}
 
 *Get page.*
 
 **Parameters:**
 
-- **page_id** (int): Page ID.
+- page_id (int): Page ID.
 
 **Example:**
 
@@ -400,35 +408,35 @@ print(response.json())
 
 #### Create By Time
 
-POST https://api.zelenka.guru/threads
+POST https://prod-api.lolz.live/threads
 
 *Create a money contest.*
 
 **Parameters:**
 
-- **post_body** (str): Content of the new contest.
-- **prize_amount** (float): How much money will each winner receive.
-- **winners_count** (int): Winner count (prize count).
+- post_body (str): Content of the new contest.
+- prize_amount (float): How much money will each winner receive.
+- winners_count (int): Winner count (prize count).
     > The maximum value is 100.
-- **length** (int): Contest duration value.
+- length (int): Contest duration value.
     > The maximum duration is 3 days.
-- **length_option** (str): Contest duration type.
+- length_option (str): Contest duration type.
     > Can be [minutes, hours, days]. The maximum duration is 3 days.
-- **require_week_sympathy** (int): Sympathies for this week.
-- **require_total_sympathy** (int): Symapthies for all time.
-- **secret_answer** (str): Secret answer of your account.
-- **reply_group** (int): Allow to reply only users with chosen or higher group.
-- **title** (str): Thread title.
+- require_week_sympathy (int): Sympathies for this week.
+- require_total_sympathy (int): Symapthies for all time.
+- secret_answer (str): Secret answer of your account.
+- reply_group (int): Allow to reply only users with chosen or higher group.
+- title (str): Thread title.
     > Can be skipped if title_en set.
-- **title_en** (str): Thread title in english.
+- title_en (str): Thread title in english.
     > Can be skipped if title set.
-- **tags** (list[str]): Thread tags.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-- **dont_alert_followers** (bool): Don't alert followers.
-- **forum_notifications** (bool): Get forum notifications.
-- **email_notifications** (bool): Get email notifications.
+- tags (list[str]): Thread tags.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- comment_ignore_group (bool): Allow commenting if user can't post in thread.
+- dont_alert_followers (bool): Don't alert followers.
+- forum_notifications (bool): Get forum notifications.
+- email_notifications (bool): Get email notifications.
 
 **Example:**
 
@@ -450,31 +458,31 @@ print(response.json())
 
 #### Create By Count
 
-POST https://api.zelenka.guru/threads
+POST https://prod-api.lolz.live/threads
 
 *Create a money contest.*
 
 **Parameters:**
 
-- **post_body** (str): Content of the new contest.
-- **prize_amount** (float): How much money will each winner receive.
-- **winners_count** (int): Winner count (prize count).
-- **needed_members** (int): Max member count.
-- **require_week_sympathy** (int): Sympathies for this week.
-- **require_total_sympathy** (int): Symapthies for all time.
-- **secret_answer** (str): Secret answer of your account.
-- **reply_group** (int): Allow to reply only users with chosen or higher group.
-- **title** (str): Thread title.
+- post_body (str): Content of the new contest.
+- prize_amount (float): How much money will each winner receive.
+- winners_count (int): Winner count (prize count).
+- needed_members (int): Max member count.
+- require_week_sympathy (int): Sympathies for this week.
+- require_total_sympathy (int): Symapthies for all time.
+- secret_answer (str): Secret answer of your account.
+- reply_group (int): Allow to reply only users with chosen or higher group.
+- title (str): Thread title.
     > Can be skipped if title_en set.
-- **title_en** (str): Thread title in english.
+- title_en (str): Thread title in english.
     > Can be skipped if title set.
-- **tags** (list[str]): Thread tags.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-- **dont_alert_followers** (bool): Don't alert followers.
-- **forum_notifications** (bool): Get forum notifications.
-- **email_notifications** (bool): Get email notifications.
+- tags (list[str]): Thread tags.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- comment_ignore_group (bool): Allow commenting if user can't post in thread.
+- dont_alert_followers (bool): Don't alert followers.
+- forum_notifications (bool): Get forum notifications.
+- email_notifications (bool): Get email notifications.
 
 **Example:**
 
@@ -490,35 +498,35 @@ print(response.json())
 
 #### Create By Time
 
-POST https://api.zelenka.guru/threads
+POST https://prod-api.lolz.live/threads
 
 *Create a new contest.*
 
 **Parameters:**
 
-- **post_body** (str): Content of the new contest.
-- **prize_group** (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
-- **winners_count** (int): Winner count (prize count).
+- post_body (str): Content of the new contest.
+- prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
+- winners_count (int): Winner count (prize count).
     > The maximum value is 100.
-- **length** (int): Contest duration value.
+- length (int): Contest duration value.
     > The maximum duration is 3 days.
-- **length_option** (Constants.Forum.Contests.Length._Literal): Contest duration type.
+- length_option (Constants.Forum.Contests.Length._Literal): Contest duration type.
     > Can be [minutes, hours, days]. The maximum duration is 3 days.
-- **require_week_sympathy** (int): Sympathies for this week.
-- **require_total_sympathy** (int): Sympathies for all time.
-- **secret_answer** (str): Secret answer of your account.
-- **reply_group** (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
-- **title** (str): Thread title.
+- require_week_sympathy (int): Sympathies for this week.
+- require_total_sympathy (int): Sympathies for all time.
+- secret_answer (str): Secret answer of your account.
+- reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
+- title (str): Thread title.
     > Can be skipped if title_en set.
-- **title_en** (str): Thread title in english.
+- title_en (str): Thread title in english.
     > Can be skipped if title set.
-- **tags** (list[str]): Thread tags.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-- **dont_alert_followers** (bool): Don't alert followers.
-- **forum_notifications** (bool): Get forum notifications.
-- **email_notifications** (bool): Get email notifications.
+- tags (list[str]): Thread tags.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- comment_ignore_group (bool): Allow commenting if user can't post in thread.
+- dont_alert_followers (bool): Don't alert followers.
+- forum_notifications (bool): Get forum notifications.
+- email_notifications (bool): Get email notifications.
 
 **Example:**
 
@@ -532,32 +540,32 @@ print(response.json())
 
 #### Create By Count
 
-POST https://api.zelenka.guru/threads
+POST https://prod-api.lolz.live/threads
 
 *Create a new contest.*
 
 **Parameters:**
 
-- **post_body** (str): Content of the new contest.
-- **prize_group** (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
-- **winners_count** (int): Winner count (prize count).
+- post_body (str): Content of the new contest.
+- prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
+- winners_count (int): Winner count (prize count).
     > The maximum value is 100.
-- **needed_members** (int): Max member count.
-- **require_week_sympathy** (int): Sympathies for this week.
-- **require_total_sympathy** (int): Sympathies for all time.
-- **secret_answer** (str): Secret answer of your account.
-- **reply_group** (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
-- **title** (str): Thread title.
+- needed_members (int): Max member count.
+- require_week_sympathy (int): Sympathies for this week.
+- require_total_sympathy (int): Sympathies for all time.
+- secret_answer (str): Secret answer of your account.
+- reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
+- title (str): Thread title.
     > Can be skipped if title_en set.
-- **title_en** (str): Thread title in english.
+- title_en (str): Thread title in english.
     > Can be skipped if title set.
-- **tags** (list[str]): Thread tags.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-- **dont_alert_followers** (bool): Don't alert followers.
-- **forum_notifications** (bool): Get forum notifications.
-- **email_notifications** (bool): Get email notifications.
+- tags (list[str]): Thread tags.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- comment_ignore_group (bool): Allow commenting if user can't post in thread.
+- dont_alert_followers (bool): Don't alert followers.
+- forum_notifications (bool): Get forum notifications.
+- email_notifications (bool): Get email notifications.
 
 **Example:**
 
@@ -573,24 +581,24 @@ print(response.json())
 
 ### Market
 
-POST https://api.zelenka.guru/claims
+POST https://prod-api.lolz.live/claims
 
 *Create a Arbitrage.*
 
 **Parameters:**
 
-- **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
-- **item_id** (str|int): Write account link or item_id.
-- **amount** (float): Amount by which the responder deceived you.
-- **post_body** (str): You should describe what's happened.
-- **currency** (str): Currency of Arbitrage.
-- **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
-- **tags** (list[str]): Thread tags.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **dont_alert_followers** (bool): Don't alert followers.
-- **forum_notifications** (bool): Get forum notifications.
-- **email_notifications** (bool): Get email notifications.
+- responder (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+- item_id (str|int): Write account link or item_id.
+- amount (float): Amount by which the responder deceived you.
+- post_body (str): You should describe what's happened.
+- currency (str): Currency of Arbitrage.
+- conversation_screenshot (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+- tags (list[str]): Thread tags.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- dont_alert_followers (bool): Don't alert followers.
+- forum_notifications (bool): Get forum notifications.
+- email_notifications (bool): Get email notifications.
 
 **Example:**
 
@@ -603,31 +611,31 @@ print(response.json())
 
 ### Non Market
 
-POST https://api.zelenka.guru/claims
+POST https://prod-api.lolz.live/claims
 
 *Create a Arbitrage.*
 
 
 **Parameters:**
 
-- **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
-- **amount** (float): Amount by which the responder deceived you.
-- **receipt** (str): Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
-- **post_body** (str): You should describe what's happened.
-- **pay_claim** (str): If you set this parameter to "now" forum will automatically calculate the amount and debit it from your account.
+- responder (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+- amount (float): Amount by which the responder deceived you.
+- receipt (str): Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
+- post_body (str): You should describe what's happened.
+- pay_claim (str): If you set this parameter to "now" forum will automatically calculate the amount and debit it from your account.
     > For filing claims, it is necessary to make a contribution in the amount of 5% of the amount of damage (but not less than 50 rubles and not more than 5000 rubles). For example, for an amount of damage of 300 rubles, you will need to pay 50 rubles, for 2,000 and 10,000 rubles - 100 and 500 rubles, respectively).
-- **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
-- **responder_data** (str): Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
-- **currency** (str): Currency of Arbitrage.
-- **transfer_type** (str): The transaction took place through a guarantor or there was a transfer to the market with a hold?
-- **tags** (list[str]): Thread tags.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-- **dont_alert_followers** (bool): Don't alert followers.
-- **reply_group** (int): Allow to reply only users with chosen or higher group.
-- **forum_notifications** (bool): Get forum notifications.
-- **email_notifications** (bool): Get email notifications.
+- conversation_screenshot (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+- responder_data (str): Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
+- currency (str): Currency of Arbitrage.
+- transfer_type (str): The transaction took place through a guarantor or there was a transfer to the market with a hold?
+- tags (list[str]): Thread tags.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- comment_ignore_group (bool): Allow commenting if user can't post in thread.
+- dont_alert_followers (bool): Don't alert followers.
+- reply_group (int): Allow to reply only users with chosen or higher group.
+- forum_notifications (bool): Get forum notifications.
+- email_notifications (bool): Get email notifications.
 
 **Example:**
 
@@ -642,13 +650,13 @@ print(response.json())
 
 ### Get
 
-GET https://api.zelenka.guru/threads/{thread_id}/poll
+GET https://prod-api.lolz.live/threads/{thread_id}/poll
 
 *Get poll.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
+- thread_id (int): Thread ID.
 
 **Example:**
 
@@ -660,14 +668,14 @@ print(response.json())
 
 ### Vote
 
-POST https://api.zelenka.guru/threads/{thread_id}/poll/votes
+POST https://prod-api.lolz.live/threads/{thread_id}/poll/votes
 
 *Vote in poll.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
-- **option_ids** (list[int] | int): Option IDs.
+- thread_id (int): Thread ID.
+- option_ids (list[int] | int): Option IDs.
 
 **Example:**
 
@@ -679,15 +687,15 @@ print(response.json())
 
 ## List Unread
 
-GET https://api.zelenka.guru/threads/new
+GET https://prod-api.lolz.live/threads/new
 
 *Get unread threads.*
 
 **Parameters:**
 
-- **forum_id** (int): Forum ID.
-- **limit** (int): Limit of threads.
-- **data_limit** (int): Limit of data.
+- forum_id (int): Forum ID.
+- limit (int): Limit of threads.
+- data_limit (int): Limit of data.
 
 **Example:**
 
@@ -699,16 +707,16 @@ print(response.json())
 
 ## List Recent
 
-GET https://api.zelenka.guru/threads/recent
+GET https://prod-api.lolz.live/threads/recent
 
 *Get recent threads.*
 
 **Parameters:**
 
-- **days** (int): Maximum number of days to search for threads.
-- **forum_id** (int): Forum ID.
-- **limit** (int): Limit of threads.
-- **data_limit** (int): Limit of data.
+- days (int): Maximum number of days to search for threads.
+- forum_id (int): Forum ID.
+- limit (int): Limit of threads.
+- data_limit (int): Limit of data.
 
 **Example:**
 
@@ -720,33 +728,33 @@ print(response.json())
 
 ## List
 
-GET https://api.zelenka.guru/threads
+GET https://prod-api.lolz.live/threads
 
 *Get threads.*
 
 **Parameters:**
 
-- **forum_id** (int): Forum ID.
-- **user_id** (int): Filter to get only threads created by the specified user.
-- **prefix_id** (int): Filter to get only threads with the specified prefix.
-- **tag_id** (int): Filter to get only threads with the specified tag.
-- **page** (int): Page.
-- **limit** (int): Limit of threads.
-- **order** (str): Order of threads.
-- **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
+- forum_id (int): Forum ID.
+- user_id (int): Filter to get only threads created by the specified user.
+- prefix_id (int): Filter to get only threads with the specified prefix.
+- tag_id (int): Filter to get only threads with the specified tag.
+- page (int): Page.
+- limit (int): Limit of threads.
+- order (str): Order of threads.
+- sticky (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
 
 **Example:**
 
 
 ## Get
 
-GET https://api.zelenka.guru/threads/{thread_id}
+GET https://prod-api.lolz.live/threads/{thread_id}
 
 *Get thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
+- thread_id (int): Thread ID.
 
 **Example:**
 
@@ -758,25 +766,25 @@ print(response.json())
 
 ## Create
 
-POST https://api.zelenka.guru/threads
+POST https://prod-api.lolz.live/threads
 
 *Create a thread.*
 
 **Parameters:**
 
-- **forum_id** (int): Forum ID.
-- **post_body** (str): Content of the new thread.
-- **title** (str): Title.
-- **title_en** (str): Title in English.
-- **prefix_ids** (list[int]): Prefix IDs.
-- **tags** (list[int]): Tags.
-- **reply_group** (int): Reply group.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **comment_ignore_group** (bool): Comment ignore group.
-- **dont_alert_followers** (bool): Don't alert followers.
-- **forum_notifications** (bool): Get forum notifications.
-- **email_notifications** (bool): Get email notifications.
+- forum_id (int): Forum ID.
+- post_body (str): Content of the new thread.
+- title (str): Title.
+- title_en (str): Title in English.
+- prefix_ids (list[int]): Prefix IDs.
+- tags (list[int]): Tags.
+- reply_group (int): Reply group.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- comment_ignore_group (bool): Comment ignore group.
+- dont_alert_followers (bool): Don't alert followers.
+- forum_notifications (bool): Get forum notifications.
+- email_notifications (bool): Get email notifications.
 
 **Example:**
 
@@ -802,23 +810,23 @@ print(response.json())
 
 ## Edit
 
-PUT https://api.zelenka.guru/threads/{thread_id}
+PUT https://prod-api.lolz.live/threads/{thread_id}
 
 *Edit a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
-- **title** (str): Title.
-- **title_en** (str): Title in English.
-- **post_body** (str): Post body.
-- **prefix_ids** (list[int]): Prefix IDs.
-- **tags** (list[int]): Tags.
-- **discussion_state** (bool): Discussion state.
-- **hide_contacts** (bool): Hide contacts.
-- **allow_ask_hidden_content** (bool): Allow ask hidden content.
-- **reply_group** (int): Reply group.
-- **comment_ignore_group** (bool): Comment ignore group.
+- thread_id (int): Thread ID.
+- title (str): Title.
+- title_en (str): Title in English.
+- post_body (str): Post body.
+- prefix_ids (list[int]): Prefix IDs.
+- tags (list[int]): Tags.
+- discussion_state (bool): Discussion state.
+- hide_contacts (bool): Hide contacts.
+- allow_ask_hidden_content (bool): Allow ask hidden content.
+- reply_group (int): Reply group.
+- comment_ignore_group (bool): Comment ignore group.
 
 **Example:**
 
@@ -842,14 +850,14 @@ print(response.json())
 
 ## Delete
 
-DELETE https://api.zelenka.guru/threads/{thread_id}
+DELETE https://prod-api.lolz.live/threads/{thread_id}
 
 *Delete a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
-- **reason** (str): Reason.
+- thread_id (int): Thread ID.
+- reason (str): Reason.
 
 **Example:**
 
@@ -861,13 +869,13 @@ print(response.json())
 
 ## Bump
 
-POST https://api.zelenka.guru/threads/{thread_id}/bump
+POST https://prod-api.lolz.live/threads/{thread_id}/bump
 
 *Bump a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
+- thread_id (int): Thread ID.
 
 **Example:**
 
@@ -879,18 +887,18 @@ print(response.json())
 
 ## Move
 
-POST https://api.zelenka.guru/threads/{thread_id}/move
+POST https://prod-api.lolz.live/threads/{thread_id}/move
 
 *Move a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
-- **forum_id** (int): Target forum ID.
-- **title** (str): Title.
-- **title_en** (str): Title in English.
-- **prefix_ids** (list[int]): Prefix IDs.
-- **send_alert** (bool): Send alert.
+- thread_id (int): Thread ID.
+- forum_id (int): Target forum ID.
+- title (str): Title.
+- title_en (str): Title in English.
+- prefix_ids (list[int]): Prefix IDs.
+- send_alert (bool): Send alert.
 
 **Example:**
 
@@ -902,13 +910,13 @@ print(response.json())
 
 ## Followers
 
-GET https://api.zelenka.guru/threads/{thread_id}/followers
+GET https://prod-api.lolz.live/threads/{thread_id}/followers
 
 *Get followers of a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
+- thread_id (int): Thread ID.
 
 **Example:**
 
@@ -920,14 +928,14 @@ print(response.json())
 
 ## Followed
 
-GET https://api.zelenka.guru/threads/{thread_id}/followed
+GET https://prod-api.lolz.live/threads/{thread_id}/followed
 
 *Get followed users of a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
-- **total** (bool): Total.
+- thread_id (int): Thread ID.
+- total (bool): Total.
 
 **Example:**
 
@@ -939,14 +947,14 @@ print(response.json())
 
 ## Follow
 
-POST https://api.zelenka.guru/threads/{thread_id}/followers
+POST https://prod-api.lolz.live/threads/{thread_id}/followers
 
 *Follow a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
-- **email** (bool): Email.
+- thread_id (int): Thread ID.
+- email (bool): Email.
 
 **Example:**
 
@@ -958,13 +966,13 @@ print(response.json())
 
 ## Unfollow
 
-DELETE https://api.zelenka.guru/threads/{thread_id}/followers
+DELETE https://prod-api.lolz.live/threads/{thread_id}/followers
 
 *Unfollow a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
+- thread_id (int): Thread ID.
 
 **Example:**
 
@@ -976,13 +984,13 @@ print(response.json())
 
 ## Navigation
 
-GET https://api.zelenka.guru/threads/{thread_id}/navigation
+GET https://prod-api.lolz.live/threads/{thread_id}/navigation
 
 *Get navigation of a thread.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
+- thread_id (int): Thread ID.
 
 **Example:**
 
@@ -998,15 +1006,15 @@ print(response.json())
 
 ### List
 
-GET https://api.zelenka.guru/posts/{post_id}/comments
+GET https://prod-api.lolz.live/posts/{post_id}/comments
 
 *Get comments of a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
-- **before_comment** (int): Parse comments before this comment.
-- **before** (int): Parse comments before this timestamp.
+- post_id (int): Post ID.
+- before_comment (int): Parse comments before this comment.
+- before (int): Parse comments before this timestamp.
 
 **Example:**
 
@@ -1018,14 +1026,14 @@ print(response.json())
 
 ### Create
 
-POST https://api.zelenka.guru/posts/{post_id}/comments
+POST https://prod-api.lolz.live/posts/{post_id}/comments
 
 *Create a comment.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
-- **comment_body** (str): Post body.
+- post_id (int): Post ID.
+- comment_body (str): Post body.
 
 **Example:**
 
@@ -1037,14 +1045,14 @@ print(response.json())
 
 ### Edit
 
-PUT https://api.zelenka.guru/posts/comments
+PUT https://prod-api.lolz.live/posts/comments
 
 *Edit a comment.*
 
 **Parameters:**
 
-- **comment_id** (int): Comment ID.
-- **comment_body** (str): Comment body.
+- comment_id (int): Comment ID.
+- comment_body (str): Comment body.
 
 **Example:**
 
@@ -1056,13 +1064,13 @@ print(response.json())
 
 ### Delete
 
-DELETE https://api.zelenka.guru/posts/comments
+DELETE https://prod-api.lolz.live/posts/comments
 
 *Delete a post comment.*
 
 **Parameters:**
 
-- **post_comment_id** (int): Id of post comment to delete.
+- post_comment_id (int): Id of post comment to delete.
 
 **Example:**
 
@@ -1074,17 +1082,17 @@ print(response.json())
 
 ## List
 
-GET https://api.zelenka.guru/posts
+GET https://prod-api.lolz.live/posts
 
 *Get posts.*
 
 **Parameters:**
 
-- **thread_id** (int): Thread ID.
-- **post_id** (int): Parse posts from page of this post.
-- **page** (int): Page.
-- **limit** (int): Posts limit per page.
-- **order** (str): Posts order.
+- thread_id (int): Thread ID.
+- post_id (int): Parse posts from page of this post.
+- page (int): Page.
+- limit (int): Posts limit per page.
+- order (str): Posts order.
 
 **Example:**
 
@@ -1096,13 +1104,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/posts/{post_id}
+GET https://prod-api.lolz.live/posts/{post_id}
 
 *Get a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
+- post_id (int): Post ID.
 
 **Example:**
 
@@ -1114,15 +1122,15 @@ print(response.json())
 
 ## Create
 
-POST https://api.zelenka.guru/posts
+POST https://prod-api.lolz.live/posts
 
 *Create a post.*
 
 **Parameters:**
 
-- **post_body** (str): Post body.
-- **thread_id** (int): Thread ID.
-- **quote_post_id** (int): Quote post ID.
+- post_body (str): Post body.
+- thread_id (int): Thread ID.
+- quote_post_id (int): Quote post ID.
 
 **Example:**
 
@@ -1134,14 +1142,14 @@ print(response.json())
 
 ## Edit
 
-PUT https://api.zelenka.guru/posts/{post_id}
+PUT https://prod-api.lolz.live/posts/{post_id}
 
 *Edit a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
-- **post_body** (str): Post body.
+- post_id (int): Post ID.
+- post_body (str): Post body.
 
 **Example:**
 
@@ -1153,14 +1161,14 @@ print(response.json())
 
 ## Delete
 
-DELETE https://api.zelenka.guru/posts/{post_id}
+DELETE https://prod-api.lolz.live/posts/{post_id}
 
 *Delete a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
-- **reason** (str): Reason.
+- post_id (int): Post ID.
+- reason (str): Reason.
 
 **Example:**
 
@@ -1172,15 +1180,15 @@ print(response.json())
 
 ## Likes
 
-GET https://api.zelenka.guru/posts/{post_id}/likes
+GET https://prod-api.lolz.live/posts/{post_id}/likes
 
 *Get likes of a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
-- **page** (int): Page.
-- **limit** (int): Likes limit per page.
+- post_id (int): Post ID.
+- page (int): Page.
+- limit (int): Likes limit per page.
 
 **Example:**
 
@@ -1192,13 +1200,13 @@ print(response.json())
 
 ## Like
 
-POST https://api.zelenka.guru/posts/{post_id}/likes
+POST https://prod-api.lolz.live/posts/{post_id}/likes
 
 *Like a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
+- post_id (int): Post ID.
 
 **Example:**
 
@@ -1210,13 +1218,13 @@ print(response.json())
 
 ## Unlike
 
-DELETE https://api.zelenka.guru/posts/{post_id}/likes
+DELETE https://prod-api.lolz.live/posts/{post_id}/likes
 
 *Unlike a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
+- post_id (int): Post ID.
 
 **Example:**
 
@@ -1228,14 +1236,14 @@ print(response.json())
 
 ## Report
 
-POST https://api.zelenka.guru/posts/{post_id}/report
+POST https://prod-api.lolz.live/posts/{post_id}/report
 
 *Report a post.*
 
 **Parameters:**
 
-- **post_id** (int): Post ID.
-- **reason** (str): Reason.
+- post_id (int): Post ID.
+- reason (str): Reason.
 
 **Example:**
 
@@ -1251,17 +1259,17 @@ print(response.json())
 
 ### Upload
 
-POST https://api.zelenka.guru/users/me/avatar
+POST https://prod-api.lolz.live/users/me/avatar
 
 *Upload an avatar.*
 > You can't create batch job for this method
 
 **Parameters:**
 
-- **file** (bytes): Avatar bytes.
-- **x** (int): X.
-- **y** (int): Y.
-- **size** (int): Selection size.
+- file (bytes): Avatar bytes.
+- x (int): X.
+- y (int): Y.
+- size (int): Selection size.
   > Minimum value - 16.
 
 **Example:**
@@ -1275,7 +1283,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://api.zelenka.guru/users/me/avatar
+DELETE https://prod-api.lolz.live/users/me/avatar
 
 **Delete an avatar.**
 
@@ -1289,15 +1297,15 @@ print(response.json())
 
 ### Crop
 
-POST https://api.zelenka.guru/users/me/avatar/crop
+POST https://prod-api.lolz.live/users/me/avatar/crop
 
 *Crop an avatar.*
 
 **Parameters:**
 
-- **x** (int): X.
-- **y** (int): Y.
-- **size** (int): Selection size.
+- x (int): X.
+- y (int): Y.
+- size (int): Selection size.
   > Minimum value - 16.
 
 **Example:**
@@ -1312,17 +1320,17 @@ print(response.json())
 
 ### Upload
 
-POST https://api.zelenka.guru/users/me/background
+POST https://prod-api.lolz.live/users/me/background
 
 *Upload a background.*
 > You can't create batch job for this method
 
 **Parameters:**
 
-- **file** (bytes): Background bytes.
-- **x** (int): X.
-- **y** (int): Y.
-- **size** (int): Selection size.
+- file (bytes): Background bytes.
+- x (int): X.
+- y (int): Y.
+- size (int): Selection size.
   > Minimum value - 100.
 
 **Example:**
@@ -1336,7 +1344,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://api.zelenka.guru/users/me/background
+DELETE https://prod-api.lolz.live/users/me/background
 
 **Delete a background.**
 
@@ -1350,15 +1358,15 @@ print(response.json())
 
 ### Crop
 
-POST https://api.zelenka.guru/users/me/background/crop
+POST https://prod-api.lolz.live/users/me/background/crop
 
 *Crop a background.*
 
 **Parameters:**
 
-- **x** (int): X.
-- **y** (int): Y.
-- **size** (int): Selection size.
+- x (int): X.
+- y (int): Y.
+- size (int): Selection size.
   > Minimum value - 100.
 
 **Example:**
@@ -1375,15 +1383,15 @@ print(response.json())
 
 #### List
 
-GET https://api.zelenka.guru/profile-posts/{post_id}/comments
+GET https://prod-api.lolz.live/profile-posts/{post_id}/comments
 
 *Get comments of a profile post.*
 
 **Parameters:**
 
-- **post_id** (int): Profile post ID.
-- **before** (int): Parse comments before this timestamp.
-- **limit** (int): Comments limit per page.
+- post_id (int): Profile post ID.
+- before (int): Parse comments before this timestamp.
+- limit (int): Comments limit per page.
 
 **Example:**
 
@@ -1395,14 +1403,14 @@ print(response.json())
 
 #### Get
 
-GET https://api.zelenka.guru/profile-posts/{post_id}/comments/{comment_id}
+GET https://prod-api.lolz.live/profile-posts/{post_id}/comments/{comment_id}
 
 *Get a comment of a profile post.*
 
 **Parameters:**
 
-- **post_id** (int): Profile post ID.
-- **comment_id** (int): Comment ID.
+- post_id (int): Profile post ID.
+- comment_id (int): Comment ID.
 
 **Example:**
 
@@ -1414,14 +1422,14 @@ print(response.json())
 
 #### Create
 
-POST https://api.zelenka.guru/profile-posts/{post_id}/comments
+POST https://prod-api.lolz.live/profile-posts/{post_id}/comments
 
 *Create a comment of a profile post.*
 
 **Parameters:**
 
-- **post_id** (int): Profile post ID.
-- **post_body** (str): Comment body.
+- post_id (int): Profile post ID.
+- post_body (str): Comment body.
 
 **Example:**
 
@@ -1433,14 +1441,14 @@ print(response.json())
 
 #### Edit
 
-PUT https://api.zelenka.guru/profile-posts/comments
+PUT https://prod-api.lolz.live/profile-posts/comments
 
 *Edit a profile post comment.*
 
 **Parameters:**
 
-- **comment_id** (int): Id of profile post comment.
-- **comment_body** (str): New content for the profile post comment.
+- comment_id (int): Id of profile post comment.
+- comment_body (str): New content for the profile post comment.
 
 **Example:**
 
@@ -1452,13 +1460,13 @@ print(response.json())
 
 #### Delete
 
-DELETE https://api.zelenka.guru/profile-posts/comments
+DELETE https://prod-api.lolz.live/profile-posts/comments
 
 *Delete a profile post comment.*
 
 **Parameters:**
 
-- **comment_id** (int): Id of profile post comment.
+- comment_id (int): Id of profile post comment.
 
 **Example:**
 
@@ -1470,15 +1478,15 @@ print(response.json())
 
 ### List
 
-GET https://api.zelenka.guru/users/{user_id}/profile-posts
+GET https://prod-api.lolz.live/users/{user_id}/profile-posts
 
 *Get profile posts of a user.*
 
 **Parameters:**
 
-- **user_id** (int): User ID.
-- **page** (int): Page.
-- **limit** (int): Posts limit per page.
+- user_id (int): User ID.
+- page (int): Page.
+- limit (int): Posts limit per page.
 
 **Example:**
 
@@ -1490,13 +1498,13 @@ print(response.json())
 
 ### Get
 
-GET https://api.zelenka.guru/profile-posts/{post_id}
+GET https://prod-api.lolz.live/profile-posts/{post_id}
 
 *Get a profile post.*
 
 **Parameters:**
 
-- **post_id** (int): Profile post ID.
+- post_id (int): Profile post ID.
 
 **Example:**
 
@@ -1508,14 +1516,14 @@ print(response.json())
 
 ### Create
 
-POST https://api.zelenka.guru/users/{user_id}/profile-posts
+POST https://prod-api.lolz.live/users/{user_id}/profile-posts
 
 *Create a profile post.*
 
 **Parameters:**
 
-- **user_id** (int): User ID.
-- **post_body** (str): Post body.
+- user_id (int): User ID.
+- post_body (str): Post body.
 
 **Example:**
 
@@ -1527,14 +1535,14 @@ print(response.json())
 
 ### Edit
 
-PUT https://api.zelenka.guru/profile-posts/{post_id}
+PUT https://prod-api.lolz.live/profile-posts/{post_id}
 
 *Edit a profile post.*
 
 **Parameters:**
 
-- **post_id** (int): Profile post ID.
-- **post_body** (str): Post body.
+- post_id (int): Profile post ID.
+- post_body (str): Post body.
 
 **Example:**
 
@@ -1546,14 +1554,14 @@ print(response.json())
 
 ### Delete
 
-DELETE https://api.zelenka.guru/profile-posts/{post_id}
+DELETE https://prod-api.lolz.live/profile-posts/{post_id}
 
 **Delete a profile post.**
 
 **Parameters:**
 
-- **post_id** (int): Profile post ID.
-- **reason** (str): Delete reason.
+- post_id (int): Profile post ID.
+- reason (str): Delete reason.
 
 **Example:**
 
@@ -1565,13 +1573,13 @@ print(response.json())
 
 ### Likes
 
-GET https://api.zelenka.guru/profile-posts/{post_id}/likes
+GET https://prod-api.lolz.live/profile-posts/{post_id}/likes
 
 *Get likes of a profile post.*
 
 **Parameters:**
 
-- **post_id** (int): Profile post ID.
+- post_id (int): Profile post ID.
 
 **Example:**
 
@@ -1583,7 +1591,7 @@ print(response.json())
 
 ### Like
 
-POST https://api.zelenka.guru/profile-posts/{post_id}/likes
+POST https://prod-api.lolz.live/profile-posts/{post_id}/likes
 
 **Like a profile post.**
 
@@ -1597,7 +1605,7 @@ print(response.json())
 
 ### Unlike
 
-DELETE https://api.zelenka.guru/profile-posts/{post_id}/likes
+DELETE https://prod-api.lolz.live/profile-posts/{post_id}/likes
 
 **Unlike a profile post.**
 
@@ -1611,14 +1619,14 @@ print(response.json())
 
 ## List
 
-GET https://api.zelenka.guru/users
+GET https://prod-api.lolz.live/users
 
 *Get users.*
 
 **Parameters:**
 
-- **page** (int): Page.
-- **limit** (int): Users limit per page.
+- page (int): Page.
+- limit (int): Users limit per page.
 
 **Example:**
 
@@ -1630,14 +1638,14 @@ print(response.json())
 
 ## Search
 
-GET https://api.zelenka.guru/users/find
+GET https://prod-api.lolz.live/users/find
 
 *Search users.*
 
 **Parameters:**
 
-- **username** (str): Username of the user.
-- **fields** (dict[str, str]): Custom fields.
+- username (str): Username of the user.
+- fields (dict[str, str]): Custom fields.
 
 **Example:**
 
@@ -1649,13 +1657,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/users/{user_id}
+GET https://prod-api.lolz.live/users/{user_id}
 
 *Get a user.*
 
 **Parameters:**
 
-- **user_id** (int): User ID.
+- user_id (int): User ID.
 
 **Example:**
 
@@ -1667,16 +1675,16 @@ print(response.json())
 
 ## Edit
 
-PUT https://api.zelenka.guru/users/me
+PUT https://prod-api.lolz.live/users/me
 
 *Edit a user.*
 
 **Parameters:**
 
-- **title** (str): Title.
-- **display_group_id** (int): Display group ID.
-- **dob** (tuple[int, int, int]): Date of birth.
-- **fields** (dict[str, str]): Custom fields.
+- title (str): Title.
+- display_group_id (int): Display group ID.
+- dob (tuple[int, int, int]): Date of birth.
+- fields (dict[str, str]): Custom fields.
 
 **Example:**
 
@@ -1688,7 +1696,7 @@ print(response.json())
 
 ## Fields
 
-GET https://api.zelenka.guru/users/fields
+GET https://prod-api.lolz.live/users/fields
 
 *Get your fields.*
 
@@ -1702,7 +1710,7 @@ print(response.json())
 
 ## Trophies
 
-GET https://api.zelenka.guru/users/{user_id}/trophies
+GET https://prod-api.lolz.live/users/{user_id}/trophies
 
 *Get user trophies.*
 
@@ -1716,16 +1724,16 @@ print(response.json())
 
 ## Followers
 
-GET https://api.zelenka.guru/users/{user_id}/followers
+GET https://prod-api.lolz.live/users/{user_id}/followers
 
 *Get followers of a user.*
 
 **Parameters:**
 
-- **user_id** (int): User ID.
-- **order** (str): Order.
-- **page** (int): Page.
-- **limit** (int): Followers limit per page.
+- user_id (int): User ID.
+- order (str): Order.
+- page (int): Page.
+- limit (int): Followers limit per page.
 
 **Example:**
 
@@ -1737,16 +1745,16 @@ print(response.json())
 
 ## Followed
 
-GET https://api.zelenka.guru/users/{user_id}/followings
+GET https://prod-api.lolz.live/users/{user_id}/followings
 
 *Get followed users of a user.*
 
 **Parameters:**
 
-- **user_id** (int): User ID.
-- **order** (str): Order.
-- **page** (int): Page.
-- **limit** (int): Followed users limit per page.
+- user_id (int): User ID.
+- order (str): Order.
+- page (int): Page.
+- limit (int): Followed users limit per page.
 
 **Example:**
 
@@ -1758,7 +1766,7 @@ print(response.json())
 
 ## Follow
 
-POST https://api.zelenka.guru/users/{user_id}/followers
+POST https://prod-api.lolz.live/users/{user_id}/followers
 
 **Follow a user.**
 
@@ -1772,7 +1780,7 @@ print(response.json())
 
 ## Unfollow
 
-DELETE https://api.zelenka.guru/users/{user_id}/followers
+DELETE https://prod-api.lolz.live/users/{user_id}/followers
 
 **Unfollow a user.**
 
@@ -1786,7 +1794,7 @@ print(response.json())
 
 ## Ignored
 
-GET https://api.zelenka.guru/users/ignored
+GET https://prod-api.lolz.live/users/ignored
 
 *Get ignored users.*
 
@@ -1800,7 +1808,7 @@ print(response.json())
 
 ## Ignore
 
-POST https://api.zelenka.guru/users/{user_id}/ignore
+POST https://prod-api.lolz.live/users/{user_id}/ignore
 
 **Ignore a user.**
 
@@ -1814,7 +1822,7 @@ print(response.json())
 
 ## Unignore
 
-DELETE https://api.zelenka.guru/users/{user_id}/ignore
+DELETE https://prod-api.lolz.live/users/{user_id}/ignore
 
 **Unignore a user.**
 
@@ -1828,7 +1836,7 @@ print(response.json())
 
 ## Content
 
-GET https://api.zelenka.guru/users/{user_id}/timeline
+GET https://prod-api.lolz.live/users/{user_id}/timeline
 
 *Get timeline of a user.*
 
@@ -1846,20 +1854,20 @@ print(response.json())
 
 ### List
 
-GET https://api.zelenka.guru/conversation-messages
+GET https://prod-api.lolz.live/conversations/messages
 
 *Get messages of a conversation.*
 
 
 ### Get
 
-GET https://api.zelenka.guru/conversation-messages/{message_id}
+GET https://prod-api.lolz.live/conversations/messages/{message_id}
 
 *Get a message.*
 
 **Parameters:**
 
-- **message_id** (int): Message ID.
+- message_id (int): Message ID.
 
 **Example:**
 
@@ -1871,14 +1879,14 @@ print(response.json())
 
 ### Create
 
-POST https://api.zelenka.guru/conversation-messages
+POST https://prod-api.lolz.live/conversations/messages
 
 **Create a message.**
 
 **Parameters:**
 
-- **conversation_id** (int): Conversation ID.
-- **message** (str): Message.
+- conversation_id (int): Conversation ID.
+- message (str): Message.
 
 **Example:**
 
@@ -1890,33 +1898,110 @@ print(response.json())
 
 ### Edit
 
-PUT https://api.zelenka.guru/conversation-messages/{message_id}
+PUT https://prod-api.lolz.live/conversations/messages/{message_id}
 
 **Edit a message.**
 
 **Parameters:**
 
-- **message_id** (int): Message ID.
-- **message** (str): Message.
+- conversation_id (int): Conversation ID.
+- message_id (int): Message ID.
+- message (str): Message.
 
 **Example:**
 
 ```python
-response = forum.conversations.messages.edit(message_id=123456, message="Hello, world!")
+response = forum.conversations.messages.edit(conversation_id=123456, message_id=1234567890, message="Hello, world!")
+print(response.json())
+```
+
+
+### Stick
+
+POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+
+**Stick a message in a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+- message_id (int): Message ID.
+
+**Example:**
+
+```python
+response = forum.conversations.messages.stick(conversation_id=123456, message_id=789012)
+print(response.json())
+```
+
+
+### Unstick
+
+DELETE https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+
+**Unstick a message in a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+- message_id (int): Message ID.
+
+**Example:**
+
+```python
+response = forum.conversations.messages.unstick(conversation_id=123456, message_id=789012)
+print(response.json())
+```
+
+
+## Alerts
+
+### Enable
+
+POST https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+
+**Enable alerts for a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+
+**Example:**
+
+```python
+response = forum.conversations.alerts.enable(conversation_id=123456)
+print(response.json())
+```
+
+
+### Disable
+
+DELETE https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+
+**Disable alerts for a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+
+**Example:**
+
+```python
+response = forum.conversations.alerts.disable(conversation_id=123456)
 print(response.json())
 ```
 
 
 ## List
 
-GET https://api.zelenka.guru/conversations
+GET https://prod-api.lolz.live/conversations
 
 *Get conversations.*
 
 **Parameters:**
 
-- **page** (int): Page.
-- **limit** (int): Limit.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -1928,13 +2013,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/conversations/{conversation_id}
+GET https://prod-api.lolz.live/conversations/{conversation_id}
 
 *Get a conversation.*
 
 **Parameters:**
 
-- **conversation_id** (int): Conversation ID.
+- conversation_id (int): Conversation ID.
 
 **Example:**
 
@@ -1946,14 +2031,14 @@ print(response.json())
 
 ## Create
 
-POST https://api.zelenka.guru/conversations
+POST https://prod-api.lolz.live/conversations
 
 **Create a conversation.**
 
 **Parameters:**
 
-- **user_id** (int): User ID.
-- **message** (str): Message.
+- user_id (int): User ID.
+- message (str): Message.
 
 **Example:**
 
@@ -1965,18 +2050,18 @@ print(response.json())
 
 ## Create Group
 
-POST https://api.zelenka.guru/conversations
+POST https://prod-api.lolz.live/conversations
 
 **Create a group conversation.**
 
 **Parameters:**
 
-- **usernames** (list[str]): Usernames.
-- **message** (str): Message.
-- **title** (str): Title.
-- **open_invite** (bool): Open invite.
-- **conversation_locked** (bool): Conversation locked.
-- **allow_edit_messages** (bool): Allow edit messages.
+- usernames (list[str]): Usernames.
+- message (str): Message.
+- title (str): Title.
+- open_invite (bool): Open invite.
+- conversation_locked (bool): Conversation locked.
+- allow_edit_messages (bool): Allow edit messages.
 
 **Example:**
 
@@ -1995,14 +2080,14 @@ print(response.json())
 
 ## Leave
 
-DELETE https://api.zelenka.guru/conversations/{conversation_id}
+DELETE https://prod-api.lolz.live/conversations/{conversation_id}
 
 **Leave from a conversation.**
 
 **Parameters:**
 
-- **conversation_id** (int): Conversation ID.
-- **leave_type** (str): Leave type.
+- conversation_id (int): Conversation ID.
+- leave_type (str): Leave type.
 
 **Example:**
 
@@ -2012,11 +2097,61 @@ print(response.json())
 ```
 
 
+## Star
+
+POST https://prod-api.lolz.live/conversations/{conversation_id}/star
+
+**Star a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+
+**Example:**
+
+```python
+response = forum.conversations.star(conversation_id=123456)
+print(response.json())
+```
+
+
+## Unstar
+
+DELETE https://prod-api.lolz.live/conversations/{conversation_id}/star
+
+**Unstar a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+
+**Example:**
+
+```python
+response = forum.conversations.unstar(conversation_id=123456)
+print(response.json())
+```
+
+
+## Read All
+
+POST https://prod-api.lolz.live/conversations/read-all
+
+**Mark all conversations as read.**
+
+**Example:**
+
+```python
+response = forum.conversations.read_all()
+print(response.json())
+```
+
+
 # Notifications
 
 ## List
 
-GET https://api.zelenka.guru/notifications
+GET https://prod-api.lolz.live/notifications
 
 *Get notifications.*
 
@@ -2030,13 +2165,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/notifications/{notification_id}
+GET https://prod-api.lolz.live/notifications/{notification_id}
 
 *Get a notification.*
 
 **Parameters:**
 
-- **notification_id** (int): Notification ID.
+- notification_id (int): Notification ID.
 
 **Example:**
 
@@ -2048,13 +2183,13 @@ print(response.json())
 
 ## Read
 
-POST https://api.zelenka.guru/notifications/read
+POST https://prod-api.lolz.live/notifications/read
 
 **Read a notification.**
 
 **Parameters:**
 
-- **notification_id** (int): Notification ID.
+- notification_id (int): Notification ID.
 
 **Example:**
 
@@ -2068,14 +2203,14 @@ print(response.json())
 
 ## List
 
-GET https://api.zelenka.guru/tags/list
+GET https://prod-api.lolz.live/tags/list
 
 *Get tags.*
 
 **Parameters:**
 
-- **page** (int): Page.
-- **limit** (int): Limit.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -2087,15 +2222,15 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/tags/{tag_id}
+GET https://prod-api.lolz.live/tags/{tag_id}
 
 *Get a tag.*
 
 **Parameters:**
 
-- **tag_id** (int): Tag ID.
-- **page** (int): Page.
-- **limit** (int): Limit.
+- tag_id (int): Tag ID.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -2107,7 +2242,7 @@ print(response.json())
 
 ## Popular
 
-GET https://api.zelenka.guru/tags/popular
+GET https://prod-api.lolz.live/tags/popular
 
 *Get popular tags.*
 
@@ -2121,13 +2256,13 @@ print(response.json())
 
 ## Search
 
-GET https://api.zelenka.guru/tags/find
+GET https://prod-api.lolz.live/tags/find
 
 **Search for a tag.**
 
 **Parameters:**
 
-- **tag** (str): Tag.
+- tag (str): Tag.
 
 **Example:**
 
@@ -2141,18 +2276,18 @@ print(response.json())
 
 ## All
 
-POST https://api.zelenka.guru/search
+POST https://prod-api.lolz.live/search
 
 **Search for all types of content.**
 
 **Parameters:**
 
-- **query** (str): Query.
-- **user_id** (int): User ID.
-- **tag** (str): Tag.
-- **forum_id** (int): Forum ID.
-- **page** (int): Page.
-- **limit** (int): Limit.
+- query (str): Query.
+- user_id (int): User ID.
+- tag (str): Tag.
+- forum_id (int): Forum ID.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -2164,16 +2299,16 @@ print(response.json())
 
 ## Threads
 
-POST https://api.zelenka.guru/search/threads
+POST https://prod-api.lolz.live/search/threads
 
 **Search for threads.**
 
 **Parameters:**
 
-- **query** (str): Query.
-- **user_id** (int): User ID.
-- **page** (int): Page.
-- **limit** (int): Limit.
+- query (str): Query.
+- user_id (int): User ID.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -2185,16 +2320,16 @@ print(response.json())
 
 ## Posts
 
-POST https://api.zelenka.guru/search/posts
+POST https://prod-api.lolz.live/search/posts
 
 **Search for posts.**
 
 **Parameters:**
 
-- **query** (str): Query.
-- **user_id** (int): User ID.
-- **page** (int): Page.
-- **limit** (int): Limit.
+- query (str): Query.
+- user_id (int): User ID.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -2206,16 +2341,16 @@ print(response.json())
 
 ## Profile Posts
 
-POST https://api.zelenka.guru/search/profile-posts
+POST https://prod-api.lolz.live/search/profile-posts
 
 **Search for profile posts.**
 
 **Parameters:**
 
-- **query** (str): Query.
-- **user_id** (int): User ID.
-- **page** (int): Page.
-- **limit** (int): Limit.
+- query (str): Query.
+- user_id (int): User ID.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -2227,16 +2362,16 @@ print(response.json())
 
 ## Tagged
 
-POST https://api.zelenka.guru/search/tagged
+POST https://prod-api.lolz.live/search/tagged
 
 **Search for tagged content.**
 
 **Parameters:**
 
-- **tag** (str): Tag.
-- **tags** (list[str]): Tags.
-- **page** (int): Page.
-- **limit** (int): Limit.
+- tag (str): Tag.
+- tags (list[str]): Tags.
+- page (int): Page.
+- limit (int): Limit.
 
 **Example:**
 
@@ -2252,13 +2387,13 @@ print(response.json())
 
 ### List
 
-GET https://api.zelenka.guru/chatbox/messages
+GET https://prod-api.lolz.live/chatbox/messages
 
 *Get chat messages.*
 
 **Parameters:**
 
-- **room_id** (int): Room ID.
+- room_id (int): Room ID.
 
 **Example:**
 
@@ -2270,14 +2405,14 @@ print(response.json())
 
 ### Create
 
-POST https://api.zelenka.guru/chatbox/message
+POST https://prod-api.lolz.live/chatbox/message
 
 *Create a chat message.*
 
 **Parameters:**
 
-- **room_id** (int): Room ID.
-- **message** (str): Message.
+- room_id (int): Room ID.
+- message (str): Message.
 
 **Example:**
 
@@ -2289,14 +2424,14 @@ print(response.json())
 
 ### Edit
 
-PUT https://api.zelenka.guru/chatbox/message
+PUT https://prod-api.lolz.live/chatbox/message
 
 *Edit a chat message.*
 
 **Parameters:**
 
-- **message_id** (int): Message ID.
-- **message** (str): Message.
+- message_id (int): Message ID.
+- message (str): Message.
 
 **Example:**
 
@@ -2308,13 +2443,13 @@ print(response.json())
 
 ### Delete
 
-DELETE https://api.zelenka.guru/chatbox/message
+DELETE https://prod-api.lolz.live/chatbox/message
 
 *Delete a chat message.*
 
 **Parameters:**
 
-- **message_id** (int): Message ID.
+- message_id (int): Message ID.
 
 **Example:**
 
@@ -2326,14 +2461,14 @@ print(response.json())
 
 ### Report
 
-POST https://api.zelenka.guru/chatbox/report
+POST https://prod-api.lolz.live/chatbox/report
 
 *Report a chat message.*
 
 **Parameters:**
 
-- **message_id** (int): Message ID.
-- **reason** (str): Reason.
+- message_id (int): Message ID.
+- reason (str): Reason.
 
 **Example:**
 
@@ -2345,13 +2480,13 @@ print(response.json())
 
 ## Get
 
-GET https://api.zelenka.guru/chatbox
+GET https://prod-api.lolz.live/chatbox
 
 *Get Chats.*
 
 **Parameters:**
 
-- **parent** (int): Parent ID.
+- parent (int): Parent ID.
 
 **Example:**
 
@@ -2363,7 +2498,7 @@ print(response.json())
 
 ## Ignored
 
-GET https://api.zelenka.guru/chatbox/ignored
+GET https://prod-api.lolz.live/chatbox/ignored
 
 *Get ignored users.*
 
@@ -2377,13 +2512,13 @@ print(response.json())
 
 ## Ignore
 
-POST https://api.zelenka.guru/chatbox/ignore
+POST https://prod-api.lolz.live/chatbox/ignore
 
 *Ignore chat user.*
 
 **Parameters:**
 
-- **user_id** (int): User ID.
+- user_id (int): User ID.
 
 **Example:**
 
@@ -2395,13 +2530,13 @@ print(response.json())
 
 ## Unignore
 
-DELETE https://api.zelenka.guru/chatbox/ignore
+DELETE https://prod-api.lolz.live/chatbox/ignore
 
 *Unignore chat user.*
 
 **Parameters:**
 
-- **user_id** (int): User ID.
+- user_id (int): User ID.
 
 **Example:**
 
@@ -2415,13 +2550,13 @@ print(response.json())
 
 ## List
 
-GET https://api.zelenka.guru/forms
+GET https://prod-api.lolz.live/forms
 
 *Get Forms list.*
 
 **Parameters:**
 
-- **page** (int): Page.
+- page (int): Page.
 
 **Example:**
 
@@ -2433,14 +2568,14 @@ print(response.json())
 
 ## Create
 
-GET https://api.zelenka.guru/forms/save
+GET https://prod-api.lolz.live/forms/save
 
 *Create thread by form.*
 
 **Parameters:**
 
-- **form_id** (int): Form ID.
-- **fields** (dict[str, str]): Form fields.
+- form_id (int): Form ID.
+- fields (dict[str, str]): Form fields.
 
 **Example:**
 
@@ -2461,13 +2596,13 @@ print(response.json())
 
 # Navigation
 
-GET https://api.zelenka.guru/navigation
+GET https://prod-api.lolz.live/navigation
 
 *Get navigation.*
 
 **Parameters:**
 
-- **parent** (int): Parent ID.
+- parent (int): Parent ID.
 
 **Example:**
 
@@ -2479,13 +2614,13 @@ print(response.json())
 
 # Batch
 
-POST https://api.zelenka.guru/batch
+POST https://prod-api.lolz.live/batch
 
 *Batch requests.*
 
 **Parameters:**
 
-- **jobs** (list[dict[str, str]]): Batch jobs.
+- jobs (list[dict[str, str]]): Batch jobs.
 
 **Example:**
 

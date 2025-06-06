@@ -22,12 +22,12 @@ class Antipublic(APIClient):
 
         **Parameters:**
 
-        - **token** (str): Your token.
+        - token (str): Your token.
           > You can get it [there](https://zelenka.guru/account/antipublic) or in antipublic app
-        - **delay_min** (float): Minimal delay between requests.
+        - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests
-        - **timeout** (float): Request timeout.
-        - **proxy** (str): Proxy string.
+        - timeout (float): Request timeout.
+        - proxy (str): Proxy string.
           > protocol://ip:port or protocol://login:password@ip:port (socks5://login:password@192.168.1.1:8080)
 
         **Example:**
@@ -158,9 +158,9 @@ class Antipublic(APIClient):
 
         **Parameters:**
 
-        - **lines** (list[str]): Lines for check (email:password or login:password).
+        - lines (list[str]): Lines for check (email:password or login:password).
           > Maximum 1000 lines per request.
-        - **insert** (bool): Upload private rows to AntiPublic db.
+        - insert (bool): Upload private rows to AntiPublic db.
 
         **Example:**
 
@@ -188,14 +188,14 @@ class Antipublic(APIClient):
 
         **Parameters:**
 
-        - **searchBy** (str): Search by email/password/domain.
-        - **query** (dict[str, str]): Query for search.
-        - **direction** (dict[str, str]): Direction for search.
-        - **order** (Literal["asc", "desc"]): [Premium subscription required] If you specify `desc` order, then most likely you will have a couple of results. Everything is fine and it should be. To get more results - you need to disable fuses by specifying all in direction for your query field. Or if the request field is strict, then specify fromLastValueOfKey equal to true.
-        - **from_last_value_of_key** (bool): [Premium subscription required] When using this option and "strict direction" the starting position starts from the last value of the key. For example, we have email:pass1, email:pass2, email:pass3. Then when setting query = email, direction = strict, fromLastValueOfKey = true the first result obtained will be email:pass3.
-        - **group_by** (Literal["login@domain", "domain", "password"]): [Premium subscription required] This option allows you to remove "duplicates". Only the first found line corresponding to the grouping will be returned and will move on to the next value.
-        - **format** (Literal["login@domain:password", "login@domain", "login", "domain", "password"]): The format of the returned results. Allows you to quickly leave the most necessary without post-processing. When used correctly together with groupBy, the execution time of a database search query can be accelerated by eliminating JOIN operations on the server.
-        - **token** (str): Page token.
+        - searchBy (str): Search by email/password/domain.
+        - query (dict[str, str]): Query for search.
+        - direction (dict[str, str]): Direction for search.
+        - order (Literal["asc", "desc"]): [Premium subscription required] If you specify `desc` order, then most likely you will have a couple of results. Everything is fine and it should be. To get more results - you need to disable fuses by specifying all in direction for your query field. Or if the request field is strict, then specify fromLastValueOfKey equal to true.
+        - from_last_value_of_key (bool): [Premium subscription required] When using this option and "strict direction" the starting position starts from the last value of the key. For example, we have email:pass1, email:pass2, email:pass3. Then when setting query = email, direction = strict, fromLastValueOfKey = true the first result obtained will be email:pass3.
+        - group_by (Literal["login@domain", "domain", "password"]): [Premium subscription required] This option allows you to remove "duplicates". Only the first found line corresponding to the grouping will be returned and will move on to the next value.
+        - format (Literal["login@domain:password", "login@domain", "login", "domain", "password"]): The format of the returned results. Allows you to quickly leave the most necessary without post-processing. When used correctly together with groupBy, the execution time of a database search query can be accelerated by eliminating JOIN operations on the server.
+        - token (str): Page token.
 
         **Example:**
 
@@ -225,9 +225,9 @@ class Antipublic(APIClient):
 
         **Parameters:**
 
-        - **emails** (list[str]): List of emails or logins for search.
-        - **limit** (int): Result limit (per email).
-        - **only_passwords** (bool): Return only passwords.
+        - emails (list[str]): List of emails or logins for search.
+        - limit (int): Result limit (per email).
+        - only_passwords (bool): Return only passwords.
 
         **Example:**
 

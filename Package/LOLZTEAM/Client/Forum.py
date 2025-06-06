@@ -23,14 +23,14 @@ class Forum(APIClient):
 
         **Parameters:**
 
-        - **token** (str): Your token.
+        - token (str): Your token.
           > You can get it [there](https://zelenka.guru/account/api)
-        - **language** (Literal["ru", "en"]): Language of the API responses.
-        - **delay_min** (float): Minimal delay between requests.
+        - language (Literal["ru", "en"]): Language of the API responses.
+        - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests.
-        - **proxy** (str): Proxy string.
+        - proxy (str): Proxy string.
           > protocol://ip:port or protocol://login:password@ip:port (socks5://login:password@192.168.1.1:8080 or http://login:password@192.168.1.1:8080)
-        - **timeout** (float): Request timeout.
+        - timeout (float): Request timeout.
 
         ```python
         from LOLZTEAM.Client import Forum
@@ -69,7 +69,7 @@ class Forum(APIClient):
         ```
         """
         super().__init__(
-            base_url="https://prod-api.zelenka.guru",
+            base_url="https://prod-api.lolz.live",
             token=token,
             language=language,
             delay_min=delay_min,
@@ -99,15 +99,15 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/categories
+            GET https://prod-api.lolz.live/categories
 
             *Get categories.*
 
             **Parameters:**
 
-            - **parent_category_id** (int): Parent category ID.
-            - **parent_forum_id** (int): Parent forum ID.
-            - **order** (str): Order of the categories.
+            - parent_category_id (int): Parent category ID.
+            - parent_forum_id (int): Parent forum ID.
+            - order (str): Order of the categories.
 
             **Example:**
 
@@ -123,13 +123,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, category_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/categories/{category_id}
+            GET https://prod-api.lolz.live/categories/{category_id}
 
             *Get category.*
 
             **Parameters:**
 
-            - **category_id** (int): Category ID.
+            - category_id (int): Category ID.
 
             **Example:**
 
@@ -148,15 +148,15 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/forums
+            GET https://prod-api.lolz.live/forums
 
             *Get forums.*
 
             **Parameters:**
 
-            - **parent_category_id** (int): Parent category ID.
-            - **parent_forum_id** (int): Parent forum ID.
-            - **order** (str): Order of the forums.
+            - parent_category_id (int): Parent category ID.
+            - parent_forum_id (int): Parent forum ID.
+            - order (str): Order of the forums.
 
             **Example:**
 
@@ -172,13 +172,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, forum_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/forums/{forum_id}
+            GET https://prod-api.lolz.live/forums/{forum_id}
 
             *Get forum.*
 
             **Parameters:**
 
-            - **forum_id** (int): Forum ID.
+            - forum_id (int): Forum ID.
 
             **Example:**
 
@@ -193,13 +193,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def followers(self, forum_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/forums/{forum_id}/followers
+            GET https://prod-api.lolz.live/forums/{forum_id}/followers
 
             *Get forum followers.*
 
             **Parameters:**
 
-            - **forum_id** (int): Forum ID.
+            - forum_id (int): Forum ID.
 
             **Example:**
 
@@ -214,13 +214,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def followed(self, total: bool = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/forums/followed
+            GET https://prod-api.lolz.live/forums/followed
 
             *Get followed forums.*
 
             **Parameters:**
 
-            - **total** (bool): Get total count of followed forums.
+            - total (bool): Get total count of followed forums.
 
             **Example:**
 
@@ -241,17 +241,17 @@ class Forum(APIClient):
                          prefix_ids: builtins.list[int] = NONE,
                          minimal_contest_amount: float = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/forums/{forum_id}/followers
+            POST https://prod-api.lolz.live/forums/{forum_id}/followers
 
             *Follow forum.*
 
             **Parameters:**
 
-            - **post** (bool): Get post notifications.
-            - **alert** (bool): Get alert notifications.
-            - **email** (bool): Get email notifications.
-            - **prefix_ids** (list[int]): Prefix IDs.
-            - **minimal_contest_amount** (float): Minimal contest amount.
+            - post (bool): Get post notifications.
+            - alert (bool): Get alert notifications.
+            - email (bool): Get email notifications.
+            - prefix_ids (list[int]): Prefix IDs.
+            - minimal_contest_amount (float): Minimal contest amount.
 
             **Example:**
 
@@ -267,13 +267,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def unfollow(self, forum_id: int) -> Response:
             """
-            DELETE https://api.zelenka.guru/forums/{forum_id}/followers
+            DELETE https://prod-api.lolz.live/forums/{forum_id}/followers
 
             *Unfollow forum.*
 
             **Parameters:**
 
-            - **forum_id** (int): Forum ID.
+            - forum_id (int): Forum ID.
 
             **Example:**
 
@@ -292,7 +292,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self) -> Response:
             """
-            GET https://api.zelenka.guru/pages
+            GET https://prod-api.lolz.live/pages
 
             *Get pages.*
 
@@ -309,13 +309,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, page_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/pages/{page_id}
+            GET https://prod-api.lolz.live/pages/{page_id}
 
             *Get page.*
 
             **Parameters:**
 
-            - **page_id** (int): Page ID.
+            - page_id (int): Page ID.
 
             **Example:**
 
@@ -362,35 +362,35 @@ class Forum(APIClient):
                     email_notifications: bool = False,
                 ) -> Response:
                     """
-                    POST https://api.zelenka.guru/threads
+                    POST https://prod-api.lolz.live/threads
 
                     *Create a money contest.*
 
                     **Parameters:**
 
-                    - **post_body** (str): Content of the new contest.
-                    - **prize_amount** (float): How much money will each winner receive.
-                    - **winners_count** (int): Winner count (prize count).
+                    - post_body (str): Content of the new contest.
+                    - prize_amount (float): How much money will each winner receive.
+                    - winners_count (int): Winner count (prize count).
                         > The maximum value is 100.
-                    - **length** (int): Contest duration value.
+                    - length (int): Contest duration value.
                         > The maximum duration is 3 days.
-                    - **length_option** (str): Contest duration type.
+                    - length_option (str): Contest duration type.
                         > Can be [minutes, hours, days]. The maximum duration is 3 days.
-                    - **require_week_sympathy** (int): Sympathies for this week.
-                    - **require_total_sympathy** (int): Symapthies for all time.
-                    - **secret_answer** (str): Secret answer of your account.
-                    - **reply_group** (int): Allow to reply only users with chosen or higher group.
-                    - **title** (str): Thread title.
+                    - require_week_sympathy (int): Sympathies for this week.
+                    - require_total_sympathy (int): Symapthies for all time.
+                    - secret_answer (str): Secret answer of your account.
+                    - reply_group (int): Allow to reply only users with chosen or higher group.
+                    - title (str): Thread title.
                         > Can be skipped if title_en set.
-                    - **title_en** (str): Thread title in english.
+                    - title_en (str): Thread title in english.
                         > Can be skipped if title set.
-                    - **tags** (list[str]): Thread tags.
-                    - **hide_contacts** (bool): Hide contacts.
-                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-                    - **dont_alert_followers** (bool): Don't alert followers.
-                    - **forum_notifications** (bool): Get forum notifications.
-                    - **email_notifications** (bool): Get email notifications.
+                    - tags (list[str]): Thread tags.
+                    - hide_contacts (bool): Hide contacts.
+                    - allow_ask_hidden_content (bool): Allow ask hidden content.
+                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
+                    - dont_alert_followers (bool): Don't alert followers.
+                    - forum_notifications (bool): Get forum notifications.
+                    - email_notifications (bool): Get email notifications.
 
                     **Example:**
 
@@ -458,31 +458,31 @@ class Forum(APIClient):
                     email_notifications: bool = False,
                 ) -> Response:
                     """
-                    POST https://api.zelenka.guru/threads
+                    POST https://prod-api.lolz.live/threads
 
                     *Create a money contest.*
 
                     **Parameters:**
 
-                    - **post_body** (str): Content of the new contest.
-                    - **prize_amount** (float): How much money will each winner receive.
-                    - **winners_count** (int): Winner count (prize count).
-                    - **needed_members** (int): Max member count.
-                    - **require_week_sympathy** (int): Sympathies for this week.
-                    - **require_total_sympathy** (int): Symapthies for all time.
-                    - **secret_answer** (str): Secret answer of your account.
-                    - **reply_group** (int): Allow to reply only users with chosen or higher group.
-                    - **title** (str): Thread title.
+                    - post_body (str): Content of the new contest.
+                    - prize_amount (float): How much money will each winner receive.
+                    - winners_count (int): Winner count (prize count).
+                    - needed_members (int): Max member count.
+                    - require_week_sympathy (int): Sympathies for this week.
+                    - require_total_sympathy (int): Symapthies for all time.
+                    - secret_answer (str): Secret answer of your account.
+                    - reply_group (int): Allow to reply only users with chosen or higher group.
+                    - title (str): Thread title.
                         > Can be skipped if title_en set.
-                    - **title_en** (str): Thread title in english.
+                    - title_en (str): Thread title in english.
                         > Can be skipped if title set.
-                    - **tags** (list[str]): Thread tags.
-                    - **hide_contacts** (bool): Hide contacts.
-                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-                    - **dont_alert_followers** (bool): Don't alert followers.
-                    - **forum_notifications** (bool): Get forum notifications.
-                    - **email_notifications** (bool): Get email notifications.
+                    - tags (list[str]): Thread tags.
+                    - hide_contacts (bool): Hide contacts.
+                    - allow_ask_hidden_content (bool): Allow ask hidden content.
+                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
+                    - dont_alert_followers (bool): Don't alert followers.
+                    - forum_notifications (bool): Get forum notifications.
+                    - email_notifications (bool): Get email notifications.
 
                     **Example:**
 
@@ -546,35 +546,35 @@ class Forum(APIClient):
                     email_notifications: bool = False,
                 ) -> Response:
                     """
-                    POST https://api.zelenka.guru/threads
+                    POST https://prod-api.lolz.live/threads
 
                     *Create a new contest.*
 
                     **Parameters:**
 
-                    - **post_body** (str): Content of the new contest.
-                    - **prize_group** (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
-                    - **winners_count** (int): Winner count (prize count).
+                    - post_body (str): Content of the new contest.
+                    - prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
+                    - winners_count (int): Winner count (prize count).
                         > The maximum value is 100.
-                    - **length** (int): Contest duration value.
+                    - length (int): Contest duration value.
                         > The maximum duration is 3 days.
-                    - **length_option** (Constants.Forum.Contests.Length._Literal): Contest duration type.
+                    - length_option (Constants.Forum.Contests.Length._Literal): Contest duration type.
                         > Can be [minutes, hours, days]. The maximum duration is 3 days.
-                    - **require_week_sympathy** (int): Sympathies for this week.
-                    - **require_total_sympathy** (int): Sympathies for all time.
-                    - **secret_answer** (str): Secret answer of your account.
-                    - **reply_group** (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
-                    - **title** (str): Thread title.
+                    - require_week_sympathy (int): Sympathies for this week.
+                    - require_total_sympathy (int): Sympathies for all time.
+                    - secret_answer (str): Secret answer of your account.
+                    - reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
+                    - title (str): Thread title.
                         > Can be skipped if title_en set.
-                    - **title_en** (str): Thread title in english.
+                    - title_en (str): Thread title in english.
                         > Can be skipped if title set.
-                    - **tags** (list[str]): Thread tags.
-                    - **hide_contacts** (bool): Hide contacts.
-                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-                    - **dont_alert_followers** (bool): Don't alert followers.
-                    - **forum_notifications** (bool): Get forum notifications.
-                    - **email_notifications** (bool): Get email notifications.
+                    - tags (list[str]): Thread tags.
+                    - hide_contacts (bool): Hide contacts.
+                    - allow_ask_hidden_content (bool): Allow ask hidden content.
+                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
+                    - dont_alert_followers (bool): Don't alert followers.
+                    - forum_notifications (bool): Get forum notifications.
+                    - email_notifications (bool): Get email notifications.
 
                     **Example:**
 
@@ -635,32 +635,32 @@ class Forum(APIClient):
                     email_notifications: bool = False,
                 ) -> Response:
                     """
-                    POST https://api.zelenka.guru/threads
+                    POST https://prod-api.lolz.live/threads
 
                     *Create a new contest.*
 
                     **Parameters:**
 
-                    - **post_body** (str): Content of the new contest.
-                    - **prize_group** (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
-                    - **winners_count** (int): Winner count (prize count).
+                    - post_body (str): Content of the new contest.
+                    - prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
+                    - winners_count (int): Winner count (prize count).
                         > The maximum value is 100.
-                    - **needed_members** (int): Max member count.
-                    - **require_week_sympathy** (int): Sympathies for this week.
-                    - **require_total_sympathy** (int): Sympathies for all time.
-                    - **secret_answer** (str): Secret answer of your account.
-                    - **reply_group** (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
-                    - **title** (str): Thread title.
+                    - needed_members (int): Max member count.
+                    - require_week_sympathy (int): Sympathies for this week.
+                    - require_total_sympathy (int): Sympathies for all time.
+                    - secret_answer (str): Secret answer of your account.
+                    - reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
+                    - title (str): Thread title.
                         > Can be skipped if title_en set.
-                    - **title_en** (str): Thread title in english.
+                    - title_en (str): Thread title in english.
                         > Can be skipped if title set.
-                    - **tags** (list[str]): Thread tags.
-                    - **hide_contacts** (bool): Hide contacts.
-                    - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                    - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-                    - **dont_alert_followers** (bool): Don't alert followers.
-                    - **forum_notifications** (bool): Get forum notifications.
-                    - **email_notifications** (bool): Get email notifications.
+                    - tags (list[str]): Thread tags.
+                    - hide_contacts (bool): Hide contacts.
+                    - allow_ask_hidden_content (bool): Allow ask hidden content.
+                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
+                    - dont_alert_followers (bool): Don't alert followers.
+                    - forum_notifications (bool): Get forum notifications.
+                    - email_notifications (bool): Get email notifications.
 
                     **Example:**
 
@@ -718,24 +718,24 @@ class Forum(APIClient):
                 email_notifications: bool = NONE,
             ) -> Response:
                 """
-                POST https://api.zelenka.guru/claims
+                POST https://prod-api.lolz.live/claims
 
                 *Create a Arbitrage.*
 
                 **Parameters:**
 
-                - **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
-                - **item_id** (str|int): Write account link or item_id.
-                - **amount** (float): Amount by which the responder deceived you.
-                - **post_body** (str): You should describe what's happened.
-                - **currency** (str): Currency of Arbitrage.
-                - **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
-                - **tags** (list[str]): Thread tags.
-                - **hide_contacts** (bool): Hide contacts.
-                - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                - **dont_alert_followers** (bool): Don't alert followers.
-                - **forum_notifications** (bool): Get forum notifications.
-                - **email_notifications** (bool): Get email notifications.
+                - responder (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+                - item_id (str|int): Write account link or item_id.
+                - amount (float): Amount by which the responder deceived you.
+                - post_body (str): You should describe what's happened.
+                - currency (str): Currency of Arbitrage.
+                - conversation_screenshot (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+                - tags (list[str]): Thread tags.
+                - hide_contacts (bool): Hide contacts.
+                - allow_ask_hidden_content (bool): Allow ask hidden content.
+                - dont_alert_followers (bool): Don't alert followers.
+                - forum_notifications (bool): Get forum notifications.
+                - email_notifications (bool): Get email notifications.
 
                 **Example:**
 
@@ -785,31 +785,31 @@ class Forum(APIClient):
                 email_notifications: bool = NONE,
             ) -> Response:
                 """
-                POST https://api.zelenka.guru/claims
+                POST https://prod-api.lolz.live/claims
 
                 *Create a Arbitrage.*
 
 
                 **Parameters:**
 
-                - **responder** (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
-                - **amount** (float): Amount by which the responder deceived you.
-                - **receipt** (str): Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
-                - **post_body** (str): You should describe what's happened.
-                - **pay_claim** (str): If you set this parameter to "now" forum will automatically calculate the amount and debit it from your account.
+                - responder (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
+                - amount (float): Amount by which the responder deceived you.
+                - receipt (str): Funds transfer recipient. Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. Must be uploaded to Imgur. Write "no" if you have not paid.
+                - post_body (str): You should describe what's happened.
+                - pay_claim (str): If you set this parameter to "now" forum will automatically calculate the amount and debit it from your account.
                     > For filing claims, it is necessary to make a contribution in the amount of 5% of the amount of damage (but not less than 50 rubles and not more than 5000 rubles). For example, for an amount of damage of 300 rubles, you will need to pay 50 rubles, for 2,000 and 10,000 rubles - 100 and 500 rubles, respectively).
-                - **conversation_screenshot** (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
-                - **responder_data** (str): Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
-                - **currency** (str): Currency of Arbitrage.
-                - **transfer_type** (str): The transaction took place through a guarantor or there was a transfer to the market with a hold?
-                - **tags** (list[str]): Thread tags.
-                - **hide_contacts** (bool): Hide contacts.
-                - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-                - **comment_ignore_group** (bool): Allow commenting if user can't post in thread.
-                - **dont_alert_followers** (bool): Don't alert followers.
-                - **reply_group** (int): Allow to reply only users with chosen or higher group.
-                - **forum_notifications** (bool): Get forum notifications.
-                - **email_notifications** (bool): Get email notifications.
+                - conversation_screenshot (str): Screenshot showing the respondent's Telegram login. If the correspondence was conducted in Telegram, upload screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot must be uploaded to Imgur. If the correspondence was conducted elsewhere, write "no".
+                - responder_data (str): Contacts and wallets of the responder. Specify the known data about the responder (Skype, Vkontakte, Qiwi, WebMoney, etc.), if any.
+                - currency (str): Currency of Arbitrage.
+                - transfer_type (str): The transaction took place through a guarantor or there was a transfer to the market with a hold?
+                - tags (list[str]): Thread tags.
+                - hide_contacts (bool): Hide contacts.
+                - allow_ask_hidden_content (bool): Allow ask hidden content.
+                - comment_ignore_group (bool): Allow commenting if user can't post in thread.
+                - dont_alert_followers (bool): Don't alert followers.
+                - reply_group (int): Allow to reply only users with chosen or higher group.
+                - forum_notifications (bool): Get forum notifications.
+                - email_notifications (bool): Get email notifications.
 
                 **Example:**
 
@@ -848,13 +848,13 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def get(self, thread_id: int) -> Response:
                 """
-                GET https://api.zelenka.guru/threads/{thread_id}/poll
+                GET https://prod-api.lolz.live/threads/{thread_id}/poll
 
                 *Get poll.*
 
                 **Parameters:**
 
-                - **thread_id** (int): Thread ID.
+                - thread_id (int): Thread ID.
 
                 **Example:**
 
@@ -869,14 +869,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def vote(self, thread_id: int, option_ids: Union[builtins.list[int], int]) -> Response:
                 """
-                POST https://api.zelenka.guru/threads/{thread_id}/poll/votes
+                POST https://prod-api.lolz.live/threads/{thread_id}/poll/votes
 
                 *Vote in poll.*
 
                 **Parameters:**
 
-                - **thread_id** (int): Thread ID.
-                - **option_ids** (list[int] | int): Option IDs.
+                - thread_id (int): Thread ID.
+                - option_ids (list[int] | int): Option IDs.
 
                 **Example:**
 
@@ -900,15 +900,15 @@ class Forum(APIClient):
                               limit: int = NONE,
                               data_limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/threads/new
+            GET https://prod-api.lolz.live/threads/new
 
             *Get unread threads.*
 
             **Parameters:**
 
-            - **forum_id** (int): Forum ID.
-            - **limit** (int): Limit of threads.
-            - **data_limit** (int): Limit of data.
+            - forum_id (int): Forum ID.
+            - limit (int): Limit of threads.
+            - data_limit (int): Limit of data.
 
             **Example:**
 
@@ -927,16 +927,16 @@ class Forum(APIClient):
                               limit: int = NONE,
                               data_limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/threads/recent
+            GET https://prod-api.lolz.live/threads/recent
 
             *Get recent threads.*
 
             **Parameters:**
 
-            - **days** (int): Maximum number of days to search for threads.
-            - **forum_id** (int): Forum ID.
-            - **limit** (int): Limit of threads.
-            - **data_limit** (int): Limit of data.
+            - days (int): Maximum number of days to search for threads.
+            - forum_id (int): Forum ID.
+            - limit (int): Limit of threads.
+            - data_limit (int): Limit of data.
 
             **Example:**
 
@@ -959,20 +959,20 @@ class Forum(APIClient):
                        sticky: bool = NONE,
                        order: Constants.Forum.ThreadOrder._Literal = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/threads
+            GET https://prod-api.lolz.live/threads
 
             *Get threads.*
 
             **Parameters:**
 
-            - **forum_id** (int): Forum ID.
-            - **user_id** (int): Filter to get only threads created by the specified user.
-            - **prefix_id** (int): Filter to get only threads with the specified prefix.
-            - **tag_id** (int): Filter to get only threads with the specified tag.
-            - **page** (int): Page.
-            - **limit** (int): Limit of threads.
-            - **order** (str): Order of threads.
-            - **sticky** (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
+            - forum_id (int): Forum ID.
+            - user_id (int): Filter to get only threads created by the specified user.
+            - prefix_id (int): Filter to get only threads with the specified prefix.
+            - tag_id (int): Filter to get only threads with the specified tag.
+            - page (int): Page.
+            - limit (int): Limit of threads.
+            - order (str): Order of threads.
+            - sticky (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
 
             **Example:**
             """
@@ -992,13 +992,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, thread_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/threads/{thread_id}
+            GET https://prod-api.lolz.live/threads/{thread_id}
 
             *Get thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
+            - thread_id (int): Thread ID.
 
             **Example:**
 
@@ -1025,25 +1025,25 @@ class Forum(APIClient):
                          forum_notifications: bool = NONE,
                          email_notifications: bool = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/threads
+            POST https://prod-api.lolz.live/threads
 
             *Create a thread.*
 
             **Parameters:**
 
-            - **forum_id** (int): Forum ID.
-            - **post_body** (str): Content of the new thread.
-            - **title** (str): Title.
-            - **title_en** (str): Title in English.
-            - **prefix_ids** (list[int]): Prefix IDs.
-            - **tags** (list[int]): Tags.
-            - **reply_group** (int): Reply group.
-            - **hide_contacts** (bool): Hide contacts.
-            - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-            - **comment_ignore_group** (bool): Comment ignore group.
-            - **dont_alert_followers** (bool): Don't alert followers.
-            - **forum_notifications** (bool): Get forum notifications.
-            - **email_notifications** (bool): Get email notifications.
+            - forum_id (int): Forum ID.
+            - post_body (str): Content of the new thread.
+            - title (str): Title.
+            - title_en (str): Title in English.
+            - prefix_ids (list[int]): Prefix IDs.
+            - tags (list[int]): Tags.
+            - reply_group (int): Reply group.
+            - hide_contacts (bool): Hide contacts.
+            - allow_ask_hidden_content (bool): Allow ask hidden content.
+            - comment_ignore_group (bool): Comment ignore group.
+            - dont_alert_followers (bool): Don't alert followers.
+            - forum_notifications (bool): Get forum notifications.
+            - email_notifications (bool): Get email notifications.
 
             **Example:**
 
@@ -1096,23 +1096,23 @@ class Forum(APIClient):
                        reply_group: Constants.Forum.ReplyGroups._Literal = 2,
                        comment_ignore_group: bool = NONE) -> Response:
             """
-            PUT https://api.zelenka.guru/threads/{thread_id}
+            PUT https://prod-api.lolz.live/threads/{thread_id}
 
             *Edit a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
-            - **title** (str): Title.
-            - **title_en** (str): Title in English.
-            - **post_body** (str): Post body.
-            - **prefix_ids** (list[int]): Prefix IDs.
-            - **tags** (list[int]): Tags.
-            - **discussion_state** (bool): Discussion state.
-            - **hide_contacts** (bool): Hide contacts.
-            - **allow_ask_hidden_content** (bool): Allow ask hidden content.
-            - **reply_group** (int): Reply group.
-            - **comment_ignore_group** (bool): Comment ignore group.
+            - thread_id (int): Thread ID.
+            - title (str): Title.
+            - title_en (str): Title in English.
+            - post_body (str): Post body.
+            - prefix_ids (list[int]): Prefix IDs.
+            - tags (list[int]): Tags.
+            - discussion_state (bool): Discussion state.
+            - hide_contacts (bool): Hide contacts.
+            - allow_ask_hidden_content (bool): Allow ask hidden content.
+            - reply_group (int): Reply group.
+            - comment_ignore_group (bool): Comment ignore group.
 
             **Example:**
 
@@ -1149,14 +1149,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def delete(self, thread_id: int, reason: str = NONE) -> Response:
             """
-            DELETE https://api.zelenka.guru/threads/{thread_id}
+            DELETE https://prod-api.lolz.live/threads/{thread_id}
 
             *Delete a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
-            - **reason** (str): Reason.
+            - thread_id (int): Thread ID.
+            - reason (str): Reason.
 
             **Example:**
 
@@ -1172,13 +1172,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def bump(self, thread_id: int) -> Response:
             """
-            POST https://api.zelenka.guru/threads/{thread_id}/bump
+            POST https://prod-api.lolz.live/threads/{thread_id}/bump
 
             *Bump a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
+            - thread_id (int): Thread ID.
 
             **Example:**
 
@@ -1193,18 +1193,18 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def move(self, thread_id: int, forum_id: int, title: str = NONE, title_en: str = NONE, prefix_ids: builtins.list[int] = NONE, send_alert: bool = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/threads/{thread_id}/move
+            POST https://prod-api.lolz.live/threads/{thread_id}/move
 
             *Move a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
-            - **forum_id** (int): Target forum ID.
-            - **title** (str): Title.
-            - **title_en** (str): Title in English.
-            - **prefix_ids** (list[int]): Prefix IDs.
-            - **send_alert** (bool): Send alert.
+            - thread_id (int): Thread ID.
+            - forum_id (int): Target forum ID.
+            - title (str): Title.
+            - title_en (str): Title in English.
+            - prefix_ids (list[int]): Prefix IDs.
+            - send_alert (bool): Send alert.
 
             **Example:**
 
@@ -1227,13 +1227,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def followers(self, thread_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/threads/{thread_id}/followers
+            GET https://prod-api.lolz.live/threads/{thread_id}/followers
 
             *Get followers of a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
+            - thread_id (int): Thread ID.
 
             **Example:**
 
@@ -1248,14 +1248,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def followed(self, thread_id: int, total: bool = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/threads/{thread_id}/followed
+            GET https://prod-api.lolz.live/threads/{thread_id}/followed
 
             *Get followed users of a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
-            - **total** (bool): Total.
+            - thread_id (int): Thread ID.
+            - total (bool): Total.
 
             **Example:**
 
@@ -1271,14 +1271,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def follow(self, thread_id: int, email: bool = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/threads/{thread_id}/followers
+            POST https://prod-api.lolz.live/threads/{thread_id}/followers
 
             *Follow a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
-            - **email** (bool): Email.
+            - thread_id (int): Thread ID.
+            - email (bool): Email.
 
             **Example:**
 
@@ -1294,13 +1294,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def unfollow(self, thread_id: int) -> Response:
             """
-            DELETE https://api.zelenka.guru/threads/{thread_id}/followers
+            DELETE https://prod-api.lolz.live/threads/{thread_id}/followers
 
             *Unfollow a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
+            - thread_id (int): Thread ID.
 
             **Example:**
 
@@ -1315,13 +1315,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def navigation(self, thread_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/threads/{thread_id}/navigation
+            GET https://prod-api.lolz.live/threads/{thread_id}/navigation
 
             *Get navigation of a thread.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
+            - thread_id (int): Thread ID.
 
             **Example:**
 
@@ -1341,15 +1341,15 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def list(self, post_id: int, before_comment: int = NONE, before: int = NONE) -> Response:
                 """
-                GET https://api.zelenka.guru/posts/{post_id}/comments
+                GET https://prod-api.lolz.live/posts/{post_id}/comments
 
                 *Get comments of a post.*
 
                 **Parameters:**
 
-                - **post_id** (int): Post ID.
-                - **before_comment** (int): Parse comments before this comment.
-                - **before** (int): Parse comments before this timestamp.
+                - post_id (int): Post ID.
+                - before_comment (int): Parse comments before this comment.
+                - before (int): Parse comments before this timestamp.
 
                 **Example:**
 
@@ -1365,14 +1365,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def create(self, post_id: int, comment_body: str) -> Response:
                 """
-                POST https://api.zelenka.guru/posts/{post_id}/comments
+                POST https://prod-api.lolz.live/posts/{post_id}/comments
 
                 *Create a comment.*
 
                 **Parameters:**
 
-                - **post_id** (int): Post ID.
-                - **comment_body** (str): Post body.
+                - post_id (int): Post ID.
+                - comment_body (str): Post body.
 
                 **Example:**
 
@@ -1388,14 +1388,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def edit(self, comment_id: int, comment_body: str) -> Response:
                 """
-                PUT https://api.zelenka.guru/posts/comments
+                PUT https://prod-api.lolz.live/posts/comments
 
                 *Edit a comment.*
 
                 **Parameters:**
 
-                - **comment_id** (int): Comment ID.
-                - **comment_body** (str): Comment body.
+                - comment_id (int): Comment ID.
+                - comment_body (str): Comment body.
 
                 **Example:**
 
@@ -1411,13 +1411,13 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def delete(self, post_comment_id: int) -> Response:
                 """
-                DELETE https://api.zelenka.guru/posts/comments
+                DELETE https://prod-api.lolz.live/posts/comments
 
                 *Delete a post comment.*
 
                 **Parameters:**
 
-                - **post_comment_id** (int): Id of post comment to delete.
+                - post_comment_id (int): Id of post comment to delete.
 
                 **Example:**
 
@@ -1437,17 +1437,17 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self, thread_id: int = NONE, post_id: int = NONE, page: int = NONE, limit: int = NONE, order: Constants.Forum.PostOrder._Literal = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/posts
+            GET https://prod-api.lolz.live/posts
 
             *Get posts.*
 
             **Parameters:**
 
-            - **thread_id** (int): Thread ID.
-            - **post_id** (int): Parse posts from page of this post.
-            - **page** (int): Page.
-            - **limit** (int): Posts limit per page.
-            - **order** (str): Posts order.
+            - thread_id (int): Thread ID.
+            - post_id (int): Parse posts from page of this post.
+            - page (int): Page.
+            - limit (int): Posts limit per page.
+            - order (str): Posts order.
 
             **Example:**
 
@@ -1463,13 +1463,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, post_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/posts/{post_id}
+            GET https://prod-api.lolz.live/posts/{post_id}
 
             *Get a post.*
 
             **Parameters:**
 
-            - **post_id** (int): Post ID.
+            - post_id (int): Post ID.
 
             **Example:**
 
@@ -1484,15 +1484,15 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def create(self, post_body: str, thread_id: int = NONE, quote_post_id: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/posts
+            POST https://prod-api.lolz.live/posts
 
             *Create a post.*
 
             **Parameters:**
 
-            - **post_body** (str): Post body.
-            - **thread_id** (int): Thread ID.
-            - **quote_post_id** (int): Quote post ID.
+            - post_body (str): Post body.
+            - thread_id (int): Thread ID.
+            - quote_post_id (int): Quote post ID.
 
             **Example:**
 
@@ -1508,14 +1508,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def edit(self, post_id: int, post_body: str = NONE) -> Response:
             """
-            PUT https://api.zelenka.guru/posts/{post_id}
+            PUT https://prod-api.lolz.live/posts/{post_id}
 
             *Edit a post.*
 
             **Parameters:**
 
-            - **post_id** (int): Post ID.
-            - **post_body** (str): Post body.
+            - post_id (int): Post ID.
+            - post_body (str): Post body.
 
             **Example:**
 
@@ -1531,14 +1531,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def delete(self, post_id: int, reason: str = NONE) -> Response:
             """
-            DELETE https://api.zelenka.guru/posts/{post_id}
+            DELETE https://prod-api.lolz.live/posts/{post_id}
 
             *Delete a post.*
 
             **Parameters:**
 
-            - **post_id** (int): Post ID.
-            - **reason** (str): Reason.
+            - post_id (int): Post ID.
+            - reason (str): Reason.
 
             **Example:**
 
@@ -1554,15 +1554,15 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def likes(self, post_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/posts/{post_id}/likes
+            GET https://prod-api.lolz.live/posts/{post_id}/likes
 
             *Get likes of a post.*
 
             **Parameters:**
 
-            - **post_id** (int): Post ID.
-            - **page** (int): Page.
-            - **limit** (int): Likes limit per page.
+            - post_id (int): Post ID.
+            - page (int): Page.
+            - limit (int): Likes limit per page.
 
             **Example:**
 
@@ -1578,13 +1578,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def like(self, post_id: int) -> Response:
             """
-            POST https://api.zelenka.guru/posts/{post_id}/likes
+            POST https://prod-api.lolz.live/posts/{post_id}/likes
 
             *Like a post.*
 
             **Parameters:**
 
-            - **post_id** (int): Post ID.
+            - post_id (int): Post ID.
 
             **Example:**
 
@@ -1599,13 +1599,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def unlike(self, post_id: int) -> Response:
             """
-            DELETE https://api.zelenka.guru/posts/{post_id}/likes
+            DELETE https://prod-api.lolz.live/posts/{post_id}/likes
 
             *Unlike a post.*
 
             **Parameters:**
 
-            - **post_id** (int): Post ID.
+            - post_id (int): Post ID.
 
             **Example:**
 
@@ -1620,14 +1620,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def report(self, post_id: int, reason: str = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/posts/{post_id}/report
+            POST https://prod-api.lolz.live/posts/{post_id}/report
 
             *Report a post.*
 
             **Parameters:**
 
-            - **post_id** (int): Post ID.
-            - **reason** (str): Reason.
+            - post_id (int): Post ID.
+            - reason (str): Reason.
 
             **Example:**
 
@@ -1648,17 +1648,17 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
-                POST https://api.zelenka.guru/users/me/avatar
+                POST https://prod-api.lolz.live/users/me/avatar
 
                 *Upload an avatar.*
                 > You can't create batch job for this method
 
                 **Parameters:**
 
-                - **file** (bytes): Avatar bytes.
-                - **x** (int): X.
-                - **y** (int): Y.
-                - **size** (int): Selection size.
+                - file (bytes): Avatar bytes.
+                - x (int): X.
+                - y (int): Y.
+                - size (int): Selection size.
                   > Minimum value - 16.
 
                 **Example:**
@@ -1677,7 +1677,7 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def delete(self) -> Response:
                 """
-                DELETE https://api.zelenka.guru/users/me/avatar
+                DELETE https://prod-api.lolz.live/users/me/avatar
 
                 **Delete an avatar.**
 
@@ -1694,15 +1694,15 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
-                POST https://api.zelenka.guru/users/me/avatar/crop
+                POST https://prod-api.lolz.live/users/me/avatar/crop
 
                 *Crop an avatar.*
 
                 **Parameters:**
 
-                - **x** (int): X.
-                - **y** (int): Y.
-                - **size** (int): Selection size.
+                - x (int): X.
+                - y (int): Y.
+                - size (int): Selection size.
                   > Minimum value - 16.
 
                 **Example:**
@@ -1723,17 +1723,17 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
-                POST https://api.zelenka.guru/users/me/background
+                POST https://prod-api.lolz.live/users/me/background
 
                 *Upload a background.*
                 > You can't create batch job for this method
 
                 **Parameters:**
 
-                - **file** (bytes): Background bytes.
-                - **x** (int): X.
-                - **y** (int): Y.
-                - **size** (int): Selection size.
+                - file (bytes): Background bytes.
+                - x (int): X.
+                - y (int): Y.
+                - size (int): Selection size.
                   > Minimum value - 100.
 
                 **Example:**
@@ -1752,7 +1752,7 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def delete(self) -> Response:
                 """
-                DELETE https://api.zelenka.guru/users/me/background
+                DELETE https://prod-api.lolz.live/users/me/background
 
                 **Delete a background.**
 
@@ -1769,15 +1769,15 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
-                POST https://api.zelenka.guru/users/me/background/crop
+                POST https://prod-api.lolz.live/users/me/background/crop
 
                 *Crop a background.*
 
                 **Parameters:**
 
-                - **x** (int): X.
-                - **y** (int): Y.
-                - **size** (int): Selection size.
+                - x (int): X.
+                - y (int): Y.
+                - size (int): Selection size.
                   > Minimum value - 100.
 
                 **Example:**
@@ -1799,15 +1799,15 @@ class Forum(APIClient):
                 @AutoDelay.WrapperSet(0.5)
                 async def list(self, post_id: int, before: int = NONE, limit: int = NONE) -> Response:
                     """
-                    GET https://api.zelenka.guru/profile-posts/{post_id}/comments
+                    GET https://prod-api.lolz.live/profile-posts/{post_id}/comments
 
                     *Get comments of a profile post.*
 
                     **Parameters:**
 
-                    - **post_id** (int): Profile post ID.
-                    - **before** (int): Parse comments before this timestamp.
-                    - **limit** (int): Comments limit per page.
+                    - post_id (int): Profile post ID.
+                    - before (int): Parse comments before this timestamp.
+                    - limit (int): Comments limit per page.
 
                     **Example:**
 
@@ -1823,14 +1823,14 @@ class Forum(APIClient):
                 @AutoDelay.WrapperSet(0.5)
                 async def get(self, post_id: int, comment_id: int) -> Response:
                     """
-                    GET https://api.zelenka.guru/profile-posts/{post_id}/comments/{comment_id}
+                    GET https://prod-api.lolz.live/profile-posts/{post_id}/comments/{comment_id}
 
                     *Get a comment of a profile post.*
 
                     **Parameters:**
 
-                    - **post_id** (int): Profile post ID.
-                    - **comment_id** (int): Comment ID.
+                    - post_id (int): Profile post ID.
+                    - comment_id (int): Comment ID.
 
                     **Example:**
 
@@ -1845,14 +1845,14 @@ class Forum(APIClient):
                 @AutoDelay.WrapperSet(0.5)
                 async def create(self, post_id: int, post_body: str) -> Response:
                     """
-                    POST https://api.zelenka.guru/profile-posts/{post_id}/comments
+                    POST https://prod-api.lolz.live/profile-posts/{post_id}/comments
 
                     *Create a comment of a profile post.*
 
                     **Parameters:**
 
-                    - **post_id** (int): Profile post ID.
-                    - **post_body** (str): Comment body.
+                    - post_id (int): Profile post ID.
+                    - post_body (str): Comment body.
 
                     **Example:**
 
@@ -1868,14 +1868,14 @@ class Forum(APIClient):
                 @AutoDelay.WrapperSet(0.5)
                 async def edit(self, comment_id: int, comment_body: str) -> Response:
                     """
-                    PUT https://api.zelenka.guru/profile-posts/comments
+                    PUT https://prod-api.lolz.live/profile-posts/comments
 
                     *Edit a profile post comment.*
 
                     **Parameters:**
 
-                    - **comment_id** (int): Id of profile post comment.
-                    - **comment_body** (str): New content for the profile post comment.
+                    - comment_id (int): Id of profile post comment.
+                    - comment_body (str): New content for the profile post comment.
 
                     **Example:**
 
@@ -1892,13 +1892,13 @@ class Forum(APIClient):
                 @AutoDelay.WrapperSet(0.5)
                 async def delete(self, comment_id: int) -> Response:
                     """
-                    DELETE https://api.zelenka.guru/profile-posts/comments
+                    DELETE https://prod-api.lolz.live/profile-posts/comments
 
                     *Delete a profile post comment.*
 
                     **Parameters:**
 
-                    - **comment_id** (int): Id of profile post comment.
+                    - comment_id (int): Id of profile post comment.
 
                     **Example:**
 
@@ -1918,15 +1918,15 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def list(self, user_id: Union[int, str], page: int = NONE, limit: int = NONE) -> Response:
                 """
-                GET https://api.zelenka.guru/users/{user_id}/profile-posts
+                GET https://prod-api.lolz.live/users/{user_id}/profile-posts
 
                 *Get profile posts of a user.*
 
                 **Parameters:**
 
-                - **user_id** (int): User ID.
-                - **page** (int): Page.
-                - **limit** (int): Posts limit per page.
+                - user_id (int): User ID.
+                - page (int): Page.
+                - limit (int): Posts limit per page.
 
                 **Example:**
 
@@ -1942,13 +1942,13 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def get(self, post_id: int) -> Response:
                 """
-                GET https://api.zelenka.guru/profile-posts/{post_id}
+                GET https://prod-api.lolz.live/profile-posts/{post_id}
 
                 *Get a profile post.*
 
                 **Parameters:**
 
-                - **post_id** (int): Profile post ID.
+                - post_id (int): Profile post ID.
 
                 **Example:**
 
@@ -1963,14 +1963,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def create(self, user_id: Union[int, str], post_body: str) -> Response:
                 """
-                POST https://api.zelenka.guru/users/{user_id}/profile-posts
+                POST https://prod-api.lolz.live/users/{user_id}/profile-posts
 
                 *Create a profile post.*
 
                 **Parameters:**
 
-                - **user_id** (int): User ID.
-                - **post_body** (str): Post body.
+                - user_id (int): User ID.
+                - post_body (str): Post body.
 
                 **Example:**
 
@@ -1986,14 +1986,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def edit(self, post_id: int, post_body: str = NONE) -> Response:
                 """
-                PUT https://api.zelenka.guru/profile-posts/{post_id}
+                PUT https://prod-api.lolz.live/profile-posts/{post_id}
 
                 *Edit a profile post.*
 
                 **Parameters:**
 
-                - **post_id** (int): Profile post ID.
-                - **post_body** (str): Post body.
+                - post_id (int): Profile post ID.
+                - post_body (str): Post body.
 
                 **Example:**
 
@@ -2009,14 +2009,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def delete(self, post_id: int, reason: str = NONE) -> Response:
                 """
-                DELETE https://api.zelenka.guru/profile-posts/{post_id}
+                DELETE https://prod-api.lolz.live/profile-posts/{post_id}
 
                 **Delete a profile post.**
 
                 **Parameters:**
 
-                - **post_id** (int): Profile post ID.
-                - **reason** (str): Delete reason.
+                - post_id (int): Profile post ID.
+                - reason (str): Delete reason.
 
                 **Example:**
 
@@ -2032,13 +2032,13 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def likes(self, post_id: int) -> Response:
                 """
-                GET https://api.zelenka.guru/profile-posts/{post_id}/likes
+                GET https://prod-api.lolz.live/profile-posts/{post_id}/likes
 
                 *Get likes of a profile post.*
 
                 **Parameters:**
 
-                - **post_id** (int): Profile post ID.
+                - post_id (int): Profile post ID.
 
                 **Example:**
 
@@ -2053,7 +2053,7 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def like(self, post_id: int) -> Response:
                 """
-                POST https://api.zelenka.guru/profile-posts/{post_id}/likes
+                POST https://prod-api.lolz.live/profile-posts/{post_id}/likes
 
                 **Like a profile post.**
 
@@ -2070,7 +2070,7 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def unlike(self, post_id: int) -> Response:
                 """
-                DELETE https://api.zelenka.guru/profile-posts/{post_id}/likes
+                DELETE https://prod-api.lolz.live/profile-posts/{post_id}/likes
 
                 **Unlike a profile post.**
 
@@ -2093,14 +2093,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/users
+            GET https://prod-api.lolz.live/users
 
             *Get users.*
 
             **Parameters:**
 
-            - **page** (int): Page.
-            - **limit** (int): Users limit per page.
+            - page (int): Page.
+            - limit (int): Users limit per page.
 
             **Example:**
 
@@ -2116,14 +2116,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def search(self, username: str = NONE, fields: dict[str, str] = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/users/find
+            GET https://prod-api.lolz.live/users/find
 
             *Search users.*
 
             **Parameters:**
 
-            - **username** (str): Username of the user.
-            - **fields** (dict[str, str]): Custom fields.
+            - username (str): Username of the user.
+            - fields (dict[str, str]): Custom fields.
 
             **Example:**
 
@@ -2142,13 +2142,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, user_id: Union[int, str] = "me") -> Response:
             """
-            GET https://api.zelenka.guru/users/{user_id}
+            GET https://prod-api.lolz.live/users/{user_id}
 
             *Get a user.*
 
             **Parameters:**
 
-            - **user_id** (int): User ID.
+            - user_id (int): User ID.
 
             **Example:**
 
@@ -2163,16 +2163,16 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def edit(self, title: str = NONE, display_group_id: Constants.Forum.User.GroupID._Literal = NONE, dob: tuple[int, int, int] = NONE, fields: dict[str, str] = NONE) -> Response:
             """
-            PUT https://api.zelenka.guru/users/me
+            PUT https://prod-api.lolz.live/users/me
 
             *Edit a user.*
 
             **Parameters:**
 
-            - **title** (str): Title.
-            - **display_group_id** (int): Display group ID.
-            - **dob** (tuple[int, int, int]): Date of birth.
-            - **fields** (dict[str, str]): Custom fields.
+            - title (str): Title.
+            - display_group_id (int): Display group ID.
+            - dob (tuple[int, int, int]): Date of birth.
+            - fields (dict[str, str]): Custom fields.
 
             **Example:**
 
@@ -2192,7 +2192,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def fields(self) -> Response:
             """
-            GET https://api.zelenka.guru/users/fields
+            GET https://prod-api.lolz.live/users/fields
 
             *Get your fields.*
 
@@ -2209,7 +2209,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def trophies(self, user_id: Union[int, str] = "me") -> Response:
             """
-            GET https://api.zelenka.guru/users/{user_id}/trophies
+            GET https://prod-api.lolz.live/users/{user_id}/trophies
 
             *Get user trophies.*
 
@@ -2226,16 +2226,16 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def followers(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/users/{user_id}/followers
+            GET https://prod-api.lolz.live/users/{user_id}/followers
 
             *Get followers of a user.*
 
             **Parameters:**
 
-            - **user_id** (int): User ID.
-            - **order** (str): Order.
-            - **page** (int): Page.
-            - **limit** (int): Followers limit per page.
+            - user_id (int): User ID.
+            - order (str): Order.
+            - page (int): Page.
+            - limit (int): Followers limit per page.
 
             **Example:**
 
@@ -2251,16 +2251,16 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def followed(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/users/{user_id}/followings
+            GET https://prod-api.lolz.live/users/{user_id}/followings
 
             *Get followed users of a user.*
 
             **Parameters:**
 
-            - **user_id** (int): User ID.
-            - **order** (str): Order.
-            - **page** (int): Page.
-            - **limit** (int): Followed users limit per page.
+            - user_id (int): User ID.
+            - order (str): Order.
+            - page (int): Page.
+            - limit (int): Followed users limit per page.
 
             **Example:**
 
@@ -2276,7 +2276,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def follow(self, user_id: Union[int, str]) -> Response:
             """
-            POST https://api.zelenka.guru/users/{user_id}/followers
+            POST https://prod-api.lolz.live/users/{user_id}/followers
 
             **Follow a user.**
 
@@ -2293,7 +2293,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def unfollow(self, user_id: Union[int, str]) -> Response:
             """
-            DELETE https://api.zelenka.guru/users/{user_id}/followers
+            DELETE https://prod-api.lolz.live/users/{user_id}/followers
 
             **Unfollow a user.**
 
@@ -2310,7 +2310,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def ignored(self) -> Response:
             """
-            GET https://api.zelenka.guru/users/ignored
+            GET https://prod-api.lolz.live/users/ignored
 
             *Get ignored users.*
 
@@ -2327,7 +2327,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def ignore(self, user_id: Union[int, str]) -> Response:
             """
-            POST https://api.zelenka.guru/users/{user_id}/ignore
+            POST https://prod-api.lolz.live/users/{user_id}/ignore
 
             **Ignore a user.**
 
@@ -2344,7 +2344,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def unignore(self, user_id: Union[int, str]) -> Response:
             """
-            DELETE https://api.zelenka.guru/users/{user_id}/ignore
+            DELETE https://prod-api.lolz.live/users/{user_id}/ignore
 
             **Unignore a user.**
 
@@ -2361,7 +2361,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def content(self, user_id: Union[int, str] = "me", page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/users/{user_id}/timeline
+            GET https://prod-api.lolz.live/users/{user_id}/timeline
 
             *Get timeline of a user.*
 
@@ -2390,29 +2390,31 @@ class Forum(APIClient):
                            before: int = NONE,
                            after: int = NONE) -> Response:
                 """
-                GET https://api.zelenka.guru/conversation-messages
+                GET https://prod-api.lolz.live/conversations/messages
 
                 *Get messages of a conversation.*
                 """
-                params = {"conversation_id": conversation_id,
-                          "page": page,
-                          "limit": limit,
-                          "order": order,
-                          "before": before,
-                          "after": after}
-                return await self.core.request("GET", "/conversation-messages", params=params)
+                params = {
+                    "conversation_id": conversation_id,
+                    "page": page,
+                    "limit": limit,
+                    "order": order,
+                    "before": before,
+                    "after": after
+                }
+                return await self.core.request("GET", "/conversations/messages", params=params)
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.5)
             async def get(self, message_id: int) -> Response:
                 """
-                GET https://api.zelenka.guru/conversation-messages/{message_id}
+                GET https://prod-api.lolz.live/conversations/messages/{message_id}
 
                 *Get a message.*
 
                 **Parameters:**
 
-                - **message_id** (int): Message ID.
+                - message_id (int): Message ID.
 
                 **Example:**
 
@@ -2421,20 +2423,20 @@ class Forum(APIClient):
                 print(response.json())
                 ```
                 """
-                return await self.core.request("GET", f"/conversation-messages/{message_id}")
+                return await self.core.request("GET", f"/conversations/messages/{message_id}")
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.5)
             async def create(self, conversation_id: int, message: str) -> Response:
                 """
-                POST https://api.zelenka.guru/conversation-messages
+                POST https://prod-api.lolz.live/conversations/messages
 
                 **Create a message.**
 
                 **Parameters:**
 
-                - **conversation_id** (int): Conversation ID.
-                - **message** (str): Message.
+                - conversation_id (int): Conversation ID.
+                - message (str): Message.
 
                 **Example:**
 
@@ -2444,47 +2446,139 @@ class Forum(APIClient):
                 ```
                 """
                 json = {"message_body": message, "conversation_id": conversation_id}
-                return await self.core.request("POST", "/conversation-messages", json=json)
+                return await self.core.request("POST", "/conversations/messages", json=json)
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.5)
-            async def edit(self, message_id: int, message: str) -> Response:
+            async def edit(self, conversation_id: int, message_id: int, message: str) -> Response:
                 """
-                PUT https://api.zelenka.guru/conversation-messages/{message_id}
+                PUT https://prod-api.lolz.live/conversations/messages/{message_id}
 
                 **Edit a message.**
 
                 **Parameters:**
 
-                - **message_id** (int): Message ID.
-                - **message** (str): Message.
+                - conversation_id (int): Conversation ID.
+                - message_id (int): Message ID.
+                - message (str): Message.
 
                 **Example:**
 
                 ```python
-                response = forum.conversations.messages.edit(message_id=123456, message="Hello, world!")
+                response = forum.conversations.messages.edit(conversation_id=123456, message_id=1234567890, message="Hello, world!")
                 print(response.json())
                 ```
                 """
-                json = {"message_body": message}
-                return await self.core.request("PUT", f"/conversation-messages/{message_id}", json=json)
+                json = {"conversation_id": conversation_id, "message_body": message}
+                return await self.core.request("PUT", f"/conversations/messages/{message_id}", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def stick(self, conversation_id: int, message_id: int) -> Response:
+                """
+                POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+
+                **Stick a message in a conversation.**
+
+                **Parameters:**
+
+                - conversation_id (int): Conversation ID.
+                - message_id (int): Message ID.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.stick(conversation_id=123456, message_id=789012)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("POST", f"/conversations/{conversation_id}/messages/{message_id}/stick")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def unstick(self, conversation_id: int, message_id: int) -> Response:
+                """
+                DELETE https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+
+                **Unstick a message in a conversation.**
+
+                **Parameters:**
+
+                - conversation_id (int): Conversation ID.
+                - message_id (int): Message ID.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.unstick(conversation_id=123456, message_id=789012)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("DELETE", f"/conversations/{conversation_id}/messages/{message_id}/stick")
+
+        class __Alerts:
+            def __init__(self, core: "Forum"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def enable(self, conversation_id: int) -> Response:
+                """
+                POST https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+
+                **Enable alerts for a conversation.**
+
+                **Parameters:**
+
+                - conversation_id (int): Conversation ID.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.alerts.enable(conversation_id=123456)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("POST", f"/conversations/{conversation_id}/alerts")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.5)
+            async def disable(self, conversation_id: int) -> Response:
+                """
+                DELETE https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+
+                **Disable alerts for a conversation.**
+
+                **Parameters:**
+
+                - conversation_id (int): Conversation ID.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.alerts.disable(conversation_id=123456)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("DELETE", f"/conversations/{conversation_id}/alerts")
 
         def __init__(self, core: "Forum"):
             self.core = core
             self.messages = self.__Messages(self.core)
+            self.alerts = self.__Alerts(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/conversations
+            GET https://prod-api.lolz.live/conversations
 
             *Get conversations.*
 
             **Parameters:**
 
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2500,13 +2594,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, conversation_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/conversations/{conversation_id}
+            GET https://prod-api.lolz.live/conversations/{conversation_id}
 
             *Get a conversation.*
 
             **Parameters:**
 
-            - **conversation_id** (int): Conversation ID.
+            - conversation_id (int): Conversation ID.
 
             **Example:**
 
@@ -2521,14 +2615,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def create(self, user_id: int, message: str) -> Response:
             """
-            POST https://api.zelenka.guru/conversations
+            POST https://prod-api.lolz.live/conversations
 
             **Create a conversation.**
 
             **Parameters:**
 
-            - **user_id** (int): User ID.
-            - **message** (str): Message.
+            - user_id (int): User ID.
+            - message (str): Message.
 
             **Example:**
 
@@ -2551,18 +2645,18 @@ class Forum(APIClient):
                                allow_edit_messages: bool = NONE,
                                ) -> Response:
             """
-            POST https://api.zelenka.guru/conversations
+            POST https://prod-api.lolz.live/conversations
 
             **Create a group conversation.**
 
             **Parameters:**
 
-            - **usernames** (list[str]): Usernames.
-            - **message** (str): Message.
-            - **title** (str): Title.
-            - **open_invite** (bool): Open invite.
-            - **conversation_locked** (bool): Conversation locked.
-            - **allow_edit_messages** (bool): Allow edit messages.
+            - usernames (list[str]): Usernames.
+            - message (str): Message.
+            - title (str): Title.
+            - open_invite (bool): Open invite.
+            - conversation_locked (bool): Conversation locked.
+            - allow_edit_messages (bool): Allow edit messages.
 
             **Example:**
 
@@ -2593,14 +2687,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def leave(self, conversation_id: int, leave_type: Literal["delete", "delete_ignore"] = "delete") -> Response:
             """
-            DELETE https://api.zelenka.guru/conversations/{conversation_id}
+            DELETE https://prod-api.lolz.live/conversations/{conversation_id}
 
             **Leave from a conversation.**
 
             **Parameters:**
 
-            - **conversation_id** (int): Conversation ID.
-            - **leave_type** (str): Leave type.
+            - conversation_id (int): Conversation ID.
+            - leave_type (str): Leave type.
 
             **Example:**
 
@@ -2612,6 +2706,65 @@ class Forum(APIClient):
             params = {"leave_type": leave_type}
             return await self.core.request("DELETE", f"/conversations/{conversation_id}", params=params)
 
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
+        async def star(self, conversation_id: int) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/{conversation_id}/star
+
+            **Star a conversation.**
+
+            **Parameters:**
+
+            - conversation_id (int): Conversation ID.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.star(conversation_id=123456)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("POST", f"/conversations/{conversation_id}/star")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
+        async def unstar(self, conversation_id: int) -> Response:
+            """
+            DELETE https://prod-api.lolz.live/conversations/{conversation_id}/star
+
+            **Unstar a conversation.**
+
+            **Parameters:**
+
+            - conversation_id (int): Conversation ID.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.unstar(conversation_id=123456)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("DELETE", f"/conversations/{conversation_id}/star")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.5)
+        async def read_all(self) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/read-all
+
+            **Mark all conversations as read.**
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.read_all()
+            print(response.json())
+            ```
+            """
+            return await self.core.request("POST", "/conversations/read-all")
+
     class __Notifications:
         def __init__(self, core: "Forum"):
             self.core = core
@@ -2620,7 +2773,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self) -> Response:
             """
-            GET https://api.zelenka.guru/notifications
+            GET https://prod-api.lolz.live/notifications
 
             *Get notifications.*
 
@@ -2637,13 +2790,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, notification_id: int) -> Response:
             """
-            GET https://api.zelenka.guru/notifications/{notification_id}
+            GET https://prod-api.lolz.live/notifications/{notification_id}
 
             *Get a notification.*
 
             **Parameters:**
 
-            - **notification_id** (int): Notification ID.
+            - notification_id (int): Notification ID.
 
             **Example:**
 
@@ -2658,13 +2811,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def read(self, notification_id: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/notifications/read
+            POST https://prod-api.lolz.live/notifications/read
 
             **Read a notification.**
 
             **Parameters:**
 
-            - **notification_id** (int): Notification ID.
+            - notification_id (int): Notification ID.
 
             **Example:**
 
@@ -2684,14 +2837,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/tags/list
+            GET https://prod-api.lolz.live/tags/list
 
             *Get tags.*
 
             **Parameters:**
 
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2707,15 +2860,15 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, tag_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/tags/{tag_id}
+            GET https://prod-api.lolz.live/tags/{tag_id}
 
             *Get a tag.*
 
             **Parameters:**
 
-            - **tag_id** (int): Tag ID.
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - tag_id (int): Tag ID.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2731,7 +2884,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def popular(self) -> Response:
             """
-            GET https://api.zelenka.guru/tags/popular
+            GET https://prod-api.lolz.live/tags/popular
 
             *Get popular tags.*
 
@@ -2748,13 +2901,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def search(self, tag: str) -> Response:
             """
-            GET https://api.zelenka.guru/tags/find
+            GET https://prod-api.lolz.live/tags/find
 
             **Search for a tag.**
 
             **Parameters:**
 
-            - **tag** (str): Tag.
+            - tag (str): Tag.
 
             **Example:**
 
@@ -2774,18 +2927,18 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def all(self, query: str = NONE, user_id: int = NONE, tag: str = NONE, forum_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/search
+            POST https://prod-api.lolz.live/search
 
             **Search for all types of content.**
 
             **Parameters:**
 
-            - **query** (str): Query.
-            - **user_id** (int): User ID.
-            - **tag** (str): Tag.
-            - **forum_id** (int): Forum ID.
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - query (str): Query.
+            - user_id (int): User ID.
+            - tag (str): Tag.
+            - forum_id (int): Forum ID.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2801,16 +2954,16 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def threads(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/search/threads
+            POST https://prod-api.lolz.live/search/threads
 
             **Search for threads.**
 
             **Parameters:**
 
-            - **query** (str): Query.
-            - **user_id** (int): User ID.
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - query (str): Query.
+            - user_id (int): User ID.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2826,16 +2979,16 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/search/posts
+            POST https://prod-api.lolz.live/search/posts
 
             **Search for posts.**
 
             **Parameters:**
 
-            - **query** (str): Query.
-            - **user_id** (int): User ID.
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - query (str): Query.
+            - user_id (int): User ID.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2851,16 +3004,16 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def profile_posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/search/profile-posts
+            POST https://prod-api.lolz.live/search/profile-posts
 
             **Search for profile posts.**
 
             **Parameters:**
 
-            - **query** (str): Query.
-            - **user_id** (int): User ID.
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - query (str): Query.
+            - user_id (int): User ID.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2876,16 +3029,16 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def tagged(self, tag: str = NONE, tags: list[str] = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/search/tagged
+            POST https://prod-api.lolz.live/search/tagged
 
             **Search for tagged content.**
 
             **Parameters:**
 
-            - **tag** (str): Tag.
-            - **tags** (list[str]): Tags.
-            - **page** (int): Page.
-            - **limit** (int): Limit.
+            - tag (str): Tag.
+            - tags (list[str]): Tags.
+            - page (int): Page.
+            - limit (int): Limit.
 
             **Example:**
 
@@ -2906,13 +3059,13 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def list(self, room_id: int) -> Response:
                 """
-                GET https://api.zelenka.guru/chatbox/messages
+                GET https://prod-api.lolz.live/chatbox/messages
 
                 *Get chat messages.*
 
                 **Parameters:**
 
-                - **room_id** (int): Room ID.
+                - room_id (int): Room ID.
 
                 **Example:**
 
@@ -2928,14 +3081,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def create(self, room_id: int, message: str) -> Response:
                 """
-                POST https://api.zelenka.guru/chatbox/message
+                POST https://prod-api.lolz.live/chatbox/message
 
                 *Create a chat message.*
 
                 **Parameters:**
 
-                - **room_id** (int): Room ID.
-                - **message** (str): Message.
+                - room_id (int): Room ID.
+                - message (str): Message.
 
                 **Example:**
 
@@ -2952,14 +3105,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def edit(self, message_id: int, message: str) -> Response:
                 """
-                PUT https://api.zelenka.guru/chatbox/message
+                PUT https://prod-api.lolz.live/chatbox/message
 
                 *Edit a chat message.*
 
                 **Parameters:**
 
-                - **message_id** (int): Message ID.
-                - **message** (str): Message.
+                - message_id (int): Message ID.
+                - message (str): Message.
 
                 **Example:**
 
@@ -2976,13 +3129,13 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def delete(self, message_id: int) -> Response:
                 """
-                DELETE https://api.zelenka.guru/chatbox/message
+                DELETE https://prod-api.lolz.live/chatbox/message
 
                 *Delete a chat message.*
 
                 **Parameters:**
 
-                - **message_id** (int): Message ID.
+                - message_id (int): Message ID.
 
                 **Example:**
 
@@ -2998,14 +3151,14 @@ class Forum(APIClient):
             @AutoDelay.WrapperSet(0.5)
             async def report(self, message_id: int, reason: str) -> Response:
                 """
-                POST https://api.zelenka.guru/chatbox/report
+                POST https://prod-api.lolz.live/chatbox/report
 
                 *Report a chat message.*
 
                 **Parameters:**
 
-                - **message_id** (int): Message ID.
-                - **reason** (str): Reason.
+                - message_id (int): Message ID.
+                - reason (str): Reason.
 
                 **Example:**
 
@@ -3026,13 +3179,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def get(self, room_id: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/chatbox
+            GET https://prod-api.lolz.live/chatbox
 
             *Get Chats.*
 
             **Parameters:**
 
-            - **parent** (int): Parent ID.
+            - parent (int): Parent ID.
 
             **Example:**
 
@@ -3048,7 +3201,7 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def ignored(self) -> Response:
             """
-            GET https://api.zelenka.guru/chatbox/ignored
+            GET https://prod-api.lolz.live/chatbox/ignored
 
             *Get ignored users.*
 
@@ -3065,13 +3218,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def ignore(self, user_id: int = NONE) -> Response:
             """
-            POST https://api.zelenka.guru/chatbox/ignore
+            POST https://prod-api.lolz.live/chatbox/ignore
 
             *Ignore chat user.*
 
             **Parameters:**
 
-            - **user_id** (int): User ID.
+            - user_id (int): User ID.
 
             **Example:**
 
@@ -3087,13 +3240,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def unignore(self, user_id: int = NONE) -> Response:
             """
-            DELETE https://api.zelenka.guru/chatbox/ignore
+            DELETE https://prod-api.lolz.live/chatbox/ignore
 
             *Unignore chat user.*
 
             **Parameters:**
 
-            - **user_id** (int): User ID.
+            - user_id (int): User ID.
 
             **Example:**
 
@@ -3113,13 +3266,13 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def list(self, page: int = NONE) -> Response:
             """
-            GET https://api.zelenka.guru/forms
+            GET https://prod-api.lolz.live/forms
 
             *Get Forms list.*
 
             **Parameters:**
 
-            - **page** (int): Page.
+            - page (int): Page.
 
             **Example:**
 
@@ -3135,14 +3288,14 @@ class Forum(APIClient):
         @AutoDelay.WrapperSet(0.5)
         async def create(self, form_id: int, fields: dict[str, str]) -> Response:
             """
-            GET https://api.zelenka.guru/forms/save
+            GET https://prod-api.lolz.live/forms/save
 
             *Create thread by form.*
 
             **Parameters:**
 
-            - **form_id** (int): Form ID.
-            - **fields** (dict[str, str]): Form fields.
+            - form_id (int): Form ID.
+            - fields (dict[str, str]): Form fields.
 
             **Example:**
 
@@ -3168,13 +3321,13 @@ class Forum(APIClient):
     @AutoDelay.WrapperSet(0.5)
     async def navigation(self, parent: int = NONE) -> Response:
         """
-        GET https://api.zelenka.guru/navigation
+        GET https://prod-api.lolz.live/navigation
 
         *Get navigation.*
 
         **Parameters:**
 
-        - **parent** (int): Parent ID.
+        - parent (int): Parent ID.
 
         **Example:**
 
@@ -3190,13 +3343,13 @@ class Forum(APIClient):
     @AutoDelay.WrapperSet(0.5)
     async def batch(self, jobs: list[dict[str, str]]) -> Response:
         """
-        POST https://api.zelenka.guru/batch
+        POST https://prod-api.lolz.live/batch
 
         *Batch requests.*
 
         **Parameters:**
 
-        - **jobs** (list[dict[str, str]]): Batch jobs.
+        - jobs (list[dict[str, str]]): Batch jobs.
 
         **Example:**
 
