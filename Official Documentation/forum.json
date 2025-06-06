@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.11a"
+    "version": "1.1.12"
   },
   "servers": [
     {
@@ -111,7 +111,7 @@
                       "scope": {
                         "type": "array",
                         "description": "Scope.",
-                          "uniqueItems": true,
+                        "uniqueItems": true,
                         "items": {
                           "type": "string",
                           "enum": [
@@ -929,7 +929,7 @@
             "style": "simple",
             "explode": false,
             "schema": {
-                "title": "Forum Id",
+              "title": "Forum Id",
               "type": "integer",
               "description": "Id of forum."
             }
@@ -1348,7 +1348,7 @@
             "style": "simple",
             "explode": false,
             "schema": {
-                "title": "Forum Id",
+              "title": "Forum Id",
               "type": "integer",
               "description": "Id of forum."
             }
@@ -4036,7 +4036,7 @@
         ],
         "responses": {
           "200": {
-           "$ref": "#/components/responses/SaveChanges"
+            "$ref": "#/components/responses/SaveChanges"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -4070,7 +4070,7 @@
         ],
         "responses": {
           "200": {
-           "$ref": "#/components/responses/SaveChanges"
+            "$ref": "#/components/responses/SaveChanges"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -6069,7 +6069,6 @@
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ThreadModel"
-
                       }
                     },
                     "data": {
@@ -6734,7 +6733,7 @@
                       "title": "Posts",
                       "type": "array",
                       "items": {
-                         "$ref": "#/components/schemas/PostModel"
+                        "$ref": "#/components/schemas/PostModel"
                       }
                     },
                     "thread": {
@@ -8176,246 +8175,7 @@
                       "title": "Users",
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "user_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "username": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "username_html": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "user_message_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_register_date": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_like_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_like2_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "contest_count": {
-                            "title": "Contest",
-                            "type": "integer"
-                          },
-                          "trophy_count": {
-                            "title": "Trophy",
-                            "type": "integer"
-                          },
-                          "short_link": {
-                            "title": "Short",
-                            "type": "string"
-                          },
-                          "custom_title": {
-                            "title": "Custom",
-                            "type": "string"
-                          },
-                          "is_banned": {
-                            "title": "Is",
-                            "type": "integer"
-                          },
-                          "user_title": {
-                            "title": "User",
-                            "type": "string"
-                          },
-                          "user_is_valid": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_verified": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_followed": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_last_seen_date": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_following_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_followers_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "links": {
-                            "title": "Links",
-                            "type": "object",
-                            "properties": {
-                              "permalink": {
-                                "title": "Permalink",
-                                "type": "string"
-                              },
-                              "detail": {
-                                "title": "Detail",
-                                "type": "string"
-                              },
-                              "avatar": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_big": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_small": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "followers": {
-                                "title": "Followers",
-                                "type": "string"
-                              },
-                              "followings": {
-                                "title": "Followings",
-                                "type": "string"
-                              },
-                              "ignore": {
-                                "title": "Ignore",
-                                "type": "string"
-                              },
-                              "timeline": {
-                                "title": "Timeline",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "permalink",
-                              "detail",
-                              "avatar",
-                              "avatar_big",
-                              "avatar_small",
-                              "followers",
-                              "followings",
-                              "ignore",
-                              "timeline"
-                            ]
-                          },
-                          "permissions": {
-                            "title": "Permissions",
-                            "type": "object",
-                            "properties": {
-                              "edit": {
-                                "title": "Edit",
-                                "type": "boolean"
-                              },
-                              "follow": {
-                                "title": "Follow",
-                                "type": "boolean"
-                              },
-                              "ignore": {
-                                "title": "Ignore",
-                                "type": "boolean"
-                              },
-                              "profile_post": {
-                                "title": "Profile",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "edit",
-                              "follow",
-                              "ignore",
-                              "profile_post"
-                            ]
-                          },
-                          "user_is_ignored": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_visitor": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_group_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "fields": {
-                            "title": "Fields",
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "title": "Id",
-                                  "type": "string"
-                                },
-                                "title": {
-                                  "title": "Title",
-                                  "type": "string"
-                                },
-                                "description": {
-                                  "title": "Description",
-                                  "type": "string"
-                                },
-                                "position": {
-                                  "title": "Position",
-                                  "type": "string"
-                                },
-                                "is_required": {
-                                  "title": "Is",
-                                  "type": "boolean"
-                                },
-                                "value": {
-                                  "title": "Value",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "id",
-                                "title",
-                                "description",
-                                "position",
-                                "is_required",
-                                "value"
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "user_id",
-                          "username",
-                          "username_html",
-                          "user_message_count",
-                          "user_register_date",
-                          "user_like_count",
-                          "user_like2_count",
-                          "contest_count",
-                          "trophy_count",
-                          "short_link",
-                          "custom_title",
-                          "is_banned",
-                          "user_title",
-                          "user_is_valid",
-                          "user_is_verified",
-                          "user_is_followed",
-                          "user_last_seen_date",
-                          "user_following_count",
-                          "user_followers_count",
-                          "links",
-                          "permissions",
-                          "user_is_ignored",
-                          "user_is_visitor",
-                          "user_group_id",
-                          "fields"
-                        ]
+                        "$ref":"#/components/schemas/UserModel"
                       }
                     },
                     "users_total": {
@@ -8598,386 +8358,7 @@
                       "title": "Users",
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "user_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "username": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "username_html": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "user_message_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_register_date": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_like_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_like2_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "contest_count": {
-                            "title": "Contest",
-                            "type": "integer"
-                          },
-                          "trophy_count": {
-                            "title": "Trophy",
-                            "type": "integer"
-                          },
-                          "short_link": {
-                            "title": "Short",
-                            "type": "string"
-                          },
-                          "custom_title": {
-                            "title": "Custom",
-                            "type": "string"
-                          },
-                          "is_banned": {
-                            "title": "Is",
-                            "type": "integer"
-                          },
-                          "user_email": {
-                            "title": "User",
-                            "type": "string"
-                          },
-                          "user_unread_notification_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_dob_day": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_dob_month": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_dob_year": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_unread_conversation_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_title": {
-                            "title": "User",
-                            "type": "string"
-                          },
-                          "user_is_valid": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_verified": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_followed": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_last_seen_date": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_following_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_followers_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "links": {
-                            "title": "Links",
-                            "type": "object",
-                            "properties": {
-                              "permalink": {
-                                "title": "Permalink",
-                                "type": "string"
-                              },
-                              "detail": {
-                                "title": "Detail",
-                                "type": "string"
-                              },
-                              "avatar": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_big": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_small": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "followers": {
-                                "title": "Followers",
-                                "type": "string"
-                              },
-                              "followings": {
-                                "title": "Followings",
-                                "type": "string"
-                              },
-                              "ignore": {
-                                "title": "Ignore",
-                                "type": "string"
-                              },
-                              "timeline": {
-                                "title": "Timeline",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "permalink",
-                              "detail",
-                              "avatar",
-                              "avatar_big",
-                              "avatar_small",
-                              "followers",
-                              "followings",
-                              "ignore",
-                              "timeline"
-                            ]
-                          },
-                          "permissions": {
-                            "title": "Permissions",
-                            "type": "object",
-                            "properties": {
-                              "edit": {
-                                "title": "Edit",
-                                "type": "boolean"
-                              },
-                              "follow": {
-                                "title": "Follow",
-                                "type": "boolean"
-                              },
-                              "ignore": {
-                                "title": "Ignore",
-                                "type": "boolean"
-                              },
-                              "profile_post": {
-                                "title": "Profile",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "edit",
-                              "follow",
-                              "ignore",
-                              "profile_post"
-                            ]
-                          },
-                          "user_is_ignored": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_visitor": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_group_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_timezone_offset": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_has_password": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "fields": {
-                            "title": "Fields",
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "title": "Id",
-                                  "type": "string"
-                                },
-                                "title": {
-                                  "title": "Title",
-                                  "type": "string"
-                                },
-                                "description": {
-                                  "title": "Description",
-                                  "type": "string"
-                                },
-                                "position": {
-                                  "title": "Position",
-                                  "type": "string"
-                                },
-                                "is_required": {
-                                  "title": "Is",
-                                  "type": "boolean"
-                                },
-                                "value": {
-                                  "title": "Value",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "id",
-                                "title",
-                                "description",
-                                "position",
-                                "is_required",
-                                "value"
-                              ]
-                            }
-                          },
-                          "user_external_authentications": {
-                            "title": "User",
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "provider": {
-                                  "title": "Provider",
-                                  "type": "string"
-                                },
-                                "provider_key": {
-                                  "title": "Provider",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "provider",
-                                "provider_key"
-                              ]
-                            }
-                          },
-                          "self_permissions": {
-                            "title": "Self",
-                            "type": "object",
-                            "properties": {
-                              "create_conversation": {
-                                "title": "Create",
-                                "type": "boolean"
-                              },
-                              "upload_attachment_conversation": {
-                                "title": "Upload",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "create_conversation",
-                              "upload_attachment_conversation"
-                            ]
-                          },
-                          "edit_permissions": {
-                            "title": "Edit",
-                            "type": "object",
-                            "properties": {
-                              "password": {
-                                "title": "Password",
-                                "type": "boolean"
-                              },
-                              "user_email": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "username": {
-                                "title": "Username",
-                                "type": "boolean"
-                              },
-                              "user_title": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "primary_group_id": {
-                                "title": "Primary",
-                                "type": "boolean"
-                              },
-                              "secondary_group_ids": {
-                                "title": "Secondary",
-                                "type": "boolean"
-                              },
-                              "user_dob_day": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_dob_month": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_dob_year": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "fields": {
-                                "title": "Fields",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "password",
-                              "user_email",
-                              "username",
-                              "user_title",
-                              "primary_group_id",
-                              "secondary_group_ids",
-                              "user_dob_day",
-                              "user_dob_month",
-                              "user_dob_year",
-                              "fields"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "user_id",
-                          "username",
-                          "username_html",
-                          "user_message_count",
-                          "user_register_date",
-                          "user_like_count",
-                          "user_like2_count",
-                          "contest_count",
-                          "trophy_count",
-                          "short_link",
-                          "custom_title",
-                          "is_banned",
-                          "user_email",
-                          "user_unread_notification_count",
-                          "user_dob_day",
-                          "user_dob_month",
-                          "user_dob_year",
-                          "user_unread_conversation_count",
-                          "user_title",
-                          "user_is_valid",
-                          "user_is_verified",
-                          "user_is_followed",
-                          "user_last_seen_date",
-                          "user_following_count",
-                          "user_followers_count",
-                          "links",
-                          "permissions",
-                          "user_is_ignored",
-                          "user_is_visitor",
-                          "user_group_id",
-                          "user_timezone_offset",
-                          "user_has_password",
-                          "fields",
-                          "user_external_authentications",
-                          "self_permissions",
-                          "edit_permissions"
-                        ]
+                        "$ref":"#/components/schemas/UserModel"
                       }
                     },
                     "system_info": {
@@ -9052,290 +8433,7 @@
                   ],
                   "properties": {
                     "user": {
-                      "title": "User",
-                      "type": "object",
-                      "properties": {
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "username": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "username_html": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "user_message_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_register_date": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_like_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_like2_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "contest_count": {
-                          "title": "Contest",
-                          "type": "integer"
-                        },
-                        "trophy_count": {
-                          "title": "Trophy",
-                          "type": "integer"
-                        },
-                        "short_link": {
-                          "title": "Short",
-                          "type": "string"
-                        },
-                        "custom_title": {
-                          "title": "Custom",
-                          "type": "string"
-                        },
-                        "is_banned": {
-                          "title": "Is",
-                          "type": "integer"
-                        },
-                        "user_title": {
-                          "title": "User",
-                          "type": "string"
-                        },
-                        "user_is_valid": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_verified": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_followed": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_last_seen_date": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_following_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_followers_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "links": {
-                          "title": "Links",
-                          "type": "object",
-                          "properties": {
-                            "permalink": {
-                              "title": "Permalink",
-                              "type": "string"
-                            },
-                            "detail": {
-                              "title": "Detail",
-                              "type": "string"
-                            },
-                            "avatar": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "avatar_big": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "avatar_small": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "followers": {
-                              "title": "Followers",
-                              "type": "string"
-                            },
-                            "followings": {
-                              "title": "Followings",
-                              "type": "string"
-                            },
-                            "ignore": {
-                              "title": "Ignore",
-                              "type": "string"
-                            },
-                            "timeline": {
-                              "title": "Timeline",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "permalink",
-                            "detail",
-                            "avatar",
-                            "avatar_big",
-                            "avatar_small",
-                            "followers",
-                            "followings",
-                            "ignore",
-                            "timeline"
-                          ]
-                        },
-                        "permissions": {
-                          "title": "Permissions",
-                          "type": "object",
-                          "properties": {
-                            "edit": {
-                              "title": "Edit",
-                              "type": "boolean"
-                            },
-                            "follow": {
-                              "title": "Follow",
-                              "type": "boolean"
-                            },
-                            "ignore": {
-                              "title": "Ignore",
-                              "type": "boolean"
-                            },
-                            "profile_post": {
-                              "title": "Profile",
-                              "type": "boolean"
-                            }
-                          },
-                          "required": [
-                            "edit",
-                            "follow",
-                            "ignore",
-                            "profile_post"
-                          ]
-                        },
-                        "user_is_ignored": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_visitor": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_group_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "fields": {
-                          "title": "Fields",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "title": "Id",
-                                "type": "string"
-                              },
-                              "title": {
-                                "title": "Title",
-                                "type": "string"
-                              },
-                              "description": {
-                                "title": "Description",
-                                "type": "string"
-                              },
-                              "position": {
-                                "title": "Position",
-                                "type": "string"
-                              },
-                              "is_required": {
-                                "title": "Is",
-                                "type": "boolean"
-                              },
-                              "value": {
-                                "title": "Value",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "title",
-                              "description",
-                              "position",
-                              "is_required",
-                              "value"
-                            ]
-                          }
-                        },
-                        "birthday": {
-                          "title": "Birthday",
-                          "type": "object",
-                          "properties": {
-                            "age": {
-                              "title": "Age",
-                              "type": "boolean"
-                            },
-                            "timeStamp": {
-                              "title": "Time Stamp",
-                              "type": "object",
-                              "properties": {
-                                "date": {
-                                  "title": "Date",
-                                  "type": "string"
-                                },
-                                "timezone_type": {
-                                  "title": "Timezone",
-                                  "type": "integer"
-                                },
-                                "timezone": {
-                                  "title": "Timezone",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "date",
-                                "timezone_type",
-                                "timezone"
-                              ]
-                            },
-                            "format": {
-                              "title": "Format",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "age",
-                            "timeStamp",
-                            "format"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "user_id",
-                        "username",
-                        "username_html",
-                        "user_message_count",
-                        "user_register_date",
-                        "user_like_count",
-                        "user_like2_count",
-                        "contest_count",
-                        "trophy_count",
-                        "short_link",
-                        "custom_title",
-                        "is_banned",
-                        "user_title",
-                        "user_is_valid",
-                        "user_is_verified",
-                        "user_is_followed",
-                        "user_last_seen_date",
-                        "user_following_count",
-                        "user_followers_count",
-                        "links",
-                        "permissions",
-                        "user_is_ignored",
-                        "user_is_visitor",
-                        "user_group_id",
-                        "fields",
-                        "birthday"
-                      ]
+                      "$ref":"#/components/schemas/UserModel"
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -9388,7 +8486,7 @@
                 {
                   "type": "string",
                   "description": "User shortlink. Use \"me\" to interact with your own profile.",
-                  "default":"me"
+                  "default": "me"
                 }
               ]
             }
@@ -9663,8 +8761,7 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
-          }
-          ,
+          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -11336,12 +10433,12 @@
               "title": "user_id",
               "oneOf": [
                 {
-                  "title":"User ID",
+                  "title": "User ID",
                   "type": "integer",
                   "description": "Id of user."
                 },
                 {
-                  "title":"Shortlink",
+                  "title": "Shortlink",
                   "type": "string",
                   "description": "User shortlink. Use \"me\" to interact with your own profile."
                 }
@@ -11928,320 +11025,7 @@
                       "type": "integer"
                     },
                     "user": {
-                      "title": "User",
-                      "type": "object",
-                      "properties": {
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "username": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "username_html": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "user_message_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_register_date": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_like_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_like2_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "contest_count": {
-                          "title": "Contest",
-                          "type": "integer"
-                        },
-                        "trophy_count": {
-                          "title": "Trophy",
-                          "type": "integer"
-                        },
-                        "short_link": {
-                          "title": "Short",
-                          "type": "string"
-                        },
-                        "custom_title": {
-                          "title": "Custom",
-                          "type": "string"
-                        },
-                        "is_banned": {
-                          "title": "Is",
-                          "type": "integer"
-                        },
-                        "user_title": {
-                          "title": "User",
-                          "type": "string"
-                        },
-                        "user_is_valid": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_verified": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_followed": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_last_seen_date": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_following_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_followers_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "links": {
-                          "title": "Links",
-                          "type": "object",
-                          "properties": {
-                            "permalink": {
-                              "title": "Permalink",
-                              "type": "string"
-                            },
-                            "detail": {
-                              "title": "Detail",
-                              "type": "string"
-                            },
-                            "avatar": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "avatar_big": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "avatar_small": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "followers": {
-                              "title": "Followers",
-                              "type": "string"
-                            },
-                            "followings": {
-                              "title": "Followings",
-                              "type": "string"
-                            },
-                            "ignore": {
-                              "title": "Ignore",
-                              "type": "string"
-                            },
-                            "timeline": {
-                              "title": "Timeline",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "permalink",
-                            "detail",
-                            "avatar",
-                            "avatar_big",
-                            "avatar_small",
-                            "followers",
-                            "followings",
-                            "ignore",
-                            "timeline"
-                          ]
-                        },
-                        "permissions": {
-                          "title": "Permissions",
-                          "type": "object",
-                          "properties": {
-                            "edit": {
-                              "title": "Edit",
-                              "type": "boolean"
-                            },
-                            "follow": {
-                              "title": "Follow",
-                              "type": "boolean"
-                            },
-                            "ignore": {
-                              "title": "Ignore",
-                              "type": "boolean"
-                            },
-                            "profile_post": {
-                              "title": "Profile",
-                              "type": "boolean"
-                            }
-                          },
-                          "required": [
-                            "edit",
-                            "follow",
-                            "ignore",
-                            "profile_post"
-                          ]
-                        },
-                        "user_is_ignored": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_visitor": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_group_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "custom_fields": {
-                          "title": "Custom",
-                          "type": "object",
-                          "properties": {
-                            "_4": {
-                              "title": "",
-                              "type": "string"
-                            },
-                            "allowSelfUnban": {
-                              "title": "Allow self unban",
-                              "type": "array",
-                              "items": {}
-                            },
-                            "discord": {
-                              "title": "Discord",
-                              "type": "string"
-                            },
-                            "github": {
-                              "title": "Github",
-                              "type": "string"
-                            },
-                            "jabber": {
-                              "title": "Jabber",
-                              "type": "string"
-                            },
-                            "lztAwardUserTrophy": {
-                              "title": "Lzt award user trophy",
-                              "type": "string"
-                            },
-                            "lztCuratorNodeTitle": {
-                              "title": "Lzt curator node title",
-                              "type": "string"
-                            },
-                            "lztCuratorNodeTitleEn": {
-                              "title": "Lzt curator node title en",
-                              "type": "string"
-                            },
-                            "lztDeposit": {
-                              "title": "Lzt deposit",
-                              "type": "string"
-                            },
-                            "lztInnovation20Link": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztInnovation30Link": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztInnovationLink": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztLikesIncreasing": {
-                              "title": "Lzt likes increasing",
-                              "type": "string"
-                            },
-                            "lztLikesZeroing": {
-                              "title": "Lzt likes zeroing",
-                              "type": "string"
-                            },
-                            "lztSympathyIncreasing": {
-                              "title": "Lzt sympathy increasing",
-                              "type": "string"
-                            },
-                            "lztSympathyZeroing": {
-                              "title": "Lzt sympathy zeroing",
-                              "type": "string"
-                            },
-                            "maecenasValue": {
-                              "title": "Maecenas value",
-                              "type": "string"
-                            },
-                            "scamURL": {
-                              "title": "Scam url",
-                              "type": "string"
-                            },
-                            "steam": {
-                              "title": "Steam",
-                              "type": "string"
-                            },
-                            "telegram": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "vk": {
-                              "title": "Vk",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "_4",
-                            "allowSelfUnban",
-                            "discord",
-                            "github",
-                            "jabber",
-                            "lztAwardUserTrophy",
-                            "lztCuratorNodeTitle",
-                            "lztCuratorNodeTitleEn",
-                            "lztDeposit",
-                            "lztInnovation20Link",
-                            "lztInnovation30Link",
-                            "lztInnovationLink",
-                            "lztLikesIncreasing",
-                            "lztLikesZeroing",
-                            "lztSympathyIncreasing",
-                            "lztSympathyZeroing",
-                            "maecenasValue",
-                            "scamURL",
-                            "steam",
-                            "telegram",
-                            "vk"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "user_id",
-                        "username",
-                        "username_html",
-                        "user_message_count",
-                        "user_register_date",
-                        "user_like_count",
-                        "user_like2_count",
-                        "contest_count",
-                        "trophy_count",
-                        "short_link",
-                        "custom_title",
-                        "is_banned",
-                        "user_title",
-                        "user_is_valid",
-                        "user_is_verified",
-                        "user_is_followed",
-                        "user_last_seen_date",
-                        "user_following_count",
-                        "user_followers_count",
-                        "links",
-                        "permissions",
-                        "user_is_ignored",
-                        "user_is_visitor",
-                        "user_group_id",
-                        "custom_fields"
-                      ]
+                      "$ref":"#/components/schemas/UserModel"
                     },
                     "links": {
                       "title": "Links",
@@ -12677,320 +11461,7 @@
                             ]
                           },
                           "timeline_user": {
-                            "title": "Timeline",
-                            "type": "object",
-                            "properties": {
-                              "user_id": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "username": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "username_html": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "user_message_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_register_date": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_like_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_like2_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "contest_count": {
-                                "title": "Contest",
-                                "type": "integer"
-                              },
-                              "trophy_count": {
-                                "title": "Trophy",
-                                "type": "integer"
-                              },
-                              "short_link": {
-                                "title": "Short",
-                                "type": "string"
-                              },
-                              "custom_title": {
-                                "title": "Custom",
-                                "type": "string"
-                              },
-                              "is_banned": {
-                                "title": "Is",
-                                "type": "integer"
-                              },
-                              "user_title": {
-                                "title": "User",
-                                "type": "string"
-                              },
-                              "user_is_valid": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_is_verified": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_is_followed": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_last_seen_date": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_following_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_followers_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "links": {
-                                "title": "Links",
-                                "type": "object",
-                                "properties": {
-                                  "permalink": {
-                                    "title": "Permalink",
-                                    "type": "string"
-                                  },
-                                  "detail": {
-                                    "title": "Detail",
-                                    "type": "string"
-                                  },
-                                  "avatar": {
-                                    "title": "Avatar",
-                                    "type": "string"
-                                  },
-                                  "avatar_big": {
-                                    "title": "Avatar",
-                                    "type": "string"
-                                  },
-                                  "avatar_small": {
-                                    "title": "Avatar",
-                                    "type": "string"
-                                  },
-                                  "followers": {
-                                    "title": "Followers",
-                                    "type": "string"
-                                  },
-                                  "followings": {
-                                    "title": "Followings",
-                                    "type": "string"
-                                  },
-                                  "ignore": {
-                                    "title": "Ignore",
-                                    "type": "string"
-                                  },
-                                  "timeline": {
-                                    "title": "Timeline",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "permalink",
-                                  "detail",
-                                  "avatar",
-                                  "avatar_big",
-                                  "avatar_small",
-                                  "followers",
-                                  "followings",
-                                  "ignore",
-                                  "timeline"
-                                ]
-                              },
-                              "permissions": {
-                                "title": "Permissions",
-                                "type": "object",
-                                "properties": {
-                                  "edit": {
-                                    "title": "Edit",
-                                    "type": "boolean"
-                                  },
-                                  "follow": {
-                                    "title": "Follow",
-                                    "type": "boolean"
-                                  },
-                                  "ignore": {
-                                    "title": "Ignore",
-                                    "type": "boolean"
-                                  },
-                                  "profile_post": {
-                                    "title": "Profile",
-                                    "type": "boolean"
-                                  }
-                                },
-                                "required": [
-                                  "edit",
-                                  "follow",
-                                  "ignore",
-                                  "profile_post"
-                                ]
-                              },
-                              "user_is_ignored": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_is_visitor": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_group_id": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "custom_fields": {
-                                "title": "Custom",
-                                "type": "object",
-                                "properties": {
-                                  "_4": {
-                                    "title": "",
-                                    "type": "string"
-                                  },
-                                  "allowSelfUnban": {
-                                    "title": "Allow self unban",
-                                    "type": "array",
-                                    "items": {}
-                                  },
-                                  "discord": {
-                                    "title": "Discord",
-                                    "type": "string"
-                                  },
-                                  "github": {
-                                    "title": "Github",
-                                    "type": "string"
-                                  },
-                                  "jabber": {
-                                    "title": "Jabber",
-                                    "type": "string"
-                                  },
-                                  "lztAwardUserTrophy": {
-                                    "title": "Lzt award user trophy",
-                                    "type": "string"
-                                  },
-                                  "lztCuratorNodeTitle": {
-                                    "title": "Lzt curator node title",
-                                    "type": "string"
-                                  },
-                                  "lztCuratorNodeTitleEn": {
-                                    "title": "Lzt curator node title en",
-                                    "type": "string"
-                                  },
-                                  "lztDeposit": {
-                                    "title": "Lzt deposit",
-                                    "type": "string"
-                                  },
-                                  "lztInnovation20Link": {
-                                    "title": "Lzt innovation link",
-                                    "type": "string"
-                                  },
-                                  "lztInnovation30Link": {
-                                    "title": "Lzt innovation link",
-                                    "type": "string"
-                                  },
-                                  "lztInnovationLink": {
-                                    "title": "Lzt innovation link",
-                                    "type": "string"
-                                  },
-                                  "lztLikesIncreasing": {
-                                    "title": "Lzt likes increasing",
-                                    "type": "string"
-                                  },
-                                  "lztLikesZeroing": {
-                                    "title": "Lzt likes zeroing",
-                                    "type": "string"
-                                  },
-                                  "lztSympathyIncreasing": {
-                                    "title": "Lzt sympathy increasing",
-                                    "type": "string"
-                                  },
-                                  "lztSympathyZeroing": {
-                                    "title": "Lzt sympathy zeroing",
-                                    "type": "string"
-                                  },
-                                  "maecenasValue": {
-                                    "title": "Maecenas value",
-                                    "type": "string"
-                                  },
-                                  "scamURL": {
-                                    "title": "Scam url",
-                                    "type": "string"
-                                  },
-                                  "steam": {
-                                    "title": "Steam",
-                                    "type": "string"
-                                  },
-                                  "telegram": {
-                                    "title": "Telegram",
-                                    "type": "string"
-                                  },
-                                  "vk": {
-                                    "title": "Vk",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "_4",
-                                  "allowSelfUnban",
-                                  "discord",
-                                  "github",
-                                  "jabber",
-                                  "lztAwardUserTrophy",
-                                  "lztCuratorNodeTitle",
-                                  "lztCuratorNodeTitleEn",
-                                  "lztDeposit",
-                                  "lztInnovation20Link",
-                                  "lztInnovation30Link",
-                                  "lztInnovationLink",
-                                  "lztLikesIncreasing",
-                                  "lztLikesZeroing",
-                                  "lztSympathyIncreasing",
-                                  "lztSympathyZeroing",
-                                  "maecenasValue",
-                                  "scamURL",
-                                  "steam",
-                                  "telegram",
-                                  "vk"
-                                ]
-                              }
-                            },
-                            "required": [
-                              "user_id",
-                              "username",
-                              "username_html",
-                              "user_message_count",
-                              "user_register_date",
-                              "user_like_count",
-                              "user_like2_count",
-                              "contest_count",
-                              "trophy_count",
-                              "short_link",
-                              "custom_title",
-                              "is_banned",
-                              "user_title",
-                              "user_is_valid",
-                              "user_is_verified",
-                              "user_is_followed",
-                              "user_last_seen_date",
-                              "user_following_count",
-                              "user_followers_count",
-                              "links",
-                              "permissions",
-                              "user_is_ignored",
-                              "user_is_visitor",
-                              "user_group_id",
-                              "custom_fields"
-                            ]
+                            "$ref":"#/components/schemas/UserModel"
                           }
                         },
                         "required": [
@@ -14374,270 +12845,7 @@
                       ]
                     },
                     "timeline_user": {
-                      "title": "Timeline",
-                      "type": "object",
-                      "properties": {
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "username": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "username_html": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "user_message_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_register_date": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_like_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_like2_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "contest_count": {
-                          "title": "Contest",
-                          "type": "integer"
-                        },
-                        "trophy_count": {
-                          "title": "Trophy",
-                          "type": "integer"
-                        },
-                        "custom_title": {
-                          "title": "Custom",
-                          "type": "string"
-                        },
-                        "is_banned": {
-                          "title": "Is",
-                          "type": "integer"
-                        },
-                        "user_title": {
-                          "title": "User",
-                          "type": "string"
-                        },
-                        "user_is_valid": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_verified": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_followed": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_last_seen_date": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_following_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_followers_count": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "links": {
-                          "title": "Links",
-                          "type": "object",
-                          "properties": {
-                            "permalink": {
-                              "title": "Permalink",
-                              "type": "string"
-                            },
-                            "detail": {
-                              "title": "Detail",
-                              "type": "string"
-                            },
-                            "avatar": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "avatar_big": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "avatar_small": {
-                              "title": "Avatar",
-                              "type": "string"
-                            },
-                            "followers": {
-                              "title": "Followers",
-                              "type": "string"
-                            },
-                            "followings": {
-                              "title": "Followings",
-                              "type": "string"
-                            },
-                            "ignore": {
-                              "title": "Ignore",
-                              "type": "string"
-                            },
-                            "timeline": {
-                              "title": "Timeline",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "permalink",
-                            "detail",
-                            "avatar",
-                            "avatar_big",
-                            "avatar_small",
-                            "followers",
-                            "followings",
-                            "ignore",
-                            "timeline"
-                          ]
-                        },
-                        "permissions": {
-                          "title": "Permissions",
-                          "type": "object",
-                          "properties": {
-                            "edit": {
-                              "title": "Edit",
-                              "type": "boolean"
-                            },
-                            "follow": {
-                              "title": "Follow",
-                              "type": "boolean"
-                            },
-                            "ignore": {
-                              "title": "Ignore",
-                              "type": "boolean"
-                            },
-                            "profile_post": {
-                              "title": "Profile",
-                              "type": "boolean"
-                            }
-                          },
-                          "required": [
-                            "edit",
-                            "follow",
-                            "ignore",
-                            "profile_post"
-                          ]
-                        },
-                        "user_is_ignored": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_is_visitor": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_group_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "custom_fields": {
-                          "title": "Custom",
-                          "type": "object",
-                          "properties": {
-                            "_4": {
-                              "title": "",
-                              "type": "string"
-                            },
-                            "allowSelfUnban": {
-                              "title": "Allow self unban",
-                              "type": "array",
-                              "items": {}
-                            },
-                            "discord": {
-                              "title": "Discord",
-                              "type": "string"
-                            },
-                            "github": {
-                              "title": "Github",
-                              "type": "string"
-                            },
-                            "jabber": {
-                              "title": "Jabber",
-                              "type": "string"
-                            },
-                            "lztInnovation20Link": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztInnovation30Link": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "lztInnovationLink": {
-                              "title": "Lzt innovation link",
-                              "type": "string"
-                            },
-                            "scamURL": {
-                              "title": "Scam url",
-                              "type": "string"
-                            },
-                            "steam": {
-                              "title": "Steam",
-                              "type": "string"
-                            },
-                            "telegram": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "vk": {
-                              "title": "Vk",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "_4",
-                            "allowSelfUnban",
-                            "discord",
-                            "github",
-                            "jabber",
-                            "lztInnovation20Link",
-                            "lztInnovation30Link",
-                            "lztInnovationLink",
-                            "scamURL",
-                            "steam",
-                            "telegram",
-                            "vk"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "user_id",
-                        "username",
-                        "username_html",
-                        "user_message_count",
-                        "user_register_date",
-                        "user_like_count",
-                        "user_like2_count",
-                        "contest_count",
-                        "trophy_count",
-                        "custom_title",
-                        "is_banned",
-                        "user_title",
-                        "user_is_valid",
-                        "user_is_verified",
-                        "user_is_followed",
-                        "user_last_seen_date",
-                        "user_following_count",
-                        "user_followers_count",
-                        "links",
-                        "permissions",
-                        "user_is_ignored",
-                        "user_is_visitor",
-                        "user_group_id",
-                        "custom_fields"
-                      ]
+                      "$ref":"#/components/schemas/UserModel"
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -15323,6 +13531,14 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "conversations",
+                    "can_start",
+                    "folders",
+                    "links",
+                    "system_info"
+                  ],
                   "properties": {
                     "conversations": {
                       "title": "Conversations",
@@ -15333,10 +13549,6 @@
                           "conversation_id": {
                             "title": "Conversation",
                             "type": "integer"
-                          },
-                          "conversation_title": {
-                            "title": "Conversation",
-                            "type": "string"
                           },
                           "creator_user_id": {
                             "title": "Creator",
@@ -15358,6 +13570,10 @@
                             "title": "Conversation",
                             "type": "integer"
                           },
+                          "conversation_online_count": {
+                            "title": "Conversation",
+                            "type": "integer"
+                          },
                           "is_starred": {
                             "title": "Is",
                             "type": "integer"
@@ -15366,74 +13582,72 @@
                             "title": "Is",
                             "type": "integer"
                           },
-                          "user_is_ignored": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "conversation_message_count": {
-                            "title": "Conversation",
+                          "is_unread": {
+                            "title": "Is",
                             "type": "integer"
-                          },
-                          "conversation_has_new_message": {
-                            "title": "Conversation",
-                            "type": "boolean"
-                          },
-                          "links": {
-                            "title": "Links",
-                            "type": "object",
-                            "properties": {
-                              "permalink": {
-                                "title": "Permalink",
-                                "type": "string"
-                              },
-                              "detail": {
-                                "title": "Detail",
-                                "type": "string"
-                              },
-                              "messages": {
-                                "title": "Messages",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "permalink",
-                              "detail",
-                              "messages"
-                            ]
                           },
                           "permissions": {
                             "title": "Permissions",
                             "type": "object",
                             "properties": {
+                              "view": {
+                                "title": "View",
+                                "type": "boolean"
+                              },
                               "reply": {
                                 "title": "Reply",
                                 "type": "boolean"
                               },
-                              "delete": {
-                                "title": "Delete",
+                              "invite": {
+                                "title": "Invite",
                                 "type": "boolean"
                               },
-                              "upload_attachment": {
+                              "manage_invite_links": {
+                                "title": "Manage",
+                                "type": "boolean"
+                              },
+                              "kick": {
+                                "title": "Kick",
+                                "type": "boolean"
+                              },
+                              "upload_avatar": {
                                 "title": "Upload",
+                                "type": "boolean"
+                              },
+                              "editOwnPost": {
+                                "title": "Edit Own Post",
+                                "type": "boolean"
+                              },
+                              "stickyMessages": {
+                                "title": "Sticky Messages",
                                 "type": "boolean"
                               }
                             },
                             "required": [
+                              "view",
                               "reply",
-                              "delete",
-                              "upload_attachment"
+                              "invite",
+                              "manage_invite_links",
+                              "kick",
+                              "upload_avatar",
+                              "editOwnPost",
+                              "stickyMessages"
                             ]
                           },
-                          "first_message": {
-                            "title": "First",
+                          "conversation_message_count": {
+                            "title": "Conversation",
+                            "type": "integer"
+                          },
+                          "creator_is_ignored": {
+                            "title": "Creator",
+                            "type": "boolean"
+                          },
+                          "last_message": {
+                            "title": "Last",
                             "type": "object",
                             "properties": {
                               "message_id": {
                                 "title": "Message",
-                                "type": "integer"
-                              },
-                              "conversation_id": {
-                                "title": "Conversation",
                                 "type": "integer"
                               },
                               "creator_user_id": {
@@ -15452,6 +13666,14 @@
                                 "title": "Message",
                                 "type": "integer"
                               },
+                              "message_need_translate": {
+                                "title": "Message",
+                                "type": "boolean"
+                              },
+                              "message_is_system": {
+                                "title": "Message",
+                                "type": "boolean"
+                              },
                               "message_body": {
                                 "title": "Message",
                                 "type": "string"
@@ -15463,10 +13685,6 @@
                               "message_body_plain_text": {
                                 "title": "Message",
                                 "type": "string"
-                              },
-                              "message_attachment_count": {
-                                "title": "Message",
-                                "type": "integer"
                               },
                               "user_is_ignored": {
                                 "title": "User",
@@ -15491,18 +13709,13 @@
                                   "creator_avatar": {
                                     "title": "Creator",
                                     "type": "string"
-                                  },
-                                  "report": {
-                                    "title": "Report",
-                                    "type": "string"
                                   }
                                 },
                                 "required": [
                                   "detail",
                                   "conversation",
                                   "creator",
-                                  "creator_avatar",
-                                  "report"
+                                  "creator_avatar"
                                 ]
                               },
                               "permissions": {
@@ -15521,16 +13734,8 @@
                                     "title": "Delete",
                                     "type": "boolean"
                                   },
-                                  "reply": {
-                                    "title": "Reply",
-                                    "type": "boolean"
-                                  },
-                                  "upload_attachment": {
-                                    "title": "Upload",
-                                    "type": "boolean"
-                                  },
-                                  "report": {
-                                    "title": "Report",
+                                  "stick-unstick": {
+                                    "title": "Stick",
                                     "type": "boolean"
                                   }
                                 },
@@ -15538,23 +13743,21 @@
                                   "view",
                                   "edit",
                                   "delete",
-                                  "reply",
-                                  "upload_attachment",
-                                  "report"
+                                  "stick-unstick"
                                 ]
                               }
                             },
                             "required": [
                               "message_id",
-                              "conversation_id",
                               "creator_user_id",
                               "creator_username",
                               "creator_username_html",
                               "message_create_date",
+                              "message_need_translate",
+                              "message_is_system",
                               "message_body",
                               "message_body_html",
                               "message_body_plain_text",
-                              "message_attachment_count",
                               "user_is_ignored",
                               "links",
                               "permissions"
@@ -15578,18 +13781,6 @@
                                   "title": "Username",
                                   "type": "string"
                                 },
-                                "avatar": {
-                                  "title": "Avatar",
-                                  "type": "string"
-                                },
-                                "avatar_big": {
-                                  "title": "Avatar",
-                                  "type": "string"
-                                },
-                                "avatar_small": {
-                                  "title": "Avatar",
-                                  "type": "string"
-                                },
                                 "last_activity": {
                                   "title": "Last",
                                   "type": "integer"
@@ -15597,49 +13788,123 @@
                                 "is_online": {
                                   "title": "Is",
                                   "type": "boolean"
+                                },
+                                "contacts_changed": {
+                                  "title": "Contacts",
+                                  "type": "boolean"
                                 }
                               },
                               "required": [
                                 "user_id",
                                 "username",
                                 "username_html",
-                                "avatar",
-                                "avatar_big",
-                                "avatar_small",
                                 "last_activity",
-                                "is_online"
+                                "is_online",
+                                "contacts_changed"
                               ]
                             }
+                          },
+                          "links": {
+                            "title": "Links",
+                            "type": "object",
+                            "properties": {
+                              "permalink": {
+                                "title": "Permalink",
+                                "type": "string"
+                              },
+                              "detail": {
+                                "title": "Detail",
+                                "type": "string"
+                              },
+                              "messages": {
+                                "title": "Messages",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "permalink",
+                              "detail",
+                              "messages"
+                            ]
                           }
                         },
                         "required": [
                           "conversation_id",
-                          "conversation_title",
                           "creator_user_id",
                           "creator_username",
                           "creator_username_html",
                           "conversation_create_date",
                           "conversation_update_date",
+                          "conversation_online_count",
                           "is_starred",
                           "is_group",
-                          "user_is_ignored",
-                          "conversation_message_count",
-                          "conversation_has_new_message",
-                          "links",
+                          "is_unread",
                           "permissions",
-                          "first_message",
-                          "recipients"
+                          "conversation_message_count",
+                          "creator_is_ignored",
+                          "last_message",
+                          "recipients",
+                          "links"
                         ]
                       }
+                    },
+                    "can_start": {
+                      "title": "Can",
+                      "type": "boolean"
+                    },
+                    "folders": {
+                      "title": "Folders",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "title": "Id",
+                            "type": "string"
+                          },
+                          "title": {
+                            "title": "Title",
+                            "type": "string"
+                          },
+                          "name": {
+                            "title": "Name",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "name"
+                        ]
+                      }
+                    },
+                    "links": {
+                      "title": "Links",
+                      "type": "object",
+                      "properties": {
+                        "pages": {
+                          "title": "Pages",
+                          "type": "integer"
+                        },
+                        "page": {
+                          "title": "Page",
+                          "type": "integer"
+                        },
+                        "next": {
+                          "title": "Next",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "pages",
+                        "page",
+                        "next"
+                      ]
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "conversations",
-                    "system_info"
-                  ]
+                  }
                 }
               }
             }
@@ -15787,6 +14052,11 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "conversation",
+                    "system_info"
+                  ],
                   "properties": {
                     "conversation": {
                       "title": "Conversation",
@@ -15820,6 +14090,10 @@
                           "title": "Conversation",
                           "type": "integer"
                         },
+                        "conversation_online_count": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
                         "is_starred": {
                           "title": "Is",
                           "type": "integer"
@@ -15828,17 +14102,61 @@
                           "title": "Is",
                           "type": "integer"
                         },
-                        "user_is_ignored": {
-                          "title": "User",
-                          "type": "boolean"
+                        "is_unread": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "permissions": {
+                          "title": "Permissions",
+                          "type": "object",
+                          "properties": {
+                            "view": {
+                              "title": "View",
+                              "type": "boolean"
+                            },
+                            "reply": {
+                              "title": "Reply",
+                              "type": "boolean"
+                            },
+                            "invite": {
+                              "title": "Invite",
+                              "type": "boolean"
+                            },
+                            "manage_invite_links": {
+                              "title": "Manage",
+                              "type": "boolean"
+                            },
+                            "kick": {
+                              "title": "Kick",
+                              "type": "boolean"
+                            },
+                            "upload_avatar": {
+                              "title": "Upload",
+                              "type": "boolean"
+                            },
+                            "editOwnPost": {
+                              "title": "Edit Own Post",
+                              "type": "boolean"
+                            },
+                            "stickyMessages": {
+                              "title": "Sticky Messages",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "view",
+                            "reply",
+                            "invite",
+                            "manage_invite_links",
+                            "kick",
+                            "upload_avatar",
+                            "editOwnPost",
+                            "stickyMessages"
+                          ]
                         },
                         "conversation_message_count": {
                           "title": "Conversation",
                           "type": "integer"
-                        },
-                        "conversation_has_new_message": {
-                          "title": "Conversation",
-                          "type": "boolean"
                         },
                         "conversation_is_open": {
                           "title": "Conversation",
@@ -15847,6 +14165,47 @@
                         "conversation_is_deleted": {
                           "title": "Conversation",
                           "type": "boolean"
+                        },
+                        "recipients": {
+                          "title": "Recipients",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "username_html": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "last_activity": {
+                                "title": "Last",
+                                "type": "integer"
+                              },
+                              "is_online": {
+                                "title": "Is",
+                                "type": "boolean"
+                              },
+                              "contacts_changed": {
+                                "title": "Contacts",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "username",
+                              "username_html",
+                              "last_activity",
+                              "is_online",
+                              "contacts_changed"
+                            ]
+                          }
                         },
                         "links": {
                           "title": "Links",
@@ -15870,80 +14229,6 @@
                             "detail",
                             "messages"
                           ]
-                        },
-                        "permissions": {
-                          "title": "Permissions",
-                          "type": "object",
-                          "properties": {
-                            "reply": {
-                              "title": "Reply",
-                              "type": "boolean"
-                            },
-                            "delete": {
-                              "title": "Delete",
-                              "type": "boolean"
-                            },
-                            "upload_attachment": {
-                              "title": "Upload",
-                              "type": "boolean"
-                            }
-                          },
-                          "required": [
-                            "reply",
-                            "delete",
-                            "upload_attachment"
-                          ]
-                        },
-                        "recipients": {
-                          "title": "Recipients",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "user_id": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "username": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "username_html": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "avatar": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_big": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_small": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "last_activity": {
-                                "title": "Last",
-                                "type": "integer"
-                              },
-                              "is_online": {
-                                "title": "Is",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "user_id",
-                              "username",
-                              "username_html",
-                              "avatar",
-                              "avatar_big",
-                              "avatar_small",
-                              "last_activity",
-                              "is_online"
-                            ]
-                          }
                         }
                       },
                       "required": [
@@ -15954,29 +14239,87 @@
                         "creator_username_html",
                         "conversation_create_date",
                         "conversation_update_date",
+                        "conversation_online_count",
                         "is_starred",
                         "is_group",
-                        "user_is_ignored",
+                        "is_unread",
+                        "permissions",
                         "conversation_message_count",
-                        "conversation_has_new_message",
                         "conversation_is_open",
                         "conversation_is_deleted",
-                        "links",
-                        "permissions",
-                        "recipients"
+                        "recipients",
+                        "links"
                       ]
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "conversation",
-                    "system_info"
-                  ]
+                  }
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post",
+              "conversate"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Leave Conversation",
+        "description": "Leave the conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
+        "operationId": "Conversations.Delete",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "query",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "title": "conversation_id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "delete_type",
+            "in": "query",
+            "description": "Deletion type.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Delete type.",
+              "type": "string",
+              "description": "Deletion type.",
+              "enum": [
+                "delete",
+                "delete_ignore"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -16373,71 +14716,9 @@
             ]
           }
         ]
-      },
-      "delete": {
-        "tags": [
-          "Conversations"
-        ],
-        "summary": "Leave Conversation",
-        "description": "Leave the conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
-        "operationId": "Conversations.Delete",
-        "parameters": [
-          {
-            "name": "conversation_id",
-            "in": "path",
-            "description": "Id of conversation.",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "title": "conversation_id",
-              "type": "integer",
-              "description": "Id of conversation."
-            }
-          },
-          {
-            "name": "delete_type",
-            "in": "query",
-            "description": "Deletion type.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Delete type.",
-              "type": "string",
-              "description": "Deletion type.",
-              "enum": [
-                "delete",
-                "delete_ignore"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/SaveChanges"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/NoPermission"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "post",
-              "conversate"
-            ]
-          }
-        ]
       }
     },
-    "/conversation-messages": {
+    "/conversation/messages": {
       "get": {
         "tags": [
           "Conversations"
@@ -16535,6 +14816,13 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "messages",
+                    "messages_total",
+                    "links",
+                    "system_info"
+                  ],
                   "properties": {
                     "messages": {
                       "title": "Messages",
@@ -16566,6 +14854,22 @@
                             "title": "Message",
                             "type": "integer"
                           },
+                          "message_is_unread": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
+                          "message_need_translate": {
+                            "title": "Message",
+                            "type": "boolean"
+                          },
+                          "message_is_system": {
+                            "title": "Message",
+                            "type": "boolean"
+                          },
+                          "message_edit_date": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
                           "message_body": {
                             "title": "Message",
                             "type": "string"
@@ -16577,10 +14881,6 @@
                           "message_body_plain_text": {
                             "title": "Message",
                             "type": "string"
-                          },
-                          "message_attachment_count": {
-                            "title": "Message",
-                            "type": "integer"
                           },
                           "user_is_ignored": {
                             "title": "User",
@@ -16605,18 +14905,13 @@
                               "creator_avatar": {
                                 "title": "Creator",
                                 "type": "string"
-                              },
-                              "report": {
-                                "title": "Report",
-                                "type": "string"
                               }
                             },
                             "required": [
                               "detail",
                               "conversation",
                               "creator",
-                              "creator_avatar",
-                              "report"
+                              "creator_avatar"
                             ]
                           },
                           "permissions": {
@@ -16635,16 +14930,8 @@
                                 "title": "Delete",
                                 "type": "boolean"
                               },
-                              "reply": {
-                                "title": "Reply",
-                                "type": "boolean"
-                              },
-                              "upload_attachment": {
-                                "title": "Upload",
-                                "type": "boolean"
-                              },
-                              "report": {
-                                "title": "Report",
+                              "stick-unstick": {
+                                "title": "Stick",
                                 "type": "boolean"
                               }
                             },
@@ -16652,9 +14939,7 @@
                               "view",
                               "edit",
                               "delete",
-                              "reply",
-                              "upload_attachment",
-                              "report"
+                              "stick-unstick"
                             ]
                           }
                         },
@@ -16665,10 +14950,13 @@
                           "creator_username",
                           "creator_username_html",
                           "message_create_date",
+                          "message_is_unread",
+                          "message_need_translate",
+                          "message_is_system",
+                          "message_edit_date",
                           "message_body",
                           "message_body_html",
                           "message_body_plain_text",
-                          "message_attachment_count",
                           "user_is_ignored",
                           "links",
                           "permissions"
@@ -16678,132 +14966,6 @@
                     "messages_total": {
                       "title": "Messages",
                       "type": "integer"
-                    },
-                    "conversation": {
-                      "title": "Conversation",
-                      "type": "object",
-                      "properties": {
-                        "conversation_id": {
-                          "title": "Conversation",
-                          "type": "integer"
-                        },
-                        "conversation_title": {
-                          "title": "Conversation",
-                          "type": "string"
-                        },
-                        "creator_user_id": {
-                          "title": "Creator",
-                          "type": "integer"
-                        },
-                        "creator_username": {
-                          "title": "Creator",
-                          "type": "string"
-                        },
-                        "creator_username_html": {
-                          "title": "Creator",
-                          "type": "string"
-                        },
-                        "conversation_create_date": {
-                          "title": "Conversation",
-                          "type": "integer"
-                        },
-                        "conversation_update_date": {
-                          "title": "Conversation",
-                          "type": "integer"
-                        },
-                        "is_starred": {
-                          "title": "Is",
-                          "type": "integer"
-                        },
-                        "is_group": {
-                          "title": "Is",
-                          "type": "integer"
-                        },
-                        "user_is_ignored": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "conversation_message_count": {
-                          "title": "Conversation",
-                          "type": "integer"
-                        },
-                        "conversation_has_new_message": {
-                          "title": "Conversation",
-                          "type": "boolean"
-                        },
-                        "conversation_is_open": {
-                          "title": "Conversation",
-                          "type": "boolean"
-                        },
-                        "conversation_is_deleted": {
-                          "title": "Conversation",
-                          "type": "boolean"
-                        },
-                        "links": {
-                          "title": "Links",
-                          "type": "object",
-                          "properties": {
-                            "permalink": {
-                              "title": "Permalink",
-                              "type": "string"
-                            },
-                            "detail": {
-                              "title": "Detail",
-                              "type": "string"
-                            },
-                            "messages": {
-                              "title": "Messages",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "permalink",
-                            "detail",
-                            "messages"
-                          ]
-                        },
-                        "permissions": {
-                          "title": "Permissions",
-                          "type": "object",
-                          "properties": {
-                            "reply": {
-                              "title": "Reply",
-                              "type": "boolean"
-                            },
-                            "delete": {
-                              "title": "Delete",
-                              "type": "boolean"
-                            },
-                            "upload_attachment": {
-                              "title": "Upload",
-                              "type": "boolean"
-                            }
-                          },
-                          "required": [
-                            "reply",
-                            "delete",
-                            "upload_attachment"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "conversation_id",
-                        "conversation_title",
-                        "creator_user_id",
-                        "creator_username",
-                        "creator_username_html",
-                        "conversation_create_date",
-                        "conversation_update_date",
-                        "is_starred",
-                        "is_group",
-                        "user_is_ignored",
-                        "conversation_message_count",
-                        "conversation_has_new_message",
-                        "conversation_is_open",
-                        "conversation_is_deleted",
-                        "links",
-                        "permissions"
-                      ]
                     },
                     "links": {
                       "title": "Links",
@@ -16831,14 +14993,7 @@
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "messages",
-                    "messages_total",
-                    "conversation",
-                    "links",
-                    "system_info"
-                  ]
+                  }
                 }
               }
             }
@@ -16910,6 +15065,11 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "system_info"
+                  ],
                   "properties": {
                     "message": {
                       "title": "Message",
@@ -16939,6 +15099,22 @@
                           "title": "Message",
                           "type": "integer"
                         },
+                        "message_is_unread": {
+                          "title": "Message",
+                          "type": "integer"
+                        },
+                        "message_need_translate": {
+                          "title": "Message",
+                          "type": "boolean"
+                        },
+                        "message_is_system": {
+                          "title": "Message",
+                          "type": "boolean"
+                        },
+                        "message_edit_date": {
+                          "title": "Message",
+                          "type": "integer"
+                        },
                         "message_body": {
                           "title": "Message",
                           "type": "string"
@@ -16950,22 +15126,6 @@
                         "message_body_plain_text": {
                           "title": "Message",
                           "type": "string"
-                        },
-                        "signature": {
-                          "title": "Signature",
-                          "type": "string"
-                        },
-                        "signature_html": {
-                          "title": "Signature",
-                          "type": "string"
-                        },
-                        "signature_plain_text": {
-                          "title": "Signature",
-                          "type": "string"
-                        },
-                        "message_attachment_count": {
-                          "title": "Message",
-                          "type": "integer"
                         },
                         "user_is_ignored": {
                           "title": "User",
@@ -16990,18 +15150,13 @@
                             "creator_avatar": {
                               "title": "Creator",
                               "type": "string"
-                            },
-                            "report": {
-                              "title": "Report",
-                              "type": "string"
                             }
                           },
                           "required": [
                             "detail",
                             "conversation",
                             "creator",
-                            "creator_avatar",
-                            "report"
+                            "creator_avatar"
                           ]
                         },
                         "permissions": {
@@ -17020,16 +15175,8 @@
                               "title": "Delete",
                               "type": "boolean"
                             },
-                            "reply": {
-                              "title": "Reply",
-                              "type": "boolean"
-                            },
-                            "upload_attachment": {
-                              "title": "Upload",
-                              "type": "boolean"
-                            },
-                            "report": {
-                              "title": "Report",
+                            "stick-unstick": {
+                              "title": "Stick",
                               "type": "boolean"
                             }
                           },
@@ -17037,9 +15184,7 @@
                             "view",
                             "edit",
                             "delete",
-                            "reply",
-                            "upload_attachment",
-                            "report"
+                            "stick-unstick"
                           ]
                         }
                       },
@@ -17050,13 +15195,13 @@
                         "creator_username",
                         "creator_username_html",
                         "message_create_date",
+                        "message_is_unread",
+                        "message_need_translate",
+                        "message_is_system",
+                        "message_edit_date",
                         "message_body",
                         "message_body_html",
                         "message_body_plain_text",
-                        "signature",
-                        "signature_html",
-                        "signature_plain_text",
-                        "message_attachment_count",
                         "user_is_ignored",
                         "links",
                         "permissions"
@@ -17065,11 +15210,7 @@
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "message",
-                    "system_info"
-                  ]
+                  }
                 }
               }
             }
@@ -17094,7 +15235,7 @@
         ]
       }
     },
-    "/conversation-messages/{message_id}": {
+    "/conversations/messages/{message_id}": {
       "get": {
         "tags": [
           "Conversations"
@@ -17111,7 +15252,7 @@
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "message_id",
+              "title": "Message Id",
               "type": "integer",
               "description": "Id of message."
             }
@@ -17315,6 +15456,19 @@
         "operationId": "Conversations.Messages.Edit",
         "parameters": [
           {
+            "name": "conversation_id",
+            "in": "query",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "title": "Conversation Id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
             "name": "message_id",
             "in": "path",
             "description": "Id of message.",
@@ -17322,7 +15476,7 @@
             "style": "simple",
             "explode": false,
             "schema": {
-              "title": "message_id",
+              "title": "Message Id",
               "type": "integer",
               "description": "Id of message."
             }
@@ -17354,6 +15508,11 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "system_info"
+                  ],
                   "properties": {
                     "message": {
                       "title": "Message",
@@ -17383,6 +15542,22 @@
                           "title": "Message",
                           "type": "integer"
                         },
+                        "message_is_unread": {
+                          "title": "Message",
+                          "type": "integer"
+                        },
+                        "message_need_translate": {
+                          "title": "Message",
+                          "type": "boolean"
+                        },
+                        "message_is_system": {
+                          "title": "Message",
+                          "type": "boolean"
+                        },
+                        "message_edit_date": {
+                          "title": "Message",
+                          "type": "integer"
+                        },
                         "message_body": {
                           "title": "Message",
                           "type": "string"
@@ -17394,22 +15569,6 @@
                         "message_body_plain_text": {
                           "title": "Message",
                           "type": "string"
-                        },
-                        "signature": {
-                          "title": "Signature",
-                          "type": "string"
-                        },
-                        "signature_html": {
-                          "title": "Signature",
-                          "type": "string"
-                        },
-                        "signature_plain_text": {
-                          "title": "Signature",
-                          "type": "string"
-                        },
-                        "message_attachment_count": {
-                          "title": "Message",
-                          "type": "integer"
                         },
                         "user_is_ignored": {
                           "title": "User",
@@ -17434,18 +15593,13 @@
                             "creator_avatar": {
                               "title": "Creator",
                               "type": "string"
-                            },
-                            "report": {
-                              "title": "Report",
-                              "type": "string"
                             }
                           },
                           "required": [
                             "detail",
                             "conversation",
                             "creator",
-                            "creator_avatar",
-                            "report"
+                            "creator_avatar"
                           ]
                         },
                         "permissions": {
@@ -17464,16 +15618,8 @@
                               "title": "Delete",
                               "type": "boolean"
                             },
-                            "reply": {
-                              "title": "Reply",
-                              "type": "boolean"
-                            },
-                            "upload_attachment": {
-                              "title": "Upload",
-                              "type": "boolean"
-                            },
-                            "report": {
-                              "title": "Report",
+                            "stick-unstick": {
+                              "title": "Stick",
                               "type": "boolean"
                             }
                           },
@@ -17481,9 +15627,7 @@
                             "view",
                             "edit",
                             "delete",
-                            "reply",
-                            "upload_attachment",
-                            "report"
+                            "stick-unstick"
                           ]
                         }
                       },
@@ -17494,13 +15638,13 @@
                         "creator_username",
                         "creator_username_html",
                         "message_create_date",
+                        "message_is_unread",
+                        "message_need_translate",
+                        "message_is_system",
+                        "message_edit_date",
                         "message_body",
                         "message_body_html",
                         "message_body_plain_text",
-                        "signature",
-                        "signature_html",
-                        "signature_plain_text",
-                        "message_attachment_count",
                         "user_is_ignored",
                         "links",
                         "permissions"
@@ -17509,11 +15653,449 @@
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post",
+              "conversate"
+            ]
+          }
+        ]
+      }
+    },
+    "/conversations/read-all": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Read All Conversations",
+        "description": "Mark all conversations as read.\n\nRequired scopes:\n+ **read**\n+ **conversate**",
+        "operationId": "Conversations.ReadAll",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Empty response"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read",
+              "conversate"
+            ]
+          }
+        ]
+      }
+    },
+    "/conversations/{conversation_id}/messages/{message_id}/stick": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Stick Conversation Message",
+        "description": "Stick a message in a conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
+        "operationId": "Conversations.Messages.Stick",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Conversation Id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "message_id",
+            "in": "path",
+            "description": "Id of message.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Message Id",
+              "type": "integer",
+              "description": "Id of message."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post",
+              "conversate"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Unstick Conversation Message",
+        "description": "Unstick a message in a conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
+        "operationId": "Conversations.Messages.Unstick",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Conversation Id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "message_id",
+            "in": "path",
+            "description": "Id of message.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Message Id",
+              "type": "integer",
+              "description": "Id of message."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post",
+              "conversate"
+            ]
+          }
+        ]
+      }
+    },
+    "/conversations/{conversation_id}/star": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Star Conversation",
+        "description": "Star conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
+        "operationId": "Conversations.Star",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "conversation_id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
                   "required": [
+                    "status",
                     "message",
                     "system_info"
-                  ]
+                  ],
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post",
+              "conversate"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Unstar Conversation",
+        "description": "Unstar conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
+        "operationId": "Conversations.Unstar",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "conversation_id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post",
+              "conversate"
+            ]
+          }
+        ]
+      }
+    },
+    "/conversations/{conversation_id}/alerts": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Enable Conversation Alerts",
+        "description": "Enable alerts for conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
+        "operationId": "Conversations.Alerts.Enable",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "conversation_id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post",
+              "conversate"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Disable Conversation Alerts",
+        "description": "Disable alerts for conversation.\n\nRequired scopes:\n+ **post**\n+ **conversate**",
+        "operationId": "Conversations.Alerts.Disable",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "conversation_id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
                 }
               }
             }
@@ -21290,294 +19872,7 @@
                             ]
                           },
                           "timeline_user": {
-                            "title": "Timeline",
-                            "type": "object",
-                            "properties": {
-                              "user_id": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "username": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "username_html": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "user_message_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_register_date": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_like_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_like2_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "contest_count": {
-                                "title": "Contest",
-                                "type": "integer"
-                              },
-                              "trophy_count": {
-                                "title": "Trophy",
-                                "type": "integer"
-                              },
-                              "custom_title": {
-                                "title": "Custom",
-                                "type": "string"
-                              },
-                              "is_banned": {
-                                "title": "Is",
-                                "type": "integer"
-                              },
-                              "user_title": {
-                                "title": "User",
-                                "type": "string"
-                              },
-                              "user_is_valid": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_is_verified": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_is_followed": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_last_seen_date": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_following_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "user_followers_count": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "links": {
-                                "title": "Links",
-                                "type": "object",
-                                "properties": {
-                                  "permalink": {
-                                    "title": "Permalink",
-                                    "type": "string"
-                                  },
-                                  "detail": {
-                                    "title": "Detail",
-                                    "type": "string"
-                                  },
-                                  "avatar": {
-                                    "title": "Avatar",
-                                    "type": "string"
-                                  },
-                                  "avatar_big": {
-                                    "title": "Avatar",
-                                    "type": "string"
-                                  },
-                                  "avatar_small": {
-                                    "title": "Avatar",
-                                    "type": "string"
-                                  },
-                                  "followers": {
-                                    "title": "Followers",
-                                    "type": "string"
-                                  },
-                                  "followings": {
-                                    "title": "Followings",
-                                    "type": "string"
-                                  },
-                                  "ignore": {
-                                    "title": "Ignore",
-                                    "type": "string"
-                                  },
-                                  "timeline": {
-                                    "title": "Timeline",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "permalink",
-                                  "detail",
-                                  "avatar",
-                                  "avatar_big",
-                                  "avatar_small",
-                                  "followers",
-                                  "followings",
-                                  "ignore",
-                                  "timeline"
-                                ]
-                              },
-                              "permissions": {
-                                "title": "Permissions",
-                                "type": "object",
-                                "properties": {
-                                  "edit": {
-                                    "title": "Edit",
-                                    "type": "boolean"
-                                  },
-                                  "follow": {
-                                    "title": "Follow",
-                                    "type": "boolean"
-                                  },
-                                  "ignore": {
-                                    "title": "Ignore",
-                                    "type": "boolean"
-                                  },
-                                  "profile_post": {
-                                    "title": "Profile",
-                                    "type": "boolean"
-                                  }
-                                },
-                                "required": [
-                                  "edit",
-                                  "follow",
-                                  "ignore",
-                                  "profile_post"
-                                ]
-                              },
-                              "user_is_ignored": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_is_visitor": {
-                                "title": "User",
-                                "type": "boolean"
-                              },
-                              "user_group_id": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "custom_fields": {
-                                "title": "Custom",
-                                "type": "object",
-                                "properties": {
-                                  "_4": {
-                                    "title": "",
-                                    "type": "string"
-                                  },
-                                  "discord": {
-                                    "title": "Discord",
-                                    "type": "string"
-                                  },
-                                  "jabber": {
-                                    "title": "Jabber",
-                                    "type": "string"
-                                  },
-                                  "lztAwardUserTrophy": {
-                                    "title": "Lzt award user trophy",
-                                    "type": "string"
-                                  },
-                                  "lztCuratorNodeTitle": {
-                                    "title": "Lzt curator node title",
-                                    "type": "string"
-                                  },
-                                  "lztCuratorNodeTitleEn": {
-                                    "title": "Lzt curator node title en",
-                                    "type": "string"
-                                  },
-                                  "lztDeposit": {
-                                    "title": "Lzt deposit",
-                                    "type": "string"
-                                  },
-                                  "lztInnovation20Link": {
-                                    "title": "Lzt innovation link",
-                                    "type": "string"
-                                  },
-                                  "lztInnovation30Link": {
-                                    "title": "Lzt innovation link",
-                                    "type": "string"
-                                  },
-                                  "lztInnovationLink": {
-                                    "title": "Lzt innovation link",
-                                    "type": "string"
-                                  },
-                                  "lztSympathyIncreasing": {
-                                    "title": "Lzt sympathy increasing",
-                                    "type": "string"
-                                  },
-                                  "lztSympathyZeroing": {
-                                    "title": "Lzt sympathy zeroing",
-                                    "type": "string"
-                                  },
-                                  "maecenasValue": {
-                                    "title": "Maecenas value",
-                                    "type": "string"
-                                  },
-                                  "scamURL": {
-                                    "title": "Scam url",
-                                    "type": "string"
-                                  },
-                                  "steam": {
-                                    "title": "Steam",
-                                    "type": "string"
-                                  },
-                                  "telegram": {
-                                    "title": "Telegram",
-                                    "type": "string"
-                                  },
-                                  "vk": {
-                                    "title": "Vk",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "_4",
-                                  "discord",
-                                  "jabber",
-                                  "lztAwardUserTrophy",
-                                  "lztCuratorNodeTitle",
-                                  "lztCuratorNodeTitleEn",
-                                  "lztDeposit",
-                                  "lztInnovation20Link",
-                                  "lztInnovation30Link",
-                                  "lztInnovationLink",
-                                  "lztSympathyIncreasing",
-                                  "lztSympathyZeroing",
-                                  "maecenasValue",
-                                  "scamURL",
-                                  "steam",
-                                  "telegram",
-                                  "vk"
-                                ]
-                              }
-                            },
-                            "required": [
-                              "user_id",
-                              "username",
-                              "username_html",
-                              "user_message_count",
-                              "user_register_date",
-                              "user_like_count",
-                              "user_like2_count",
-                              "contest_count",
-                              "trophy_count",
-                              "custom_title",
-                              "is_banned",
-                              "user_title",
-                              "user_is_valid",
-                              "user_is_verified",
-                              "user_is_followed",
-                              "user_last_seen_date",
-                              "user_following_count",
-                              "user_followers_count",
-                              "links",
-                              "permissions",
-                              "user_is_ignored",
-                              "user_is_visitor",
-                              "user_group_id",
-                              "custom_fields"
-                            ]
+                            "$ref":"#/components/schemas/UserModel"
                           }
                         },
                         "required": [
@@ -22557,7 +20852,10 @@
                       }
                     },
                     "ban": {
-                      "type": ["object", "boolean"],
+                      "type": [
+                        "object",
+                        "boolean"
+                      ],
                       "required": [
                         "user_id",
                         "username",
@@ -22784,7 +21082,10 @@
                   ],
                   "properties": {
                     "ban": {
-                      "type": ["object", "boolean"],
+                      "type": [
+                        "object",
+                        "boolean"
+                      ],
                       "required": [
                         "user_id",
                         "username",
@@ -24673,6 +22974,335 @@
       }
     },
     "schemas": {
+      "UserModel": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "username",
+          "username_html",
+          "user_message_count",
+          "user_register_date",
+          "user_like_count",
+          "user_like2_count",
+          "contest_count",
+          "trophy_count",
+          "short_link",
+          "custom_title",
+          "is_banned",
+          "user_title",
+          "user_deposit",
+          "user_is_valid",
+          "user_is_verified",
+          "user_is_followed",
+          "user_last_seen_date",
+          "user_following",
+          "user_followers",
+          "links",
+          "permissions",
+          "user_is_ignored",
+          "user_is_visitor",
+          "user_group_id",
+          "fields"
+        ],
+        "properties": {
+          "user_id": {
+            "title": "User",
+            "type": "integer"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "username_html": {
+            "title": "Username",
+            "type": "string"
+          },
+          "user_message_count": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_register_date": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_like_count": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_like2_count": {
+            "title": "User",
+            "type": "integer"
+          },
+          "contest_count": {
+            "title": "Contest",
+            "type": "integer"
+          },
+          "trophy_count": {
+            "title": "Trophy",
+            "type": "integer"
+          },
+          "short_link": {
+            "title": "Short",
+            "type": "string"
+          },
+          "custom_title": {
+            "title": "Custom",
+            "type": "string"
+          },
+          "is_banned": {
+            "title": "Is",
+            "type": "integer"
+          },
+          "user_title": {
+            "title": "User",
+            "type": "string"
+          },
+          "user_deposit": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_is_valid": {
+            "title": "User",
+            "type": "boolean"
+          },
+          "user_is_verified": {
+            "title": "User",
+            "type": "boolean"
+          },
+          "user_is_followed": {
+            "title": "User",
+            "type": "boolean"
+          },
+          "user_last_seen_date": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_following": {
+            "title": "User",
+            "type": "object",
+            "properties": {
+              "users": {
+                "title": "Users",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "title": "User",
+                      "type": "integer"
+                    },
+                    "username": {
+                      "title": "Username",
+                      "type": "string"
+                    },
+                    "username_html": {
+                      "title": "Username",
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "title": "Avatar",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "user_id",
+                    "username",
+                    "username_html",
+                    "avatar"
+                  ]
+                }
+              },
+              "count": {
+                "title": "Count",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "users",
+              "count"
+            ]
+          },
+          "user_followers": {
+            "title": "User",
+            "type": "object",
+            "properties": {
+              "users": {
+                "title": "Users",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "title": "User",
+                      "type": "integer"
+                    },
+                    "username": {
+                      "title": "Username",
+                      "type": "string"
+                    },
+                    "username_html": {
+                      "title": "Username",
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "title": "Avatar",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "user_id",
+                    "username",
+                    "username_html",
+                    "avatar"
+                  ]
+                }
+              },
+              "count": {
+                "title": "Count",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "users",
+              "count"
+            ]
+          },
+          "links": {
+            "title": "Links",
+            "type": "object",
+            "properties": {
+              "permalink": {
+                "title": "Permalink",
+                "type": "string"
+              },
+              "detail": {
+                "title": "Detail",
+                "type": "string"
+              },
+              "avatar": {
+                "title": "Avatar",
+                "type": "string"
+              },
+              "avatar_big": {
+                "title": "Avatar",
+                "type": "string"
+              },
+              "avatar_small": {
+                "title": "Avatar",
+                "type": "string"
+              },
+              "followers": {
+                "title": "Followers",
+                "type": "string"
+              },
+              "followings": {
+                "title": "Followings",
+                "type": "string"
+              },
+              "ignore": {
+                "title": "Ignore",
+                "type": "string"
+              },
+              "timeline": {
+                "title": "Timeline",
+                "type": "string"
+              }
+            },
+            "required": [
+              "permalink",
+              "detail",
+              "avatar",
+              "avatar_big",
+              "avatar_small",
+              "followers",
+              "followings",
+              "ignore",
+              "timeline"
+            ]
+          },
+          "permissions": {
+            "title": "Permissions",
+            "type": "object",
+            "properties": {
+              "edit": {
+                "title": "Edit",
+                "type": "boolean"
+              },
+              "follow": {
+                "title": "Follow",
+                "type": "boolean"
+              },
+              "ignore": {
+                "title": "Ignore",
+                "type": "boolean"
+              },
+              "profile_post": {
+                "title": "Profile",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "edit",
+              "follow",
+              "ignore",
+              "profile_post"
+            ]
+          },
+          "user_is_ignored": {
+            "title": "User",
+            "type": "boolean"
+          },
+          "user_is_visitor": {
+            "title": "User",
+            "type": "boolean"
+          },
+          "user_group_id": {
+            "title": "User",
+            "type": "integer"
+          },
+          "fields": {
+            "title": "Fields",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "title": "Id",
+                  "type": "string"
+                },
+                "title": {
+                  "title": "Title",
+                  "type": "string"
+                },
+                "description": {
+                  "title": "Description",
+                  "type": "string"
+                },
+                "position": {
+                  "title": "Position",
+                  "type": "string"
+                },
+                "is_required": {
+                  "title": "Is",
+                  "type": "boolean"
+                },
+                "value": {
+                  "title": "Value",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "description",
+                "position",
+                "is_required",
+                "value"
+              ]
+            }
+          }
+        }
+      },
       "ThreadModel": {
         "type": "object",
         "required": [
