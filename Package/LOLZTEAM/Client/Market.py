@@ -1194,7 +1194,7 @@ class Market(APIClient):
             ```
             """
             json = {
-                "tag_id[]": tag_id
+                "tag_id": tag_id
             }
             return await self.core.request("POST", f"/{item_id}/tag", json=json)
 
@@ -1219,7 +1219,7 @@ class Market(APIClient):
             ```
             """
             json = {
-                "tag_id[]": tag_id
+                "tag_id": tag_id
             }
             return await self.core.request("DELETE", f"/{item_id}/tag", json=json)
 
