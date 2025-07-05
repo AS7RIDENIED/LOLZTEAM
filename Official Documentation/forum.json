@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.14a"
+    "version": "1.1.15"
   },
   "servers": [
     {
@@ -20570,7 +20570,7 @@
           "Chatbox"
         ],
         "summary": "Get Chats",
-        "description": "Get chatbox rooms.\n\nRequired scopes:\n+ **read**",
+        "description": "Get chatbox rooms.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.Index",
         "parameters": [
           {
@@ -20581,31 +20581,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "type": "integer",
-              "x-enumDescriptions": {
-                "1": "[Russian] Chat",
-                "2": "General chat",
-                "3": "[Russian] Market chat",
-                "4": "Market chat",
-                "8": "Newbie chat",
-                "9": "[Russian] Marketplace",
-                "10": "Marketplace",
-                "11": "[Russian] ChatGPT",
-                "12": "ChatGPT",
-                "13": "No whiners"
-              },
-              "enum": [
-                1,
-                2,
-                3,
-                4,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13
-              ]
+              "$ref":"#/components/schemas/RoomIdModel"
             }
           }
         ],
@@ -20617,157 +20593,244 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "ignoredUsers",
-                    "ban",
-                    "room",
                     "rooms",
-                    "roomCount",
+                    "ban",
+                    "ignore",
                     "permissions",
+                    "commands",
                     "system_info"
                   ],
                   "properties": {
-                    "ignoredUsers": {
-                      "title": "Ignored Users",
-                      "type": "array",
-                      "items": {
-                        "type": "integer"
-                      }
-                    },
-                    "ban": {
-                      "type": [
-                        "object",
-                        "boolean"
-                      ],
-                      "required": [
-                        "user_id",
-                        "username",
-                        "moderator_id",
-                        "moderator_username",
-                        "ban_date",
-                        "end_date",
-                        "reason",
-                        "user_message"
-                      ],
-                      "properties": {
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "username": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "moderator_id": {
-                          "title": "Moderator",
-                          "type": "integer"
-                        },
-                        "moderator_username": {
-                          "title": "Moderator",
-                          "type": "string"
-                        },
-                        "ban_date": {
-                          "title": "Ban",
-                          "type": "integer"
-                        },
-                        "end_date": {
-                          "title": "End",
-                          "type": "integer"
-                        },
-                        "reason": {
-                          "title": "Reason",
-                          "type": "string"
-                        },
-                        "user_message": {
-                          "title": "User",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "room": {
-                      "title": "Room",
-                      "type": "object",
-                      "properties": {
-                        "room_id": {
-                          "title": "Room",
-                          "type": "integer"
-                        },
-                        "post_cooldown": {
-                          "title": "Post",
-                          "type": "integer"
-                        },
-                        "title": {
-                          "title": "Title",
-                          "type": "string"
-                        },
-                        "canPostMessages": {
-                          "title": "Can Post Messages",
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "room_id",
-                        "post_cooldown",
-                        "title",
-                        "canPostMessages"
-                      ]
-                    },
                     "rooms": {
                       "title": "Rooms",
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
+                          "can_report": {
+                            "title": "Can",
+                            "type": "boolean"
+                          },
+                          "eng": {
+                            "title": "Eng",
+                            "type": "boolean"
+                          },
+                          "market": {
+                            "title": "Market",
+                            "type": "boolean"
+                          },
                           "room_id": {
                             "title": "Room",
-                            "type": "integer"
-                          },
-                          "post_cooldown": {
-                            "title": "Post",
                             "type": "integer"
                           },
                           "title": {
                             "title": "Title",
                             "type": "string"
-                          },
-                          "canPostMessages": {
-                            "title": "Can Post Messages",
-                            "type": "boolean"
                           }
                         },
                         "required": [
+                          "can_report",
+                          "eng",
+                          "market",
                           "room_id",
-                          "post_cooldown",
-                          "title",
-                          "canPostMessages"
+                          "title"
                         ]
                       }
                     },
-                    "roomCount": {
-                      "title": "Room Count",
-                      "type": "integer"
+                    "ban": {
+                      "title": "Ban"
+                    },
+                    "ignore": {
+                      "title": "Ignore",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "avatar_date": {
+                            "title": "Avatar",
+                            "type": "integer"
+                          },
+                          "background_date": {
+                            "title": "Background",
+                            "type": "integer"
+                          },
+                          "contest_count": {
+                            "title": "Contest",
+                            "type": "integer"
+                          },
+                          "custom_title": {
+                            "title": "Custom",
+                            "type": "string"
+                          },
+                          "display_banner_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_icon_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_style_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "is_banned": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "last_activity": {
+                            "title": "Last",
+                            "type": "integer"
+                          },
+                          "like2_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "like_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "message_count": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
+                          "register_date": {
+                            "title": "Register",
+                            "type": "integer"
+                          },
+                          "rendered": {
+                            "title": "Rendered",
+                            "type": "object",
+                            "properties": {
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "avatars": {
+                                "title": "Avatars",
+                                "type": "object",
+                                "properties": {
+                                  "l": {
+                                    "title": "L",
+                                    "type": "string"
+                                  },
+                                  "m": {
+                                    "title": "M",
+                                    "type": "string"
+                                  },
+                                  "s": {
+                                    "title": "S",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "l",
+                                  "m",
+                                  "s"
+                                ]
+                              },
+                              "link": {
+                                "title": "Link",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "avatars",
+                              "link"
+                            ]
+                          },
+                          "short_link": {
+                            "title": "Short"
+                          },
+                          "trophy_points": {
+                            "title": "Trophy",
+                            "type": "integer"
+                          },
+                          "uniq_banner": {
+                            "title": "Uniq"
+                          },
+                          "uniq_username_css": {
+                            "title": "Uniq",
+                            "type": "string"
+                          },
+                          "user_id": {
+                            "title": "User",
+                            "type": "integer"
+                          },
+                          "username": {
+                            "title": "Username",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "avatar_date",
+                          "background_date",
+                          "contest_count",
+                          "custom_title",
+                          "display_banner_id",
+                          "display_icon_group_id",
+                          "display_style_group_id",
+                          "is_banned",
+                          "last_activity",
+                          "like2_count",
+                          "like_count",
+                          "message_count",
+                          "register_date",
+                          "rendered",
+                          "short_link",
+                          "trophy_points",
+                          "uniq_banner",
+                          "uniq_username_css",
+                          "user_id",
+                          "username"
+                        ]
+                      }
                     },
                     "permissions": {
                       "title": "Permissions",
                       "type": "object",
                       "properties": {
-                        "canPostMessage": {
-                          "title": "Can Post Message",
+                        "deleteAnyMessage": {
+                          "title": "Delete Any Message",
                           "type": "boolean"
                         },
-                        "canViewChatbox": {
-                          "title": "Can View Chatbox",
+                        "editAnyMessage": {
+                          "title": "Edit Any Message",
                           "type": "boolean"
                         },
-                        "canBanUser": {
-                          "title": "Can Ban User",
+                        "viewAnyMessage": {
+                          "title": "View Any Message",
+                          "type": "boolean"
+                        },
+                        "viewMessages": {
+                          "title": "View Messages",
+                          "type": "boolean"
+                        },
+                        "postMessage": {
+                          "title": "Post Message",
+                          "type": "boolean"
+                        },
+                        "ban": {
+                          "title": "Ban",
                           "type": "boolean"
                         }
                       },
                       "required": [
-                        "canPostMessage",
-                        "canViewChatbox",
-                        "canBanUser"
+                        "deleteAnyMessage",
+                        "editAnyMessage",
+                        "viewAnyMessage",
+                        "viewMessages",
+                        "postMessage",
+                        "ban"
                       ]
+                    },
+                    "commands": {
+                      "title": "Commands",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -20787,7 +20850,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "read"
+              "chatbox"
             ]
           }
         ]
@@ -20799,7 +20862,7 @@
           "Chatbox"
         ],
         "summary": "Get Chat Messages",
-        "description": "Get chatbox rooms.\n\nRequired scopes:\n+ **read**",
+        "description": "Get chatbox rooms.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.GetMessages",
         "parameters": [
           {
@@ -20810,34 +20873,11 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "type": "integer",
-              "x-enumDescriptions": {
-                "1": "[Russian] Chat",
-                "2": "General chat",
-                "3": "[Russian] Market chat",
-                "4": "Market chat",
-                "8": "Newbie chat",
-                "9": "[Russian] Marketplace",
-                "10": "Marketplace",
-                "11": "[Russian] ChatGPT",
-                "12": "ChatGPT",
-                "13": "No whiners"
-              },
-              "enum": [
-                1,
-                2,
-                3,
-                4,
-                8,
-                9,
-                10,
-                11,
-                12
-              ]
+              "$ref":"#/components/schemas/RoomIdModel"
             }
           },
           {
-            "name": "before_message",
+            "name": "before_message_id",
             "in": "query",
             "description": "Message id to get older chat messages.",
             "required": false,
@@ -20857,110 +20897,456 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "ban",
-                    "ignoredUsers",
                     "messages",
                     "system_info"
                   ],
                   "properties": {
-                    "ban": {
-                      "title": "Ban",
-                      "type": "boolean"
-                    },
-                    "ignoredUsers": {
-                      "title": "Ignored Users",
-                      "type": "array",
-                      "items": {
-                        "type": "integer"
-                      }
-                    },
                     "messages": {
                       "title": "Messages",
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "message_id": {
-                            "title": "Message",
+                          "date": {
+                            "title": "Date",
                             "type": "integer"
                           },
-                          "room_id": {
-                            "title": "Room",
-                            "type": "integer"
-                          },
-                          "user_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "username": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "username_html": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "plain_message": {
-                            "title": "Plain",
-                            "type": "string"
-                          },
-                          "message_date": {
-                            "title": "Message",
-                            "type": "integer"
-                          },
-                          "is_curator_message": {
+                          "is_deleted": {
                             "title": "Is",
                             "type": "boolean"
-                          },
-                          "poster_avatar": {
-                            "title": "Poster",
-                            "type": "string"
                           },
                           "message": {
                             "title": "Message",
                             "type": "string"
                           },
-                          "permissions": {
-                            "title": "Permissions",
+                          "message_id": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
+                          "messageRaw": {
+                            "title": "Message Raw",
+                            "type": "string"
+                          },
+                          "reply_message": {
+                            "title": "Reply",
                             "type": "object",
                             "properties": {
-                              "report": {
-                                "title": "Report",
+                              "date": {
+                                "title": "Date",
+                                "type": "integer"
+                              },
+                              "is_deleted": {
+                                "title": "Is",
                                 "type": "boolean"
                               },
-                              "edit": {
-                                "title": "Edit",
-                                "type": "boolean"
+                              "message": {
+                                "title": "Message",
+                                "type": "string"
                               },
-                              "delete": {
-                                "title": "Delete",
-                                "type": "boolean"
+                              "message_id": {
+                                "title": "Message",
+                                "type": "integer"
                               },
-                              "ban": {
-                                "title": "Ban",
-                                "type": "boolean"
+                              "messageRaw": {
+                                "title": "Message Raw",
+                                "type": "string"
+                              },
+                              "room": {
+                                "title": "Room",
+                                "type": "object",
+                                "properties": {
+                                  "can_report": {
+                                    "title": "Can",
+                                    "type": "boolean"
+                                  },
+                                  "eng": {
+                                    "title": "Eng",
+                                    "type": "boolean"
+                                  },
+                                  "market": {
+                                    "title": "Market",
+                                    "type": "boolean"
+                                  },
+                                  "room_id": {
+                                    "title": "Room",
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "title": "Title",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "can_report",
+                                  "eng",
+                                  "market",
+                                  "room_id",
+                                  "title"
+                                ]
+                              },
+                              "user": {
+                                "title": "User",
+                                "type": "object",
+                                "properties": {
+                                  "avatar_date": {
+                                    "title": "Avatar",
+                                    "type": "integer"
+                                  },
+                                  "background_date": {
+                                    "title": "Background",
+                                    "type": "integer"
+                                  },
+                                  "contest_count": {
+                                    "title": "Contest",
+                                    "type": "integer"
+                                  },
+                                  "custom_title": {
+                                    "title": "Custom",
+                                    "type": "string"
+                                  },
+                                  "display_banner_id": {
+                                    "title": "Display",
+                                    "type": "integer"
+                                  },
+                                  "display_icon_group_id": {
+                                    "title": "Display",
+                                    "type": "integer"
+                                  },
+                                  "display_style_group_id": {
+                                    "title": "Display",
+                                    "type": "integer"
+                                  },
+                                  "is_banned": {
+                                    "title": "Is",
+                                    "type": "boolean"
+                                  },
+                                  "last_activity": {
+                                    "title": "Last",
+                                    "type": "integer"
+                                  },
+                                  "like2_count": {
+                                    "title": "Like",
+                                    "type": "integer"
+                                  },
+                                  "like_count": {
+                                    "title": "Like",
+                                    "type": "integer"
+                                  },
+                                  "message_count": {
+                                    "title": "Message",
+                                    "type": "integer"
+                                  },
+                                  "register_date": {
+                                    "title": "Register",
+                                    "type": "integer"
+                                  },
+                                  "rendered": {
+                                    "title": "Rendered",
+                                    "type": "object",
+                                    "properties": {
+                                      "username": {
+                                        "title": "Username",
+                                        "type": "string"
+                                      },
+                                      "avatars": {
+                                        "title": "Avatars",
+                                        "type": "object",
+                                        "properties": {
+                                          "l": {
+                                            "title": "L",
+                                            "type": "string"
+                                          },
+                                          "m": {
+                                            "title": "M",
+                                            "type": "string"
+                                          },
+                                          "s": {
+                                            "title": "S",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "l",
+                                          "m",
+                                          "s"
+                                        ]
+                                      },
+                                      "link": {
+                                        "title": "Link",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "username",
+                                      "avatars",
+                                      "link"
+                                    ]
+                                  },
+                                  "short_link": {
+                                    "title": "Short",
+                                    "type": "string"
+                                  },
+                                  "trophy_points": {
+                                    "title": "Trophy",
+                                    "type": "integer"
+                                  },
+                                  "uniq_banner": {
+                                    "title": "Uniq"
+                                  },
+                                  "uniq_username_css": {
+                                    "title": "Uniq",
+                                    "type": "string"
+                                  },
+                                  "user_id": {
+                                    "title": "User",
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "title": "Username",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "avatar_date",
+                                  "background_date",
+                                  "contest_count",
+                                  "custom_title",
+                                  "display_banner_id",
+                                  "display_icon_group_id",
+                                  "display_style_group_id",
+                                  "is_banned",
+                                  "last_activity",
+                                  "like2_count",
+                                  "like_count",
+                                  "message_count",
+                                  "register_date",
+                                  "rendered",
+                                  "short_link",
+                                  "trophy_points",
+                                  "uniq_banner",
+                                  "uniq_username_css",
+                                  "user_id",
+                                  "username"
+                                ]
                               }
                             },
                             "required": [
-                              "report",
-                              "edit",
-                              "delete",
-                              "ban"
+                              "date",
+                              "is_deleted",
+                              "message",
+                              "message_id",
+                              "messageRaw",
+                              "room",
+                              "user"
+                            ]
+                          },
+                          "room": {
+                            "title": "Room",
+                            "type": "object",
+                            "properties": {
+                              "can_report": {
+                                "title": "Can",
+                                "type": "boolean"
+                              },
+                              "eng": {
+                                "title": "Eng",
+                                "type": "boolean"
+                              },
+                              "market": {
+                                "title": "Market",
+                                "type": "boolean"
+                              },
+                              "room_id": {
+                                "title": "Room",
+                                "type": "integer"
+                              },
+                              "title": {
+                                "title": "Title",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "can_report",
+                              "eng",
+                              "market",
+                              "room_id",
+                              "title"
+                            ]
+                          },
+                          "user": {
+                            "title": "User",
+                            "type": "object",
+                            "properties": {
+                              "avatar_date": {
+                                "title": "Avatar",
+                                "type": "integer"
+                              },
+                              "background_date": {
+                                "title": "Background",
+                                "type": "integer"
+                              },
+                              "contest_count": {
+                                "title": "Contest",
+                                "type": "integer"
+                              },
+                              "custom_title": {
+                                "title": "Custom",
+                                "type": "string"
+                              },
+                              "display_banner_id": {
+                                "title": "Display",
+                                "type": "integer"
+                              },
+                              "display_icon_group_id": {
+                                "title": "Display",
+                                "type": "integer"
+                              },
+                              "display_style_group_id": {
+                                "title": "Display",
+                                "type": "integer"
+                              },
+                              "is_banned": {
+                                "title": "Is",
+                                "type": "boolean"
+                              },
+                              "last_activity": {
+                                "title": "Last",
+                                "type": "integer"
+                              },
+                              "like2_count": {
+                                "title": "Like",
+                                "type": "integer"
+                              },
+                              "like_count": {
+                                "title": "Like",
+                                "type": "integer"
+                              },
+                              "message_count": {
+                                "title": "Message",
+                                "type": "integer"
+                              },
+                              "register_date": {
+                                "title": "Register",
+                                "type": "integer"
+                              },
+                              "rendered": {
+                                "title": "Rendered",
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "title": "Username",
+                                    "type": "string"
+                                  },
+                                  "avatars": {
+                                    "title": "Avatars",
+                                    "type": "object",
+                                    "properties": {
+                                      "l": {
+                                        "title": "L",
+                                        "type": "string"
+                                      },
+                                      "m": {
+                                        "title": "M",
+                                        "type": "string"
+                                      },
+                                      "s": {
+                                        "title": "S",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "l",
+                                      "m",
+                                      "s"
+                                    ]
+                                  },
+                                  "link": {
+                                    "title": "Link",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "username",
+                                  "avatars",
+                                  "link"
+                                ]
+                              },
+                              "short_link": {
+                                "title": "Short"
+                              },
+                              "trophy_points": {
+                                "title": "Trophy",
+                                "type": "integer"
+                              },
+                              "uniq_banner": {
+                                "title": "Uniq",
+                                "type": "object",
+                                "properties": {
+                                  "banner_css": {
+                                    "title": "Banner",
+                                    "type": "string"
+                                  },
+                                  "banner_text": {
+                                    "title": "Banner",
+                                    "type": "string"
+                                  },
+                                  "banner_icon": {
+                                    "title": "Banner",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "banner_css",
+                                  "banner_text",
+                                  "banner_icon"
+                                ]
+                              },
+                              "uniq_username_css": {
+                                "title": "Uniq",
+                                "type": "string"
+                              },
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "avatar_date",
+                              "background_date",
+                              "contest_count",
+                              "custom_title",
+                              "display_banner_id",
+                              "display_icon_group_id",
+                              "display_style_group_id",
+                              "is_banned",
+                              "last_activity",
+                              "like2_count",
+                              "like_count",
+                              "message_count",
+                              "register_date",
+                              "rendered",
+                              "short_link",
+                              "trophy_points",
+                              "uniq_banner",
+                              "uniq_username_css",
+                              "user_id",
+                              "username"
                             ]
                           }
                         },
                         "required": [
-                          "message_id",
-                          "room_id",
-                          "user_id",
-                          "username",
-                          "username_html",
-                          "plain_message",
-                          "message_date",
-                          "is_curator_message",
-                          "poster_avatar",
+                          "date",
+                          "is_deleted",
                           "message",
-                          "permissions"
+                          "message_id",
+                          "messageRaw",
+                          "reply_message",
+                          "room",
+                          "user"
                         ]
                       }
                     },
@@ -20985,19 +21371,17 @@
         "security": [
           {
             "HTTPBearer": [
-              "read"
+              "chatbox"
             ]
           }
         ]
-      }
-    },
-    "/chatbox/message": {
+      },
       "post": {
         "tags": [
           "Chatbox"
         ],
         "summary": "Create Chat Message",
-        "description": "Create chat message.\n\nRequired scopes:\n+ **post**",
+        "description": "Create chat message.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.PostMessage",
         "parameters": [
           {
@@ -21008,30 +21392,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "type": "integer",
-              "x-enumDescriptions": {
-                "1": "[Russian] Chat",
-                "2": "General chat",
-                "3": "[Russian] Market chat",
-                "4": "Market chat",
-                "8": "Newbie chat",
-                "9": "[Russian] Marketplace",
-                "10": "Marketplace",
-                "11": "[Russian] ChatGPT",
-                "12": "ChatGPT",
-                "13": "No whiners"
-              },
-              "enum": [
-                1,
-                2,
-                3,
-                4,
-                8,
-                9,
-                10,
-                11,
-                12
-              ]
+              "$ref":"#/components/schemas/RoomIdModel"
             }
           }
         ],
@@ -21068,90 +21429,242 @@
                   ],
                   "properties": {
                     "message": {
+                      "title": "Message",
                       "type": "object",
-                      "required": [
-                        "message_id",
-                        "room_id",
-                        "user_id",
-                        "username",
-                        "username_html",
-                        "plain_message",
-                        "message_date",
-                        "is_curator_message",
-                        "poster_avatar",
-                        "message",
-                        "permissions"
-                      ],
                       "properties": {
-                        "message_id": {
-                          "title": "Message",
-                          "type": "integer"
-                        },
-                        "room_id": {
-                          "title": "Room",
-                          "type": "integer"
-                        },
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "username": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "username_html": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "plain_message": {
-                          "title": "Plain",
-                          "type": "string"
-                        },
-                        "message_date": {
-                          "title": "Message",
-                          "type": "integer"
-                        },
-                        "is_curator_message": {
-                          "title": "Is",
+                        "can_report": {
+                          "title": "Can",
                           "type": "boolean"
                         },
-                        "poster_avatar": {
-                          "title": "Poster",
-                          "type": "string"
+                        "date": {
+                          "title": "Date",
+                          "type": "integer"
+                        },
+                        "is_deleted": {
+                          "title": "Is",
+                          "type": "boolean"
                         },
                         "message": {
                           "title": "Message",
                           "type": "string"
                         },
-                        "permissions": {
-                          "title": "Permissions",
+                        "message_id": {
+                          "title": "Message",
+                          "type": "integer"
+                        },
+                        "messageRaw": {
+                          "title": "Message Raw",
+                          "type": "string"
+                        },
+                        "room": {
+                          "title": "Room",
                           "type": "object",
                           "properties": {
-                            "report": {
-                              "title": "Report",
+                            "can_report": {
+                              "title": "Can",
                               "type": "boolean"
                             },
-                            "edit": {
-                              "title": "Edit",
+                            "eng": {
+                              "title": "Eng",
                               "type": "boolean"
                             },
-                            "delete": {
-                              "title": "Delete",
+                            "market": {
+                              "title": "Market",
                               "type": "boolean"
                             },
-                            "ban": {
-                              "title": "Ban",
-                              "type": "boolean"
+                            "room_id": {
+                              "title": "Room",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
                             }
                           },
                           "required": [
-                            "report",
-                            "edit",
-                            "delete",
-                            "ban"
+                            "can_report",
+                            "eng",
+                            "market",
+                            "room_id",
+                            "title"
+                          ]
+                        },
+                        "user": {
+                          "title": "User",
+                          "type": "object",
+                          "properties": {
+                            "avatar_date": {
+                              "title": "Avatar",
+                              "type": "integer"
+                            },
+                            "background_date": {
+                              "title": "Background",
+                              "type": "integer"
+                            },
+                            "contest_count": {
+                              "title": "Contest",
+                              "type": "integer"
+                            },
+                            "custom_title": {
+                              "title": "Custom",
+                              "type": "string"
+                            },
+                            "display_banner_id": {
+                              "title": "Display",
+                              "type": "integer"
+                            },
+                            "display_icon_group_id": {
+                              "title": "Display",
+                              "type": "integer"
+                            },
+                            "display_style_group_id": {
+                              "title": "Display",
+                              "type": "integer"
+                            },
+                            "email": {
+                              "title": "Email",
+                              "type": "string"
+                            },
+                            "is_admin": {
+                              "title": "Is",
+                              "type": "boolean"
+                            },
+                            "is_banned": {
+                              "title": "Is",
+                              "type": "boolean"
+                            },
+                            "is_moderator": {
+                              "title": "Is",
+                              "type": "boolean"
+                            },
+                            "is_staff": {
+                              "title": "Is",
+                              "type": "boolean"
+                            },
+                            "last_activity": {
+                              "title": "Last",
+                              "type": "integer"
+                            },
+                            "like2_count": {
+                              "title": "Like",
+                              "type": "integer"
+                            },
+                            "like_count": {
+                              "title": "Like",
+                              "type": "integer"
+                            },
+                            "message_count": {
+                              "title": "Message",
+                              "type": "integer"
+                            },
+                            "register_date": {
+                              "title": "Register",
+                              "type": "integer"
+                            },
+                            "rendered": {
+                              "title": "Rendered",
+                              "type": "object",
+                              "properties": {
+                                "username": {
+                                  "title": "Username",
+                                  "type": "string"
+                                },
+                                "avatars": {
+                                  "title": "Avatars",
+                                  "type": "object",
+                                  "properties": {
+                                    "l": {
+                                      "title": "L",
+                                      "type": "string"
+                                    },
+                                    "m": {
+                                      "title": "M",
+                                      "type": "string"
+                                    },
+                                    "s": {
+                                      "title": "S",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "l",
+                                    "m",
+                                    "s"
+                                  ]
+                                },
+                                "link": {
+                                  "title": "Link",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "username",
+                                "avatars",
+                                "link"
+                              ]
+                            },
+                            "short_link": {
+                              "title": "Short",
+                              "type": "string"
+                            },
+                            "trophy_points": {
+                              "title": "Trophy",
+                              "type": "integer"
+                            },
+                            "uniq_banner": {
+                              "title": "Uniq"
+                            },
+                            "uniq_username_css": {
+                              "title": "Uniq",
+                              "type": "string"
+                            },
+                            "user_id": {
+                              "title": "User",
+                              "type": "integer"
+                            },
+                            "username": {
+                              "title": "Username",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "avatar_date",
+                            "background_date",
+                            "contest_count",
+                            "custom_title",
+                            "display_banner_id",
+                            "display_icon_group_id",
+                            "display_style_group_id",
+                            "email",
+                            "is_admin",
+                            "is_banned",
+                            "is_moderator",
+                            "is_staff",
+                            "last_activity",
+                            "like2_count",
+                            "like_count",
+                            "message_count",
+                            "register_date",
+                            "rendered",
+                            "short_link",
+                            "trophy_points",
+                            "uniq_banner",
+                            "uniq_username_css",
+                            "user_id",
+                            "username"
                           ]
                         }
-                      }
+                      },
+                      "required": [
+                        "can_report",
+                        "date",
+                        "is_deleted",
+                        "message",
+                        "message_id",
+                        "messageRaw",
+                        "room",
+                        "user"
+                      ]
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -21174,7 +21687,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "post"
+              "chatbox"
             ]
           }
         ]
@@ -21184,7 +21697,7 @@
           "Chatbox"
         ],
         "summary": "Edit Chat Message",
-        "description": "Edit chat message.\n\nRequired scopes:\n+ **post**",
+        "description": "Edit chat message.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.EditMessage",
         "parameters": [
           {
@@ -21333,7 +21846,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "post"
+              "chatbox"
             ]
           }
         ]
@@ -21343,7 +21856,7 @@
           "Chatbox"
         ],
         "summary": "Delete Chat Message",
-        "description": "Delete chat message.\n\nRequired scopes:\n+ **post**",
+        "description": "Delete chat message.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.DeleteMessage",
         "parameters": [
           {
@@ -21375,19 +21888,19 @@
         "security": [
           {
             "HTTPBearer": [
-              "post"
+              "chatbox"
             ]
           }
         ]
       }
     },
-    "/chatbox/report": {
+    "/chatbox/messages/report": {
       "post": {
         "tags": [
           "Chatbox"
         ],
         "summary": "Report Chat Message",
-        "description": "Report chat message.\n\nRequired scopes:\n+ **post**",
+        "description": "Report chat message.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.ReportMessage",
         "parameters": [
           {
@@ -21439,19 +21952,441 @@
         "security": [
           {
             "HTTPBearer": [
-              "post"
+              "chatbox"
+            ]
+          }
+        ]
+      }
+    },
+    "/chatbox/messages/leaderboard": {
+      "get": {
+        "tags": [
+          "Chatbox"
+        ],
+        "summary": "Get Chat Leaderboard",
+        "description": "Get chat leaderboard.\n\nRequired scopes:\n+ **chatbox**",
+        "operationId": "Chatbox.GetLeaderboard",
+        "parameters": [
+          {
+            "name": "duration",
+            "in": "query",
+            "description": "Duration.",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "enum":["day","week","month"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "leaderboard",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "leaderboard": {
+                      "title": "Leaderboard",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "title": "Count",
+                            "type": "integer"
+                          },
+                          "user_id": {
+                            "title": "User",
+                            "type": "integer"
+                          },
+                          "avatar_date": {
+                            "title": "Avatar",
+                            "type": "integer"
+                          },
+                          "background_date": {
+                            "title": "Background",
+                            "type": "integer"
+                          },
+                          "contest_count": {
+                            "title": "Contest",
+                            "type": "integer"
+                          },
+                          "custom_title": {
+                            "title": "Custom",
+                            "type": "string"
+                          },
+                          "display_banner_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_icon_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_style_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "is_banned": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "last_activity": {
+                            "title": "Last",
+                            "type": "integer"
+                          },
+                          "like2_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "like_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "message_count": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
+                          "register_date": {
+                            "title": "Register",
+                            "type": "integer"
+                          },
+                          "rendered": {
+                            "title": "Rendered",
+                            "type": "object",
+                            "properties": {
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "avatars": {
+                                "title": "Avatars",
+                                "type": "object",
+                                "properties": {
+                                  "l": {
+                                    "title": "L",
+                                    "type": "string"
+                                  },
+                                  "m": {
+                                    "title": "M",
+                                    "type": "string"
+                                  },
+                                  "s": {
+                                    "title": "S",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "l",
+                                  "m",
+                                  "s"
+                                ]
+                              },
+                              "link": {
+                                "title": "Link",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "avatars",
+                              "link"
+                            ]
+                          },
+                          "short_link": {
+                            "title": "Short"
+                          },
+                          "trophy_points": {
+                            "title": "Trophy",
+                            "type": "integer"
+                          },
+                          "uniq_banner": {
+                            "title": "Uniq",
+                            "type": "object",
+                            "properties": {
+                              "banner_css": {
+                                "title": "Banner",
+                                "type": "string"
+                              },
+                              "banner_text": {
+                                "title": "Banner",
+                                "type": "string"
+                              },
+                              "banner_icon": {
+                                "title": "Banner",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "banner_css",
+                              "banner_text",
+                              "banner_icon"
+                            ]
+                          },
+                          "uniq_username_css": {
+                            "title": "Uniq",
+                            "type": "string"
+                          },
+                          "username": {
+                            "title": "Username",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "user_id",
+                          "avatar_date",
+                          "background_date",
+                          "contest_count",
+                          "custom_title",
+                          "display_banner_id",
+                          "display_icon_group_id",
+                          "display_style_group_id",
+                          "is_banned",
+                          "last_activity",
+                          "like2_count",
+                          "like_count",
+                          "message_count",
+                          "register_date",
+                          "rendered",
+                          "short_link",
+                          "trophy_points",
+                          "uniq_banner",
+                          "uniq_username_css",
+                          "username"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "chatbox"
             ]
           }
         ]
       }
     },
     "/chatbox/ignore": {
+      "get": {
+        "tags": [
+          "Chatbox"
+        ],
+        "summary": "Get Ignored Chat Users",
+        "description": "Get list of ignored chat users.\n\nRequired scopes:\n+ **chatbox**",
+        "operationId": "Chatbox.GetIgnore",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ignored",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "ignored": {
+                      "title": "Ignored",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "avatar_date": {
+                            "title": "Avatar",
+                            "type": "integer"
+                          },
+                          "background_date": {
+                            "title": "Background",
+                            "type": "integer"
+                          },
+                          "contest_count": {
+                            "title": "Contest",
+                            "type": "integer"
+                          },
+                          "custom_title": {
+                            "title": "Custom",
+                            "type": "string"
+                          },
+                          "display_banner_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_icon_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_style_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "is_banned": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "last_activity": {
+                            "title": "Last",
+                            "type": "integer"
+                          },
+                          "like2_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "like_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "message_count": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
+                          "register_date": {
+                            "title": "Register",
+                            "type": "integer"
+                          },
+                          "rendered": {
+                            "title": "Rendered",
+                            "type": "object",
+                            "properties": {
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "avatars": {
+                                "title": "Avatars",
+                                "type": "object",
+                                "properties": {
+                                  "l": {
+                                    "title": "L",
+                                    "type": "string"
+                                  },
+                                  "m": {
+                                    "title": "M",
+                                    "type": "string"
+                                  },
+                                  "s": {
+                                    "title": "S",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "l",
+                                  "m",
+                                  "s"
+                                ]
+                              },
+                              "link": {
+                                "title": "Link",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "avatars",
+                              "link"
+                            ]
+                          },
+                          "short_link": {
+                            "title": "Short"
+                          },
+                          "trophy_points": {
+                            "title": "Trophy",
+                            "type": "integer"
+                          },
+                          "uniq_banner": {
+                            "title": "Uniq"
+                          },
+                          "uniq_username_css": {
+                            "title": "Uniq",
+                            "type": "string"
+                          },
+                          "user_id": {
+                            "title": "User",
+                            "type": "integer"
+                          },
+                          "username": {
+                            "title": "Username",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "avatar_date",
+                          "background_date",
+                          "contest_count",
+                          "custom_title",
+                          "display_banner_id",
+                          "display_icon_group_id",
+                          "display_style_group_id",
+                          "is_banned",
+                          "last_activity",
+                          "like2_count",
+                          "like_count",
+                          "message_count",
+                          "register_date",
+                          "rendered",
+                          "short_link",
+                          "trophy_points",
+                          "uniq_banner",
+                          "uniq_username_css",
+                          "user_id",
+                          "username"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "chatbox"
+            ]
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Chatbox"
         ],
         "summary": "Ignore Chat User",
-        "description": "Ignore chat user.\n\nRequired scopes:\n+ **post**",
+        "description": "Ignore chat user.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.PostIgnore",
         "parameters": [
           {
@@ -21475,7 +22410,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "post"
+              "chatbox"
             ]
           }
         ]
@@ -21485,7 +22420,7 @@
           "Chatbox"
         ],
         "summary": "Unignore Chat User",
-        "description": "Unignore chat user.\n\nRequired scopes:\n+ **post**",
+        "description": "Unignore chat user.\n\nRequired scopes:\n+ **chatbox**",
         "operationId": "Chatbox.DeleteIgnore",
         "parameters": [
           {
@@ -21509,249 +22444,7 @@
         "security": [
           {
             "HTTPBearer": [
-              "post"
-            ]
-          }
-        ]
-      }
-    },
-    "/chatbox/ignored": {
-      "get": {
-        "tags": [
-          "Chatbox"
-        ],
-        "summary": "Get Ignored Users",
-        "description": "Get ignored users.\n\nRequired scopes:\n+ **read**",
-        "operationId": "Chatbox.GetIgnore",
-        "responses": {
-          "200": {
-            "description": "Successful Response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "ignoredUsers",
-                    "system_info"
-                  ],
-                  "properties": {
-                    "ignoredUsers": {
-                      "title": "Ignored Users",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "user_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "username": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "username_html": {
-                            "title": "Username",
-                            "type": "string"
-                          },
-                          "user_message_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_register_date": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_like_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_like2_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "contest_count": {
-                            "title": "Contest",
-                            "type": "integer"
-                          },
-                          "trophy_count": {
-                            "title": "Trophy",
-                            "type": "integer"
-                          },
-                          "custom_title": {
-                            "title": "Custom",
-                            "type": "string"
-                          },
-                          "is_banned": {
-                            "title": "Is",
-                            "type": "integer"
-                          },
-                          "user_title": {
-                            "title": "User",
-                            "type": "string"
-                          },
-                          "user_is_valid": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_verified": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_followed": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_last_seen_date": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_following_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "user_followers_count": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "links": {
-                            "title": "Links",
-                            "type": "object",
-                            "properties": {
-                              "permalink": {
-                                "title": "Permalink",
-                                "type": "string"
-                              },
-                              "detail": {
-                                "title": "Detail",
-                                "type": "string"
-                              },
-                              "avatar": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_big": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "avatar_small": {
-                                "title": "Avatar",
-                                "type": "string"
-                              },
-                              "followers": {
-                                "title": "Followers",
-                                "type": "string"
-                              },
-                              "followings": {
-                                "title": "Followings",
-                                "type": "string"
-                              },
-                              "ignore": {
-                                "title": "Ignore",
-                                "type": "string"
-                              },
-                              "timeline": {
-                                "title": "Timeline",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "permalink",
-                              "detail",
-                              "avatar",
-                              "avatar_big",
-                              "avatar_small",
-                              "followers",
-                              "followings",
-                              "ignore",
-                              "timeline"
-                            ]
-                          },
-                          "permissions": {
-                            "title": "Permissions",
-                            "type": "object",
-                            "properties": {
-                              "edit": {
-                                "title": "Edit",
-                                "type": "boolean"
-                              },
-                              "follow": {
-                                "title": "Follow",
-                                "type": "boolean"
-                              },
-                              "ignore": {
-                                "title": "Ignore",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "edit",
-                              "follow",
-                              "ignore"
-                            ]
-                          },
-                          "user_is_ignored": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_is_visitor": {
-                            "title": "User",
-                            "type": "boolean"
-                          },
-                          "user_group_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "custom_fields": {
-                            "title": "Custom"
-                          }
-                        },
-                        "required": [
-                          "user_id",
-                          "username",
-                          "username_html",
-                          "user_message_count",
-                          "user_register_date",
-                          "user_like_count",
-                          "user_like2_count",
-                          "contest_count",
-                          "trophy_count",
-                          "custom_title",
-                          "is_banned",
-                          "user_title",
-                          "user_is_valid",
-                          "user_is_verified",
-                          "user_is_followed",
-                          "user_last_seen_date",
-                          "user_following_count",
-                          "user_followers_count",
-                          "links",
-                          "permissions",
-                          "user_is_ignored",
-                          "user_is_visitor",
-                          "user_group_id",
-                          "custom_fields"
-                        ]
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/SystemInfo"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/NoPermission"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "read"
+              "chatbox"
             ]
           }
         ]
@@ -22727,6 +23420,33 @@
       }
     },
     "schemas": {
+      "RoomIdModel":{
+        "type": "integer",
+        "x-enumDescriptions": {
+          "1": "[Russian] General chat",
+          "2": "[English] General hat",
+          "3": "[Russian] Market chat",
+          "4": "[English] Market chat",
+          "8": "Newbie chat",
+          "9": "[Russian] Marketplace",
+          "10": "[English] Marketplace",
+          "11": "[Russian] ChatGPT",
+          "12": "[English] ChatGPT",
+          "13": "No whiners chat"
+        },
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ]
+      },
       "UserModel": {
         "type": "object",
         "required": [
