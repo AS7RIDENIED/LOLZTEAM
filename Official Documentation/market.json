@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.64a"
+    "version": "1.1.65"
   },
   "servers": [
     {
@@ -965,11 +965,15 @@
                   "Assassin's Creed 2",
                   "Assassin's Creed Freedom Cry",
                   "Assassin's Creed Syndicate Season Pass",
+                  "Assassin's Creed® III Tyranny of King Washington: The Infamy",
                   "Assassin's Creed® Odyssey",
+                  "Assassin’s Creed Shadows",
                   "Assassin’s Creed Unity Revolutionary Armaments Pack",
                   "Assassin’s Creed® Brotherhood",
                   "Assassin’s Creed® III",
                   "Assassin’s Creed® III - The Tyranny of King Washington: The Redemption",
+                  "Assassin’s Creed® III – The Battle Hardened Pack",
+                  "Assassin’s Creed® III – The Hidden Secrets Pack",
                   "Assassin’s Creed® III: The Betrayal",
                   "Assassin’s Creed® IV Black Flag™",
                   "Assassin’s Creed® IV Black Flag™ – Freedom Cry",
@@ -1079,6 +1083,7 @@
                   "Blade Symphony Original Soundtrack",
                   "Blade Symphony_cis",
                   "Blasphemous",
+                  "Blasphemous 2",
                   "Blaster Shooter GunGuy!",
                   "BlazeRush",
                   "BlazeRush_cis",
@@ -1200,6 +1205,9 @@
                   "Call of Duty®: Modern Warfare® 2 Stimulus Package",
                   "Call of Duty®: Modern Warfare® 2 Stimulus Package_cis",
                   "Call of Duty®: Modern Warfare® 3 (2011)",
+                  "Call of Duty®: Modern Warfare® 3 (2011) Collection 1",
+                  "Call of Duty®: Modern Warfare® 3 (2011) Collection 2",
+                  "Call of Juarez: Bound in Blood",
                   "Call of Tomsk-7",
                   "Camera Obscura Soundtrack",
                   "Camera Obscura Soundtrack_cis",
@@ -1226,6 +1234,7 @@
                   "CastleMiner Z_cis",
                   "CastleStorm - From Outcast to Savior",
                   "Catch a Lover",
+                  "Catlateral Damage Soundtrack",
                   "Cats Hidden in Japan",
                   "Cave Story+",
                   "Caveman World: Mountains of Unga Boonga",
@@ -1278,6 +1287,7 @@
                   "Clergy Splode",
                   "Clock Rogue",
                   "Clones_cis",
+                  "Cloudberry Kingdom™",
                   "Clue/Cluedo: Classic Edition",
                   "Clustertruck OST",
                   "CoH 2 - German Commander: Elite Troops Doctrine",
@@ -1377,6 +1387,7 @@
                   "DETOUR",
                   "DETOUR_cis",
                   "DEVOUR",
+                  "DJMAX RESPECT V",
                   "DLC \"New Edition\" - Escape Game Fort Boyard",
                   "DLC - Crusader Kings II: Europa Universalis IV Converter",
                   "DLC Quest",
@@ -1401,6 +1412,7 @@
                   "Darksiders II - Season Pass",
                   "Darksiders II Deathinitive Edition",
                   "Darwinia",
+                  "Date Everything! - Lavish Edition",
                   "David.",
                   "Dawn of Defiance",
                   "Dawn of War II",
@@ -1435,6 +1447,7 @@
                   "Dead by Daylight - The Halloween® Chapter",
                   "Dead by Daylight: BETA Gift - Expired",
                   "Dead by Daylight: BETA Gift - Expired_cis",
+                  "Dead by Daylight: Five Nights at Freddy’s",
                   "Dead by Daylight_cis",
                   "Deadlight",
                   "Deadlight Original Soundtrack",
@@ -1490,6 +1503,7 @@
                   "Dinosaur Hunt - Wild West Guns Expansion Pack",
                   "Dirt 2",
                   "Disco Elysium - The Final Cut",
+                  "Dishonored",
                   "Dishonored - Definitive Edition",
                   "Dishonored: The Brigmore Witches",
                   "Disney Princess: Enchanted Journey",
@@ -1532,6 +1546,7 @@
                   "Drift racing car",
                   "Drift86",
                   "Driver® Parallel Lines",
+                  "Dropsy",
                   "Drunken Robot Pornography",
                   "Duck Game",
                   "Duck Game_cis",
@@ -1568,6 +1583,7 @@
                   "Dungeonland Gift",
                   "Dungeons",
                   "Dungeons & Dragons: Chronicles of Mystara",
+                  "Dungeons - The Dark Lord",
                   "Dungeons 2",
                   "Dungeons 2 - A Chance of Dragons",
                   "Dungeons 2 - A Game of Winter",
@@ -1596,6 +1612,7 @@
                   "E.T. Armies_cis",
                   "E.Y.E: Divine Cybermancy",
                   "E.Y.E: Divine Cybermancy_cis",
+                  "EA SPORTS FC™ 25",
                   "EDGE",
                   "EDGE&TRIGGER",
                   "ELDEN RING Shadow of the Erdtree",
@@ -1637,6 +1654,7 @@
                   "Euro Truck Simulator 2 - Going East!",
                   "Euro Truck Simulator 2 - Goodyear Tyres Pack",
                   "Euro Truck Simulator 2 - Halloween Paint Jobs Pack",
+                  "Euro Truck Simulator 2 - Heavy Cargo Pack",
                   "Euro Truck Simulator 2 - High Power Cargo Pack",
                   "Euro Truck Simulator 2 - Ice Cold Paint Jobs Pack_cis",
                   "Euro Truck Simulator 2 - Irish Paint Jobs Pack",
@@ -1648,6 +1666,7 @@
                   "Euro Truck Simulator 2 - Special Transport",
                   "Euro Truck Simulator 2 - UK Paint Jobs Pack",
                   "Euro Truck Simulator 2 - USA Paint Jobs Pack",
+                  "Euro Truck Simulator 2 - Window Flags",
                   "Euro Truck Simulator 2_cis",
                   "Euro Truck Simulator_cis",
                   "Europa Universalis III: Enlightenment SpritePack",
@@ -1667,6 +1686,7 @@
                   "FATE",
                   "FEZ",
                   "FINAL FANTASY VII",
+                  "FINAL FANTASY XIV Online",
                   "FORCED 2 Test Access Gift",
                   "FORCED: Slightly Better Edition",
                   "FTL: Faster Than Light",
@@ -1807,6 +1827,7 @@
                   "Gas Guzzlers Extreme_cis",
                   "Gauntlet™ Slayer Edition",
                   "Gauntlet™ Slayer Edition_cis",
+                  "GemCraft - Chasing Shadows",
                   "Gemini Rue",
                   "Geometry Dash",
                   "Getting Over It with Bennett Foddy",
@@ -1939,6 +1960,7 @@
                   "Heroes of Might & Magic V_cis",
                   "Heroes of Steel RPG",
                   "Hitler My Friend",
+                  "Hitman: Absolution: Agency HX UMP",
                   "Hitman: Absolution: Deus Ex (Adam Jensen) Disguise",
                   "Hitman: Blood Money_cis",
                   "Hitman: Contracts",
@@ -1989,6 +2011,7 @@
                   "Hyperdimension Neptunia Re;Birth1 Plutia Battle Entry",
                   "I Have No Mouth, and I Must Scream",
                   "I am Weapon: Revival",
+                  "I, Gladiator",
                   "I, Zombie",
                   "ICARUS",
                   "INDIKA",
@@ -2207,6 +2230,7 @@
                   "Max Payne 3: Pill Bottle Item",
                   "Max Payne 3_cis",
                   "McDROID",
+                  "MechWarrior Online™ - Desperada Legendary Mech Pack",
                   "Medieval Dynasty",
                   "Medieval Engineers",
                   "Medieval Engineers Deluxe Gift",
@@ -2235,8 +2259,10 @@
                   "Middle-earth: Shadow of Mordor Game of the Year Edition",
                   "Middle-earth™: Shadow of War™",
                   "Middle-earth™: The Shadow Bundle",
+                  "Miko Gakkou: Second Year",
                   "Milk inside a bag of milk inside a bag of milk",
                   "Milk outside a bag of milk outside a bag of milk",
+                  "Mindustry",
                   "Minecraft Legends",
                   "Minecraft: Story Mode - A Telltale Games Series",
                   "Mineirinho Hoversurf DC",
@@ -2572,6 +2598,7 @@
                   "Quest of Dungeons",
                   "R.E.P.O.",
                   "RACE 07",
+                  "REKA",
                   "REMNANT II®",
                   "RIFT",
                   "RIP - Trilogy™",
@@ -2723,6 +2750,7 @@
                   "STAR WARS Jedi: Fallen Order™",
                   "STAR WARS™ Battlefront II (Classic, 2005)",
                   "STAR WARS™ Battlefront™ II",
+                  "STAR WARS™ Jedi Knight - Jedi Academy™",
                   "STAR WARS™ Jedi Knight - Mysteries of the Sith™",
                   "STAR WARS™ Jedi Knight II - Jedi Outcast™",
                   "STAR WARS™ Knights of the Old Republic™",
@@ -3099,6 +3127,7 @@
                   "The Escapists - Escape Team",
                   "The Escapists 2",
                   "The Evil Within_cis",
+                  "The Executive - Movie Industry Tycoon",
                   "The First Templar - Steam Special Edition",
                   "The Forest",
                   "The Forest_cis",
@@ -3205,13 +3234,16 @@
                   "Toki Tori_cis",
                   "Tom Clancy's  The Division™ -  Military Specialists Outfits Pack",
                   "Tom Clancy's EndWar™",
+                  "Tom Clancy's Ghost Recon Phantoms - EU Infinite Pack",
                   "Tom Clancy's Ghost Recon®",
                   "Tom Clancy's Rainbow Six Siege - Beta Gift",
                   "Tom Clancy's Rainbow Six Siege - Beta Gift_cis",
                   "Tom Clancy's Rainbow Six® 3 Gold",
                   "Tom Clancy's Rainbow Six® Siege",
                   "Tom Clancy's Rainbow Six® Siege - Cyan Weapon Skin",
+                  "Tom Clancy's Rainbow Six® Siege - Ruby Weapon Skin",
                   "Tom Clancy's Rainbow Six® Siege - The Safari Bundle",
+                  "Tom Clancy's Rainbow Six® Siege – Ops Icon Charm Bundle",
                   "Tom Clancy's Rainbow Six® Vegas",
                   "Tom Clancy's Rainbow Six® Vegas 2",
                   "Tom Clancy's Rainbow Six® Vegas_cis",
@@ -3338,6 +3370,7 @@
                   "Unknown package 12670",
                   "Unknown package 12671",
                   "Unknown package 12704",
+                  "Unknown package 12706",
                   "Unknown package 12717",
                   "Unknown package 12721",
                   "Unknown package 12736",
@@ -3386,6 +3419,7 @@
                   "Unknown package 1693",
                   "Unknown package 17284",
                   "Unknown package 17285",
+                  "Unknown package 17285_cis",
                   "Unknown package 17286",
                   "Unknown package 17287",
                   "Unknown package 17288",
@@ -3416,6 +3450,7 @@
                   "Unknown package 2487",
                   "Unknown package 2536",
                   "Unknown package 25543",
+                  "Unknown package 25544",
                   "Unknown package 25569",
                   "Unknown package 25601",
                   "Unknown package 2573",
@@ -3465,6 +3500,7 @@
                   "Unknown package 33318",
                   "Unknown package 33495",
                   "Unknown package 33961",
+                  "Unknown package 34366",
                   "Unknown package 34431",
                   "Unknown package 34680_cis",
                   "Unknown package 35969",
@@ -3504,6 +3540,7 @@
                   "Unknown package 45183",
                   "Unknown package 45320",
                   "Unknown package 459",
+                  "Unknown package 4638",
                   "Unknown package 46384",
                   "Unknown package 46504",
                   "Unknown package 46740",
@@ -8090,6 +8127,18 @@
                   "character_tigerrootfame",
                   "character_tigerroothype",
                   "character_tikitorch",
+                  "character_timberstakeclub",
+                  "character_timberstakedrift",
+                  "character_timberstakedrift_b",
+                  "character_timberstakedrift_c",
+                  "character_timberstakedrift_d",
+                  "character_timberstakedrift_e",
+                  "character_timberstakepurse",
+                  "character_timberstakesoul",
+                  "character_timberstakesoul_b",
+                  "character_timberstakesoul_c",
+                  "character_timberstakesoul_d",
+                  "character_timberstakesoul_e",
                   "character_timeinterval",
                   "character_timesquare",
                   "character_tireswing",
@@ -12226,6 +12275,7 @@
                   "tideking",
                   "tidy",
                   "tikitorch",
+                  "timberstake",
                   "timeout",
                   "timesticking",
                   "timetravelbackflip",
@@ -13981,6 +14031,7 @@
                   11514,
                   11515,
                   11516,
+                  11517,
                   12101,
                   12201,
                   12301,
@@ -14423,6 +14474,7 @@
                   1405,
                   1406,
                   1407,
+                  1408,
                   1409,
                   8001,
                   8002,
@@ -14608,6 +14660,7 @@
                   23041,
                   23042,
                   23043,
+                  23044,
                   24000,
                   24001,
                   24002,
@@ -14862,6 +14915,7 @@
                   1361,
                   1371,
                   1381,
+                  1391,
                   1421
                 ]
               }
@@ -14944,6 +14998,7 @@
                   13012,
                   13013,
                   13015,
+                  13016,
                   13101,
                   13103,
                   13106,
@@ -14980,7 +15035,8 @@
                   14133,
                   14136,
                   14137,
-                  14138
+                  14138,
+                  14139
                 ]
               }
             }
@@ -19616,6 +19672,7 @@
                 "type": "string",
                 "enum": [
                   "8-BIT",
+                  "ALLI",
                   "AMBER",
                   "ANGELO",
                   "ASH",
@@ -19707,6 +19764,7 @@
                   "SURGE",
                   "TARA",
                   "TICK",
+                  "TRUNK",
                   "WILLOW"
                 ]
               }
@@ -43086,582 +43144,6 @@
         ]
       }
     },
-    "/cinema": {
-      "get": {
-        "tags": [
-          "Category Search"
-        ],
-        "summary": "Cinema",
-        "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.Cinema",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/page"
-          },
-          {
-            "$ref": "#/components/parameters/pmin"
-          },
-          {
-            "$ref": "#/components/parameters/pmax"
-          },
-          {
-            "$ref": "#/components/parameters/title"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/show"
-          },
-          {
-            "$ref": "#/components/parameters/tag_id"
-          },
-          {
-            "$ref": "#/components/parameters/not_tag_id"
-          },
-          {
-            "$ref": "#/components/parameters/origin"
-          },
-          {
-            "$ref": "#/components/parameters/not_origin"
-          },
-          {
-            "$ref": "#/components/parameters/user_id"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/currency"
-          },
-          {
-            "$ref": "#/components/parameters/email_login_data"
-          },
-          {
-            "$ref": "#/components/parameters/email_provider"
-          },
-          {
-            "$ref": "#/components/parameters/not_email_provider"
-          },
-          {
-            "$ref": "#/components/parameters/parse_same_item_ids"
-          },
-          {
-            "name": "service[]",
-            "in": "query",
-            "description": "List of allowed cinema services.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Service Id",
-              "type": "array",
-              "description": "List of allowed cinema services.",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "ivi",
-                  "start"
-                ]
-              }
-            }
-          },
-          {
-            "$ref": "#/components/parameters/subscription_length"
-          },
-          {
-            "$ref": "#/components/parameters/subscription_period"
-          },
-          {
-            "$ref": "#/components/parameters/autorenewal"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "items",
-                    "totalItems",
-                    "totalItemsPrice",
-                    "hasNextPage",
-                    "perPage",
-                    "page",
-                    "wasCached",
-                    "cacheTTL",
-                    "lastModified",
-                    "serverTime",
-                    "searchUrl",
-                    "stickyItems",
-                    "system_info"
-                  ],
-                  "properties": {
-                    "items": {
-                      "title": "Items",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "item_id": {
-                            "title": "Item",
-                            "type": "integer"
-                          },
-                          "item_state": {
-                            "title": "Item",
-                            "type": "string"
-                          },
-                          "category_id": {
-                            "title": "Category",
-                            "type": "integer"
-                          },
-                          "published_date": {
-                            "title": "Published",
-                            "type": "integer"
-                          },
-                          "title": {
-                            "title": "Title",
-                            "type": "string"
-                          },
-                          "description": {
-                            "title": "Description",
-                            "type": "string"
-                          },
-                          "price": {
-                            "title": "Price",
-                            "type": "integer"
-                          },
-                          "update_stat_date": {
-                            "title": "Update",
-                            "type": "integer"
-                          },
-                          "refreshed_date": {
-                            "title": "Refreshed",
-                            "type": "integer"
-                          },
-                          "edit_date": {
-                            "title": "Edit",
-                            "type": "integer"
-                          },
-                          "view_count": {
-                            "title": "View",
-                            "type": "integer"
-                          },
-                          "is_sticky": {
-                            "title": "Is",
-                            "type": "integer"
-                          },
-                          "item_origin": {
-                            "title": "Item",
-                            "type": "string"
-                          },
-                          "extended_guarantee": {
-                            "title": "Extended",
-                            "type": "integer"
-                          },
-                          "nsb": {
-                            "title": "Nsb",
-                            "type": "integer"
-                          },
-                          "allow_ask_discount": {
-                            "title": "Allow",
-                            "type": "integer"
-                          },
-                          "title_en": {
-                            "title": "Title",
-                            "type": "string"
-                          },
-                          "description_en": {
-                            "title": "Description",
-                            "type": "string"
-                          },
-                          "email_type": {
-                            "title": "Email",
-                            "type": "string"
-                          },
-                          "email_provider": {
-                            "title": "Email"
-                          },
-                          "item_domain": {
-                            "title": "Item",
-                            "type": "string"
-                          },
-                          "resale_item_origin": {
-                            "title": "Resale",
-                            "type": "string"
-                          },
-                          "cinema_item_id": {
-                            "title": "Cinema",
-                            "type": "integer"
-                          },
-                          "cinema_service": {
-                            "title": "Cinema",
-                            "type": "string"
-                          },
-                          "cinema_end_date": {
-                            "title": "Cinema",
-                            "type": "integer"
-                          },
-                          "cinema_is_renew": {
-                            "title": "Cinema",
-                            "type": "integer"
-                          },
-                          "cinema_start_date": {
-                            "title": "Cinema",
-                            "type": "integer"
-                          },
-                          "cinema_sub_title": {
-                            "title": "Cinema",
-                            "type": "string"
-                          },
-                          "feedback_data": {
-                            "title": "Feedback",
-                            "type": "string"
-                          },
-                          "isIgnored": {
-                            "title": "Is Ignored",
-                            "type": "boolean"
-                          },
-                          "priceWithSellerFee": {
-                            "title": "Price With Seller Fee",
-                            "type": "integer"
-                          },
-                          "guarantee": {
-                            "title": "Guarantee"
-                          },
-                          "canViewLoginData": {
-                            "title": "Can View Login Data",
-                            "type": "boolean"
-                          },
-                          "canUpdateItemStats": {
-                            "title": "Can Update Item Stats",
-                            "type": "boolean"
-                          },
-                          "canReportItem": {
-                            "title": "Can Report Item",
-                            "type": "boolean"
-                          },
-                          "canViewEmailLoginData": {
-                            "title": "Can View Email Login Data",
-                            "type": "boolean"
-                          },
-                          "showGetEmailCodeButton": {
-                            "title": "Show Get Email Code Button",
-                            "type": "boolean"
-                          },
-                          "canOpenItem": {
-                            "title": "Can Open Item",
-                            "type": "boolean"
-                          },
-                          "canCloseItem": {
-                            "title": "Can Close Item",
-                            "type": "boolean"
-                          },
-                          "canEditItem": {
-                            "title": "Can Edit Item",
-                            "type": "boolean"
-                          },
-                          "canDeleteItem": {
-                            "title": "Can Delete Item",
-                            "type": "boolean"
-                          },
-                          "canStickItem": {
-                            "title": "Can Stick Item",
-                            "type": "boolean"
-                          },
-                          "canUnstickItem": {
-                            "title": "Can Unstick Item",
-                            "type": "boolean"
-                          },
-                          "bumpSettings": {
-                            "title": "Bump Settings",
-                            "type": "object",
-                            "properties": {
-                              "canBumpItem": {
-                                "title": "Can Bump Item",
-                                "type": "boolean"
-                              },
-                              "canBumpItemGlobally": {
-                                "title": "Can Bump Item Globally",
-                                "type": "boolean"
-                              },
-                              "shortErrorPhrase": {
-                                "title": "Short Error Phrase"
-                              },
-                              "errorPhrase": {
-                                "title": "Error Phrase"
-                              }
-                            },
-                            "required": [
-                              "canBumpItem",
-                              "canBumpItemGlobally",
-                              "shortErrorPhrase",
-                              "errorPhrase"
-                            ]
-                          },
-                          "canBumpItem": {
-                            "title": "Can Bump Item",
-                            "type": "boolean"
-                          },
-                          "canBuyItem": {
-                            "title": "Can Buy Item",
-                            "type": "boolean"
-                          },
-                          "rub_price": {
-                            "title": "Rub",
-                            "type": "integer"
-                          },
-                          "price_currency": {
-                            "title": "Price",
-                            "type": "string"
-                          },
-                          "canValidateAccount": {
-                            "title": "Can Validate Account",
-                            "type": "boolean"
-                          },
-                          "canResellItemAfterPurchase": {
-                            "title": "Can Resell Item After Purchase",
-                            "type": "boolean"
-                          },
-                          "cinemaServiceTitle": {
-                            "title": "Cinema Service Title",
-                            "type": "string"
-                          },
-                          "canViewAccountLink": {
-                            "title": "Can View Account Link",
-                            "type": "boolean"
-                          },
-                          "canChangePassword": {
-                            "title": "Can Change Password",
-                            "type": "boolean"
-                          },
-                          "itemOriginPhrase": {
-                            "title": "Item Origin Phrase",
-                            "type": "string"
-                          },
-                          "tags": {
-                            "title": "Tags",
-                            "type": "array",
-                            "items": {}
-                          },
-                          "note_text": {
-                            "title": "Note"
-                          },
-                          "hasPendingAutoBuy": {
-                            "title": "Has Pending Auto Buy",
-                            "type": "boolean"
-                          },
-                          "descriptionHtml": {
-                            "title": "Description Html",
-                            "type": "string"
-                          },
-                          "descriptionEnHtml": {
-                            "title": "Description En Html",
-                            "type": "string"
-                          },
-                          "descriptionPlain": {
-                            "title": "Description Plain",
-                            "type": "string"
-                          },
-                          "descriptionEnPlain": {
-                            "title": "Description En Plain",
-                            "type": "string"
-                          },
-                          "seller": {
-                            "title": "Seller",
-                            "type": "object",
-                            "properties": {
-                              "user_id": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "sold_items_count": {
-                                "title": "Sold",
-                                "type": "integer"
-                              },
-                              "active_items_count": {
-                                "title": "Active",
-                                "type": "integer"
-                              },
-                              "restore_data": {
-                                "title": "Restore",
-                                "type": "string"
-                              },
-                              "username": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "avatar_date": {
-                                "title": "Avatar",
-                                "type": "integer"
-                              },
-                              "is_banned": {
-                                "title": "Is",
-                                "type": "integer"
-                              },
-                              "display_style_group_id": {
-                                "title": "Display",
-                                "type": "integer"
-                              },
-                              "restore_percents": {
-                                "title": "Restore"
-                              }
-                            },
-                            "required": [
-                              "user_id",
-                              "sold_items_count",
-                              "active_items_count",
-                              "restore_data",
-                              "username",
-                              "avatar_date",
-                              "is_banned",
-                              "display_style_group_id",
-                              "restore_percents"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "item_id",
-                          "item_state",
-                          "category_id",
-                          "published_date",
-                          "title",
-                          "description",
-                          "price",
-                          "update_stat_date",
-                          "refreshed_date",
-                          "edit_date",
-                          "view_count",
-                          "is_sticky",
-                          "item_origin",
-                          "extended_guarantee",
-                          "nsb",
-                          "allow_ask_discount",
-                          "title_en",
-                          "description_en",
-                          "email_type",
-                          "email_provider",
-                          "item_domain",
-                          "resale_item_origin",
-                          "cinema_item_id",
-                          "cinema_service",
-                          "cinema_end_date",
-                          "cinema_is_renew",
-                          "cinema_start_date",
-                          "cinema_sub_title",
-                          "feedback_data",
-                          "isIgnored",
-                          "priceWithSellerFee",
-                          "guarantee",
-                          "canViewLoginData",
-                          "canUpdateItemStats",
-                          "canReportItem",
-                          "canViewEmailLoginData",
-                          "showGetEmailCodeButton",
-                          "canOpenItem",
-                          "canCloseItem",
-                          "canEditItem",
-                          "canDeleteItem",
-                          "canStickItem",
-                          "canUnstickItem",
-                          "bumpSettings",
-                          "canBumpItem",
-                          "canBuyItem",
-                          "rub_price",
-                          "price_currency",
-                          "canValidateAccount",
-                          "canResellItemAfterPurchase",
-                          "cinemaServiceTitle",
-                          "canViewAccountLink",
-                          "canChangePassword",
-                          "itemOriginPhrase",
-                          "tags",
-                          "note_text",
-                          "hasPendingAutoBuy",
-                          "descriptionHtml",
-                          "descriptionEnHtml",
-                          "descriptionPlain",
-                          "descriptionEnPlain",
-                          "seller"
-                        ]
-                      }
-                    },
-                    "totalItems": {
-                      "title": "Total Items",
-                      "type": "integer"
-                    },
-                    "totalItemsPrice": {
-                      "title": "Total Items Price"
-                    },
-                    "hasNextPage": {
-                      "title": "Has Next Page",
-                      "type": "boolean"
-                    },
-                    "perPage": {
-                      "title": "Per Page",
-                      "type": "integer"
-                    },
-                    "page": {
-                      "title": "Page",
-                      "type": "integer"
-                    },
-                    "wasCached": {
-                      "title": "Was Cached",
-                      "type": "boolean"
-                    },
-                    "cacheTTL": {
-                      "title": "Cache Ttl",
-                      "type": "integer"
-                    },
-                    "lastModified": {
-                      "title": "Last Modified",
-                      "type": "integer"
-                    },
-                    "serverTime": {
-                      "title": "Server Time",
-                      "type": "integer"
-                    },
-                    "searchUrl": {
-                      "title": "Search Url",
-                      "type": "string"
-                    },
-                    "stickyItems": {
-                      "title": "Sticky Items",
-                      "type": "array",
-                      "items": {}
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/SystemInfo"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
     "/roblox": {
       "get": {
         "tags": [
@@ -44693,675 +44175,6 @@
                           "itemOriginPhrase",
                           "sold_items_category_count",
                           "restore_items_category_count",
-                          "tags",
-                          "note_text",
-                          "hasPendingAutoBuy",
-                          "descriptionHtml",
-                          "descriptionEnHtml",
-                          "descriptionPlain",
-                          "descriptionEnPlain",
-                          "seller"
-                        ]
-                      }
-                    },
-                    "totalItems": {
-                      "title": "Total Items",
-                      "type": "integer"
-                    },
-                    "totalItemsPrice": {
-                      "title": "Total Items Price"
-                    },
-                    "hasNextPage": {
-                      "title": "Has Next Page",
-                      "type": "boolean"
-                    },
-                    "perPage": {
-                      "title": "Per Page",
-                      "type": "integer"
-                    },
-                    "page": {
-                      "title": "Page",
-                      "type": "integer"
-                    },
-                    "wasCached": {
-                      "title": "Was Cached",
-                      "type": "boolean"
-                    },
-                    "cacheTTL": {
-                      "title": "Cache Ttl",
-                      "type": "integer"
-                    },
-                    "lastModified": {
-                      "title": "Last Modified",
-                      "type": "integer"
-                    },
-                    "serverTime": {
-                      "title": "Server Time",
-                      "type": "integer"
-                    },
-                    "searchUrl": {
-                      "title": "Search Url",
-                      "type": "string"
-                    },
-                    "stickyItems": {
-                      "title": "Sticky Items",
-                      "type": "array",
-                      "items": {}
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/SystemInfo"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": [
-              "market"
-            ]
-          }
-        ]
-      }
-    },
-    "/spotify": {
-      "get": {
-        "tags": [
-          "Category Search"
-        ],
-        "summary": "Spotify",
-        "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.Spotify",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/page"
-          },
-          {
-            "$ref": "#/components/parameters/pmin"
-          },
-          {
-            "$ref": "#/components/parameters/pmax"
-          },
-          {
-            "$ref": "#/components/parameters/title"
-          },
-          {
-            "$ref": "#/components/parameters/order_by"
-          },
-          {
-            "$ref": "#/components/parameters/show"
-          },
-          {
-            "$ref": "#/components/parameters/tag_id"
-          },
-          {
-            "$ref": "#/components/parameters/not_tag_id"
-          },
-          {
-            "$ref": "#/components/parameters/origin"
-          },
-          {
-            "$ref": "#/components/parameters/not_origin"
-          },
-          {
-            "$ref": "#/components/parameters/user_id"
-          },
-          {
-            "$ref": "#/components/parameters/nsb"
-          },
-          {
-            "$ref": "#/components/parameters/sb"
-          },
-          {
-            "$ref": "#/components/parameters/nsb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/sb_by_me"
-          },
-          {
-            "$ref": "#/components/parameters/currency"
-          },
-          {
-            "$ref": "#/components/parameters/email_login_data"
-          },
-          {
-            "$ref": "#/components/parameters/email_provider"
-          },
-          {
-            "$ref": "#/components/parameters/not_email_provider"
-          },
-          {
-            "$ref": "#/components/parameters/parse_same_item_ids"
-          },
-          {
-            "$ref": "#/components/parameters/country"
-          },
-          {
-            "$ref": "#/components/parameters/not_country"
-          },
-          {
-            "name": "family",
-            "in": "query",
-            "description": "Has family subscription.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Family",
-              "description": "Has family subscription.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "family_manager",
-            "in": "query",
-            "description": "Has family manager permissions.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Family",
-              "description": "Has family manager permissions.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "family_member_count_min",
-            "in": "query",
-            "description": "Minimum count of members in family.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Family Member Count Min",
-              "type": "integer",
-              "description": "Minimum count of members in family.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "family_member_count_max",
-            "in": "query",
-            "description": "Maximum count of members in family.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Family Member Count Max",
-              "type": "integer",
-              "description": "Maximum count of members in family.",
-              "minimum": 1
-            }
-          },
-          {
-            "$ref": "#/components/parameters/subscription_length"
-          },
-          {
-            "$ref": "#/components/parameters/subscription_period"
-          },
-          {
-            "$ref": "#/components/parameters/autorenewal"
-          },
-          {
-            "name": "trial",
-            "in": "query",
-            "description": "Trial subscription.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Trial",
-              "description": "Trial subscription.",
-              "$ref": "#/components/schemas/YesNoNoMatterScheme"
-            }
-          },
-          {
-            "name": "plan_name[]",
-            "in": "query",
-            "description": "List of allowed plans.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Plan Name",
-              "type": "array",
-              "description": "List of allowed plans.",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "Premium Basic",
-                  "Premium Duo",
-                  "Premium Fallback",
-                  "Premium Family",
-                  "Premium Individual",
-                  "Premium Student"
-                ]
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "items",
-                    "totalItems",
-                    "totalItemsPrice",
-                    "hasNextPage",
-                    "perPage",
-                    "page",
-                    "wasCached",
-                    "cacheTTL",
-                    "lastModified",
-                    "serverTime",
-                    "searchUrl",
-                    "stickyItems",
-                    "system_info"
-                  ],
-                  "properties": {
-                    "items": {
-                      "title": "Items",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "item_id": {
-                            "title": "Item",
-                            "type": "integer"
-                          },
-                          "item_state": {
-                            "title": "Item",
-                            "type": "string"
-                          },
-                          "category_id": {
-                            "title": "Category",
-                            "type": "integer"
-                          },
-                          "published_date": {
-                            "title": "Published",
-                            "type": "integer"
-                          },
-                          "title": {
-                            "title": "Title",
-                            "type": "string"
-                          },
-                          "description": {
-                            "title": "Description",
-                            "type": "string"
-                          },
-                          "price": {
-                            "title": "Price",
-                            "type": "integer"
-                          },
-                          "update_stat_date": {
-                            "title": "Update",
-                            "type": "integer"
-                          },
-                          "refreshed_date": {
-                            "title": "Refreshed",
-                            "type": "integer"
-                          },
-                          "edit_date": {
-                            "title": "Edit",
-                            "type": "integer"
-                          },
-                          "view_count": {
-                            "title": "View",
-                            "type": "integer"
-                          },
-                          "is_sticky": {
-                            "title": "Is",
-                            "type": "integer"
-                          },
-                          "item_origin": {
-                            "title": "Item",
-                            "type": "string"
-                          },
-                          "extended_guarantee": {
-                            "title": "Extended",
-                            "type": "integer"
-                          },
-                          "nsb": {
-                            "title": "Nsb",
-                            "type": "integer"
-                          },
-                          "allow_ask_discount": {
-                            "title": "Allow",
-                            "type": "integer"
-                          },
-                          "title_en": {
-                            "title": "Title",
-                            "type": "string"
-                          },
-                          "description_en": {
-                            "title": "Description",
-                            "type": "string"
-                          },
-                          "email_type": {
-                            "title": "Email",
-                            "type": "string"
-                          },
-                          "email_provider": {
-                            "title": "Email"
-                          },
-                          "item_domain": {
-                            "title": "Item",
-                            "type": "string"
-                          },
-                          "resale_item_origin": {
-                            "title": "Resale",
-                            "type": "string"
-                          },
-                          "spotify_item_id": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "spotify_country": {
-                            "title": "Spotify",
-                            "type": "string"
-                          },
-                          "spotify_family": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "spotify_created_date": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "spotify_family_manager": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "spotify_family_member_count": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "spotify_plan_name": {
-                            "title": "Spotify",
-                            "type": "string"
-                          },
-                          "spotify_recurring": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "spotify_trial": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "spotify_expires": {
-                            "title": "Spotify",
-                            "type": "integer"
-                          },
-                          "feedback_data": {
-                            "title": "Feedback",
-                            "type": "string"
-                          },
-                          "isIgnored": {
-                            "title": "Is Ignored",
-                            "type": "boolean"
-                          },
-                          "priceWithSellerFee": {
-                            "title": "Price With Seller Fee",
-                            "type": "integer"
-                          },
-                          "guarantee": {
-                            "title": "Guarantee"
-                          },
-                          "canViewLoginData": {
-                            "title": "Can View Login Data",
-                            "type": "boolean"
-                          },
-                          "canUpdateItemStats": {
-                            "title": "Can Update Item Stats",
-                            "type": "boolean"
-                          },
-                          "canReportItem": {
-                            "title": "Can Report Item",
-                            "type": "boolean"
-                          },
-                          "canViewEmailLoginData": {
-                            "title": "Can View Email Login Data",
-                            "type": "boolean"
-                          },
-                          "showGetEmailCodeButton": {
-                            "title": "Show Get Email Code Button",
-                            "type": "boolean"
-                          },
-                          "canOpenItem": {
-                            "title": "Can Open Item",
-                            "type": "boolean"
-                          },
-                          "canCloseItem": {
-                            "title": "Can Close Item",
-                            "type": "boolean"
-                          },
-                          "canEditItem": {
-                            "title": "Can Edit Item",
-                            "type": "boolean"
-                          },
-                          "canDeleteItem": {
-                            "title": "Can Delete Item",
-                            "type": "boolean"
-                          },
-                          "canStickItem": {
-                            "title": "Can Stick Item",
-                            "type": "boolean"
-                          },
-                          "canUnstickItem": {
-                            "title": "Can Unstick Item",
-                            "type": "boolean"
-                          },
-                          "bumpSettings": {
-                            "title": "Bump Settings",
-                            "type": "object",
-                            "properties": {
-                              "canBumpItem": {
-                                "title": "Can Bump Item",
-                                "type": "boolean"
-                              },
-                              "canBumpItemGlobally": {
-                                "title": "Can Bump Item Globally",
-                                "type": "boolean"
-                              },
-                              "shortErrorPhrase": {
-                                "title": "Short Error Phrase"
-                              },
-                              "errorPhrase": {
-                                "title": "Error Phrase"
-                              }
-                            },
-                            "required": [
-                              "canBumpItem",
-                              "canBumpItemGlobally",
-                              "shortErrorPhrase",
-                              "errorPhrase"
-                            ]
-                          },
-                          "canBumpItem": {
-                            "title": "Can Bump Item",
-                            "type": "boolean"
-                          },
-                          "canBuyItem": {
-                            "title": "Can Buy Item",
-                            "type": "boolean"
-                          },
-                          "rub_price": {
-                            "title": "Rub",
-                            "type": "integer"
-                          },
-                          "price_currency": {
-                            "title": "Price",
-                            "type": "string"
-                          },
-                          "canValidateAccount": {
-                            "title": "Can Validate Account",
-                            "type": "boolean"
-                          },
-                          "canResellItemAfterPurchase": {
-                            "title": "Can Resell Item After Purchase",
-                            "type": "boolean"
-                          },
-                          "canViewAccountLink": {
-                            "title": "Can View Account Link",
-                            "type": "boolean"
-                          },
-                          "canChangePassword": {
-                            "title": "Can Change Password",
-                            "type": "boolean"
-                          },
-                          "itemOriginPhrase": {
-                            "title": "Item Origin Phrase",
-                            "type": "string"
-                          },
-                          "tags": {
-                            "title": "Tags",
-                            "type": "array",
-                            "items": {}
-                          },
-                          "note_text": {
-                            "title": "Note"
-                          },
-                          "hasPendingAutoBuy": {
-                            "title": "Has Pending Auto Buy",
-                            "type": "boolean"
-                          },
-                          "descriptionHtml": {
-                            "title": "Description Html",
-                            "type": "string"
-                          },
-                          "descriptionEnHtml": {
-                            "title": "Description En Html",
-                            "type": "string"
-                          },
-                          "descriptionPlain": {
-                            "title": "Description Plain",
-                            "type": "string"
-                          },
-                          "descriptionEnPlain": {
-                            "title": "Description En Plain",
-                            "type": "string"
-                          },
-                          "seller": {
-                            "title": "Seller",
-                            "type": "object",
-                            "properties": {
-                              "user_id": {
-                                "title": "User",
-                                "type": "integer"
-                              },
-                              "sold_items_count": {
-                                "title": "Sold",
-                                "type": "integer"
-                              },
-                              "active_items_count": {
-                                "title": "Active",
-                                "type": "integer"
-                              },
-                              "restore_data": {
-                                "title": "Restore",
-                                "type": "string"
-                              },
-                              "username": {
-                                "title": "Username",
-                                "type": "string"
-                              },
-                              "avatar_date": {
-                                "title": "Avatar",
-                                "type": "integer"
-                              },
-                              "is_banned": {
-                                "title": "Is",
-                                "type": "integer"
-                              },
-                              "display_style_group_id": {
-                                "title": "Display",
-                                "type": "integer"
-                              },
-                              "restore_percents": {
-                                "title": "Restore"
-                              }
-                            },
-                            "required": [
-                              "user_id",
-                              "sold_items_count",
-                              "active_items_count",
-                              "restore_data",
-                              "username",
-                              "avatar_date",
-                              "is_banned",
-                              "display_style_group_id",
-                              "restore_percents"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "item_id",
-                          "item_state",
-                          "category_id",
-                          "published_date",
-                          "title",
-                          "description",
-                          "price",
-                          "update_stat_date",
-                          "refreshed_date",
-                          "edit_date",
-                          "view_count",
-                          "is_sticky",
-                          "item_origin",
-                          "extended_guarantee",
-                          "nsb",
-                          "allow_ask_discount",
-                          "title_en",
-                          "description_en",
-                          "email_type",
-                          "email_provider",
-                          "item_domain",
-                          "resale_item_origin",
-                          "spotify_item_id",
-                          "spotify_country",
-                          "spotify_family",
-                          "spotify_created_date",
-                          "spotify_family_manager",
-                          "spotify_family_member_count",
-                          "spotify_plan_name",
-                          "spotify_recurring",
-                          "spotify_trial",
-                          "spotify_expires",
-                          "feedback_data",
-                          "isIgnored",
-                          "priceWithSellerFee",
-                          "guarantee",
-                          "canViewLoginData",
-                          "canUpdateItemStats",
-                          "canReportItem",
-                          "canViewEmailLoginData",
-                          "showGetEmailCodeButton",
-                          "canOpenItem",
-                          "canCloseItem",
-                          "canEditItem",
-                          "canDeleteItem",
-                          "canStickItem",
-                          "canUnstickItem",
-                          "bumpSettings",
-                          "canBumpItem",
-                          "canBuyItem",
-                          "rub_price",
-                          "price_currency",
-                          "canValidateAccount",
-                          "canResellItemAfterPurchase",
-                          "canViewAccountLink",
-                          "canChangePassword",
-                          "itemOriginPhrase",
                           "tags",
                           "note_text",
                           "hasPendingAutoBuy",
@@ -50633,9 +49446,7 @@
                 "19": "VPN",
                 "20": "Tiktok",
                 "22": "Discord",
-                "23": "Cinema",
                 "24": "Telegram",
-                "26": "Spotify",
                 "27": "War Thunder",
                 "28": "Minecraft",
                 "30": "Gifts",
@@ -50654,18 +49465,16 @@
                 12,
                 13,
                 14,
-                16,
                 15,
+                16,
                 17,
                 18,
                 19,
                 20,
                 22,
-                23,
                 24,
-                26,
                 27,
-                29,
+                28,
                 30,
                 31
               ]
@@ -50940,34 +49749,6 @@
               "title": "Category Id",
               "type": "integer",
               "description": "Accounts category.",
-              "enum": [
-                1,
-                3,
-                4,
-                5,
-                6,
-                7,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                16,
-                15,
-                17,
-                18,
-                19,
-                20,
-                22,
-                23,
-                24,
-                26,
-                27,
-                29,
-                30,
-                31
-              ],
               "x-enumDescriptions": {
                 "1": "Steam",
                 "3": "Origin",
@@ -50988,14 +49769,38 @@
                 "19": "VPN",
                 "20": "Tiktok",
                 "22": "Discord",
-                "23": "Cinema",
                 "24": "Telegram",
-                "26": "Spotify",
                 "27": "War Thunder",
                 "28": "Minecraft",
                 "30": "Gifts",
                 "31": "Roblox"
-              }
+              },
+              "enum": [
+                1,
+                3,
+                4,
+                5,
+                6,
+                7,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                22,
+                24,
+                27,
+                28,
+                30,
+                31
+              ]
             }
           },
           {
@@ -57814,8 +56619,7 @@
                     "type": "number"
                   },
                   "currency": {
-                    "title": "Currency",
-                    "type": "string"
+                    "$ref": "#/components/schemas/CurrencyModel"
                   },
                   "include_fee": {
                     "title": "Include Fee",
@@ -61882,8 +60686,6 @@
             "battlenet",
             "chatgpt",
             "vpn",
-            "cinema",
-            "spotify",
             "warface",
             "minecraft"
           ]
@@ -61933,9 +60735,7 @@
             "19": "VPN",
             "20": "Tiktok",
             "22": "Discord",
-            "23": "Cinema",
             "24": "Telegram",
-            "26": "Spotify",
             "27": "War Thunder",
             "28": "Minecraft",
             "30": "Gifts",
@@ -61954,18 +60754,16 @@
             12,
             13,
             14,
-            16,
             15,
+            16,
             17,
             18,
             19,
             20,
             22,
-            23,
             24,
-            26,
             27,
-            29,
+            28,
             30,
             31
           ]
