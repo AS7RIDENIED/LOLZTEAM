@@ -99,28 +99,20 @@
     * [Get](#get-21)
     * [Params](#params-21)
     * [Games](#games-21)
-  * [Cinema](#cinema)
+  * [Roblox](#roblox)
     * [Get](#get-22)
     * [Params](#params-22)
     * [Games](#games-22)
-  * [Roblox](#roblox)
+  * [Warface](#warface)
     * [Get](#get-23)
     * [Params](#params-23)
     * [Games](#games-23)
-  * [Spotify](#spotify)
+  * [Minecraft](#minecraft)
     * [Get](#get-24)
     * [Params](#params-24)
     * [Games](#games-24)
-  * [Warface](#warface)
-    * [Get](#get-25)
-    * [Params](#params-25)
-    * [Games](#games-25)
-  * [Minecraft](#minecraft)
-    * [Get](#get-26)
-    * [Params](#params-26)
-    * [Games](#games-26)
   * [List](#list)
-  * [Get](#get-27)
+  * [Get](#get-25)
 * [List](#list-1)
   * [Owned](#owned)
   * [Purchased](#purchased)
@@ -142,7 +134,7 @@
   * [Guarantee](#guarantee)
     * [Cancel](#cancel)
     * [Check](#check)
-  * [Get](#get-28)
+  * [Get](#get-26)
   * [Bulk](#bulk)
   * [Edit](#edit)
   * [Delete](#delete)
@@ -174,7 +166,7 @@
   * [Add](#add)
   * [Check](#check-2)
 * [Profile](#profile)
-  * [Get](#get-29)
+  * [Get](#get-27)
   * [Edit](#edit-1)
 * [Payments](#payments)
   * [Auto](#auto)
@@ -183,7 +175,7 @@
     * [Delete](#delete-1)
   * [Invoice](#invoice)
     * [List](#list-3)
-    * [Get](#get-30)
+    * [Get](#get-28)
     * [Create](#create-1)
   * [Payout](#payout)
     * [Services](#services)
@@ -195,7 +187,7 @@
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-31)
+  * [Get](#get-29)
   * [Add](#add-1)
   * [Delete](#delete-2)
 * [Batch](#batch)
@@ -1554,65 +1546,6 @@ print(response.json())
 ```
 
 
-## Cinema
-
-### Get
-
-GET https://api.lzt.market/CATEGORY_NAME
-
-*Displays a list of accounts in a specific category according to your parameters.*
-
-**Parameters:**
-
-- page (int): The number of the page to display results from
-- title (str): The word or words contained in the account title.
-- pmin (float): Minimal price of account (Inclusive).
-- pmax (float): Maximum price of account (Inclusive).
-- origin (list): List of account origins.
-- not_origin (list): List of account origins that won't be included.
-- order_by (str): Item order.
-- sb (bool): Sold before.
-- sb_by_me (bool): Sold before by me.
-- nsb (bool): Not sold before.
-- nsb_by_me (bool): Not sold before by me.
-- kwargs (any): Any additional search parameters.
-
-**Example:**
-
-```python
-response = market.categories.cinema.get(pmin=100, pmax=500)
-print(response.json())
-```
-
-
-### Params
-
-GET https://api.lzt.market/CATEGORY_NAME/params
-
-*Displays a list of parameters for a specific category.*
-
-**Example:**
-
-```python
-response = market.categories.cinema.params()
-print(response.json())
-```
-
-
-### Games
-
-GET https://api.lzt.market/CATEGORY_NAME/games
-
-*Displays a list of games for a specific category.*
-
-**Example:**
-
-```python
-response = market.categories.cinema.games()
-print(response.json())
-```
-
-
 ## Roblox
 
 ### Get
@@ -1668,65 +1601,6 @@ GET https://api.lzt.market/CATEGORY_NAME/games
 
 ```python
 response = market.categories.roblox.games()
-print(response.json())
-```
-
-
-## Spotify
-
-### Get
-
-GET https://api.lzt.market/CATEGORY_NAME
-
-*Displays a list of accounts in a specific category according to your parameters.*
-
-**Parameters:**
-
-- page (int): The number of the page to display results from
-- title (str): The word or words contained in the account title.
-- pmin (float): Minimal price of account (Inclusive).
-- pmax (float): Maximum price of account (Inclusive).
-- origin (list): List of account origins.
-- not_origin (list): List of account origins that won't be included.
-- order_by (str): Item order.
-- sb (bool): Sold before.
-- sb_by_me (bool): Sold before by me.
-- nsb (bool): Not sold before.
-- nsb_by_me (bool): Not sold before by me.
-- kwargs (any): Any additional search parameters.
-
-**Example:**
-
-```python
-response = market.categories.spotify.get(pmin=100, pmax=500)
-print(response.json())
-```
-
-
-### Params
-
-GET https://api.lzt.market/CATEGORY_NAME/params
-
-*Displays a list of parameters for a specific category.*
-
-**Example:**
-
-```python
-response = market.categories.spotify.params()
-print(response.json())
-```
-
-
-### Games
-
-GET https://api.lzt.market/CATEGORY_NAME/games
-
-*Displays a list of games for a specific category.*
-
-**Example:**
-
-```python
-response = market.categories.spotify.games()
 print(response.json())
 ```
 
@@ -2036,6 +1910,7 @@ POST https://api.lzt.market/{item_id}/update-inventory
 - item_id (int): Item ID.
 - app_id (int): App ID.
 - all (bool): Update entire inventory.
+- authorize (bool): Parse inventory when authorized (Parse trade banned items).
 
 **Example:**
 
@@ -3001,6 +2876,7 @@ POST https://api.lzt.market/invoice
 - url_callback (str): Callback url.
 - lifetime (int): Invoice lifetime (300 to 43200, defaults to 3600).
 - additional_data (str): Additional information for you.
+- is_test (bool): Create a test invoice.
 
 **Example:**
 

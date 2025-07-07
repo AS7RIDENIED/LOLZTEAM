@@ -3,7 +3,7 @@ from typing import Literal
 
 class Market:
     class Category:
-        _Literal = Literal["steam", "fortnite", "mihoyo", "riot", "telegram", "supercell", "origin", "world-of-tanks", "wot-blitz", "epicgames", "gifts", "escape-from-tarkov", "socialclub", "uplay", "war-thunder", "discord", "tiktok", "instagram", "battlenet", "vpn", "cinema", "roblox", "spotify", "warface", "minecraft"]
+        _Literal = Literal["steam", "fortnite", "mihoyo", "riot", "telegram", "supercell", "origin", "world-of-tanks", "wot-blitz", "epicgames", "gifts", "escape-from-tarkov", "socialclub", "uplay", "war-thunder", "discord", "tiktok", "instagram", "battlenet", "vpn", "roblox", "warface", "minecraft"]
         steam = "steam"
         fortnite = "fortnite"
         mihoyo = "mihoyo"
@@ -25,14 +25,12 @@ class Market:
         battlenet = "battlenet"
         chatgpt = "chatgpt"
         vpn = "vpn"
-        cinema = "cinema"
         roblox = "roblox"
-        spotify = "spotify"
         warface = "warface"
         minecraft = "minecraft"
 
     class CategoryID:
-        _Literal = Literal["1", "3", "4", "5", "6", "7", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "26", "27", "28", "30", "31"]
+        _Literal = Literal["1", "3", "4", "5", "6", "7", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "24", "27", "28", "30", "31"]
         steam = 1
         fortnite = 9
         mihoyo = 17
@@ -54,9 +52,7 @@ class Market:
         battlenet = 11
         chatgpt = 6
         vpn = 19
-        cinema = 23
         roblox = 31
-        spotify = 26
         warface = 4
         minecraft = 28
 
@@ -139,14 +135,13 @@ class Market:
         oldest_edited = "edate_to_up"
 
     class Extra:
-        _Literal = Literal["proxy", "close_item", "region", "service", "system", "confirmationCode", "discord_token", "cookies", "login_without_cookies", "cookie_login", "mfa_file", "dota2_mmr", "ea_games", "uplay_games", "the_quarry", "warframe", "ark", "ark_ascended", "genshin_currency", "honkai_currency", "zenless_currency", "telegramClient", "telegramJson", "checkChannels", "checkSpam", "checkHypixelBan"]
+        _Literal = Literal["proxy", "close_item", "region", "service", "system", "confirmationCode", "cookies", "login_without_cookies", "cookie_login", "mfa_file", "dota2_mmr", "ea_games", "uplay_games", "the_quarry", "warframe", "ark", "ark_ascended", "genshin_currency", "honkai_currency", "zenless_currency", "telegramClient", "telegramJson", "checkChannels", "checkSpam", "checkHypixelBan"]
         proxy = "proxy"
         close_item = "close_item"
         region = "region"
         service = "service"
         system = "system"
         confirmationCode = "confirmationCode"
-        discord_token = "discord_token"
         cookies = "cookies"
         login_without_cookies = "login_without_cookies"
         cookie_login = "cookie_login"
@@ -408,6 +403,14 @@ class Forum:
             default = "natural"
             newest = "follow_date"
             oldest = "follow_date_reverse"
+
+    class ChatRoomIDs:
+        _Literal = Literal["1", "2", "3", "4", "13"]
+        general_ru = 1             # [Russian] General chat
+        general_en = 2             # [English] General hat
+        market_ru = 3              # [Russian] Market chat
+        market_en = 4              # [English] Market chat
+        no_whiners = 13            # No whiners chat
 
 
 class Antipublic:

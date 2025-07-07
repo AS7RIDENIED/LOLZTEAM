@@ -1,9 +1,9 @@
 [project]
 name = "lolzteam"
-version = "2.0.15"
+version = "2.0.16"
 description = "Python API Client for https://lolz.live/ & https://lzt.market/ & https://antipublic.one/"
 authors = [
-    {name = "AS7RID", email = "as7ridwork@gmail.com"}
+    {name = "AS7RID", email = "uuepq2f36@mozmail.com"}
 ]
 license = {text = "MIT"}
 readme = "README.md"

@@ -246,17 +246,9 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/vpn")
 
-        class __Cinema(__BaseCategory):
-            def __init__(self, core: "Market"):
-                super().__init__(core, "/cinema")
-
         class __Roblox(__BaseCategory):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/roblox")
-
-        class __Spotify(__BaseCategory):
-            def __init__(self, core: "Market"):
-                super().__init__(core, "/spotify")
 
         class __Warface(__BaseCategory):
             def __init__(self, core: "Market"):
@@ -290,14 +282,12 @@ class Market(APIClient):
             self.battlenet = self.__BattleNet(self.core)
             self.chatgpt = self.__ChatGPT(self.core)
             self.vpn = self.__VPN(self.core)
-            self.cinema = self.__Cinema(self.core)
             self.roblox = self.__Roblox(self.core)
-            self.spotify = self.__Spotify(self.core)
             self.warface = self.__Warface(self.core)
             self.minecraft = self.__Minecraft(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def list(self, top_queries: bool = False) -> Response:
             """
             GET https://api.lzt.market/category
@@ -350,7 +340,7 @@ class Market(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def owned(self, category_id: Constants.Market.CategoryID._Literal,
                         status: Constants.Market.ItemStatus._Literal = NONE,
                         **kwargs) -> Response:
@@ -380,7 +370,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/user/items", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def purchased(self, category_id: Constants.Market.CategoryID._Literal, **kwargs) -> Response:
             """
             GET https://api.lzt.market/user/orders
@@ -406,7 +396,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/user/orders", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def favorite(self, category_id: Constants.Market.CategoryID._Literal, **kwargs) -> Response:
             """
             GET https://api.lzt.market/fave
@@ -432,7 +422,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/fave", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def viewed(self, category_id: Constants.Market.CategoryID._Literal, **kwargs) -> Response:
             """
             GET https://api.lzt.market/viewed
@@ -463,7 +453,7 @@ class Market(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def item_value(self, item_id: str, app_id: Constants.Market.AppID._Literal, currency: Constants.Market.Currency._Literal = NONE, ignore_cache: bool = NONE) -> Response:
                 """
                 GET https://api.lzt.market/{item_id}/inventory-value
@@ -516,7 +506,7 @@ class Market(APIClient):
                 return await self.core.request("GET", "/steam-value", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def html_preview(self, item_id: int, type: Literal["profiles", "games"] = NONE) -> Response:
                 """
                 GET https://api.lzt.market/{item_id}/steam-preview
@@ -542,8 +532,14 @@ class Market(APIClient):
                 return await self.core.request("GET", f"/{item_id}/steam-preview", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
-            async def inventory_update(self, item_id: int, app_id: Constants.Market.AppID._Literal = NONE, all: bool = NONE) -> Response:
+            @AutoDelay.WrapperSet(0.2)
+            async def inventory_update(
+                self,
+                item_id: int,
+                app_id: Constants.Market.AppID._Literal = NONE,
+                all: bool = NONE,
+                authorize: bool = NONE
+            ) -> Response:
                 """
                 POST https://api.lzt.market/{item_id}/update-inventory
 
@@ -554,6 +550,7 @@ class Market(APIClient):
                 - item_id (int): Item ID.
                 - app_id (int): App ID.
                 - all (bool): Update entire inventory.
+                - authorize (bool): Parse inventory when authorized (Parse trade banned items).
 
                 **Example:**
 
@@ -564,12 +561,13 @@ class Market(APIClient):
                 """
                 params = {
                     "app_id": app_id,
-                    "all": all
+                    "all": all,
+                    "authorize": authorize
                 }
                 return await self.core.request("POST", f"/{item_id}/update-inventory", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def mafile(self, item_id: int) -> Response:
                 """
                 GET https://api.lzt.market/{item_id}/mafile
@@ -591,7 +589,7 @@ class Market(APIClient):
                 return await self.core.request("GET", f"/{item_id}/mafile")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def mafile_remove(self, item_id: int) -> Response:
                 """
                 DELETE https://api.lzt.market/{item_id}/mafile
@@ -613,7 +611,7 @@ class Market(APIClient):
                 return await self.core.request("DELETE", f"/{item_id}/mafile")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def sda(self, item_id: int, id: int = NONE, nonce: int = NONE) -> Response:
                 """
                 POST https://api.lzt.market/{item_id}/confirm-sda
@@ -641,7 +639,7 @@ class Market(APIClient):
                 return await self.core.request("POST", f"/{item_id}/confirm-sda", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def guard(self, item_id: int) -> Response:
                 """
                 get https://api.lzt.market/{item_id}/guard-code
@@ -662,7 +660,7 @@ class Market(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def code(self, item_id: str) -> Response:
                 """
                 GET https://api.lzt.market/{item_id}/telegram-login-code
@@ -683,7 +681,7 @@ class Market(APIClient):
                 return await self.core.request("GET", f"/{item_id}/telegram-login-code")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def reset_auth(self, item_id: str) -> Response:
                 """
                 POST https://api.lzt.market/{item_id}/telegram-reset-authorizations
@@ -708,7 +706,7 @@ class Market(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def cancel(self, item_id: int) -> Response:
                 """
                 POST https://api.lzt.market/{item_id}/refuse-guarantee
@@ -729,7 +727,7 @@ class Market(APIClient):
                 return await self.core.request("POST", f"/{item_id}/refuse-guarantee")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def check(self, item_id: int) -> Response:
                 """
                 POST https://api.lzt.market/{item_id}/check-guarantee
@@ -756,7 +754,7 @@ class Market(APIClient):
             self.guarantee = self.__Guarantee(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def get(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/{item_id}
@@ -777,7 +775,7 @@ class Market(APIClient):
             return await self.core.request("GET", f"/{item_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def bulk(self, item_ids: list[int]) -> Response:
             """
             POST https://api.lzt.market/bulk/items
@@ -801,7 +799,7 @@ class Market(APIClient):
             return await self.core.request("POST", "/bulk/items", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def edit(
             self,
             item_id: int,
@@ -872,7 +870,7 @@ class Market(APIClient):
             return await self.core.request("PUT", f"/{item_id}/edit", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def delete(self, item_id: int, reason: str) -> Response:
             """
             DELETE https://api.lzt.market/{item_id}
@@ -890,7 +888,7 @@ class Market(APIClient):
             return await self.core.request("DELETE", f"/{item_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def bump(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/bump
@@ -911,7 +909,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/bump")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def open(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/open
@@ -932,7 +930,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/open")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def close(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/close
@@ -953,7 +951,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/close")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def ai_price(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/{item_id}/ai-price
@@ -974,7 +972,7 @@ class Market(APIClient):
             return await self.core.request("GET", f"/{item_id}/ai-price")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def auto_buy_price(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/{item_id}/auto-buy-price
@@ -995,7 +993,7 @@ class Market(APIClient):
             return await self.core.request("GET", f"/{item_id}/auto-buy-price")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def note(self, item_id: int, text: str = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/note-save
@@ -1020,7 +1018,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/note-save", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def image(self, item_id: int, image_type: Literal["skins", "pickaxes", "dances", "gliders", "weapons", "agents", "buddies"]) -> Response:
             """
             GET https://api.lzt.market/{item_id}/image
@@ -1045,7 +1043,7 @@ class Market(APIClient):
             return await self.core.request("GET", f"/{item_id}/image", params={"type": image_type})
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def arbitrage(self, item_id: int, post_body: str) -> Response:
             """
             POST https://api.lzt.market/{item_id}/claims
@@ -1070,7 +1068,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/claims", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def letters(self, item_id: int = None, email: str = None, password: str = None, limit: int = None) -> Response:
             """
             GET https://api.lzt.market/letters2
@@ -1100,7 +1098,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/letters2", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def email_code(self, item_id: int = NONE, email: str = NONE, login: str = NONE) -> Response:
             """
             GET https://api.lzt.market/email-code
@@ -1128,7 +1126,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/email-code", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def email_password(self, item_id: int) -> Response:
             """
             GET https://api.lzt.market/{item_id}/temp-email-password
@@ -1149,7 +1147,7 @@ class Market(APIClient):
             return await self.core.request("GET", f"/{item_id}/temp-email-password")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def change_password(self, item_id: int, cancel: bool = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/change-password
@@ -1174,7 +1172,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/change-password", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def tag(self, item_id: int, tag_id: Union[int, list[int]]) -> Response:
             """
             POST https://api.lzt.market/{item_id}/tag
@@ -1199,7 +1197,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/tag", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def untag(self, item_id: int, tag_id: Union[int, list[int]]) -> Response:
             """
             DELETE https://api.lzt.market/{item_id}/tag
@@ -1224,7 +1222,7 @@ class Market(APIClient):
             return await self.core.request("DELETE", f"/{item_id}/tag", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def favorite(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/star
@@ -1245,7 +1243,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/star")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def unfavorite(self, item_id: int) -> Response:
             """
             DELETE https://api.lzt.market/{item_id}/star
@@ -1266,7 +1264,7 @@ class Market(APIClient):
             return await self.core.request("DELETE", f"/{item_id}/star")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def stick(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/stick
@@ -1287,7 +1285,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/stick")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def unstick(self, item_id: int) -> Response:
             """
             DELETE https://api.lzt.market/{item_id}/stick
@@ -1308,7 +1306,7 @@ class Market(APIClient):
             return await self.core.request("DELETE", f"/{item_id}/stick")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def transfer(self, item_id: int, username: str, secret_answer: str) -> Response:
             """
             POST https://api.lzt.market/{item_id}/change-owner
@@ -1339,7 +1337,7 @@ class Market(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def fast(self, item_id: int, price: float = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/fast-buy
@@ -1364,7 +1362,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/fast-buy", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def check(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/check-account
@@ -1385,7 +1383,7 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/check-account")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def buy(self, item_id: int, price: float = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/confirm-buy
@@ -1415,7 +1413,7 @@ class Market(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def fast(
             self,
             price: float,
@@ -1515,7 +1513,7 @@ class Market(APIClient):
             return await self.core.request("POST", "/item/fast-sell", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def add(
             self,
             price: float,
@@ -1605,7 +1603,7 @@ class Market(APIClient):
             return await self.core.request("POST", "/item/add", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def check(
             self,
             item_id: int,
@@ -1661,7 +1659,7 @@ class Market(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def get(self) -> Response:
             """
             GET https://api.lzt.market/me
@@ -1678,7 +1676,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/me")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def edit(
             self,
             title: str = NONE,
@@ -1753,7 +1751,7 @@ class Market(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def list(self) -> Response:
                 """
                 GET https://api.lzt.market/auto-payments
@@ -1770,7 +1768,7 @@ class Market(APIClient):
                 return await self.core.request("GET", "/auto-payments")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def create(self, username_receiver: str, day: int, amount: float,
                              currency: Constants.Market.Currency._Literal = NONE,
                              description: str = NONE, secret_answer: str = NONE) -> Response:
@@ -1813,7 +1811,7 @@ class Market(APIClient):
                 return await self.core.request("POST", "/auto-payment", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def delete(self, auto_payment_id: int) -> Response:
                 """
                 DELETE https://api.lzt.market/auto-payment
@@ -1839,7 +1837,7 @@ class Market(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def list(self,
                            amount: float = NONE,
                            status: Literal["paid", "not_paid"] = NONE,
@@ -1876,7 +1874,7 @@ class Market(APIClient):
                 return await self.core.request("GET", "/invoice/list", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def get(self, invoice_id: int = NONE, payment_id: str = NONE) -> Response:
                 """
                 GET https://api.lzt.market/invoice
@@ -1902,7 +1900,7 @@ class Market(APIClient):
                 return await self.core.request("GET", "/invoice", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def create(
                     self,
                     amount: float,
@@ -1913,7 +1911,8 @@ class Market(APIClient):
                     merchant_id: int,
                     url_callback: str = NONE,
                     lifetime: int = NONE,
-                    additional_data: str = NONE
+                    additional_data: str = NONE,
+                    is_test: bool = NONE
             ) -> Response:
                 """
                 POST https://api.lzt.market/invoice
@@ -1931,6 +1930,7 @@ class Market(APIClient):
                 - url_callback (str): Callback url.
                 - lifetime (int): Invoice lifetime (300 to 43200, defaults to 3600).
                 - additional_data (str): Additional information for you.
+                - is_test (bool): Create a test invoice.
 
                 **Example:**
 
@@ -1957,7 +1957,8 @@ class Market(APIClient):
                     "url_callback": url_callback,
                     "merchant_id": merchant_id,
                     "lifetime": lifetime,
-                    "additional_data": additional_data
+                    "additional_data": additional_data,
+                    "is_test": is_test
                 }
                 return await self.core.request("POST", "/invoice", params=params)
 
@@ -1966,7 +1967,7 @@ class Market(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def services(self) -> Response:
                 """
                 GET https://api.lzt.market/balance/payout/services
@@ -1983,7 +1984,7 @@ class Market(APIClient):
                 return await self.core.request("GET", "/balance/payout/services")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.5)
+            @AutoDelay.WrapperSet(0.2)
             async def create(self, service: str, wallet: str, amount: float, currency: Constants.Market.Currency._Literal, include_fee: bool = NONE, extra: dict = NONE) -> Response:
                 """
                 POST https://api.lzt.market/balance/payout/
@@ -2021,7 +2022,7 @@ class Market(APIClient):
             self.payout = self.__Payout(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def currency(self) -> Response:
             """
             GET https://api.lzt.market/currency
@@ -2038,7 +2039,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/currency")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def transfer(
             self,
             amount: float,
@@ -2093,7 +2094,7 @@ class Market(APIClient):
             return await self.core.request("POST", "/balance/transfer", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def fee(self, amount: float) -> Response:
             """
             GET https://api.lzt.market/balance/transfer/fee
@@ -2117,7 +2118,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/balance/transfer/fee", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def cancel(self, payment_id: int) -> Response:
             """
             POST https://api.lzt.market/balance/transfer/cancel
@@ -2142,7 +2143,7 @@ class Market(APIClient):
             return await self.core.request("POST", "/balance/transfer/cancel", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def history(self,
                           operation_type: Constants.Market.OperationTypes._Literal = NONE,
                           page: int = NONE,
@@ -2261,7 +2262,7 @@ class Market(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def get(self) -> Response:
             """
             GET https://api.lzt.market/proxy
@@ -2278,7 +2279,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/proxy")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def add(self, proxy: Union[list, str]) -> Response:
             """
             POST https://api.lzt.market/proxy
@@ -2304,7 +2305,7 @@ class Market(APIClient):
             return await self.core.request("POST", "/proxy", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.5)
+        @AutoDelay.WrapperSet(0.2)
         async def delete(self, proxy_id: int = NONE, all: bool = NONE) -> Response:
             """
             DELETE https://api.lzt.market/proxy
@@ -2330,7 +2331,7 @@ class Market(APIClient):
             return await self.core.request("DELETE", "/proxy", json=json)
 
     @UNIVERSAL(batchable=False)
-    @AutoDelay.WrapperSet(0.5)
+    @AutoDelay.WrapperSet(0.2)
     async def batch(self, jobs: list[dict[str, str]]) -> Response:
         """
         POST https://api.lzt.market/batch

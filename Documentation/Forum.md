@@ -149,10 +149,12 @@
   * [Ignored](#ignored-1)
   * [Ignore](#ignore-1)
   * [Unignore](#unignore-1)
+  * [Leaderboard](#leaderboard)
 * [Forms](#forms)
   * [List](#list-14)
   * [Create](#create-8)
 * [Navigation](#navigation-1)
+* [Css](#css)
 * [Batch](#batch)
 
 
@@ -1685,11 +1687,27 @@ PUT https://prod-api.lolz.live/users/me
 - display_group_id (int): Display group ID.
 - dob (tuple[int, int, int]): Date of birth.
 - fields (dict[str, str]): Custom fields.
+- display_icon_group_id (int): ID of the icon group you want to display.
+- display_banner_id (int): ID of the banner you want to display.
+- conv_welcome_message (str): This message is shown when someone wants to write to you.
+- username (str): New username.
+- secret_answer (str): Secret answer.
+- secret_answer_type (int): Secret answer type.
+- short_link (str): Profile short link.
 
 **Example:**
 
 ```python
-response = forum.users.edit(title="Test title", display_group_id=1, dob=(1, 1, 2000), fields={"_4": "My new interests", "occupation": "My new occupation"})
+response = forum.users.edit(
+    title="Test title",
+    display_group_id=1,
+    dob=(1, 1, 2000),
+    fields={"_4": "My new interests", "occupation": "My new occupation"},
+    username="RiceMorgan",
+    secret_answer="***********",
+    secret_answer_type=1,
+    short_link="ricemorgan"
+)
 print(response.json())
 ```
 
@@ -2394,10 +2412,15 @@ GET https://prod-api.lolz.live/chatbox/messages
 **Parameters:**
 
 - room_id (int): Room ID.
+- before_message_id (intsas): Message id to get older chat messages.
 
 **Example:**
 
 ```python
+response = forum.chat.messages.list(room_id=1)
+print(response.json())
+
+# With before_message_id
 response = forum.chat.messages.list(room_id=1)
 print(response.json())
 ```
@@ -2405,7 +2428,7 @@ print(response.json())
 
 ### Create
 
-POST https://prod-api.lolz.live/chatbox/message
+POST https://prod-api.lolz.live/chatbox/messages
 
 *Create a chat message.*
 
@@ -2413,18 +2436,19 @@ POST https://prod-api.lolz.live/chatbox/message
 
 - room_id (int): Room ID.
 - message (str): Message.
+- reply_message_id (int, optional): ID of the message being replied to.
 
 **Example:**
 
 ```python
-response = forum.chat.messages.create(room_id=1, message="Hello, world!")
+response = forum.chat.messages.create(room_id=1, message="/sex AS7RID")
 print(response.json())
 ```
 
 
 ### Edit
 
-PUT https://prod-api.lolz.live/chatbox/message
+PUT https://prod-api.lolz.live/chatbox/messages
 
 *Edit a chat message.*
 
@@ -2443,7 +2467,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://prod-api.lolz.live/chatbox/message
+DELETE https://prod-api.lolz.live/chatbox/messages
 
 *Delete a chat message.*
 
@@ -2461,7 +2485,7 @@ print(response.json())
 
 ### Report
 
-POST https://prod-api.lolz.live/chatbox/report
+POST https://prod-api.lolz.live/chatbox/messages/report
 
 *Report a chat message.*
 
@@ -2486,19 +2510,19 @@ GET https://prod-api.lolz.live/chatbox
 
 **Parameters:**
 
-- parent (int): Parent ID.
+- room_id (int): Room ID.
 
 **Example:**
 
 ```python
-response = forum.chat.get()
+response = forum.chat.get(room_id=1)
 print(response.json())
 ```
 
 
 ## Ignored
 
-GET https://prod-api.lolz.live/chatbox/ignored
+GET https://prod-api.lolz.live/chatbox/ignore
 
 *Get ignored users.*
 
@@ -2542,6 +2566,24 @@ DELETE https://prod-api.lolz.live/chatbox/ignore
 
 ```python
 response = forum.chat.unignore(user_id=2410024)
+print(response.json())
+```
+
+
+## Leaderboard
+
+GET https://prod-api.lolz.live/chatbox/messages/leaderboard
+
+*Get chat leaderboard.*
+
+**Parameters:**
+
+- duration (str, optional): Duration.
+
+**Example:**
+
+```python
+response = forum.chat.leaderboard(duration="month")
 print(response.json())
 ```
 
@@ -2608,6 +2650,25 @@ GET https://prod-api.lolz.live/navigation
 
 ```python
 response = forum.navigation()
+print(response.json())
+```
+
+
+# Css
+
+GET https://prod-api.lolz.live/css
+
+*Get navigation.*
+
+**Parameters:**
+
+- css (Union[str, list]): The names or identifiers of the CSS selectors to retrieve.
+- **kwargs (dict[str, any]): Additional query parameters.
+
+**Example:**
+
+```python
+response = forum.css(query="public")
 print(response.json())
 ```
 
