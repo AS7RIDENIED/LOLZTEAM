@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.65a"
+    "version": "1.1.66"
   },
   "servers": [
     {
@@ -1066,6 +1066,7 @@
                   "Besiege_cis",
                   "Betrayer",
                   "Beyond Gravity",
+                  "Beyond: Two Souls",
                   "Big Journey to Home - Official Soundtrack",
                   "Bighead Runner: Original Soundtrack",
                   "Binding of Isaac: Wrath of the Lamb",
@@ -1155,6 +1156,7 @@
                   "Braid",
                   "Brawlhalla",
                   "Brawlhalla - Spring Esports 2025 Pack",
+                  "Brawlhalla - Summer Esports 2025 Pack",
                   "Breach & Clear: Deadline Rebirth (2016)",
                   "Breach - Four Gifts",
                   "Breath of Death VII",
@@ -1163,6 +1165,8 @@
                   "Broforce_cis",
                   "Broken Age",
                   "Broken Dreams",
+                  "Broken Sword 4 - the Angel of Death (2006)",
+                  "Broken Sword 5 - the Serpent's Curse",
                   "Brothers - A Tale of Two Sons",
                   "Brutal Force",
                   "Brutal Legend",
@@ -1171,6 +1175,7 @@
                   "Bunch of Heroes",
                   "Burnout Paradise: The Ultimate Box",
                   "Bus World",
+                  "Butsbal",
                   "CBT With Yuuka Kazami",
                   "CHUCHEL",
                   "COH 2 - British Commander: Tactical Support Regiment",
@@ -1178,6 +1183,7 @@
                   "CS:GO Prime Status Upgrade_cis",
                   "Cactus Simulator",
                   "Caesar™ IV",
+                  "Calibre 10 Racing",
                   "Call of Duty: Black Ops III - Multiplayer Starter Pack",
                   "Call of Duty: Black Ops III Beta GIFT",
                   "Call of Duty: Black Ops III Beta GIFT_cis",
@@ -1305,7 +1311,9 @@
                   "Coma: Mortuary_cis",
                   "Comedy Night",
                   "Command & Conquer 3 Tiberium Wars™_cis",
+                  "Command & Conquer: Red Alert 3 - Uprising",
                   "Command & Conquer™ 3: Kane’s Wrath",
+                  "Command & Conquer™ Red Alert™ 3",
                   "Commandos 2: Men of Courage",
                   "Commandos 3: Destination Berlin",
                   "Commandos 3: Destination Berlin_cis",
@@ -1378,6 +1386,7 @@
                   "Cubicle Quest_cis",
                   "Cult of the Lamb",
                   "Cultures: Northland + 8th Wonder of the World",
+                  "Cuphead",
                   "Cyberpunk 2077",
                   "D.W.A.R.F.S.",
                   "DARK SOULS™ II - Season Pass_cis",
@@ -1397,6 +1406,7 @@
                   "DLC Quest",
                   "DOOM",
                   "DOOM Eternal Standard Edition",
+                  "DRAGON BALL XENOVERSE Season Pass",
                   "DRAGON BALL XENOVERSE_cis",
                   "DRAGON: A Game About a Dragon",
                   "Daedalus - No Escape",
@@ -1606,6 +1616,7 @@
                   "Dying Light - Ultimate Survivor Bundle",
                   "Dying Light - Ultimate Survivor Bundle_cis",
                   "Dying Light - Volatile Hunter Bundle",
+                  "Dying Light 2: Reloaded Edition",
                   "Dying Light Definitive Edition",
                   "Dying Light ROW Gift",
                   "Dying Light: Bad Blood",
@@ -1668,6 +1679,7 @@
                   "Euro Truck Simulator 2 - Scandinavia_cis",
                   "Euro Truck Simulator 2 - Scottish Paint Jobs Pack",
                   "Euro Truck Simulator 2 - Special Transport",
+                  "Euro Truck Simulator 2 - Turkish Paint Jobs Pack",
                   "Euro Truck Simulator 2 - UK Paint Jobs Pack",
                   "Euro Truck Simulator 2 - USA Paint Jobs Pack",
                   "Euro Truck Simulator 2 - Window Flags",
@@ -1725,6 +1737,8 @@
                   "Far Cry® 2",
                   "Far Cry® 4",
                   "Far Cry® 4 – Overrun",
+                  "Far Cry® 5",
+                  "Far Cry® 6",
                   "Far Cry® New Dawn",
                   "Far Cry® Primal",
                   "FarSky",
@@ -1814,6 +1828,7 @@
                   "Future Wars",
                   "GRAV",
                   "GRID Autosport",
+                  "GRIS",
                   "GTFO Alpha Gift",
                   "GTFO Alpha Gift_cis",
                   "Gal*Gun: Double Peace - 'Sexy Ribbons' Costume Set",
@@ -1843,6 +1858,7 @@
                   "Girl Amazon Survival",
                   "Girlfriend Rescue",
                   "Girls! Girls! Girls!?",
+                  "Gish",
                   "GoD Factory: Wingmen",
                   "Goat Simulator",
                   "Goat Simulator: GoatZ",
@@ -2037,6 +2053,7 @@
                   "Innocent Girl",
                   "Insecticide Part 1",
                   "Insurgency",
+                  "Insurgency: Sandstorm - Gold Edition",
                   "Insurgency_cis",
                   "Intergalactic Bubbles",
                   "Interloper",
@@ -2049,6 +2066,7 @@
                   "Iron Grip: Warlord",
                   "Iron Warriors: T - 72 Tank Command ",
                   "It Takes Two",
+                  "JRPG Bundle",
                   "Jagged Alliance 2 - Wildfire",
                   "Jagged Alliance: Back in Action DLC: Urban Specialist Kit",
                   "Jigsaw Puzzle Pack - Pixel Puzzles Ultimate: Savanna",
@@ -2083,6 +2101,7 @@
                   "Killing Floor: PostMortem Character Pack",
                   "Killsquad",
                   "Kinetic Void",
+                  "King Arthur II: Dead Legions",
                   "King Arthur's Gold",
                   "King Arthur's Gold_cis",
                   "Kingdom Come: Deliverance",
@@ -2153,11 +2172,13 @@
                   "Liar's Bar",
                   "Life is Feudal: Your Own Gift (2-pack)",
                   "Life is Strange - Episode 1",
+                  "Life is Strange Complete Season (Episodes 1-5)",
                   "Lightfish",
                   "Lilly and Sasha: Curse of the Immortals",
                   "Lilly and Sasha: Curse of the Immortals_cis",
                   "Little Inferno",
                   "Little Misfortune",
+                  "Little Nightmares II",
                   "Little Racers STREET",
                   "Little Racers STREET_cis",
                   "Lords of the Fallen - The Arcane Boost",
@@ -2183,6 +2204,7 @@
                   "METAL SLUG_cis",
                   "MONOPOLY® PLUS",
                   "MQEL Founders Pack Gift",
+                  "MX Bikes",
                   "MX vs. ATV Unleashed",
                   "MXGP - The Official Motocross Videogame",
                   "Machinarium",
@@ -2263,6 +2285,8 @@
                   "Middle-earth: Shadow of Mordor Game of the Year Edition",
                   "Middle-earth™: Shadow of War™",
                   "Middle-earth™: The Shadow Bundle",
+                  "Midnight Murder Club",
+                  "Might & Magic: Clash of Heroes - I Am the Boss DLC",
                   "Miko Gakkou: Second Year",
                   "Milk inside a bag of milk inside a bag of milk",
                   "Milk outside a bag of milk outside a bag of milk",
@@ -2345,6 +2369,7 @@
                   "Narco Terror Gift",
                   "Nation Red",
                   "Nation Red_cis",
+                  "National Zombie Park Gift",
                   "Natural Selection 2",
                   "Natural Selection 2_cis",
                   "Naval Warfare",
@@ -2388,6 +2413,7 @@
                   "ORION: Prelude_cis",
                   "OUTBRK",
                   "Oblivion Game of the Year Deluxe",
+                  "Octodad: Dadliest Catch",
                   "Octodad: Dadliest Catch + Soundtrack",
                   "Oddworld: Abe's Exoddus®",
                   "Oddworld: Munch's Oddysee",
@@ -2501,6 +2527,7 @@
                   "PAYDAY™ The Heist: Wolfpack DLC_cis",
                   "PAYDAY™ The Heist_cis",
                   "PC Building Simulator",
+                  "PEAK",
                   "POSTAL",
                   "POSTAL 2",
                   "POSTAL 2: Paradise Lost",
@@ -2526,6 +2553,7 @@
                   "Payday 2 Gift",
                   "Payday 2 Gift Pre-Order",
                   "Payday 2 Gift from John Wick",
+                  "Payday 2 Gift from John Wick_cis",
                   "Peekaboo",
                   "Penny Arcade's On the Rain-Slick Precipice of Darkness 3_cis",
                   "Phasmophobia",
@@ -2549,6 +2577,7 @@
                   "Poker Night at the Inventory",
                   "Polarity",
                   "Polarity_cis",
+                  "Poly Bridge",
                   "Pool Nation",
                   "Port Royale 3",
                   "Port Royale 3 Gold and Patrician IV Gold - Double Pack",
@@ -2590,6 +2619,7 @@
                   "Puzzle Agent",
                   "Puzzle Chronicles",
                   "Puzzle Dimension",
+                  "Puzzle Scenery",
                   "Puzzler World",
                   "Puzzler World 2",
                   "Puzzline",
@@ -2640,6 +2670,7 @@
                   "Red Faction: Guerrilla",
                   "Red Orchestra 2: Heroes of Stalingrad with Rising Storm",
                   "Red Orchestra 2: Heroes of Stalingrad with Rising Storm_cis",
+                  "Reflex",
                   "Reflex Arena",
                   "Reign Of Kings",
                   "Reign Of Kings_cis",
@@ -2654,6 +2685,7 @@
                   "Resident Evil 7 Biohazard",
                   "Resident Evil Re:Verse - Hunk Skin: Grim Reaper (The Mercenaries 3D)",
                   "Resident Evil Revelations 2",
+                  "Resident Evil Village - Street Wolf Outfit",
                   "Resident Evil: Operation Raccoon City",
                   "Resident Evil: Revelations Jessica's G18 + Custom Part:",
                   "Resident Evil: Revelations Jill's Samurai Edge + Custom Part:",
@@ -3209,8 +3241,10 @@
                   "The Witcher: Enhanced Edition Director's Cut_cis",
                   "The Witcher: Enhanced Edition Gift",
                   "The Witcher: Enhanced Edition Gift_cis",
+                  "The Wolf Among Us",
                   "The Wonderful End of the World",
                   "Theatre of War 2: Africa 1943",
+                  "There's Poop In My Soup",
                   "Thief Simulator",
                   "Thief Town",
                   "Thief™ Gold",
@@ -3233,6 +3267,7 @@
                   "Titan Quest Anniversary Edition_cis",
                   "To The Moon Game and Soundtrack Bundle",
                   "To The Moon Game and Soundtrack Bundle_cis",
+                  "To the Moon",
                   "Toilet Tycoon",
                   "Toki Tori",
                   "Toki Tori_cis",
@@ -3256,6 +3291,7 @@
                   "Tom Clancy's Splinter Cell®_cis",
                   "Tom Clancy's The Division™ - Frontline Outfits Pack",
                   "Tom Clancy's The Division™ - Season Pass",
+                  "Tom Clancy’s Rainbow Six® Extraction",
                   "Tom Clancy’s Splinter Cell Blacklist",
                   "Tom Clancy’s Splinter Cell Blacklist - High Power Pack DLC",
                   "Tom Clancy’s The Division 2 - Bargain Bundle",
@@ -3308,6 +3344,8 @@
                   "TrackMania² Stadium",
                   "TrackMania² Valley",
                   "Trailmakers",
+                  "Train Simulator: Metro-North Kawasaki M8 EMU Add-On",
+                  "Train Simulator: NEC: New York-New Haven Route Add-On",
                   "Trainz™ Simulator 12",
                   "Transistor",
                   "Trapped Dead",
@@ -3330,6 +3368,7 @@
                   "Tropico Trilogy",
                   "Truco",
                   "Tryst: Survival DLC_cis",
+                  "Turtle Odyssey",
                   "Twin Sector",
                   "Two Worlds Collection",
                   "Two Worlds II HD",
@@ -3362,6 +3401,7 @@
                   "Unknown package 118358",
                   "Unknown package 12036",
                   "Unknown package 12072",
+                  "Unknown package 12111",
                   "Unknown package 12163",
                   "Unknown package 12184",
                   "Unknown package 123216",
@@ -3398,6 +3438,7 @@
                   "Unknown package 13095",
                   "Unknown package 13151",
                   "Unknown package 13152",
+                  "Unknown package 13408",
                   "Unknown package 13499",
                   "Unknown package 135549_cis",
                   "Unknown package 13743",
@@ -3492,6 +3533,7 @@
                   "Unknown package 30130",
                   "Unknown package 30182",
                   "Unknown package 30274",
+                  "Unknown package 30307",
                   "Unknown package 30582",
                   "Unknown package 30948",
                   "Unknown package 30948_cis",
@@ -3607,6 +3649,7 @@
                   "Unknown package 6346",
                   "Unknown package 63681",
                   "Unknown package 6381",
+                  "Unknown package 6447",
                   "Unknown package 6487",
                   "Unknown package 64902",
                   "Unknown package 64902_cis",
@@ -3676,6 +3719,7 @@
                   "Uplink",
                   "Urban Trial Freestyle",
                   "VEGAS Pro 14 Edit Steam Edition",
+                  "VERGE:Lost chapter",
                   "VVVVVV",
                   "Valheim",
                   "Valiant Hearts: The Great War™ / Soldats Inconnus : Mémoires de la Grande Guerre™_cis",
@@ -7967,6 +8011,7 @@
                   "character_scareybeary",
                   "character_scarletbionic",
                   "character_scorpionzero",
+                  "character_scraptunnel",
                   "character_scribble",
                   "character_scubadasher",
                   "character_scuffle",
@@ -7990,6 +8035,7 @@
                   "character_shiitakeshaolin_rouge",
                   "character_shimmerzen",
                   "character_shinystar",
+                  "character_shirttilapia",
                   "character_shiverflame_ace",
                   "character_shrimpstroll",
                   "character_silencer",
@@ -9888,6 +9934,7 @@
                   "pickaxe_scareybeary",
                   "pickaxe_scarletbionic",
                   "pickaxe_scorpionzero",
+                  "pickaxe_scraptunnel",
                   "pickaxe_scubadasher",
                   "pickaxe_scuffle",
                   "pickaxe_scythe_gold",
@@ -9907,6 +9954,7 @@
                   "pickaxe_sherwolf",
                   "pickaxe_shiitakeshaolin_rouge",
                   "pickaxe_shinystar",
+                  "pickaxe_shirttilapia",
                   "pickaxe_shiverflame",
                   "pickaxe_shrimpstroll",
                   "pickaxe_shrimpstroll_guitar",
@@ -11041,6 +11089,7 @@
                   "checkmate_sync_follower",
                   "cheerleading",
                   "cheerpapayacomms",
+                  "chelseahotel",
                   "cherish",
                   "chew",
                   "chicken",
@@ -12077,6 +12126,8 @@
                   "shinobi",
                   "shiny",
                   "shinytiger",
+                  "shirttilapia",
+                  "shirttilapia_toast",
                   "shiverflame",
                   "shockvalue",
                   "shockvalue_sync",
@@ -12445,6 +12496,7 @@
                   "IOSAppStore",
                   "Live",
                   "Nintendo",
+                  "OneStoreKorea",
                   "PSN",
                   "Samsung"
                 ]
@@ -14421,6 +14473,8 @@
                   1008,
                   1009,
                   1013,
+                  1014,
+                  1015,
                   1101,
                   1102,
                   1103,
@@ -14615,6 +14669,8 @@
                   21050,
                   21051,
                   21052,
+                  21053,
+                  21054,
                   22000,
                   22001,
                   22002,
@@ -14665,6 +14721,8 @@
                   23042,
                   23043,
                   23044,
+                  23045,
+                  23046,
                   24000,
                   24001,
                   24002,
@@ -15016,6 +15074,7 @@
                   13135,
                   13142,
                   14001,
+                  14002,
                   14003,
                   14102,
                   14104,
@@ -36924,6 +36983,12 @@
               "title": "Transactions",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
+          },
+          {
+            "$ref": "#/components/parameters/reg"
+          },
+          {
+            "$ref": "#/components/parameters/reg_period"
           }
         ],
         "responses": {
@@ -49152,6 +49217,136 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/cart": {
+      "post": {
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Add Item to Cart",
+        "description": "Adds item to your cart.",
+        "operationId": "Cart.Add",
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "query",
+            "description": "Item id.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "item_id",
+              "type": "integer",
+              "description": "Item id."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "success": {
+                      "title": "Success",
+                      "type": "boolean"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorModel"
+          },
+          "404": {
+            "$ref": "#/components/responses/AdNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Delete Item From Cart",
+        "description": "Deletes an item from the cart.",
+        "operationId": "Cart.Delete",
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "query",
+            "description": "Item id.\nDon't set this parameter to delete all items from your cart.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "item_id",
+              "type": "integer",
+              "description": "Item id."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "success": {
+                      "title": "Success",
+                      "type": "boolean"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
             "$ref": "#/components/responses/AdNotFoundModel"
