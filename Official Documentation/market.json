@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.66"
+    "version": "1.1.66a"
   },
   "servers": [
     {
@@ -777,7 +777,8 @@
                   325,
                   326,
                   327,
-                  329
+                  329,
+                  330
                 ]
               }
             }
@@ -963,6 +964,7 @@
                   "Arma 3 Apex",
                   "Arma 3 DLC Bundle 1",
                   "Arma 3 Karts",
+                  "Arma Reforger",
                   "Arma Tactics",
                   "Arma X Gift Copy",
                   "Artemis Spaceship Bridge Simulator",
@@ -1311,9 +1313,7 @@
                   "Coma: Mortuary_cis",
                   "Comedy Night",
                   "Command & Conquer 3 Tiberium Wars™_cis",
-                  "Command & Conquer: Red Alert 3 - Uprising",
                   "Command & Conquer™ 3: Kane’s Wrath",
-                  "Command & Conquer™ Red Alert™ 3",
                   "Commandos 2: Men of Courage",
                   "Commandos 3: Destination Berlin",
                   "Commandos 3: Destination Berlin_cis",
@@ -1425,6 +1425,7 @@
                   "Darksiders II",
                   "Darksiders II - Season Pass",
                   "Darksiders II Deathinitive Edition",
+                  "Darkspore (preorder)",
                   "Darwinia",
                   "Date Everything! - Lavish Edition",
                   "David.",
@@ -1755,6 +1756,7 @@
                   "Fear & Hunger",
                   "Fear & Hunger 2: Termina",
                   "Feed All Monsters",
+                  "Feeding Frenzy 2 Deluxe",
                   "Feign",
                   "Femboy Aim Trainer",
                   "Femboy Bangers 2",
@@ -1958,6 +1960,7 @@
                   "Heat Wave DLC - Jack's pack_cis",
                   "Heat Wave DLC - Kenji's pack_cis",
                   "Heavy Bullets",
+                  "Heavy Rain",
                   "Heileen 3: New Horizons",
                   "Hell Let Loose",
                   "Hentai Furry",
@@ -2041,6 +2044,7 @@
                   "Ichi_cis",
                   "Iesabel",
                   "If My Heart Had Wings",
+                  "Iggle Pop Deluxe",
                   "Immune - True Survival",
                   "Impire: Black and White Demons",
                   "Impossible Creatures Steam Edition",
@@ -2396,6 +2400,7 @@
                   "No Man's Sky",
                   "No Time To Live",
                   "No Time to Relax",
+                  "Northgard - Hræsvelg, Clan of the Eagle",
                   "Nosferatu: The Wrath of Malachi",
                   "NotTheNameWeWanted",
                   "Nuclear Dawn",
@@ -2555,6 +2560,7 @@
                   "Payday 2 Gift from John Wick",
                   "Payday 2 Gift from John Wick_cis",
                   "Peekaboo",
+                  "Peggle Deluxe",
                   "Penny Arcade's On the Rain-Slick Precipice of Darkness 3_cis",
                   "Phasmophobia",
                   "Pianistic",
@@ -3117,6 +3123,7 @@
                   "Talisman: Digital Edition",
                   "Talisman: Digital Edition_cis",
                   "Talisman: Prologue",
+                  "Talismania Deluxe",
                   "Tango Fiesta",
                   "Tattletail",
                   "Team Fortress 2",
@@ -3382,6 +3389,7 @@
                   "Ultimate Monkey Race",
                   "Ultra Street Fighter® IV Digital Upgrade",
                   "Ultratron",
+                  "UnEpic",
                   "Undertale",
                   "Undertale_cis",
                   "Uninvited Guest",
@@ -3605,6 +3613,7 @@
                   "Unknown package 51149",
                   "Unknown package 51150_cis",
                   "Unknown package 51211_cis",
+                  "Unknown package 51297",
                   "Unknown package 51499",
                   "Unknown package 516",
                   "Unknown package 51669",
@@ -3696,6 +3705,7 @@
                   "Unknown package 83256",
                   "Unknown package 83886_cis",
                   "Unknown package 84206",
+                  "Unknown package 8672",
                   "Unknown package 86905",
                   "Unknown package 8796",
                   "Unknown package 89583",
@@ -3741,6 +3751,7 @@
                   "Viscera Cleanup Detail Gift_cis",
                   "Viscera Cleanup Detail: Santa's Rampage",
                   "Vlad the Impaler",
+                  "Voice of Pripyat_cis",
                   "Void Crew",
                   "VoidExpanse",
                   "Volcano Princess",
@@ -3854,6 +3865,7 @@
                   "Zombie Tycoon 2: Brainhov's Revenge_cis",
                   "Zort",
                   "Zueirama",
+                  "Zuma Deluxe",
                   "ibb & obb",
                   "ibb & obb_cis",
                   "ibb &amp; obb - Gift  Luxurious Friends Forever",
@@ -4776,15 +4788,7 @@
                                   }
                                 },
                                 "required": [
-                                  "570",
-                                  "730",
-                                  "945360",
-                                  "739630",
-                                  "1677740",
-                                  "230410",
-                                  "1818750",
-                                  "506540",
-                                  "386360"
+                                  "730"
                                 ]
                               },
                               "total": {
@@ -7276,6 +7280,7 @@
                   "beancharacter",
                   "beancharacter_original",
                   "beancharacter_test",
+                  "bentbaton_temp",
                   "character_abstractmirror_rogue",
                   "character_accentwall",
                   "character_agedchasm",
@@ -7297,6 +7302,7 @@
                   "character_arcticiceblue",
                   "character_arcticicetalus",
                   "character_ashenmagnusslant",
+                  "character_astrallilac",
                   "character_auracop_bullet",
                   "character_auracop_npc",
                   "character_auroradart",
@@ -7333,6 +7339,7 @@
                   "character_billy",
                   "character_billygold",
                   "character_bingrass",
+                  "character_bionickitty",
                   "character_bionicsmoke",
                   "character_birdnest",
                   "character_birdnestnavy",
@@ -7360,6 +7367,7 @@
                   "character_bravebuildsuper",
                   "character_bravebuildsuper_cinematic",
                   "character_brawnybass",
+                  "character_brightbionic",
                   "character_brightdisk",
                   "character_brightion",
                   "character_brightshimmer",
@@ -7373,6 +7381,7 @@
                   "character_butterplate",
                   "character_buttoncase",
                   "character_buttonchild",
+                  "character_bytegear",
                   "character_cabbagesugar",
                   "character_cafestove",
                   "character_cajuntaco",
@@ -7825,6 +7834,7 @@
                   "character_neonglow",
                   "character_nighthawk",
                   "character_nigirininja",
+                  "character_ninjawarrior",
                   "character_nitroflow",
                   "character_noiseless",
                   "character_novelguard",
@@ -7836,6 +7846,7 @@
                   "character_oceanbreeze",
                   "character_olivestomp",
                   "character_omegaangel",
+                  "character_omelettepop",
                   "character_openended",
                   "character_orinchai",
                   "character_outergarment",
@@ -7945,6 +7956,7 @@
                   "character_qualitycreek",
                   "character_quickburst_plains",
                   "character_quietpeanuts",
+                  "character_radiantmove",
                   "character_radiumfox_flame",
                   "character_ragedebris",
                   "character_raggedrebel",
@@ -7994,6 +8006,7 @@
                   "character_rosedust",
                   "character_roseform",
                   "character_roundthumb_nail",
+                  "character_rowdydevilfncs",
                   "character_royalangst_tote",
                   "character_royaldusk",
                   "character_ruins",
@@ -8047,6 +8060,7 @@
                   "character_skeleprobe",
                   "character_skiffeye",
                   "character_skifftoil",
+                  "character_skilledruby",
                   "character_skippingclouds",
                   "character_skullbritedot",
                   "character_sleekbiker",
@@ -8127,6 +8141,7 @@
                   "character_stormaviator",
                   "character_strategicspur_blast",
                   "character_streetgothsummer",
+                  "character_strikinglybright",
                   "character_stronghibiscus",
                   "character_strontiumspark",
                   "character_studybench",
@@ -8165,6 +8180,7 @@
                   "character_tattoon",
                   "character_tealmink_pelt",
                   "character_technoawaken",
+                  "character_techspeeder",
                   "character_techtomato",
                   "character_tennisleash",
                   "character_teriyakitech",
@@ -8441,6 +8457,7 @@
                   "pickaxe_arcticicetalus",
                   "pickaxe_ashenmagnus",
                   "pickaxe_asterorder",
+                  "pickaxe_astrallilac",
                   "pickaxe_auracop",
                   "pickaxe_autumndelivery",
                   "pickaxe_avocadoseal",
@@ -8474,6 +8491,7 @@
                   "pickaxe_bikemold_bass",
                   "pickaxe_billygold",
                   "pickaxe_bingrass",
+                  "pickaxe_bionickitty",
                   "pickaxe_bionicsmoke",
                   "pickaxe_birdnest",
                   "pickaxe_birufang",
@@ -8508,6 +8526,7 @@
                   "pickaxe_buttervehicle",
                   "pickaxe_buttoncase",
                   "pickaxe_buttonchild",
+                  "pickaxe_bytegear",
                   "pickaxe_cabbagesugar",
                   "pickaxe_cafestove",
                   "pickaxe_cajuntaco",
@@ -8761,6 +8780,7 @@
                   "pickaxe_hitman",
                   "pickaxe_hollydessert",
                   "pickaxe_honeybear_drum",
+                  "pickaxe_honeysail",
                   "pickaxe_hornedjudgment",
                   "pickaxe_hornettavine",
                   "pickaxe_humanbeing",
@@ -9621,6 +9641,9 @@
                   "pickaxe_impulse",
                   "pickaxe_indiebucket",
                   "pickaxe_inferno",
+                  "pickaxe_inflatemate_guitar",
+                  "pickaxe_inflatemate_keytar",
+                  "pickaxe_inflatemate_mic",
                   "pickaxe_inflatododo",
                   "pickaxe_inkhoop",
                   "pickaxe_inkhoop_bass",
@@ -9768,6 +9791,7 @@
                   "pickaxe_newschool_mic",
                   "pickaxe_nighthawk",
                   "pickaxe_nigirininja",
+                  "pickaxe_ninjawarrior",
                   "pickaxe_nitroflow",
                   "pickaxe_noisefncs",
                   "pickaxe_noiseless",
@@ -9780,6 +9804,7 @@
                   "pickaxe_oldschool_mic",
                   "pickaxe_olivestomp",
                   "pickaxe_olivestomp_guitar",
+                  "pickaxe_omelettepop",
                   "pickaxe_openended",
                   "pickaxe_orb_drum",
                   "pickaxe_orinchai",
@@ -9873,6 +9898,7 @@
                   "pickaxe_quickburst",
                   "pickaxe_quietpeanuts",
                   "pickaxe_quietpeanuts_guitar",
+                  "pickaxe_radiantmove",
                   "pickaxe_radiumfox",
                   "pickaxe_ragedebris",
                   "pickaxe_raggedrebel",
@@ -9965,6 +9991,7 @@
                   "pickaxe_sirwolf",
                   "pickaxe_skeleprobe",
                   "pickaxe_skeletonhunterfncs",
+                  "pickaxe_skilledruby",
                   "pickaxe_skippingclouds",
                   "pickaxe_skullbritedot",
                   "pickaxe_skullpunkblade",
@@ -10021,6 +10048,7 @@
                   "pickaxe_stallionaviator",
                   "pickaxe_stallionsmoke",
                   "pickaxe_starstray",
+                  "pickaxe_starwandfncs",
                   "pickaxe_staticshades",
                   "pickaxe_steammarauder",
                   "pickaxe_steampower",
@@ -10031,6 +10059,7 @@
                   "pickaxe_stormaviator",
                   "pickaxe_stormyearn",
                   "pickaxe_strategicspur",
+                  "pickaxe_strikinglybright",
                   "pickaxe_strontiumspark",
                   "pickaxe_studybench",
                   "pickaxe_stunningmountain",
@@ -10061,6 +10090,7 @@
                   "pickaxe_tealmink",
                   "pickaxe_tech_guitar",
                   "pickaxe_technoawaken",
+                  "pickaxe_techspeeder",
                   "pickaxe_tennisleash",
                   "pickaxe_theherald",
                   "pickaxe_thickwatch",
@@ -11171,6 +11201,7 @@
                   "custodial",
                   "cuteness",
                   "cyberarmor",
+                  "cyberice",
                   "cyclone",
                   "cycloneheadbang",
                   "cyclopsprey",
@@ -11240,6 +11271,7 @@
                   "drum_pullups",
                   "drum_relaxeddrummer",
                   "drum_rensdrums",
+                  "drum_sparklers",
                   "drum_spotlight_alien",
                   "drum_spotlight_point",
                   "drum_spotlight_scream",
@@ -11358,6 +11390,7 @@
                   "galileo3_t4dko",
                   "galileo4_pxpe0",
                   "galileoshow_cheer",
+                  "gamebreaker",
                   "garlicwhisk",
                   "garlicwhisk_clobber",
                   "gasstation_104fq",
@@ -11976,6 +12009,7 @@
                   "quickburst_guitarflame",
                   "quickburst_guitarsparks",
                   "quickburst_speakers",
+                  "quickflexes",
                   "quicksweeper",
                   "quietpeanuts_blue",
                   "quietpeanuts_pizza",
@@ -12076,6 +12110,7 @@
                   "scorecardburger",
                   "scorecardtomato",
                   "scorpionzero",
+                  "scraptunnel",
                   "scribe",
                   "scrolls",
                   "scrubdub",
@@ -20938,14 +20973,14 @@
         ]
       }
     },
-    "/origin": {
+    "/ea": {
       "get": {
         "tags": [
           "Category Search"
         ],
-        "summary": "Origin",
+        "summary": "EA (Origin)",
         "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.Origin",
+        "operationId": "Category.EA",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -46148,14 +46183,13 @@
                   ],
                   "type": "object",
                   "properties": {
-                    "0": {
+                    "category": {
                       "title": "Category",
                       "required": [
                         "category_description",
                         "category_id",
                         "category_title",
-                        "links",
-                        "permissions"
+                        "links"
                       ],
                       "type": "object",
                       "properties": {
@@ -48199,10 +48233,7 @@
                                 "stickers"
                               ]
                             }
-                          },
-                          "required": [
-                            "5710629964"
-                          ]
+                          }
                         },
                         "steam_id": {
                           "title": "Steam",
@@ -48446,10 +48477,7 @@
                                 "stickers"
                               ]
                             }
-                          },
-                          "required": [
-                            "5710629964"
-                          ]
+                          }
                         },
                         "steam_id": {
                           "title": "Steam",
@@ -49627,7 +49655,7 @@
               "description": "Accounts category.",
               "x-enumDescriptions": {
                 "1": "Steam",
-                "3": "Origin",
+                "3": "EA (Origin)",
                 "4": "Warface",
                 "5": "Uplay",
                 "6": "ChatGPT",
@@ -49842,8 +49870,7 @@
                   "title": "FastSellModel",
                   "required": [
                     "item",
-                    "message",
-                    "status",
+                    "itemLink",
                     "system_info"
                   ],
                   "type": "object",
@@ -49950,7 +49977,7 @@
               "description": "Accounts category.",
               "x-enumDescriptions": {
                 "1": "Steam",
-                "3": "Origin",
+                "3": "EA (Origin)",
                 "4": "Warface",
                 "5": "Uplay",
                 "6": "ChatGPT",
@@ -57211,9 +57238,6 @@
                     },
                     "params": {
                       "title": "Params",
-                      "required": [
-                        "key"
-                      ],
                       "type": "object",
                       "additionalProperties": {
                         "type": "string"
@@ -57601,10 +57625,6 @@
         }
       },
       "ItemFromListModel": {
-        "required": [
-          "visitor_id",
-          "time"
-        ],
         "properties": {
           "item_id": {
             "type": "integer",
@@ -60870,7 +60890,7 @@
             "riot",
             "telegram",
             "supercell",
-            "origin",
+            "ea",
             "world-of-tanks",
             "wot-blitz",
             "gifts",
@@ -60916,7 +60936,7 @@
           "description": "Accounts category.",
           "x-enumDescriptions": {
             "1": "Steam",
-            "3": "Origin",
+            "3": "EA (Origin)",
             "4": "Warface",
             "5": "Uplay",
             "6": "ChatGPT",
