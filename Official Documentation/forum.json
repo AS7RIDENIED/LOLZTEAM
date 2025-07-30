@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.16b"
+    "version": "1.1.17"
   },
   "servers": [
     {
@@ -2701,6 +2701,32 @@
             }
           },
           {
+            "name": "schedule_date",
+            "in": "query",
+            "description": "Date to schedule thread creation (format: `DD-MM-YYYY`).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Schedule date",
+              "type": "string",
+              "description": "Date to schedule thread creation (format: `DD-MM-YYYY`)."
+            }
+          },
+          {
+            "name": "schedule_time",
+            "in": "query",
+            "description": "Time to schedule thread creation (format: `HH:MM`).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Schedule time",
+              "type": "string",
+              "description": "Time to schedule thread creation (format: `HH:MM`)."
+            }
+          },
+          {
             "name": "watch_thread_state",
             "in": "query",
             "description": "Watch thread state.",
@@ -3132,6 +3158,32 @@
             }
           },
           {
+            "name": "schedule_date",
+            "in": "query",
+            "description": "Date to schedule thread creation (format: `DD-MM-YYYY`).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Schedule date",
+              "type": "string",
+              "description": "Date to schedule thread creation (format: `DD-MM-YYYY`)."
+            }
+          },
+          {
+            "name": "schedule_time",
+            "in": "query",
+            "description": "Time to schedule thread creation (format: `HH:MM`).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Schedule time",
+              "type": "string",
+              "description": "Time to schedule thread creation (format: `HH:MM`)."
+            }
+          },
+          {
             "name": "watch_thread_state",
             "in": "query",
             "description": "Watch thread state.",
@@ -3487,6 +3539,32 @@
               "title": "Don't alert followers",
               "type": "boolean",
               "description": "Don't alert followers about thread creation."
+            }
+          },
+          {
+            "name": "schedule_date",
+            "in": "query",
+            "description": "Date to schedule thread creation (format: `DD-MM-YYYY`).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Schedule date",
+              "type": "string",
+              "description": "Date to schedule thread creation (format: `DD-MM-YYYY`)."
+            }
+          },
+          {
+            "name": "schedule_time",
+            "in": "query",
+            "description": "Time to schedule thread creation (format: `HH:MM`).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Schedule time",
+              "type": "string",
+              "description": "Time to schedule thread creation (format: `HH:MM`)."
             }
           },
           {
@@ -14115,6 +14193,458 @@
           }
         ]
       },
+      "put": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Edit Conversation",
+        "description": "Edit conversation.\n\nRequired scopes:\n+ **conversate**",
+        "operationId": "Conversations.Update",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "query",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Conversation Id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "New conversation title.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Conversation Title",
+              "type": "string",
+              "description": "New conversation title."
+            }
+          },
+          {
+            "name": "open_invite",
+            "in": "query",
+            "description": "Allow members to invite others.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Open Invite",
+              "type": "boolean",
+              "description": "Allow members to invite others."
+            }
+          },
+          {
+            "name": "history_open",
+            "in": "query",
+            "description": "Make conversation history visible to new members.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "History Open",
+              "type": "boolean",
+              "description": "Make conversation history visible to new members."
+            }
+          },
+          {
+            "name": "allow_edit_messages",
+            "in": "query",
+            "description": "Allow members to edit their own messages.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Edit Messages",
+              "type": "boolean",
+              "description": "Allow members to edit their own messages."
+            }
+          },
+          {
+            "name": "allow_sticky_messages",
+            "in": "query",
+            "description": "Allow members to stick messages.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Sticky Messages",
+              "type": "boolean",
+              "description": "Allow members to stick messages."
+            }
+          },
+          {
+            "name": "allow_delete_own_messages",
+            "in": "query",
+            "description": "Allow members to delete their own messages.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Delete Own Messages",
+              "type": "boolean",
+              "description": "Allow members to delete their own messages."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "conversation": {
+                      "title": "Conversation",
+                      "type": "object",
+                      "properties": {
+                        "conversation_id": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "conversation_title": {
+                          "title": "Conversation",
+                          "type": "string"
+                        },
+                        "creator_user_id": {
+                          "title": "Creator",
+                          "type": "integer"
+                        },
+                        "creator_username": {
+                          "title": "Creator",
+                          "type": "string"
+                        },
+                        "creator_username_html": {
+                          "title": "Creator",
+                          "type": "string"
+                        },
+                        "conversation_create_date": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "conversation_update_date": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "is_starred": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "is_group": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "user_is_ignored": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "conversation_message_count": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "conversation_has_new_message": {
+                          "title": "Conversation",
+                          "type": "boolean"
+                        },
+                        "conversation_is_open": {
+                          "title": "Conversation",
+                          "type": "boolean"
+                        },
+                        "conversation_is_deleted": {
+                          "title": "Conversation",
+                          "type": "boolean"
+                        },
+                        "links": {
+                          "title": "Links",
+                          "type": "object",
+                          "properties": {
+                            "permalink": {
+                              "title": "Permalink",
+                              "type": "string"
+                            },
+                            "detail": {
+                              "title": "Detail",
+                              "type": "string"
+                            },
+                            "messages": {
+                              "title": "Messages",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "permalink",
+                            "detail",
+                            "messages"
+                          ]
+                        },
+                        "permissions": {
+                          "title": "Permissions",
+                          "type": "object",
+                          "properties": {
+                            "reply": {
+                              "title": "Reply",
+                              "type": "boolean"
+                            },
+                            "delete": {
+                              "title": "Delete",
+                              "type": "boolean"
+                            },
+                            "upload_attachment": {
+                              "title": "Upload",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "reply",
+                            "delete",
+                            "upload_attachment"
+                          ]
+                        },
+                        "recipients": {
+                          "title": "Recipients",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "username_html": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "avatar": {
+                                "title": "Avatar",
+                                "type": "string"
+                              },
+                              "avatar_big": {
+                                "title": "Avatar",
+                                "type": "string"
+                              },
+                              "avatar_small": {
+                                "title": "Avatar",
+                                "type": "string"
+                              },
+                              "last_activity": {
+                                "title": "Last",
+                                "type": "integer"
+                              },
+                              "is_online": {
+                                "title": "Is",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "username",
+                              "username_html",
+                              "avatar",
+                              "avatar_big",
+                              "avatar_small",
+                              "last_activity",
+                              "is_online"
+                            ]
+                          }
+                        },
+                        "first_message": {
+                          "title": "First",
+                          "type": "object",
+                          "properties": {
+                            "message_id": {
+                              "title": "Message",
+                              "type": "integer"
+                            },
+                            "conversation_id": {
+                              "title": "Conversation",
+                              "type": "integer"
+                            },
+                            "creator_user_id": {
+                              "title": "Creator",
+                              "type": "integer"
+                            },
+                            "creator_username": {
+                              "title": "Creator",
+                              "type": "string"
+                            },
+                            "creator_username_html": {
+                              "title": "Creator",
+                              "type": "string"
+                            },
+                            "message_create_date": {
+                              "title": "Message",
+                              "type": "integer"
+                            },
+                            "message_body": {
+                              "title": "Message",
+                              "type": "string"
+                            },
+                            "message_body_html": {
+                              "title": "Message",
+                              "type": "string"
+                            },
+                            "message_body_plain_text": {
+                              "title": "Message",
+                              "type": "string"
+                            },
+                            "message_attachment_count": {
+                              "title": "Message",
+                              "type": "integer"
+                            },
+                            "user_is_ignored": {
+                              "title": "User",
+                              "type": "boolean"
+                            },
+                            "links": {
+                              "title": "Links",
+                              "type": "object",
+                              "properties": {
+                                "detail": {
+                                  "title": "Detail",
+                                  "type": "string"
+                                },
+                                "conversation": {
+                                  "title": "Conversation",
+                                  "type": "string"
+                                },
+                                "creator": {
+                                  "title": "Creator",
+                                  "type": "string"
+                                },
+                                "creator_avatar": {
+                                  "title": "Creator",
+                                  "type": "string"
+                                },
+                                "report": {
+                                  "title": "Report",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "detail",
+                                "conversation",
+                                "creator",
+                                "creator_avatar",
+                                "report"
+                              ]
+                            },
+                            "permissions": {
+                              "title": "Permissions",
+                              "type": "object",
+                              "properties": {
+                                "view": {
+                                  "title": "View",
+                                  "type": "boolean"
+                                },
+                                "edit": {
+                                  "title": "Edit",
+                                  "type": "boolean"
+                                },
+                                "delete": {
+                                  "title": "Delete",
+                                  "type": "boolean"
+                                },
+                                "reply": {
+                                  "title": "Reply",
+                                  "type": "boolean"
+                                },
+                                "upload_attachment": {
+                                  "title": "Upload",
+                                  "type": "boolean"
+                                },
+                                "report": {
+                                  "title": "Report",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "view",
+                                "edit",
+                                "delete",
+                                "reply",
+                                "upload_attachment",
+                                "report"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "message_id",
+                            "conversation_id",
+                            "creator_user_id",
+                            "creator_username",
+                            "creator_username_html",
+                            "message_create_date",
+                            "message_body",
+                            "message_body_html",
+                            "message_body_plain_text",
+                            "message_attachment_count",
+                            "user_is_ignored",
+                            "links",
+                            "permissions"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "conversation_id",
+                        "conversation_title",
+                        "creator_user_id",
+                        "creator_username",
+                        "creator_username_html",
+                        "conversation_create_date",
+                        "conversation_update_date",
+                        "is_starred",
+                        "is_group",
+                        "user_is_ignored",
+                        "conversation_message_count",
+                        "conversation_has_new_message",
+                        "conversation_is_open",
+                        "conversation_is_deleted",
+                        "links",
+                        "permissions",
+                        "recipients",
+                        "first_message"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  },
+                  "required": [
+                    "conversation",
+                    "system_info"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "conversate"
+            ]
+          }
+        ]
+      },
       "delete": {
         "tags": [
           "Conversations"
@@ -14172,6 +14702,286 @@
           {
             "HTTPBearer": [
               "post",
+              "conversate"
+            ]
+          }
+        ]
+      }
+    },
+    "/conversations/start": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Start Conversation",
+        "description": "Start a new conversation with a user.\n\nRequired scopes:\n+ **conversate**",
+        "operationId": "Conversations.Start",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "ID of the user to start a conversation with.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "User ID",
+              "type": "integer",
+              "description": "ID of the user to start a conversation with."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "conversation",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "conversation": {
+                      "title": "Conversation",
+                      "type": "object",
+                      "properties": {
+                        "conversation_id": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "creator_user_id": {
+                          "title": "Creator",
+                          "type": "integer"
+                        },
+                        "creator_username": {
+                          "title": "Creator",
+                          "type": "string"
+                        },
+                        "creator_username_html": {
+                          "title": "Creator",
+                          "type": "string"
+                        },
+                        "conversation_create_date": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "conversation_update_date": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "conversation_last_read_date": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "conversation_online_count": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "is_starred": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "is_group": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "is_unread": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "alerts": {
+                          "title": "Alerts",
+                          "type": "integer"
+                        },
+                        "permissions": {
+                          "title": "Permissions",
+                          "type": "object",
+                          "properties": {
+                            "view": {
+                              "title": "View",
+                              "type": "boolean"
+                            },
+                            "reply": {
+                              "title": "Reply",
+                              "type": "boolean"
+                            },
+                            "invite": {
+                              "title": "Invite",
+                              "type": "boolean"
+                            },
+                            "manage_invite_links": {
+                              "title": "Manage",
+                              "type": "boolean"
+                            },
+                            "kick": {
+                              "title": "Kick",
+                              "type": "boolean"
+                            },
+                            "upload_avatar": {
+                              "title": "Upload",
+                              "type": "boolean"
+                            },
+                            "editOwnPost": {
+                              "title": "Edit Own Post",
+                              "type": "boolean"
+                            },
+                            "stickyMessages": {
+                              "title": "Sticky Messages",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "view",
+                            "reply",
+                            "invite",
+                            "manage_invite_links",
+                            "kick",
+                            "upload_avatar",
+                            "editOwnPost",
+                            "stickyMessages"
+                          ]
+                        },
+                        "conversation_message_count": {
+                          "title": "Conversation",
+                          "type": "integer"
+                        },
+                        "conversation_is_new": {
+                          "title": "Conversation",
+                          "type": "boolean"
+                        },
+                        "creator_is_ignored": {
+                          "title": "Creator",
+                          "type": "boolean"
+                        },
+                        "conversation_is_open": {
+                          "title": "Conversation",
+                          "type": "boolean"
+                        },
+                        "conversation_is_deleted": {
+                          "title": "Conversation",
+                          "type": "boolean"
+                        },
+                        "recipients": {
+                          "title": "Recipients",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "username_html": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "last_activity": {
+                                "title": "Last",
+                                "type": "integer"
+                              },
+                              "is_online": {
+                                "title": "Is",
+                                "type": "boolean"
+                              },
+                              "contacts_changed": {
+                                "title": "Contacts",
+                                "type": "boolean"
+                              },
+                              "avatar": {
+                                "title": "Avatar",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "username",
+                              "username_html",
+                              "last_activity",
+                              "is_online",
+                              "contacts_changed",
+                              "avatar"
+                            ]
+                          }
+                        },
+                        "links": {
+                          "title": "Links",
+                          "type": "object",
+                          "properties": {
+                            "permalink": {
+                              "title": "Permalink",
+                              "type": "string"
+                            },
+                            "detail": {
+                              "title": "Detail",
+                              "type": "string"
+                            },
+                            "messages": {
+                              "title": "Messages",
+                              "type": "string"
+                            },
+                            "avatar": {
+                              "title": "Avatar",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "permalink",
+                            "detail",
+                            "messages",
+                            "avatar"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "conversation_id",
+                        "creator_user_id",
+                        "creator_username",
+                        "creator_username_html",
+                        "conversation_create_date",
+                        "conversation_update_date",
+                        "conversation_last_read_date",
+                        "conversation_online_count",
+                        "is_starred",
+                        "is_group",
+                        "is_unread",
+                        "alerts",
+                        "permissions",
+                        "conversation_message_count",
+                        "conversation_is_new",
+                        "creator_is_ignored",
+                        "conversation_is_open",
+                        "conversation_is_deleted",
+                        "recipients",
+                        "links"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
               "conversate"
             ]
           }
@@ -14567,14 +15377,14 @@
           {
             "name": "conversation_id",
             "in": "query",
-            "description": "Id of needed conversation.",
+            "description": "Id of conversation.",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "title": "Conversation Id",
               "type": "integer",
-              "description": "Id of needed conversation."
+              "description": "Id of conversation."
             }
           },
           {
@@ -15509,6 +16319,181 @@
           {
             "HTTPBearer": [
               "post",
+              "conversate"
+            ]
+          }
+        ]
+      },
+      "delete":{
+      "tags": [
+        "Conversations"
+      ],
+      "summary": "Delete Conversation Message",
+      "description": "Deletes a message from a conversation.\n\nRequired scopes:\n+ **conversate**",
+      "operationId": "Conversations.Messages.Delete",
+      "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "query",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "title": "Conversation Id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "message_id",
+            "in": "path",
+            "description": "Id of message.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Message Id",
+              "type": "integer",
+              "description": "Id of message."
+            }
+          }
+        ],
+      "responses": {
+        "200": {
+          "$ref": "#/components/responses/SaveChanges"
+        },
+        "401": {
+          "$ref": "#/components/responses/Unauthorized"
+        },
+        "403": {
+          "$ref": "#/components/responses/NoPermission"
+        },
+        "404": {
+          "$ref": "#/components/responses/NotFound"
+        }
+      },
+      "security": [
+        {
+          "HTTPBearer": [
+            "conversate"
+          ]
+        }
+      ]
+      }
+    },
+    "/conversations/{conversation_id}/invite": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Invite Users to Conversation",
+        "description": "Invite one or more users to an existing conversation.\n\nRequired scopes:\n+ **conversate**\n+ **post**",
+        "operationId": "Conversations.Invite",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "conversation_id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "recipients",
+            "in": "query",
+            "description": "List of recipients username's.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": { 
+              "title": "Recipients",
+              "type": "string",
+              "description": "List of recipients username's."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "conversate"
+            ]
+          }
+        ]
+      }
+    },
+    "/conversations/{conversation_id}/kick": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Kick User from Conversation",
+        "description": "Kicks a user from a conversation.\n\nRequired scopes:\n+ **conversate**",
+        "operationId": "Conversations.Kick",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "description": "Id of conversation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "conversation_id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Id of user to kick from conversation.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "title": "user_id",
+              "type": "integer",
+              "description": "Id of user to kick from conversation."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
               "conversate"
             ]
           }
@@ -20642,7 +21627,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "$ref":"#/components/schemas/RoomIdModel"
+              "$ref": "#/components/schemas/RoomIdModel"
             }
           }
         ],
@@ -20934,7 +21919,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "$ref":"#/components/schemas/RoomIdModel"
+              "$ref": "#/components/schemas/RoomIdModel"
             }
           },
           {
@@ -21453,7 +22438,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "$ref":"#/components/schemas/RoomIdModel"
+              "$ref": "#/components/schemas/RoomIdModel"
             }
           },
           {
@@ -22048,7 +23033,11 @@
             "explode": false,
             "schema": {
               "type": "string",
-              "enum":["day","week","month"]
+              "enum": [
+                "day",
+                "week",
+                "month"
+              ]
             }
           }
         ],
@@ -23340,7 +24329,10 @@
         "explode": false,
         "schema": {
           "title": "user_id",
-          "type": ["string", "integer"]
+          "type": [
+            "string",
+            "integer"
+          ]
         }
       },
       "user_id_path": {
@@ -23352,7 +24344,10 @@
         "explode": false,
         "schema": {
           "title": "user_id",
-          "type": ["string", "integer"]
+          "type": [
+            "string",
+            "integer"
+          ]
         }
       }
     },
@@ -23492,7 +24487,7 @@
       }
     },
     "schemas": {
-      "RoomIdModel":{
+      "RoomIdModel": {
         "type": "integer",
         "x-enumDescriptions": {
           "1": "[Russian] General chat",
