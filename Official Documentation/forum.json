@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.17a"
+    "version": "1.1.17b"
   },
   "servers": [
     {
@@ -970,6 +970,218 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read"
+            ]
+          }
+        ]
+      }
+    },
+    "/forums/grouped": {
+      "get": {
+        "tags": [
+          "Forums"
+        ],
+        "summary": "Get Forums Tree",
+        "description": "Returns grouped forums.\n\nRequired scopes:\n+ **read**",
+        "operationId": "Forums.Grouped",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "tabs",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "data": {
+                      "title": "Data",
+                      "type": "object",
+                      "properties": {
+                        "0": {
+                          "title": "",
+                          "type": "object",
+                          "properties": {
+                            "0": {
+                              "title": "",
+                              "type": "object",
+                              "properties": {
+                                "forum_id": {
+                                  "title": "Forum",
+                                  "type": "integer"
+                                },
+                                "forum_title": {
+                                  "title": "Forum",
+                                  "type": "string"
+                                },
+                                "forum_description": {
+                                  "title": "Forum",
+                                  "type": "string"
+                                },
+                                "forum_thread_count": {
+                                  "title": "Forum",
+                                  "type": "integer"
+                                },
+                                "forum_post_count": {
+                                  "title": "Forum",
+                                  "type": "integer"
+                                },
+                                "parent_node_id": {
+                                  "title": "Parent",
+                                  "type": "integer"
+                                },
+                                "links": {
+                                  "title": "Links",
+                                  "type": "object",
+                                  "properties": {
+                                    "permalink": {
+                                      "title": "Permalink",
+                                      "type": "string"
+                                    },
+                                    "detail": {
+                                      "title": "Detail",
+                                      "type": "string"
+                                    },
+                                    "sub-categories": {
+                                      "title": "Sub",
+                                      "type": "string"
+                                    },
+                                    "sub-forums": {
+                                      "title": "Sub",
+                                      "type": "string"
+                                    },
+                                    "threads": {
+                                      "title": "Threads",
+                                      "type": "string"
+                                    },
+                                    "followers": {
+                                      "title": "Followers",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "permalink",
+                                    "detail",
+                                    "sub-categories",
+                                    "sub-forums",
+                                    "threads",
+                                    "followers"
+                                  ]
+                                },
+                                "permissions": {
+                                  "title": "Permissions",
+                                  "type": "object",
+                                  "properties": {
+                                    "view": {
+                                      "title": "View",
+                                      "type": "boolean"
+                                    },
+                                    "edit": {
+                                      "title": "Edit",
+                                      "type": "boolean"
+                                    },
+                                    "delete": {
+                                      "title": "Delete",
+                                      "type": "boolean"
+                                    },
+                                    "create_thread": {
+                                      "title": "Create",
+                                      "type": "boolean"
+                                    },
+                                    "tag_thread": {
+                                      "title": "Tag",
+                                      "type": "boolean"
+                                    },
+                                    "follow": {
+                                      "title": "Follow",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "view",
+                                    "edit",
+                                    "delete",
+                                    "create_thread",
+                                    "tag_thread",
+                                    "follow"
+                                  ]
+                                },
+                                "forum_is_followed": {
+                                  "title": "Forum",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "forum_id",
+                                "forum_title",
+                                "forum_description",
+                                "forum_thread_count",
+                                "forum_post_count",
+                                "parent_node_id",
+                                "links",
+                                "permissions",
+                                "forum_is_followed"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "0"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "0"
+                      ]
+                    },
+                    "tabs": {
+                      "title": "Tabs",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "link_title": {
+                            "title": "Link",
+                            "type": "string"
+                          },
+                          "isDefault": {
+                            "title": "Is Default",
+                            "type": "boolean"
+                          },
+                          "title": {
+                            "title": "Title",
+                            "type": "string"
+                          },
+                          "isHidden": {
+                            "title": "Is Hidden",
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "link_title",
+                          "isDefault",
+                          "title",
+                          "isHidden"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         },
         "security": [
@@ -13399,6 +13611,20 @@
         "operationId": "Conversations.List",
         "parameters": [
           {
+            "name": "folder",
+            "in": "query",
+            "description": "Filter conversations by folder.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Folder",
+              "type": "string",
+              "description": "Filter conversations by folder.",
+              "enum": ["all", "unread", "groups", "market", "market_replacements", "staff","giveaways", "p2p"]
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Page number of conversations.",
@@ -15695,6 +15921,11 @@
                 ],
                 "type": "object",
                 "properties": {
+                  "reply_message_id": {
+                    "title": "Reply Message Id",
+                    "type": "integer",
+                    "description": "ID of the message being replied to."
+                  },
                   "message_body": {
                     "title": "Message Body",
                     "type": "string",
@@ -15876,6 +16107,128 @@
           {
             "HTTPBearer": [
               "post",
+              "conversate"
+            ]
+          }
+        ]
+      }
+    },
+    "/conversations/search": {
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "summary": "Search Conversations Messages",
+        "description": "Search for conversations messages or recipients.\n\nRequired scopes:\n+ **read**\n+ **conversate**",
+        "operationId": "Conversations.Search",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search query string.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "conversation_id",
+            "in": "query",
+            "description": "Id of conversation to.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Conversation Id",
+              "type": "integer",
+              "description": "Id of conversation."
+            }
+          },
+          {
+            "name": "search_recipients",
+            "in": "query",
+            "description": "Search for recipients.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "conversations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "conversation_id": {
+                            "type": "integer",
+                            "title": "Conversation Id"
+                          },
+                          "title": {
+                            "type": "string",
+                            "title": "Title"
+                          },
+                          "creator_user_id": {
+                            "type": "integer",
+                            "title": "Creator User Id"
+                          },
+                          "creator_username": {
+                            "type": "string",
+                            "title": "Creator Username"
+                          },
+                          "last_message_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "title": "Last Message Date"
+                          },
+                          "recipient_count": {
+                            "type": "integer",
+                            "title": "Recipient Count"
+                          }
+                        },
+                        "required": [
+                          "conversation_id",
+                          "title",
+                          "creator_user_id",
+                          "creator_username",
+                          "last_message_date",
+                          "recipient_count"
+                        ]
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "title": "Total Results"
+                    }
+                  },
+                  "required": [
+                    "conversations",
+                    "total"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read",
               "conversate"
             ]
           }
