@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.17c"
+    "version": "1.1.18"
   },
   "servers": [
     {
@@ -2536,7 +2536,9 @@
                 "thread_post_count",
                 "thread_post_count_reverse",
                 "first_post_likes",
-                "first_post_likes_reverse"
+                "first_post_likes_reverse",
+                "reply_count",
+                "reply_count_asc"
               ]
             }
           }
@@ -8802,7 +8804,526 @@
                   ],
                   "properties": {
                     "user": {
-                      "$ref": "#/components/schemas/UserModel"
+                      "title": "User",
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "username": {
+                          "title": "Username",
+                          "type": "string"
+                        },
+                        "username_html": {
+                          "title": "Username",
+                          "type": "string"
+                        },
+                        "user_message_count": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_register_date": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_like_count": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_like2_count": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "contest_count": {
+                          "title": "Contest",
+                          "type": "integer"
+                        },
+                        "trophy_count": {
+                          "title": "Trophy",
+                          "type": "integer"
+                        },
+                        "short_link": {
+                          "title": "Short",
+                          "type": "string"
+                        },
+                        "custom_title": {
+                          "title": "Custom",
+                          "type": "string"
+                        },
+                        "is_banned": {
+                          "title": "Is",
+                          "type": "integer"
+                        },
+                        "user_email": {
+                          "title": "User",
+                          "type": "string"
+                        },
+                        "user_unread_notification_count": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_unread_conversation_count": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "conv_welcome_message": {
+                          "title": "Conv",
+                          "type": "string"
+                        },
+                        "user_title": {
+                          "title": "User",
+                          "type": "string"
+                        },
+                        "user_deposit": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_is_valid": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "user_is_verified": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "user_is_followed": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "user_last_seen_date": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "links": {
+                          "title": "Links",
+                          "type": "object",
+                          "properties": {
+                            "permalink": {
+                              "title": "Permalink",
+                              "type": "string"
+                            },
+                            "detail": {
+                              "title": "Detail",
+                              "type": "string"
+                            },
+                            "avatar": {
+                              "title": "Avatar",
+                              "type": "string"
+                            },
+                            "avatar_big": {
+                              "title": "Avatar",
+                              "type": "string"
+                            },
+                            "avatar_small": {
+                              "title": "Avatar",
+                              "type": "string"
+                            },
+                            "followers": {
+                              "title": "Followers",
+                              "type": "string"
+                            },
+                            "followings": {
+                              "title": "Followings",
+                              "type": "string"
+                            },
+                            "ignore": {
+                              "title": "Ignore",
+                              "type": "string"
+                            },
+                            "timeline": {
+                              "title": "Timeline",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "permalink",
+                            "detail",
+                            "avatar",
+                            "avatar_big",
+                            "avatar_small",
+                            "followers",
+                            "followings",
+                            "ignore",
+                            "timeline"
+                          ]
+                        },
+                        "permissions": {
+                          "title": "Permissions",
+                          "type": "object",
+                          "properties": {
+                            "edit": {
+                              "title": "Edit",
+                              "type": "boolean"
+                            },
+                            "follow": {
+                              "title": "Follow",
+                              "type": "boolean"
+                            },
+                            "ignore": {
+                              "title": "Ignore",
+                              "type": "boolean"
+                            },
+                            "profile_post": {
+                              "title": "Profile",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "edit",
+                            "follow",
+                            "ignore",
+                            "profile_post"
+                          ]
+                        },
+                        "user_is_ignored": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "user_is_visitor": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "user_group_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_groups": {
+                          "title": "User",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "user_group_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_group_title": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_group_title_en": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_group_banner_css_class": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_group_banner_text": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_group_banner_text_en": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "display_group_selectable": {
+                                "title": "Display",
+                                "type": "boolean"
+                              },
+                              "display_banner_selectable": {
+                                "title": "Display",
+                                "type": "boolean"
+                              },
+                              "display_icon_selectable": {
+                                "title": "Display",
+                                "type": "boolean"
+                              },
+                              "is_primary_group": {
+                                "title": "Is",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "user_group_id",
+                              "user_group_title",
+                              "user_group_title_en",
+                              "user_group_banner_css_class",
+                              "user_group_banner_text",
+                              "user_group_banner_text_en",
+                              "display_group_selectable",
+                              "display_banner_selectable",
+                              "display_icon_selectable",
+                              "is_primary_group"
+                            ]
+                          }
+                        },
+                        "fields": {
+                          "title": "Fields",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "title": "Id",
+                                "type": "string"
+                              },
+                              "title": {
+                                "title": "Title",
+                                "type": "string"
+                              },
+                              "description": {
+                                "title": "Description",
+                                "type": "string"
+                              },
+                              "position": {
+                                "title": "Position",
+                                "type": "string"
+                              },
+                              "is_required": {
+                                "title": "Is",
+                                "type": "boolean"
+                              },
+                              "value": {
+                                "title": "Value",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "description",
+                              "position",
+                              "is_required",
+                              "value"
+                            ]
+                          }
+                        },
+                        "user_timezone_offset": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_external_authentications": {
+                          "title": "User",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "provider": {
+                                "title": "Provider",
+                                "type": "string"
+                              },
+                              "provider_key": {
+                                "title": "Provider",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "provider",
+                              "provider_key"
+                            ]
+                          }
+                        },
+                        "self_permissions": {
+                          "title": "Self",
+                          "type": "object",
+                          "properties": {
+                            "create_conversation": {
+                              "title": "Create",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "create_conversation"
+                          ]
+                        },
+                        "edit_permissions": {
+                          "title": "Edit",
+                          "type": "object",
+                          "properties": {
+                            "password": {
+                              "title": "Password",
+                              "type": "boolean"
+                            },
+                            "user_email": {
+                              "title": "User",
+                              "type": "boolean"
+                            },
+                            "username": {
+                              "title": "Username",
+                              "type": "boolean"
+                            },
+                            "user_title": {
+                              "title": "User",
+                              "type": "boolean"
+                            },
+                            "short_link": {
+                              "title": "Short",
+                              "type": "boolean"
+                            },
+                            "hide_username_logs": {
+                              "title": "Hide",
+                              "type": "boolean"
+                            },
+                            "primary_group_id": {
+                              "title": "Primary",
+                              "type": "boolean"
+                            },
+                            "secondary_group_ids": {
+                              "title": "Secondary",
+                              "type": "boolean"
+                            },
+                            "user_dob_day": {
+                              "title": "User",
+                              "type": "boolean"
+                            },
+                            "user_dob_month": {
+                              "title": "User",
+                              "type": "boolean"
+                            },
+                            "user_dob_year": {
+                              "title": "User",
+                              "type": "boolean"
+                            },
+                            "fields": {
+                              "title": "Fields",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "password",
+                            "user_email",
+                            "username",
+                            "user_title",
+                            "short_link",
+                            "hide_username_logs",
+                            "primary_group_id",
+                            "secondary_group_ids",
+                            "user_dob_day",
+                            "user_dob_month",
+                            "user_dob_year",
+                            "fields"
+                          ]
+                        },
+                        "user_following": {
+                          "title": "User",
+                          "type": "object",
+                          "properties": {
+                            "users": {
+                              "title": "Users",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "user_id": {
+                                    "title": "User",
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "title": "Username",
+                                    "type": "string"
+                                  },
+                                  "username_html": {
+                                    "title": "Username",
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "user_id",
+                                  "username",
+                                  "username_html",
+                                  "avatar"
+                                ]
+                              }
+                            },
+                            "count": {
+                              "title": "Count",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "users",
+                            "count"
+                          ]
+                        },
+                        "user_followers": {
+                          "title": "User",
+                          "type": "object",
+                          "properties": {
+                            "users": {
+                              "title": "Users",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "user_id": {
+                                    "title": "User",
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "title": "Username",
+                                    "type": "string"
+                                  },
+                                  "username_html": {
+                                    "title": "Username",
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "user_id",
+                                  "username",
+                                  "username_html",
+                                  "avatar"
+                                ]
+                              }
+                            },
+                            "count": {
+                              "title": "Count",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "users",
+                            "count"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "username",
+                        "username_html",
+                        "user_message_count",
+                        "user_register_date",
+                        "user_like_count",
+                        "user_like2_count",
+                        "contest_count",
+                        "trophy_count",
+                        "short_link",
+                        "custom_title",
+                        "is_banned",
+                        "user_email",
+                        "user_unread_notification_count",
+                        "user_unread_conversation_count",
+                        "conv_welcome_message",
+                        "user_title",
+                        "user_deposit",
+                        "user_is_valid",
+                        "user_is_verified",
+                        "user_is_followed",
+                        "user_last_seen_date",
+                        "links",
+                        "permissions",
+                        "user_is_ignored",
+                        "user_is_visitor",
+                        "user_group_id",
+                        "user_groups",
+                        "fields",
+                        "user_timezone_offset",
+                        "user_external_authentications",
+                        "self_permissions",
+                        "edit_permissions",
+                        "user_following",
+                        "user_followers"
+                      ]
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -8995,6 +9516,357 @@
               "title": "Short Link",
               "type": "string",
               "description": "Profile short link."
+            }
+          },
+          {
+            "name": "language_id",
+            "in": "query",
+            "description": "User interface language ID.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Language Id",
+              "type": "integer",
+              "description": "User interface language ID."
+            }
+          },
+          {
+            "name": "timezone",
+            "in": "query",
+            "description": "User timezone.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Timezone",
+              "type": "string",
+              "description": "User timezone.",
+              "enum": [
+                "Pacific/Midway",
+                "Pacific/Honolulu",
+                "Pacific/Marquesas",
+                "America/Anchorage",
+                "America/Los_Angeles",
+                "America/Santa_Isabel",
+                "America/Tijuana",
+                "America/Denver",
+                "America/Chihuahua",
+                "America/Phoenix",
+                "America/Chicago",
+                "America/Belize",
+                "America/Mexico_City",
+                "Pacific/Easter",
+                "America/New_York",
+                "America/Havana",
+                "America/Bogota",
+                "America/Caracas",
+                "America/Halifax",
+                "America/Goose_Bay",
+                "America/Asuncion",
+                "America/Santiago",
+                "America/Cuiaba",
+                "America/La_Paz",
+                "America/St_Johns",
+                "America/Argentina/Buenos_Aires",
+                "America/Argentina/San_Luis",
+                "America/Argentina/Mendoza",
+                "Atlantic/Stanley",
+                "America/Godthab",
+                "America/Montevideo",
+                "America/Sao_Paulo",
+                "America/Miquelon",
+                "America/Noronha",
+                "Atlantic/Cape_Verde",
+                "Atlantic/Azores",
+                "Europe/London",
+                "Africa/Casablanca",
+                "Atlantic/Reykjavik",
+                "Europe/Amsterdam",
+                "Africa/Algiers",
+                "Africa/Windhoek",
+                "Africa/Tunis",
+                "Europe/Athens",
+                "Africa/Johannesburg",
+                "Europe/Kaliningrad",
+                "Asia/Amman",
+                "Asia/Beirut",
+                "Africa/Cairo",
+                "Asia/Jerusalem",
+                "Asia/Gaza",
+                "Asia/Damascus",
+                "Europe/Moscow",
+                "Europe/Minsk",
+                "Africa/Nairobi",
+                "Asia/Tehran",
+                "Asia/Dubai",
+                "Asia/Yerevan",
+                "Asia/Baku",
+                "Indian/Mauritius",
+                "Asia/Kabul",
+                "Asia/Yekaterinburg",
+                "Asia/Tashkent",
+                "Asia/Kolkata",
+                "Asia/Kathmandu",
+                "Asia/Novosibirsk",
+                "Asia/Dhaka",
+                "Asia/Almaty",
+                "Asia/Rangoon",
+                "Asia/Krasnoyarsk",
+                "Asia/Bangkok",
+                "Asia/Irkutsk",
+                "Asia/Hong_Kong",
+                "Asia/Singapore",
+                "Australia/Perth",
+                "Asia/Yakutsk",
+                "Asia/Tokyo",
+                "Asia/Seoul",
+                "Australia/Adelaide",
+                "Australia/Darwin",
+                "Asia/Vladivostok",
+                "Asia/Magadan",
+                "Australia/Brisbane",
+                "Australia/Sydney",
+                "Pacific/Noumea",
+                "Pacific/Norfolk",
+                "Asia/Anadyr",
+                "Pacific/Auckland",
+                "Pacific/Fiji",
+                "Pacific/Chatham",
+                "Pacific/Tongatapu",
+                "Pacific/Apia",
+                "Pacific/Kiritimati"
+              ],
+              "x-enumDescriptions":{
+                "Pacific/Midway": "(UTC-11:00) American Samoa",
+                "Pacific/Honolulu": "(UTC-10:00) Hawaii",
+                "Pacific/Marquesas": "(UTC-09:30) Marquesas Islands",
+                "America/Anchorage": "(UTC-09:00) Alaska",
+                "America/Los_Angeles": "(UTC-08:00) Pacific Time (US & Canada)",
+                "America/Santa_Isabel": "(UTC-08:00) Baja California",
+                "America/Tijuana": "(UTC-08:00) Tijuana",
+                "America/Denver": "(UTC-07:00) Mountain Time (US & Canada)",
+                "America/Chihuahua": "(UTC-07:00) Chihuahua, La Paz, Mazatlan",
+                "America/Phoenix": "(UTC-07:00) Arizona",
+                "America/Chicago": "(UTC-06:00) Central Time (US & Canada)",
+                "America/Belize": "(UTC-06:00) Saskatchewan, Central America",
+                "America/Mexico_City": "(UTC-06:00) Guadalajara, Mexico City, Monterrey",
+                "Pacific/Easter": "(UTC-06:00) Easter Island",
+                "America/New_York": "(UTC-05:00) Eastern Time (US & Canada)",
+                "America/Havana": "(UTC-05:00) Cuba",
+                "America/Bogota": "(UTC-05:00) Bogota, Lima, Quito",
+                "America/Caracas": "(UTC-04:30) Caracas",
+                "America/Halifax": "(UTC-04:00) Atlantic Time (Canada)",
+                "America/Goose_Bay": "(UTC-04:00) Atlantic Time (Goose Bay)",
+                "America/Asuncion": "(UTC-04:00) Asuncion",
+                "America/Santiago": "(UTC-04:00) Santiago",
+                "America/Cuiaba": "(UTC-04:00) Cuiaba",
+                "America/La_Paz": "(UTC-04:00) Georgetown, La Paz, Manaus, San Juan",
+                "America/St_Johns": "(UTC-03:30) Newfoundland",
+                "America/Argentina/Buenos_Aires": "(UTC-03:00) Buenos Aires",
+                "America/Argentina/San_Luis": "(UTC-03:00) San Luis",
+                "America/Argentina/Mendoza": "(UTC-03:00) Argentina, Cayenne, Fortaleza",
+                "Atlantic/Stanley": "(UTC-03:00) Falkland Islands",
+                "America/Godthab": "(UTC-03:00) Greenland",
+                "America/Montevideo": "(UTC-03:00) Montevideo",
+                "America/Sao_Paulo": "(UTC-03:00) Brasilia",
+                "America/Miquelon": "(UTC-03:00) Saint Pierre and Miquelon",
+                "America/Noronha": "(UTC-02:00) Mid-Atlantic",
+                "Atlantic/Cape_Verde": "(UTC-01:00) Cape Verde Is.",
+                "Atlantic/Azores": "(UTC-01:00) Azores",
+                "Europe/London": "(UTC) Dublin, Edinburgh, Lisbon, London",
+                "Africa/Casablanca": "(UTC) Casablanca",
+                "Atlantic/Reykjavik": "(UTC) Monrovia, Reykjavik",
+                "Europe/Amsterdam": "(UTC+01:00) Central European Time",
+                "Africa/Algiers": "(UTC+01:00) West Central Africa",
+                "Africa/Windhoek": "(UTC+01:00) Windhoek",
+                "Africa/Tunis": "(UTC+01:00) Tunis",
+                "Europe/Athens": "(UTC+02:00) Eastern European Time",
+                "Africa/Johannesburg": "(UTC+02:00) South Africa Standard Time",
+                "Europe/Kaliningrad": "(UTC+02:00) Kaliningrad",
+                "Asia/Amman": "(UTC+02:00) Amman",
+                "Asia/Beirut": "(UTC+02:00) Beirut",
+                "Africa/Cairo": "(UTC+02:00) Cairo",
+                "Asia/Jerusalem": "(UTC+02:00) Jerusalem",
+                "Asia/Gaza": "(UTC+02:00) Gaza",
+                "Asia/Damascus": "(UTC+02:00) Syria",
+                "Europe/Moscow": "(UTC+03:00) Moscow, St. Petersburg, Volgograd",
+                "Europe/Minsk": "(UTC+03:00) Minsk",
+                "Africa/Nairobi": "(UTC+03:00) Nairobi, Baghdad, Kuwait, Qatar, Riyadh",
+                "Asia/Tehran": "(UTC+03:30) Tehran",
+                "Asia/Dubai": "(UTC+04:00) Abu Dhabi, Muscat, Tbilisi",
+                "Asia/Yerevan": "(UTC+04:00) Yerevan",
+                "Asia/Baku": "(UTC+04:00) Baku",
+                "Indian/Mauritius": "(UTC+04:00) Mauritius",
+                "Asia/Kabul": "(UTC+04:30) Kabul",
+                "Asia/Yekaterinburg": "(UTC+05:00) Ekaterinburg",
+                "Asia/Tashkent": "(UTC+05:00) Tashkent, Karachi",
+                "Asia/Kolkata": "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi",
+                "Asia/Kathmandu": "(UTC+05:45) Kathmandu",
+                "Asia/Novosibirsk": "(UTC+06:00) Novosibirsk",
+                "Asia/Dhaka": "(UTC+06:00) Astana, Dhaka",
+                "Asia/Almaty": "(UTC+06:00) Almaty, Bishkek, Qyzylorda",
+                "Asia/Rangoon": "(UTC+06:30) Yangon (Rangoon)",
+                "Asia/Krasnoyarsk": "(UTC+07:00) Krasnoyarsk",
+                "Asia/Bangkok": "(UTC+07:00) Bangkok, Hanoi, Jakarta",
+                "Asia/Irkutsk": "(UTC+08:00) Irkutsk",
+                "Asia/Hong_Kong": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+                "Asia/Singapore": "(UTC+08:00) Kuala Lumpur, Singapore",
+                "Australia/Perth": "(UTC+08:00) Perth",
+                "Asia/Yakutsk": "(UTC+09:00) Yakutsk",
+                "Asia/Tokyo": "(UTC+09:00) Osaka, Sapporo, Tokyo",
+                "Asia/Seoul": "(UTC+09:00) Seoul",
+                "Australia/Adelaide": "(UTC+09:30) Adelaide",
+                "Australia/Darwin": "(UTC+09:30) Darwin",
+                "Asia/Vladivostok": "(UTC+10:00) Vladivostok",
+                "Asia/Magadan": "(UTC+10:00) Magadan",
+                "Australia/Brisbane": "(UTC+10:00) Brisbane, Guam",
+                "Australia/Sydney": "(UTC+10:00) Sydney, Melbourne, Hobart",
+                "Pacific/Noumea": "(UTC+11:00) Solomon Is., New Caledonia",
+                "Pacific/Norfolk": "(UTC+11:30) Norfolk Island",
+                "Asia/Anadyr": "(UTC+12:00) Anadyr, Kamchatka",
+                "Pacific/Auckland": "(UTC+12:00) Auckland, Wellington",
+                "Pacific/Fiji": "(UTC+12:00) Fiji",
+                "Pacific/Chatham": "(UTC+12:45) Chatham Islands",
+                "Pacific/Tongatapu": "(UTC+13:00) Nuku'alofa",
+                "Pacific/Apia": "(UTC+13:00) Apia, Samoa",
+                "Pacific/Kiritimati": "(UTC+14:00) Kiritimati"
+              }
+            }
+          },
+          {
+            "name": "receive_admin_email",
+            "in": "query",
+            "description": "Whether to receive admin emails.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Receive Admin Email",
+              "type": "boolean",
+              "description": "Whether to receive admin emails."
+            }
+          },
+          {
+            "name": "activity_visible",
+            "in": "query",
+            "description": "Whether user activity is visible.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Activity Visible",
+              "type": "boolean",
+              "description": "Whether user activity is visible."
+            }
+          },
+          {
+            "name": "show_dob_date",
+            "in": "query",
+            "description": "Show date of birth (day and month).",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Show DOB Date",
+              "type": "boolean",
+              "description": "Show date of birth (day and month)."
+            }
+          },
+          {
+            "name": "show_dob_year",
+            "in": "query",
+            "description": "Show year of birth.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Show DOB Year",
+              "type": "boolean",
+              "description": "Show year of birth."
+            }
+          },
+          {
+            "name": "hide_username_change_logs",
+            "in": "query",
+            "description": "Hide username change logs.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Hide Username Change Logs",
+              "type": "boolean",
+              "description": "Hide username change logs."
+            }
+          },
+          {
+            "name": "allow_view_profile",
+            "in": "query",
+            "description": "Who can view your profile.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow View Profile",
+              "type": "string",
+              "description": "Who can view your profile.",
+              "enum": ["none","members","followed"]
+            }
+          },
+          {
+            "name": "allow_post_profile",
+            "in": "query",
+            "description": "Who can post on your profile.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Post Profile",
+              "type": "string",
+              "description": "Who can post on your profile.",
+              "enum": ["none","members","followed"]
+            }
+          },
+          {
+            "name": "allow_send_personal_conversation",
+            "in": "query",
+            "description": "Who can send you personal conversations.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Send Personal Conversation",
+              "type": "string",
+              "description": "Who can send you personal conversations.",
+              "enum": ["none","members","followed"]
+            }
+          },
+          {
+            "name": "allow_invite_group",
+            "in": "query",
+            "description": "Who can invite you to groups.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Invite Group",
+              "type": "string",
+              "description": "Who can invite you to groups.",
+              "enum": ["none","members","followed"]
+            }
+          },
+          {
+            "name": "allow_receive_news_feed",
+            "in": "query",
+            "description": "Who can see your news feed.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Receive News Feed",
+              "type": "string",
+              "description": "Who can see your news feed.",
+              "enum": ["none","members","followed"]
             }
           },
           {
@@ -14108,7 +14980,7 @@
             "name": "is_group",
             "in": "query",
             "description": "Is group. Set **false** if personal conversation, or set **true** if group.",
-            "required": true,
+            "required": false,
             "style": "form",
             "explode": true,
             "schema": {
@@ -14145,19 +15017,6 @@
             }
           },
           {
-            "name": "conversation_locked",
-            "in": "query",
-            "description": "Is conversation locked.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Conversation Locked",
-              "type": "boolean",
-              "description": "Is conversation locked."
-            }
-          },
-          {
             "name": "allow_edit_messages",
             "in": "query",
             "description": "Allow edit messages.",
@@ -14168,6 +15027,32 @@
               "title": "Allow Edit Messages",
               "type": "boolean",
               "description": "Allow edit messages."
+            }
+          },
+          {
+            "name": "allow_sticky_messages",
+            "in": "query",
+            "description": "Allow members to stick messages.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Sticky Messages",
+              "type": "boolean",
+              "description": "Allow members to stick messages."
+            }
+          },
+          {
+            "name": "allow_delete_own_messages",
+            "in": "query",
+            "description": "Allow members to delete their own messages.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Allow Delete Own Messages",
+              "type": "boolean",
+              "description": "Allow members to delete their own messages."
             }
           }
         ],
@@ -15910,6 +16795,17 @@
               "type": "integer",
               "description": "Id of needed conversation."
             }
+          },
+          {
+            "name": "reply_message_id",
+            "in": "query",
+            "description": "ID of the message being replied to.",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "requestBody": {
@@ -15921,11 +16817,6 @@
                 ],
                 "type": "object",
                 "properties": {
-                  "reply_message_id": {
-                    "title": "Reply Message Id",
-                    "type": "integer",
-                    "description": "ID of the message being replied to."
-                  },
                   "message_body": {
                     "title": "Message Body",
                     "type": "string",
@@ -15934,8 +16825,7 @@
                 }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -16163,57 +17053,358 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "conversations",
+                    "recipients",
+                    "system_info"
+                  ],
                   "properties": {
                     "conversations": {
+                      "title": "Conversations",
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
                           "conversation_id": {
-                            "type": "integer",
-                            "title": "Conversation Id"
-                          },
-                          "title": {
-                            "type": "string",
-                            "title": "Title"
+                            "title": "Conversation",
+                            "type": "integer"
                           },
                           "creator_user_id": {
-                            "type": "integer",
-                            "title": "Creator User Id"
+                            "title": "Creator",
+                            "type": "integer"
                           },
                           "creator_username": {
-                            "type": "string",
-                            "title": "Creator Username"
+                            "title": "Creator",
+                            "type": "string"
                           },
-                          "last_message_date": {
-                            "type": "string",
-                            "format": "date-time",
-                            "title": "Last Message Date"
+                          "creator_username_html": {
+                            "title": "Creator",
+                            "type": "string"
                           },
-                          "recipient_count": {
-                            "type": "integer",
-                            "title": "Recipient Count"
+                          "conversation_update_date": {
+                            "title": "Conversation",
+                            "type": "integer"
+                          },
+                          "conversation_last_read_date": {
+                            "title": "Conversation",
+                            "type": "integer"
+                          },
+                          "conversation_online_count": {
+                            "title": "Conversation",
+                            "type": "integer"
+                          },
+                          "is_group": {
+                            "title": "Is",
+                            "type": "integer"
+                          },
+                          "global_unread": {
+                            "title": "Global",
+                            "type": "integer"
+                          },
+                          "alerts": {
+                            "title": "Alerts",
+                            "type": "boolean"
+                          },
+                          "unread_message_count": {
+                            "title": "Unread",
+                            "type": "integer"
+                          },
+                          "permissions": {
+                            "title": "Permissions",
+                            "type": "object",
+                            "properties": {
+                              "view": {
+                                "title": "View",
+                                "type": "boolean"
+                              },
+                              "reply": {
+                                "title": "Reply",
+                                "type": "boolean"
+                              },
+                              "invite": {
+                                "title": "Invite",
+                                "type": "boolean"
+                              },
+                              "manage_invite_links": {
+                                "title": "Manage",
+                                "type": "boolean"
+                              },
+                              "kick": {
+                                "title": "Kick",
+                                "type": "boolean"
+                              },
+                              "upload_avatar": {
+                                "title": "Upload",
+                                "type": "boolean"
+                              },
+                              "editOwnPost": {
+                                "title": "Edit Own Post",
+                                "type": "boolean"
+                              },
+                              "stickyMessages": {
+                                "title": "Sticky Messages",
+                                "type": "boolean"
+                              },
+                              "deleteOwnMessages": {
+                                "title": "Delete Own Messages",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "view",
+                              "reply",
+                              "invite",
+                              "manage_invite_links",
+                              "kick",
+                              "upload_avatar",
+                              "editOwnPost",
+                              "stickyMessages",
+                              "deleteOwnMessages"
+                            ]
+                          },
+                          "conversation_message_count": {
+                            "title": "Conversation",
+                            "type": "integer"
+                          },
+                          "conversation_is_new": {
+                            "title": "Conversation",
+                            "type": "boolean"
+                          },
+                          "creator_is_ignored": {
+                            "title": "Creator",
+                            "type": "boolean"
+                          },
+                          "last_message": {
+                            "title": "Last",
+                            "type": "object",
+                            "properties": {
+                              "message_id": {
+                                "title": "Message",
+                                "type": "integer"
+                              },
+                              "conversation_id": {
+                                "title": "Conversation",
+                                "type": "integer"
+                              },
+                              "creator_user_id": {
+                                "title": "Creator",
+                                "type": "integer"
+                              },
+                              "creator_username": {
+                                "title": "Creator",
+                                "type": "string"
+                              },
+                              "creator_username_html": {
+                                "title": "Creator",
+                                "type": "string"
+                              },
+                              "message_create_date": {
+                                "title": "Message",
+                                "type": "integer"
+                              },
+                              "message_need_translate": {
+                                "title": "Message",
+                                "type": "boolean"
+                              },
+                              "message_is_system": {
+                                "title": "Message",
+                                "type": "boolean"
+                              },
+                              "message_body": {
+                                "title": "Message",
+                                "type": "string"
+                              },
+                              "message_body_html": {
+                                "title": "Message",
+                                "type": "string"
+                              },
+                              "message_body_plain_text": {
+                                "title": "Message",
+                                "type": "string"
+                              },
+                              "user_is_ignored": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "links": {
+                                "title": "Links",
+                                "type": "object",
+                                "properties": {
+                                  "detail": {
+                                    "title": "Detail",
+                                    "type": "string"
+                                  },
+                                  "conversation": {
+                                    "title": "Conversation",
+                                    "type": "string"
+                                  },
+                                  "creator": {
+                                    "title": "Creator",
+                                    "type": "string"
+                                  },
+                                  "creator_avatar": {
+                                    "title": "Creator",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "detail",
+                                  "conversation",
+                                  "creator",
+                                  "creator_avatar"
+                                ]
+                              },
+                              "permissions": {
+                                "title": "Permissions",
+                                "type": "object",
+                                "properties": {
+                                  "view": {
+                                    "title": "View",
+                                    "type": "boolean"
+                                  },
+                                  "edit": {
+                                    "title": "Edit",
+                                    "type": "boolean"
+                                  },
+                                  "delete": {
+                                    "title": "Delete",
+                                    "type": "boolean"
+                                  },
+                                  "stick-unstick": {
+                                    "title": "Stick",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "view",
+                                  "edit",
+                                  "delete",
+                                  "stick-unstick"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "message_id",
+                              "conversation_id",
+                              "creator_user_id",
+                              "creator_username",
+                              "creator_username_html",
+                              "message_create_date",
+                              "message_need_translate",
+                              "message_is_system",
+                              "message_body",
+                              "message_body_html",
+                              "message_body_plain_text",
+                              "user_is_ignored",
+                              "links",
+                              "permissions"
+                            ]
+                          },
+                          "recipients": {
+                            "title": "Recipients",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "user_id": {
+                                  "title": "User",
+                                  "type": "integer"
+                                },
+                                "username": {
+                                  "title": "Username",
+                                  "type": "string"
+                                },
+                                "username_html": {
+                                  "title": "Username",
+                                  "type": "string"
+                                },
+                                "last_activity": {
+                                  "title": "Last",
+                                  "type": "integer"
+                                },
+                                "is_online": {
+                                  "title": "Is",
+                                  "type": "boolean"
+                                },
+                                "contacts_changed": {
+                                  "title": "Contacts",
+                                  "type": "boolean"
+                                },
+                                "avatar": {
+                                  "title": "Avatar",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "user_id",
+                                "username",
+                                "username_html",
+                                "last_activity",
+                                "is_online",
+                                "contacts_changed",
+                                "avatar"
+                              ]
+                            }
+                          },
+                          "links": {
+                            "title": "Links",
+                            "type": "object",
+                            "properties": {
+                              "permalink": {
+                                "title": "Permalink",
+                                "type": "string"
+                              },
+                              "detail": {
+                                "title": "Detail",
+                                "type": "string"
+                              },
+                              "messages": {
+                                "title": "Messages",
+                                "type": "string"
+                              },
+                              "avatar": {
+                                "title": "Avatar",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "permalink",
+                              "detail",
+                              "messages",
+                              "avatar"
+                            ]
                           }
                         },
                         "required": [
                           "conversation_id",
-                          "title",
                           "creator_user_id",
                           "creator_username",
-                          "last_message_date",
-                          "recipient_count"
+                          "creator_username_html",
+                          "conversation_update_date",
+                          "conversation_last_read_date",
+                          "conversation_online_count",
+                          "is_group",
+                          "global_unread",
+                          "alerts",
+                          "unread_message_count",
+                          "permissions",
+                          "conversation_message_count",
+                          "conversation_is_new",
+                          "creator_is_ignored",
+                          "last_message",
+                          "recipients",
+                          "links"
                         ]
                       }
                     },
-                    "total": {
-                      "type": "integer",
-                      "title": "Total Results"
+                    "recipients": {
+                      "title": "Recipients",
+                      "type": "boolean"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
                     }
-                  },
-                  "required": [
-                    "conversations",
-                    "total"
-                  ]
+                  }
                 }
               }
             }
