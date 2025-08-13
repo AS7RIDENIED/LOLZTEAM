@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.18a"
+    "version": "1.1.18b"
   },
   "servers": [
     {
@@ -26419,7 +26419,8 @@
           "links",
           "permissions",
           "node_title",
-          "last_post"
+          "last_post",
+          "contest"
         ],
         "properties": {
           "thread_id": {
@@ -26487,25 +26488,221 @@
             "type": "boolean"
           },
           "first_post": {
-            "$ref": "#/components/schemas/PostModel"
+            "title": "First",
+            "type": "object",
+            "properties": {
+              "post_id": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "thread_id": {
+                "title": "Thread",
+                "type": "integer"
+              },
+              "poster_user_id": {
+                "title": "Poster",
+                "type": "integer"
+              },
+              "poster_username": {
+                "title": "Poster",
+                "type": "string"
+              },
+              "poster_username_html": {
+                "title": "Poster",
+                "type": "string"
+              },
+              "post_create_date": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "post_body": {
+                "title": "Post",
+                "type": "string"
+              },
+              "post_body_html": {
+                "title": "Post",
+                "type": "string"
+              },
+              "post_body_plain_text": {
+                "title": "Post",
+                "type": "string"
+              },
+              "signature": {
+                "title": "Signature",
+                "type": "string"
+              },
+              "signature_html": {
+                "title": "Signature",
+                "type": "string"
+              },
+              "signature_plain_text": {
+                "title": "Signature",
+                "type": "string"
+              },
+              "post_like_count": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "user_is_ignored": {
+                "title": "User",
+                "type": "boolean"
+              },
+              "post_is_published": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "post_is_deleted": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "post_update_date": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "post_is_first_post": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "post_is_liked": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "links": {
+                "title": "Links",
+                "type": "object",
+                "properties": {
+                  "permalink": {
+                    "title": "Permalink",
+                    "type": "string"
+                  },
+                  "detail": {
+                    "title": "Detail",
+                    "type": "string"
+                  },
+                  "thread": {
+                    "title": "Thread",
+                    "type": "string"
+                  },
+                  "poster": {
+                    "title": "Poster",
+                    "type": "string"
+                  },
+                  "likes": {
+                    "title": "Likes",
+                    "type": "string"
+                  },
+                  "report": {
+                    "title": "Report",
+                    "type": "string"
+                  },
+                  "poster_avatar": {
+                    "title": "Poster",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "permalink",
+                  "detail",
+                  "thread",
+                  "poster",
+                  "likes",
+                  "report",
+                  "poster_avatar"
+                ]
+              },
+              "permissions": {
+                "title": "Permissions",
+                "type": "object",
+                "properties": {
+                  "view": {
+                    "title": "View",
+                    "type": "boolean"
+                  },
+                  "edit": {
+                    "title": "Edit",
+                    "type": "boolean"
+                  },
+                  "delete": {
+                    "title": "Delete",
+                    "type": "boolean"
+                  },
+                  "reply": {
+                    "title": "Reply",
+                    "type": "boolean"
+                  },
+                  "like": {
+                    "title": "Like",
+                    "type": "boolean"
+                  },
+                  "report": {
+                    "title": "Report",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "view",
+                  "edit",
+                  "delete",
+                  "reply",
+                  "like",
+                  "report"
+                ]
+              },
+              "thread_is_deleted": {
+                "title": "Thread",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "post_id",
+              "thread_id",
+              "poster_user_id",
+              "poster_username",
+              "poster_username_html",
+              "post_create_date",
+              "post_body",
+              "post_body_html",
+              "post_body_plain_text",
+              "signature",
+              "signature_html",
+              "signature_plain_text",
+              "post_like_count",
+              "user_is_ignored",
+              "post_is_published",
+              "post_is_deleted",
+              "post_update_date",
+              "post_is_first_post",
+              "post_is_liked",
+              "links",
+              "permissions",
+              "thread_is_deleted"
+            ]
           },
           "thread_prefixes": {
             "title": "Thread",
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "prefix_id": {
+                  "title": "Prefix",
+                  "type": "integer"
+                },
+                "prefix_title": {
+                  "title": "Prefix",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "prefix_id",
+                "prefix_title"
+              ]
+            }
           },
           "thread_tags": {
             "title": "Thread",
-            "type": "object",
-            "properties": {
-              "0": {
-                "title": "",
-                "type": "string"
-              }
-            },
-            "required": [
-              "0"
-            ]
+            "type": "array",
+            "items": {}
           },
           "links": {
             "title": "Links",
@@ -26588,6 +26785,32 @@
               "edit": {
                 "title": "Edit",
                 "type": "boolean"
+              },
+              "bump": {
+                "title": "Bump",
+                "type": "object",
+                "properties": {
+                  "can": {
+                    "title": "Can",
+                    "type": "boolean"
+                  },
+                  "available_count": {
+                    "title": "Available",
+                    "type": "integer"
+                  },
+                  "error": {
+                    "title": "Error"
+                  },
+                  "next_available_time": {
+                    "title": "Next"
+                  }
+                },
+                "required": [
+                  "can",
+                  "available_count",
+                  "error",
+                  "next_available_time"
+                ]
               }
             },
             "required": [
@@ -26595,7 +26818,8 @@
               "delete",
               "follow",
               "post",
-              "edit"
+              "edit",
+              "bump"
             ]
           },
           "node_title": {
@@ -26603,7 +26827,310 @@
             "type": "string"
           },
           "last_post": {
-            "$ref": "#/components/schemas/PostModel"
+            "title": "Last",
+            "type": "object",
+            "properties": {
+              "post_id": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "thread_id": {
+                "title": "Thread",
+                "type": "integer"
+              },
+              "poster_user_id": {
+                "title": "Poster",
+                "type": "integer"
+              },
+              "poster_username": {
+                "title": "Poster",
+                "type": "string"
+              },
+              "poster_username_html": {
+                "title": "Poster",
+                "type": "string"
+              },
+              "post_create_date": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "post_body": {
+                "title": "Post",
+                "type": "string"
+              },
+              "post_body_html": {
+                "title": "Post",
+                "type": "string"
+              },
+              "post_body_plain_text": {
+                "title": "Post",
+                "type": "string"
+              },
+              "signature": {
+                "title": "Signature",
+                "type": "string"
+              },
+              "signature_html": {
+                "title": "Signature",
+                "type": "string"
+              },
+              "signature_plain_text": {
+                "title": "Signature",
+                "type": "string"
+              },
+              "post_like_count": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "user_is_ignored": {
+                "title": "User",
+                "type": "boolean"
+              },
+              "post_is_published": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "post_is_deleted": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "post_update_date": {
+                "title": "Post",
+                "type": "integer"
+              },
+              "post_is_first_post": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "post_is_liked": {
+                "title": "Post",
+                "type": "boolean"
+              },
+              "links": {
+                "title": "Links",
+                "type": "object",
+                "properties": {
+                  "permalink": {
+                    "title": "Permalink",
+                    "type": "string"
+                  },
+                  "detail": {
+                    "title": "Detail",
+                    "type": "string"
+                  },
+                  "thread": {
+                    "title": "Thread",
+                    "type": "string"
+                  },
+                  "poster": {
+                    "title": "Poster",
+                    "type": "string"
+                  },
+                  "likes": {
+                    "title": "Likes",
+                    "type": "string"
+                  },
+                  "report": {
+                    "title": "Report",
+                    "type": "string"
+                  },
+                  "poster_avatar": {
+                    "title": "Poster",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "permalink",
+                  "detail",
+                  "thread",
+                  "poster",
+                  "likes",
+                  "report",
+                  "poster_avatar"
+                ]
+              },
+              "permissions": {
+                "title": "Permissions",
+                "type": "object",
+                "properties": {
+                  "view": {
+                    "title": "View",
+                    "type": "boolean"
+                  },
+                  "edit": {
+                    "title": "Edit",
+                    "type": "boolean"
+                  },
+                  "delete": {
+                    "title": "Delete",
+                    "type": "boolean"
+                  },
+                  "reply": {
+                    "title": "Reply",
+                    "type": "boolean"
+                  },
+                  "like": {
+                    "title": "Like",
+                    "type": "boolean"
+                  },
+                  "report": {
+                    "title": "Report",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "view",
+                  "edit",
+                  "delete",
+                  "reply",
+                  "like",
+                  "report"
+                ]
+              },
+              "thread_is_deleted": {
+                "title": "Thread",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "post_id",
+              "thread_id",
+              "poster_user_id",
+              "poster_username",
+              "poster_username_html",
+              "post_create_date",
+              "post_body",
+              "post_body_html",
+              "post_body_plain_text",
+              "signature",
+              "signature_html",
+              "signature_plain_text",
+              "post_like_count",
+              "user_is_ignored",
+              "post_is_published",
+              "post_is_deleted",
+              "post_update_date",
+              "post_is_first_post",
+              "post_is_liked",
+              "links",
+              "permissions",
+              "thread_is_deleted"
+            ]
+          },
+          "contest": {
+            "title": "Contest",
+            "type": "object",
+            "properties": {
+              "type": {
+                "title": "Type",
+                "type": "string"
+              },
+              "finish_date": {
+                "title": "Finish",
+                "type": "integer"
+              },
+              "now_count_members": {
+                "title": "Now",
+                "type": "integer"
+              },
+              "needed_members": {
+                "title": "Needed",
+                "type": "integer"
+              },
+              "is_finished": {
+                "title": "Is",
+                "type": "integer"
+              },
+              "count_winners": {
+                "title": "Count",
+                "type": "integer"
+              },
+              "require_like_count": {
+                "title": "Require",
+                "type": "integer"
+              },
+              "require_total_like_count": {
+                "title": "Require",
+                "type": "integer"
+              },
+              "prize_type": {
+                "title": "Prize",
+                "type": "string"
+              },
+              "prize_type_phrase": {
+                "title": "Prize",
+                "type": "string"
+              },
+              "prize_data": {
+                "title": "Prize",
+                "type": "integer"
+              },
+              "is_money_places": {
+                "title": "Is",
+                "type": "integer"
+              },
+              "chance_to_win": {
+                "title": "Chance",
+                "type": "number"
+              },
+              "winners": {
+                "title": "Winners",
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "already_participate": {
+                "title": "Already",
+                "type": "boolean"
+              },
+              "permissions": {
+                "title": "Permissions",
+                "type": "object",
+                "properties": {
+                  "can_finish": {
+                    "title": "Can",
+                    "type": "boolean"
+                  },
+                  "can_participate": {
+                    "title": "Can",
+                    "type": "boolean"
+                  },
+                  "can_participate_error": {
+                    "title": "Can",
+                    "type": "string"
+                  },
+                  "can_view_user_list": {
+                    "title": "Can",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "can_finish",
+                  "can_participate",
+                  "can_participate_error",
+                  "can_view_user_list"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "finish_date",
+              "now_count_members",
+              "needed_members",
+              "is_finished",
+              "count_winners",
+              "require_like_count",
+              "require_total_like_count",
+              "prize_type",
+              "prize_type_phrase",
+              "prize_data",
+              "is_money_places",
+              "chance_to_win",
+              "winners",
+              "already_participate",
+              "permissions"
+            ]
           }
         }
       },
