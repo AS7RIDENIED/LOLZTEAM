@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.66с"
+    "version": "1.1.67"
   },
   "servers": [
     {
@@ -47415,17 +47415,423 @@
         ]
       }
     },
-    "/{item_id}/claims": {
+    "/claims": {
+      "get": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Get Claims",
+        "description": "Create a Arbitrage.",
+        "operationId": "Profile.Claims",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter claims by their type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "market",
+                "nomarket"
+              ]
+            }
+          },
+          {
+            "name": "claim_state",
+            "in": "query",
+            "description": "Filter claims by their state.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "solved",
+                "rejected",
+                "settled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "claims",
+                    "stats",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "claims": {
+                      "title": "Claims",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "thread_id": {
+                            "title": "Thread",
+                            "type": "integer"
+                          },
+                          "claim_date": {
+                            "title": "Claim",
+                            "type": "integer"
+                          },
+                          "claim_state": {
+                            "title": "Claim",
+                            "type": "string"
+                          },
+                          "message_body": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "amount_formatted": {
+                            "title": "Amount",
+                            "type": "string"
+                          },
+                          "author": {
+                            "title": "Author",
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "username_html": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "user_message_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_register_date": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_like_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_like2_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "contest_count": {
+                                "title": "Contest",
+                                "type": "integer"
+                              },
+                              "trophy_count": {
+                                "title": "Trophy",
+                                "type": "integer"
+                              },
+                              "custom_title": {
+                                "title": "Custom",
+                                "type": "string"
+                              },
+                              "is_banned": {
+                                "title": "Is",
+                                "type": "integer"
+                              },
+                              "user_title": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_is_valid": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_verified": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_followed": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_last_seen_date": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "links": {
+                                "title": "Links",
+                                "type": "object",
+                                "properties": {
+                                  "permalink": {
+                                    "title": "Permalink",
+                                    "type": "string"
+                                  },
+                                  "detail": {
+                                    "title": "Detail",
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "avatar_big": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "avatar_small": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "followers": {
+                                    "title": "Followers",
+                                    "type": "string"
+                                  },
+                                  "followings": {
+                                    "title": "Followings",
+                                    "type": "string"
+                                  },
+                                  "ignore": {
+                                    "title": "Ignore",
+                                    "type": "string"
+                                  },
+                                  "timeline": {
+                                    "title": "Timeline",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "permalink",
+                                  "detail",
+                                  "avatar",
+                                  "avatar_big",
+                                  "avatar_small",
+                                  "followers",
+                                  "followings",
+                                  "ignore",
+                                  "timeline"
+                                ]
+                              },
+                              "permissions": {
+                                "title": "Permissions",
+                                "type": "object",
+                                "properties": {
+                                  "edit": {
+                                    "title": "Edit",
+                                    "type": "boolean"
+                                  },
+                                  "follow": {
+                                    "title": "Follow",
+                                    "type": "boolean"
+                                  },
+                                  "ignore": {
+                                    "title": "Ignore",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "edit",
+                                  "follow",
+                                  "ignore"
+                                ]
+                              },
+                              "user_is_ignored": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_visitor": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_group_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "ban_reason": {
+                                "title": "Ban",
+                                "type": "string"
+                              },
+                              "fields": {
+                                "title": "Fields",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "title": "Id",
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "title": "Title",
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "title": "Description",
+                                      "type": "string"
+                                    },
+                                    "position": {
+                                      "title": "Position",
+                                      "type": "string"
+                                    },
+                                    "is_required": {
+                                      "title": "Is",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "description",
+                                    "position",
+                                    "is_required"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "username",
+                              "username_html",
+                              "user_message_count",
+                              "user_register_date",
+                              "user_like_count",
+                              "user_like2_count",
+                              "contest_count",
+                              "trophy_count",
+                              "custom_title",
+                              "is_banned",
+                              "user_title",
+                              "user_is_valid",
+                              "user_is_verified",
+                              "user_is_followed",
+                              "user_last_seen_date",
+                              "links",
+                              "permissions",
+                              "user_is_ignored",
+                              "user_is_visitor",
+                              "user_group_id",
+                              "ban_reason",
+                              "fields"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "thread_id",
+                          "claim_date",
+                          "claim_state",
+                          "message_body",
+                          "amount_formatted",
+                          "author"
+                        ]
+                      }
+                    },
+                    "stats": {
+                      "title": "Stats",
+                      "type": "object",
+                      "properties": {
+                        "market": {
+                          "title": "Market",
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "title": "Total",
+                              "type": "integer"
+                            },
+                            "solved": {
+                              "title": "Solved",
+                              "type": "integer"
+                            },
+                            "settled": {
+                              "title": "Settled",
+                              "type": "integer"
+                            },
+                            "rejected": {
+                              "title": "Rejected",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "solved",
+                            "settled",
+                            "rejected"
+                          ]
+                        },
+                        "noMarket": {
+                          "title": "No Market",
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "title": "Total",
+                              "type": "integer"
+                            },
+                            "solved": {
+                              "title": "Solved",
+                              "type": "integer"
+                            },
+                            "settled": {
+                              "title": "Settled",
+                              "type": "integer"
+                            },
+                            "rejected": {
+                              "title": "Rejected",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "solved",
+                            "settled",
+                            "rejected"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "market",
+                        "noMarket"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Accounts managing"
         ],
         "summary": "Create Arbitrage",
         "description": "Create a Arbitrage.",
-        "operationId": "Managing.Arbitrage",
+        "operationId": "Managing.CreateClaim",
         "parameters": [
           {
-            "$ref": "#/components/parameters/item_id_path"
+            "name": "item_id",
+            "in": "query",
+            "description": "Item id.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "item_id",
+              "type": "integer",
+              "description": "Item id."
+            }
           }
         ],
         "requestBody": {
