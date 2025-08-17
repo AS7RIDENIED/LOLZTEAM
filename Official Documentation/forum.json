@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\n\n## API free libraries\n\n- [Node.js](https://github.com/NztForum/node-lzt) \n- [Python](https://github.com/AS7RIDENIED/LOLZTEAM)\n- [C#](https://github.com/fanidamn/LolzMarketAPI)\n\n## Rate limit\n\n20 requests per minute (3 seconds delay between per request).\n\nIf you exceed the limit, the response code 429 will be returned to you.\n\n## One Time Token\n\nAny client can generate one time token (OTT) using existing token. The format for OTT is as follow:\n\n**user_id,timestamp,once,client_id**\n\nWith **user_id** is the ID of authenticated user; **timestamp** is the unix timestamp for OTT expire time, the OTT will work as long as indicated by **timestamp** or by token expire date, whatever comes first; **client_id** is the client ID; **once** is md5 of a concentration of **user_id**, **timestamp**, a valid existing token and the client secret. Example code to generate an OTT:\n\n**Configuration**\n\n- TTL of access token: 180 days\n- TTL of authorization code: 30 seconds\n- TTL of refresh token: 180 days\n- Authorization URI: **/oauth/authorize** (Recommended)\n- Access token exchange URI: **/oauth/token** (Disabled)\n- Token param name: **oauth_token**\n- Token bearer header name: **Bearer**\n\n## Discoverability\n\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\n\n## Common Parameters\n\n### i18n\n\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401.\n\n### Fields filtering\n\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\n\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (**\\***) to include all default fields before specifying additional ones.\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\n\n### Resource ordering\n\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example).\n\n### Encryption\n\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions:\n\n- **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\n\n### Headers\n\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bb code html with **tools/chr** link. Since forum-2018100301.\n- **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101.\n\n### Content-Type\n\napplication/x-www-form-urlencoded.\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Docs/forum.json) file.",
-    "version": "1.1.18d"
+    "version": "1.1.19"
   },
   "servers": [
     {
@@ -1908,6 +1908,241 @@
           {
             "HTTPBearer": [
               "read"
+            ]
+          }
+        ]
+      }
+    },
+    "/forums/feed/options": {
+      "get": {
+        "tags": [
+          "Forums"
+        ],
+        "summary": "Get Feed Options",
+        "description": "Returns available options for the forums feed.\n\nRequired scopes:\n+ **read**",
+        "operationId": "Forums.GetFeedOptions",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "forums",
+                    "excluded_forums_ids",
+                    "default_excluded_forums_ids",
+                    "keywords",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "forums": {
+                      "title": "Forums",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "forum_id": {
+                            "title": "Forum",
+                            "type": "integer"
+                          },
+                          "forum_title": {
+                            "title": "Forum",
+                            "type": "string"
+                          },
+                          "forum_description": {
+                            "title": "Forum",
+                            "type": "string"
+                          },
+                          "parent_node_id": {
+                            "title": "Parent",
+                            "type": "integer"
+                          },
+                          "links": {
+                            "title": "Links",
+                            "type": "object",
+                            "properties": {
+                              "permalink": {
+                                "title": "Permalink",
+                                "type": "string"
+                              },
+                              "detail": {
+                                "title": "Detail",
+                                "type": "string"
+                              },
+                              "sub-categories": {
+                                "title": "Sub",
+                                "type": "string"
+                              },
+                              "sub-forums": {
+                                "title": "Sub",
+                                "type": "string"
+                              },
+                              "threads": {
+                                "title": "Threads",
+                                "type": "string"
+                              },
+                              "followers": {
+                                "title": "Followers",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "permalink",
+                              "detail",
+                              "sub-categories",
+                              "sub-forums",
+                              "threads",
+                              "followers"
+                            ]
+                          },
+                          "permissions": {
+                            "title": "Permissions",
+                            "type": "object",
+                            "properties": {
+                              "view": {
+                                "title": "View",
+                                "type": "boolean"
+                              },
+                              "edit": {
+                                "title": "Edit",
+                                "type": "boolean"
+                              },
+                              "delete": {
+                                "title": "Delete",
+                                "type": "boolean"
+                              },
+                              "create_thread": {
+                                "title": "Create",
+                                "type": "boolean"
+                              },
+                              "tag_thread": {
+                                "title": "Tag",
+                                "type": "boolean"
+                              },
+                              "follow": {
+                                "title": "Follow",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "view",
+                              "edit",
+                              "delete",
+                              "create_thread",
+                              "tag_thread",
+                              "follow"
+                            ]
+                          },
+                          "forum_is_followed": {
+                            "title": "Forum",
+                            "type": "boolean"
+                          },
+                          "has_children": {
+                            "title": "Has",
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "forum_id",
+                          "forum_title",
+                          "forum_description",
+                          "parent_node_id",
+                          "links",
+                          "permissions",
+                          "forum_is_followed",
+                          "has_children"
+                        ]
+                      }
+                    },
+                    "excluded_forums_ids": {
+                      "title": "Excluded",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "default_excluded_forums_ids": {
+                      "title": "Default",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "keywords": {
+                      "title": "Keywords",
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Forums"
+        ],
+        "summary": "Edit Feed Options",
+        "description": "Edit feed options.\n\nRequired scopes:\n+ **post**",
+        "operationId": "Forums.EditFeedOptions",
+        "parameters": [
+          {
+            "name": "node_ids",
+            "in": "query",
+            "description": "Array of forum ids to exclude from the feed.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "description": "List of keywords to exclude specific threads from the feed.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Keywords",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
             ]
           }
         ]
@@ -7659,6 +7894,73 @@
       }
     },
     "/posts/{post_id}/report": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get Post Report Reasons",
+        "description": "Get post report reasons.\n\nRequired scopes:\n+ **read**",
+        "operationId": "Posts.ReportReasons",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "description": "Id of post.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "post_id",
+              "type": "integer",
+              "description": "Id of post."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "reasons",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "reasons": {
+                      "title": "Reasons",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Posts"
@@ -10063,6 +10365,410 @@
         ]
       }
     },
+    "/users/{user_id}/claims": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get User Claims",
+        "description": "Get user claims.\n\nRequired scopes:\n+ **read**",
+        "operationId": "Users.Claims",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/user_id_path"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter claims by their type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "market",
+                "nomarket"
+              ]
+            }
+          },
+          {
+            "name": "claim_state",
+            "in": "query",
+            "description": "Filter claims by their state.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "solved",
+                "rejected",
+                "settled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "claims",
+                    "stats",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "claims": {
+                      "title": "Claims",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "thread_id": {
+                            "title": "Thread",
+                            "type": "integer"
+                          },
+                          "claim_date": {
+                            "title": "Claim",
+                            "type": "integer"
+                          },
+                          "claim_state": {
+                            "title": "Claim",
+                            "type": "string"
+                          },
+                          "message_body": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "amount_formatted": {
+                            "title": "Amount",
+                            "type": "string"
+                          },
+                          "author": {
+                            "title": "Author",
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "username_html": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "user_message_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_register_date": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_like_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_like2_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "contest_count": {
+                                "title": "Contest",
+                                "type": "integer"
+                              },
+                              "trophy_count": {
+                                "title": "Trophy",
+                                "type": "integer"
+                              },
+                              "custom_title": {
+                                "title": "Custom",
+                                "type": "string"
+                              },
+                              "is_banned": {
+                                "title": "Is",
+                                "type": "integer"
+                              },
+                              "user_title": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_is_valid": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_verified": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_followed": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_last_seen_date": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "links": {
+                                "title": "Links",
+                                "type": "object",
+                                "properties": {
+                                  "permalink": {
+                                    "title": "Permalink",
+                                    "type": "string"
+                                  },
+                                  "detail": {
+                                    "title": "Detail",
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "avatar_big": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "avatar_small": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "followers": {
+                                    "title": "Followers",
+                                    "type": "string"
+                                  },
+                                  "followings": {
+                                    "title": "Followings",
+                                    "type": "string"
+                                  },
+                                  "ignore": {
+                                    "title": "Ignore",
+                                    "type": "string"
+                                  },
+                                  "timeline": {
+                                    "title": "Timeline",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "permalink",
+                                  "detail",
+                                  "avatar",
+                                  "avatar_big",
+                                  "avatar_small",
+                                  "followers",
+                                  "followings",
+                                  "ignore",
+                                  "timeline"
+                                ]
+                              },
+                              "permissions": {
+                                "title": "Permissions",
+                                "type": "object",
+                                "properties": {
+                                  "edit": {
+                                    "title": "Edit",
+                                    "type": "boolean"
+                                  },
+                                  "follow": {
+                                    "title": "Follow",
+                                    "type": "boolean"
+                                  },
+                                  "ignore": {
+                                    "title": "Ignore",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "edit",
+                                  "follow",
+                                  "ignore"
+                                ]
+                              },
+                              "user_is_ignored": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_visitor": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_group_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "ban_reason": {
+                                "title": "Ban",
+                                "type": "string"
+                              },
+                              "fields": {
+                                "title": "Fields",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "title": "Id",
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "title": "Title",
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "title": "Description",
+                                      "type": "string"
+                                    },
+                                    "position": {
+                                      "title": "Position",
+                                      "type": "string"
+                                    },
+                                    "is_required": {
+                                      "title": "Is",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "description",
+                                    "position",
+                                    "is_required"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "username",
+                              "username_html",
+                              "user_message_count",
+                              "user_register_date",
+                              "user_like_count",
+                              "user_like2_count",
+                              "contest_count",
+                              "trophy_count",
+                              "custom_title",
+                              "is_banned",
+                              "user_title",
+                              "user_is_valid",
+                              "user_is_verified",
+                              "user_is_followed",
+                              "user_last_seen_date",
+                              "links",
+                              "permissions",
+                              "user_is_ignored",
+                              "user_is_visitor",
+                              "user_group_id",
+                              "ban_reason",
+                              "fields"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "thread_id",
+                          "claim_date",
+                          "claim_state",
+                          "message_body",
+                          "amount_formatted",
+                          "author"
+                        ]
+                      }
+                    },
+                    "stats": {
+                      "title": "Stats",
+                      "type": "object",
+                      "properties": {
+                        "market": {
+                          "title": "Market",
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "title": "Total",
+                              "type": "integer"
+                            },
+                            "solved": {
+                              "title": "Solved",
+                              "type": "integer"
+                            },
+                            "settled": {
+                              "title": "Settled",
+                              "type": "integer"
+                            },
+                            "rejected": {
+                              "title": "Rejected",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "solved",
+                            "settled",
+                            "rejected"
+                          ]
+                        },
+                        "noMarket": {
+                          "title": "No Market",
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "title": "Total",
+                              "type": "integer"
+                            },
+                            "solved": {
+                              "title": "Solved",
+                              "type": "integer"
+                            },
+                            "settled": {
+                              "title": "Settled",
+                              "type": "integer"
+                            },
+                            "rejected": {
+                              "title": "Rejected",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "solved",
+                            "settled",
+                            "rejected"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "market",
+                        "noMarket"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read"
+            ]
+          }
+        ]
+      }
+    },
     "/users/{user_id}/avatar": {
       "post": {
         "tags": [
@@ -12294,6 +13000,19 @@
             "$ref": "#/components/parameters/user_id_path"
           },
           {
+            "name": "posts_user_id",
+            "in": "query",
+            "description": "Filter to get only posts from the specified user.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Posts User Id",
+              "type": "integer",
+              "description": "Filter to get only posts from the specified user."
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Page number of contents.",
@@ -13069,6 +13788,132 @@
               "title": "Reason",
               "type": "string",
               "description": "Reason of the profile post removal."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      }
+    },
+    "/profile-posts/{profile_post_id}/report": {
+      "get": {
+        "tags": [
+          "Profile Posts"
+        ],
+        "summary": "Get Profile Post Report Reasons",
+        "description": "Get Profile Post Report Reasons.\n\nRequired scopes:\n+ **read**",
+        "operationId": "ProfilePosts.ReportReasons",
+        "parameters": [
+          {
+            "name": "profile_post_id",
+            "in": "path",
+            "description": "Id of profile post.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Profile Post Id",
+              "type": "integer",
+              "description": "Id of profile post."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "reasons",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "reasons": {
+                      "title": "Reasons",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "read"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Profile Posts"
+        ],
+        "summary": "Report a Profile Post",
+        "description": "Report a profile post.\n\nRequired scopes:\n+ **post**",
+        "operationId": "ProfilePosts.Report",
+        "parameters": [
+          {
+            "name": "profile_post_id",
+            "in": "path",
+            "description": "Id of profile post.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Profile Post Id",
+              "type": "integer",
+              "description": "Id of profile post."
+            }
+          },
+          {
+            "name": "message",
+            "in": "query",
+            "description": "Reason of the report.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Message",
+              "type": "string",
+              "description": "Reason of the report."
             }
           }
         ],
@@ -23092,9 +23937,6 @@
                     },
                     "params": {
                       "title": "Params",
-                      "required": [
-                        "key"
-                      ],
                       "type": "object",
                       "additionalProperties": {
                         "type": "string"
@@ -24541,14 +25383,327 @@
         ]
       }
     },
+    "/chatbox/messages/online": {
+      "get": {
+        "tags": [
+          "Chatbox"
+        ],
+        "summary": "Get Chat Messages",
+        "description": "Get chatbox rooms.\n\nRequired scopes:\n+ **chatbox**",
+        "operationId": "Chatbox.Online",
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "query",
+            "description": "Room id.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/schemas/RoomIdModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "users",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "users": {
+                      "title": "Users",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "avatar_date": {
+                            "title": "Avatar",
+                            "type": "integer"
+                          },
+                          "background_date": {
+                            "title": "Background",
+                            "type": "integer"
+                          },
+                          "contest_count": {
+                            "title": "Contest",
+                            "type": "integer"
+                          },
+                          "custom_title": {
+                            "title": "Custom",
+                            "type": "string"
+                          },
+                          "display_banner_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_icon_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "display_style_group_id": {
+                            "title": "Display",
+                            "type": "integer"
+                          },
+                          "is_admin": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "is_banned": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "is_moderator": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "is_staff": {
+                            "title": "Is",
+                            "type": "boolean"
+                          },
+                          "last_activity": {
+                            "title": "Last",
+                            "type": "integer"
+                          },
+                          "like2_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "like_count": {
+                            "title": "Like",
+                            "type": "integer"
+                          },
+                          "message_count": {
+                            "title": "Message",
+                            "type": "integer"
+                          },
+                          "register_date": {
+                            "title": "Register",
+                            "type": "integer"
+                          },
+                          "rendered": {
+                            "title": "Rendered",
+                            "type": "object",
+                            "properties": {
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "avatars": {
+                                "title": "Avatars",
+                                "type": "object",
+                                "properties": {
+                                  "l": {
+                                    "title": "L",
+                                    "type": "string"
+                                  },
+                                  "m": {
+                                    "title": "M",
+                                    "type": "string"
+                                  },
+                                  "s": {
+                                    "title": "S",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "l",
+                                  "m",
+                                  "s"
+                                ]
+                              },
+                              "link": {
+                                "title": "Link",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "avatars",
+                              "link"
+                            ]
+                          },
+                          "short_link": {
+                            "title": "Short",
+                            "type": "string"
+                          },
+                          "trophy_points": {
+                            "title": "Trophy",
+                            "type": "integer"
+                          },
+                          "uniq_banner": {
+                            "title": "Uniq",
+                            "type": "object",
+                            "properties": {
+                              "banner_css": {
+                                "title": "Banner",
+                                "type": "string"
+                              },
+                              "banner_text": {
+                                "title": "Banner",
+                                "type": "string"
+                              },
+                              "banner_icon": {
+                                "title": "Banner",
+                                "type": "string"
+                              },
+                              "username_icon": {
+                                "title": "Username",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "banner_css",
+                              "banner_text",
+                              "banner_icon",
+                              "username_icon"
+                            ]
+                          },
+                          "uniq_username_css": {
+                            "title": "Uniq",
+                            "type": "string"
+                          },
+                          "user_id": {
+                            "title": "User",
+                            "type": "integer"
+                          },
+                          "username": {
+                            "title": "Username",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "avatar_date",
+                          "background_date",
+                          "contest_count",
+                          "custom_title",
+                          "display_banner_id",
+                          "display_icon_group_id",
+                          "display_style_group_id",
+                          "is_admin",
+                          "is_banned",
+                          "is_moderator",
+                          "is_staff",
+                          "last_activity",
+                          "like2_count",
+                          "like_count",
+                          "message_count",
+                          "register_date",
+                          "rendered",
+                          "short_link",
+                          "trophy_points",
+                          "uniq_banner",
+                          "uniq_username_css",
+                          "user_id",
+                          "username"
+                        ]
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "chatbox"
+            ]
+          }
+        ]
+      }
+    },
     "/chatbox/messages/report": {
+      "get": {
+        "tags": [
+          "Chatbox"
+        ],
+        "summary": "Get Chat Message Report Reasons",
+        "description": "Report chat message.\n\nRequired scopes:\n+ **chatbox**",
+        "operationId": "Chatbox.ReportReasons",
+        "parameters": [
+          {
+            "name": "message_id",
+            "in": "query",
+            "description": "Message id.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "reasons",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "reasons": {
+                      "title": "Reasons",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "chatbox"
+            ]
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Chatbox"
         ],
         "summary": "Report Chat Message",
         "description": "Report chat message.\n\nRequired scopes:\n+ **chatbox**",
-        "operationId": "Chatbox.ReportMessage",
+        "operationId": "Chatbox.Report",
         "parameters": [
           {
             "name": "message_id",
