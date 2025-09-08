@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.68a"
+    "version": "1.1.69"
   },
   "servers": [
     {
@@ -49265,6 +49265,91 @@
       }
     },
     "/cart": {
+      "get": {
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Get Cart Items",
+        "description": "Retrieves the list of items currently in your cart.",
+        "operationId": "Cart.Get",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/category_id"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/pmin"
+          },
+          {
+            "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/origin"
+          },
+          {
+            "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ItemListResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Cart"
@@ -57591,20 +57676,18 @@
         ]
       },
       "ItemListModel": {
-        "title": "Item List Model",
+        "type": "object",
         "required": [
           "items",
           "totalItems",
           "totalItemsPrice",
+          "hasNextPage",
           "perPage",
           "page",
-          "cacheTTL",
-          "lastModified",
           "searchUrl",
           "stickyItems",
           "system_info"
         ],
-        "type": "object",
         "properties": {
           "items": {
             "type": "array",
@@ -57613,37 +57696,32 @@
             }
           },
           "totalItems": {
-            "type": "integer",
-            "default": 0
+            "title": "Total Items",
+            "type": "integer"
           },
           "totalItemsPrice": {
-            "type": "integer",
-            "default": 0
+            "title": "Total Items Price"
+          },
+          "hasNextPage": {
+            "title": "Has Next Page",
+            "type": "boolean"
           },
           "perPage": {
-            "type": "integer",
-            "default": 40
+            "title": "Per Page",
+            "type": "integer"
           },
           "page": {
-            "type": "integer",
-            "default": 1
-          },
-          "cacheTTL": {
-            "type": "integer",
-            "default": 0
-          },
-          "lastModified": {
-            "type": "integer",
-            "default": 0
+            "title": "Page",
+            "type": "integer"
           },
           "searchUrl": {
-            "type": "string",
-            "default": "/"
+            "title": "Search Url",
+            "type": "string"
           },
           "stickyItems": {
             "type": "array",
             "items": {
-              "type": "object"
+              "$ref": "#/components/schemas/ItemFromListModel"
             }
           },
           "system_info": {
