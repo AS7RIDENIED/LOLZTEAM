@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.69a"
+    "version": "1.1.70"
   },
   "servers": [
     {
@@ -46860,7 +46860,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -46898,7 +46898,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -46907,7 +46907,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -47990,7 +47990,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -48616,7 +48616,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -48814,7 +48814,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -48870,7 +48870,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -48926,7 +48926,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -48969,7 +48969,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -48978,7 +48978,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49068,7 +49068,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49095,7 +49095,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -49104,7 +49104,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49131,7 +49131,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -49140,7 +49140,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49167,7 +49167,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -49176,7 +49176,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49252,7 +49252,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49403,7 +49403,7 @@
             "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49467,7 +49467,7 @@
             "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49517,7 +49517,7 @@
             "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49553,7 +49553,7 @@
             "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -49682,7 +49682,7 @@
             "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -50441,7 +50441,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -50520,7 +50520,7 @@
             "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -50673,7 +50673,7 @@
             "$ref": "#/components/responses/ErrorModel"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -50692,7 +50692,7 @@
         ],
         "summary": "Get Mafile",
         "description": "Returns steam mafile.\n> ❗️ This action is cancelling active account guarantee",
-        "operationId": "Managing.SteamMafile",
+        "operationId": "Managing.Steam.GetMafile",
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
@@ -50817,7 +50817,41 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Add Mafile",
+        "description": "Add a new Steam mafile to the account.",
+        "operationId": "Managing.Steam.AddMafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/item_id_path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/StatusItem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -50834,7 +50868,7 @@
         ],
         "summary": "Remove Mafile",
         "description": "Remove steam mafile.\n> ❗️ This will unlink the authenticator from the account and remove mafile from the item",
-        "operationId": "Managing.SteamRemoveMafile",
+        "operationId": "Managing.Steam.RemoveMafile",
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
@@ -50842,594 +50876,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "item",
-                    "system_info"
-                  ],
-                  "properties": {
-                    "status": {
-                      "title": "Status",
-                      "type": "string"
-                    },
-                    "item": {
-                      "title": "Item",
-                      "type": "object",
-                      "properties": {
-                        "item_id": {
-                          "title": "Item",
-                          "type": "integer"
-                        },
-                        "item_state": {
-                          "title": "Item",
-                          "type": "string"
-                        },
-                        "category_id": {
-                          "title": "Category",
-                          "type": "integer"
-                        },
-                        "published_date": {
-                          "title": "Published",
-                          "type": "integer"
-                        },
-                        "title": {
-                          "title": "Title",
-                          "type": "string"
-                        },
-                        "description": {
-                          "title": "Description",
-                          "type": "string"
-                        },
-                        "price": {
-                          "title": "Price",
-                          "type": "integer"
-                        },
-                        "update_stat_date": {
-                          "title": "Update",
-                          "type": "integer"
-                        },
-                        "refreshed_date": {
-                          "title": "Refreshed",
-                          "type": "integer"
-                        },
-                        "edit_date": {
-                          "title": "Edit",
-                          "type": "integer"
-                        },
-                        "view_count": {
-                          "title": "View",
-                          "type": "integer"
-                        },
-                        "is_sticky": {
-                          "title": "Is",
-                          "type": "integer"
-                        },
-                        "item_origin": {
-                          "title": "Item",
-                          "type": "string"
-                        },
-                        "proxy_id": {
-                          "title": "Proxy",
-                          "type": "integer"
-                        },
-                        "extended_guarantee": {
-                          "title": "Extended",
-                          "type": "integer"
-                        },
-                        "nsb": {
-                          "title": "Nsb",
-                          "type": "integer"
-                        },
-                        "allow_ask_discount": {
-                          "title": "Allow",
-                          "type": "integer"
-                        },
-                        "title_en": {
-                          "title": "Title",
-                          "type": "string"
-                        },
-                        "description_en": {
-                          "title": "Description",
-                          "type": "string"
-                        },
-                        "email_type": {
-                          "title": "Email",
-                          "type": "string"
-                        },
-                        "email_provider": {
-                          "title": "Email",
-                          "type": "string"
-                        },
-                        "item_domain": {
-                          "title": "Item",
-                          "type": "string"
-                        },
-                        "resale_item_origin": {
-                          "title": "Resale",
-                          "type": "string"
-                        },
-                        "category_title": {
-                          "title": "Category",
-                          "type": "string"
-                        },
-                        "category_url": {
-                          "title": "Category",
-                          "type": "string"
-                        },
-                        "require_temp_email": {
-                          "title": "Require",
-                          "type": "integer"
-                        },
-                        "available_temp_email": {
-                          "title": "Available",
-                          "type": "integer"
-                        },
-                        "check_button_enabled": {
-                          "title": "Check",
-                          "type": "integer"
-                        },
-                        "checker_enabled": {
-                          "title": "Checker",
-                          "type": "integer"
-                        },
-                        "buy_without_validation": {
-                          "title": "Buy",
-                          "type": "integer"
-                        },
-                        "has_guarantee": {
-                          "title": "Has",
-                          "type": "integer"
-                        },
-                        "require_video_recording": {
-                          "title": "Require",
-                          "type": "integer"
-                        },
-                        "can_be_resold": {
-                          "title": "Can",
-                          "type": "integer"
-                        },
-                        "login_type": {
-                          "title": "Login",
-                          "type": "string"
-                        },
-                        "require_email_login_data": {
-                          "title": "Require",
-                          "type": "integer"
-                        },
-                        "category_prefix_id": {
-                          "title": "Category",
-                          "type": "integer"
-                        },
-                        "steam_item_id": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_id": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_country": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_register_date": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_last_activity": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_games": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_full_games": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_community_ban": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_bans": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_cs2_profile_rank": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_balance": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_cs2_rank_id": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_is_limited": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_level": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_friend_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_data": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_cs2_last_activity": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_dota2_solo_mmr": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cs2_ban_date": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_converted_balance": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cards_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cards_games": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_pubg_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cs2_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_dota2_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_tf2_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_rust_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cs2_wingman_rank_id": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_game_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_steam_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cs2_medals": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_cs2_win_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_dota2_game_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_dota2_lose_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_dota2_win_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_hours_played_recently": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_faceit_level": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_points": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_transactions": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_last_transaction_date": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_relevant_game_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_gift_count": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_gifts": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_limit_spent": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_dota2_behavior": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_trust_factor": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_mfa": {
-                          "title": "Steam",
-                          "type": "boolean"
-                        },
-                        "steam_mfa_file": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_refresh_token": {
-                          "title": "Steam"
-                        },
-                        "steam_market": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_market_restrictions": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_market_ban_end_date": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_unturned_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cs2_last_launched": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_kf2_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_dst_inv_value": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cs2_premier_elo": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_has_activated_keys": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_cs2_ban_type": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_external_accounts": {
-                          "title": "Steam",
-                          "type": "string"
-                        },
-                        "steam_rust_kill_player": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_rust_deaths": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_total_gifts_rub": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_total_refunds_rub": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_total_ingame_rub": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_total_games_rub": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_total_purchased_rub": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "steam_dota2_last_match_date": {
-                          "title": "Steam",
-                          "type": "integer"
-                        },
-                        "descriptionHtml": {
-                          "title": "Description Html",
-                          "type": "string"
-                        },
-                        "descriptionEnHtml": {
-                          "title": "Description En Html",
-                          "type": "string"
-                        },
-                        "descriptionPlain": {
-                          "title": "Description Plain",
-                          "type": "string"
-                        },
-                        "descriptionEnPlain": {
-                          "title": "Description En Plain",
-                          "type": "string"
-                        },
-                        "seller": {
-                          "title": "Seller",
-                          "type": "object",
-                          "properties": {
-                            "user_id": {
-                              "title": "User",
-                              "type": "integer"
-                            }
-                          },
-                          "required": [
-                            "user_id"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "item_id",
-                        "item_state",
-                        "category_id",
-                        "published_date",
-                        "title",
-                        "description",
-                        "price",
-                        "update_stat_date",
-                        "refreshed_date",
-                        "edit_date",
-                        "view_count",
-                        "is_sticky",
-                        "item_origin",
-                        "proxy_id",
-                        "extended_guarantee",
-                        "nsb",
-                        "allow_ask_discount",
-                        "title_en",
-                        "description_en",
-                        "email_type",
-                        "email_provider",
-                        "item_domain",
-                        "resale_item_origin",
-                        "category_title",
-                        "category_url",
-                        "require_temp_email",
-                        "available_temp_email",
-                        "check_button_enabled",
-                        "checker_enabled",
-                        "buy_without_validation",
-                        "has_guarantee",
-                        "require_video_recording",
-                        "can_be_resold",
-                        "login_type",
-                        "require_email_login_data",
-                        "category_prefix_id",
-                        "steam_item_id",
-                        "steam_id",
-                        "steam_country",
-                        "steam_register_date",
-                        "steam_last_activity",
-                        "steam_games",
-                        "steam_full_games",
-                        "steam_community_ban",
-                        "steam_bans",
-                        "steam_cs2_profile_rank",
-                        "steam_balance",
-                        "steam_cs2_rank_id",
-                        "steam_is_limited",
-                        "steam_level",
-                        "steam_friend_count",
-                        "steam_data",
-                        "steam_cs2_last_activity",
-                        "steam_dota2_solo_mmr",
-                        "steam_cs2_ban_date",
-                        "steam_converted_balance",
-                        "steam_cards_count",
-                        "steam_cards_games",
-                        "steam_pubg_inv_value",
-                        "steam_cs2_inv_value",
-                        "steam_dota2_inv_value",
-                        "steam_tf2_inv_value",
-                        "steam_rust_inv_value",
-                        "steam_cs2_wingman_rank_id",
-                        "steam_game_count",
-                        "steam_steam_inv_value",
-                        "steam_inv_value",
-                        "steam_cs2_medals",
-                        "steam_cs2_win_count",
-                        "steam_dota2_game_count",
-                        "steam_dota2_lose_count",
-                        "steam_dota2_win_count",
-                        "steam_hours_played_recently",
-                        "steam_faceit_level",
-                        "steam_points",
-                        "steam_transactions",
-                        "steam_last_transaction_date",
-                        "steam_relevant_game_count",
-                        "steam_gift_count",
-                        "steam_gifts",
-                        "steam_limit_spent",
-                        "steam_dota2_behavior",
-                        "steam_trust_factor",
-                        "steam_mfa",
-                        "steam_mfa_file",
-                        "steam_refresh_token",
-                        "steam_market",
-                        "steam_market_restrictions",
-                        "steam_market_ban_end_date",
-                        "steam_unturned_inv_value",
-                        "steam_cs2_last_launched",
-                        "steam_kf2_inv_value",
-                        "steam_dst_inv_value",
-                        "steam_cs2_premier_elo",
-                        "steam_has_activated_keys",
-                        "steam_cs2_ban_type",
-                        "steam_external_accounts",
-                        "steam_rust_kill_player",
-                        "steam_rust_deaths",
-                        "steam_total_gifts_rub",
-                        "steam_total_refunds_rub",
-                        "steam_total_ingame_rub",
-                        "steam_total_games_rub",
-                        "steam_total_purchased_rub",
-                        "steam_dota2_last_match_date",
-                        "descriptionHtml",
-                        "descriptionEnHtml",
-                        "descriptionPlain",
-                        "descriptionEnPlain",
-                        "seller"
-                      ]
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/SystemInfo"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/StatusItem"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -51438,7 +50885,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51481,7 +50928,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51526,7 +50973,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -51535,7 +50982,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51602,7 +51049,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51638,7 +51085,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51674,7 +51121,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51731,7 +51178,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51810,7 +51257,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -51872,7 +51319,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -52033,7 +51480,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -52042,7 +51489,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -52076,7 +51523,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -52112,7 +51559,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -52146,7 +51593,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -52208,7 +51655,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -52234,98 +51681,605 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "MeModel",
-                  "required": [
-                    "user"
-                  ],
                   "type": "object",
+                  "required": [
+                    "user",
+                    "system_info"
+                  ],
                   "properties": {
                     "user": {
                       "title": "User",
-                      "required": [
-                        "balance",
-                        "hold",
-                        "short_link",
-                        "system_info",
-                        "user_dob_day",
-                        "user_dob_month",
-                        "user_dob_year",
-                        "user_email",
-                        "user_id",
-                        "user_last_seen_date",
-                        "user_like_count",
-                        "user_message_count",
-                        "user_register_date",
-                        "user_title",
-                        "user_unread_notification_count",
-                        "username"
-                      ],
                       "type": "object",
                       "properties": {
-                        "user_id": {
-                          "title": "User Id",
+                        "active_items_count": {
+                          "title": "Active",
                           "type": "integer"
+                        },
+                        "activity_visible": {
+                          "title": "Activity",
+                          "type": "boolean"
+                        },
+                        "age": {
+                          "title": "Age",
+                          "type": "integer"
+                        },
+                        "balance": {
+                          "title": "Balance",
+                          "type": "string"
+                        },
+                        "bump_item_period": {
+                          "title": "Bump",
+                          "type": "integer"
+                        },
+                        "can_edit": {
+                          "title": "Can",
+                          "type": "boolean"
+                        },
+                        "can_follow": {
+                          "title": "Can",
+                          "type": "boolean"
+                        },
+                        "can_ignore": {
+                          "title": "Can",
+                          "type": "boolean"
+                        },
+                        "can_post_profile": {
+                          "title": "Can",
+                          "type": "boolean"
+                        },
+                        "can_view_profile": {
+                          "title": "Can",
+                          "type": "boolean"
+                        },
+                        "can_view_profile_posts": {
+                          "title": "Can",
+                          "type": "boolean"
+                        },
+                        "can_warn": {
+                          "title": "Can",
+                          "type": "boolean"
+                        },
+                        "contest_count": {
+                          "title": "Contest",
+                          "type": "integer"
+                        },
+                        "conv_welcome_message": {
+                          "title": "Conv",
+                          "type": "string"
+                        },
+                        "convertedBalance": {
+                          "title": "Converted Balance",
+                          "type": "integer"
+                        },
+                        "convertedDeposit": {
+                          "title": "Converted Deposit",
+                          "type": "integer"
+                        },
+                        "convertedHold": {
+                          "title": "Converted Hold",
+                          "type": "integer"
+                        },
+                        "currency": {
+                          "title": "Currency",
+                          "type": "string"
+                        },
+                        "currencyPhrase": {
+                          "title": "Currency Phrase",
+                          "type": "string"
+                        },
+                        "custom_account_download_format": {
+                          "title": "Custom",
+                          "type": "string"
+                        },
+                        "custom_fields": {
+                          "title": "Custom",
+                          "type": "object",
+                          "properties": {
+                            "_4": {
+                              "title": "",
+                              "type": "string"
+                            },
+                            "allowSelfUnban": {
+                              "title": "Allow Self Unban",
+                              "type": "array",
+                              "items": {}
+                            },
+                            "ban_reason": {
+                              "title": "Ban",
+                              "type": "string"
+                            },
+                            "discord": {
+                              "title": "Discord",
+                              "type": "string"
+                            },
+                            "github": {
+                              "title": "Github",
+                              "type": "string"
+                            },
+                            "jabber": {
+                              "title": "Jabber",
+                              "type": "string"
+                            },
+                            "lztAwardUserTrophy": {
+                              "title": "Lzt Award User Trophy",
+                              "type": "string"
+                            },
+                            "lztLikesIncreasing": {
+                              "title": "Lzt Likes Increasing",
+                              "type": "string"
+                            },
+                            "lztLikesZeroing": {
+                              "title": "Lzt Likes Zeroing",
+                              "type": "string"
+                            },
+                            "lztSympathyIncreasing": {
+                              "title": "Lzt Sympathy Increasing",
+                              "type": "string"
+                            },
+                            "lztSympathyZeroing": {
+                              "title": "Lzt Sympathy Zeroing",
+                              "type": "string"
+                            },
+                            "lztUnbanAmount": {
+                              "title": "Lzt Unban Amount",
+                              "type": "string"
+                            },
+                            "maecenasValue": {
+                              "title": "Maecenas Value",
+                              "type": "string"
+                            },
+                            "scamURL": {
+                              "title": "Scam Url",
+                              "type": "string"
+                            },
+                            "steam": {
+                              "title": "Steam",
+                              "type": "string"
+                            },
+                            "telegram": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "vk": {
+                              "title": "Vk",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "_4",
+                            "allowSelfUnban",
+                            "ban_reason",
+                            "discord",
+                            "github",
+                            "jabber",
+                            "lztAwardUserTrophy",
+                            "lztLikesIncreasing",
+                            "lztLikesZeroing",
+                            "lztSympathyIncreasing",
+                            "lztSympathyZeroing",
+                            "lztUnbanAmount",
+                            "maecenasValue",
+                            "scamURL",
+                            "steam",
+                            "telegram",
+                            "vk"
+                          ]
+                        },
+                        "custom_title": {
+                          "title": "Custom",
+                          "type": "string"
+                        },
+                        "deposit": {
+                          "title": "Deposit",
+                          "type": "integer"
+                        },
+                        "dob": {
+                          "title": "Dob",
+                          "type": "object",
+                          "properties": {
+                            "year": {
+                              "title": "Year",
+                              "type": "integer"
+                            },
+                            "month": {
+                              "title": "Month",
+                              "type": "integer"
+                            },
+                            "day": {
+                              "title": "Day",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "year",
+                            "month",
+                            "day"
+                          ]
+                        },
+                        "feedback_data": {
+                          "title": "Feedback",
+                          "type": "object",
+                          "properties": {
+                            "12345": {
+                              "title": "",
+                              "type": "object",
+                              "properties": {
+                                "positive": {
+                                  "title": "Positive",
+                                  "type": "integer"
+                                },
+                                "negative": {
+                                  "title": "Negative",
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "positive",
+                                "negative"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "12345"
+                          ]
+                        },
+                        "hold": {
+                          "title": "Hold",
+                          "type": "string"
+                        },
+                        "homepage": {
+                          "title": "Homepage",
+                          "type": "string"
+                        },
+                        "imap_data": {
+                          "title": "Imap",
+                          "type": "object",
+                          "properties": {
+                            "domain.zone": {
+                              "type": "object",
+                              "properties": {
+                                "domain": {
+                                  "title": "Domain",
+                                  "type": "string"
+                                },
+                                "imap_server": {
+                                  "title": "Imap",
+                                  "type": "string"
+                                },
+                                "port": {
+                                  "title": "Port",
+                                  "type": "integer"
+                                },
+                                "secure": {
+                                  "title": "Secure",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "domain",
+                                "imap_server",
+                                "port",
+                                "secure"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "domain.zone"
+                          ]
+                        },
+                        "is_admin": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "is_banned": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "is_followed": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "is_ignored": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "is_moderator": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "is_staff": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "is_super_admin": {
+                          "title": "Is",
+                          "type": "boolean"
+                        },
+                        "joined_date": {
+                          "title": "Joined",
+                          "type": "integer"
+                        },
+                        "last_activity": {
+                          "title": "Last",
+                          "type": "integer"
+                        },
+                        "like_count": {
+                          "title": "Like",
+                          "type": "integer"
+                        },
+                        "location": {
+                          "title": "Location",
+                          "type": "string"
+                        },
+                        "market_custom_title": {
+                          "title": "Market",
+                          "type": "string"
+                        },
+                        "max_discount_percent": {
+                          "title": "Max",
+                          "type": "integer"
+                        },
+                        "message_count": {
+                          "title": "Message",
+                          "type": "integer"
+                        },
+                        "paid_mail_left": {
+                          "title": "Paid",
+                          "type": "integer"
+                        },
+                        "register_date": {
+                          "title": "Register",
+                          "type": "integer"
+                        },
+                        "rendered": {
+                          "title": "Rendered",
+                          "type": "object",
+                          "properties": {
+                            "username": {
+                              "title": "Username",
+                              "type": "string"
+                            },
+                            "avatars": {
+                              "title": "Avatars",
+                              "type": "object",
+                              "properties": {
+                                "l": {
+                                  "title": "L",
+                                  "type": "string"
+                                },
+                                "m": {
+                                  "title": "M",
+                                  "type": "string"
+                                },
+                                "s": {
+                                  "title": "S",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "l",
+                                "m",
+                                "s"
+                              ]
+                            },
+                            "link": {
+                              "title": "Link",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "username",
+                            "avatars",
+                            "link"
+                          ]
+                        },
+                        "restore_count": {
+                          "title": "Restore",
+                          "type": "integer"
+                        },
+                        "restore_data": {
+                          "title": "Restore",
+                          "type": "object",
+                          "properties": {
+                            "12345": {
+                              "title": "",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "12345"
+                          ]
+                        },
+                        "short_link": {
+                          "title": "Short",
+                          "type": "string"
+                        },
+                        "sold_items_count": {
+                          "title": "Sold",
+                          "type": "integer"
+                        },
+                        "tags": {
+                          "title": "Tags",
+                          "type": "object",
+                          "properties": {
+                            "12345": {
+                              "title": "",
+                              "type": "object",
+                              "properties": {
+                                "title": {
+                                  "title": "Title",
+                                  "type": "string"
+                                },
+                                "bc": {
+                                  "title": "Bc",
+                                  "type": "string"
+                                },
+                                "tag_id": {
+                                  "title": "Tag",
+                                  "type": "integer"
+                                },
+                                "forOwnedAccountsOnly": {
+                                  "title": "For Owned Accounts Only",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "title",
+                                "bc",
+                                "tag_id",
+                                "forOwnedAccountsOnly"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "12345"
+                          ]
+                        },
+                        "telegram_client": {
+                          "title": "Telegram",
+                          "type": "object",
+                          "properties": {
+                            "telegram_api_id": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "telegram_api_hash": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "telegram_device_model": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "telegram_system_version": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "telegram_app_version": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "telegram_system_lang_code": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "telegram_lang_code": {
+                              "title": "Telegram",
+                              "type": "string"
+                            },
+                            "telegram_lang_pack": {
+                              "title": "Telegram",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "telegram_api_id",
+                            "telegram_api_hash",
+                            "telegram_device_model",
+                            "telegram_system_version",
+                            "telegram_app_version",
+                            "telegram_system_lang_code",
+                            "telegram_lang_code",
+                            "telegram_lang_pack"
+                          ]
+                        },
+                        "trophy_points": {
+                          "title": "Trophy",
+                          "type": "integer"
+                        },
+                        "user_allow_ask_discount": {
+                          "title": "User",
+                          "type": "boolean"
+                        },
+                        "user_id": {
+                          "title": "User",
+                          "type": "integer"
+                        },
+                        "user_title": {
+                          "title": "User",
+                          "type": "string"
                         },
                         "username": {
                           "title": "Username",
                           "type": "string"
                         },
-                        "user_message_count": {
-                          "title": "User Message Count",
-                          "type": "integer"
-                        },
-                        "user_register_date": {
-                          "title": "User Register Date",
-                          "type": "integer"
-                        },
-                        "user_like_count": {
-                          "title": "User Like Count",
-                          "type": "integer"
-                        },
-                        "short_link": {
-                          "title": "Short Link",
+                        "view_url": {
+                          "title": "View",
                           "type": "string"
                         },
-                        "user_email": {
-                          "title": "User Email",
-                          "type": "string"
+                        "visible": {
+                          "title": "Visible",
+                          "type": "boolean"
                         },
-                        "user_unread_notification_count": {
-                          "title": "User Unread Notification Count",
+                        "warning_points": {
+                          "title": "Warning",
                           "type": "integer"
-                        },
-                        "user_dob_day": {
-                          "title": "User Dob Day",
-                          "type": "integer"
-                        },
-                        "user_dob_month": {
-                          "title": "User Dob Month",
-                          "type": "integer"
-                        },
-                        "user_dob_year": {
-                          "title": "User Dob Year",
-                          "type": "integer"
-                        },
-                        "user_title": {
-                          "title": "User Title",
-                          "type": "string"
-                        },
-                        "user_last_seen_date": {
-                          "title": "User Last Seen Date",
-                          "type": "integer"
-                        },
-                        "balance": {
-                          "title": "Balance",
-                          "type": "integer"
-                        },
-                        "hold": {
-                          "title": "Hold",
-                          "type": "integer"
-                        },
-                        "system_info": {
-                          "$ref": "#/components/schemas/SystemInfo"
                         }
-                      }
+                      },
+                      "required": [
+                        "active_items_count",
+                        "activity_visible",
+                        "age",
+                        "balance",
+                        "bump_item_period",
+                        "can_edit",
+                        "can_follow",
+                        "can_ignore",
+                        "can_post_profile",
+                        "can_view_profile",
+                        "can_view_profile_posts",
+                        "can_warn",
+                        "contest_count",
+                        "conv_welcome_message",
+                        "convertedBalance",
+                        "convertedDeposit",
+                        "convertedHold",
+                        "currency",
+                        "currencyPhrase",
+                        "custom_account_download_format",
+                        "custom_fields",
+                        "custom_title",
+                        "deposit",
+                        "dob",
+                        "feedback_data",
+                        "hold",
+                        "homepage",
+                        "imap_data",
+                        "is_admin",
+                        "is_banned",
+                        "is_followed",
+                        "is_ignored",
+                        "is_moderator",
+                        "is_staff",
+                        "is_super_admin",
+                        "joined_date",
+                        "last_activity",
+                        "like_count",
+                        "location",
+                        "market_custom_title",
+                        "max_discount_percent",
+                        "message_count",
+                        "paid_mail_left",
+                        "register_date",
+                        "rendered",
+                        "restore_count",
+                        "restore_data",
+                        "short_link",
+                        "sold_items_count",
+                        "tags",
+                        "telegram_client",
+                        "trophy_points",
+                        "user_allow_ask_discount",
+                        "user_id",
+                        "user_title",
+                        "username",
+                        "view_url",
+                        "visible",
+                        "warning_points"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/SystemInfo"
                     }
                   }
                 }
@@ -55218,7 +55172,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -55394,7 +55348,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -55403,7 +55357,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/AdNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFoundModel"
           }
         },
         "security": [
@@ -55598,7 +55552,6 @@
                     "paymentStats",
                     "hasNextPage",
                     "lastOperationId",
-                    "test",
                     "nextPageHref",
                     "system_info"
                   ],
@@ -56060,10 +56013,6 @@
                     },
                     "lastOperationId": {
                       "title": "Last Operation Id",
-                      "type": "integer"
-                    },
-                    "test": {
-                      "title": "Test",
                       "type": "integer"
                     },
                     "nextPageHref": {
@@ -56637,7 +56586,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/OkStatus"
+            "$ref": "#/components/responses/Status"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -60482,7 +60431,7 @@
           }
         }
       },
-      "OkStatus": {
+      "Status": {
         "description": "Successful Response.",
         "content": {
           "application/json": {
@@ -60503,6 +60452,40 @@
                 "message": {
                   "title": "Message",
                   "type": "string"
+                },
+                "system_info": {
+                  "$ref": "#/components/schemas/SystemInfo"
+                }
+              }
+            }
+          }
+        }
+      },
+      "StatusItem": {
+        "description": "Successful Response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "title": "OkModel",
+              "required": [
+                "status",
+                "message",
+                "item",
+                "system_info"
+              ],
+              "type": "object",
+              "properties": {
+                "status": {
+                  "title": "Status",
+                  "type": "string",
+                  "default": "ok"
+                },
+                "message": {
+                  "title": "Message",
+                  "type": "string"
+                },
+                "item":{
+                  "$ref": "#/components/schemas/ItemModel"
                 },
                 "system_info": {
                   "$ref": "#/components/schemas/SystemInfo"
@@ -60551,7 +60534,7 @@
           }
         }
       },
-      "AdNotFoundModel": {
+      "ItemNotFoundModel": {
         "description": "Error Response.",
         "content": {
           "application/json": {
@@ -60572,7 +60555,7 @@
               }
             },
             "examples": {
-              "AdNotFound": {
+              "ItemNotFound": {
                 "summary": "Ad not found error",
                 "value": {
                   "errors": [
