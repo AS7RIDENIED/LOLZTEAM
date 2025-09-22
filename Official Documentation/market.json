@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.70a"
+    "version": "1.1.71"
   },
   "servers": [
     {
@@ -308,7 +308,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Trade Ban",
               "description": "Has lifetime trade ban.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -321,7 +320,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Trade Limit",
               "description": "Has temporary trade limit.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -337,7 +335,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Limit",
               "description": "Has 5 $ limit.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -350,7 +347,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Mafile",
               "description": "Has .mafile (Steam Guard Authenticator).",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -448,7 +444,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Mm Ban",
               "description": "Has CS2 Matchmaking ban.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -4306,7 +4301,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Last Trans Date Period Later",
               "$ref": "#/components/schemas/DatePeriodModel"
             }
           },
@@ -4546,7 +4540,6 @@
             "explode": true,
             "schema": {
               "description": "Has FACEIT account.",
-              "title": "Has Faceit",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -13103,8 +13096,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Bp",
-              "description": "Has Battle Pass.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -13159,7 +13150,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Xbox Linkable",
               "description": "Can be linked to Xbox.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -13172,7 +13162,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Psn Linkable",
               "description": "Can be linked to PSN.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -14204,7 +14193,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Ea",
               "description": "Has linked external accounts.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -18855,7 +18843,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Spam",
               "description": "Has a spam ban.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -18868,8 +18855,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Password",
-              "type": "string",
               "description": "Has a cloud password.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -21575,8 +21560,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Xbox Connected",
-              "type": "string",
               "description": "Xbox connected to account.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -21589,8 +21572,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Steam Connected",
-              "type": "string",
               "description": "Steam connected to account.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -21603,8 +21584,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "PSN Connected",
-              "type": "string",
               "description": "PSN connected to account.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -21675,7 +21654,6 @@
             "explode": true,
             "schema": {
               "description": "Has transactions.",
-              "title": "Transactions",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
@@ -35736,7 +35714,6 @@
             "explode": true,
             "schema": {
               "description": "Access to pve.",
-              "title": "Pve",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -37414,7 +37391,6 @@
             "explode": true,
             "schema": {
               "description": "Has transactions.",
-              "title": "Transactions",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -38193,7 +38169,6 @@
             "explode": true,
             "schema": {
               "description": "Has nitro.",
-              "title": "Nitro",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -38283,7 +38258,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Billing",
               "description": "Has billing.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -38296,7 +38270,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Gifts",
               "description": "Has gifts.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -38310,7 +38283,6 @@
             "explode": true,
             "schema": {
               "description": "Has transactions.",
-              "title": "Transactions",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -38491,7 +38463,6 @@
             "explode": true,
             "schema": {
               "description": "Has clans.",
-              "title": "Clans",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -38614,7 +38585,6 @@
             "explode": true,
             "schema": {
               "description": "Has two-factor authentication.",
-              "title": "2fa",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -39406,7 +39376,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Cookie Login",
               "description": "Login by cookies.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -40109,7 +40078,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Login Without Cookies",
               "description": "Login without cookies.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -40801,7 +40769,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Edit Btag",
               "description": "Can edit BattleTag.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -40814,7 +40781,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Changeable Fn",
               "description": "Can edit full name.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -40827,8 +40793,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Real Id",
-              "type": "string",
               "description": "Real id.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -40841,7 +40805,6 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "title": "Parent Control",
               "description": "Has disabled parent control.",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
@@ -40855,7 +40818,6 @@
             "explode": true,
             "schema": {
               "description": "Has no bans.",
-              "title": "No Bans",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -41671,7 +41633,6 @@
             "explode": true,
             "schema": {
               "description": "Has transactions.",
-              "title": "Transactions",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -43285,7 +43246,6 @@
             "explode": true,
             "schema": {
               "description": "Voice chat is available.",
-              "title": "Voice",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
@@ -44915,7 +44875,6 @@
             "explode": true,
             "schema": {
               "description": "Is API enabled in Hypixel Skyblock.",
-              "title": "Hypixel Skyblock Api Enabled",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           },
@@ -45130,7 +45089,6 @@
             "explode": true,
             "schema": {
               "description": "Was Hypixel ban parsed by Market.",
-              "title": "Hypixel Ban Parsed",
               "$ref": "#/components/schemas/YesNoNoMatterScheme"
             }
           }
@@ -46881,21 +46839,27 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "reason",
-            "in": "query",
-            "description": "Delete reason.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Reason",
-              "type": "string",
-              "description": "Delete reason."
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "title": "Reason",
+                    "type": "string",
+                    "description": "Delete reason."
+                  }
+                },
+                "required": [
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/Status"
@@ -46925,7 +46889,7 @@
           "Accounts managing"
         ],
         "summary": "Get Claims",
-        "description": "Create a Arbitrage.",
+        "description": "Returns a list of claims filed against you.",
         "operationId": "Profile.Claims",
         "parameters": [
           {
@@ -47320,34 +47284,23 @@
         "tags": [
           "Accounts managing"
         ],
-        "summary": "Create Arbitrage",
-        "description": "Create a Arbitrage.",
+        "summary": "Create Claim",
+        "description": "Create a claim.",
         "operationId": "Managing.CreateClaim",
-        "parameters": [
-          {
-            "name": "item_id",
-            "in": "query",
-            "description": "Item id.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "item_id",
-              "type": "integer",
-              "description": "Item id."
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "title": "Post Body",
                 "required": [
-                  "post_body"
+                  "post_body",
+                  "item_id"
                 ],
                 "type": "object",
                 "properties": {
+                  "item_id": {
+                    "$ref": "#/components/schemas/ItemIDModel"
+                  },
                   "post_body": {
                     "title": "Post Body",
                     "type": "string",
@@ -47356,8 +47309,7 @@
                 }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -48008,7 +47960,7 @@
           "Accounts managing"
         ],
         "summary": "Bulk Get Accounts",
-        "description": "Bulk get up to 250 accounts.\nYou can get only your accounts or those you have purchased.",
+        "description": "Bulk get up to 250 accounts.",
         "operationId": "Managing.BulkGet",
         "requestBody": {
           "required": true,
@@ -48021,8 +47973,7 @@
                     "title": "Item ID",
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "minimum": 1
+                      "$ref": "#/components/schemas/ItemIDModel"
                     }
                   },
                   "parse_same_item_ids": {
@@ -48639,145 +48590,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "title",
-            "in": "query",
-            "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Title Ru",
-              "type": "string",
-              "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language."
-            }
-          },
-          {
-            "name": "title_en",
-            "in": "query",
-            "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Title En",
-              "type": "string",
-              "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language."
-            }
-          },
-          {
-            "name": "price",
-            "in": "query",
-            "required": false,
-            "description": "Current price of account in your currency.",
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Price",
-              "type": "integer",
-              "description": "Current price of account in your currency.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "currency",
-            "in": "query",
-            "description": "Using currency for amount. Required if you are trying to change price field.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/CurrencyModel"
-            }
-          },
-          {
-            "name": "item_origin",
-            "in": "query",
-            "description": "Account origin. Where did you get it from.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Item Origin",
-              "type": "string",
-              "description": "Account origin. Where did you get it from.",
-              "x-enumDescriptions": {
-                "brute": "Account received using Bruteforce",
-                "phishing": "Account received from phishing page",
-                "stealer": "Account received from stealer logs",
-                "autoreg": "Account is automatically registered by a tool",
-                "personal": "Account is yours. You created it yourself",
-                "resale": "Account received from another seller",
-                "dummy": "Dummy (empty) account (only for Steam category)",
-                "self_registration": "Self registered account (only for Telegram category)"
-              },
-              "enum": [
-                "brute",
-                "phishing",
-                "stealer",
-                "personal",
-                "resale",
-                "autoreg",
-                "dummy"
-              ]
-            }
-          },
-          {
-            "name": "email_login_data",
-            "in": "query",
-            "description": "Email login data (email:password format).",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Email Login Data",
-              "type": "string",
-              "description": "Email login data (email:password format)."
-            }
-          },
-          {
-            "name": "email_type",
-            "in": "query",
-            "description": "Email type.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Email Type",
-              "type": "string",
-              "description": "Email type.",
-              "enum": [
-                "native",
-                "autoreg"
-              ]
-            }
-          },
-          {
-            "name": "allow_ask_discount",
-            "in": "query",
-            "description": "Allow users to ask discount for this account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Allow Ask Discount",
-              "type": "boolean",
-              "description": "Allow users to ask discount for this account."
-            }
-          },
-          {
-            "name": "proxy_id",
-            "in": "query",
-            "description": "Using proxy id for account checking. See GET or POST /proxy to get or edit proxy list.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Id",
-              "type": "integer",
-              "description": "Using proxy id for account checking. See GET or POST /proxy to get or edit proxy list."
-            }
           }
         ],
         "requestBody": {
@@ -48787,6 +48599,74 @@
                 "title": "Account Information",
                 "type": "object",
                 "properties": {
+                  "title": {
+                    "title": "Title Ru",
+                    "type": "string",
+                    "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language."
+                  },
+                  "title_en": {
+                    "title": "Title En",
+                    "type": "string",
+                    "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language."
+                  },
+                  "price": {
+                    "title": "Price",
+                    "type": "integer",
+                    "description": "Current price of account in your currency.",
+                    "minimum": 1
+                  },
+                  "currency": {
+                    "$ref": "#/components/schemas/CurrencyModel",
+                    "description": "Using currency for amount. Required if you are trying to change price field."
+                  },
+                  "item_origin": {
+                    "title": "Item Origin",
+                    "type": "string",
+                    "description": "Account origin. Where did you get it from.",
+                    "x-enumDescriptions": {
+                      "brute": "Account received using Bruteforce",
+                      "phishing": "Account received from phishing page",
+                      "stealer": "Account received from stealer logs",
+                      "autoreg": "Account is automatically registered by a tool",
+                      "personal": "Account is yours. You created it yourself",
+                      "resale": "Account received from another seller",
+                      "dummy": "Dummy (empty) account (only for Steam category)",
+                      "self_registration": "Self registered account (only for Telegram category)"
+                    },
+                    "enum": [
+                      "brute",
+                      "phishing",
+                      "stealer",
+                      "personal",
+                      "resale",
+                      "autoreg",
+                      "dummy"
+                    ]
+                  },
+                  "email_login_data": {
+                    "title": "Email Login Data",
+                    "type": "string",
+                    "description": "Email login data (email:password format)."
+                  },
+                  "email_type": {
+                    "title": "Email Type",
+                    "type": "string",
+                    "description": "Email type.",
+                    "enum": [
+                      "native",
+                      "autoreg"
+                    ]
+                  },
+                  "allow_ask_discount": {
+                    "title": "Allow Ask Discount",
+                    "type": "boolean",
+                    "description": "Allow users to ask discount for this account."
+                  },
+                  "proxy_id": {
+                    "title": "Proxy Id",
+                    "type": "integer",
+                    "description": "Using proxy id for account checking. See GET or POST /proxy to get or edit proxy list."
+                  },
                   "description": {
                     "title": "Description",
                     "type": "string",
@@ -49001,37 +48881,56 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "all",
-            "in": "query",
-            "description": "Update the entire Steam inventory.",
-            "required": false,
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "title": "All",
-              "type": "boolean",
-              "description": "Update the entire Steam inventory."
-            }
-          },
-          {
-            "$ref": "#/components/parameters/app_id"
-          },
-          {
-            "name": "authorize",
-            "in": "query",
-            "description": "Parse inventory when authorized (Parse trade banned items).",
-            "required": false,
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "title": "Authorize",
-              "type": "boolean",
-              "description": "Parse inventory when authorized (Parse trade banned items)."
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "boolean",
+                    "description": "Update the entire Steam inventory.",
+                    "title": "All"
+                  },
+                  "app_id": {
+                    "title": "App Id",
+                    "type": "integer",
+                    "description": "Application id.",
+                    "x-enumDescriptions": {
+                      "730": "CS2",
+                      "578080": "PUBG",
+                      "753": "Steam",
+                      "570": "Dota 2",
+                      "440": "Team Fortress 2",
+                      "252490": "Rust",
+                      "304930": "Unturned",
+                      "232090": "Killing Floor 2",
+                      "322330": "Don't Starve Together"
+                    },
+                    "enum": [
+                      730,
+                      578080,
+                      753,
+                      570,
+                      440,
+                      252490,
+                      304930,
+                      232090,
+                      322330
+                    ]
+                  },
+                  "authorize": {
+                    "type": "boolean",
+                    "description": "Parse inventory when authorized (Parse trade banned items).",
+                    "title": "Authorize"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -49270,7 +49169,7 @@
           "Cart"
         ],
         "summary": "Get Cart Items",
-        "description": "Retrieves the list of items currently in your cart.",
+        "description": "Returns the list of items currently in your cart.",
         "operationId": "Cart.Get",
         "parameters": [
           {
@@ -49357,21 +49256,24 @@
         "summary": "Add Item to Cart",
         "description": "Adds item to your cart.",
         "operationId": "Cart.Add",
-        "parameters": [
-          {
-            "name": "item_id",
-            "in": "query",
-            "description": "Item id.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "item_id",
-              "type": "integer",
-              "description": "Item id."
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "item_id": {
+                    "$ref": "#/components/schemas/ItemIDModel"
+                  }
+                },
+                "required": [
+                  "item_id"
+                ]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -49421,21 +49323,21 @@
         "summary": "Delete Item From Cart",
         "description": "Deletes an item from the cart.",
         "operationId": "Cart.Delete",
-        "parameters": [
-          {
-            "name": "item_id",
-            "in": "query",
-            "description": "Item id.\nDon't set this parameter to delete all items from your cart.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "item_id",
-              "type": "integer",
-              "description": "Item id."
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "item_id": {
+                     "$ref": "#/components/schemas/ItemIDModel"
+                  }
+                },
+                "description": "Item id.\nIgnore set this parameter to delete all items from your cart."
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -49490,22 +49392,25 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "price",
-            "in": "query",
-            "description": "Current price of account in your currency.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Price",
-              "type": "number",
-              "description": "Current price of account in your currency.",
-              "minimum": 1
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "price": {
+                    "title": "Price",
+                    "type": "number",
+                    "description": "Current price of account in your currency.",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/BuyItem"
@@ -49576,22 +49481,25 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "price",
-            "in": "query",
-            "required": false,
-            "description": "Current price of account in your currency.",
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Price",
-              "type": "integer",
-              "description": "Current price of account in your currency.",
-              "minimum": 1
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "price": {
+                    "title": "Price",
+                    "type": "integer",
+                    "description": "Current price of account in your currency.",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -49702,201 +49610,141 @@
         "summary": "Fast Account Upload",
         "description": "Adds and check account on validity. If account is valid, account will be published on the market.\n\n**If you receive a \"retry_request\" error, that you should send same request again.**",
         "operationId": "Publishing.FastSell",
-        "parameters": [
-          {
-            "name": "title",
-            "in": "query",
-            "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Title Ru",
-              "type": "string",
-              "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language."
-            }
-          },
-          {
-            "name": "title_en",
-            "in": "query",
-            "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Title En",
-              "type": "string",
-              "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language."
-            }
-          },
-          {
-            "$ref": "#/components/parameters/price"
-          },
-          {
-            "name": "category_id",
-            "in": "query",
-            "description": "Accounts category.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Category Id",
-              "type": "integer",
-              "description": "Accounts category.",
-              "x-enumDescriptions": {
-                "1": "Steam",
-                "3": "EA (Origin)",
-                "4": "Warface",
-                "5": "Uplay",
-                "6": "ChatGPT",
-                "7": "Social Club",
-                "9": "Fortnite",
-                "10": "Instagram",
-                "11": "Battlenet",
-                "12": "Epic Games",
-                "13": "Riot",
-                "14": "World Of Tanks",
-                "15": "Supercell",
-                "16": "WOT Blitz",
-                "17": "miHoYo",
-                "18": "Escape From Tarkov",
-                "19": "VPN",
-                "20": "Tiktok",
-                "22": "Discord",
-                "24": "Telegram",
-                "28": "Minecraft",
-                "30": "Gifts",
-                "31": "Roblox"
-              },
-              "enum": [
-                1,
-                3,
-                4,
-                5,
-                6,
-                7,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                22,
-                24,
-                28,
-                30,
-                31
-              ]
-            }
-          },
-          {
-            "name": "currency",
-            "in": "query",
-            "description": "Using currency.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/CurrencyModel"
-            }
-          },
-          {
-            "name": "item_origin",
-            "in": "query",
-            "description": "Account origin. Where did you get it from.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "description": "Account origin. Where did you get it from.",
-              "type": "string",
-              "enum": [
-                "brute",
-                "phishing",
-                "stealer",
-                "personal",
-                "resale",
-                "autoreg",
-                "dummy",
-                "self_registration"
-              ],
-              "x-enumDescriptions": {
-                "brute": "Account received using Bruteforce",
-                "phishing": "Account received from phishing page",
-                "stealer": "Account received from stealer logs",
-                "personal": "Account is yours. You created it yourself",
-                "resale": "Account received from another seller",
-                "autoreg": "Account is automatically registered by a tool",
-                "dummy": "Dummy (empty) account (only for Steam category)",
-                "self_registration": "Self registered account (only for Telegram category)"
-              }
-            }
-          },
-          {
-            "name": "extended_guarantee",
-            "in": "query",
-            "description": "Guarantee type.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Extended Guarantee",
-              "type": "integer",
-              "description": "Guarantee type.",
-              "x-enumDescriptions": {
-                "-1": "12 hours",
-                "0": "24 hours",
-                "1": "3 days"
-              },
-              "enum": [
-                -1,
-                0,
-                1
-              ]
-            }
-          },
-          {
-            "name": "allow_ask_discount",
-            "in": "query",
-            "description": "Allow users to ask discount for this account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Allow Ask Discount",
-              "type": "boolean",
-              "description": "Allow users to ask discount for this account."
-            }
-          },
-          {
-            "name": "proxy_id",
-            "in": "query",
-            "description": "Proxy id that will be used to check account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Id",
-              "type": "integer",
-              "description": "Proxy id that will be used to check account."
-            }
-          },
-          {
-            "$ref": "#/components/parameters/random_proxy"
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required":["price", "category_id", "currency", "item_origin"],
                 "properties": {
+                  "title": {
+                    "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
+                    "title": "Title Ru",
+                    "type": "string"
+                  },
+                  "title_en": {
+                    "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language.",
+                    "title": "Title En",
+                    "type": "string"
+                  },
+                  "price": {
+                    "title": "Price",
+                    "type": "number",
+                    "description": "Current price of account in your currency.",
+                    "minimum": 1
+                  },
+                  "category_id": {
+                    "description": "Accounts category.",
+                    "title": "Category Id",
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      15,
+                      16,
+                      17,
+                      18,
+                      19,
+                      20,
+                      22,
+                      24,
+                      28,
+                      30,
+                      31
+                    ],
+                    "x-enumDescriptions": {
+                      "1": "Steam",
+                      "3": "EA (Origin)",
+                      "4": "Warface",
+                      "5": "Uplay",
+                      "6": "ChatGPT",
+                      "7": "Social Club",
+                      "9": "Fortnite",
+                      "10": "Instagram",
+                      "11": "Battlenet",
+                      "12": "Epic Games",
+                      "13": "Riot",
+                      "14": "World Of Tanks",
+                      "15": "Supercell",
+                      "16": "WOT Blitz",
+                      "17": "miHoYo",
+                      "18": "Escape From Tarkov",
+                      "19": "VPN",
+                      "20": "Tiktok",
+                      "22": "Discord",
+                      "24": "Telegram",
+                      "28": "Minecraft",
+                      "30": "Gifts",
+                      "31": "Roblox"
+                    }
+                  },
+                  "currency": {
+                    "description": "Using currency.",
+                    "$ref": "#/components/schemas/CurrencyModel"
+                  },
+                  "item_origin": {
+                    "description": "Account origin. Where did you get it from.",
+                    "title": "Item Origin",
+                    "type": "string",
+                    "enum": [
+                      "brute",
+                      "phishing",
+                      "stealer",
+                      "personal",
+                      "resale",
+                      "autoreg",
+                      "dummy",
+                      "self_registration"
+                    ],
+                    "x-enumDescriptions": {
+                      "brute": "Account received using Bruteforce",
+                      "phishing": "Account received from phishing page",
+                      "stealer": "Account received from stealer logs",
+                      "personal": "Account is yours. You created it yourself",
+                      "resale": "Account received from another seller",
+                      "autoreg": "Account is automatically registered by a tool",
+                      "dummy": "Dummy (empty) account (only for Steam category)",
+                      "self_registration": "Self registered account (only for Telegram category)"
+                    }
+                  },
+                  "extended_guarantee": {
+                    "description": "Guarantee type.",
+                    "title": "Extended Guarantee",
+                    "type": "integer",
+                    "enum": [
+                      -1,
+                      0,
+                      1
+                    ],
+                    "x-enumDescriptions": {
+                      "-1": "12 hours",
+                      "0": "24 hours",
+                      "1": "3 days"
+                    }
+                  },
+                  "allow_ask_discount": {
+                    "description": "Allow users to ask discount for this account.",
+                    "title": "Allow Ask Discount",
+                    "type": "boolean"
+                  },
+                  "proxy_id": {
+                    "description": "Proxy id that will be used to check account.",
+                    "title": "Proxy Id",
+                    "type": "integer"
+                  },
+                  "random_proxy": {
+                    "$ref": "#/components/parameters/random_proxy/schema"
+                  },
                   "description": {
                     "description": "Account public description.",
                     "title": "Description",
@@ -49942,7 +49790,7 @@
                     ]
                   },
                   "extra": {
-                    "$ref": "#/components/schemas/PublishingExtra"
+                    "$ref": "#/components/schemas/ExtraModel"
                   }
                 }
               }
@@ -50022,291 +49870,165 @@
         "summary": "Add Account",
         "description": "Adds account on the market.\n\nRequired email login data categories:\n+ 9 - Fortnite\n+ 12 - Epic games\n+ 18 - Escape from Tarkov",
         "operationId": "Publishing.Add",
-        "parameters": [
-          {
-            "name": "title",
-            "in": "query",
-            "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Title Ru",
-              "type": "string",
-              "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language."
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "price",
+                  "category_id",
+                  "currency",
+                  "item_origin"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
+                    "title": "Title Ru",
+                    "type": "string"
+                  },
+                  "title_en": {
+                    "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language.",
+                    "title": "Title En",
+                    "type": "string"
+                  },
+                  "price": {
+                    "title": "Price",
+                    "type": "number",
+                    "description": "Current price of account in your currency.",
+                    "minimum": 1
+                  },
+                  "category_id": {
+                    "description": "Accounts category.",
+                    "title": "Category Id",
+                    "type": "integer",
+                    "x-enumDescriptions": {
+                      "1": "Steam",
+                      "3": "EA (Origin)",
+                      "4": "Warface",
+                      "5": "Uplay",
+                      "6": "ChatGPT",
+                      "7": "Social Club",
+                      "9": "Fortnite",
+                      "10": "Instagram",
+                      "11": "Battlenet",
+                      "12": "Epic Games",
+                      "13": "Riot",
+                      "14": "World Of Tanks",
+                      "15": "Supercell",
+                      "16": "WOT Blitz",
+                      "17": "miHoYo",
+                      "18": "Escape From Tarkov",
+                      "19": "VPN",
+                      "20": "Tiktok",
+                      "22": "Discord",
+                      "24": "Telegram",
+                      "28": "Minecraft",
+                      "30": "Gifts",
+                      "31": "Roblox"
+                    },
+                    "enum": [
+                      1, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 28, 30, 31
+                    ]
+                  },
+                  "currency": {
+                    "$ref": "#/components/schemas/CurrencyModel"
+                  },
+                  "item_origin": {
+                    "title": "Item Origin",
+                    "type": "string",
+                    "description": "Account origin. Where did you get it from.",
+                    "x-enumDescriptions": {
+                      "brute": "Account received using Bruteforce",
+                      "phishing": "Account received from phishing page",
+                      "stealer": "Account received from stealer logs",
+                      "autoreg": "Account is automatically registered by a tool",
+                      "personal": "Account is yours. You created it yourself",
+                      "resale": "Account received from another seller",
+                      "dummy": "Dummy (empty) account (only for Steam category)",
+                      "self_registration": "Self registered account (only for Telegram category)"
+                    },
+                    "enum": [
+                      "brute",
+                      "phishing",
+                      "stealer",
+                      "personal",
+                      "resale",
+                      "autoreg",
+                      "dummy",
+                      "self_registration"
+                    ]
+                  },
+                  "extended_guarantee": {
+                    "title": "Extended Guarantee",
+                    "type": "integer",
+                    "description": "Guarantee type.",
+                    "x-enumDescriptions": {
+                      "-1": "12 hours",
+                      "0": "24 hours",
+                      "1": "3 days"
+                    },
+                    "enum": [
+                      -1, 0, 1
+                    ]
+                  },
+                  "description": {
+                    "title": "Description",
+                    "type": "string",
+                    "description": "Account public description."
+                  },
+                  "information": {
+                    "title": "Information",
+                    "type": "string",
+                    "description": "Account private information (visible only for buyer)."
+                  },
+                  "forceTempEmail": {
+                    "title": "Paid Mail",
+                    "type": "boolean",
+                    "description": "Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories."
+                  },
+                  "resell_item_id": {
+                    "title": "Resell Item Id",
+                    "type": "integer",
+                    "description": "Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account."
+                  },
+                  "has_email_login_data": {
+                    "title": "Has Email Login Data",
+                    "type": "boolean",
+                    "description": "Required if a **category** is one of list of Required email login data categories."
+                  },
+                  "email_login_data": {
+                    "title": "Email Login Data",
+                    "type": "string",
+                    "description": "Required if a **category** is one of list of Required email login data categories. Email login data (email:password format)."
+                  },
+                  "email_type": {
+                    "title": "Email Type",
+                    "type": "string",
+                    "description": "Email type.",
+                    "enum": [
+                      "native",
+                      "autoreg"
+                    ]
+                  },
+                  "allow_ask_discount": {
+                    "title": "Allow Ask Discount",
+                    "type": "boolean",
+                    "description": "Allow users to ask discount for this account."
+                  },
+                  "proxy_id": {
+                    "title": "Proxy Id",
+                    "type": "integer",
+                    "description": "Proxy id that will be used to check account."
+                  },
+                  "random_proxy": {
+                    "$ref": "#/components/parameters/random_proxy/schema"
+                  }
+                }
+              }
             }
-          },
-          {
-            "name": "title_en",
-            "in": "query",
-            "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Title En",
-              "type": "string",
-              "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language."
-            }
-          },
-          {
-            "$ref": "#/components/parameters/price"
-          },
-          {
-            "name": "category_id",
-            "in": "query",
-            "description": "Accounts category.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Category Id",
-              "type": "integer",
-              "description": "Accounts category.",
-              "x-enumDescriptions": {
-                "1": "Steam",
-                "3": "EA (Origin)",
-                "4": "Warface",
-                "5": "Uplay",
-                "6": "ChatGPT",
-                "7": "Social Club",
-                "9": "Fortnite",
-                "10": "Instagram",
-                "11": "Battlenet",
-                "12": "Epic Games",
-                "13": "Riot",
-                "14": "World Of Tanks",
-                "15": "Supercell",
-                "16": "WOT Blitz",
-                "17": "miHoYo",
-                "18": "Escape From Tarkov",
-                "19": "VPN",
-                "20": "Tiktok",
-                "22": "Discord",
-                "24": "Telegram",
-                "28": "Minecraft",
-                "30": "Gifts",
-                "31": "Roblox"
-              },
-              "enum": [
-                1,
-                3,
-                4,
-                5,
-                6,
-                7,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                22,
-                24,
-                28,
-                30,
-                31
-              ]
-            }
-          },
-          {
-            "name": "currency",
-            "in": "query",
-            "description": "Using currency.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/CurrencyModel"
-            }
-          },
-          {
-            "name": "item_origin",
-            "in": "query",
-            "description": "Account origin. Where did you get it from.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Item Origin",
-              "type": "string",
-              "description": "Account origin. Where did you get it from.",
-              "x-enumDescriptions": {
-                "brute": "Account received using Bruteforce",
-                "phishing": "Account received from phishing page",
-                "stealer": "Account received from stealer logs",
-                "autoreg": "Account is automatically registered by a tool",
-                "personal": "Account is yours. You created it yourself",
-                "resale": "Account received from another seller",
-                "dummy": "Dummy (empty) account (only for Steam category)",
-                "self_registration": "Self registered account (only for Telegram category)"
-              },
-              "enum": [
-                "brute",
-                "phishing",
-                "stealer",
-                "personal",
-                "resale",
-                "autoreg",
-                "dummy",
-                "self_registration"
-              ]
-            }
-          },
-          {
-            "name": "extended_guarantee",
-            "in": "query",
-            "description": "Guarantee type.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Extended Guarantee",
-              "type": "integer",
-              "description": "Guarantee type.",
-              "x-enumDescriptions": {
-                "-1": "12 hours",
-                "0": "24 hours",
-                "1": "3 days"
-              },
-              "enum": [
-                -1,
-                0,
-                1
-              ]
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Account public description.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Description",
-              "type": "string",
-              "description": "Account public description."
-            }
-          },
-          {
-            "name": "information",
-            "in": "query",
-            "description": "Account private information (visible only for buyer).",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Information",
-              "type": "string",
-              "description": "Account private information (visible only for buyer)."
-            }
-          },
-          {
-            "name": "forceTempEmail",
-            "in": "query",
-            "description": "Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Paid Mail",
-              "type": "boolean",
-              "description": "Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories."
-            }
-          },
-          {
-            "name": "resell_item_id",
-            "in": "query",
-            "description": "Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Resell Item Id",
-              "type": "integer",
-              "description": "Put item id, if you are trying to resell item. This is useful to pass temporary email from reselling item to new item. You will get same temporary email from reselling account."
-            }
-          },
-          {
-            "name": "has_email_login_data",
-            "in": "query",
-            "description": "Required if a **category** is one of list of Required email login data categories.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Has Email Login Data",
-              "type": "boolean",
-              "description": "Required if a **category** is one of list of Required email login data categories."
-            }
-          },
-          {
-            "name": "email_login_data",
-            "in": "query",
-            "description": "Required if a **category** is one of list of Required email login data categories. Email login data (email:password format).",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Email Login Data",
-              "type": "string",
-              "description": "Required if a **category** is one of list of Required email login data categories. Email login data (email:password format)."
-            }
-          },
-          {
-            "name": "email_type",
-            "in": "query",
-            "description": "Email type.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Email Type",
-              "type": "string",
-              "description": "Email type.",
-              "enum": [
-                "native",
-                "autoreg"
-              ]
-            }
-          },
-          {
-            "name": "allow_ask_discount",
-            "in": "query",
-            "description": "Allow users to ask discount for this account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Allow Ask Discount",
-              "type": "boolean",
-              "description": "Allow users to ask discount for this account."
-            }
-          },
-          {
-            "name": "proxy_id",
-            "in": "query",
-            "description": "Proxy id that will be used to check account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Id",
-              "type": "integer",
-              "description": "Proxy id that will be used to check account."
-            }
-          },
-          {
-            "$ref": "#/components/parameters/random_proxy"
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -50364,30 +50086,23 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "resell_item_id",
-            "in": "query",
-            "description": "Put if you are trying to resell an account.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Resell Item Id",
-              "type": "integer",
-              "description": "Put if you are trying to resell an account."
-            }
-          },
-          {
-            "$ref": "#/components/parameters/random_proxy"
           }
         ],
         "requestBody": {
-          "required": false,
           "content": {
             "application/json": {
               "schema": {
                 "properties": {
+                  "resell_item_id": {
+                    "title": "Resell Item Id",
+                    "type": "integer",
+                    "description": "Put if you are trying to resell an account."
+                  },
+                  "random_proxy": {
+                    "title": "Random Proxy",
+                    "type": "boolean",
+                    "description": "Set this parameter to **true** so that the Market will take a random proxy from its pool for each of your requests.\nOtherwise, if this parameter is set to **false** or not set, the Market will take a specific proxy from its pool, which is predefined for each item.\n> This parameter only works with proxies from the Market pool. If you want to use your own proxies, use the proxy_id or extra[proxy] parameter."
+                  },
                   "login": {
                     "description": "Account login (or email).",
                     "title": "Login",
@@ -50423,7 +50138,7 @@
                     ]
                   },
                   "extra": {
-                    "$ref": "#/components/schemas/PublishingExtra"
+                    "$ref": "#/components/schemas/ExtraModel"
                   }
                 }
               }
@@ -50508,7 +50223,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfCodeModel"
+                  "$ref": "#/components/schemas/ConfirmationCodeModel"
                 }
               }
             }
@@ -50916,7 +50631,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfCodeModel"
+                  "$ref": "#/components/schemas/ConfirmationCodeModel"
                 }
               }
             }
@@ -50951,26 +50666,27 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "description": "Confirmation id. (Required along with **nonce** if you want to confirm action).",
-            "schema": {
-              "type": "integer",
-              "description": "Confirmation id. (Required along with **nonce** if you want to confirm action)."
-            }
-          },
-          {
-            "name": "nonce",
-            "in": "query",
-            "description": "Confirmation nonce. (Required along with **id** if you want to confirm action).",
-            "schema": {
-              "type": "integer",
-              "description": "Confirmation nonce. (Required along with **id** if you want to confirm action)."
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Confirmation id. (Required along with **nonce** if you want to confirm action)."
+                  },
+                  "nonce": {
+                    "type": "integer",
+                    "description": "Confirmation nonce. (Required along with **id** if you want to confirm action)."
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/Status"
@@ -51201,24 +50917,25 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "_cancel",
-            "in": "query",
-            "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": " Cancel",
-              "type": "integer",
-              "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data.",
-              "enum": [
-                1
-              ]
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "_cancel": {
+                    "title": "Cancel",
+                    "type": "integer",
+                    "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data.",
+                    "enum": [1]
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -51342,20 +51059,25 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "tag_id",
-            "in": "query",
-            "description": "Tag ID.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Tag ID",
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_id": {
+                    "title": "Tag ID",
+                    "type": "integer",
+                    "description": "Tag ID."
+                  }
+                },
+                "required": ["tag_id"]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/Tag"
@@ -51408,20 +51130,25 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "tag_id",
-            "in": "query",
-            "description": "Tag ID.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Tag ID",
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_id": {
+                    "title": "Tag ID",
+                    "type": "integer",
+                    "description": "Tag ID."
+                  }
+                },
+                "required": ["tag_id"]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/Tag"
@@ -51616,34 +51343,30 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "The username of the new account owner.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Username",
-              "type": "string",
-              "description": "The username of the new account owner."
-            }
-          },
-          {
-            "name": "secret_answer",
-            "in": "query",
-            "description": "Secret answer of your account.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Secret Answer",
-              "type": "string",
-              "description": "Secret answer of your account."
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "title": "Username",
+                    "type": "string",
+                    "description": "The username of the new account owner."
+                  },
+                  "secret_answer": {
+                    "title": "Secret Answer",
+                    "type": "string",
+                    "description": "Secret answer of your account."
+                  }
+                },
+                "required": ["username", "secret_answer"]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/SaveChanges"
@@ -52305,243 +52028,110 @@
         "summary": "Edit Market Settings",
         "description": "Change settings about your profile on the market.",
         "operationId": "Profile.Edit",
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "query",
-            "description": "Account currency.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/CurrencyModel"
-            }
-          },
-          {
-            "name": "user_allow_ask_discount",
-            "in": "query",
-            "description": "Allow users ask discount for your accounts.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "User Allow Ask Discount",
-              "type": "boolean",
-              "description": "Allow users ask discount for your accounts."
-            }
-          },
-          {
-            "name": "max_discount_percent",
-            "in": "query",
-            "description": "Maximum discount percents for your accounts.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Max Discount Percent",
-              "type": "integer",
-              "description": "Maximum discount percents for your accounts."
-            }
-          },
-          {
-            "name": "disable_steam_guard",
-            "in": "query",
-            "description": "Disable Steam Guard on account purchase moment.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Disable Steam Guard",
-              "type": "boolean",
-              "description": "Disable Steam Guard on account purchase moment."
-            }
-          },
-          {
-            "name": "deauthorize_steam",
-            "in": "query",
-            "description": "Finish all Steam sessions after purchase.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Deathorize Steam",
-              "type": "boolean",
-              "description": "Finish all Steam sessions after purchase."
-            }
-          },
-          {
-            "name": "change_password_on_purchase",
-            "in": "query",
-            "description": "Change Steam password after purchase.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Change Password On Purchase",
-              "type": "boolean",
-              "description": "Change Steam password after purchase."
-            }
-          },
-          {
-            "name": "hide_favourites",
-            "in": "query",
-            "description": "Hide your profile info when you add an account to favorites.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Hide Favourites",
-              "type": "boolean",
-              "description": "Hide your profile info when you add an account to favorites."
-            }
-          },
-          {
-            "name": "show_too_low_price_change_warning",
-            "in": "query",
-            "description": "Show a warning when you reduce the price of an account too much.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Show Price Change Warnings",
-              "type": "boolean",
-              "description": "Show a warning when you reduce the price of an account too much."
-            }
-          },
-          {
-            "name": "allow_accept_accounts",
-            "in": "query",
-            "description": "Usernames who can transfer market accounts to you. Separate values with a comma.",
-            "required": false,
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "title": "Allow Accept Accounts",
-              "type": "array",
-              "description": "Usernames who can transfer market accounts to you. Separate values with a comma.",
-              "items": {
-                "type": "string"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "$ref": "#/components/schemas/CurrencyModel",
+                    "description": "Account currency."
+                  },
+                  "user_allow_ask_discount": {
+                    "title": "User Allow Ask Discount",
+                    "type": "boolean",
+                    "description": "Allow users ask discount for your accounts."
+                  },
+                  "max_discount_percent": {
+                    "title": "Max Discount Percent",
+                    "type": "integer",
+                    "description": "Maximum discount percents for your accounts."
+                  },
+                  "disable_steam_guard": {
+                    "title": "Disable Steam Guard",
+                    "type": "boolean",
+                    "description": "Disable Steam Guard on account purchase moment."
+                  },
+                  "deauthorize_steam": {
+                    "title": "Deathorize Steam",
+                    "type": "boolean",
+                    "description": "Finish all Steam sessions after purchase."
+                  },
+                  "change_password_on_purchase": {
+                    "title": "Change Password On Purchase",
+                    "type": "boolean",
+                    "description": "Change Steam password after purchase."
+                  },
+                  "hide_favourites": {
+                    "title": "Hide Favourites",
+                    "type": "boolean",
+                    "description": "Hide your profile info when you add an account to favorites."
+                  },
+                  "show_too_low_price_change_warning": {
+                    "title": "Show Price Change Warnings",
+                    "type": "boolean",
+                    "description": "Show a warning when you reduce the price of an account too much."
+                  },
+                  "allow_accept_accounts": {
+                    "title": "Allow Accept Accounts",
+                    "type": "array",
+                    "description": "Usernames who can transfer market accounts to you. Separate values with a comma.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "market_custom_title": {
+                    "title": "Market Custom Title",
+                    "type": "string",
+                    "description": "Market title."
+                  },
+                  "telegram_api_id": {
+                    "title": "Telegram api id.",
+                    "type": "string",
+                    "description": "Telegram api id."
+                  },
+                  "telegram_api_hash": {
+                    "title": "Telegram api hash.",
+                    "type": "string",
+                    "description": "Telegram api hash."
+                  },
+                  "telegram_device_model": {
+                    "title": "Telegram device model.",
+                    "type": "string",
+                    "description": "Telegram device model."
+                  },
+                  "telegram_system_version": {
+                    "title": "Telegram system version.",
+                    "type": "string",
+                    "description": "Telegram system version."
+                  },
+                  "telegram_app_version": {
+                    "title": "Telegram app version.",
+                    "type": "string",
+                    "description": "Telegram app version."
+                  },
+                  "telegram_lang_pack": {
+                    "title": "Telegram lang pack.",
+                    "type": "string",
+                    "description": "Telegram lang pack."
+                  },
+                  "telegram_lang_code": {
+                    "title": "Telegram lang code.",
+                    "type": "string",
+                    "description": "Telegram lang code."
+                  },
+                  "telegram_system_lang_code": {
+                    "title": "Telegram system lang code.",
+                    "type": "string",
+                    "description": "Telegram system lang code."
+                  }
+                }
               }
             }
-          },
-          {
-            "name": "market_custom_title",
-            "in": "query",
-            "description": "Market title.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Market Custom Title",
-              "type": "string",
-              "description": "Market title."
-            }
-          },
-          {
-            "name": "telegram_api_id",
-            "in": "query",
-            "description": "Telegram api id.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram api id.",
-              "type": "string",
-              "description": "Telegram api id."
-            }
-          },
-          {
-            "name": "telegram_api_hash",
-            "in": "query",
-            "description": "Telegram api hash.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram api hash.",
-              "type": "string",
-              "description": "Telegram api hash."
-            }
-          },
-          {
-            "name": "telegram_device_model",
-            "in": "query",
-            "description": "Telegram device model.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram device model.",
-              "type": "string",
-              "description": "Telegram device model."
-            }
-          },
-          {
-            "name": "telegram_system_version",
-            "in": "query",
-            "description": "Telegram system version.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram system version.",
-              "type": "string",
-              "description": "Telegram system version."
-            }
-          },
-          {
-            "name": "telegram_app_version",
-            "in": "query",
-            "description": "Telegram app version.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram app version.",
-              "type": "string",
-              "description": "Telegram app version."
-            }
-          },
-          {
-            "name": "telegram_lang_pack",
-            "in": "query",
-            "description": "Telegram lang pack.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram lang pack.",
-              "type": "string",
-              "description": "Telegram lang pack."
-            }
-          },
-          {
-            "name": "telegram_lang_code",
-            "in": "query",
-            "description": "Telegram lang code.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram lang code.",
-              "type": "string",
-              "description": "Telegram lang code."
-            }
-          },
-          {
-            "name": "telegram_system_lang_code",
-            "in": "query",
-            "description": "Telegram system lang code.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram system lang code.",
-              "type": "string",
-              "description": "Telegram system lang code."
-            }
           }
-        ],
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/SaveChanges"
@@ -52564,7 +52154,7 @@
         "tags": [
           "Invoices"
         ],
-        "summary": "Get invoice",
+        "summary": "Get Invoice",
         "description": "Get invoice.\n\nRequired scopes:\n+ **invoice**",
         "operationId": "Payments.Invoice.Get",
         "parameters": [
@@ -52604,98 +52194,8 @@
                     "system_info"
                   ],
                   "properties": {
-                    "data": {
-                      "title": "Data",
-                      "type": "object",
-                      "properties": {
-                        "invoice_id": {
-                          "title": "Invoice",
-                          "type": "integer"
-                        },
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "merchant_id": {
-                          "title": "Merchant",
-                          "type": "integer"
-                        },
-                        "invoice_date": {
-                          "title": "Invoice",
-                          "type": "integer"
-                        },
-                        "expires_at": {
-                          "title": "Expires",
-                          "type": "integer"
-                        },
-                        "amount": {
-                          "title": "Amount",
-                          "type": "integer"
-                        },
-                        "currency": {
-                          "title": "Currency",
-                          "type": "string"
-                        },
-                        "status": {
-                          "title": "Status",
-                          "type": "string"
-                        },
-                        "paid_date": {
-                          "title": "Paid",
-                          "type": "integer"
-                        },
-                        "payer_user_id": {
-                          "title": "Payer",
-                          "type": "integer"
-                        },
-                        "payment_id": {
-                          "title": "Payment",
-                          "type": "string"
-                        },
-                        "additional_data": {
-                          "title": "Additional",
-                          "type": "string"
-                        },
-                        "comment": {
-                          "title": "Comment",
-                          "type": "string"
-                        },
-                        "url_success": {
-                          "title": "Url",
-                          "type": "string"
-                        },
-                        "url_callback": {
-                          "title": "Url",
-                          "type": "string"
-                        },
-                        "resend_attempts": {
-                          "title": "Resend",
-                          "type": "integer"
-                        },
-                        "url": {
-                          "title": "Url",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "invoice_id",
-                        "user_id",
-                        "merchant_id",
-                        "invoice_date",
-                        "expires_at",
-                        "amount",
-                        "currency",
-                        "status",
-                        "paid_date",
-                        "payer_user_id",
-                        "payment_id",
-                        "additional_data",
-                        "comment",
-                        "url_success",
-                        "url_callback",
-                        "resend_attempts",
-                        "url"
-                      ]
+                    "invoice": {
+                      "$ref": "#/components/schemas/InvoiceModel"
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -52748,143 +52248,82 @@
         "tags": [
           "Invoices"
         ],
-        "summary": "Create invoice",
+        "summary": "Create Invoice",
         "description": "Create invoice.\n\nRequired scopes:\n+ **invoice**",
         "operationId": "Payments.Invoice.Create",
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "query",
-            "description": "Currency that will be used to create the invoice.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/CurrencyModel"
-            }
-          },
-          {
-            "name": "amount",
-            "in": "query",
-            "description": "Invoice amount.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Amount",
-              "type": "number",
-              "description": "Invoice amount.",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "payment_id",
-            "in": "query",
-            "description": "Payment ID in your system (must be unique within the merchant / invoices).",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Amount",
-              "type": "string",
-              "description": "Payment ID in your system (must be unique within the merchant / invoices)."
-            }
-          },
-          {
-            "name": "comment",
-            "in": "query",
-            "description": "Comment to the invoice.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Comment",
-              "type": "string",
-              "description": "Comment to the invoice."
-            }
-          },
-          {
-            "name": "url_success",
-            "in": "query",
-            "description": "URL to redirect to after successful payment.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "URL Success",
-              "type": "string",
-              "description": "URL to redirect to after successful payment."
-            }
-          },
-          {
-            "name": "url_callback",
-            "in": "query",
-            "description": "Callback url.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Callback URL",
-              "type": "string",
-              "description": "Callback url."
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "query",
-            "description": "Merchant ID.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Merchant ID",
-              "type": "integer",
-              "description": "Merchant ID."
-            }
-          },
-          {
-            "name": "lifetime",
-            "in": "query",
-            "description": "Invoice lifetime.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Lifetime",
-              "type": "number",
-              "description": "Invoice lifetime.",
-              "minimum": 300,
-              "maximum": 43200,
-              "default": 3600
-            }
-          },
-          {
-            "name": "additional_data",
-            "in": "query",
-            "description": "Additional information for you.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Additional Data",
-              "type": "string",
-              "description": "Additional information for you."
-            }
-          },
-          {
-            "name": "is_test",
-            "in": "query",
-            "description": "Create a test invoice.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Is Test",
-              "type": "boolean",
-              "description": "Create a test invoice."
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "currency",
+                  "amount",
+                  "payment_id",
+                  "comment",
+                  "url_success",
+                  "merchant_id"
+                ],
+                "properties": {
+                  "currency": {
+                    "$ref": "#/components/schemas/CurrencyModel",
+                    "description": "Currency that will be used to create the invoice."
+                  },
+                  "amount": {
+                    "title": "Amount",
+                    "type": "number",
+                    "description": "Invoice amount.",
+                    "minimum": 0
+                  },
+                  "payment_id": {
+                    "title": "Payment ID",
+                    "type": "string",
+                    "description": "Payment ID in your system (must be unique within the merchant / invoices)."
+                  },
+                  "comment": {
+                    "title": "Comment",
+                    "type": "string",
+                    "description": "Comment to the invoice."
+                  },
+                  "url_success": {
+                    "title": "URL Success",
+                    "type": "string",
+                    "description": "URL to redirect to after successful payment.",
+                    "example": "https://lolz.live/"
+                  },
+                  "url_callback": {
+                    "title": "Callback URL",
+                    "type": "string",
+                    "description": "Callback url."
+                  },
+                  "merchant_id": {
+                    "title": "Merchant ID",
+                    "type": "integer",
+                    "description": "Merchant ID."
+                  },
+                  "lifetime": {
+                    "title": "Lifetime",
+                    "type": "number",
+                    "description": "Invoice lifetime.",
+                    "minimum": 300,
+                    "maximum": 43200,
+                    "default": 3600
+                  },
+                  "additional_data": {
+                    "title": "Additional Data",
+                    "type": "string",
+                    "description": "Additional information for you."
+                  },
+                  "is_test": {
+                    "title": "Is Test",
+                    "type": "boolean",
+                    "description": "Create a test invoice."
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -52898,97 +52337,7 @@
                   ],
                   "properties": {
                     "invoice": {
-                      "title": "Invoice",
-                      "type": "object",
-                      "properties": {
-                        "amount": {
-                          "title": "Amount",
-                          "type": "number"
-                        },
-                        "payment_id": {
-                          "title": "Payment",
-                          "type": "string"
-                        },
-                        "merchant_id": {
-                          "title": "Merchant",
-                          "type": "integer"
-                        },
-                        "comment": {
-                          "title": "Comment",
-                          "type": "string"
-                        },
-                        "additional_data": {
-                          "title": "Additional",
-                          "type": "string"
-                        },
-                        "url_success": {
-                          "title": "Url",
-                          "type": "string"
-                        },
-                        "url_callback": {
-                          "title": "Url",
-                          "type": "string"
-                        },
-                        "is_test": {
-                          "title": "Is",
-                          "type": "integer"
-                        },
-                        "expires_at": {
-                          "title": "Expires",
-                          "type": "integer"
-                        },
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "invoice_date": {
-                          "title": "Invoice",
-                          "type": "integer"
-                        },
-                        "status": {
-                          "title": "Status",
-                          "type": "string"
-                        },
-                        "paid_date": {
-                          "title": "Paid",
-                          "type": "integer"
-                        },
-                        "payer_user_id": {
-                          "title": "Payer",
-                          "type": "integer"
-                        },
-                        "resend_attempts": {
-                          "title": "Resend",
-                          "type": "integer"
-                        },
-                        "invoice_id": {
-                          "title": "Invoice",
-                          "type": "integer"
-                        },
-                        "url": {
-                          "title": "Url",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "amount",
-                        "payment_id",
-                        "merchant_id",
-                        "comment",
-                        "additional_data",
-                        "url_success",
-                        "url_callback",
-                        "is_test",
-                        "expires_at",
-                        "user_id",
-                        "invoice_date",
-                        "status",
-                        "paid_date",
-                        "payer_user_id",
-                        "resend_attempts",
-                        "invoice_id",
-                        "url"
-                      ]
+                      "$ref": "#/components/schemas/InvoiceModel"
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -53017,7 +52366,7 @@
         "tags": [
           "Invoices"
         ],
-        "summary": "Get invoice list",
+        "summary": "Get Invoice List",
         "description": "Get invoice list.\n\nRequired scopes:\n+ **invoice**",
         "operationId": "Payments.Invoice.List",
         "parameters": [
@@ -53097,96 +52446,7 @@
                       "title": "Invoices",
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "invoice_id": {
-                            "title": "Invoice",
-                            "type": "integer"
-                          },
-                          "user_id": {
-                            "title": "User",
-                            "type": "integer"
-                          },
-                          "merchant_id": {
-                            "title": "Merchant",
-                            "type": "integer"
-                          },
-                          "invoice_date": {
-                            "title": "Invoice",
-                            "type": "integer"
-                          },
-                          "expires_at": {
-                            "title": "Expires",
-                            "type": "integer"
-                          },
-                          "amount": {
-                            "title": "Amount",
-                            "type": "integer"
-                          },
-                          "currency": {
-                            "title": "Currency",
-                            "type": "string"
-                          },
-                          "status": {
-                            "title": "Status",
-                            "type": "string"
-                          },
-                          "paid_date": {
-                            "title": "Paid",
-                            "type": "integer"
-                          },
-                          "payer_user_id": {
-                            "title": "Payer",
-                            "type": "integer"
-                          },
-                          "payment_id": {
-                            "title": "Payment",
-                            "type": "string"
-                          },
-                          "additional_data": {
-                            "title": "Additional",
-                            "type": "string"
-                          },
-                          "comment": {
-                            "title": "Comment",
-                            "type": "string"
-                          },
-                          "url_success": {
-                            "title": "Url",
-                            "type": "string"
-                          },
-                          "url_callback": {
-                            "title": "Url",
-                            "type": "string"
-                          },
-                          "resend_attempts": {
-                            "title": "Resend",
-                            "type": "integer"
-                          },
-                          "url": {
-                            "title": "Url",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "invoice_id",
-                          "user_id",
-                          "merchant_id",
-                          "invoice_date",
-                          "expires_at",
-                          "amount",
-                          "currency",
-                          "status",
-                          "paid_date",
-                          "payer_user_id",
-                          "payment_id",
-                          "additional_data",
-                          "comment",
-                          "url_success",
-                          "url_callback",
-                          "resend_attempts",
-                          "url"
-                        ]
+                        "$ref": "#/components/schemas/InvoiceModel"
                       }
                     },
                     "count": {
@@ -55030,146 +54290,80 @@
         "summary": "Transfer Money",
         "description": "Transfer money to any user.\n\nRequired scopes:\n+ **payment**",
         "operationId": "Payments.Transfer",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "query",
-            "description": "User id of receiver. If **user_id** specified, **username** is not required.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "User Id",
-              "type": "integer",
-              "description": "User id of receiver. If **user_id** specified, **username** is not required."
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "Username of receiver. If **username** specified, **user_id** is not required.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Username",
-              "type": "string",
-              "description": "Username of receiver. If **username** specified, **user_id** is not required."
-            }
-          },
-          {
-            "name": "amount",
-            "in": "query",
-            "description": "Amount to send in your currency.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Amount",
-              "type": "integer",
-              "description": "Amount to send in your currency.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "currency",
-            "in": "query",
-            "description": "Using currency for amount.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "$ref": "#/components/schemas/CurrencyModel"
-            }
-          },
-          {
-            "name": "comment",
-            "in": "query",
-            "description": "Transfer comment.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Comment",
-              "maxLength": 255,
-              "type": "string",
-              "description": "Transfer comment."
-            }
-          },
-          {
-            "name": "telegram_deal",
-            "in": "query",
-            "description": "Is the deal happening on Telegram? ",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram Deal",
-              "type": "boolean",
-              "description": "Is the deal happening on Telegram? "
-            }
-          },
-          {
-            "name": "telegram_username",
-            "in": "query",
-            "description": "Telegram username of the user you are dialoguing with.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Telegram Username",
-              "type": "string",
-              "description": "Telegram username of the user you are dialoguing with."
-            }
-          },
-          {
-            "name": "transfer_hold",
-            "in": "query",
-            "description": "Hold transfer or not.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Transfer Hold",
-              "type": "boolean",
-              "description": "Hold transfer or not."
-            }
-          },
-          {
-            "name": "hold_length_value",
-            "in": "query",
-            "description": "Hold length value.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Hold Length Value",
-              "type": "integer",
-              "description": "Hold length value.",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "hold_length_option",
-            "in": "query",
-            "description": "Hold length option.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Hold Length Option",
-              "type": "string",
-              "description": "Hold length option.",
-              "enum": [
-                "hour",
-                "day",
-                "week",
-                "month",
-                "year"
-              ]
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "amount",
+                  "currency"
+                ],
+                "properties": {
+                  "user_id": {
+                    "title": "User Id",
+                    "type": "integer",
+                    "description": "User id of receiver. If **user_id** specified, **username** is not required."
+                  },
+                  "username": {
+                    "title": "Username",
+                    "type": "string",
+                    "description": "Username of receiver. If **username** specified, **user_id** is not required."
+                  },
+                  "amount": {
+                    "title": "Amount",
+                    "type": "integer",
+                    "description": "Amount to send in your currency.",
+                    "minimum": 1
+                  },
+                  "currency": {
+                    "$ref": "#/components/schemas/CurrencyModel",
+                    "description": "Using currency for amount."
+                  },
+                  "comment": {
+                    "title": "Comment",
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Transfer comment."
+                  },
+                  "telegram_deal": {
+                    "title": "Telegram Deal",
+                    "type": "boolean",
+                    "description": "Is the deal happening on Telegram? "
+                  },
+                  "telegram_username": {
+                    "title": "Telegram Username",
+                    "type": "string",
+                    "description": "Telegram username of the user you are dialoguing with."
+                  },
+                  "transfer_hold": {
+                    "title": "Transfer Hold",
+                    "type": "boolean",
+                    "description": "Hold transfer or not."
+                  },
+                  "hold_length_value": {
+                    "title": "Hold Length Value",
+                    "type": "integer",
+                    "description": "Hold length value.",
+                    "minimum": 1
+                  },
+                  "hold_length_option": {
+                    "title": "Hold Length Option",
+                    "type": "string",
+                    "description": "Hold length option.",
+                    "enum": [
+                      "hour",
+                      "day",
+                      "week",
+                      "month",
+                      "year"
+                    ]
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/Status"
@@ -55331,21 +54525,23 @@
         "summary": "Cancel Transfer",
         "description": "Cancels a transfer with a hold that was sent to your account.\n\nRequired scopes:\n+ **payment**",
         "operationId": "Payments.Cancel",
-        "parameters": [
-          {
-            "name": "payment_id",
-            "in": "query",
-            "description": "Payment id.",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Amount",
-              "type": "integer",
-              "description": "Payment id."
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payment_id": {
+                    "title": "Amount",
+                    "type": "integer",
+                    "description": "Payment id."
+                  }
+                },
+                "required": ["payment_id"]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/Status"
@@ -56408,101 +55604,55 @@
         "summary": "Create Auto Payment",
         "description": "Creates auto payment.\n\nRequired scopes:\n+ **payment**",
         "operationId": "AutoPayments.Create",
-        "parameters": [
-          {
-            "name": "secret_answer",
-            "in": "query",
-            "description": "Secret answer.",
-            "required": false,
-            "schema": {
-              "title": "Secret Answer",
-              "type": "string"
-            }
-          },
-          {
-            "name": "username_receiver",
-            "in": "query",
-            "description": "Username of the payment receiver.",
-            "required": true,
-            "schema": {
-              "title": "Username Receiver",
-              "type": "string"
-            }
-          },
-          {
-            "name": "day",
-            "in": "query",
-            "description": "Day of the month for the payment.",
-            "required": true,
-            "schema": {
-              "title": "Day",
-              "type": "integer",
-              "enum": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                27,
-                28
-              ]
-            }
-          },
-          {
-            "name": "amount",
-            "in": "query",
-            "description": "Amount to be transferred.",
-            "required": true,
-            "schema": {
-              "title": "Amount",
-              "type": "number"
-            }
-          },
-          {
-            "name": "currency",
-            "in": "query",
-            "description": "Currency for the payment.",
-            "required": false,
-            "schema": {
-              "title": "Currency",
-              "type": "string",
-              "$ref": "#/components/schemas/CurrencyModel"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Payment description.",
-            "required": false,
-            "schema": {
-              "title": "Description",
-              "type": "string",
-              "maxLength": 255
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "secret_answer": {
+                    "title": "Secret Answer",
+                    "type": "string",
+                    "description": "Secret answer."
+                  },
+                  "username_receiver": {
+                    "title": "Username Receiver",
+                    "type": "string",
+                    "description": "Username of the payment receiver."
+                  },
+                  "day": {
+                    "title": "Day",
+                    "type": "integer",
+                    "description": "Day of the month for the payment. (Use \"0\" for the last day of the month)",
+                    "enum": [
+                      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
+                    ]
+                  },
+                  "amount": {
+                    "title": "Amount",
+                    "type": "number",
+                    "description": "Amount to be transferred."
+                  },
+                  "currency": {
+                    "$ref": "#/components/schemas/CurrencyModel",
+                    "description": "Currency for the payment."
+                  },
+                  "description": {
+                    "title": "Description",
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Payment description."
+                  }
+                },
+                "required": [
+                  "username_receiver",
+                  "day",
+                  "amount"
+                ]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -56585,18 +55735,23 @@
         "summary": "Delete Auto Payment",
         "description": "Deletes an auto payment.\n\nRequired scopes:\n+ **payment**",
         "operationId": "AutoPayments.Delete",
-        "parameters": [
-          {
-            "name": "auto_payment_id",
-            "in": "query",
-            "description": "Auto payment ID.",
-            "required": true,
-            "schema": {
-              "title": "Auto Payment Id",
-              "type": "integer"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "auto_payment_id": {
+                    "title": "Auto Payment Id",
+                    "type": "integer",
+                    "description": "Auto payment ID."
+                  }
+                },
+                "required": ["auto_payment_id"]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/Status"
@@ -57184,73 +56339,43 @@
         "summary": "Add Proxy",
         "description": "Add single proxy or proxy list.\n\n\nTo add single proxy use this parameters:\n\n\n+ **proxy_ip** (required) - proxy ip or host\n+ **proxy_port** (required) - proxy port\n+ **proxy_user** (optional) - proxy username\n+ **proxy_pass** (optional) - proxy password\n\nTo add proxy list use this parameters:\n\n\n+ **proxy_row** (required) - proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\n separator)",
         "operationId": "Proxy.Add",
-        "parameters": [
-          {
-            "name": "proxy_ip",
-            "in": "query",
-            "description": "Proxy ip or host. Required if **proxy_row** is not specified.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Ip",
-              "type": "string",
-              "description": "Proxy ip or host. Required if **proxy_row** is not specified."
-            }
-          },
-          {
-            "name": "proxy_port",
-            "in": "query",
-            "description": "Proxy port. Required if **proxy_row** is not specified.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Port",
-              "type": "integer",
-              "description": "Proxy port. Required if **proxy_row** is not specified."
-            }
-          },
-          {
-            "name": "proxy_user",
-            "in": "query",
-            "description": "Proxy username. Required if **proxy_row** is not specified.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy User",
-              "type": "string",
-              "description": "Proxy username. Required if **proxy_row** is not specified."
-            }
-          },
-          {
-            "name": "proxy_pass",
-            "in": "query",
-            "description": "Proxy password. Required if **proxy_row** is not specified.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Pass",
-              "type": "string",
-              "description": "Proxy password. Required if **proxy_row** is not specified."
-            }
-          },
-          {
-            "name": "proxy_row",
-            "in": "query",
-            "description": "Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\n separator)",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Row",
-              "type": "string",
-              "description": "Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\r\\n separator)"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "proxy_ip": {
+                    "title": "Proxy Ip",
+                    "type": "string",
+                    "description": "Proxy ip or host. Required if **proxy_row** is not specified."
+                  },
+                  "proxy_port": {
+                    "title": "Proxy Port",
+                    "type": "integer",
+                    "description": "Proxy port. Required if **proxy_row** is not specified."
+                  },
+                  "proxy_user": {
+                    "title": "Proxy User",
+                    "type": "string",
+                    "description": "Proxy username. Required if **proxy_row** is not specified."
+                  },
+                  "proxy_pass": {
+                    "title": "Proxy Pass",
+                    "type": "string",
+                    "description": "Proxy password. Required if **proxy_row** is not specified."
+                  },
+                  "proxy_row": {
+                    "title": "Proxy Row",
+                    "type": "string",
+                    "description": "Proxy list in String format ip:port:user:pass. Each proxy must be start with new line (use \\r\\n separator)"
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/SaveChanges"
@@ -57297,34 +56422,29 @@
         "summary": "Delete Proxy",
         "description": "Delete single or all proxies.",
         "operationId": "Proxy.Delete",
-        "parameters": [
-          {
-            "name": "proxy_id",
-            "in": "query",
-            "description": "Id of an existing proxy.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Proxy Id",
-              "type": "integer",
-              "description": "Id of an existing proxy."
-            }
-          },
-          {
-            "name": "delete_all",
-            "in": "query",
-            "description": "True. If you want to delete all proxy.",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "title": "Delete All",
-              "type": "boolean",
-              "description": "True. If you want to delete all proxy."
+        "requestBody": {
+          "description": "Parameters for deleting a proxy or all proxies.",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "proxy_id": {
+                    "title": "Proxy Id",
+                    "type": "integer",
+                    "description": "Id of an existing proxy."
+                  },
+                  "delete_all": {
+                    "title": "Delete All",
+                    "type": "boolean",
+                    "description": "Delete all proxies."
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/SaveChanges"
@@ -57529,7 +56649,7 @@
   },
   "components": {
     "schemas": {
-      "PublishingExtra": {
+      "ExtraModel": {
         "type": "object",
         "title": "Extra",
         "properties": {
@@ -57691,8 +56811,8 @@
           }
         }
       },
-      "ConfCodeModel": {
-        "title": "ConfCodeModel",
+      "ConfirmationCodeModel": {
+        "title": "ConfirmationCodeModel",
         "required": [
           "codeData",
           "item"
@@ -58970,6 +58090,103 @@
           "descriptionEnPlain",
           "seller"
         ]
+      },
+      "ItemIDModel": {
+        "title": "Item ID",
+        "type": "integer",
+        "description": "Item id."
+      },
+      "InvoiceModel": {
+        "type": "object",
+        "required": [
+          "additional_data",
+          "amount",
+          "comment",
+          "expires_at",
+          "invoice_date",
+          "invoice_id",
+          "is_test",
+          "merchant_id",
+          "paid_date",
+          "payer_user_id",
+          "payment_id",
+          "resend_attempts",
+          "status",
+          "url",
+          "url_callback",
+          "url_success",
+          "user_id"
+        ],
+        "properties": {
+          "additional_data": {
+            "title": "Additional",
+            "type": "string"
+          },
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "comment": {
+            "title": "Comment",
+            "type": "string"
+          },
+          "expires_at": {
+            "title": "Expires",
+            "type": "integer"
+          },
+          "invoice_date": {
+            "title": "Invoice",
+            "type": "integer"
+          },
+          "invoice_id": {
+            "title": "Invoice",
+            "type": "integer"
+          },
+          "is_test": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "merchant_id": {
+            "title": "Merchant",
+            "type": "integer"
+          },
+          "paid_date": {
+            "title": "Paid",
+            "type": "integer"
+          },
+          "payer_user_id": {
+            "title": "Payer",
+            "type": "integer"
+          },
+          "payment_id": {
+            "title": "Payment",
+            "type": "string"
+          },
+          "resend_attempts": {
+            "title": "Resend",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          },
+          "url_callback": {
+            "title": "Url",
+            "type": "string"
+          },
+          "url_success": {
+            "title": "Url",
+            "type": "string"
+          },
+          "user_id": {
+            "title": "User",
+            "type": "integer"
+          }
+        }
       },
       "SystemInfo": {
         "required": [
@@ -60497,7 +59714,7 @@
                   "title": "Message",
                   "type": "string"
                 },
-                "item":{
+                "item": {
                   "$ref": "#/components/schemas/ItemModel"
                 },
                 "system_info": {
