@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.71"
+    "version": "1.1.72"
   },
   "servers": [
     {
@@ -49330,7 +49330,7 @@
                 "type": "object",
                 "properties": {
                   "item_id": {
-                     "$ref": "#/components/schemas/ItemIDModel"
+                    "$ref": "#/components/schemas/ItemIDModel"
                   }
                 },
                 "description": "Item id.\nIgnore set this parameter to delete all items from your cart."
@@ -49615,7 +49615,12 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required":["price", "category_id", "currency", "item_origin"],
+                "required": [
+                  "price",
+                  "category_id",
+                  "currency",
+                  "item_origin"
+                ],
                 "properties": {
                   "title": {
                     "description": "Title of account. If **title** specified and **title_en** is empty, **title_en** will be automatically translated to English language.",
@@ -49928,7 +49933,29 @@
                       "31": "Roblox"
                     },
                     "enum": [
-                      1, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 28, 30, 31
+                      1,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      15,
+                      16,
+                      17,
+                      18,
+                      19,
+                      20,
+                      22,
+                      24,
+                      28,
+                      30,
+                      31
                     ]
                   },
                   "currency": {
@@ -49969,7 +49996,9 @@
                       "1": "3 days"
                     },
                     "enum": [
-                      -1, 0, 1
+                      -1,
+                      0,
+                      1
                     ]
                   },
                   "description": {
@@ -50929,7 +50958,9 @@
                     "title": "Cancel",
                     "type": "integer",
                     "description": "Cancel change password recommendation. It will be helpful, if you don't want to change password and get login data.",
-                    "enum": [1]
+                    "enum": [
+                      1
+                    ]
                   }
                 }
               }
@@ -51073,7 +51104,9 @@
                     "description": "Tag ID."
                   }
                 },
-                "required": ["tag_id"]
+                "required": [
+                  "tag_id"
+                ]
               }
             }
           }
@@ -51144,7 +51177,9 @@
                     "description": "Tag ID."
                   }
                 },
-                "required": ["tag_id"]
+                "required": [
+                  "tag_id"
+                ]
               }
             }
           }
@@ -51362,7 +51397,10 @@
                     "description": "Secret answer of your account."
                   }
                 },
-                "required": ["username", "secret_answer"]
+                "required": [
+                  "username",
+                  "secret_answer"
+                ]
               }
             }
           }
@@ -51411,595 +51449,7 @@
                   ],
                   "properties": {
                     "user": {
-                      "title": "User",
-                      "type": "object",
-                      "properties": {
-                        "active_items_count": {
-                          "title": "Active",
-                          "type": "integer"
-                        },
-                        "activity_visible": {
-                          "title": "Activity",
-                          "type": "boolean"
-                        },
-                        "age": {
-                          "title": "Age",
-                          "type": "integer"
-                        },
-                        "balance": {
-                          "title": "Balance",
-                          "type": "string"
-                        },
-                        "bump_item_period": {
-                          "title": "Bump",
-                          "type": "integer"
-                        },
-                        "can_edit": {
-                          "title": "Can",
-                          "type": "boolean"
-                        },
-                        "can_follow": {
-                          "title": "Can",
-                          "type": "boolean"
-                        },
-                        "can_ignore": {
-                          "title": "Can",
-                          "type": "boolean"
-                        },
-                        "can_post_profile": {
-                          "title": "Can",
-                          "type": "boolean"
-                        },
-                        "can_view_profile": {
-                          "title": "Can",
-                          "type": "boolean"
-                        },
-                        "can_view_profile_posts": {
-                          "title": "Can",
-                          "type": "boolean"
-                        },
-                        "can_warn": {
-                          "title": "Can",
-                          "type": "boolean"
-                        },
-                        "contest_count": {
-                          "title": "Contest",
-                          "type": "integer"
-                        },
-                        "conv_welcome_message": {
-                          "title": "Conv",
-                          "type": "string"
-                        },
-                        "convertedBalance": {
-                          "title": "Converted Balance",
-                          "type": "integer"
-                        },
-                        "convertedDeposit": {
-                          "title": "Converted Deposit",
-                          "type": "integer"
-                        },
-                        "convertedHold": {
-                          "title": "Converted Hold",
-                          "type": "integer"
-                        },
-                        "currency": {
-                          "title": "Currency",
-                          "type": "string"
-                        },
-                        "currencyPhrase": {
-                          "title": "Currency Phrase",
-                          "type": "string"
-                        },
-                        "custom_account_download_format": {
-                          "title": "Custom",
-                          "type": "string"
-                        },
-                        "custom_fields": {
-                          "title": "Custom",
-                          "type": "object",
-                          "properties": {
-                            "_4": {
-                              "title": "",
-                              "type": "string"
-                            },
-                            "allowSelfUnban": {
-                              "title": "Allow Self Unban",
-                              "type": "array",
-                              "items": {}
-                            },
-                            "ban_reason": {
-                              "title": "Ban",
-                              "type": "string"
-                            },
-                            "discord": {
-                              "title": "Discord",
-                              "type": "string"
-                            },
-                            "github": {
-                              "title": "Github",
-                              "type": "string"
-                            },
-                            "jabber": {
-                              "title": "Jabber",
-                              "type": "string"
-                            },
-                            "lztAwardUserTrophy": {
-                              "title": "Lzt Award User Trophy",
-                              "type": "string"
-                            },
-                            "lztLikesIncreasing": {
-                              "title": "Lzt Likes Increasing",
-                              "type": "string"
-                            },
-                            "lztLikesZeroing": {
-                              "title": "Lzt Likes Zeroing",
-                              "type": "string"
-                            },
-                            "lztSympathyIncreasing": {
-                              "title": "Lzt Sympathy Increasing",
-                              "type": "string"
-                            },
-                            "lztSympathyZeroing": {
-                              "title": "Lzt Sympathy Zeroing",
-                              "type": "string"
-                            },
-                            "lztUnbanAmount": {
-                              "title": "Lzt Unban Amount",
-                              "type": "string"
-                            },
-                            "maecenasValue": {
-                              "title": "Maecenas Value",
-                              "type": "string"
-                            },
-                            "scamURL": {
-                              "title": "Scam Url",
-                              "type": "string"
-                            },
-                            "steam": {
-                              "title": "Steam",
-                              "type": "string"
-                            },
-                            "telegram": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "vk": {
-                              "title": "Vk",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "_4",
-                            "allowSelfUnban",
-                            "ban_reason",
-                            "discord",
-                            "github",
-                            "jabber",
-                            "lztAwardUserTrophy",
-                            "lztLikesIncreasing",
-                            "lztLikesZeroing",
-                            "lztSympathyIncreasing",
-                            "lztSympathyZeroing",
-                            "lztUnbanAmount",
-                            "maecenasValue",
-                            "scamURL",
-                            "steam",
-                            "telegram",
-                            "vk"
-                          ]
-                        },
-                        "custom_title": {
-                          "title": "Custom",
-                          "type": "string"
-                        },
-                        "deposit": {
-                          "title": "Deposit",
-                          "type": "integer"
-                        },
-                        "dob": {
-                          "title": "Dob",
-                          "type": "object",
-                          "properties": {
-                            "year": {
-                              "title": "Year",
-                              "type": "integer"
-                            },
-                            "month": {
-                              "title": "Month",
-                              "type": "integer"
-                            },
-                            "day": {
-                              "title": "Day",
-                              "type": "integer"
-                            }
-                          },
-                          "required": [
-                            "year",
-                            "month",
-                            "day"
-                          ]
-                        },
-                        "feedback_data": {
-                          "title": "Feedback",
-                          "type": "object",
-                          "properties": {
-                            "12345": {
-                              "title": "",
-                              "type": "object",
-                              "properties": {
-                                "positive": {
-                                  "title": "Positive",
-                                  "type": "integer"
-                                },
-                                "negative": {
-                                  "title": "Negative",
-                                  "type": "integer"
-                                }
-                              },
-                              "required": [
-                                "positive",
-                                "negative"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "12345"
-                          ]
-                        },
-                        "hold": {
-                          "title": "Hold",
-                          "type": "string"
-                        },
-                        "homepage": {
-                          "title": "Homepage",
-                          "type": "string"
-                        },
-                        "imap_data": {
-                          "title": "Imap",
-                          "type": "object",
-                          "properties": {
-                            "domain.zone": {
-                              "type": "object",
-                              "properties": {
-                                "domain": {
-                                  "title": "Domain",
-                                  "type": "string"
-                                },
-                                "imap_server": {
-                                  "title": "Imap",
-                                  "type": "string"
-                                },
-                                "port": {
-                                  "title": "Port",
-                                  "type": "integer"
-                                },
-                                "secure": {
-                                  "title": "Secure",
-                                  "type": "boolean"
-                                }
-                              },
-                              "required": [
-                                "domain",
-                                "imap_server",
-                                "port",
-                                "secure"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "domain.zone"
-                          ]
-                        },
-                        "is_admin": {
-                          "title": "Is",
-                          "type": "boolean"
-                        },
-                        "is_banned": {
-                          "title": "Is",
-                          "type": "boolean"
-                        },
-                        "is_followed": {
-                          "title": "Is",
-                          "type": "boolean"
-                        },
-                        "is_ignored": {
-                          "title": "Is",
-                          "type": "boolean"
-                        },
-                        "is_moderator": {
-                          "title": "Is",
-                          "type": "boolean"
-                        },
-                        "is_staff": {
-                          "title": "Is",
-                          "type": "boolean"
-                        },
-                        "is_super_admin": {
-                          "title": "Is",
-                          "type": "boolean"
-                        },
-                        "joined_date": {
-                          "title": "Joined",
-                          "type": "integer"
-                        },
-                        "last_activity": {
-                          "title": "Last",
-                          "type": "integer"
-                        },
-                        "like_count": {
-                          "title": "Like",
-                          "type": "integer"
-                        },
-                        "location": {
-                          "title": "Location",
-                          "type": "string"
-                        },
-                        "market_custom_title": {
-                          "title": "Market",
-                          "type": "string"
-                        },
-                        "max_discount_percent": {
-                          "title": "Max",
-                          "type": "integer"
-                        },
-                        "message_count": {
-                          "title": "Message",
-                          "type": "integer"
-                        },
-                        "paid_mail_left": {
-                          "title": "Paid",
-                          "type": "integer"
-                        },
-                        "register_date": {
-                          "title": "Register",
-                          "type": "integer"
-                        },
-                        "rendered": {
-                          "title": "Rendered",
-                          "type": "object",
-                          "properties": {
-                            "username": {
-                              "title": "Username",
-                              "type": "string"
-                            },
-                            "avatars": {
-                              "title": "Avatars",
-                              "type": "object",
-                              "properties": {
-                                "l": {
-                                  "title": "L",
-                                  "type": "string"
-                                },
-                                "m": {
-                                  "title": "M",
-                                  "type": "string"
-                                },
-                                "s": {
-                                  "title": "S",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "l",
-                                "m",
-                                "s"
-                              ]
-                            },
-                            "link": {
-                              "title": "Link",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "username",
-                            "avatars",
-                            "link"
-                          ]
-                        },
-                        "restore_count": {
-                          "title": "Restore",
-                          "type": "integer"
-                        },
-                        "restore_data": {
-                          "title": "Restore",
-                          "type": "object",
-                          "properties": {
-                            "12345": {
-                              "title": "",
-                              "type": "integer"
-                            }
-                          },
-                          "required": [
-                            "12345"
-                          ]
-                        },
-                        "short_link": {
-                          "title": "Short",
-                          "type": "string"
-                        },
-                        "sold_items_count": {
-                          "title": "Sold",
-                          "type": "integer"
-                        },
-                        "tags": {
-                          "title": "Tags",
-                          "type": "object",
-                          "properties": {
-                            "12345": {
-                              "title": "",
-                              "type": "object",
-                              "properties": {
-                                "title": {
-                                  "title": "Title",
-                                  "type": "string"
-                                },
-                                "bc": {
-                                  "title": "Bc",
-                                  "type": "string"
-                                },
-                                "tag_id": {
-                                  "title": "Tag",
-                                  "type": "integer"
-                                },
-                                "forOwnedAccountsOnly": {
-                                  "title": "For Owned Accounts Only",
-                                  "type": "boolean"
-                                }
-                              },
-                              "required": [
-                                "title",
-                                "bc",
-                                "tag_id",
-                                "forOwnedAccountsOnly"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "12345"
-                          ]
-                        },
-                        "telegram_client": {
-                          "title": "Telegram",
-                          "type": "object",
-                          "properties": {
-                            "telegram_api_id": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "telegram_api_hash": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "telegram_device_model": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "telegram_system_version": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "telegram_app_version": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "telegram_system_lang_code": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "telegram_lang_code": {
-                              "title": "Telegram",
-                              "type": "string"
-                            },
-                            "telegram_lang_pack": {
-                              "title": "Telegram",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "telegram_api_id",
-                            "telegram_api_hash",
-                            "telegram_device_model",
-                            "telegram_system_version",
-                            "telegram_app_version",
-                            "telegram_system_lang_code",
-                            "telegram_lang_code",
-                            "telegram_lang_pack"
-                          ]
-                        },
-                        "trophy_points": {
-                          "title": "Trophy",
-                          "type": "integer"
-                        },
-                        "user_allow_ask_discount": {
-                          "title": "User",
-                          "type": "boolean"
-                        },
-                        "user_id": {
-                          "title": "User",
-                          "type": "integer"
-                        },
-                        "user_title": {
-                          "title": "User",
-                          "type": "string"
-                        },
-                        "username": {
-                          "title": "Username",
-                          "type": "string"
-                        },
-                        "view_url": {
-                          "title": "View",
-                          "type": "string"
-                        },
-                        "visible": {
-                          "title": "Visible",
-                          "type": "boolean"
-                        },
-                        "warning_points": {
-                          "title": "Warning",
-                          "type": "integer"
-                        }
-                      },
-                      "required": [
-                        "active_items_count",
-                        "activity_visible",
-                        "age",
-                        "balance",
-                        "bump_item_period",
-                        "can_edit",
-                        "can_follow",
-                        "can_ignore",
-                        "can_post_profile",
-                        "can_view_profile",
-                        "can_view_profile_posts",
-                        "can_warn",
-                        "contest_count",
-                        "conv_welcome_message",
-                        "convertedBalance",
-                        "convertedDeposit",
-                        "convertedHold",
-                        "currency",
-                        "currencyPhrase",
-                        "custom_account_download_format",
-                        "custom_fields",
-                        "custom_title",
-                        "deposit",
-                        "dob",
-                        "feedback_data",
-                        "hold",
-                        "homepage",
-                        "imap_data",
-                        "is_admin",
-                        "is_banned",
-                        "is_followed",
-                        "is_ignored",
-                        "is_moderator",
-                        "is_staff",
-                        "is_super_admin",
-                        "joined_date",
-                        "last_activity",
-                        "like_count",
-                        "location",
-                        "market_custom_title",
-                        "max_discount_percent",
-                        "message_count",
-                        "paid_mail_left",
-                        "register_date",
-                        "rendered",
-                        "restore_count",
-                        "restore_data",
-                        "short_link",
-                        "sold_items_count",
-                        "tags",
-                        "telegram_client",
-                        "trophy_points",
-                        "user_allow_ask_discount",
-                        "user_id",
-                        "user_title",
-                        "username",
-                        "view_url",
-                        "visible",
-                        "warning_points"
-                      ]
+                      "$ref": "#/components/schemas/UserModel"
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -52029,50 +51479,64 @@
         "description": "Change settings about your profile on the market.",
         "operationId": "Profile.Edit",
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "currency": {
-                    "$ref": "#/components/schemas/CurrencyModel",
-                    "description": "Account currency."
+                  "user": {
+                    "type": "object",
+                    "properties": {
+                      "currency": {
+                        "$ref": "#/components/schemas/CurrencyModel",
+                        "description": "Account currency."
+                      },
+                      "user_allow_ask_discount": {
+                        "title": "User Allow Ask Discount",
+                        "type": "boolean",
+                        "description": "Allow users ask discount for your accounts."
+                      },
+                      "max_discount_percent": {
+                        "title": "Max Discount Percent",
+                        "type": "integer",
+                        "description": "Maximum discount percents for your accounts."
+                      },
+                      "market_custom_title": {
+                        "title": "Market Custom Title",
+                        "type": "string",
+                        "description": "Market title."
+                      }
+                    }
                   },
-                  "user_allow_ask_discount": {
-                    "title": "User Allow Ask Discount",
-                    "type": "boolean",
-                    "description": "Allow users ask discount for your accounts."
-                  },
-                  "max_discount_percent": {
-                    "title": "Max Discount Percent",
-                    "type": "integer",
-                    "description": "Maximum discount percents for your accounts."
-                  },
-                  "disable_steam_guard": {
-                    "title": "Disable Steam Guard",
-                    "type": "boolean",
-                    "description": "Disable Steam Guard on account purchase moment."
-                  },
-                  "deauthorize_steam": {
-                    "title": "Deathorize Steam",
-                    "type": "boolean",
-                    "description": "Finish all Steam sessions after purchase."
-                  },
-                  "change_password_on_purchase": {
-                    "title": "Change Password On Purchase",
-                    "type": "boolean",
-                    "description": "Change Steam password after purchase."
-                  },
-                  "hide_favourites": {
-                    "title": "Hide Favourites",
-                    "type": "boolean",
-                    "description": "Hide your profile info when you add an account to favorites."
-                  },
-                  "show_too_low_price_change_warning": {
-                    "title": "Show Price Change Warnings",
-                    "type": "boolean",
-                    "description": "Show a warning when you reduce the price of an account too much."
+                  "option": {
+                    "type": "object",
+                    "properties": {
+                      "disable_steam_guard": {
+                        "title": "Disable Steam Guard",
+                        "type": "boolean",
+                        "description": "Disable Steam Guard on account purchase moment."
+                      },
+                      "deauthorize_steam": {
+                        "title": "Deathorize Steam",
+                        "type": "boolean",
+                        "description": "Finish all Steam sessions after purchase."
+                      },
+                      "change_password_on_purchase": {
+                        "title": "Change Password On Purchase",
+                        "type": "boolean",
+                        "description": "Change Steam password after purchase."
+                      },
+                      "hide_favourites": {
+                        "title": "Hide Favourites",
+                        "type": "boolean",
+                        "description": "Hide your profile info when you add an account to favorites."
+                      },
+                      "show_too_low_price_change_warning": {
+                        "title": "Show Price Change Warnings",
+                        "type": "boolean",
+                        "description": "Show a warning when you reduce the price of an account too much."
+                      }
+                    }
                   },
                   "allow_accept_accounts": {
                     "title": "Allow Accept Accounts",
@@ -52081,11 +51545,6 @@
                     "items": {
                       "type": "string"
                     }
-                  },
-                  "market_custom_title": {
-                    "title": "Market Custom Title",
-                    "type": "string",
-                    "description": "Market title."
                   },
                   "telegram_api_id": {
                     "title": "Telegram api id.",
@@ -52126,6 +51585,11 @@
                     "title": "Telegram system lang code.",
                     "type": "string",
                     "description": "Telegram system lang code."
+                  },
+                  "clear_telegram_client": {
+                    "title": "Clear Telegram Client",
+                    "type": "boolean",
+                    "description": "Clear Telegram data."
                   }
                 }
               }
@@ -52190,7 +51654,7 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "data",
+                    "invoice",
                     "system_info"
                   ],
                   "properties": {
@@ -54282,6 +53746,89 @@
         ]
       }
     },
+    "/balance/exchange": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Get List Of Balances",
+        "description": "Returns list of balances.",
+        "operationId": "Payments.Balance.List",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/BalanceExchange"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "payment"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Exchange Balance",
+        "description": "Transfer funds from one balance to another.",
+        "operationId": "Payments.BalanceExchange",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from_balance": {
+                    "title": "From Balance",
+                    "type": "string",
+                    "description": "Source balance type"
+                  },
+                  "to_balance": {
+                    "title": "To Balance",
+                    "type": "string",
+                    "description": "Target balance type",
+                    "example": "balance"
+                  },
+                  "amount": {
+                    "title": "Amount",
+                    "type": "integer",
+                    "description": "Amount to exchange"
+                  }
+                },
+                "required": [
+                  "from_balance",
+                  "to_balance",
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/BalanceExchange"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "payment"
+            ]
+          }
+        ]
+      }
+    },
     "/balance/transfer": {
       "post": {
         "tags": [
@@ -54537,7 +54084,9 @@
                     "description": "Payment id."
                   }
                 },
-                "required": ["payment_id"]
+                "required": [
+                  "payment_id"
+                ]
               }
             }
           }
@@ -55625,7 +55174,35 @@
                     "type": "integer",
                     "description": "Day of the month for the payment. (Use \"0\" for the last day of the month)",
                     "enum": [
-                      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      15,
+                      16,
+                      17,
+                      18,
+                      19,
+                      20,
+                      21,
+                      22,
+                      23,
+                      24,
+                      25,
+                      26,
+                      27,
+                      28
                     ]
                   },
                   "amount": {
@@ -55747,7 +55324,9 @@
                     "description": "Auto payment ID."
                   }
                 },
-                "required": ["auto_payment_id"]
+                "required": [
+                  "auto_payment_id"
+                ]
               }
             }
           }
@@ -56649,6 +56228,694 @@
   },
   "components": {
     "schemas": {
+      "UserModel": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "active_items_count": {
+            "title": "Active",
+            "type": "integer"
+          },
+          "activity_visible": {
+            "title": "Activity",
+            "type": "boolean"
+          },
+          "age": {
+            "title": "Age",
+            "type": "integer"
+          },
+          "balance": {
+            "title": "Balance",
+            "type": "string"
+          },
+          "balances": {
+            "title": "Balances",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "balance": {
+                  "title": "Balance",
+                  "type": "string"
+                },
+                "balance_id": {
+                  "title": "Balance",
+                  "type": "integer"
+                },
+                "custom_title": {
+                  "title": "Custom"
+                },
+                "fullTitle": {
+                  "title": "Full Title",
+                  "type": "string"
+                },
+                "merchant_id": {
+                  "title": "Merchant",
+                  "type": "integer"
+                },
+                "title": {
+                  "title": "Title",
+                  "type": "string"
+                },
+                "type": {
+                  "title": "Type",
+                  "type": "string"
+                },
+                "user_id": {
+                  "title": "User",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "balance",
+                "balance_id",
+                "custom_title",
+                "fullTitle",
+                "merchant_id",
+                "title",
+                "type",
+                "user_id"
+              ]
+            }
+          },
+          "bump_item_period": {
+            "title": "Bump",
+            "type": "integer"
+          },
+          "can_edit": {
+            "title": "Can",
+            "type": "boolean"
+          },
+          "can_follow": {
+            "title": "Can",
+            "type": "boolean"
+          },
+          "can_ignore": {
+            "title": "Can",
+            "type": "boolean"
+          },
+          "can_post_profile": {
+            "title": "Can",
+            "type": "boolean"
+          },
+          "can_view_profile": {
+            "title": "Can",
+            "type": "boolean"
+          },
+          "can_view_profile_posts": {
+            "title": "Can",
+            "type": "boolean"
+          },
+          "can_warn": {
+            "title": "Can",
+            "type": "boolean"
+          },
+          "contest_count": {
+            "title": "Contest",
+            "type": "integer"
+          },
+          "conv_welcome_message": {
+            "title": "Conv",
+            "type": "string"
+          },
+          "convertedBalance": {
+            "title": "Converted Balance",
+            "type": "integer"
+          },
+          "convertedDeposit": {
+            "title": "Converted Deposit",
+            "type": "integer"
+          },
+          "convertedHold": {
+            "title": "Converted Hold",
+            "type": "integer"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "currencyPhrase": {
+            "title": "Currency Phrase",
+            "type": "string"
+          },
+          "custom_account_download_format": {
+            "title": "Custom",
+            "type": "string"
+          },
+          "custom_fields": {
+            "title": "Custom",
+            "type": "object",
+            "properties": {
+              "_4": {
+                "title": "",
+                "type": "string"
+              },
+              "allowSelfUnban": {
+                "title": "Allow Self Unban",
+                "type": "array",
+                "items": {}
+              },
+              "ban_reason": {
+                "title": "Ban",
+                "type": "string"
+              },
+              "discord": {
+                "title": "Discord",
+                "type": "string"
+              },
+              "github": {
+                "title": "Github",
+                "type": "string"
+              },
+              "jabber": {
+                "title": "Jabber",
+                "type": "string"
+              },
+              "lztAwardUserTrophy": {
+                "title": "Lzt Award User Trophy",
+                "type": "string"
+              },
+              "lztLikesIncreasing": {
+                "title": "Lzt Likes Increasing",
+                "type": "string"
+              },
+              "lztLikesZeroing": {
+                "title": "Lzt Likes Zeroing",
+                "type": "string"
+              },
+              "lztSympathyIncreasing": {
+                "title": "Lzt Sympathy Increasing",
+                "type": "string"
+              },
+              "lztSympathyZeroing": {
+                "title": "Lzt Sympathy Zeroing",
+                "type": "string"
+              },
+              "lztUnbanAmount": {
+                "title": "Lzt Unban Amount",
+                "type": "string"
+              },
+              "maecenasValue": {
+                "title": "Maecenas Value",
+                "type": "string"
+              },
+              "scamURL": {
+                "title": "Scam Url",
+                "type": "string"
+              },
+              "steam": {
+                "title": "Steam",
+                "type": "string"
+              },
+              "telegram": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "vk": {
+                "title": "Vk",
+                "type": "string"
+              }
+            },
+            "required": [
+              "_4",
+              "allowSelfUnban",
+              "ban_reason",
+              "discord",
+              "github",
+              "jabber",
+              "lztAwardUserTrophy",
+              "lztLikesIncreasing",
+              "lztLikesZeroing",
+              "lztSympathyIncreasing",
+              "lztSympathyZeroing",
+              "lztUnbanAmount",
+              "maecenasValue",
+              "scamURL",
+              "steam",
+              "telegram",
+              "vk"
+            ]
+          },
+          "custom_title": {
+            "title": "Custom",
+            "type": "string"
+          },
+          "deposit": {
+            "title": "Deposit",
+            "type": "integer"
+          },
+          "dob": {
+            "title": "Dob",
+            "type": "object",
+            "properties": {
+              "year": {
+                "title": "Year",
+                "type": "integer"
+              },
+              "month": {
+                "title": "Month",
+                "type": "integer"
+              },
+              "day": {
+                "title": "Day",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "year",
+              "month",
+              "day"
+            ]
+          },
+          "feedback_data": {
+            "title": "Feedback",
+            "type": "object",
+            "properties": {
+              "12345": {
+                "title": "",
+                "type": "object",
+                "properties": {
+                  "positive": {
+                    "title": "Positive",
+                    "type": "integer"
+                  },
+                  "negative": {
+                    "title": "Negative",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "positive",
+                  "negative"
+                ]
+              }
+            },
+            "required": [
+              "12345"
+            ]
+          },
+          "hold": {
+            "title": "Hold",
+            "type": "string"
+          },
+          "homepage": {
+            "title": "Homepage",
+            "type": "string"
+          },
+          "imap_data": {
+            "title": "Imap",
+            "type": "object",
+            "properties": {
+              "domain.zone": {
+                "type": "object",
+                "properties": {
+                  "domain": {
+                    "title": "Domain",
+                    "type": "string"
+                  },
+                  "imap_server": {
+                    "title": "Imap",
+                    "type": "string"
+                  },
+                  "port": {
+                    "title": "Port",
+                    "type": "integer"
+                  },
+                  "secure": {
+                    "title": "Secure",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "domain",
+                  "imap_server",
+                  "port",
+                  "secure"
+                ]
+              }
+            },
+            "required": [
+              "domain.zone"
+            ]
+          },
+          "is_admin": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "is_banned": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "is_followed": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "is_ignored": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "is_moderator": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "is_staff": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "is_super_admin": {
+            "title": "Is",
+            "type": "boolean"
+          },
+          "joined_date": {
+            "title": "Joined",
+            "type": "integer"
+          },
+          "last_activity": {
+            "title": "Last",
+            "type": "integer"
+          },
+          "like_count": {
+            "title": "Like",
+            "type": "integer"
+          },
+          "location": {
+            "title": "Location",
+            "type": "string"
+          },
+          "market_custom_title": {
+            "title": "Market",
+            "type": "string"
+          },
+          "max_discount_percent": {
+            "title": "Max",
+            "type": "integer"
+          },
+          "message_count": {
+            "title": "Message",
+            "type": "integer"
+          },
+          "paid_mail_left": {
+            "title": "Paid",
+            "type": "integer"
+          },
+          "register_date": {
+            "title": "Register",
+            "type": "integer"
+          },
+          "rendered": {
+            "title": "Rendered",
+            "type": "object",
+            "properties": {
+              "username": {
+                "title": "Username",
+                "type": "string"
+              },
+              "avatars": {
+                "title": "Avatars",
+                "type": "object",
+                "properties": {
+                  "l": {
+                    "title": "L",
+                    "type": "string"
+                  },
+                  "m": {
+                    "title": "M",
+                    "type": "string"
+                  },
+                  "s": {
+                    "title": "S",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "l",
+                  "m",
+                  "s"
+                ]
+              },
+              "link": {
+                "title": "Link",
+                "type": "string"
+              }
+            },
+            "required": [
+              "username",
+              "avatars",
+              "link"
+            ]
+          },
+          "restore_count": {
+            "title": "Restore",
+            "type": "integer"
+          },
+          "restore_data": {
+            "title": "Restore",
+            "type": "object",
+            "properties": {
+              "12345": {
+                "title": "",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "12345"
+            ]
+          },
+          "short_link": {
+            "title": "Short",
+            "type": "string"
+          },
+          "sold_items_count": {
+            "title": "Sold",
+            "type": "integer"
+          },
+          "tags": {
+            "title": "Tags",
+            "type": "object",
+            "properties": {
+              "12345": {
+                "title": "",
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "title": "Title",
+                    "type": "string"
+                  },
+                  "bc": {
+                    "title": "Bc",
+                    "type": "string"
+                  },
+                  "tag_id": {
+                    "title": "Tag",
+                    "type": "integer"
+                  },
+                  "forOwnedAccountsOnly": {
+                    "title": "For Owned Accounts Only",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "title",
+                  "bc",
+                  "tag_id",
+                  "forOwnedAccountsOnly"
+                ]
+              }
+            },
+            "required": [
+              "12345"
+            ]
+          },
+          "telegram_client": {
+            "title": "Telegram",
+            "type": "object",
+            "properties": {
+              "telegram_api_id": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "telegram_api_hash": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "telegram_device_model": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "telegram_system_version": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "telegram_app_version": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "telegram_system_lang_code": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "telegram_lang_code": {
+                "title": "Telegram",
+                "type": "string"
+              },
+              "telegram_lang_pack": {
+                "title": "Telegram",
+                "type": "string"
+              }
+            },
+            "required": [
+              "telegram_api_id",
+              "telegram_api_hash",
+              "telegram_device_model",
+              "telegram_system_version",
+              "telegram_app_version",
+              "telegram_system_lang_code",
+              "telegram_lang_code",
+              "telegram_lang_pack"
+            ]
+          },
+          "trophy_points": {
+            "title": "Trophy",
+            "type": "integer"
+          },
+          "user_allow_ask_discount": {
+            "title": "User",
+            "type": "boolean"
+          },
+          "user_id": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_title": {
+            "title": "User",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "view_url": {
+            "title": "View",
+            "type": "string"
+          },
+          "visible": {
+            "title": "Visible",
+            "type": "boolean"
+          },
+          "warning_points": {
+            "title": "Warning",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "active_items_count",
+          "activity_visible",
+          "age",
+          "balance",
+          "balances",
+          "bump_item_period",
+          "can_edit",
+          "can_follow",
+          "can_ignore",
+          "can_post_profile",
+          "can_view_profile",
+          "can_view_profile_posts",
+          "can_warn",
+          "contest_count",
+          "conv_welcome_message",
+          "convertedBalance",
+          "convertedDeposit",
+          "convertedHold",
+          "currency",
+          "currencyPhrase",
+          "custom_account_download_format",
+          "custom_fields",
+          "custom_title",
+          "deposit",
+          "dob",
+          "feedback_data",
+          "hold",
+          "homepage",
+          "imap_data",
+          "is_admin",
+          "is_banned",
+          "is_followed",
+          "is_ignored",
+          "is_moderator",
+          "is_staff",
+          "is_super_admin",
+          "joined_date",
+          "last_activity",
+          "like_count",
+          "location",
+          "market_custom_title",
+          "max_discount_percent",
+          "message_count",
+          "paid_mail_left",
+          "register_date",
+          "rendered",
+          "restore_count",
+          "restore_data",
+          "short_link",
+          "sold_items_count",
+          "tags",
+          "telegram_client",
+          "trophy_points",
+          "user_allow_ask_discount",
+          "user_id",
+          "user_title",
+          "username",
+          "view_url",
+          "visible",
+          "warning_points"
+        ]
+      },
+      "BalanceModel": {
+        "type": "object",
+        "required": [
+          "balance",
+          "balance_id",
+          "custom_title",
+          "fullTitle",
+          "merchant_id",
+          "title",
+          "type",
+          "user_id"
+        ],
+        "properties": {
+          "balance": {
+            "title": "Balance",
+            "type": "string"
+          },
+          "balance_id": {
+            "title": "Balance",
+            "type": "integer"
+          },
+          "custom_title": {
+            "title": "Custom"
+          },
+          "fullTitle": {
+            "title": "Full Title",
+            "type": "string"
+          },
+          "merchant_id": {
+            "title": "Merchant",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "user_id": {
+            "title": "User",
+            "type": "integer"
+          }
+        }
+      },
       "ExtraModel": {
         "type": "object",
         "title": "Extra",
@@ -58206,6 +58473,54 @@
       }
     },
     "responses": {
+      "BalanceExchange": {
+        "description": "Successful Response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "from",
+                "to",
+                "system_info"
+              ],
+              "properties": {
+                "from": {
+                  "title": "From",
+                  "type": "object",
+                  "properties": {
+                    "balance": {
+                      "$ref": "#/components/schemas/UserModel"
+                    },
+                    "12345": {
+                      "$ref": "#/components/schemas/BalanceModel"
+                    }
+                  },
+                  "required": [
+                    "balance",
+                    "12345"
+                  ]
+                },
+                "to": {
+                  "title": "To",
+                  "type": "object",
+                  "properties": {
+                    "balance": {
+                      "$ref": "#/components/schemas/UserModel"
+                    }
+                  },
+                  "required": [
+                    "balance"
+                  ]
+                },
+                "system_info": {
+                  "$ref": "#/components/schemas/SystemInfo"
+                }
+              }
+            }
+          }
+        }
+      },
       "CheckAccount": {
         "description": "Successful Response.",
         "content": {
