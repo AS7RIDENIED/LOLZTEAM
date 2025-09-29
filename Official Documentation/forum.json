@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io) ## [Telegram chat](https://t.me/lztmarket_api) ## Free API Client packages * [Node.js](https://github.com/NztForum/node-lzt) * [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) ## Rate limit 300 requests per minute (0.2 second delay between requests). If you exceed the limit, the response code 429 will be returned to you. ## Token configuration You can pass the token as a query parameter or in the request headers * Query parameter: **oauth_token=_token_** * Header: **Authorization**: \"**Bearer _token_**\" ## Discoverability System information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection. ## Status codes | Code | Name | Description | | ---- | --------------------- | ------------------------------------------------------------------------------------------------------- | | 200 | OK | The request was successfully completed. | | 400 | Bad Request | The request is invalid due to client error. | | 401 | Unauthorized | [Authentication is required.](/reference/information#/token-configuration) | | 403 | Forbidden | You do not have permission to view this page or perform this action. | | 429 | Too Many Requests | [Too many requests in a short period.](/reference/information#/rate-limit) | | 500 | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). | | 502 | Bad Gateway | The gateway encountered an error while processing the request, try again later. | | 503 | Service Unavailable | The server is temporarily unavailable, try again later. | | 504 | Gateway Timeout | The gateway timed out waiting for a response, try again later. | ## Common Parameters ### i18n All API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401. ### Fields filtering For API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones. * **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (*****) to include all default fields before specifying additional ones. * **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"*.key\") to exclude the field everywhere. ### Resource ordering For API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example). ### Encryption For sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions: * **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself. ### Headers * **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bbcode html with **tools/chr** link. Since forum-2018100301. * **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101. ### Content-Type API always returns the response as application/json (With few exceptions). You should send requests to API with application/json or application/x-www-form-urlencoded content type. You can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/refs/heads/main/Official%20Documentation/forum.json) file.",
-    "version": "1.1.23"
+    "version": "1.1.23a"
   },
   "servers": [
     {
@@ -9941,10 +9941,10 @@
             "explode": true,
             "schema": {
               "title": "Gender",
-              "nullable": true,
               "type": "string",
               "description": "User gender.",
               "enum": [
+                "",
                 "male",
                 "female"
               ]
@@ -16947,6 +16947,47 @@
         "summary": "Get Notifications",
         "description": "List of notifications (both read and unread).\n\nRequired scopes:\n+ **read**",
         "operationId": "Notifications.List",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter notifications by their type.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "market",
+                "nomarket"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of notifications.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Page",
+              "type": "integer",
+              "description": "Page number of notifications."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of notifications in a page.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Limit",
+              "type": "integer",
+              "description": "Number of notifications in a page."
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response.",
@@ -16958,80 +16999,7 @@
                       "title": "Notifications",
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "notification_id": {
-                            "title": "Notification",
-                            "type": "integer"
-                          },
-                          "notification_create_date": {
-                            "title": "Notification",
-                            "type": "integer"
-                          },
-                          "content_type": {
-                            "title": "Content",
-                            "type": "string"
-                          },
-                          "content_id": {
-                            "title": "Content",
-                            "type": "integer"
-                          },
-                          "content_action": {
-                            "title": "Content",
-                            "type": "string"
-                          },
-                          "notification_is_unread": {
-                            "title": "Notification",
-                            "type": "boolean"
-                          },
-                          "creator_user_id": {
-                            "title": "Creator",
-                            "type": "integer"
-                          },
-                          "creator_username": {
-                            "title": "Creator",
-                            "type": "string"
-                          },
-                          "notification_type": {
-                            "title": "Notification",
-                            "type": "string"
-                          },
-                          "links": {
-                            "title": "Links",
-                            "type": "object",
-                            "properties": {
-                              "content": {
-                                "title": "Content",
-                                "type": "string"
-                              },
-                              "creator_avatar": {
-                                "title": "Creator",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "content",
-                              "creator_avatar"
-                            ]
-                          },
-                          "notification_html": {
-                            "title": "Notification",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "notification_id",
-                          "notification_create_date",
-                          "content_type",
-                          "content_id",
-                          "content_action",
-                          "notification_is_unread",
-                          "creator_user_id",
-                          "creator_username",
-                          "notification_type",
-                          "links",
-                          "notification_html"
-                        ]
+                        "$ref": "#/components/schemas/NotificationModel"
                       }
                     },
                     "notifications_total": {
@@ -17131,76 +17099,7 @@
                       "type": "integer"
                     },
                     "notification": {
-                      "title": "Notification",
-                      "type": "object",
-                      "properties": {
-                        "notification_id": {
-                          "title": "Notification",
-                          "type": "integer"
-                        },
-                        "notification_create_date": {
-                          "title": "Notification",
-                          "type": "integer"
-                        },
-                        "content_type": {
-                          "title": "Content",
-                          "type": "string"
-                        },
-                        "content_id": {
-                          "title": "Content",
-                          "type": "integer"
-                        },
-                        "content_action": {
-                          "title": "Content",
-                          "type": "string"
-                        },
-                        "notification_is_unread": {
-                          "title": "Notification",
-                          "type": "boolean"
-                        },
-                        "creator_user_id": {
-                          "title": "Creator",
-                          "type": "integer"
-                        },
-                        "creator_username": {
-                          "title": "Creator",
-                          "type": "string"
-                        },
-                        "notification_type": {
-                          "title": "Notification",
-                          "type": "string"
-                        },
-                        "links": {
-                          "title": "Links",
-                          "type": "object",
-                          "properties": {
-                            "content": {
-                              "title": "Content",
-                              "type": "string"
-                            },
-                            "creator_avatar": {
-                              "title": "Creator",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "content",
-                            "creator_avatar"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "notification_id",
-                        "notification_create_date",
-                        "content_type",
-                        "content_id",
-                        "content_action",
-                        "notification_is_unread",
-                        "creator_user_id",
-                        "creator_username",
-                        "notification_type",
-                        "links"
-                      ]
+                      "$ref": "#/components/schemas/NotificationModel"
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/SystemInfo"
@@ -25017,6 +24916,87 @@
       }
     },
     "schemas": {
+      "NotificationModel":{
+        "type": "object",
+        "required": [
+          "notification_id",
+          "notification_create_date",
+          "content_type",
+          "content_id",
+          "content_action",
+          "notification_is_unread",
+          "creator_user_id",
+          "creator_username",
+          "creator_username_html",
+          "notification_type",
+          "links",
+          "notification_html"
+        ],
+        "properties": {
+          "notification_id": {
+            "title": "Notification",
+            "type": "integer"
+          },
+          "notification_create_date": {
+            "title": "Notification",
+            "type": "integer"
+          },
+          "content_type": {
+            "title": "Content",
+            "type": "string"
+          },
+          "content_id": {
+            "title": "Content",
+            "type": "integer"
+          },
+          "content_action": {
+            "title": "Content",
+            "type": "string"
+          },
+          "notification_is_unread": {
+            "title": "Notification",
+            "type": "boolean"
+          },
+          "creator_user_id": {
+            "title": "Creator",
+            "type": "integer"
+          },
+          "creator_username": {
+            "title": "Creator",
+            "type": "string"
+          },
+          "creator_username_html": {
+            "title": "Creator",
+            "type": "string"
+          },
+          "notification_type": {
+            "title": "Notification",
+            "type": "string"
+          },
+          "links": {
+            "title": "Links",
+            "type": "object",
+            "properties": {
+              "content": {
+                "title": "Content",
+                "type": "string"
+              },
+              "creator_avatar": {
+                "title": "Creator",
+                "type": "string"
+              }
+            },
+            "required": [
+              "content",
+              "creator_avatar"
+            ]
+          },
+          "notification_html": {
+            "title": "Notification",
+            "type": "string"
+          }
+        }
+      },
       "LinkModel":{
         "type": "object",
         "required": [
