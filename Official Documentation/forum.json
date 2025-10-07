@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io) ## [Telegram chat](https://t.me/lztmarket_api) ## Free API Client packages * [Node.js](https://github.com/NztForum/node-lzt) * [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) ## Rate limit 300 requests per minute (0.2 second delay between requests). If you exceed the limit, the response code 429 will be returned to you. ## Token configuration You can pass the token as a query parameter or in the request headers * Query parameter: **oauth_token=_token_** * Header: **Authorization**: \"**Bearer _token_**\" ## Discoverability System information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection. ## Status codes | Code | Name | Description | | ---- | --------------------- | ------------------------------------------------------------------------------------------------------- | | 200 | OK | The request was successfully completed. | | 400 | Bad Request | The request is invalid due to client error. | | 401 | Unauthorized | [Authentication is required.](/reference/information#/token-configuration) | | 403 | Forbidden | You do not have permission to view this page or perform this action. | | 429 | Too Many Requests | [Too many requests in a short period.](/reference/information#/rate-limit) | | 500 | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). | | 502 | Bad Gateway | The gateway encountered an error while processing the request, try again later. | | 503 | Service Unavailable | The server is temporarily unavailable, try again later. | | 504 | Gateway Timeout | The gateway timed out waiting for a response, try again later. | ## Common Parameters ### i18n All API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401. ### Fields filtering For API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones. * **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (*****) to include all default fields before specifying additional ones. * **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"*.key\") to exclude the field everywhere. ### Resource ordering For API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example). ### Encryption For sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions: * **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself. ### Headers * **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bbcode html with **tools/chr** link. Since forum-2018100301. * **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101. ### Content-Type API always returns the response as application/json (With few exceptions). You should send requests to API with application/json or application/x-www-form-urlencoded content type. You can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/refs/heads/main/Official%20Documentation/forum.json) file.",
-    "version": "1.1.23b"
+    "version": "1.1.24"
   },
   "servers": [
     {
@@ -2864,7 +2864,7 @@
             }
           },
           {
-            "name": "thread_prefix_id",
+            "name": "prefix_ids[]",
             "in": "query",
             "description": "Filter to get only threads with the specified prefix.",
             "required": false,
@@ -2872,8 +2872,29 @@
             "explode": true,
             "schema": {
               "title": "Thread Prefix Id",
-              "type": "integer",
-              "description": "Filter to get only threads with the specified prefix."
+              "type": "array",
+              "description": "Filter to get only threads with the specified prefix.",
+              "items": {
+                "type": "integer",
+                "description": "Filter to get only threads with the specified prefix."
+              }
+            }
+          },
+          {
+            "name": "prefix_ids_not[]",
+            "in": "query",
+            "description": "Filter to get only threads without the specified prefix.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "title": "Thread Prefix Id",
+              "type": "array",
+              "description": "Filter to get only threads without the specified prefix.",
+              "items": {
+                "type": "integer",
+                "description": "Filter to get only threads without the specified prefix."
+              }
             }
           },
           {
@@ -13447,7 +13468,6 @@
           "content": {
             "application/json": {
               "schema": {
-                "title": "Body_edit_profile_post_profile_posts__profilepost_id__put",
                 "required": [
                   "post_body"
                 ],
@@ -13457,6 +13477,11 @@
                     "title": "Post Body",
                     "type": "string",
                     "description": "New content of the profile post."
+                  },
+                  "disable_comments": {
+                    "title": "Disable Comments",
+                    "type": "boolean",
+                    "description": "Disable comments."
                   }
                 }
               }
@@ -14068,6 +14093,96 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      }
+    },
+    "/profile-posts/{profile_post_id}/stick": {
+      "post": {
+        "tags": [
+          "Profile Posts"
+        ],
+        "summary": "Stick Profile Post",
+        "description": "Stick a profile post.\n\nRequired scopes:\n+ **post**",
+        "operationId": "ProfilePosts.Stick",
+        "parameters": [
+          {
+            "name": "profile_post_id",
+            "in": "path",
+            "description": "Id of profile post.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Profile Post Id",
+              "type": "integer",
+              "description": "Id of profile post."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "post"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Profile Posts"
+        ],
+        "summary": "Unstick Profile Post",
+        "description": "Unstick a profile post.\n\nRequired scopes:\n+ **post**",
+        "operationId": "ProfilePosts.Unstick",
+        "parameters": [
+          {
+            "name": "profile_post_id",
+            "in": "path",
+            "description": "Id of profile post.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "title": "Profilepost_id",
+              "type": "integer",
+              "description": "Id of profile post."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -25727,6 +25842,7 @@
           "links",
           "permissions",
           "node_title",
+          "restrictions",
           "last_post",
           "contest"
         ],
@@ -25993,28 +26109,30 @@
           "thread_prefixes": {
             "title": "Thread",
             "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "prefix_id": {
-                  "title": "Prefix",
-                  "type": "integer"
-                },
-                "prefix_title": {
-                  "title": "Prefix",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "prefix_id",
-                "prefix_title"
-              ]
-            }
+            "items": {}
           },
           "thread_tags": {
             "title": "Thread",
-            "type": "array",
-            "items": {}
+            "type": "object",
+            "properties": {
+              "97491": {
+                "title": "",
+                "type": "string"
+              },
+              "193431": {
+                "title": "",
+                "type": "string"
+              },
+              "206": {
+                "title": "",
+                "type": "string"
+              }
+            },
+            "required": [
+              "97491",
+              "193431",
+              "206"
+            ]
           },
           "links": {
             "title": "Links",
@@ -26052,10 +26170,6 @@
                 "title": "First",
                 "type": "string"
               },
-              "last_poster": {
-                "title": "Last",
-                "type": "string"
-              },
               "last_post": {
                 "title": "Last",
                 "type": "string"
@@ -26070,7 +26184,6 @@
               "first_poster",
               "first_poster_avatar",
               "first_post",
-              "last_poster",
               "last_post"
             ]
           },
@@ -26095,6 +26208,14 @@
                 "type": "boolean"
               },
               "edit": {
+                "title": "Edit",
+                "type": "boolean"
+              },
+              "edit_title": {
+                "title": "Edit",
+                "type": "boolean"
+              },
+              "edit_tags": {
                 "title": "Edit",
                 "type": "boolean"
               },
@@ -26131,12 +26252,32 @@
               "follow",
               "post",
               "edit",
+              "edit_title",
+              "edit_tags",
               "bump"
             ]
           },
           "node_title": {
             "title": "Node",
             "type": "string"
+          },
+          "restrictions": {
+            "title": "Restrictions",
+            "type": "object",
+            "properties": {
+              "reply_delay": {
+                "title": "Reply",
+                "type": "integer"
+              },
+              "max_reply_count": {
+                "title": "Max",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "reply_delay",
+              "max_reply_count"
+            ]
           },
           "last_post": {
             "title": "Last",
@@ -26330,8 +26471,25 @@
             ]
           },
           "contest": {
-            "title": "Contest",
             "type": "object",
+            "required": [
+              "type",
+              "finish_date",
+              "now_count_members",
+              "needed_members",
+              "is_finished",
+              "count_winners",
+              "require_like_count",
+              "require_total_like_count",
+              "prize_type",
+              "prize_type_phrase",
+              "prize_data",
+              "is_money_places",
+              "chance_to_win",
+              "winners",
+              "already_participate",
+              "permissions"
+            ],
             "properties": {
               "type": {
                 "title": "Type",
@@ -26424,25 +26582,7 @@
                   "can_view_user_list"
                 ]
               }
-            },
-            "required": [
-              "type",
-              "finish_date",
-              "now_count_members",
-              "needed_members",
-              "is_finished",
-              "count_winners",
-              "require_like_count",
-              "require_total_like_count",
-              "prize_type",
-              "prize_type_phrase",
-              "prize_data",
-              "is_money_places",
-              "chance_to_win",
-              "winners",
-              "already_participate",
-              "permissions"
-            ]
+            }
           }
         }
       },
