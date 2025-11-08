@@ -39,7 +39,7 @@
     * [Get](#get-6)
     * [Params](#params-6)
     * [Games](#games-6)
-  * [Origin](#origin)
+  * [Ea](#ea)
     * [Get](#get-7)
     * [Params](#params-7)
     * [Games](#games-7)
@@ -71,48 +71,44 @@
     * [Get](#get-14)
     * [Params](#params-14)
     * [Games](#games-14)
-  * [War_thunder](#war_thunder)
+  * [Discord](#discord)
     * [Get](#get-15)
     * [Params](#params-15)
     * [Games](#games-15)
-  * [Discord](#discord)
+  * [Tiktok](#tiktok)
     * [Get](#get-16)
     * [Params](#params-16)
     * [Games](#games-16)
-  * [Tiktok](#tiktok)
+  * [Instagram](#instagram)
     * [Get](#get-17)
     * [Params](#params-17)
     * [Games](#games-17)
-  * [Instagram](#instagram)
+  * [Battlenet](#battlenet)
     * [Get](#get-18)
     * [Params](#params-18)
     * [Games](#games-18)
-  * [Battlenet](#battlenet)
+  * [Chatgpt](#chatgpt)
     * [Get](#get-19)
     * [Params](#params-19)
     * [Games](#games-19)
-  * [Chatgpt](#chatgpt)
+  * [Vpn](#vpn)
     * [Get](#get-20)
     * [Params](#params-20)
     * [Games](#games-20)
-  * [Vpn](#vpn)
+  * [Roblox](#roblox)
     * [Get](#get-21)
     * [Params](#params-21)
     * [Games](#games-21)
-  * [Roblox](#roblox)
+  * [Warface](#warface)
     * [Get](#get-22)
     * [Params](#params-22)
     * [Games](#games-22)
-  * [Warface](#warface)
+  * [Minecraft](#minecraft)
     * [Get](#get-23)
     * [Params](#params-23)
     * [Games](#games-23)
-  * [Minecraft](#minecraft)
-    * [Get](#get-24)
-    * [Params](#params-24)
-    * [Games](#games-24)
   * [List](#list)
-  * [Get](#get-25)
+  * [Get](#get-24)
 * [List](#list-1)
   * [Owned](#owned)
   * [Purchased](#purchased)
@@ -125,6 +121,7 @@
     * [Html Preview](#html-preview)
     * [Inventory Update](#inventory-update)
     * [Mafile](#mafile)
+    * [Mafile Add](#mafile-add)
     * [Mafile Remove](#mafile-remove)
     * [Sda](#sda)
     * [Guard](#guard)
@@ -134,7 +131,7 @@
   * [Guarantee](#guarantee)
     * [Cancel](#cancel)
     * [Check](#check)
-  * [Get](#get-26)
+  * [Get](#get-25)
   * [Bulk](#bulk)
   * [Edit](#edit)
   * [Delete](#delete)
@@ -158,21 +155,27 @@
   * [Unstick](#unstick)
   * [Transfer](#transfer)
 * [Purchasing](#purchasing)
+  * [Cart](#cart)
+    * [Get](#get-26)
+    * [Add](#add)
+    * [Delete](#delete-1)
   * [Fast](#fast)
   * [Check](#check-1)
   * [Buy](#buy)
 * [Publishing](#publishing)
   * [Fast](#fast-1)
-  * [Add](#add)
+  * [Add](#add-1)
   * [Check](#check-2)
 * [Profile](#profile)
   * [Get](#get-27)
   * [Edit](#edit-1)
+  * [Claims](#claims)
+  * [Create Claim](#create-claim)
 * [Payments](#payments)
   * [Auto](#auto)
     * [List](#list-2)
     * [Create](#create)
-    * [Delete](#delete-1)
+    * [Delete](#delete-2)
   * [Invoice](#invoice)
     * [List](#list-3)
     * [Get](#get-28)
@@ -180,6 +183,9 @@
   * [Payout](#payout)
     * [Services](#services)
     * [Create](#create-2)
+  * [Balance](#balance)
+    * [Get](#get-29)
+    * [Exchange](#exchange)
   * [Currency](#currency)
   * [Transfer](#transfer-1)
   * [Fee](#fee)
@@ -187,10 +193,15 @@
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-29)
-  * [Add](#add-1)
-  * [Delete](#delete-2)
-* [Batch](#batch)
+  * [Get](#get-30)
+  * [Add](#add-2)
+  * [Delete](#delete-3)
+* [Imap](#imap)
+  * [Add](#add-3)
+  * [Delete](#delete-4)
+* [Batch Requests](#batch-requests)
+  * [Batch](#batch)
+  * [Executor](#executor)
 
 
 </details>
@@ -202,7 +213,7 @@ LOLZTEAM Market API Client
 **Parameters:**
 
 - token (str): Your token.
-  > You can get it [there](https://zelenka.guru/account/api)
+  > You can get it [there](https://lolz.live/account/api)
 - language (Literal["ru", "en"]): Language of the API responses.
 - delay_min (float): Minimal delay between requests.
   > This parameter sets a strict minimal delay between your requests.
@@ -661,7 +672,7 @@ print(response.json())
 ```
 
 
-## Origin
+## Ea
 
 ### Get
 
@@ -687,7 +698,7 @@ GET https://api.lzt.market/CATEGORY_NAME
 **Example:**
 
 ```python
-response = market.categories.origin.get(pmin=100, pmax=500)
+response = market.categories.ea.get(pmin=100, pmax=500)
 print(response.json())
 ```
 
@@ -701,7 +712,7 @@ GET https://api.lzt.market/CATEGORY_NAME/params
 **Example:**
 
 ```python
-response = market.categories.origin.params()
+response = market.categories.ea.params()
 print(response.json())
 ```
 
@@ -715,7 +726,7 @@ GET https://api.lzt.market/CATEGORY_NAME/games
 **Example:**
 
 ```python
-response = market.categories.origin.games()
+response = market.categories.ea.games()
 print(response.json())
 ```
 
@@ -1129,65 +1140,6 @@ GET https://api.lzt.market/CATEGORY_NAME/games
 
 ```python
 response = market.categories.uplay.games()
-print(response.json())
-```
-
-
-## Thunder
-
-### Get
-
-GET https://api.lzt.market/CATEGORY_NAME
-
-*Displays a list of accounts in a specific category according to your parameters.*
-
-**Parameters:**
-
-- page (int): The number of the page to display results from
-- title (str): The word or words contained in the account title.
-- pmin (float): Minimal price of account (Inclusive).
-- pmax (float): Maximum price of account (Inclusive).
-- origin (list): List of account origins.
-- not_origin (list): List of account origins that won't be included.
-- order_by (str): Item order.
-- sb (bool): Sold before.
-- sb_by_me (bool): Sold before by me.
-- nsb (bool): Not sold before.
-- nsb_by_me (bool): Not sold before by me.
-- kwargs (any): Any additional search parameters.
-
-**Example:**
-
-```python
-response = market.categories.war_thunder.get(pmin=100, pmax=500)
-print(response.json())
-```
-
-
-### Params
-
-GET https://api.lzt.market/CATEGORY_NAME/params
-
-*Displays a list of parameters for a specific category.*
-
-**Example:**
-
-```python
-response = market.categories.war_thunder.params()
-print(response.json())
-```
-
-
-### Games
-
-GET https://api.lzt.market/CATEGORY_NAME/games
-
-*Displays a list of games for a specific category.*
-
-**Example:**
-
-```python
-response = market.categories.war_thunder.games()
 print(response.json())
 ```
 
@@ -1939,6 +1891,24 @@ print(response.json())
 ```
 
 
+### Mafile Add
+
+POST https://api.lzt.market/{item_id}/mafile
+
+*Add a new Steam mafile to the account.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+
+**Example:**
+
+```python
+response = market.managing.steam.mafile_add(item_id=1234567890)
+print(response.json())
+```
+
+
 ### Mafile Remove
 
 DELETE https://api.lzt.market/{item_id}/mafile
@@ -2158,6 +2128,13 @@ DELETE https://api.lzt.market/{item_id}
 
 - item_id (int): Item ID.
 - reason (str): Reason.
+
+**Example:**
+
+```python
+response = market.managing.delete(item_id=1234567890)
+print(response.json())
+```
 
 
 ## Bump
@@ -2520,6 +2497,81 @@ print(response.json())
 
 # Purchasing
 
+## Cart
+
+### Get
+
+GET https://api.lzt.market/cart
+
+*Returns the list of items currently in your cart.*
+
+**Parameters:**
+
+- category_id (int): Category ID.
+- page (int): Page number.
+- pmin (float): Minimum price.
+- pmax (float): Maximum price.
+- title (str): Filter by title.
+- order_by (str): Order by.
+- tag_id (list): Tag IDs.
+- not_tag_id (list): Not Tag IDs.
+- origin (str): Item origin.
+- not_origin (str): Not item origin.
+- user_id (int): User ID.
+- nsb (bool): Not sold by.
+- sb (bool): Sold by.
+- nsb_by_me (bool): Not sold by me.
+- sb_by_me (bool): Sold by me.
+- currency (str): Currency.
+- email_login_data (str): Email login data.
+- email_provider (str): Email provider.
+- not_email_provider (str): Not email provider.
+- parse_same_item_ids (bool): Parse same item IDs.
+- kwargs: Additional parameters.
+
+**Example:**
+
+```python
+response = market.purchasing.cart.get(category_id=1, page=2)
+print(response.json())
+```
+
+
+### Add
+
+POST https://api.lzt.market/cart
+
+*Adds item to your cart.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+
+**Example:**
+
+```python
+response = market.purchasing.cart.add(item_id=1234567890)
+print(response.json())
+```
+
+
+### Delete
+
+DELETE https://api.lzt.market/cart
+
+*Deletes an item from the cart. If item_id is None, will remove all items from your cart.*
+
+**Parameters:**
+- item_id (int): Item ID to delete.
+
+**Example:**
+
+```python
+response = market.purchasing.cart.delete(item_id=1234567890)
+print(response.json())
+```
+
+
 ## Fast
 
 POST https://api.lzt.market/{item_id}/fast-buy
@@ -2750,6 +2802,47 @@ print(response.json())
 ```
 
 
+## Claims
+
+GET https://api.lzt.market/claims
+
+*Returns a list of claims filed against you.*
+
+**Parameters:**
+
+- type (str, optional): Filter claims by their type.
+- claim_state (str, optional): Filter claims by their state.
+
+**Example:**
+
+```python
+response = market.profile.claims(claim_type="market", claim_state="active")
+print(response.json())
+```
+
+
+## Create Claim
+
+POST https://api.lzt.market/claims
+
+*Create a claim.*
+
+**Parameters:**
+
+- item_id (int): The ID of the item related to the claim.
+- post_body (str): Description of the situation and evidence.
+
+**Example:**
+
+```python
+response = market.profile.create_claim(
+    item_id=123456,
+    post_body="Bleh"
+)
+print(response.json())
+```
+
+
 # Payments
 
 ## Auto
@@ -2932,6 +3025,45 @@ print(response.json())
 ```
 
 
+## Balance
+
+### Get
+
+GET https://api.lzt.market/balance/exchange
+
+*Returns list of balances.*
+
+**Example:**
+
+```python
+response = market.payments.balance.get()
+print(response.json())
+```
+
+
+### Exchange
+
+POST https://api.lzt.market/balance/exchange
+
+*Transfer funds from one balance to another.*
+
+**Parameters:**
+
+- from_balance (str): Source balance type.
+- to_balance (str): Target balance type.
+- amount (int): Amount to exchange.
+
+**Example:**
+
+```python
+response = market.payments.balance_exchange(
+    from_balance="123",
+    amount=100
+)
+print(response.json())
+```
+
+
 ## Currency
 
 GET https://api.lzt.market/currency
@@ -2962,6 +3094,8 @@ POST https://api.lzt.market/balance/transfer
 - comment (str): Payment comment.
 - hold (int): Hold length.
 - hold_option (str): Hold option.
+- telegram_deal (bool): Is the deal happening on Telegram?
+- telegram_username (str): Telegram username of the user you are dialoguing with.
 
 **Example:**
 
@@ -3100,7 +3234,7 @@ POST https://api.lzt.market/proxy
 
 **Parameters:**
 
-- proxy (Union[list, str]): Single proxy or list of proxies.
+- proxy (list[str] | str): Single proxy or list of proxies.
 
 **Example:**
 
@@ -3129,7 +3263,51 @@ print(response.json())
 ```
 
 
-# Batch
+# Imap
+
+## Add
+
+POST https://api.lzt.market/imap
+
+*Adds an IMAP configuration for a domain.*
+
+**Parameters:**
+- domain (str): Domain to create IMAP configuration for.
+- imap_server (str): IMAP server address.
+- port (int): IMAP server port.
+- secure (bool): Whether to use a secure connection.
+
+**Example:**
+```python
+response = market.imap.create(
+    domain="supercoolmail.com",
+    imap_server="imap.supercoolmail.com",
+    port=993,
+    secure=True
+)
+print(response.json())
+```
+
+
+## Delete
+
+DELETE https://api.lzt.market/imap
+
+*Delete an IMAP configuration for a domain.*
+
+**Parameters:**
+- domain (str): Domain to delete IMAP configuration for.
+
+**Example:**
+```python
+response = market.imap.delete(domain="supercoolmail.com")
+print(response.json())
+```
+
+
+# Batch Requests
+
+## Batch
 
 POST https://api.lzt.market/batch
 
@@ -3137,7 +3315,7 @@ POST https://api.lzt.market/batch
 
 **Parameters:**
 
-- jobs (list[dict[str, str]]): Batch jobs.
+- jobs (list[dict]): Batch jobs.
 
 **Example:**
 
@@ -3148,6 +3326,24 @@ response = market.batch(jobs=[{"method": "GET", "url": "/1234567890", params: {}
 print(response.json())
 
 #  You also can use executor to ease work with batch requests while you have a lot of jobs:
+jobs = [market.managing.get.job(item_id=1234567890) for _ in range(42)]
+while jobs:  # It will be running until all jobs will be executed
+    jobs, response = market.batch.executor(jobs=jobs)
+    print(response.json())
+```
+
+
+## Executor
+
+*Executes batch requests until all jobs are executed.*
+
+**Parameters:**
+
+- jobs (list): Batch jobs.
+
+**Example**:
+
+```python
 jobs = [market.managing.get.job(item_id=1234567890) for _ in range(42)]
 while jobs:  # It will be running until all jobs will be executed
     jobs, response = market.batch.executor(jobs=jobs)

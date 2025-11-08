@@ -14,35 +14,39 @@
   * [List](#list)
   * [Get](#get)
 * [Forums](#forums)
-  * [List](#list-1)
-  * [Get](#get-1)
+  * [Feed](#feed)
+    * [Options](#options)
+    * [Edit](#edit)
+  * [Links](#links)
+    * [List](#list-1)
+    * [Get](#get-1)
+  * [Grouped](#grouped)
+  * [List](#list-2)
+  * [Get](#get-2)
   * [Followers](#followers)
   * [Followed](#followed)
   * [Follow](#follow)
   * [Unfollow](#unfollow)
 * [Pages](#pages)
-  * [List](#list-2)
-  * [Get](#get-2)
+  * [List](#list-3)
+  * [Get](#get-3)
 * [Threads](#threads)
   * [Contests](#contests)
     * [Money](#money)
-      * [Create By Time](#create-by-time)
-      * [Create By Count](#create-by-count)
     * [Upgrade](#upgrade)
-      * [Create By Time](#create-by-time-1)
-      * [Create By Count](#create-by-count-1)
   * [Arbitrage](#arbitrage)
     * [Market](#market)
     * [Non Market](#non-market)
   * [Poll](#poll)
-    * [Get](#get-3)
+    * [Get](#get-4)
     * [Vote](#vote)
   * [List Unread](#list-unread)
   * [List Recent](#list-recent)
-  * [List](#list-3)
-  * [Get](#get-4)
+  * [Literal](#literal)
+  * [List](#list-4)
+  * [Get](#get-5)
   * [Create](#create)
-  * [Edit](#edit)
+  * [Edit](#edit-1)
   * [Delete](#delete)
   * [Bump](#bump)
   * [Move](#move)
@@ -53,19 +57,20 @@
   * [Navigation](#navigation)
 * [Posts](#posts)
   * [Comments](#comments)
-    * [List](#list-4)
+    * [List](#list-5)
     * [Create](#create-1)
-    * [Edit](#edit-1)
+    * [Edit](#edit-2)
     * [Delete](#delete-1)
-  * [List](#list-5)
-  * [Get](#get-5)
+  * [List](#list-6)
+  * [Get](#get-6)
   * [Create](#create-2)
-  * [Edit](#edit-2)
+  * [Edit](#edit-3)
   * [Delete](#delete-2)
   * [Likes](#likes)
   * [Like](#like)
   * [Unlike](#unlike)
   * [Report](#report)
+  * [Reasons](#reasons)
 * [Users](#users)
   * [Avatar](#avatar)
     * [Upload](#upload)
@@ -77,25 +82,36 @@
     * [Crop](#crop-1)
   * [Profile Posts](#profile-posts)
     * [Comments](#comments-1)
-      * [List](#list-6)
-      * [Get](#get-6)
+      * [List](#list-7)
+      * [Get](#get-7)
       * [Create](#create-3)
-      * [Edit](#edit-3)
+      * [Edit](#edit-4)
       * [Delete](#delete-5)
-    * [List](#list-7)
-    * [Get](#get-7)
+      * [Report](#report-1)
+    * [List](#list-8)
+    * [Get](#get-8)
     * [Create](#create-4)
-    * [Edit](#edit-4)
+    * [Edit](#edit-5)
     * [Delete](#delete-6)
     * [Likes](#likes-1)
     * [Like](#like-1)
     * [Unlike](#unlike-1)
-  * [List](#list-8)
+    * [Report](#report-2)
+    * [Reasons](#reasons-1)
+    * [Stick](#stick)
+    * [Unstick](#unstick)
+  * [Secret Answer](#secret-answer)
+    * [Types](#types)
+    * [Reset](#reset)
+    * [Cancel Reset](#cancel-reset)
+  * [List](#list-9)
   * [Search](#search)
-  * [Get](#get-8)
-  * [Edit](#edit-5)
+  * [Get](#get-9)
+  * [Edit](#edit-6)
   * [Fields](#fields)
   * [Trophies](#trophies)
+  * [Claims](#claims)
+  * [Likes](#likes-2)
   * [Followers](#followers-2)
   * [Followed](#followed-2)
   * [Follow](#follow-2)
@@ -106,56 +122,70 @@
   * [Content](#content)
 * [Conversations](#conversations)
   * [Messages](#messages)
-    * [List](#list-9)
-    * [Get](#get-9)
+    * [List](#list-10)
+    * [Get](#get-10)
     * [Create](#create-5)
-    * [Edit](#edit-6)
-    * [Stick](#stick)
-    * [Unstick](#unstick)
+    * [Edit](#edit-7)
+    * [Delete](#delete-7)
+    * [Stick](#stick-1)
+    * [Unstick](#unstick-1)
   * [Alerts](#alerts)
     * [Enable](#enable)
     * [Disable](#disable)
-  * [List](#list-10)
-  * [Get](#get-10)
-  * [Create](#create-6)
-  * [Create Group](#create-group)
-  * [Leave](#leave)
-  * [Star](#star)
-  * [Unstar](#unstar)
-  * [Read All](#read-all)
-* [Notifications](#notifications)
+  * [Save](#save)
   * [List](#list-11)
   * [Get](#get-11)
+  * [Start](#start)
+  * [Create](#create-6)
+  * [Create Group](#create-group)
+  * [Edit](#edit-8)
+  * [Leave](#leave)
+  * [Search](#search-1)
+  * [Star](#star)
+  * [Invite](#invite)
+  * [Kick](#kick)
+  * [Unstar](#unstar)
   * [Read](#read)
-* [Tags](#tags)
+  * [Read All](#read-all)
+* [Notifications](#notifications)
   * [List](#list-12)
   * [Get](#get-12)
+  * [Read](#read-1)
+* [Tags](#tags)
+  * [List](#list-13)
+  * [Get](#get-13)
   * [Popular](#popular)
-  * [Search](#search-1)
-* [Search](#search-2)
+  * [Search](#search-2)
+* [Search](#search-3)
+  * [Results](#results)
   * [All](#all)
+  * [Users](#users-1)
   * [Threads](#threads-1)
   * [Posts](#posts-1)
   * [Profile Posts](#profile-posts-1)
   * [Tagged](#tagged)
 * [Chat](#chat)
   * [Messages](#messages-1)
-    * [List](#list-13)
+    * [List](#list-14)
     * [Create](#create-7)
-    * [Edit](#edit-7)
-    * [Delete](#delete-7)
-    * [Report](#report-1)
-  * [Get](#get-13)
+    * [Edit](#edit-9)
+    * [Delete](#delete-8)
+    * [Report](#report-3)
+    * [Reasons](#reasons-2)
+  * [Get](#get-14)
   * [Ignored](#ignored-1)
   * [Ignore](#ignore-1)
   * [Unignore](#unignore-1)
   * [Leaderboard](#leaderboard)
+  * [Online](#online)
 * [Forms](#forms)
-  * [List](#list-14)
+  * [List](#list-15)
   * [Create](#create-8)
 * [Navigation](#navigation-1)
 * [Css](#css)
-* [Batch](#batch)
+* [Batch Requests](#batch-requests)
+  * [Batch](#batch)
+  * [Executor](#executor)
 
 
 </details>
@@ -167,7 +197,7 @@ LOLZTEAM Forum API Client
 **Parameters:**
 
 - token (str): Your token.
-  > You can get it [there](https://zelenka.guru/account/api)
+  > You can get it [there](https://lolz.live/account/api)
 - language (Literal["ru", "en"]): Language of the API responses.
 - delay_min (float): Minimal delay between requests.
   > This parameter sets a strict minimal delay between your requests.
@@ -253,6 +283,88 @@ print(response.json())
 
 
 # Forums
+
+## Feed
+
+### Options
+
+GET https://prod-api.lolz.live/forums/feed/options
+
+*Returns available options for the forums feed.*
+
+**Example:**
+
+```python
+response = forum.forums.feed.options()
+print(response.json())
+```
+
+
+### Edit
+
+PUT https://prod-api.lolz.live/forums/feed/options
+
+*Edit feed options.*
+
+**Parameters:**
+- node_ids (list[int]): Array of forum ids to exclude from the feed.
+- keywords (list[str]): List of keywords to exclude specific threads from the feed.
+
+**Example:**
+
+```python
+response = forum.forums.feed.edit(node_ids=[8, 876, 766], keywords=["раздача", "звезды"])
+print(response.json())
+```
+
+
+## Links
+
+### List
+
+GET https://prod-api.lolz.live/link-forums
+
+*List of all link forums.*
+
+**Example:**
+
+```python
+response = forum.forums.links.list()
+print(response.json())
+```
+
+
+### Get
+
+GET https://prod-api.lolz.live/link-forums/{link_id}
+
+*Detail information of a link forum.*
+
+**Parameters:**
+
+- link_id (int): Id of link forum.
+
+**Example:**
+
+```python
+response = forum.forums.links.get(link_id=1)
+print(response.json())
+```
+
+
+## Grouped
+
+GET https://prod-api.lolz.live/forums/grouped
+
+*Returns grouped forums (forums tree).*
+
+**Example:**
+
+```python
+response = forum.forums.grouped()
+print(response.json())
+```
+
 
 ## List
 
@@ -408,9 +520,7 @@ print(response.json())
 
 ### Money
 
-#### Create By Time
-
-POST https://prod-api.lolz.live/threads
+POST https://prod-api.lolz.live/contests
 
 *Create a money contest.*
 
@@ -439,6 +549,8 @@ POST https://prod-api.lolz.live/threads
 - dont_alert_followers (bool): Don't alert followers.
 - forum_notifications (bool): Get forum notifications.
 - email_notifications (bool): Get email notifications.
+- schedule_date (str): Date to schedule thread creation (format: `DD-MM-YYYY`).
+- schedule_time (str): Time to schedule thread creation (format: `HH:MM`).
 
 **Example:**
 
@@ -452,55 +564,17 @@ response = forum.threads.contests.money.create_by_time(
     require_week_sympathy=1,
     require_total_sympathy=50,
     secret_answer="My secret answer",
-    title="Contest"
+    title="Contest",
+    schedule_date="31-12-2025",
+    schedule_time="23:59"
 )
-print(response.json())
-```
-
-
-#### Create By Count
-
-POST https://prod-api.lolz.live/threads
-
-*Create a money contest.*
-
-**Parameters:**
-
-- post_body (str): Content of the new contest.
-- prize_amount (float): How much money will each winner receive.
-- winners_count (int): Winner count (prize count).
-- needed_members (int): Max member count.
-- require_week_sympathy (int): Sympathies for this week.
-- require_total_sympathy (int): Symapthies for all time.
-- secret_answer (str): Secret answer of your account.
-- reply_group (int): Allow to reply only users with chosen or higher group.
-- title (str): Thread title.
-    > Can be skipped if title_en set.
-- title_en (str): Thread title in english.
-    > Can be skipped if title set.
-- tags (list[str]): Thread tags.
-- hide_contacts (bool): Hide contacts.
-- allow_ask_hidden_content (bool): Allow ask hidden content.
-- comment_ignore_group (bool): Allow commenting if user can't post in thread.
-- dont_alert_followers (bool): Don't alert followers.
-- forum_notifications (bool): Get forum notifications.
-- email_notifications (bool): Get email notifications.
-
-**Example:**
-
-```python
-response = forum.threads.contests.money.create_by_count(post_body="Contest", prize_amount=500, winners_count=1,
-                                                       needed_members=300, require_week_sympathy=1, require_total_sympathy=50,
-                                                       secret_answer="My secret answer", title="Contest")
 print(response.json())
 ```
 
 
 ### Upgrade
 
-#### Create By Time
-
-POST https://prod-api.lolz.live/threads
+POST https://prod-api.lolz.live/contests
 
 *Create a new contest.*
 
@@ -529,52 +603,16 @@ POST https://prod-api.lolz.live/threads
 - dont_alert_followers (bool): Don't alert followers.
 - forum_notifications (bool): Get forum notifications.
 - email_notifications (bool): Get email notifications.
+- schedule_date (str): Date to schedule thread creation (format: `DD-MM-YYYY`).
+- schedule_time (str): Time to schedule thread creation (format: `HH:MM`).
 
 **Example:**
 
 ```python
 response = forum.threads.contests.upgrade.create_by_time(post_body="Contest", prize_group=1, winners_count=1,
-                                                       length=3, length_option="days", require_week_sympathy=1,
-                                                       require_total_sympathy=50, secret_answer="My secret answer", title="Contest")
-print(response.json())
-```
-
-
-#### Create By Count
-
-POST https://prod-api.lolz.live/threads
-
-*Create a new contest.*
-
-**Parameters:**
-
-- post_body (str): Content of the new contest.
-- prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
-- winners_count (int): Winner count (prize count).
-    > The maximum value is 100.
-- needed_members (int): Max member count.
-- require_week_sympathy (int): Sympathies for this week.
-- require_total_sympathy (int): Sympathies for all time.
-- secret_answer (str): Secret answer of your account.
-- reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
-- title (str): Thread title.
-    > Can be skipped if title_en set.
-- title_en (str): Thread title in english.
-    > Can be skipped if title set.
-- tags (list[str]): Thread tags.
-- hide_contacts (bool): Hide contacts.
-- allow_ask_hidden_content (bool): Allow ask hidden content.
-- comment_ignore_group (bool): Allow commenting if user can't post in thread.
-- dont_alert_followers (bool): Don't alert followers.
-- forum_notifications (bool): Get forum notifications.
-- email_notifications (bool): Get email notifications.
-
-**Example:**
-
-```python
-response = forum.threads.contests.upgrade.create_by_count(post_body="Contest", prize_group=1, winners_count=1,
-                                                       needed_members=300, require_week_sympathy=1,
-                                                       require_total_sympathy=50, secret_answer="My secret answer", title="Contest")
+                                                        length=3, length_option="days", require_week_sympathy=1,
+                                                        require_total_sympathy=50, secret_answer="My secret answer", title="Contest",
+                                                        schedule_date="31-12-2025", schedule_time="23:59")
 print(response.json())
 ```
 
@@ -590,7 +628,7 @@ POST https://prod-api.lolz.live/claims
 **Parameters:**
 
 - responder (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
-- item_id (str|int): Write account link or item_id.
+- item_id (str | int): Market account link or item_id.
 - amount (float): Amount by which the responder deceived you.
 - post_body (str): You should describe what's happened.
 - currency (str): Currency of Arbitrage.
@@ -728,6 +766,28 @@ print(response.json())
 ```
 
 
+## Literal
+Special typing form to define literal types (a.k.a. value types).
+
+This form can be used to indicate to type checkers that the corresponding
+variable or function parameter has a value equivalent to the provided
+literal (or one of several literals)::
+
+    def validate_simple(data: Any) -> Literal[True]:  # always returns True
+        ...
+
+    MODE = Literal['r', 'rb', 'w', 'wb']
+    def open_helper(file: str, mode: MODE) -> str:
+        ...
+
+    open_helper('/some/path', 'r')  # Passes type check
+    open_helper('/other/path', 'typo')  # Error in type checker
+
+Literal[...] cannot be subclassed. At runtime, an arbitrary value
+is allowed as type argument to Literal[...], but type checkers may
+impose restrictions.
+
+
 ## List
 
 GET https://prod-api.lolz.live/threads
@@ -735,15 +795,23 @@ GET https://prod-api.lolz.live/threads
 *Get threads.*
 
 **Parameters:**
-
-- forum_id (int): Forum ID.
+- forum_id (int): Id of the containing forum.
+- tab (str): Tab to get threads from. [main, mythreads, viewedthreads, userthreads, fave, compilation, scheduledthreads]
+- state (str): Thread state (active or closed). Works only if forum_id is set.
+- period (str): Filter to get only threads created within the selected period (day, week, month, year). Works only if forum_id is set.
+- title (str): Thread title.
+- title_only (bool): Search only in titles.
 - user_id (int): Filter to get only threads created by the specified user.
-- prefix_id (int): Filter to get only threads with the specified prefix.
+- sticky (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards threads_total and do not affect pagination.
+- prefix_ids (list of int): Filter to get only threads with the specified prefixes.
+- prefix_ids_not (list of int): Filter to get only threads without the specified prefixes.
 - tag_id (int): Filter to get only threads with the specified tag.
-- page (int): Page.
-- limit (int): Limit of threads.
-- order (str): Order of threads.
-- sticky (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
+- page (int): Page number of threads.
+- limit (int): Number of threads in a page.
+- order (str): Ordering of threads.
+- direction (str): Direction of threads ordering ("asc", "desc").
+- thread_create_date (int): Filter threads by creation date. Only works with 'thread_create_date' and 'thread_create_date_reverse' ordering.
+- thread_update_date (int): Filter threads by update date. Only works with 'thread_update_date' and 'thread_update_date_reverse' ordering.
 
 **Example:**
 
@@ -787,6 +855,8 @@ POST https://prod-api.lolz.live/threads
 - dont_alert_followers (bool): Don't alert followers.
 - forum_notifications (bool): Get forum notifications.
 - email_notifications (bool): Get email notifications.
+- schedule_date (str): Date to schedule thread creation (format: `DD-MM-YYYY`).
+- schedule_time (str): Time to schedule thread creation (format: `HH:MM`).
 
 **Example:**
 
@@ -804,7 +874,9 @@ response = forum.threads.create(
     comment_ignore_group=False,
     dont_alert_followers=False,
     forum_notifications=True,
-    email_notifications=False
+    email_notifications=False,
+    schedule_date="31-12-2025",
+    schedule_time="23:59"
 )
 print(response.json())
 ```
@@ -1040,7 +1112,7 @@ POST https://prod-api.lolz.live/posts/{post_id}/comments
 **Example:**
 
 ```python
-response = forum.posts.comments.create(post_id=5523020, post_body="Test comment")
+response = forum.posts.comments.create(post_id=5523020, comment_body="Test comment")
 print(response.json())
 ```
 
@@ -1253,6 +1325,26 @@ POST https://prod-api.lolz.live/posts/{post_id}/report
 response = forum.posts.report(post_id=5523020, reason="Test reason")
 print(response.json())
 ```
+
+
+## Reasons
+
+GET https://prod-api.lolz.live/posts/{post_id}/report
+
+*Get post report reasons.*
+
+**Parameters:**
+
+- post_id (int): Post ID.
+
+**Example:**
+
+```python
+response = forum.posts.reasons(post_id=39769208)
+print(response.json())
+```
+
+**Required scopes:** read
 
 
 # Users
@@ -1478,6 +1570,25 @@ print(response.json())
 ```
 
 
+#### Report
+
+POST https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+
+*Report a profile post comment.*
+
+**Parameters:**
+
+- comment_id (int): Id of profile post comment.
+- message (str): Reason of the report.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.comments.report(comment_id=123456, message="Report reason")
+print(response.json())
+```
+
+
 ### List
 
 GET https://prod-api.lolz.live/users/{user_id}/profile-posts
@@ -1486,14 +1597,15 @@ GET https://prod-api.lolz.live/users/{user_id}/profile-posts
 
 **Parameters:**
 
-- user_id (int): User ID.
+- user_id (int | str): User ID.
+- by_user_id (int): Filter to get only posts from the specified user.
 - page (int): Page.
 - limit (int): Posts limit per page.
 
 **Example:**
 
 ```python
-response = forum.users.profile_posts.list(user_id=2410024, page=1, limit=10)
+response = forum.users.profile_posts.list(user_id=2410024, page=1, limit=10, by_user_id=1)
 print(response.json())
 ```
 
@@ -1524,7 +1636,7 @@ POST https://prod-api.lolz.live/users/{user_id}/profile-posts
 
 **Parameters:**
 
-- user_id (int): User ID.
+- user_id (int | str): User ID.
 - post_body (str): Post body.
 
 **Example:**
@@ -1545,11 +1657,12 @@ PUT https://prod-api.lolz.live/profile-posts/{post_id}
 
 - post_id (int): Profile post ID.
 - post_body (str): Post body.
+- disable_comments (bool): Disable comments.
 
 **Example:**
 
 ```python
-response = forum.users.profile_posts.edit(post_id=5523020, post_body="Test post")
+response = forum.users.profile_posts.edit(post_id=5523020, post_body="No one can comment that xdx", disable_comments=True)
 print(response.json())
 ```
 
@@ -1619,6 +1732,123 @@ print(response.json())
 ```
 
 
+### Report
+
+POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+
+*Report a profile post.*
+
+**Parameters:**
+
+- profile_post_id (int): Profile post ID.
+- reason (str): Reason.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.report(profile_post_id=3925037, reason="Test report")
+print(response.json())
+```
+
+
+### Reasons
+
+GET https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+
+*Get profile post report reasons.*
+
+**Parameters:**
+
+- profile_post_id (int): Profile post ID.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.reasons(profile_post_id=55233925037020)
+print(response.json())
+```
+
+
+### Stick
+
+POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+
+*Stick a profile post.*
+
+**Parameters:**
+
+- profile_post_id (int): Id of profile post.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.stick(profile_post_id=123456)
+print(response.json())
+```
+
+
+### Unstick
+
+DELETE https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+
+*Unstick a profile post.*
+
+**Parameters:**
+
+- profile_post_id (int): Id of profile post.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.unstick(profile_post_id=123456)
+print(response.json())
+```
+
+
+## Answer
+
+### Types
+
+GET https://prod-api.lolz.live/users/secret-answer/types
+
+*Get available secret answer types.*
+
+**Example:**
+
+```python
+response = forum.users.secret_answer.types()
+print(response.json())
+```
+
+
+### Reset
+
+POST https://prod-api.lolz.live/account/secret-answer/reset
+
+*Request a reset of the secret answer for the account.*
+
+**Example:**
+
+```python
+response = forum.users.secret_answer.reset()
+print(response.json())
+```
+
+
+### Cancel Reset
+
+DELETE https://prod-api.lolz.live/account/secret-answer/reset
+
+*Cancel a pending secret answer reset request for the account.*
+
+**Example:**
+
+```python
+response = forum.users.secret_answer.reset_cancel()
+print(response.json())
+```
+
+
 ## List
 
 GET https://prod-api.lolz.live/users
@@ -1665,7 +1895,7 @@ GET https://prod-api.lolz.live/users/{user_id}
 
 **Parameters:**
 
-- user_id (int): User ID.
+- user_id (int | str): User ID.
 
 **Example:**
 
@@ -1683,7 +1913,7 @@ PUT https://prod-api.lolz.live/users/me
 
 **Parameters:**
 
-- title (str): Title.
+- title (str): User title.
 - display_group_id (int): Display group ID.
 - dob (tuple[int, int, int]): Date of birth.
 - fields (dict[str, str]): Custom fields.
@@ -1694,17 +1924,31 @@ PUT https://prod-api.lolz.live/users/me
 - secret_answer (str): Secret answer.
 - secret_answer_type (int): Secret answer type.
 - short_link (str): Profile short link.
+- language_id (int): User interface language ID.
+- gender (str): User gender.
+- timezone (str): User timezone. E.g `Europe/Moscow`
+- receive_admin_email (bool): Whether to receive admin emails.
+- activity_visible (bool): Whether user activity is visible.
+- show_dob_date (bool): Show date of birth (day and month).
+- show_dob_year (bool): Show year of birth.
+- hide_username_change_logs (bool): Hide username change logs.
+- allow_view_profile (str): Who can view your profile.
+- allow_post_profile (str): Who can post on your profile.
+- allow_send_personal_conversation (str): Who can send you personal conversations.
+- allow_invite_group (str): Who can invite you to groups.
+- allow_receive_news_feed (str): Who can see your news feed.
+- alert (dict): Alert settings.
 
 **Example:**
 
 ```python
 response = forum.users.edit(
-    title="Test title",
+    title="ГДЗ по математике - https://t.me/Kanalchik_alexa :rooster_talk:",
     display_group_id=1,
     dob=(1, 1, 2000),
     fields={"_4": "My new interests", "occupation": "My new occupation"},
     username="RiceMorgan",
-    secret_answer="***********",
+    secret_answer="no_one_knows_my_sa",
     secret_answer_type=1,
     short_link="ricemorgan"
 )
@@ -1732,12 +1976,64 @@ GET https://prod-api.lolz.live/users/{user_id}/trophies
 
 *Get user trophies.*
 
+ **Parameters:**
+
+- user_id (int | str): User ID.
+
 **Example:**
 
 ```python
 response = forum.users.trophies(user_id=2410024)
 print(response.json())
-```/
+```
+
+
+## Claims
+
+GET https://prod-api.lolz.live/users/{user_id}/claims
+
+*Get user claims.*
+
+**Parameters:**
+
+- user_id (int | str): User ID.
+- type (str): Filter claims by their type.
+- claim_state (str): Filter claims by their state.
+
+**Example:**
+
+```python
+response = forum.users.claims(user_id=1, type="market", claim_state="solved")
+print(response.json())
+```
+
+
+## Likes
+
+GET https://prod-api.lolz.live/users/{user_id}/likes
+
+*Get information about user likes.*
+
+**Parameters:**
+- user_id (int | str): User ID.
+- node_id (int): Filter by forum section.
+- like_type (str): Like variation. One of "like" (Sympathies), "like2" (Likes).
+- type (str): Likes type. One of "gotten", "given".
+- page (int): Page number.
+- content_type (str): Content type.
+- search_user_id (int): Get only likes from/to specified user.
+- stats (bool): Show weekly statistics.
+
+**Example:**
+
+```python
+response = forum.users.likes(
+    user_id=2410024,
+    like_type="like2",
+    type="given"
+)
+print(response.json())
+```
 
 
 ## Followers
@@ -1748,7 +2044,7 @@ GET https://prod-api.lolz.live/users/{user_id}/followers
 
 **Parameters:**
 
-- user_id (int): User ID.
+- user_id (int | str): User ID.
 - order (str): Order.
 - page (int): Page.
 - limit (int): Followers limit per page.
@@ -1769,7 +2065,7 @@ GET https://prod-api.lolz.live/users/{user_id}/followings
 
 **Parameters:**
 
-- user_id (int): User ID.
+- user_id (int | str): User ID.
 - order (str): Order.
 - page (int): Page.
 - limit (int): Followed users limit per page.
@@ -1788,6 +2084,10 @@ POST https://prod-api.lolz.live/users/{user_id}/followers
 
 **Follow a user.**
 
+**Parameters:**
+
+- user_id (int | str): User ID.
+
 **Example:**
 
 ```python
@@ -1801,6 +2101,10 @@ print(response.json())
 DELETE https://prod-api.lolz.live/users/{user_id}/followers
 
 **Unfollow a user.**
+
+**Parameters:**
+
+- user_id (int | str): User ID.
 
 **Example:**
 
@@ -1830,6 +2134,10 @@ POST https://prod-api.lolz.live/users/{user_id}/ignore
 
 **Ignore a user.**
 
+**Parameters:**
+
+- user_id (int | str): User ID.
+
 **Example:**
 
 ```python
@@ -1844,6 +2152,10 @@ DELETE https://prod-api.lolz.live/users/{user_id}/ignore
 
 **Unignore a user.**
 
+**Parameters:**
+
+- user_id (int | str): User ID.
+
 **Example:**
 
 ```python
@@ -1857,6 +2169,12 @@ print(response.json())
 GET https://prod-api.lolz.live/users/{user_id}/timeline
 
 *Get timeline of a user.*
+
+**Parameters:**
+
+- user_id (int | str): User ID.
+- page (int): Page number.
+- limit (int): Number of items per page.
 
 **Example:**
 
@@ -1874,7 +2192,23 @@ print(response.json())
 
 GET https://prod-api.lolz.live/conversations/messages
 
-*Get messages of a conversation.*
+**Get messages from a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Id of conversation.
+- page (int): Page number of messages.
+- limit (int): Number of messages in a page.
+- order (str): Ordering of messages.
+- before (int): Date (UNIX timestamp) to get older messages.
+- after (int): Date (UNIX timestamp) to get newer messages.
+
+**Example:**
+
+```python
+response = forum.conversations.messages.list(conversation_id=123456)
+print(response.json())
+```
 
 
 ### Get
@@ -1930,6 +2264,25 @@ PUT https://prod-api.lolz.live/conversations/messages/{message_id}
 
 ```python
 response = forum.conversations.messages.edit(conversation_id=123456, message_id=1234567890, message="Hello, world!")
+print(response.json())
+```
+
+
+### Delete
+
+POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}
+
+**Deletes a message.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+- message_id (int): Message ID.
+
+**Example:**
+
+```python
+response = forum.conversations.messages.delete(conversation_id=123456, message_id=54321)
 print(response.json())
 ```
 
@@ -2010,6 +2363,26 @@ print(response.json())
 ```
 
 
+## Save
+
+POST https://prod-api.lolz.live/conversations/save
+
+*Send content to Saved Messages.*
+
+**Parameters:**
+
+- text (str): Content.
+
+**Example:**
+
+```python
+response = forum.conversations.save(link="https://lolz.guru/threads/5523020/")
+print(response.json())
+```
+
+**Required scopes:** conversate
+
+
 ## List
 
 GET https://prod-api.lolz.live/conversations
@@ -2020,6 +2393,7 @@ GET https://prod-api.lolz.live/conversations
 
 - page (int): Page.
 - limit (int): Limit.
+- folder (str): Filter conversations by folder.
 
 **Example:**
 
@@ -2043,6 +2417,24 @@ GET https://prod-api.lolz.live/conversations/{conversation_id}
 
 ```python
 response = forum.conversations.get(conversation_id=123456)
+print(response.json())
+```
+
+
+## Start
+
+POST https://prod-api.lolz.live/conversations/start
+
+*Start a new conversation with a user.*
+
+**Parameters:**
+
+- user_id (int): User ID.
+
+**Example:**
+
+```python
+response = forum.conversations.start(user_id=1)
 print(response.json())
 ```
 
@@ -2078,8 +2470,9 @@ POST https://prod-api.lolz.live/conversations
 - message (str): Message.
 - title (str): Title.
 - open_invite (bool): Open invite.
-- conversation_locked (bool): Conversation locked.
 - allow_edit_messages (bool): Allow edit messages.
+- allow_stick_messages (bool): Allow members to stick messages.
+- allow_delete_own_messages (bool): Allow members to delete their own messages.
 
 **Example:**
 
@@ -2089,8 +2482,37 @@ response = forum.conversations.create_group(
     message="Hello, world!",
     title="Group Conversation",
     open_invite=True,
-    conversation_locked=False,
-    allow_edit_messages=True
+    allow_edit_messages=True,
+    allow_sticky_messages=True,
+    allow_delete_own_messages=False
+)
+print(response.json())
+```
+
+
+## Edit
+
+PUT https://prod-api.lolz.live/conversations
+
+**Edit conversation settings.**
+
+**Parameters:**
+
+- conversation_id (int): ID of the conversation to edit.
+- title (str): New conversation title.
+- open_invite (bool): Allow members to invite others.
+- open_history (bool): Make conversation history visible to new members.
+- allow_edit_messages (bool): Allow members to edit their own messages.
+- allow_stick_messages (bool): Allow members to stick messages.
+- allow_delete_own_messages (bool): Allow members to delete their own messages.
+
+**Example:**
+
+```python
+response = forum.conversations.edit(
+    conversation_id=123456,
+    open_invite=False,
+    allow_delete_own_messages=True
 )
 print(response.json())
 ```
@@ -2115,6 +2537,31 @@ print(response.json())
 ```
 
 
+## Search
+
+POST https://prod-api.lolz.live/conversations/search
+
+**Search for conversations messages or recipients.**
+
+**Parameters:**
+
+- q (str): Search query string.
+- conversation_id (int): Id of conversation.
+- search_recipients (bool): Search for recipients.
+
+**Returns:** Response containing conversations and recipient status.
+
+**Example:**
+
+```python
+response = forum.conversations.messages.search(
+    q="root",
+    search_recipients=True
+)
+print(response.json())
+```
+
+
 ## Star
 
 POST https://prod-api.lolz.live/conversations/{conversation_id}/star
@@ -2133,6 +2580,44 @@ print(response.json())
 ```
 
 
+## Invite
+
+POST https://prod-api.lolz.live/conversations/{conversation_id}/invite
+
+**Invite one or more users to an existing conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+- recipients (list[str]): List of usernames to invite.
+
+**Example:**
+
+```python
+response = forum.conversations.invite(conversation_id=123456, recipients=["root", "Alex"])
+print(response.json())
+```
+
+
+## Kick
+
+POST https://prod-api.lolz.live/conversations/{conversation_id}/kick
+
+**Kick a user from a conversation.**
+
+**Parameters:**
+
+- conversation_id (int): Conversation ID.
+- user_id (int): ID of user to kick from conversation.
+
+**Example:**
+
+```python
+response = forum.conversations.kick(conversation_id=123456, user_id=1)
+print(response.json())
+```
+
+
 ## Unstar
 
 DELETE https://prod-api.lolz.live/conversations/{conversation_id}/star
@@ -2147,6 +2632,20 @@ DELETE https://prod-api.lolz.live/conversations/{conversation_id}/star
 
 ```python
 response = forum.conversations.unstar(conversation_id=123456)
+print(response.json())
+```
+
+
+## Read
+
+POST https://prod-api.lolz.live/conversations/read-all
+
+**Read a specific conversation.**
+
+**Example:**
+
+```python
+response = forum.conversations.read(conversation_id=1234567890)
 print(response.json())
 ```
 
@@ -2173,10 +2672,16 @@ GET https://prod-api.lolz.live/notifications
 
 *Get notifications.*
 
+**Parameters:**
+
+- type (str): Filter notifications by their type.
+- page (int): Page number of notifications.
+- limit (int): Number of notifications in a page.
+
 **Example:**
 
 ```python
-response = forum.notifications.list()
+response = forum.notifications.list(type="forum")
 print(response.json())
 ```
 
@@ -2292,6 +2797,28 @@ print(response.json())
 
 # Search
 
+## Results
+
+GET https://prod-api.lolz.live/search/{search_id}/results
+
+**Get Search Results.**
+
+List of search results (with pagination).
+
+**Parameters:**
+
+- search_id (int): Search ID.
+- page (int): Page number of results.
+- limit (int): Number of results in a page.
+
+**Example:**
+
+```python
+response = forum.search.results(search_id=123456, page=1, limit=10)
+print(response.json())
+```
+
+
 ## All
 
 POST https://prod-api.lolz.live/search
@@ -2311,6 +2838,26 @@ POST https://prod-api.lolz.live/search
 
 ```python
 response = forum.search.all(user_id=2410024, forum_id=876, page=1, limit=10)
+print(response.json())
+```
+
+
+## Users
+
+POST https://prod-api.lolz.live/search/users
+
+**Search for users.**
+
+**Parameters:**
+
+- query (str): Search query.
+
+**Returns:** Response containing matched users.
+
+**Example:**
+
+```python
+response = forum.search.users(query="AS7RID")
 print(response.json())
 ```
 
@@ -2419,10 +2966,6 @@ GET https://prod-api.lolz.live/chatbox/messages
 ```python
 response = forum.chat.messages.list(room_id=1)
 print(response.json())
-
-# With before_message_id
-response = forum.chat.messages.list(room_id=1)
-print(response.json())
 ```
 
 
@@ -2436,7 +2979,7 @@ POST https://prod-api.lolz.live/chatbox/messages
 
 - room_id (int): Room ID.
 - message (str): Message.
-- reply_message_id (int, optional): ID of the message being replied to.
+- reply_message_id (int): ID of the message being replied to.
 
 **Example:**
 
@@ -2498,6 +3041,24 @@ POST https://prod-api.lolz.live/chatbox/messages/report
 
 ```python
 response = forum.chat.messages.report(message_id=1234567890, reason="Report reason.")
+print(response.json())
+```
+
+
+### Reasons
+
+GET https://prod-api.lolz.live/chatbox/messages/report
+
+*Get chat message report reasons.*
+
+**Parameters:**
+
+- message_id (int): Message ID.
+
+**Example:**
+
+```python
+response = forum.chat.messages.reasons(message_id=1234567890)
 print(response.json())
 ```
 
@@ -2578,12 +3139,30 @@ GET https://prod-api.lolz.live/chatbox/messages/leaderboard
 
 **Parameters:**
 
-- duration (str, optional): Duration.
+- duration (str): Duration.
 
 **Example:**
 
 ```python
 response = forum.chat.leaderboard(duration="month")
+print(response.json())
+```
+
+
+## Online
+
+GET https://prod-api.lolz.live/chatbox/messages/online
+
+*Get chat online users.*
+
+**Parameters:**
+
+- room_id (int): Room id.
+
+**Example:**
+
+```python
+response = forum.chat.online(room_id=1)
 print(response.json())
 ```
 
@@ -2662,7 +3241,7 @@ GET https://prod-api.lolz.live/css
 
 **Parameters:**
 
-- css (Union[str, list]): The names or identifiers of the CSS selectors to retrieve.
+- css (str | list): The names or identifiers of the CSS selectors to retrieve.
 - **kwargs (dict[str, any]): Additional query parameters.
 
 **Example:**
@@ -2673,7 +3252,9 @@ print(response.json())
 ```
 
 
-# Batch
+# Batch Requests
+
+## Batch
 
 POST https://prod-api.lolz.live/batch
 
@@ -2681,17 +3262,29 @@ POST https://prod-api.lolz.live/batch
 
 **Parameters:**
 
-- jobs (list[dict[str, str]]): Batch jobs.
+- jobs (list[dict]): Batch jobs.
 
 **Example:**
 
 ```python
 response = forum.batch(jobs=[{"method": "GET", "url": "/users/2410024", "params": {}}])
-#  Also you can create jobs for almost all functions like this:
+#  You can create jobs for almost all functions like this:
 #  job = forum.users.get.job(user_id=2410024)
 print(response.json())
+```
 
-#  You also can use executor to ease work with batch requests while you have a lot of jobs:
+
+## Executor
+
+*Executes batch requests until all jobs are executed.*
+
+**Parameters:**
+
+- jobs (list): Batch jobs.
+
+**Example**:
+
+```python
 jobs = [forum.users.get.job(user_id=i*1000) for i in range(42)]
 while jobs:  # It will be running until all jobs will be executed
     jobs, response = forum.batch.executor(jobs=jobs)

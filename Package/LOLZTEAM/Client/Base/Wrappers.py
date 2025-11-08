@@ -1,6 +1,7 @@
 """
 Some useful wrappers
 """
+
 from concurrent.futures import ThreadPoolExecutor
 from typing import Callable, TypeVar
 from functools import wraps
@@ -28,14 +29,14 @@ def RETRY(count: int = 10):
                         httpx.RemoteProtocolError,
                         anyio.EndOfStream):
                     # TODO: Add error logging here somehow -> e.__class__.__name__
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.5)  # Not changing to prevent requests spam
                     continue
             return await func(*args, **kwargs)
         return wrapper
     return decorator
 
 
-def UNIVERSAL(batchable=False, set_null_job=True):
+def UNIVERSAL(batchable=False) -> httpx.Response:
     """
     Universal wrapper to run async function in sync context and create batch jobs
     """
@@ -45,11 +46,10 @@ def UNIVERSAL(batchable=False, set_null_job=True):
                 self.func = func
                 self.batchable = batchable
 
-            def __get__(self, instance, owner) -> Callable:  # noqa
+            def __get__(self, instance, owner):
                 if instance is None:
                     return self.func
-
-                from .Core import _NONE  # pylint: disable=E0402
+                from .Core import _NONE
 
                 class RequestCapture:
                     """
@@ -122,7 +122,7 @@ def UNIVERSAL(batchable=False, set_null_job=True):
                         "params": params,
                     }
 
-                def null_job(*args, **kwargs):  # noqa pylint: disable=unused-argument
+                def null_job(*args, **kwargs):
                     #  Preventing errors when the function is not batchable
                     return None
 
@@ -145,20 +145,9 @@ def UNIVERSAL(batchable=False, set_null_job=True):
                         setattr(wrapper, "job", job_on_request)
                     else:
                         setattr(wrapper, "job", job)
-                elif set_null_job:
+                else:
                     setattr(wrapper, "job", null_job)
 
-                # TODO: Should refactor this shitcode someday
-                if self.func.__qualname__ in ["Market.batch", "Forum.batch"]:
-                    @UNIVERSAL(set_null_job=False)
-                    async def executor(self, jobs: list[dict[str, str]]) -> tuple[list[dict[str, str]], httpx.Response]:
-                        jobs_to_proceed = []
-                        while jobs:
-                            jobs_to_proceed.append(jobs.pop(0))
-                            if len(jobs_to_proceed) == 10:
-                                break
-                        return jobs, await self.core.batch(jobs=jobs_to_proceed)
-                    setattr(wrapper, "executor", executor.__get__(instance, type(instance)))  # pylint: disable=no-value-for-parameter
                 return wrapper
 
         return UniversalWrapper(func, batchable=batchable)

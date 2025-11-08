@@ -8,16 +8,15 @@ import logging
 import asyncio
 
 from httpx import Response
+from functools import wraps
 from typing import Union, Literal
 from dataclasses import dataclass
 from httpx._utils import URLPattern
-from importlib.metadata import version, PackageNotFoundError
 from binascii import Error as binasciiError
 from urllib.parse import parse_qs, urlparse
-from ..Base.Wrappers import RETRY, UNIVERSAL, wraps
+from ..Base.Wrappers import RETRY, UNIVERSAL
 from ..Base.Exceptions import BAD_TOKEN, BAD_ENDPOINT
-
-# TODO: Shithead, implement fucking synchronizer
+from importlib.metadata import version, PackageNotFoundError
 
 
 class APIClient:
@@ -97,8 +96,8 @@ class APIClient:
 
         if not kwargs.get("params"):
             kwargs["params"] = {}
-        if endpoint.startswith(self.settings.base_url.replace("api.", "")):  # Remove baseurl from endpoint path
-            endpoint = endpoint.replace(self.settings.base_url.replace("api.", ""), "")
+        if endpoint.startswith(self.settings.base_url.replace("prod-api.", "").replace("api.", "")):  # Remove baseurl from endpoint path
+            endpoint = endpoint.replace(self.settings.base_url.replace("prod-api.", "").replace("api.", ""), "")
         if not (endpoint.startswith('/') or endpoint.startswith(f"{self.settings.base_url}/")):  # Check for valid endpoint to prevent token leaks and other shit
             raise BAD_ENDPOINT(f"You can't send request to \"{endpoint}\" because it's domain is different from \"{self.settings.base_url}\"")
 
@@ -125,7 +124,7 @@ class APIClient:
             if isinstance(v, (list, tuple)) and not k.endswith("[]"):  # Parse list params
                 kwargs["params"][f"{k}[]"] = v
                 del kwargs["params"][k]
-            if isinstance(v, dict):                                    # Parse dict params
+            elif isinstance(v, dict):                                  # Parse dict params
                 for kk, vv in v.items():
                     kwargs["params"][f"{k}[{kk}]"] = vv
                 del kwargs["params"][k]
@@ -151,7 +150,7 @@ class APIClient:
                            f"Params: {mask(obj=kwargs.get('params', {}), mask_={'secret_answer': '********'})}",
                            f"Data: {json.dumps(mask(obj=kwargs.get('data', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('data') else None,
                            f"Json: {json.dumps(mask(obj=kwargs.get('json', {}), mask_={'secret_answer': '********'}))}" if kwargs.get('json') else None,
-                           f"File: {kwargs.get('files')}" if kwargs.get('files') else None
+                           #    f"File: {kwargs.get('files')}" if kwargs.get('files') else None
                        ]
                        )
             )
@@ -170,7 +169,7 @@ class AutoDelay:
 
     def __init__(self, delay_min: float = 0, enabled: bool = True):
         self._enabled = enabled
-        self._delay = 3
+        self._delay = 0.2
         self._delay_min = delay_min
         self._last_request_time = 0
 
@@ -319,12 +318,6 @@ class Logger:
             self.logger.error(message)
 
 
-class Sync:  # Placeholder
-    """
-    Delay Synchronizer
-    """
-
-
 @dataclass
 class Settings:
     """
@@ -428,8 +421,10 @@ class Settings:
     def token(self, token: str) -> None:
         self._token = token
         if self._isAntipublic:
-            self.async_client.headers.update({"authorization": f"{'Bearer' if '.' in self._token else 'Legacy'} {self._token}"})
-            self.user_id = None  # TODO: Unify this shit when legacy tokens will gone. Also don't forget to edit logger stuff.
+            self.async_client.headers.update({"authorization": f"Bearer {self._token}"})
+            self.user_id = None
+            # TODO: Unify this shit when legacy tokens will gone. Also don't forget to edit logger stuff.
+            # Legacy tokens are gone but `sub` in jwt doesn't match with lzt user_id, so ig ignore this for now. Putting random antipublic subject id will confuse users
             self.scopes = None
             self.jti = None
         else:
@@ -441,7 +436,7 @@ class Settings:
                 decoded_payload: dict = json.loads(base64.b64decode(payload + "==" if payload[-2:] != "==" else payload).decode("utf-8"))
                 user_id = decoded_payload.get("sub", 0)
                 if hasattr(self, "user_id"):
-                    if self.user_id != user_id:  # pylint: disable=E0203
+                    if self.user_id != user_id:
                         if not self._isAntipublic:
                             self.logger.file_name = f"{user_id}.{self.logger.logger_name}.log"
                         else:
@@ -461,7 +456,7 @@ class _NONE:
     """
 
     @staticmethod
-    def TrimNONE(obj: Union[dict, list, tuple]) -> Union[dict, list, tuple]:
+    def TrimNONE(obj: Union[dict, list]) -> Union[dict, list]:
         """
         Trim NONE from any object
         """
@@ -469,13 +464,13 @@ class _NONE:
             for key, value in obj.copy().items():
                 if isinstance(value, _NONE):
                     obj.pop(key)
-                if isinstance(value, (dict, list, tuple)):
+                elif isinstance(value, (dict, list)):
                     obj[key] = _NONE.TrimNONE(value)
-        elif isinstance(obj, (list, tuple)):
+        elif isinstance(obj, (list)):
             for value in obj.copy():
                 if isinstance(value, _NONE):
                     obj.remove(value)
-                if isinstance(value, (dict, list, tuple)):
+                elif isinstance(value, (dict, list)):
                     obj[obj.index(value)] = _NONE.TrimNONE(value)
         return obj
 

@@ -1,6 +1,8 @@
 from .Base import Constants
 from .Base.Core import APIClient, AutoDelay, Response, _NONE, NONE
 from .Base.Wrappers import UNIVERSAL
+
+from functools import cached_property
 from typing import Literal, Union
 from httpx import URL
 
@@ -16,14 +18,14 @@ class Market(APIClient):
     ## 💛Made with love💛
     """
 
-    def __init__(self, token: str, language: Literal["ru", "en"] = None, delay_min: float = 0, proxy: str = None, timeout: float = 90, verify: bool = True):
+    def __init__(self, token: str, language: Literal["ru", "en"] = None, delay_min: float = 0, proxy: str = None, timeout: float = 300, verify: bool = True):
         """
         LOLZTEAM Market API Client
 
         **Parameters:**
 
         - token (str): Your token.
-          > You can get it [there](https://zelenka.guru/account/api)
+          > You can get it [there](https://lolz.live/account/api)
         - language (Literal["ru", "en"]): Language of the API responses.
         - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests.
@@ -83,6 +85,7 @@ class Market(APIClient):
         self.publishing = self.__Publishing(self)
         self.profile = self.__Profile(self)
         self.payments = self.__Payments(self)
+        self.imap = self.__IMAP(self)
         self.proxy = self.__Proxy(self)
 
     class __Categories:
@@ -92,7 +95,7 @@ class Market(APIClient):
                 self.endpoint = endpoint
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.2)
             async def get(self, **kwargs) -> Response:
                 """
                 GET https://api.lzt.market/CATEGORY_NAME
@@ -125,7 +128,7 @@ class Market(APIClient):
                 return await self.core.request("GET", self.endpoint, params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.2)
             async def params(self) -> Response:
                 """
                 GET https://api.lzt.market/CATEGORY_NAME/params
@@ -142,7 +145,7 @@ class Market(APIClient):
                 return await self.core.request("GET", self.endpoint + "/params")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.2)
             async def games(self) -> Response:
                 """
                 GET https://api.lzt.market/CATEGORY_NAME/games
@@ -186,9 +189,9 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/supercell")
 
-        class __Origin(__BaseCategory):
+        class __Ea(__BaseCategory):
             def __init__(self, core: "Market"):
-                super().__init__(core, "/origin")
+                super().__init__(core, "/ea")
 
         class __Wot(__BaseCategory):
             def __init__(self, core: "Market"):
@@ -217,10 +220,6 @@ class Market(APIClient):
         class __Uplay(__BaseCategory):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/uplay")
-
-        class __War_Thunder(__BaseCategory):
-            def __init__(self, core: "Market"):
-                super().__init__(core, "/war-thunder")
 
         class __Discord(__BaseCategory):
             def __init__(self, core: "Market"):
@@ -267,7 +266,7 @@ class Market(APIClient):
             self.riot = self.__Riot(self.core)
             self.telegram = self.__Telegram(self.core)
             self.supercell = self.__Supercell(self.core)
-            self.origin = self.__Origin(self.core)
+            self.origin = self.__Ea(self.core)
             self.wot = self.__Wot(self.core)
             self.wot_blitz = self.__Wot_Blitz(self.core)
             self.gifts = self.__Gifts(self.core)
@@ -275,7 +274,6 @@ class Market(APIClient):
             self.eft = self.__Eft(self.core)
             self.socialclub = self.__SocialClub(self.core)
             self.uplay = self.__Uplay(self.core)
-            self.war_thunder = self.__War_Thunder(self.core)
             self.discord = self.__Discord(self.core)
             self.tiktok = self.__Tiktok(self.core)
             self.instagram = self.__Instagram(self.core)
@@ -309,7 +307,7 @@ class Market(APIClient):
             return await self.core.request("GET", "/category", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(3)
+        @AutoDelay.WrapperSet(0.2)
         async def get(
             self,
             category_name: Constants.Market.Category._Literal,
@@ -480,7 +478,7 @@ class Market(APIClient):
                 return await self.core.request("GET", f"/{item_id}/inventory-value", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(3)
+            @AutoDelay.WrapperSet(0.2)
             async def inventory_value(self, url: str, app_id: Constants.Market.AppID._Literal = NONE, currency: Constants.Market.Currency._Literal = NONE, ignore_cache: bool = NONE) -> Response:
                 """
                 GET https://api.lzt.market/steam-value
@@ -587,6 +585,27 @@ class Market(APIClient):
                 ```
                 """
                 return await self.core.request("GET", f"/{item_id}/mafile")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def mafile_add(self, item_id: int) -> Response:
+                """
+                POST https://api.lzt.market/{item_id}/mafile
+
+                *Add a new Steam mafile to the account.*
+
+                **Parameters:**
+
+                - item_id (int): Item ID.
+
+                **Example:**
+
+                ```python
+                response = market.managing.steam.mafile_add(item_id=1234567890)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("POST", f"/{item_id}/mafile")
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
@@ -881,6 +900,13 @@ class Market(APIClient):
 
             - item_id (int): Item ID.
             - reason (str): Reason.
+
+            **Example:**
+
+            ```python
+            response = market.managing.delete(item_id=1234567890)
+            print(response.json())
+            ```
             """
             json = {
                 "reason": reason
@@ -1069,7 +1095,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def letters(self, item_id: int = None, email: str = None, password: str = None, limit: int = None) -> Response:
+        async def letters(self, item_id: int = NONE, email: str = NONE, password: str = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.lzt.market/letters2
 
@@ -1173,7 +1199,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def tag(self, item_id: int, tag_id: Union[int, list[int]]) -> Response:
+        async def tag(self, item_id: int, tag_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/tag
 
@@ -1198,7 +1224,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def untag(self, item_id: int, tag_id: Union[int, list[int]]) -> Response:
+        async def untag(self, item_id: int, tag_id: int) -> Response:
             """
             DELETE https://api.lzt.market/{item_id}/tag
 
@@ -1333,8 +1359,108 @@ class Market(APIClient):
             return await self.core.request("POST", f"/{item_id}/change-owner", json=json)
 
     class __Purchasing:
+        class __Cart:
+            def __init__(self, core: "Market"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def get(
+                self,
+                category_id: Constants.Market.CategoryID._Literal = NONE,
+                **kwargs
+            ) -> Response:
+                """
+                GET https://api.lzt.market/cart
+
+                *Returns the list of items currently in your cart.*
+
+                **Parameters:**
+
+                - category_id (int): Category ID.
+                - page (int): Page number.
+                - pmin (float): Minimum price.
+                - pmax (float): Maximum price.
+                - title (str): Filter by title.
+                - order_by (str): Order by.
+                - tag_id (list): Tag IDs.
+                - not_tag_id (list): Not Tag IDs.
+                - origin (str): Item origin.
+                - not_origin (str): Not item origin.
+                - user_id (int): User ID.
+                - nsb (bool): Not sold by.
+                - sb (bool): Sold by.
+                - nsb_by_me (bool): Not sold by me.
+                - sb_by_me (bool): Sold by me.
+                - currency (str): Currency.
+                - email_login_data (str): Email login data.
+                - email_provider (str): Email provider.
+                - not_email_provider (str): Not email provider.
+                - parse_same_item_ids (bool): Parse same item IDs.
+                - kwargs: Additional parameters.
+
+                **Example:**
+
+                ```python
+                response = market.purchasing.cart.get(category_id=1, page=2)
+                print(response.json())
+                ```
+                """
+                params = {
+                    "category_id": category_id
+                }
+                if kwargs:
+                    params.update(kwargs)
+                return await self.core.request("GET", "/cart", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def add(self, item_id: int) -> Response:
+                """
+                POST https://api.lzt.market/cart
+
+                *Adds item to your cart.*
+
+                **Parameters:**
+
+                - item_id (int): Item ID.
+
+                **Example:**
+
+                ```python
+                response = market.purchasing.cart.add(item_id=1234567890)
+                print(response.json())
+                ```
+                """
+                json = {
+                    "item_id": item_id
+                }
+                return await self.core.request("POST", "/cart", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def delete(self, item_id: int = NONE) -> Response:
+                """
+                DELETE https://api.lzt.market/cart
+
+                *Deletes an item from the cart. If item_id is None, will remove all items from your cart.*
+
+                **Parameters:**
+                - item_id (int): Item ID to delete.
+
+                **Example:**
+
+                ```python
+                response = market.purchasing.cart.delete(item_id=1234567890)
+                print(response.json())
+                ```
+                """
+                json = {"item_id": item_id}
+                return await self.core.request("DELETE", "/cart", json=json)
+
         def __init__(self, core: "Market"):
             self.core = core
+            self.cart = self.__Cart(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -1731,7 +1857,7 @@ class Market(APIClient):
                 "change_password_on_purchase": change_password_on_purchase,
                 "hide_favourites": hide_favorites,
                 "show_too_low_price_change_warning": show_too_low_price_change_warning,
-                "allow_accept_accounts": ",".join(allow_accept_accounts) if allow_accept_accounts else None,
+                "allow_accept_accounts": ",".join(allow_accept_accounts) if not isinstance(allow_accept_accounts, _NONE) else allow_accept_accounts,
                 "currency": currency,
             }
             if not isinstance(telegram_client, _NONE):
@@ -1744,6 +1870,69 @@ class Market(APIClient):
                 json["telegram_lang_code"] = telegram_client.get("telegram_lang_code", NONE)
                 json["telegram_system_lang_code"] = telegram_client.get("telegram_system_lang_code", NONE)
             return await self.core.request("POST", "/me", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def claims(
+            self,
+            claim_type: Literal["market", "nomarket"] = NONE,
+            claim_state: Literal["active", "solved", "rejected", "settled"] = NONE,
+        ) -> Response:
+            """
+            GET https://api.lzt.market/claims
+
+            *Returns a list of claims filed against you.*
+
+            **Parameters:**
+
+            - type (str, optional): Filter claims by their type.
+            - claim_state (str, optional): Filter claims by their state.
+
+            **Example:**
+
+            ```python
+            response = market.profile.claims(claim_type="market", claim_state="active")
+            print(response.json())
+            ```
+            """
+            params = {
+                "type": claim_type,
+                "claim_state": claim_state
+            }
+            return await self.core.request("GET", "/claims", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def create_claim(
+            self,
+            item_id: int,
+            post_body: str,
+        ) -> Response:
+            """
+            POST https://api.lzt.market/claims
+
+            *Create a claim.*
+
+            **Parameters:**
+
+            - item_id (int): The ID of the item related to the claim.
+            - post_body (str): Description of the situation and evidence.
+
+            **Example:**
+
+            ```python
+            response = market.profile.create_claim(
+                item_id=123456,
+                post_body="Bleh"
+            )
+            print(response.json())
+            ```
+            """
+            json = {
+                "item_id": item_id,
+                "post_body": post_body
+            }
+            return await self.core.request("POST", "/claims", json=json)
 
     class __Payments:
         class __Auto:
@@ -2011,15 +2200,68 @@ class Market(APIClient):
                     "wallet": wallet,
                     "amount": amount,
                     "currency": currency,
-                    "include_fee": bool(include_fee) if not isinstance(include_fee, _NONE) else include_fee
+                    "include_fee": include_fee if not isinstance(include_fee, _NONE) else False
                 }
                 return await self.core.request("POST", "/balance/payout/services", json=json)
+
+        class __Balance:
+            def __init__(self, core: "Market"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def get(self) -> Response:
+                """
+                GET https://api.lzt.market/balance/exchange
+
+                *Returns list of balances.*
+
+                **Example:**
+
+                ```python
+                response = market.payments.balance.get()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", "/balance/exchange")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def exchange(self, amount: int, from_balance: str, to_balance: str = "balance") -> Response:
+                """
+                POST https://api.lzt.market/balance/exchange
+
+                *Transfer funds from one balance to another.*
+
+                **Parameters:**
+
+                - from_balance (str): Source balance type.
+                - to_balance (str): Target balance type.
+                - amount (int): Amount to exchange.
+
+                **Example:**
+
+                ```python
+                response = market.payments.balance_exchange(
+                    from_balance="123",
+                    amount=100
+                )
+                print(response.json())
+                ```
+                """
+                json = {
+                    "from_balance": from_balance,
+                    "to_balance": to_balance,
+                    "amount": amount
+                }
+                return await self.core.request("POST", "/balance/exchange", json=json)
 
         def __init__(self, core: "Market"):
             self.core = core
             self.invoice = self.__Invoice(self.core)
             self.auto = self.__Auto(self.core)
             self.payout = self.__Payout(self.core)
+            self.balance = self.__Balance(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -2048,7 +2290,9 @@ class Market(APIClient):
             username: str = NONE,
             comment: str = NONE,
             hold: int = NONE,
-            hold_option: Constants.Market.HoldPeriod._Literal = NONE
+            hold_option: Constants.Market.HoldPeriod._Literal = NONE,
+            telegram_deal: bool = NONE,
+            telegram_username: str = NONE
         ) -> Response:
             """
             POST https://api.lzt.market/balance/transfer
@@ -2065,6 +2309,8 @@ class Market(APIClient):
             - comment (str): Payment comment.
             - hold (int): Hold length.
             - hold_option (str): Hold option.
+            - telegram_deal (bool): Is the deal happening on Telegram?
+            - telegram_username (str): Telegram username of the user you are dialoguing with.
 
             **Example:**
 
@@ -2089,7 +2335,9 @@ class Market(APIClient):
                 "comment": comment,
                 "transfer_hold": bool(hold) if not isinstance(hold, _NONE) else hold,
                 "hold_length_value": hold,
-                "hold_length_option": hold_option
+                "hold_length_option": hold_option,
+                "telegram_deal": telegram_deal,
+                "telegram_username": telegram_username
             }
             return await self.core.request("POST", "/balance/transfer", json=json)
 
@@ -2149,6 +2397,7 @@ class Market(APIClient):
                           page: int = NONE,
                           min_amount: float = NONE,
                           max_amount: float = NONE,
+                          currency: Constants.Market.Currency._Literal = NONE,
                           operation_id_lt: int = NONE,
                           receiver: str = NONE,
                           sender: str = NONE,
@@ -2196,6 +2445,7 @@ class Market(APIClient):
                 "page": page,
                 "pmin": min_amount,
                 "pmax": max_amount,
+                "currency": currency,
                 "operation_id_lt": operation_id_lt,
                 "receiver": receiver,
                 "sender": sender,
@@ -2280,7 +2530,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def add(self, proxy: Union[list, str]) -> Response:
+        async def add(self, proxy: Union[list[str], str]) -> Response:
             """
             POST https://api.lzt.market/proxy
 
@@ -2288,7 +2538,7 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - proxy (Union[list, str]): Single proxy or list of proxies.
+            - proxy (list[str] | str): Single proxy or list of proxies.
 
             **Example:**
 
@@ -2330,9 +2580,123 @@ class Market(APIClient):
             }
             return await self.core.request("DELETE", "/proxy", json=json)
 
-    @UNIVERSAL(batchable=False)
-    @AutoDelay.WrapperSet(0.2)
-    async def batch(self, jobs: list[dict[str, str]]) -> Response:
+    class __IMAP:
+        def __init__(self, core: "Market"):
+            self.core = core
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def add(self, domain: str, imap_server: str, port: int, secure: bool) -> Response:
+            """
+            POST https://api.lzt.market/imap
+
+            *Adds an IMAP configuration for a domain.*
+
+            **Parameters:**
+            - domain (str): Domain to create IMAP configuration for.
+            - imap_server (str): IMAP server address.
+            - port (int): IMAP server port.
+            - secure (bool): Whether to use a secure connection.
+
+            **Example:**
+            ```python
+            response = market.imap.create(
+                domain="supercoolmail.com",
+                imap_server="imap.supercoolmail.com",
+                port=993,
+                secure=True
+            )
+            print(response.json())
+            ```
+            """
+            json = {
+                "domain": domain,
+                "imap_server": imap_server,
+                "port": port,
+                "secure": secure
+            }
+            return await self.core.request("POST", "/imap", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def delete(self, domain: str) -> Response:
+            """
+            DELETE https://api.lzt.market/imap
+
+            *Delete an IMAP configuration for a domain.*
+
+            **Parameters:**
+            - domain (str): Domain to delete IMAP configuration for.
+
+            **Example:**
+            ```python
+            response = market.imap.delete(domain="supercoolmail.com")
+            print(response.json())
+            ```
+            """
+            json = {
+                "domain": domain
+            }
+            return await self.core.request("DELETE", "/imap", json=json)
+
+    class __Batch:
+        def __init__(self, core: "Market"):
+            self.core = core
+
+        @UNIVERSAL(batchable=False)
+        @AutoDelay.WrapperSet(0.2)
+        async def __call__(self, jobs: list):
+            """
+            POST https://api.lzt.market/batch
+
+            *Batch requests.*
+
+            **Parameters:**
+
+            - jobs (list[dict]): Batch jobs.
+
+            **Example:**
+
+            ```python
+            response = market.batch(jobs=[{"method": "GET", "url": "/1234567890", params: {}}])
+            #  Also you can create jobs for almost all functions like this:
+            #  job = market.managing.get.job(item_id=1234567890)
+            print(response.json())
+
+            #  You also can use executor to ease work with batch requests while you have a lot of jobs:
+            jobs = [market.managing.get.job(item_id=1234567890) for _ in range(42)]
+            while jobs:  # It will be running until all jobs will be executed
+                jobs, response = market.batch.executor(jobs=jobs)
+                print(response.json())
+            ```
+            """
+            return await self.core.request("POST", "/batch", json=jobs)
+
+        @UNIVERSAL(batchable=False)
+        @AutoDelay.WrapperSet(0.2)
+        async def executor(self, jobs):
+            """
+            *Executes batch requests until all jobs are executed.*
+
+            **Parameters:**
+
+            - jobs (list): Batch jobs.
+
+            **Example**:
+
+            ```python
+            jobs = [market.managing.get.job(item_id=1234567890) for _ in range(42)]
+            while jobs:  # It will be running until all jobs will be executed
+                jobs, response = market.batch.executor(jobs=jobs)
+                print(response.json())
+            ```
+            """
+            jobs_to_proceed = jobs[:10]
+            jobs = jobs[10:]
+            return jobs, await self.core.batch(jobs=jobs_to_proceed)
+
+    @cached_property
+    def batch(self) -> __Batch:
         """
         POST https://api.lzt.market/batch
 
@@ -2340,7 +2704,7 @@ class Market(APIClient):
 
         **Parameters:**
 
-        - jobs (list[dict[str, str]]): Batch jobs.
+        - jobs (list[dict]): Batch jobs.
 
         **Example:**
 
@@ -2357,4 +2721,4 @@ class Market(APIClient):
             print(response.json())
         ```
         """
-        return await self.core.request("POST", "/batch", json=jobs)
+        return self.__Batch(self.core)

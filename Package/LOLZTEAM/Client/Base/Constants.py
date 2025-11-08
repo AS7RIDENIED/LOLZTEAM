@@ -3,61 +3,122 @@ from typing import Literal
 
 class Market:
     class Category:
-        _Literal = Literal["steam", "fortnite", "mihoyo", "riot", "telegram", "supercell", "origin", "world-of-tanks", "wot-blitz", "epicgames", "gifts", "escape-from-tarkov", "socialclub", "uplay", "war-thunder", "discord", "tiktok", "instagram", "battlenet", "vpn", "roblox", "warface", "minecraft"]
+        _Literal = Literal[
+            "steam",
+            "fortnite",
+            "mihoyo",
+            "riot",
+            "telegram",
+            "supercell",
+            "ea",
+            "world-of-tanks",
+            "wot-blitz",
+            "epicgames",
+            "gifts",
+            "minecraft",
+            "escape-from-tarkov",
+            "socialclub",
+            "uplay",
+            "discord",
+            "tiktok",
+            "instagram",
+            "chatgpt",
+            "battlenet",
+            "vpn",
+            "roblox",
+            "warface"
+        ]
         steam = "steam"
         fortnite = "fortnite"
         mihoyo = "mihoyo"
         riot = "riot"
         telegram = "telegram"
         supercell = "supercell"
-        origin = "origin"
+        ea = "ea"
         wot = "world-of-tanks"
         wot_blitz = "wot-blitz"
         epicgames = "epicgames"
         gifts = "gifts"
+        minecraft = "minecraft"
         eft = "escape-from-tarkov"
         socialclub = "socialclub"
         uplay = "uplay"
-        war_thunder = "war-thunder"
         discord = "discord"
         tiktok = "tiktok"
         instagram = "instagram"
-        battlenet = "battlenet"
         chatgpt = "chatgpt"
+        battlenet = "battlenet"
         vpn = "vpn"
         roblox = "roblox"
         warface = "warface"
-        minecraft = "minecraft"
 
     class CategoryID:
-        _Literal = Literal["1", "3", "4", "5", "6", "7", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "24", "27", "28", "30", "31"]
+        _Literal = Literal[
+            "1",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "22",
+            "24",
+            "28",
+            "30",
+            "31"
+        ]
         steam = 1
-        fortnite = 9
-        mihoyo = 17
-        riot = 13
-        telegram = 24
-        supercell = 15
         origin = 3
-        wot = 14
-        wot_blitz = 16
-        epicgames = 12
-        gifts = 30
-        eft = 18
-        socialclub = 7
+        warface = 4
         uplay = 5
-        war_thunder = 27
-        discord = 22
-        tiktok = 20
+        chatgpt = 6
+        socialclub = 7
+        fortnite = 9
         instagram = 10
         battlenet = 11
-        chatgpt = 6
+        epicgames = 12
+        riot = 13
+        wot = 14
+        supercell = 15
+        wot_blitz = 16
+        mihoyo = 17
+        eft = 18
         vpn = 19
-        roblox = 31
-        warface = 4
+        tiktok = 20
+        discord = 22
+        telegram = 24
         minecraft = 28
+        gifts = 30
+        roblox = 31
 
     class OperationTypes:
-        _Literal = Literal["income", "cost", "paid_item", "sold_item", "withdrawal_balance", "refilled_balance", "internal_purchase", "money_transfer", "claim_hold", "insurance_deposit", "paid_mail", "contest"]
+        _Literal = Literal[
+            "income",
+            "cost",
+            "paid_item",
+            "sold_item",
+            "withdrawal_balance",
+            "refilled_balance",
+            "internal_purchase",
+            "money_transfer",
+            "claim_hold",
+            "insurance_deposit",
+            "paid_mail",
+            "contest",
+            "invoice",
+            "balance_exchange"
+        ]
         income = "income"
         cost = "cost"
         paid_item = "paid_item"
@@ -70,6 +131,8 @@ class Market:
         insurance_deposit = "insurance_deposit"
         paid_mail = "paid_mail"
         contest = "contest"
+        invoice = "invoice"
+        balance_exchange = "balance_exchange"
 
     class HoldPeriod:
         _Literal = Literal["hour", "day", "week", "month"]
@@ -77,14 +140,14 @@ class Market:
         day = "day"
         week = "week"
         month = "month"
-        # year = "year"  # Max period is month mhm
 
     class Currency:
-        _Literal = Literal["rub", "uah", "kzt", "byn", "usd", "eur", "gbp", "cny", "try", "jpy", "brl"]
+        _Literal = Literal["rub", "uah", "kzt", "pln", "byn", "usd", "eur", "gbp", "cny", "try", "jpy", "brl"]
         ruble = "rub"
         hryvnia = "uah"
         tenge = "kzt"
-        ruble_byn = "byn"
+        zloty = "pln"
+        byn = "byn"
         dollar = "usd"
         euro = "eur"
         pound = "gbp"
@@ -111,15 +174,34 @@ class Market:
         three_days = 1
 
     class ItemStatus:
-        _Literal = Literal["active", "paid", "deleted", "awaiting", "closed", "discount_request", "stickied", "pre_active"]
+        _Literal = Literal[
+            "stickied",
+            "discount_request",
+            "in_buyers_favorites",
+            "active",
+            "paid",
+            "closed",
+            "deleted",
+            "awaiting",
+            "pre_active",
+            "pre_upload",
+            "pending_deletion",
+            "closed_inactive",
+            "auto_bump"
+        ]
+        stickied = "stickied"
+        discount_request = "discount_request"
+        in_buyers_favorites = "in_buyers_favorites"
         active = "active"
         paid = "paid"
+        closed = "closed"
         deleted = "deleted"
         awaiting = "awaiting"
-        closed = "closed"
-        discount_request = "discount_request"
-        stickied = "stickied"
         pre_active = "pre_active"
+        pre_upload = "pre_upload"
+        pending_deletion = "pending_deletion"
+        closed_inactive = "closed_inactive"
+        auto_bump = "auto_bump"
 
     class ItemOrder:
         _Literal = Literal["price_to_up", "price_to_down", "pdate_to_down", "pdate_to_up", "pdate_to_down_upload", "pdate_to_up_upload", "ddate_to_down", "ddate_to_up", "edate_to_down", "edate_to_up"]
@@ -184,27 +266,30 @@ class Forum:
             days = "days"
 
         class UpgradePrize:
-            _Literal = Literal["1", "6", "12", "14", "17", "19"]
-            supreme = 1
-            legend = 6
-            antipublic = 12
-            uniq = 14
-            photo_leaks = 17
-            auto_participation = 19
+            _Literal = Literal["19", "20", "6", "1", "12", "13", "15", "14", "17"]
+            auto_participation = 19       # Автоучастие в розыгрышах - 1 000 ₽
+            auto_market_purchase = 20     # Автоматическая покупка на Маркете - 999 ₽
+            legend = 6                    # Легенда - 2 999 ₽
+            supreme = 1                   # Суприм - 1 500 ₽
+            antipublic_plus = 12          # Подписка AntiPublic.One Plus - 2 000 ₽
+            antipublic_premium = 13		  # Подписка AntiPublic.one Premium - 500 ₽
+            antipublic_premium_5000 = 15  # Подписка AntiPublic.one Premium - 5 000 ₽
+            uniq = 14                     # Уник - 7 500 ₽
+            photo_leaks_6m = 17           # Слив фотографий 18+ – 6 месяцев - 1 200 ₽
 
     class ThreadOrder:
-        _Literal = Literal["natural", "natural_reverse", "thread_create_date", "thread_create_date_reverse", "thread_update_date", "thread_update_date_reverse", "thread_view_count", "thread_view_count_reverse", "thread_post_count", "thread_post_count_reverse", "first_post_likes", "first_post_likes_reverse"]
+        _Literal = Literal["natural",
+                           "thread_create_date",
+                           "thread_update_date",
+                           "thread_view_count",
+                           "first_post_likes",
+                           "reply_count"]
         default = "natural"
-        oldest = "thread_create_date"
-        oldest_bumped = "thread_update_date_reverse"
-        newest = "thread_create_date_reverse"
-        newest_bumped = "thread_update_date"
-        min_views = "thread_view_count"
-        max_views = "thread_view_count_reverse"
-        min_posts = "thread_post_count"
-        max_posts = "thread_post_count_reverse"
-        min_likes = "first_post_likes"
-        max_likes = "first_post_likes_reverse"
+        create_date = "thread_create_date"
+        bump_date = "thread_update_date"
+        views = "thread_view_count"
+        posts = "reply_count"
+        likes = "first_post_likes"
 
     class PostOrder:
         _Literal = Literal["natural", "natural_reverse", "post_likes", "post_likes_reverse"]

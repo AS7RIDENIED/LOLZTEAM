@@ -1,7 +1,8 @@
+from .Base import Constants
 from .Base.Core import APIClient, AutoDelay, Response, _NONE, NONE
 from .Base.Wrappers import UNIVERSAL
-from .Base import Constants
 
+from functools import cached_property
 from typing import Literal, Union
 import builtins
 
@@ -24,7 +25,7 @@ class Forum(APIClient):
         **Parameters:**
 
         - token (str): Your token.
-          > You can get it [there](https://zelenka.guru/account/api)
+          > You can get it [there](https://lolz.live/account/api)
         - language (Literal["ru", "en"]): Language of the API responses.
         - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests.
@@ -143,6 +144,113 @@ class Forum(APIClient):
     class __Forums:
         def __init__(self, core: "Forum"):
             self.core = core
+            self.feed = self.__Feed(self.core)
+            self.links = self.__Links(self.core)
+
+        class __Feed:
+            def __init__(self, core: "Forum"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def options(self) -> Response:
+                """
+                GET https://prod-api.lolz.live/forums/feed/options
+
+                *Returns available options for the forums feed.*
+
+                **Example:**
+
+                ```python
+                response = forum.forums.feed.options()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", "/forums/feed/options")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def edit(self, node_ids: list[int] = NONE, keywords: list[str] = NONE) -> Response:
+                """
+                PUT https://prod-api.lolz.live/forums/feed/options
+
+                *Edit feed options.*
+
+                **Parameters:**
+                - node_ids (list[int]): Array of forum ids to exclude from the feed.
+                - keywords (list[str]): List of keywords to exclude specific threads from the feed.
+
+                **Example:**
+
+                ```python
+                response = forum.forums.feed.edit(node_ids=[8, 876, 766], keywords=["раздача", "звезды"])
+                print(response.json())
+                ```
+                """
+                json = {
+                    "node_ids": node_ids,
+                    "keywords": keywords
+                }
+                return await self.core.request("PUT", "/forums/feed/options", json=json)
+
+        class __Links:
+            def __init__(self, core: "Forum"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def list(self) -> Response:
+                """
+                GET https://prod-api.lolz.live/link-forums
+
+                *List of all link forums.*
+
+                **Example:**
+
+                ```python
+                response = forum.forums.links.list()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", "/link-forums")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def get(self, link_id: int) -> Response:
+                """
+                GET https://prod-api.lolz.live/link-forums/{link_id}
+
+                *Detail information of a link forum.*
+
+                **Parameters:**
+
+                - link_id (int): Id of link forum.
+
+                **Example:**
+
+                ```python
+                response = forum.forums.links.get(link_id=1)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", f"/link-forums/{link_id}")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def grouped(self) -> Response:
+            """
+            GET https://prod-api.lolz.live/forums/grouped
+
+            *Returns grouped forums (forums tree).*
+
+            **Example:**
+
+            ```python
+            response = forum.forums.grouped()
+            print(response.json())
+            ```
+            """
+            return await self.core.request("GET", "/forums/grouped")
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -331,370 +439,209 @@ class Forum(APIClient):
         class __Contests:
             def __init__(self, core: "Forum"):
                 self.core = core
-                self.money = self.__Money(self.core)
-                self.upgrade = self.__Upgrade(self.core)
 
-            class __Money:
-                def __init__(self, core: "Forum"):
-                    self.core = core
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def money(
+                self,
+                post_body: str,
+                length: int,
+                length_option: Constants.Forum.Contests.Length._Literal,
+                require_week_sympathy: int,
+                require_total_sympathy: int,
+                secret_answer: str = NONE,
+                prize_places: list[int] = NONE,
+                prize_amount: float = NONE,
+                winners_count: int = NONE,
+                reply_group: Constants.Forum.ReplyGroups._Literal = 2,
+                title: str = NONE,
+                title_en: str = NONE,
+                tags: list[str] = NONE,
+                hide_contacts: bool = NONE,
+                allow_ask_hidden_content: bool = NONE,
+                comment_ignore_group: bool = NONE,
+                dont_alert_followers: bool = NONE,
+                forum_notifications: bool = True,
+                email_notifications: bool = False,
+                schedule_date: str = NONE,
+                schedule_time: str = NONE,
+            ) -> Response:
+                """
+                POST https://prod-api.lolz.live/contests
 
-                @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
-                async def create_by_time(
-                    self,
-                    post_body: str,
-                    prize_amount: float,
-                    winners_count: int,
-                    length: int,
-                    length_option: Constants.Forum.Contests.Length._Literal,
-                    require_week_sympathy: int,
-                    require_total_sympathy: int,
-                    secret_answer: str,
-                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = NONE,
-                    title_en: str = NONE,
-                    tags: list[str] = NONE,
-                    hide_contacts: bool = NONE,
-                    allow_ask_hidden_content: bool = NONE,
-                    comment_ignore_group: bool = NONE,
-                    dont_alert_followers: bool = NONE,
-                    forum_notifications: bool = True,
-                    email_notifications: bool = False,
-                ) -> Response:
-                    """
-                    POST https://prod-api.lolz.live/threads
+                *Create a money contest.*
 
-                    *Create a money contest.*
+                **Parameters:**
 
-                    **Parameters:**
+                - post_body (str): Content of the new contest.
+                - prize_amount (float): How much money will each winner receive.
+                - winners_count (int): Winner count (prize count).
+                    > The maximum value is 100.
+                - length (int): Contest duration value.
+                    > The maximum duration is 3 days.
+                - length_option (str): Contest duration type.
+                    > Can be [minutes, hours, days]. The maximum duration is 3 days.
+                - require_week_sympathy (int): Sympathies for this week.
+                - require_total_sympathy (int): Symapthies for all time.
+                - secret_answer (str): Secret answer of your account.
+                - reply_group (int): Allow to reply only users with chosen or higher group.
+                - title (str): Thread title.
+                    > Can be skipped if title_en set.
+                - title_en (str): Thread title in english.
+                    > Can be skipped if title set.
+                - tags (list[str]): Thread tags.
+                - hide_contacts (bool): Hide contacts.
+                - allow_ask_hidden_content (bool): Allow ask hidden content.
+                - comment_ignore_group (bool): Allow commenting if user can't post in thread.
+                - dont_alert_followers (bool): Don't alert followers.
+                - forum_notifications (bool): Get forum notifications.
+                - email_notifications (bool): Get email notifications.
+                - schedule_date (str): Date to schedule thread creation (format: `DD-MM-YYYY`).
+                - schedule_time (str): Time to schedule thread creation (format: `HH:MM`).
 
-                    - post_body (str): Content of the new contest.
-                    - prize_amount (float): How much money will each winner receive.
-                    - winners_count (int): Winner count (prize count).
-                        > The maximum value is 100.
-                    - length (int): Contest duration value.
-                        > The maximum duration is 3 days.
-                    - length_option (str): Contest duration type.
-                        > Can be [minutes, hours, days]. The maximum duration is 3 days.
-                    - require_week_sympathy (int): Sympathies for this week.
-                    - require_total_sympathy (int): Symapthies for all time.
-                    - secret_answer (str): Secret answer of your account.
-                    - reply_group (int): Allow to reply only users with chosen or higher group.
-                    - title (str): Thread title.
-                        > Can be skipped if title_en set.
-                    - title_en (str): Thread title in english.
-                        > Can be skipped if title set.
-                    - tags (list[str]): Thread tags.
-                    - hide_contacts (bool): Hide contacts.
-                    - allow_ask_hidden_content (bool): Allow ask hidden content.
-                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
-                    - dont_alert_followers (bool): Don't alert followers.
-                    - forum_notifications (bool): Get forum notifications.
-                    - email_notifications (bool): Get email notifications.
+                **Example:**
 
-                    **Example:**
+                ```python
+                response = forum.threads.contests.money.create_by_time(
+                    post_body="Contest",
+                    prize_amount=500,
+                    winners_count=1,
+                    length=3,
+                    length_option="days",
+                    require_week_sympathy=1,
+                    require_total_sympathy=50,
+                    secret_answer="My secret answer",
+                    title="Contest",
+                    schedule_date="31-12-2025",
+                    schedule_time="23:59"
+                )
+                print(response.json())
+                ```
+                """
+                json = {
+                    "prize_data_money": prize_amount,
+                    "prize_data_places": prize_places,
+                    "is_money_places": bool(prize_places) if not isinstance(prize_places, _NONE) else prize_places,
+                    "count_winners": winners_count,
+                    "length_value": length,
+                    "length_option": length_option,
+                    "require_like_count": require_week_sympathy,
+                    "require_total_like_count": require_total_sympathy,
+                    "secret_answer": secret_answer,
+                    "contest_type": "by_finish_date",
+                    "prize_type": "money",
+                    "post_body": post_body,
+                    "title": title,
+                    "title_en": title_en,
+                    "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
+                    "reply_group": reply_group,
+                    "hide_contacts": hide_contacts,
+                    "allow_ask_hidden_content": allow_ask_hidden_content,
+                    "comment_ignore_group": comment_ignore_group,
+                    "dont_alert_followers": dont_alert_followers,
+                    "watch_thread_state": True if any([forum_notifications if not isinstance(forum_notifications, _NONE) else None, email_notifications if not isinstance(email_notifications, _NONE) else None]) else False,
+                    "watch_thread": forum_notifications,
+                    "watch_thread_email": email_notifications,
+                    "schedule_date": schedule_date,
+                    "schedule_time": schedule_time,
+                }
+                return await self.core.request("POST", "/contests", json=json)
 
-                    ```python
-                    response = forum.threads.contests.money.create_by_time(
-                        post_body="Contest",
-                        prize_amount=500,
-                        winners_count=1,
-                        length=3,
-                        length_option="days",
-                        require_week_sympathy=1,
-                        require_total_sympathy=50,
-                        secret_answer="My secret answer",
-                        title="Contest"
-                    )
-                    print(response.json())
-                    ```
-                    """
-                    json = {
-                        "prize_data_money": prize_amount,
-                        "count_winners": winners_count,
-                        "length_value": length,
-                        "length_option": length_option,
-                        "require_like_count": require_week_sympathy,
-                        "require_total_like_count": require_total_sympathy,
-                        "secret_answer": secret_answer,
-                        "contest_type": "by_finish_date",
-                        "prize_type": "money",
-                        "forum_id": 766,
-                        "post_body": post_body,
-                        "title": title,
-                        "title_en": title_en,
-                        "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
-                        "reply_group": reply_group,
-                        "hide_contacts": hide_contacts,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
-                        "comment_ignore_group": comment_ignore_group,
-                        "dont_alert_followers": dont_alert_followers,
-                        "watch_thread_state": True if any([forum_notifications if not isinstance(forum_notifications, _NONE) else None, email_notifications if not isinstance(email_notifications, _NONE) else None]) else False,
-                        "watch_thread": forum_notifications,
-                        "watch_thread_email": email_notifications
-                    }
-                    return await self.core.request("POST", "/threads", json=json)
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def upgrade(
+                self,
+                post_body: str,
+                prize_group: Constants.Forum.Contests.UpgradePrize._Literal,
+                winners_count: int,
+                length: int,
+                length_option: Constants.Forum.Contests.Length._Literal,
+                require_week_sympathy: int,
+                require_total_sympathy: int,
+                secret_answer: str,
+                reply_group: Constants.Forum.ReplyGroups._Literal = 2,
+                title: str = NONE,
+                title_en: str = NONE,
+                tags: list[str] = NONE,
+                hide_contacts: bool = NONE,
+                allow_ask_hidden_content: bool = NONE,
+                comment_ignore_group: bool = NONE,
+                dont_alert_followers: bool = NONE,
+                forum_notifications: bool = True,
+                email_notifications: bool = False,
+                schedule_date: str = NONE,
+                schedule_time: str = NONE,
+            ) -> Response:
+                """
+                POST https://prod-api.lolz.live/contests
 
-                @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
-                async def create_by_count(
-                    self,
-                    post_body: str,
-                    prize_amount: float,
-                    winners_count: int,
-                    needed_members: int,
-                    require_week_sympathy: int,
-                    require_total_sympathy: int,
-                    secret_answer: str,
-                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = NONE,
-                    title_en: str = NONE,
-                    tags: list[str] = NONE,
-                    hide_contacts: bool = NONE,
-                    allow_ask_hidden_content: bool = NONE,
-                    comment_ignore_group: bool = NONE,
-                    dont_alert_followers: bool = NONE,
-                    forum_notifications: bool = True,
-                    email_notifications: bool = False,
-                ) -> Response:
-                    """
-                    POST https://prod-api.lolz.live/threads
+                *Create a new contest.*
 
-                    *Create a money contest.*
+                **Parameters:**
 
-                    **Parameters:**
+                - post_body (str): Content of the new contest.
+                - prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
+                - winners_count (int): Winner count (prize count).
+                    > The maximum value is 100.
+                - length (int): Contest duration value.
+                    > The maximum duration is 3 days.
+                - length_option (Constants.Forum.Contests.Length._Literal): Contest duration type.
+                    > Can be [minutes, hours, days]. The maximum duration is 3 days.
+                - require_week_sympathy (int): Sympathies for this week.
+                - require_total_sympathy (int): Sympathies for all time.
+                - secret_answer (str): Secret answer of your account.
+                - reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
+                - title (str): Thread title.
+                    > Can be skipped if title_en set.
+                - title_en (str): Thread title in english.
+                    > Can be skipped if title set.
+                - tags (list[str]): Thread tags.
+                - hide_contacts (bool): Hide contacts.
+                - allow_ask_hidden_content (bool): Allow ask hidden content.
+                - comment_ignore_group (bool): Allow commenting if user can't post in thread.
+                - dont_alert_followers (bool): Don't alert followers.
+                - forum_notifications (bool): Get forum notifications.
+                - email_notifications (bool): Get email notifications.
+                - schedule_date (str): Date to schedule thread creation (format: `DD-MM-YYYY`).
+                - schedule_time (str): Time to schedule thread creation (format: `HH:MM`).
 
-                    - post_body (str): Content of the new contest.
-                    - prize_amount (float): How much money will each winner receive.
-                    - winners_count (int): Winner count (prize count).
-                    - needed_members (int): Max member count.
-                    - require_week_sympathy (int): Sympathies for this week.
-                    - require_total_sympathy (int): Symapthies for all time.
-                    - secret_answer (str): Secret answer of your account.
-                    - reply_group (int): Allow to reply only users with chosen or higher group.
-                    - title (str): Thread title.
-                        > Can be skipped if title_en set.
-                    - title_en (str): Thread title in english.
-                        > Can be skipped if title set.
-                    - tags (list[str]): Thread tags.
-                    - hide_contacts (bool): Hide contacts.
-                    - allow_ask_hidden_content (bool): Allow ask hidden content.
-                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
-                    - dont_alert_followers (bool): Don't alert followers.
-                    - forum_notifications (bool): Get forum notifications.
-                    - email_notifications (bool): Get email notifications.
+                **Example:**
 
-                    **Example:**
+                ```python
+                response = forum.threads.contests.upgrade.create_by_time(post_body="Contest", prize_group=1, winners_count=1,
+                                                                        length=3, length_option="days", require_week_sympathy=1,
+                                                                        require_total_sympathy=50, secret_answer="My secret answer", title="Contest",
+                                                                        schedule_date="31-12-2025", schedule_time="23:59")
+                print(response.json())
+                ```
+                """
 
-                    ```python
-                    response = forum.threads.contests.money.create_by_count(post_body="Contest", prize_amount=500, winners_count=1,
-                                                                           needed_members=300, require_week_sympathy=1, require_total_sympathy=50,
-                                                                           secret_answer="My secret answer", title="Contest")
-                    print(response.json())
-                    ```
-                    """
-                    json = {
-                        "prize_data_money": prize_amount,
-                        "count_winners": winners_count,
-                        "needed_members": needed_members,
-                        "require_like_count": require_week_sympathy,
-                        "require_total_like_count": require_total_sympathy,
-                        "secret_answer": secret_answer,
-                        "contest_type": "by_needed_members",
-                        "prize_type": "money",
-                        "forum_id": 766,
-                        "post_body": post_body,
-                        "title": title,
-                        "title_en": title_en,
-                        "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
-                        "reply_group": reply_group,
-                        "hide_contacts": hide_contacts,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
-                        "comment_ignore_group": comment_ignore_group,
-                        "dont_alert_followers": dont_alert_followers,
-                        "watch_thread_state": True if any([forum_notifications if not isinstance(forum_notifications, _NONE) else None, email_notifications if not isinstance(email_notifications, _NONE) else None]) else False,
-                        "watch_thread": forum_notifications,
-                        "watch_thread_email": email_notifications
-                    }
-                    return await self.core.request("POST", "/threads", json=json)
-
-            class __Upgrade:
-                def __init__(self, core: "Forum"):
-                    self.core = core
-
-                @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
-                async def create_by_time(
-                    self,
-                    post_body: str,
-                    prize_group: Constants.Forum.Contests.UpgradePrize._Literal,
-                    winners_count: int,
-                    length: int,
-                    length_option: Constants.Forum.Contests.Length._Literal,
-                    require_week_sympathy: int,
-                    require_total_sympathy: int,
-                    secret_answer: str,
-                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = NONE,
-                    title_en: str = NONE,
-                    tags: list[str] = NONE,
-                    hide_contacts: bool = NONE,
-                    allow_ask_hidden_content: bool = NONE,
-                    comment_ignore_group: bool = NONE,
-                    dont_alert_followers: bool = NONE,
-                    forum_notifications: bool = True,
-                    email_notifications: bool = False,
-                ) -> Response:
-                    """
-                    POST https://prod-api.lolz.live/threads
-
-                    *Create a new contest.*
-
-                    **Parameters:**
-
-                    - post_body (str): Content of the new contest.
-                    - prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
-                    - winners_count (int): Winner count (prize count).
-                        > The maximum value is 100.
-                    - length (int): Contest duration value.
-                        > The maximum duration is 3 days.
-                    - length_option (Constants.Forum.Contests.Length._Literal): Contest duration type.
-                        > Can be [minutes, hours, days]. The maximum duration is 3 days.
-                    - require_week_sympathy (int): Sympathies for this week.
-                    - require_total_sympathy (int): Sympathies for all time.
-                    - secret_answer (str): Secret answer of your account.
-                    - reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
-                    - title (str): Thread title.
-                        > Can be skipped if title_en set.
-                    - title_en (str): Thread title in english.
-                        > Can be skipped if title set.
-                    - tags (list[str]): Thread tags.
-                    - hide_contacts (bool): Hide contacts.
-                    - allow_ask_hidden_content (bool): Allow ask hidden content.
-                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
-                    - dont_alert_followers (bool): Don't alert followers.
-                    - forum_notifications (bool): Get forum notifications.
-                    - email_notifications (bool): Get email notifications.
-
-                    **Example:**
-
-                    ```python
-                    response = forum.threads.contests.upgrade.create_by_time(post_body="Contest", prize_group=1, winners_count=1,
-                                                                           length=3, length_option="days", require_week_sympathy=1,
-                                                                           require_total_sympathy=50, secret_answer="My secret answer", title="Contest")
-                    print(response.json())
-                    ```
-                    """
-
-                    json = {
-                        "prize_data_upgrade": prize_group,
-                        "count_winners": winners_count,
-                        "length_value": length,
-                        "length_option": length_option,
-                        "require_like_count": require_week_sympathy,
-                        "require_total_like_count": require_total_sympathy,
-                        "secret_answer": secret_answer,
-                        "contest_type": "by_finish_date",
-                        "prize_type": "upgrades",
-                        "forum_id": 766,
-                        "post_body": post_body,
-                        "title": title,
-                        "title_en": title_en,
-                        "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
-                        "reply_group": reply_group,
-                        "hide_contacts": hide_contacts,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
-                        "comment_ignore_group": comment_ignore_group,
-                        "dont_alert_followers": dont_alert_followers,
-                        "watch_thread_state": True if any([forum_notifications if not isinstance(forum_notifications, _NONE) else None, email_notifications if not isinstance(email_notifications, _NONE) else None]) else False,
-                        "watch_thread": forum_notifications,
-                        "watch_thread_email": email_notifications
-                    }
-                    return await self.core.request("POST", "/threads", json=json)
-
-                @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
-                async def create_by_count(
-                    self,
-                    post_body: str,
-                    prize_group: Constants.Forum.Contests.UpgradePrize._Literal,
-                    winners_count: int,
-                    needed_members: int,
-                    require_week_sympathy: int,
-                    require_total_sympathy: int,
-                    secret_answer: str,
-                    reply_group: Constants.Forum.ReplyGroups._Literal = 2,
-                    title: str = NONE,
-                    title_en: str = NONE,
-                    tags: list[str] = NONE,
-                    hide_contacts: bool = NONE,
-                    allow_ask_hidden_content: bool = NONE,
-                    comment_ignore_group: bool = NONE,
-                    dont_alert_followers: bool = NONE,
-                    forum_notifications: bool = True,
-                    email_notifications: bool = False,
-                ) -> Response:
-                    """
-                    POST https://prod-api.lolz.live/threads
-
-                    *Create a new contest.*
-
-                    **Parameters:**
-
-                    - post_body (str): Content of the new contest.
-                    - prize_group (Constants.Forum.Contests.UpgradePrize._Literal): Which upgrade will each winner receive.
-                    - winners_count (int): Winner count (prize count).
-                        > The maximum value is 100.
-                    - needed_members (int): Max member count.
-                    - require_week_sympathy (int): Sympathies for this week.
-                    - require_total_sympathy (int): Sympathies for all time.
-                    - secret_answer (str): Secret answer of your account.
-                    - reply_group (Constants.Forum.ReplyGroups._Literal): Allow to reply only users with chosen or higher group.
-                    - title (str): Thread title.
-                        > Can be skipped if title_en set.
-                    - title_en (str): Thread title in english.
-                        > Can be skipped if title set.
-                    - tags (list[str]): Thread tags.
-                    - hide_contacts (bool): Hide contacts.
-                    - allow_ask_hidden_content (bool): Allow ask hidden content.
-                    - comment_ignore_group (bool): Allow commenting if user can't post in thread.
-                    - dont_alert_followers (bool): Don't alert followers.
-                    - forum_notifications (bool): Get forum notifications.
-                    - email_notifications (bool): Get email notifications.
-
-                    **Example:**
-
-                    ```python
-                    response = forum.threads.contests.upgrade.create_by_count(post_body="Contest", prize_group=1, winners_count=1,
-                                                                           needed_members=300, require_week_sympathy=1,
-                                                                           require_total_sympathy=50, secret_answer="My secret answer", title="Contest")
-                    print(response.json())
-                    ```
-                    """
-                    json = {
-                        "prize_data_upgrade": prize_group,
-                        "count_winners": winners_count,
-                        "needed_members": needed_members,
-                        "require_like_count": require_week_sympathy,
-                        "require_total_like_count": require_total_sympathy,
-                        "secret_answer": secret_answer,
-                        "contest_type": "by_needed_members",
-                        "prize_type": "upgrades",
-                        "forum_id": 766,
-                        "post_body": post_body,
-                        "title": title,
-                        "title_en": title_en,
-                        "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
-                        "reply_group": reply_group,
-                        "hide_contacts": hide_contacts,
-                        "allow_ask_hidden_content": allow_ask_hidden_content,
-                        "comment_ignore_group": comment_ignore_group,
-                        "dont_alert_followers": dont_alert_followers,
-                        "watch_thread_state": True if any([forum_notifications if not isinstance(forum_notifications, _NONE) else None, email_notifications if not isinstance(email_notifications, _NONE) else None]) else False,
-                        "watch_thread": forum_notifications,
-                        "watch_thread_email": email_notifications
-                    }
-                    return await self.core.request("POST", "/threads", json=json)
+                json = {
+                    "prize_data_upgrade": prize_group,
+                    "count_winners": winners_count,
+                    "length_value": length,
+                    "length_option": length_option,
+                    "require_like_count": require_week_sympathy,
+                    "require_total_like_count": require_total_sympathy,
+                    "secret_answer": secret_answer,
+                    "contest_type": "by_finish_date",
+                    "prize_type": "upgrades",
+                    "post_body": post_body,
+                    "title": title,
+                    "title_en": title_en,
+                    "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
+                    "reply_group": reply_group,
+                    "hide_contacts": hide_contacts,
+                    "allow_ask_hidden_content": allow_ask_hidden_content,
+                    "comment_ignore_group": comment_ignore_group,
+                    "dont_alert_followers": dont_alert_followers,
+                    "watch_thread_state": True if any([forum_notifications if not isinstance(forum_notifications, _NONE) else None, email_notifications if not isinstance(email_notifications, _NONE) else None]) else False,
+                    "watch_thread": forum_notifications,
+                    "watch_thread_email": email_notifications,
+                    "schedule_date": schedule_date,
+                    "schedule_time": schedule_time,
+                }
+                return await self.core.request("POST", "/contests", json=json)
 
         class __Arbitrage:
             def __init__(self, core: "Forum"):
@@ -725,7 +672,7 @@ class Forum(APIClient):
                 **Parameters:**
 
                 - responder (str): To whom the complaint is filed. Specify a nickname or a link to the profile.
-                - item_id (str|int): Write account link or item_id.
+                - item_id (str | int): Market account link or item_id.
                 - amount (float): Amount by which the responder deceived you.
                 - post_body (str): You should describe what's happened.
                 - currency (str): Currency of Arbitrage.
@@ -948,43 +895,82 @@ class Forum(APIClient):
             params = {"days": days, "forum_id": forum_id, "limit": limit, "data_limit": data_limit}
             return await self.core.request("GET", "/threads/recent", params=params)
 
+        from typing import Literal
+
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def list(self, forum_id: int,
-                       user_id: int = NONE,
-                       prefix_id: int = NONE,
-                       tag_id: int = NONE,
-                       page: int = NONE,
-                       limit: int = NONE,
-                       sticky: bool = NONE,
-                       order: Constants.Forum.ThreadOrder._Literal = NONE) -> Response:
+        async def list(
+            self,
+            forum_id: int = NONE,
+            user_id: int = NONE,
+            tag_id: int = NONE,
+            page: int = NONE,
+            limit: int = NONE,
+            sticky: bool = NONE,
+            order: Constants.Forum.ThreadOrder._Literal = NONE,
+            direction: Literal["asc", "desc"] = NONE,
+            tab: Literal[
+                "main",
+                "mythreads",
+                "viewedthreads",
+                "userthreads",
+                "fave",
+                "compilation",
+                "scheduledthreads"
+            ] = NONE,
+            state: Literal["active", "closed"] = NONE,
+            period: Literal["day", "week", "month", "year"] = NONE,
+            title: str = NONE,
+            title_only: bool = NONE,
+            prefix_ids: list[int] = NONE,
+            prefix_ids_not: list[int] = NONE,
+            thread_create_date: int = NONE,
+            thread_update_date: int = NONE
+        ) -> Response:
             """
             GET https://prod-api.lolz.live/threads
 
             *Get threads.*
 
             **Parameters:**
-
-            - forum_id (int): Forum ID.
+            - forum_id (int): Id of the containing forum.
+            - tab (str): Tab to get threads from. [main, mythreads, viewedthreads, userthreads, fave, compilation, scheduledthreads]
+            - state (str): Thread state (active or closed). Works only if forum_id is set.
+            - period (str): Filter to get only threads created within the selected period (day, week, month, year). Works only if forum_id is set.
+            - title (str): Thread title.
+            - title_only (bool): Search only in titles.
             - user_id (int): Filter to get only threads created by the specified user.
-            - prefix_id (int): Filter to get only threads with the specified prefix.
+            - sticky (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards threads_total and do not affect pagination.
+            - prefix_ids (list of int): Filter to get only threads with the specified prefixes.
+            - prefix_ids_not (list of int): Filter to get only threads without the specified prefixes.
             - tag_id (int): Filter to get only threads with the specified tag.
-            - page (int): Page.
-            - limit (int): Limit of threads.
-            - order (str): Order of threads.
-            - sticky (bool): Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page.
+            - page (int): Page number of threads.
+            - limit (int): Number of threads in a page.
+            - order (str): Ordering of threads.
+            - direction (str): Direction of threads ordering ("asc", "desc").
+            - thread_create_date (int): Filter threads by creation date. Only works with 'thread_create_date' and 'thread_create_date_reverse' ordering.
+            - thread_update_date (int): Filter threads by update date. Only works with 'thread_update_date' and 'thread_update_date_reverse' ordering.
 
             **Example:**
             """
             params = {
                 "forum_id": forum_id,
+                "tab": tab,
+                "state": state,
+                "period": period,
+                "title": title,
+                "title_only": title_only,
                 "creator_user_id": user_id,
-                "thread_prefix_id": prefix_id,
+                "sticky": sticky,
+                "prefix_ids[]": prefix_ids,
+                "prefix_ids_not[]": prefix_ids_not,
                 "thread_tag_id": tag_id,
                 "page": page,
                 "limit": limit,
-                "sticky": sticky,
-                "order": order
+                "order": order,
+                "direction": direction,
+                "thread_create_date": thread_create_date,
+                "thread_update_date": thread_update_date
             }
             return await self.core.request("GET", "/threads", params=params)
 
@@ -1023,7 +1009,9 @@ class Forum(APIClient):
                          comment_ignore_group: bool = NONE,
                          dont_alert_followers: bool = NONE,
                          forum_notifications: bool = NONE,
-                         email_notifications: bool = NONE) -> Response:
+                         email_notifications: bool = NONE,
+                         schedule_date: str = NONE,
+                         schedule_time: str = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/threads
 
@@ -1044,6 +1032,8 @@ class Forum(APIClient):
             - dont_alert_followers (bool): Don't alert followers.
             - forum_notifications (bool): Get forum notifications.
             - email_notifications (bool): Get email notifications.
+            - schedule_date (str): Date to schedule thread creation (format: `DD-MM-YYYY`).
+            - schedule_time (str): Time to schedule thread creation (format: `HH:MM`).
 
             **Example:**
 
@@ -1061,26 +1051,34 @@ class Forum(APIClient):
                 comment_ignore_group=False,
                 dont_alert_followers=False,
                 forum_notifications=True,
-                email_notifications=False
+                email_notifications=False,
+                schedule_date="31-12-2025",
+                schedule_time="23:59"
             )
             print(response.json())
             ```
             """
-            json = {"forum_id": forum_id,
-                    "post_body": post_body,
-                    "title": title,
-                    "title_en": title_en,
-                    "prefix_id": prefix_ids,
-                    "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
-                    "reply_group": reply_group,
-                    "hide_contacts": hide_contacts,
-                    "allow_ask_hidden_content": allow_ask_hidden_content,
-                    "comment_ignore_group": comment_ignore_group,
-                    "dont_alert_followers": dont_alert_followers,
-                    "watch_thread_state": True if any([forum_notifications if not isinstance(forum_notifications, _NONE) else None, email_notifications if not isinstance(email_notifications, _NONE) else None]) else False,
-                    "watch_thread": forum_notifications,
-                    "watch_thread_email": email_notifications
-                    }
+            json = {
+                "forum_id": forum_id,
+                "post_body": post_body,
+                "title": title,
+                "title_en": title_en,
+                "prefix_id": prefix_ids,
+                "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
+                "reply_group": reply_group,
+                "hide_contacts": hide_contacts,
+                "allow_ask_hidden_content": allow_ask_hidden_content,
+                "comment_ignore_group": comment_ignore_group,
+                "dont_alert_followers": dont_alert_followers,
+                "watch_thread_state": True if any([
+                    forum_notifications if not isinstance(forum_notifications, _NONE) else None,
+                    email_notifications if not isinstance(email_notifications, _NONE) else None
+                ]) else False,
+                "watch_thread": forum_notifications,
+                "watch_thread_email": email_notifications,
+                "schedule_date": schedule_date,
+                "schedule_time": schedule_time
+            }
             return await self.core.request("POST", "/threads", json=json)
 
         @UNIVERSAL(batchable=True)
@@ -1218,7 +1216,7 @@ class Forum(APIClient):
                 "title": title,
                 "title_en": title_en,
                 "prefix_id": prefix_ids,
-                "apply_thread_prefix": True if prefix_ids and not isinstance(prefix_ids, _NONE) else NONE,
+                "apply_thread_prefix": True if not isinstance(prefix_ids, _NONE) else NONE,
                 "send_alert": send_alert
             }
             return await self.core.request("POST", f"/threads/{thread_id}/move", json=json)
@@ -1377,7 +1375,7 @@ class Forum(APIClient):
                 **Example:**
 
                 ```python
-                response = forum.posts.comments.create(post_id=5523020, post_body="Test comment")
+                response = forum.posts.comments.create(post_id=5523020, comment_body="Test comment")
                 print(response.json())
                 ```
                 """
@@ -1638,6 +1636,29 @@ class Forum(APIClient):
             """
             json = {"message": reason}
             return await self.core.request("POST", f"/posts/{post_id}/report", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def reasons(self, post_id: int) -> Response:
+            """
+            GET https://prod-api.lolz.live/posts/{post_id}/report
+
+            *Get post report reasons.*
+
+            **Parameters:**
+
+            - post_id (int): Post ID.
+
+            **Example:**
+
+            ```python
+            response = forum.posts.reasons(post_id=39769208)
+            print(response.json())
+            ```
+
+            **Required scopes:** read
+            """
+            return await self.core.request("GET", f"/posts/{post_id}/report")
 
     class __Users:
         class __Avatar:
@@ -1910,13 +1931,42 @@ class Forum(APIClient):
                     params = {"comment_id": comment_id}
                     return await self.core.request("DELETE", "/profile-posts/comments", params=params)
 
+                @UNIVERSAL(batchable=True)
+                @AutoDelay.WrapperSet(0.2)
+                async def report(self, comment_id: int, reason: str) -> Response:
+                    """
+                    POST https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+
+                    *Report a profile post comment.*
+
+                    **Parameters:**
+
+                    - comment_id (int): Id of profile post comment.
+                    - message (str): Reason of the report.
+
+                    **Example:**
+
+                    ```python
+                    response = forum.users.profile_posts.comments.report(comment_id=123456, message="Report reason")
+                    print(response.json())
+                    ```
+                    """
+                    json = {"message": reason}
+                    return await self.core.request("POST", f"/profile-posts/comments/{comment_id}/report", json=json)
+
             def __init__(self, core: "Forum"):
                 self.core = core
                 self.comments = self.__Comments(self.core)
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
-            async def list(self, user_id: Union[int, str], page: int = NONE, limit: int = NONE) -> Response:
+            async def list(
+                self,
+                user_id: Union[int, str],
+                by_user_id: int = NONE,
+                page: int = NONE,
+                limit: int = NONE,
+            ) -> Response:
                 """
                 GET https://prod-api.lolz.live/users/{user_id}/profile-posts
 
@@ -1924,18 +1974,23 @@ class Forum(APIClient):
 
                 **Parameters:**
 
-                - user_id (int): User ID.
+                - user_id (int | str): User ID.
+                - by_user_id (int): Filter to get only posts from the specified user.
                 - page (int): Page.
                 - limit (int): Posts limit per page.
 
                 **Example:**
 
                 ```python
-                response = forum.users.profile_posts.list(user_id=2410024, page=1, limit=10)
+                response = forum.users.profile_posts.list(user_id=2410024, page=1, limit=10, by_user_id=1)
                 print(response.json())
                 ```
                 """
-                params = {"page": page, "limit": limit}
+                params = {
+                    "page": page,
+                    "limit": limit,
+                    "posts_user_id": by_user_id,
+                }
                 return await self.core.request("GET", f"/users/{user_id}/profile-posts", params=params)
 
             @UNIVERSAL(batchable=True)
@@ -1969,7 +2024,7 @@ class Forum(APIClient):
 
                 **Parameters:**
 
-                - user_id (int): User ID.
+                - user_id (int | str): User ID.
                 - post_body (str): Post body.
 
                 **Example:**
@@ -1984,7 +2039,7 @@ class Forum(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
-            async def edit(self, post_id: int, post_body: str = NONE) -> Response:
+            async def edit(self, post_id: int, post_body: str = NONE, disable_comments: bool = NONE) -> Response:
                 """
                 PUT https://prod-api.lolz.live/profile-posts/{post_id}
 
@@ -1994,15 +2049,19 @@ class Forum(APIClient):
 
                 - post_id (int): Profile post ID.
                 - post_body (str): Post body.
+                - disable_comments (bool): Disable comments.
 
                 **Example:**
 
                 ```python
-                response = forum.users.profile_posts.edit(post_id=5523020, post_body="Test post")
+                response = forum.users.profile_posts.edit(post_id=5523020, post_body="No one can comment that xdx", disable_comments=True)
                 print(response.json())
                 ```
                 """
-                json = {"post_body": post_body}
+                json = {
+                    "post_body": post_body,
+                    "disable_comments": disable_comments
+                }
                 return await self.core.request("PUT", f"/profile-posts/{post_id}", json=json)
 
             @UNIVERSAL(batchable=True)
@@ -2083,11 +2142,153 @@ class Forum(APIClient):
                 """
                 return await self.core.request("DELETE", f"/profile-posts/{post_id}/likes")
 
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def report(self, profile_post_id: int, reason: str = NONE) -> Response:
+                """
+                POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+
+                *Report a profile post.*
+
+                **Parameters:**
+
+                - profile_post_id (int): Profile post ID.
+                - reason (str): Reason.
+
+                **Example:**
+
+                ```python
+                response = forum.users.profile_posts.report(profile_post_id=3925037, reason="Test report")
+                print(response.json())
+                ```
+                """
+                json = {"message": reason}
+                return await self.core.request("POST", f"/profile-posts/{profile_post_id}/report", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def reasons(self, profile_post_id: int) -> Response:
+                """
+                GET https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+
+                *Get profile post report reasons.*
+
+                **Parameters:**
+
+                - profile_post_id (int): Profile post ID.
+
+                **Example:**
+
+                ```python
+                response = forum.users.profile_posts.reasons(profile_post_id=55233925037020)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", f"/profile-posts/{profile_post_id}/report")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def stick(self, profile_post_id: int) -> Response:
+                """
+                POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+
+                *Stick a profile post.*
+
+                **Parameters:**
+
+                - profile_post_id (int): Id of profile post.
+
+                **Example:**
+
+                ```python
+                response = forum.users.profile_posts.stick(profile_post_id=123456)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("POST", f"/profile-posts/{profile_post_id}/stick")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def unstick(self, profile_post_id: int) -> Response:
+                """
+                DELETE https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+
+                *Unstick a profile post.*
+
+                **Parameters:**
+
+                - profile_post_id (int): Id of profile post.
+
+                **Example:**
+
+                ```python
+                response = forum.users.profile_posts.unstick(profile_post_id=123456)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("DELETE", f"/profile-posts/{profile_post_id}/stick")
+
+        class __Secret_Answer:
+            def __init__(self, core: "Forum"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def types(self) -> Response:
+                """
+                GET https://prod-api.lolz.live/users/secret-answer/types
+
+                *Get available secret answer types.*
+
+                **Example:**
+
+                ```python
+                response = forum.users.secret_answer.types()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", "/users/secret-answer-types")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def reset(self) -> Response:
+                """
+                POST https://prod-api.lolz.live/account/secret-answer/reset
+
+                *Request a reset of the secret answer for the account.*
+
+                **Example:**
+
+                ```python
+                response = forum.users.secret_answer.reset()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("POST", "/account/secret-answer/reset")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def cancel_reset(self) -> Response:
+                """
+                DELETE https://prod-api.lolz.live/account/secret-answer/reset
+
+                *Cancel a pending secret answer reset request for the account.*
+
+                **Example:**
+
+                ```python
+                response = forum.users.secret_answer.reset_cancel()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("DELETE", "/account/secret-answer/reset")
+
         def __init__(self, core: "Forum"):
             self.core = core
             self.avatar = self.__Avatar(self.core)
             self.background = self.__Background(self.core)
             self.profile_posts = self.__Profile_Posts(self.core)
+            self.secret_answer = self.__Secret_Answer(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -2148,7 +2349,7 @@ class Forum(APIClient):
 
             **Parameters:**
 
-            - user_id (int): User ID.
+            - user_id (int | str): User ID.
 
             **Example:**
 
@@ -2174,6 +2375,20 @@ class Forum(APIClient):
             secret_answer: str = NONE,
             secret_answer_type: int = NONE,
             short_link: str = NONE,
+            language_id: Literal["1", "2"] = NONE,
+            gender: Literal["", "male", "female"] = NONE,
+            timezone: str = NONE,
+            receive_admin_email: bool = NONE,
+            activity_visible: bool = NONE,
+            show_dob_date: bool = NONE,
+            show_dob_year: bool = NONE,
+            hide_username_change_logs: bool = NONE,
+            allow_view_profile: Literal["none", "members", "followed"] = NONE,
+            allow_post_profile: Literal["none", "members", "followed"] = NONE,
+            allow_send_personal_conversation: Literal["none", "members", "followed"] = NONE,
+            allow_invite_group: Literal["none", "members", "followed"] = NONE,
+            allow_receive_news_feed: Literal["none", "members", "followed"] = NONE,
+            alert: dict = NONE
         ) -> Response:
             """
             PUT https://prod-api.lolz.live/users/me
@@ -2182,7 +2397,7 @@ class Forum(APIClient):
 
             **Parameters:**
 
-            - title (str): Title.
+            - title (str): User title.
             - display_group_id (int): Display group ID.
             - dob (tuple[int, int, int]): Date of birth.
             - fields (dict[str, str]): Custom fields.
@@ -2193,17 +2408,31 @@ class Forum(APIClient):
             - secret_answer (str): Secret answer.
             - secret_answer_type (int): Secret answer type.
             - short_link (str): Profile short link.
+            - language_id (int): User interface language ID.
+            - gender (str): User gender.
+            - timezone (str): User timezone. E.g `Europe/Moscow`
+            - receive_admin_email (bool): Whether to receive admin emails.
+            - activity_visible (bool): Whether user activity is visible.
+            - show_dob_date (bool): Show date of birth (day and month).
+            - show_dob_year (bool): Show year of birth.
+            - hide_username_change_logs (bool): Hide username change logs.
+            - allow_view_profile (str): Who can view your profile.
+            - allow_post_profile (str): Who can post on your profile.
+            - allow_send_personal_conversation (str): Who can send you personal conversations.
+            - allow_invite_group (str): Who can invite you to groups.
+            - allow_receive_news_feed (str): Who can see your news feed.
+            - alert (dict): Alert settings.
 
             **Example:**
 
             ```python
             response = forum.users.edit(
-                title="Test title",
+                title="ГДЗ по математике - https://t.me/Kanalchik_alexa :rooster_talk:",
                 display_group_id=1,
                 dob=(1, 1, 2000),
                 fields={"_4": "My new interests", "occupation": "My new occupation"},
                 username="RiceMorgan",
-                secret_answer="***********",
+                secret_answer="no_one_knows_my_sa",
                 secret_answer_type=1,
                 short_link="ricemorgan"
             )
@@ -2211,7 +2440,7 @@ class Forum(APIClient):
             ```
             """
             json = {
-                "title": title,
+                "user_title": title,
                 "display_group_id": display_group_id,
                 "fields": fields,
                 "display_icon_group_id": display_icon_group_id,
@@ -2221,7 +2450,22 @@ class Forum(APIClient):
                 "secret_answer": secret_answer,
                 "secret_answer_type": secret_answer_type,
                 "short_link": short_link,
+                "language_id": language_id,
+                "gender": gender,
+                "timezone": timezone,
+                "receive_admin_email": receive_admin_email,
+                "activity_visible": activity_visible,
+                "show_dob_date": show_dob_date,
+                "show_dob_year": show_dob_year,
+                "hide_username_change_logs": hide_username_change_logs,
+                "allow_view_profile": allow_view_profile,
+                "allow_post_profile": allow_post_profile,
+                "allow_send_personal_conversation": allow_send_personal_conversation,
+                "allow_invite_group": allow_invite_group,
+                "allow_receive_news_feed": allow_receive_news_feed,
+                "alert": alert,
             }
+
             if not isinstance(dob, _NONE) and len(dob) == 3:
                 json["user_dob_day"] = dob[0]
                 json["user_dob_month"] = dob[1]
@@ -2253,14 +2497,101 @@ class Forum(APIClient):
 
             *Get user trophies.*
 
+             **Parameters:**
+
+            - user_id (int | str): User ID.
+
             **Example:**
 
             ```python
             response = forum.users.trophies(user_id=2410024)
             print(response.json())
-            ```/
+            ```
             """
             return await self.core.request("GET", f"/users/{user_id}/trophies")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def claims(
+            self,
+            user_id: Union[int, str] = "me",
+            claim_type: Literal["market",
+                                "nomarket"] = NONE,
+            claim_state: Literal["active",
+                                 "solved",
+                                 "rejected",
+                                 "settled"] = NONE
+        ) -> Response:
+            """
+            GET https://prod-api.lolz.live/users/{user_id}/claims
+
+            *Get user claims.*
+
+            **Parameters:**
+
+            - user_id (int | str): User ID.
+            - type (str): Filter claims by their type.
+            - claim_state (str): Filter claims by their state.
+
+            **Example:**
+
+            ```python
+            response = forum.users.claims(user_id=1, type="market", claim_state="solved")
+            print(response.json())
+            ```
+            """
+            params = {"type": claim_type, "claim_state": claim_state}
+            return await self.core.request("GET", f"/users/{user_id}/claims", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def likes(
+            self,
+            user_id: Union[int, str] = "me",
+            forum_id: int = NONE,
+            like_type: Literal["like", "like2"] = NONE,
+            type: Literal["gotten", "given"] = "gotten",
+            page: int = NONE,
+            content_type: Literal["post", "post_comment", "profile_post", "profile_post_comment"] = "post",
+            search_user_id: int = NONE,
+            stats: bool = NONE
+        ) -> Response:
+            """
+            GET https://prod-api.lolz.live/users/{user_id}/likes
+
+            *Get information about user likes.*
+
+            **Parameters:**
+            - user_id (int | str): User ID.
+            - node_id (int): Filter by forum section.
+            - like_type (str): Like variation. One of "like" (Sympathies), "like2" (Likes).
+            - type (str): Likes type. One of "gotten", "given".
+            - page (int): Page number.
+            - content_type (str): Content type.
+            - search_user_id (int): Get only likes from/to specified user.
+            - stats (bool): Show weekly statistics.
+
+            **Example:**
+
+            ```python
+            response = forum.users.likes(
+                user_id=2410024,
+                like_type="like2",
+                type="given"
+            )
+            print(response.json())
+            ```
+            """
+            params = {
+                "node_id": forum_id,
+                "like_type": like_type,
+                "type": type,
+                "page": page,
+                "content_type": content_type,
+                "search_user_id": search_user_id,
+                "stats": stats,
+            }
+            return await self.core.request("GET", f"/users/{user_id}/likes", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -2272,7 +2603,7 @@ class Forum(APIClient):
 
             **Parameters:**
 
-            - user_id (int): User ID.
+            - user_id (int | str): User ID.
             - order (str): Order.
             - page (int): Page.
             - limit (int): Followers limit per page.
@@ -2297,7 +2628,7 @@ class Forum(APIClient):
 
             **Parameters:**
 
-            - user_id (int): User ID.
+            - user_id (int | str): User ID.
             - order (str): Order.
             - page (int): Page.
             - limit (int): Followed users limit per page.
@@ -2320,6 +2651,10 @@ class Forum(APIClient):
 
             **Follow a user.**
 
+            **Parameters:**
+
+            - user_id (int | str): User ID.
+
             **Example:**
 
             ```python
@@ -2336,6 +2671,10 @@ class Forum(APIClient):
             DELETE https://prod-api.lolz.live/users/{user_id}/followers
 
             **Unfollow a user.**
+
+            **Parameters:**
+
+            - user_id (int | str): User ID.
 
             **Example:**
 
@@ -2371,6 +2710,10 @@ class Forum(APIClient):
 
             **Ignore a user.**
 
+            **Parameters:**
+
+            - user_id (int | str): User ID.
+
             **Example:**
 
             ```python
@@ -2388,6 +2731,10 @@ class Forum(APIClient):
 
             **Unignore a user.**
 
+            **Parameters:**
+
+            - user_id (int | str): User ID.
+
             **Example:**
 
             ```python
@@ -2404,6 +2751,12 @@ class Forum(APIClient):
             GET https://prod-api.lolz.live/users/{user_id}/timeline
 
             *Get timeline of a user.*
+
+            **Parameters:**
+
+            - user_id (int | str): User ID.
+            - page (int): Page number.
+            - limit (int): Number of items per page.
 
             **Example:**
 
@@ -2432,7 +2785,23 @@ class Forum(APIClient):
                 """
                 GET https://prod-api.lolz.live/conversations/messages
 
-                *Get messages of a conversation.*
+                **Get messages from a conversation.**
+
+                **Parameters:**
+
+                - conversation_id (int): Id of conversation.
+                - page (int): Page number of messages.
+                - limit (int): Number of messages in a page.
+                - order (str): Ordering of messages.
+                - before (int): Date (UNIX timestamp) to get older messages.
+                - after (int): Date (UNIX timestamp) to get newer messages.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.list(conversation_id=123456)
+                print(response.json())
+                ```
                 """
                 params = {
                     "conversation_id": conversation_id,
@@ -2511,6 +2880,28 @@ class Forum(APIClient):
                 """
                 json = {"conversation_id": conversation_id, "message_body": message}
                 return await self.core.request("PUT", f"/conversations/messages/{message_id}", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def delete(self, conversation_id: int, message_id: int) -> Response:
+                """
+                POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}
+
+                **Deletes a message.**
+
+                **Parameters:**
+
+                - conversation_id (int): Conversation ID.
+                - message_id (int): Message ID.
+
+                **Example:**
+
+                ```python
+                response = forum.conversations.messages.delete(conversation_id=123456, message_id=54321)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("DELETE", f"/conversations/{conversation_id}/messages/{message_id}")
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
@@ -2609,7 +3000,45 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def list(self, page: int = NONE, limit: int = NONE) -> Response:
+        async def save(self, text: str) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/save
+
+            *Send content to Saved Messages.*
+
+            **Parameters:**
+
+            - text (str): Content.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.save(link="https://lolz.guru/threads/5523020/")
+            print(response.json())
+            ```
+
+            **Required scopes:** conversate
+            """
+            json = {"link": text}
+            return await self.core.request("POST", "/conversations/save", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def list(
+            self,
+            page: int = NONE,
+            limit: int = NONE,
+            folder: Literal[
+                "all",
+                "unread",
+                "groups",
+                "market",
+                "market_replacements",
+                "staff",
+                "giveaways",
+                "p2p"
+            ] = NONE
+        ) -> Response:
             """
             GET https://prod-api.lolz.live/conversations
 
@@ -2619,6 +3048,7 @@ class Forum(APIClient):
 
             - page (int): Page.
             - limit (int): Limit.
+            - folder (str): Filter conversations by folder.
 
             **Example:**
 
@@ -2627,7 +3057,7 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            params = {"page": page, "limit": limit}
+            params = {"page": page, "limit": limit, "folder": folder}
             return await self.core.request("GET", "/conversations", params=params)
 
         @UNIVERSAL(batchable=True)
@@ -2650,6 +3080,28 @@ class Forum(APIClient):
             ```
             """
             return await self.core.request("GET", f"/conversations/{conversation_id}")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def start(self, user_id: int) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/start
+
+            *Start a new conversation with a user.*
+
+            **Parameters:**
+
+            - user_id (int): User ID.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.start(user_id=1)
+            print(response.json())
+            ```
+            """
+            json = {"user_id": user_id}
+            return await self.core.request("POST", "/conversations/start", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -2681,8 +3133,9 @@ class Forum(APIClient):
                                message: str,
                                title: str,
                                open_invite: bool = NONE,
-                               conversation_locked: bool = NONE,
                                allow_edit_messages: bool = NONE,
+                               allow_stick_messages: bool = NONE,
+                               allow_delete_own_messages: bool = NONE,
                                ) -> Response:
             """
             POST https://prod-api.lolz.live/conversations
@@ -2695,8 +3148,9 @@ class Forum(APIClient):
             - message (str): Message.
             - title (str): Title.
             - open_invite (bool): Open invite.
-            - conversation_locked (bool): Conversation locked.
             - allow_edit_messages (bool): Allow edit messages.
+            - allow_stick_messages (bool): Allow members to stick messages.
+            - allow_delete_own_messages (bool): Allow members to delete their own messages.
 
             **Example:**
 
@@ -2706,22 +3160,72 @@ class Forum(APIClient):
                 message="Hello, world!",
                 title="Group Conversation",
                 open_invite=True,
-                conversation_locked=False,
-                allow_edit_messages=True
+                allow_edit_messages=True,
+                allow_sticky_messages=True,
+                allow_delete_own_messages=False
             )
             print(response.json())
             ```
             """
             json = {
                 "message_body": message,
-                "recipients": ",".join(usernames),
+                "recipients": usernames,
                 "title": title,
                 "open_invite": open_invite,
-                "conversation_locked": conversation_locked,
                 "allow_edit_messages": allow_edit_messages,
+                "allow_sticky_messages": allow_stick_messages,
+                "allow_delete_own_messages": allow_delete_own_messages,
                 "is_group": True
             }
             return await self.core.request("POST", "/conversations", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def edit(self,
+                       conversation_id: int,
+                       title: str = NONE,
+                       open_invite: bool = NONE,
+                       open_history: bool = NONE,
+                       allow_edit_messages: bool = NONE,
+                       allow_stick_messages: bool = NONE,
+                       allow_delete_own_messages: bool = NONE
+                       ) -> Response:
+            """
+            PUT https://prod-api.lolz.live/conversations
+
+            **Edit conversation settings.**
+
+            **Parameters:**
+
+            - conversation_id (int): ID of the conversation to edit.
+            - title (str): New conversation title.
+            - open_invite (bool): Allow members to invite others.
+            - open_history (bool): Make conversation history visible to new members.
+            - allow_edit_messages (bool): Allow members to edit their own messages.
+            - allow_stick_messages (bool): Allow members to stick messages.
+            - allow_delete_own_messages (bool): Allow members to delete their own messages.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.edit(
+                conversation_id=123456,
+                open_invite=False,
+                allow_delete_own_messages=True
+            )
+            print(response.json())
+            ```
+            """
+            json = {
+                "conversation_id": conversation_id,
+                "title": title,
+                "open_invite": open_invite,
+                "history_open": open_history,
+                "allow_edit_messages": allow_edit_messages,
+                "allow_sticky_messages": allow_stick_messages,
+                "allow_delete_own_messages": allow_delete_own_messages
+            }
+            return await self.core.request("PUT", "/conversations", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -2748,6 +3252,44 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
+        async def search(
+            self,
+            q: str = NONE,
+            conversation_id: int = NONE,
+            search_recipients: bool = NONE
+        ) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/search
+
+            **Search for conversations messages or recipients.**
+
+            **Parameters:**
+
+            - q (str): Search query string.
+            - conversation_id (int): Id of conversation.
+            - search_recipients (bool): Search for recipients.
+
+            **Returns:** Response containing conversations and recipient status.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.messages.search(
+                q="root",
+                search_recipients=True
+            )
+            print(response.json())
+            ```
+            """
+            json = {
+                "q": q,
+                "conversation_id": conversation_id,
+                "search_recipients": search_recipients
+            }
+            return await self.core.request("POST", "/conversations/search", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
         async def star(self, conversation_id: int) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/{conversation_id}/star
@@ -2766,6 +3308,52 @@ class Forum(APIClient):
             ```
             """
             return await self.core.request("POST", f"/conversations/{conversation_id}/star")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def invite(self, conversation_id: int, recipients: builtins.list[str]) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/{conversation_id}/invite
+
+            **Invite one or more users to an existing conversation.**
+
+            **Parameters:**
+
+            - conversation_id (int): Conversation ID.
+            - recipients (list[str]): List of usernames to invite.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.invite(conversation_id=123456, recipients=["root", "Alex"])
+            print(response.json())
+            ```
+            """
+            json = {"recipients": recipients}
+            return await self.core.request("POST", f"/conversations/{conversation_id}/invite", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def kick(self, conversation_id: int, user_id: int) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/{conversation_id}/kick
+
+            **Kick a user from a conversation.**
+
+            **Parameters:**
+
+            - conversation_id (int): Conversation ID.
+            - user_id (int): ID of user to kick from conversation.
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.kick(conversation_id=123456, user_id=1)
+            print(response.json())
+            ```
+            """
+            json = {"user_id": user_id}
+            return await self.core.request("POST", f"/conversations/{conversation_id}/kick", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -2790,6 +3378,23 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
+        async def read(self, conversation_id: int) -> Response:
+            """
+            POST https://prod-api.lolz.live/conversations/read-all
+
+            **Read a specific conversation.**
+
+            **Example:**
+
+            ```python
+            response = forum.conversations.read(conversation_id=1234567890)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("POST", "/conversations/read-all")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
         async def read_all(self) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/read-all
@@ -2811,20 +3416,32 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def list(self) -> Response:
+        async def list(
+            self,
+            notification_type: Literal["market", "nomarket"] = NONE,
+            page: int = NONE,
+            limit: int = NONE,
+        ) -> Response:
             """
             GET https://prod-api.lolz.live/notifications
 
             *Get notifications.*
 
+            **Parameters:**
+
+            - type (str): Filter notifications by their type.
+            - page (int): Page number of notifications.
+            - limit (int): Number of notifications in a page.
+
             **Example:**
 
             ```python
-            response = forum.notifications.list()
+            response = forum.notifications.list(type="forum")
             print(response.json())
             ```
             """
-            return await self.core.request("GET", "/notifications")
+            params = {"type": notification_type, "page": page, "limit": limit}
+            return await self.core.request("GET", "/notifications", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -2965,6 +3582,32 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
+        async def results(self, search_id: int, page: int = NONE, limit: int = NONE) -> Response:
+            """
+            GET https://prod-api.lolz.live/search/{search_id}/results
+
+            **Get Search Results.**
+
+            List of search results (with pagination).
+
+            **Parameters:**
+
+            - search_id (int): Search ID.
+            - page (int): Page number of results.
+            - limit (int): Number of results in a page.
+
+            **Example:**
+
+            ```python
+            response = forum.search.results(search_id=123456, page=1, limit=10)
+            print(response.json())
+            ```
+            """
+            json = {"page": page, "limit": limit}
+            return await self.core.request("GET", f"/search/{search_id}/results", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
         async def all(self, query: str = NONE, user_id: int = NONE, tag: str = NONE, forum_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search
@@ -2989,6 +3632,30 @@ class Forum(APIClient):
             """
             params = {"q": query, "user_id": user_id, "tag": tag, "forum_id": forum_id, "page": page, "limit": limit}
             return await self.core.request("POST", "/search", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def users(self, query: str = NONE) -> Response:
+            """
+            POST https://prod-api.lolz.live/search/users
+
+            **Search for users.**
+
+            **Parameters:**
+
+            - query (str): Search query.
+
+            **Returns:** Response containing matched users.
+
+            **Example:**
+
+            ```python
+            response = forum.search.users(query="AS7RID")
+            print(response.json())
+            ```
+            """
+            json = {"q": query}
+            return await self.core.request("POST", "/search/users", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -3113,10 +3780,6 @@ class Forum(APIClient):
                 ```python
                 response = forum.chat.messages.list(room_id=1)
                 print(response.json())
-
-                # With before_message_id
-                response = forum.chat.messages.list(room_id=1)
-                print(response.json())
                 ```
                 """
                 params = {"room_id": room_id,
@@ -3140,7 +3803,7 @@ class Forum(APIClient):
 
                 - room_id (int): Room ID.
                 - message (str): Message.
-                - reply_message_id (int, optional): ID of the message being replied to.
+                - reply_message_id (int): ID of the message being replied to.
 
                 **Example:**
 
@@ -3149,10 +3812,8 @@ class Forum(APIClient):
                 print(response.json())
                 ```
                 """
-                params = {"room_id": room_id,
-                          "reply_message_id": reply_message_id}
-                json = {"message": message}
-                return await self.core.request("POST", "/chatbox/messages", params=params, json=json)
+                json = {"room_id": room_id, "reply_message_id": reply_message_id, "message": message}
+                return await self.core.request("POST", "/chatbox/messages", json=json)
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
@@ -3220,9 +3881,30 @@ class Forum(APIClient):
                 print(response.json())
                 ```
                 """
+                json = {"reason": reason, "message_id": message_id}
+                return await self.core.request("POST", "/chatbox/messages/report", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def reasons(self, message_id: int) -> Response:
+                """
+                GET https://prod-api.lolz.live/chatbox/messages/report
+
+                *Get chat message report reasons.*
+
+                **Parameters:**
+
+                - message_id (int): Message ID.
+
+                **Example:**
+
+                ```python
+                response = forum.chat.messages.reasons(message_id=1234567890)
+                print(response.json())
+                ```
+                """
                 params = {"message_id": message_id}
-                json = {"reason": reason}
-                return await self.core.request("POST", "/chatbox/messages/report", params=params, json=json)
+                return await self.core.request("GET", "/chatbox/messages/report", params=params)
 
         def __init__(self, core: "Forum"):
             self.core = core
@@ -3321,7 +4003,7 @@ class Forum(APIClient):
 
             **Parameters:**
 
-            - duration (str, optional): Duration.
+            - duration (str): Duration.
 
             **Example:**
 
@@ -3332,6 +4014,28 @@ class Forum(APIClient):
             """
             params = {"duration": duration}
             return await self.core.request("GET", "/chatbox/messages/leaderboard", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def online(self, room_id: int) -> Response:
+            """
+            GET https://prod-api.lolz.live/chatbox/messages/online
+
+            *Get chat online users.*
+
+            **Parameters:**
+
+            - room_id (int): Room id.
+
+            **Example:**
+
+            ```python
+            response = forum.chat.online(room_id=1)
+            print(response.json())
+            ```
+            """
+            params = {"room_id": room_id}
+            return await self.core.request("GET", "/chatbox/messages/online", params=params)
 
     class __Forms:
         def __init__(self, core: "Forum"):
@@ -3424,7 +4128,7 @@ class Forum(APIClient):
 
         **Parameters:**
 
-        - css (Union[str, list]): The names or identifiers of the CSS selectors to retrieve.
+        - css (str | list): The names or identifiers of the CSS selectors to retrieve.
         - **kwargs (dict[str, any]): Additional query parameters.
 
         **Example:**
@@ -3439,9 +4143,58 @@ class Forum(APIClient):
             params.update(kwargs)
         return await self.core.request("GET", "/navigation", params=params)
 
-    @UNIVERSAL(batchable=False)
-    @AutoDelay.WrapperSet(0.2)
-    async def batch(self, jobs: list[dict[str, str]]) -> Response:
+    class __Batch:
+        def __init__(self, core: "Forum"):
+            self.core = core
+
+        @UNIVERSAL(batchable=False)
+        @AutoDelay.WrapperSet(0.2)
+        async def __call__(self, jobs: list):
+            """
+            POST https://prod-api.lolz.live/batch
+
+            *Batch requests.*
+
+            **Parameters:**
+
+            - jobs (list[dict]): Batch jobs.
+
+            **Example:**
+
+            ```python
+            response = forum.batch(jobs=[{"method": "GET", "url": "/users/2410024", "params": {}}])
+            #  You can create jobs for almost all functions like this:
+            #  job = forum.users.get.job(user_id=2410024)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("POST", "/batch", json=jobs)
+
+        @UNIVERSAL(batchable=False)
+        @AutoDelay.WrapperSet(0.2)
+        async def executor(self, jobs):
+            """
+            *Executes batch requests until all jobs are executed.*
+
+            **Parameters:**
+
+            - jobs (list): Batch jobs.
+
+            **Example**:
+
+            ```python
+            jobs = [forum.users.get.job(user_id=i*1000) for i in range(42)]
+            while jobs:  # It will be running until all jobs will be executed
+                jobs, response = forum.batch.executor(jobs=jobs)
+                print(response.json())
+            ```
+            """
+            jobs_to_proceed = jobs[:10]
+            jobs = jobs[10:]
+            return jobs, await self.core.batch(jobs=jobs_to_proceed)
+
+    @cached_property
+    def batch(self) -> __Batch:
         """
         POST https://prod-api.lolz.live/batch
 
@@ -3449,21 +4202,15 @@ class Forum(APIClient):
 
         **Parameters:**
 
-        - jobs (list[dict[str, str]]): Batch jobs.
+        - jobs (list[dict]): Batch jobs.
 
         **Example:**
 
         ```python
         response = forum.batch(jobs=[{"method": "GET", "url": "/users/2410024", "params": {}}])
-        #  Also you can create jobs for almost all functions like this:
+        #  You can create jobs for almost all functions like this:
         #  job = forum.users.get.job(user_id=2410024)
         print(response.json())
-
-        #  You also can use executor to ease work with batch requests while you have a lot of jobs:
-        jobs = [forum.users.get.job(user_id=i*1000) for i in range(42)]
-        while jobs:  # It will be running until all jobs will be executed
-            jobs, response = forum.batch.executor(jobs=jobs)
-            print(response.json())
         ```
         """
-        return await self.core.request("POST", "/batch", json=jobs)
+        return self.__Batch(self.core)
