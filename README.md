@@ -1,13 +1,9 @@
 <div align="center">
-  <a href="https://zelenka.guru/threads/5523020/">
-    <img src="https://i.imgur.com/Vm2tOZh.png" alt="LOLZTEAM API Library" width="80%"/>
-  </a>
+  <a href="https://zelenka.guru/threads/5523020/"><img src="https://i.imgur.com/Vm2tOZh.png" alt="LOLZTEAM API Library" width="80%"/></a>
   <br>
-  <a href="https://pypi.org/project/LOLZTEAM">
-    <img src="https://img.shields.io/github/last-commit/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72" alt="GitHub last commit"> <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72">
-    <br>
-    <img src="https://img.shields.io/pypi/dm/LOLZTEAM?style=for-the-badge&color=2bad72" alt="PyPI Downloads"> <img src="https://img.shields.io/pypi/v/LOLZTEAM?style=for-the-badge&color=2bad72" alt="Package version">
-  </a>
+  <a href="https://pypi.org/project/LOLZTEAM"><img src="https://img.shields.io/github/last-commit/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72" alt="GitHub last commit"></a> <a href="https://pypi.org/project/LOLZTEAM"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/AS7RIDENIED/LOLZTEAM?style=for-the-badge&color=2bad72"></a>
+  <br>
+  <a href="https://pypi.org/project/LOLZTEAM"><img src="https://img.shields.io/pypi/dm/LOLZTEAM?style=for-the-badge&color=2bad72" alt="PyPI Downloads"></a> <a href="https://pypi.org/project/LOLZTEAM"><img src="https://img.shields.io/pypi/v/LOLZTEAM?style=for-the-badge&color=2bad72" alt="Package version"></a>
 </div>
 
 ## 🚀 Installation
@@ -69,13 +65,13 @@ asyncio.run(async_example())
 
 # You should just add ".job" between function name and parentheses to create a job.
 # You can't create a job for methods that are uploading files (like avatar/background) and ofc not for client.batch(...) method.
-# P.s Your IDE probably may not show that ".job" function exists but it does, trust me.
+# P.s Your IDE probably may not show that ".job" function exists but it does.
 
 forum.settings.token = "token"                                        # 🔑 Change token
 forum.settings.language = "en"                                        # 🌍 Change language (Antipublic client doesn't support language changing)
 forum.settings.proxy = "http://login:password@192.168.1.1:8080"       # 🌐 Change proxy
-forum.settings.delay.min = 3                                          # 🕒 Set minimal delay (E.g. your minimal delay is 3 seconds, but if a method you want to use has a 
-                                                                      #     delay of 0.5 seconds, your script will sleep for 3 seconds instead of 0.5 seconds)
+forum.settings.delay.min = 3                                          # 🕒 Set minimal delay (E.g. When your minimal delay is 3 seconds, and a method you want to use has a 
+                                                                      #     delay of 0.2 seconds, your script will sleep for 3 seconds instead of 0.2 seconds)
 forum.settings.delay.disable()                                        # 🕒 Disable auto delay
 forum.settings.logger.disable()                                       # 📝 Stop logging
 
