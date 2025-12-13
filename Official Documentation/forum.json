@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io) ## [Telegram chat](https://t.me/lztmarket_api) ## Free API Client packages * [Node.js](https://github.com/NztForum/node-lzt) * [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) ## Rate limit 300 requests per minute (0.2 second delay between requests). If you exceed the limit, the response code 429 will be returned to you. ## Token configuration You can pass the token as a query parameter or in the request headers * Query parameter: **oauth_token=_token_** * Header: **Authorization**: \"**Bearer _token_**\" ## Discoverability System information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection. ## Status codes | Code | Name | Description | | ---- | --------------------- | ------------------------------------------------------------------------------------------------------- | | 200 | OK | The request was successfully completed. | | 400 | Bad Request | The request is invalid due to client error. | | 401 | Unauthorized | [Authentication is required.](/reference/information#/token-configuration) | | 403 | Forbidden | You do not have permission to view this page or perform this action. | | 429 | Too Many Requests | [Too many requests in a short period.](/reference/information#/rate-limit) | | 500 | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). | | 502 | Bad Gateway | The gateway encountered an error while processing the request, try again later. | | 503 | Service Unavailable | The server is temporarily unavailable, try again later. | | 504 | Gateway Timeout | The gateway timed out waiting for a response, try again later. | ## Common Parameters ### i18n All API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401. ### Fields filtering For API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones. * **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (*****) to include all default fields before specifying additional ones. * **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"*.key\") to exclude the field everywhere. ### Resource ordering For API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example). ### Encryption For sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions: * **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself. ### Headers * **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bbcode html with **tools/chr** link. Since forum-2018100301. * **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101. ### Content-Type API always returns the response as application/json (With few exceptions). You should send requests to API with application/json or application/x-www-form-urlencoded content type. You can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/refs/heads/main/Official%20Documentation/forum.json) file.",
-    "version": "1.1.28"
+    "version": "1.1.28a"
   },
   "servers": [
     {
@@ -24376,6 +24376,13 @@
           "is_banned",
           "display_banner_id",
           "display_icon_group_id",
+          "balance",
+          "hold",
+          "currency",
+          "user_email",
+          "user_unread_notification_count",
+          "user_unread_conversation_count",
+          "conv_welcome_message",
           "user_title",
           "user_deposit",
           "user_is_valid",
@@ -24387,10 +24394,18 @@
           "user_is_ignored",
           "user_is_visitor",
           "user_group_id",
+          "user_groups",
           "fields",
+          "user_timezone_offset",
+          "user_external_authentications",
+          "self_permissions",
+          "edit_permissions",
           "birthday",
+          "secret_answer_rendered",
+          "secret_answer_first_letter",
           "user_following",
-          "user_followers"
+          "user_followers",
+          "banner"
         ],
         "properties": {
           "user_id": {
@@ -24448,6 +24463,34 @@
           "display_icon_group_id": {
             "title": "Display",
             "type": "integer"
+          },
+          "balance": {
+            "title": "Balance",
+            "type": "string"
+          },
+          "hold": {
+            "title": "Hold",
+            "type": "string"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "user_email": {
+            "title": "User",
+            "type": "string"
+          },
+          "user_unread_notification_count": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_unread_conversation_count": {
+            "title": "User",
+            "type": "integer"
+          },
+          "conv_welcome_message": {
+            "title": "Conv",
+            "type": "string"
           },
           "user_title": {
             "title": "User",
@@ -24566,6 +24609,88 @@
             "title": "User",
             "type": "integer"
           },
+          "user_groups": {
+            "title": "User",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "user_group_id": {
+                  "title": "User",
+                  "type": "integer"
+                },
+                "user_group_title": {
+                  "title": "User",
+                  "type": "string"
+                },
+                "user_group_title_en": {
+                  "title": "User",
+                  "type": "string"
+                },
+                "user_group_banner_css_class": {
+                  "title": "User",
+                  "type": "string"
+                },
+                "user_group_banner_text": {
+                  "title": "User",
+                  "type": "string"
+                },
+                "user_group_banner_text_en": {
+                  "title": "User",
+                  "type": "string"
+                },
+                "display_group_selectable": {
+                  "title": "Display",
+                  "type": "boolean"
+                },
+                "display_banner_selectable": {
+                  "title": "Display",
+                  "type": "boolean"
+                },
+                "display_icon_selectable": {
+                  "title": "Display",
+                  "type": "boolean"
+                },
+                "is_primary_group": {
+                  "title": "Is",
+                  "type": "boolean"
+                },
+                "user_group_extra_data": {
+                  "title": "User",
+                  "type": "object",
+                  "properties": {
+                    "titles": {
+                      "title": "Titles",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "titles"
+                  ]
+                },
+                "user_group_icon_class": {
+                  "title": "User",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "user_group_id",
+                "user_group_title",
+                "user_group_title_en",
+                "user_group_banner_css_class",
+                "user_group_banner_text",
+                "user_group_banner_text_en",
+                "user_group_icon_class",
+                "display_group_selectable",
+                "display_banner_selectable",
+                "display_icon_selectable",
+                "is_primary_group"
+              ]
+            }
+          },
           "fields": {
             "title": "Fields",
             "type": "array",
@@ -24595,6 +24720,36 @@
                 "value": {
                   "title": "Value",
                   "type": "string"
+                },
+                "is_multi_choice": {
+                  "title": "Is",
+                  "type": "boolean"
+                },
+                "choices": {
+                  "title": "Choices",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "title": "Key",
+                        "type": "string"
+                      },
+                      "value": {
+                        "title": "Value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "value"
+                    ]
+                  }
+                },
+                "values": {
+                  "title": "Values",
+                  "type": "array",
+                  "items": {}
                 }
               },
               "required": [
@@ -24602,10 +24757,118 @@
                 "title",
                 "description",
                 "position",
+                "is_multi_choice",
                 "is_required",
-                "value"
+                "choices",
+                "values"
               ]
             }
+          },
+          "user_timezone_offset": {
+            "title": "User",
+            "type": "integer"
+          },
+          "user_external_authentications": {
+            "title": "User",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "title": "Provider",
+                  "type": "string"
+                },
+                "provider_key": {
+                  "title": "Provider",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "provider",
+                "provider_key"
+              ]
+            }
+          },
+          "self_permissions": {
+            "title": "Self",
+            "type": "object",
+            "properties": {
+              "create_conversation": {
+                "title": "Create",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "create_conversation"
+            ]
+          },
+          "edit_permissions": {
+            "title": "Edit",
+            "type": "object",
+            "properties": {
+              "password": {
+                "title": "Password",
+                "type": "boolean"
+              },
+              "user_email": {
+                "title": "User",
+                "type": "boolean"
+              },
+              "username": {
+                "title": "Username",
+                "type": "boolean"
+              },
+              "user_title": {
+                "title": "User",
+                "type": "boolean"
+              },
+              "short_link": {
+                "title": "Short",
+                "type": "boolean"
+              },
+              "hide_username_logs": {
+                "title": "Hide",
+                "type": "boolean"
+              },
+              "primary_group_id": {
+                "title": "Primary",
+                "type": "boolean"
+              },
+              "secondary_group_ids": {
+                "title": "Secondary",
+                "type": "boolean"
+              },
+              "user_dob_day": {
+                "title": "User",
+                "type": "boolean"
+              },
+              "user_dob_month": {
+                "title": "User",
+                "type": "boolean"
+              },
+              "user_dob_year": {
+                "title": "User",
+                "type": "boolean"
+              },
+              "fields": {
+                "title": "Fields",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "password",
+              "user_email",
+              "username",
+              "user_title",
+              "short_link",
+              "hide_username_logs",
+              "primary_group_id",
+              "secondary_group_ids",
+              "user_dob_day",
+              "user_dob_month",
+              "user_dob_year",
+              "fields"
+            ]
           },
           "birthday": {
             "title": "Birthday",
@@ -24649,6 +24912,14 @@
               "format"
             ]
           },
+          "secret_answer_rendered": {
+            "title": "Secret",
+            "type": "string"
+          },
+          "secret_answer_first_letter": {
+            "title": "Secret",
+            "type": "string"
+          },
           "user_following": {
             "title": "User",
             "type": "object",
@@ -24656,7 +24927,33 @@
               "users": {
                 "title": "Users",
                 "type": "array",
-                "items": {}
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "title": "User",
+                      "type": "integer"
+                    },
+                    "username": {
+                      "title": "Username",
+                      "type": "string"
+                    },
+                    "username_html": {
+                      "title": "Username",
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "title": "Avatar",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "user_id",
+                    "username",
+                    "username_html",
+                    "avatar"
+                  ]
+                }
               },
               "count": {
                 "title": "Count",
@@ -24712,6 +25009,10 @@
               "users",
               "count"
             ]
+          },
+          "banner": {
+            "title": "Banner",
+            "type": "string"
           }
         }
       },
