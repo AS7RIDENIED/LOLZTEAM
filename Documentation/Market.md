@@ -107,8 +107,12 @@
     * [Get](#get-23)
     * [Params](#params-23)
     * [Games](#games-23)
+  * [Hytale](#hytale)
+    * [Get](#get-24)
+    * [Params](#params-24)
+    * [Games](#games-24)
   * [List](#list)
-  * [Get](#get-24)
+  * [Get](#get-25)
 * [List](#list-1)
   * [Owned](#owned)
   * [Purchased](#purchased)
@@ -131,11 +135,15 @@
   * [Guarantee](#guarantee)
     * [Cancel](#cancel)
     * [Check](#check)
-  * [Get](#get-25)
+  * [Discount](#discount)
+    * [Request](#request)
+    * [Cancel](#cancel-1)
+  * [Get](#get-26)
   * [Bulk](#bulk)
   * [Edit](#edit)
   * [Delete](#delete)
   * [Bump](#bump)
+  * [Auto Bump](#auto-bump)
   * [Open](#open)
   * [Close](#close)
   * [Ai Price](#ai-price)
@@ -154,9 +162,10 @@
   * [Stick](#stick)
   * [Unstick](#unstick)
   * [Transfer](#transfer)
+  * [Decline Video Recording](#decline-video-recording)
 * [Purchasing](#purchasing)
   * [Cart](#cart)
-    * [Get](#get-26)
+    * [Get](#get-27)
     * [Add](#add)
     * [Delete](#delete-1)
   * [Fast](#fast)
@@ -167,7 +176,7 @@
   * [Add](#add-1)
   * [Check](#check-2)
 * [Profile](#profile)
-  * [Get](#get-27)
+  * [Get](#get-28)
   * [Edit](#edit-1)
   * [Claims](#claims)
   * [Create Claim](#create-claim)
@@ -178,22 +187,22 @@
     * [Delete](#delete-2)
   * [Invoice](#invoice)
     * [List](#list-3)
-    * [Get](#get-28)
+    * [Get](#get-29)
     * [Create](#create-1)
   * [Payout](#payout)
     * [Services](#services)
     * [Create](#create-2)
   * [Balance](#balance)
-    * [Get](#get-29)
+    * [Get](#get-30)
     * [Exchange](#exchange)
   * [Currency](#currency)
   * [Transfer](#transfer-1)
   * [Fee](#fee)
-  * [Cancel](#cancel-1)
+  * [Cancel](#cancel-2)
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-30)
+  * [Get](#get-31)
   * [Add](#add-2)
   * [Delete](#delete-3)
 * [Imap](#imap)
@@ -1675,6 +1684,65 @@ print(response.json())
 ```
 
 
+## Hytale
+
+### Get
+
+GET https://api.lzt.market/CATEGORY_NAME
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- page (int): The number of the page to display results from
+- title (str): The word or words contained in the account title.
+- pmin (float): Minimal price of account (Inclusive).
+- pmax (float): Maximum price of account (Inclusive).
+- origin (list): List of account origins.
+- not_origin (list): List of account origins that won't be included.
+- order_by (str): Item order.
+- sb (bool): Sold before.
+- sb_by_me (bool): Sold before by me.
+- nsb (bool): Not sold before.
+- nsb_by_me (bool): Not sold before by me.
+- kwargs (any): Any additional search parameters.
+
+**Example:**
+
+```python
+response = market.categories.hytale.get(pmin=100, pmax=500)
+print(response.json())
+```
+
+
+### Params
+
+GET https://api.lzt.market/CATEGORY_NAME/params
+
+*Displays a list of parameters for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.hytale.params()
+print(response.json())
+```
+
+
+### Games
+
+GET https://api.lzt.market/CATEGORY_NAME/games
+
+*Displays a list of games for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.hytale.games()
+print(response.json())
+```
+
+
 ## List
 
 GET https://api.lzt.market/category
@@ -2039,6 +2107,46 @@ print(response.json())
 ```
 
 
+## Discount
+
+### Request
+
+POST https://api.lzt.market/{item_id}/discount
+
+*Request a discount for the specified item.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+- discount_price (float): Requested discounted price.
+- message (str, optional): Message to the seller.
+
+**Example:**
+
+```python
+response = market.managing.discount.request(item_id=1234567890, discount_price=100, message="Please give a discount")
+print(response.json())
+```
+
+
+### Cancel
+
+DELETE https://api.lzt.market/{item_id}/discount
+
+*Cancel a requested discount for the specified item.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+
+**Example:**
+
+```python
+response = market.managing.discount.cancel(item_id=1234567890)
+print(response.json())
+```
+
+
 ## Get
 
 GET https://api.lzt.market/{item_id}
@@ -2151,6 +2259,24 @@ POST https://api.lzt.market/{item_id}/bump
 
 ```python
 response = market.managing.bump(item_id=1234567890)
+print(response.json())
+```
+
+
+## Auto Bump
+
+POST https://api.lzt.market/{item_id}/auto-bump
+
+*Enable/disable or edit automatic bumping for the specified account.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+- hour (int): Interval in hours. (Set `hour` to 0 to disable autobump)
+
+**Example:**
+```python
+response = await market.managing.auto_bump(item_id=1234567890, hour=2)
 print(response.json())
 ```
 
@@ -2295,7 +2421,6 @@ GET https://api.lzt.market/letters2
 
 **Parameters:**
 
-- item_id (int): Item ID. Returns letters only from the sender of the selected account category.
 - email (str): Email.
 - password (str): Password.
 - limit (int): Number of letters to return.
@@ -2303,7 +2428,7 @@ GET https://api.lzt.market/letters2
 **Example:**
 
 ```python
-response = market.managing.letters(item_id=1234567890)
+response = market.managing.letters(email="login@web.site", password="password")
 print(response.json())
 ```
 
@@ -2317,8 +2442,6 @@ GET https://api.lzt.market/email-code
 **Parameters:**
 
 - item_id (int): Item ID.
-- email (str): Email.
-- login (str): Login.
 
 **Example:**
 
@@ -2491,6 +2614,25 @@ POST https://api.lzt.market/{item_id}/change-owner
 
 ```python
 response = market.managing.transfer(item_id=1234567890, username="AS7RID", secret_answer="secret_answer")
+print(response.json())
+```
+
+
+## Decline Video Recording
+
+POST https://api.lzt.market/{item_id}/decline-video-recording
+
+*Waiver of the requirement to record a video and any claims regarding this account.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+- waive_claims (bool): You voluntarily and with full awareness of your actions waive any claims regarding this account.
+
+**Example:**
+
+```python
+response = await market.managing.decline_video_recording(item_id=1234567890, waive_claims=True)
 print(response.json())
 ```
 
@@ -3322,7 +3464,7 @@ POST https://api.lzt.market/batch
 ```python
 response = market.batch(jobs=[{"method": "GET", "url": "/1234567890", params: {}}])
 #  Also you can create jobs for almost all functions like this:
-#  job = market.managing.get.job(item_id=1234567890)
+#  job = market.managing.get.job(item_id=1234567890, job_id=1234567890)
 print(response.json())
 
 #  You also can use executor to ease work with batch requests while you have a lot of jobs:

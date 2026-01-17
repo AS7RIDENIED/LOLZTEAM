@@ -61,6 +61,7 @@
     * [Create](#create-1)
     * [Edit](#edit-2)
     * [Delete](#delete-1)
+    * [Report](#report)
   * [List](#list-6)
   * [Get](#get-6)
   * [Create](#create-2)
@@ -69,7 +70,7 @@
   * [Likes](#likes)
   * [Like](#like)
   * [Unlike](#unlike)
-  * [Report](#report)
+  * [Report](#report-1)
   * [Reasons](#reasons)
 * [Users](#users)
   * [Avatar](#avatar)
@@ -87,7 +88,7 @@
       * [Create](#create-3)
       * [Edit](#edit-4)
       * [Delete](#delete-5)
-      * [Report](#report-1)
+      * [Report](#report-2)
     * [List](#list-8)
     * [Get](#get-8)
     * [Create](#create-4)
@@ -96,7 +97,7 @@
     * [Likes](#likes-1)
     * [Like](#like-1)
     * [Unlike](#unlike-1)
-    * [Report](#report-2)
+    * [Report](#report-3)
     * [Reasons](#reasons-1)
     * [Stick](#stick)
     * [Unstick](#unstick)
@@ -118,6 +119,7 @@
   * [Unfollow](#unfollow-2)
   * [Ignored](#ignored)
   * [Ignore](#ignore)
+  * [Ignore Edit](#ignore-edit)
   * [Unignore](#unignore)
   * [Content](#content)
 * [Conversations](#conversations)
@@ -170,7 +172,7 @@
     * [Create](#create-7)
     * [Edit](#edit-9)
     * [Delete](#delete-8)
-    * [Report](#report-3)
+    * [Report](#report-4)
     * [Reasons](#reasons-2)
   * [Get](#get-14)
   * [Ignored](#ignored-1)
@@ -1150,6 +1152,25 @@ DELETE https://prod-api.lolz.live/posts/comments
 
 ```python
 response = forum.posts.comments.delete(post_comment_id=123456)
+print(response.json())
+```
+
+
+### Report
+
+POST https://prod-api.lolz.live/posts/comments/report
+
+*Report a post comment.*
+
+**Parameters:**
+
+- post_comment_id (int): Id of the post comment to report.
+- reason (str): Reason of the report.
+
+**Example:**
+
+```python
+response = forum.posts.comments.report(post_comment_id=123456, reason="1.4.1")
 print(response.json())
 ```
 
@@ -2142,6 +2163,32 @@ POST https://prod-api.lolz.live/users/{user_id}/ignore
 
 ```python
 response = forum.users.ignore(user_id=2410024)
+print(response.json())
+```
+
+
+## Ignore Edit
+
+PUT https://prod-api.lolz.live/users/{user_id}/ignore
+
+**Edit ignoring options for a user.**
+
+**Parameters:**
+
+- user_id (int | str): User ID.
+- ignore_conversations (bool): Ignore user's conversations.
+- ignore_content (bool): Ignore user's content.
+- restrict_view_profile (bool): Restrict user from viewing your profile.
+
+**Example:**
+
+```python
+response = forum.users.ignore_edit(
+    user_id=2410024,
+    ignore_conversations=True,
+    ignore_content=False,
+    restrict_view_profile=True
+)
 print(response.json())
 ```
 
@@ -3267,9 +3314,9 @@ POST https://prod-api.lolz.live/batch
 **Example:**
 
 ```python
-response = forum.batch(jobs=[{"method": "GET", "url": "/users/2410024", "params": {}}])
+response = forum.batch(jobs=[{"id": "2410024", "method": "GET", "url": "/users/2410024", "params": {}}])
 #  You can create jobs for almost all functions like this:
-#  job = forum.users.get.job(user_id=2410024)
+#  job = forum.users.get.job(user_id=2410024, job_id=24100244)
 print(response.json())
 ```
 
@@ -3285,7 +3332,7 @@ print(response.json())
 **Example**:
 
 ```python
-jobs = [forum.users.get.job(user_id=i*1000) for i in range(42)]
+jobs = [forum.users.get.job(user_id=i*1000, job_id=i) for i in range(42)]
 while jobs:  # It will be running until all jobs will be executed
     jobs, response = forum.batch.executor(jobs=jobs)
     print(response.json())
