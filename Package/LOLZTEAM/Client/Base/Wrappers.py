@@ -72,6 +72,7 @@ def UNIVERSAL(batchable=False) -> httpx.Response:
                     Returns job for batch request
                     """
                     capture = RequestCapture()
+                    job_id = str(kwargs.pop("job_id", random.randint(1000000, 9999999)))
                     if hasattr(instance, "core"):
                         head_instance = instance.core
                     else:
@@ -100,7 +101,7 @@ def UNIVERSAL(batchable=False) -> httpx.Response:
                         params.update(_NONE.TrimNONE(captured.get("json", {})))
 
                         return {
-                            "id": str(kwargs.get("job_id", random.randint(1000000, 9999999))),
+                            "id": job_id,
                             "method": captured["method"],
                             "uri": captured["endpoint"],
                             "params": params,
@@ -116,7 +117,7 @@ def UNIVERSAL(batchable=False) -> httpx.Response:
                     params.update(_NONE.TrimNONE(kwargs.get("data", {})))
                     params.update(_NONE.TrimNONE(kwargs.get("json", {})))
                     return {
-                        "id": str(kwargs.get("job_id", random.randint(1, 1000000))),
+                        "id": str(kwargs.pop("job_id", random.randint(1, 1000000))),
                         "method": method,
                         "uri": endpoint,
                         "params": params,

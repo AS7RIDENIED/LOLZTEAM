@@ -257,6 +257,10 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/minecraft")
 
+        class __Hytale(__BaseCategory):
+            def __init__(self, core: "Market"):
+                super().__init__(core, "/hytale")
+
         def __init__(self, core: "Market"):
             self.core = core
             self.latest = self.__Latest(self.core)
@@ -283,6 +287,7 @@ class Market(APIClient):
             self.roblox = self.__Roblox(self.core)
             self.warface = self.__Warface(self.core)
             self.minecraft = self.__Minecraft(self.core)
+            self.hytale = self.__Hytale(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -766,11 +771,61 @@ class Market(APIClient):
                 """
                 return await self.core.request("POST", f"/{item_id}/check-guarantee")
 
+        class __Discount:
+            def __init__(self, core: "Market"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def request(self, item_id: int, discount_price: float, message: str = NONE) -> Response:
+                """
+                POST https://api.lzt.market/{item_id}/discount
+
+                *Request a discount for the specified item.*
+
+                **Parameters:**
+
+                - item_id (int): Item ID.
+                - discount_price (float): Requested discounted price.
+                - message (str, optional): Message to the seller.
+
+                **Example:**
+
+                ```python
+                response = market.managing.discount.request(item_id=1234567890, discount_price=100, message="Please give a discount")
+                print(response.json())
+                ```
+                """
+                json = {"discount_price": discount_price, "message": message}
+                return await self.core.request("POST", f"/{item_id}/discount", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def cancel(self, item_id: int) -> Response:
+                """
+                DELETE https://api.lzt.market/{item_id}/discount
+
+                *Cancel a requested discount for the specified item.*
+
+                **Parameters:**
+
+                - item_id (int): Item ID.
+
+                **Example:**
+
+                ```python
+                response = market.managing.discount.cancel(item_id=1234567890)
+                print(response.json())
+                ```
+                """
+                return await self.core.request("DELETE", f"/{item_id}/discount")
+
         def __init__(self, core: "Market"):
             self.core = core
             self.steam = self.__SteamMan(self.core)
             self.telegram = self.__TelegramMan(self.core)
             self.guarantee = self.__Guarantee(self.core)
+            self.discount = self.__Discount(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -936,6 +991,30 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
+        async def auto_bump(self, item_id: int, hour: int) -> Response:
+            """
+            POST https://api.lzt.market/{item_id}/auto-bump
+
+            *Enable/disable or edit automatic bumping for the specified account.*
+
+            **Parameters:**
+
+            - item_id (int): Item ID.
+            - hour (int): Interval in hours. (Set `hour` to 0 to disable autobump)
+
+            **Example:**
+            ```python
+            response = await market.managing.auto_bump(item_id=1234567890, hour=2)
+            print(response.json())
+            ```
+            """
+            json = {
+                "hour": hour
+            }
+            return await self.core.request("POST" if hour else "DELETE", f"/{item_id}/auto-bump", json=json if hour else None)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
         async def open(self, item_id: int) -> Response:
             """
             POST https://api.lzt.market/{item_id}/open
@@ -1095,7 +1174,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def letters(self, item_id: int = NONE, email: str = NONE, password: str = NONE, limit: int = NONE) -> Response:
+        async def letters(self, email: str = NONE, password: str = NONE, limit: int = NONE) -> Response:
             """
             GET https://api.lzt.market/letters2
 
@@ -1103,7 +1182,6 @@ class Market(APIClient):
 
             **Parameters:**
 
-            - item_id (int): Item ID. Returns letters only from the sender of the selected account category.
             - email (str): Email.
             - password (str): Password.
             - limit (int): Number of letters to return.
@@ -1111,12 +1189,11 @@ class Market(APIClient):
             **Example:**
 
             ```python
-            response = market.managing.letters(item_id=1234567890)
+            response = market.managing.letters(email="login@web.site", password="password")
             print(response.json())
             ```
             """
             params = {
-                "item_id": item_id,
                 "email": email,
                 "password": password,
                 "limit": limit
@@ -1125,7 +1202,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def email_code(self, item_id: int = NONE, email: str = NONE, login: str = NONE) -> Response:
+        async def email_code(self, item_id: int = NONE) -> Response:
             """
             GET https://api.lzt.market/email-code
 
@@ -1134,8 +1211,6 @@ class Market(APIClient):
             **Parameters:**
 
             - item_id (int): Item ID.
-            - email (str): Email.
-            - login (str): Login.
 
             **Example:**
 
@@ -1145,9 +1220,7 @@ class Market(APIClient):
             ```
             """
             json = {
-                "item_id": item_id,
-                "email": email,
-                "login": login
+                "item_id": item_id
             }
             return await self.core.request("GET", "/email-code", json=json)
 
@@ -1357,6 +1430,31 @@ class Market(APIClient):
                 "secret_answer": secret_answer
             }
             return await self.core.request("POST", f"/{item_id}/change-owner", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def decline_video_recording(self, item_id: int, waive_claims: bool) -> Response:
+            """
+            POST https://api.lzt.market/{item_id}/decline-video-recording
+
+            *Waiver of the requirement to record a video and any claims regarding this account.*
+
+            **Parameters:**
+
+            - item_id (int): Item ID.
+            - waive_claims (bool): You voluntarily and with full awareness of your actions waive any claims regarding this account.
+
+            **Example:**
+
+            ```python
+            response = await market.managing.decline_video_recording(item_id=1234567890, waive_claims=True)
+            print(response.json())
+            ```
+            """
+            json = {
+                "i_voluntarily_and_with_full_awareness_of_my_actions_waive_any_claims_regarding_this_item": waive_claims
+            }
+            return await self.core.request("POST", f"/{item_id}/decline-video-recording", json=json)
 
     class __Purchasing:
         class __Cart:
@@ -2660,7 +2758,7 @@ class Market(APIClient):
             ```python
             response = market.batch(jobs=[{"method": "GET", "url": "/1234567890", params: {}}])
             #  Also you can create jobs for almost all functions like this:
-            #  job = market.managing.get.job(item_id=1234567890)
+            #  job = market.managing.get.job(item_id=1234567890, job_id=1234567890)
             print(response.json())
 
             #  You also can use executor to ease work with batch requests while you have a lot of jobs:
@@ -2711,7 +2809,7 @@ class Market(APIClient):
         ```python
         response = market.batch(jobs=[{"method": "GET", "url": "/1234567890", params: {}}])
         #  Also you can create jobs for almost all functions like this:
-        #  job = market.managing.get.job(item_id=1234567890)
+        #  job = market.managing.get.job(item_id=1234567890, job_id=1234567890)
         print(response.json())
 
         #  You also can use executor to ease work with batch requests while you have a lot of jobs:

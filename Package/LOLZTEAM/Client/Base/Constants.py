@@ -60,6 +60,7 @@ class Market:
             "5",
             "6",
             "7",
+            "8"
             "9",
             "10",
             "11",
@@ -84,6 +85,7 @@ class Market:
         uplay = 5
         chatgpt = 6
         socialclub = 7
+        hytale = 8
         fortnite = 9
         instagram = 10
         battlenet = 11

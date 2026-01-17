@@ -1427,6 +1427,29 @@ class Forum(APIClient):
                 params = {"post_comment_id": post_comment_id}
                 return await self.core.request("DELETE", "/posts/comments", params=params)
 
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def report(self, post_comment_id: int, reason: str) -> Response:
+                """
+                POST https://prod-api.lolz.live/posts/comments/report
+
+                *Report a post comment.*
+
+                **Parameters:**
+
+                - post_comment_id (int): Id of the post comment to report.
+                - reason (str): Reason of the report.
+
+                **Example:**
+
+                ```python
+                response = forum.posts.comments.report(post_comment_id=123456, reason="1.4.1")
+                print(response.json())
+                ```
+                """
+                json = {"post_comment_id": post_comment_id, "message": reason}
+                return await self.core.request("POST", "/posts/comments/report", json=json)
+
         def __init__(self, core: "Forum"):
             self.core = core
             self.comments = self.__Comments(self.core)
@@ -2722,6 +2745,46 @@ class Forum(APIClient):
             ```
             """
             return await self.core.request("POST", f"/users/{user_id}/ignore")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def ignore_edit(
+            self,
+            user_id: Union[int, str],
+            ignore_conversations: bool = NONE,
+            ignore_content: bool = NONE,
+            restrict_view_profile: bool = NONE,
+        ) -> Response:
+            """
+            PUT https://prod-api.lolz.live/users/{user_id}/ignore
+
+            **Edit ignoring options for a user.**
+
+            **Parameters:**
+
+            - user_id (int | str): User ID.
+            - ignore_conversations (bool): Ignore user's conversations.
+            - ignore_content (bool): Ignore user's content.
+            - restrict_view_profile (bool): Restrict user from viewing your profile.
+
+            **Example:**
+
+            ```python
+            response = forum.users.ignore_edit(
+                user_id=2410024,
+                ignore_conversations=True,
+                ignore_content=False,
+                restrict_view_profile=True
+            )
+            print(response.json())
+            ```
+            """
+            params = {
+                "ignore_conversations": ignore_conversations,
+                "ignore_content": ignore_content,
+                "restrict_view_profile": restrict_view_profile,
+            }
+            return await self.core.request("PUT", f"/users/{user_id}/ignore", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -4162,9 +4225,9 @@ class Forum(APIClient):
             **Example:**
 
             ```python
-            response = forum.batch(jobs=[{"method": "GET", "url": "/users/2410024", "params": {}}])
+            response = forum.batch(jobs=[{"id": "2410024", "method": "GET", "url": "/users/2410024", "params": {}}])
             #  You can create jobs for almost all functions like this:
-            #  job = forum.users.get.job(user_id=2410024)
+            #  job = forum.users.get.job(user_id=2410024, job_id=24100244)
             print(response.json())
             ```
             """
@@ -4183,7 +4246,7 @@ class Forum(APIClient):
             **Example**:
 
             ```python
-            jobs = [forum.users.get.job(user_id=i*1000) for i in range(42)]
+            jobs = [forum.users.get.job(user_id=i*1000, job_id=i) for i in range(42)]
             while jobs:  # It will be running until all jobs will be executed
                 jobs, response = forum.batch.executor(jobs=jobs)
                 print(response.json())
@@ -4207,9 +4270,9 @@ class Forum(APIClient):
         **Example:**
 
         ```python
-        response = forum.batch(jobs=[{"method": "GET", "url": "/users/2410024", "params": {}}])
+        response = forum.batch(jobs=[{"id": "2410024", "method": "GET", "url": "/users/2410024", "params": {}}])
         #  You can create jobs for almost all functions like this:
-        #  job = forum.users.get.job(user_id=2410024)
+        #  job = forum.users.get.job(user_id=2410024, job_id=2410024)
         print(response.json())
         ```
         """
