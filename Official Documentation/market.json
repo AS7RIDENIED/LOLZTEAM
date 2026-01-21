@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.78a"
+    "version": "1.1.79"
   },
   "servers": [
     {
@@ -52460,6 +52460,77 @@
         ]
       }
     },
+    "/{item_id}/external-account": {
+      "post": {
+        "tags": [
+          "Account publishing"
+        ],
+        "summary": "Add an External Account",
+        "description": "Check and add an external account to your item.\n\n> ❗️ Please note that if you're linking a Social Club account to Steam, it will update the last activity on your account (This is a limitation of Steam). If Social Club Games does not have a linked account, do not enter any data.",
+        "operationId": "Publishing.External",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/item_id_path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "External account type.",
+                    "type": "string",
+                    "enum": [
+                      "socialclub"
+                    ]
+                  },
+                  "login": {
+                    "description": "Account login data (login:password format).",
+                    "title": "Login Password",
+                    "type": "string"
+                  },
+                  "email_login_data": {
+                    "description": "Email login data (email:password format).",
+                    "title": "Email Login Data",
+                    "type": "string"
+                  },
+                  "cookies": {
+                    "description": "Cookies.",
+                    "title": "Cookies",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "$ref": "#/components/responses/ItemNotFoundModel"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/{item_id}/email-code": {
       "get": {
         "tags": [
@@ -53352,8 +53423,8 @@
         "tags": [
           "Accounts managing"
         ],
-        "summary": "Tag Account",
-        "description": "Adds tag for the account.",
+        "summary": "Add a Tag",
+        "description": "Adds a tag to the specified account.",
         "operationId": "Managing.Tag",
         "parameters": [
           {
@@ -53425,9 +53496,157 @@
         "tags": [
           "Accounts managing"
         ],
-        "summary": "Untag Account",
-        "description": "Deletes tag from the account.",
+        "summary": "Remove a Tag",
+        "description": "Removes a tag from from the specified account.",
         "operationId": "Managing.Untag",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/item_id_path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_id": {
+                    "title": "Tag ID",
+                    "type": "integer",
+                    "description": "Tag ID."
+                  }
+                },
+                "required": [
+                  "tag_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Tag"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Tag Not Found",
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "default": "The requested tag could not be found."
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/{item_id}/public-tag": {
+      "post": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Add a Public Tag",
+        "description": "Adds a public tag to the specified account.",
+        "operationId": "Managing.PublicTag",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/item_id_path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag_id": {
+                    "title": "Tag ID",
+                    "type": "integer",
+                    "description": "Tag ID."
+                  }
+                },
+                "required": [
+                  "tag_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Tag"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Tag Not Found",
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "default": "The requested tag could not be found."
+                      }
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "Remove a Public Tag",
+        "description": "Removes a public tag from the specified account.",
+        "operationId": "Managing.PublicUntag",
         "parameters": [
           {
             "$ref": "#/components/parameters/item_id_path"
@@ -58624,8 +58843,71 @@
   "components": {
     "schemas": {
       "UserModel": {
-        "title": "User",
         "type": "object",
+        "required": [
+          "active_items_count",
+          "activity_visible",
+          "age",
+          "balance",
+          "balances",
+          "bump_item_period",
+          "can_edit",
+          "can_follow",
+          "can_ignore",
+          "can_post_profile",
+          "can_view_profile",
+          "can_view_profile_posts",
+          "can_warn",
+          "contest_count",
+          "conv_welcome_message",
+          "convertedBalance",
+          "convertedDeposit",
+          "convertedHold",
+          "currency",
+          "currencyPhrase",
+          "custom_account_download_format",
+          "custom_fields",
+          "custom_title",
+          "deposit",
+          "dob",
+          "feedback_data",
+          "hold",
+          "homepage",
+          "imap_data",
+          "is_admin",
+          "is_banned",
+          "is_followed",
+          "is_ignored",
+          "is_moderator",
+          "is_staff",
+          "is_super_admin",
+          "joined_date",
+          "last_activity",
+          "like2_count",
+          "like_count",
+          "location",
+          "market_custom_title",
+          "max_discount_percent",
+          "message_count",
+          "paid_mail_left",
+          "public_tags",
+          "register_date",
+          "rendered",
+          "restore_count",
+          "restore_data",
+          "short_link",
+          "sold_items_count",
+          "tags",
+          "telegram_client",
+          "trophy_points",
+          "user_allow_ask_discount",
+          "user_id",
+          "user_title",
+          "username",
+          "view_url",
+          "visible",
+          "warning_points"
+        ],
         "properties": {
           "active_items_count": {
             "title": "Active",
@@ -58657,6 +58939,10 @@
                   "title": "Balance",
                   "type": "integer"
                 },
+                "convertedBalance": {
+                  "title": "Converted Balance",
+                  "type": "number"
+                },
                 "custom_title": {
                   "title": "Custom"
                 },
@@ -58684,6 +58970,7 @@
               "required": [
                 "balance",
                 "balance_id",
+                "convertedBalance",
                 "custom_title",
                 "fullTitle",
                 "merchant_id",
@@ -58829,6 +59116,22 @@
               "vk": {
                 "title": "Vk",
                 "type": "string"
+              },
+              "favoritePorn": {
+                "title": "Favorite Porn",
+                "type": "string"
+              },
+              "favoriteVape": {
+                "title": "Favorite Vape",
+                "type": "string"
+              },
+              "favoriteAnime": {
+                "title": "Favorite Anime",
+                "type": "string"
+              },
+              "matrix": {
+                "title": "Matrix",
+                "type": "string"
               }
             },
             "required": [
@@ -58848,7 +59151,11 @@
               "scamURL",
               "steam",
               "telegram",
-              "vk"
+              "vk",
+              "favoritePorn",
+              "favoriteVape",
+              "favoriteAnime",
+              "matrix"
             ]
           },
           "custom_title": {
@@ -58989,6 +59296,10 @@
             "title": "Last",
             "type": "integer"
           },
+          "like2_count": {
+            "title": "Like",
+            "type": "integer"
+          },
           "like_count": {
             "title": "Like",
             "type": "integer"
@@ -59012,6 +59323,32 @@
           "paid_mail_left": {
             "title": "Paid",
             "type": "integer"
+          },
+          "public_tags": {
+            "title": "Public",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "background_color": {
+                  "title": "Background",
+                  "type": "string"
+                },
+                "tag_id": {
+                  "title": "Tag",
+                  "type": "integer"
+                },
+                "title": {
+                  "title": "Title",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "background_color",
+                "tag_id",
+                "title"
+              ]
+            }
           },
           "register_date": {
             "title": "Register",
@@ -59048,6 +59385,24 @@
                   "s"
                 ]
               },
+              "backgrounds": {
+                "title": "Backgrounds",
+                "type": "object",
+                "properties": {
+                  "l": {
+                    "title": "L",
+                    "type": "string"
+                  },
+                  "m": {
+                    "title": "M",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "l",
+                  "m"
+                ]
+              },
               "link": {
                 "title": "Link",
                 "type": "string"
@@ -59056,6 +59411,7 @@
             "required": [
               "username",
               "avatars",
+              "backgrounds",
               "link"
             ]
           },
@@ -59086,40 +59442,39 @@
           },
           "tags": {
             "title": "Tags",
-            "type": "object",
-            "properties": {
-              "12345": {
-                "title": "",
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "title": "Title",
-                    "type": "string"
-                  },
-                  "bc": {
-                    "title": "Bc",
-                    "type": "string"
-                  },
-                  "tag_id": {
-                    "title": "Tag",
-                    "type": "integer"
-                  },
-                  "forOwnedAccountsOnly": {
-                    "title": "For Owned Accounts Only",
-                    "type": "boolean"
-                  }
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tag_id": {
+                  "title": "Tag",
+                  "type": "integer"
                 },
-                "required": [
-                  "title",
-                  "bc",
-                  "tag_id",
-                  "forOwnedAccountsOnly"
-                ]
-              }
-            },
-            "required": [
-              "12345"
-            ]
+                "title": {
+                  "title": "Title",
+                  "type": "string"
+                },
+                "isDefault": {
+                  "title": "Is Default",
+                  "type": "boolean"
+                },
+                "forOwnedAccountsOnly": {
+                  "title": "For Owned Accounts Only",
+                  "type": "boolean"
+                },
+                "bc": {
+                  "title": "Bc",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tag_id",
+                "title",
+                "isDefault",
+                "forOwnedAccountsOnly",
+                "bc"
+              ]
+            }
           },
           "telegram_client": {
             "title": "Telegram",
@@ -59201,69 +59556,7 @@
             "title": "Warning",
             "type": "integer"
           }
-        },
-        "required": [
-          "active_items_count",
-          "activity_visible",
-          "age",
-          "balance",
-          "balances",
-          "bump_item_period",
-          "can_edit",
-          "can_follow",
-          "can_ignore",
-          "can_post_profile",
-          "can_view_profile",
-          "can_view_profile_posts",
-          "can_warn",
-          "contest_count",
-          "conv_welcome_message",
-          "convertedBalance",
-          "convertedDeposit",
-          "convertedHold",
-          "currency",
-          "currencyPhrase",
-          "custom_account_download_format",
-          "custom_fields",
-          "custom_title",
-          "deposit",
-          "dob",
-          "feedback_data",
-          "hold",
-          "homepage",
-          "imap_data",
-          "is_admin",
-          "is_banned",
-          "is_followed",
-          "is_ignored",
-          "is_moderator",
-          "is_staff",
-          "is_super_admin",
-          "joined_date",
-          "last_activity",
-          "like_count",
-          "location",
-          "market_custom_title",
-          "max_discount_percent",
-          "message_count",
-          "paid_mail_left",
-          "register_date",
-          "rendered",
-          "restore_count",
-          "restore_data",
-          "short_link",
-          "sold_items_count",
-          "tags",
-          "telegram_client",
-          "trophy_points",
-          "user_allow_ask_discount",
-          "user_id",
-          "user_title",
-          "username",
-          "view_url",
-          "visible",
-          "warning_points"
-        ]
+        }
       },
       "BalanceModel": {
         "type": "object",
@@ -60858,7 +61151,8 @@
       "Resp_SystemInfo": {
         "required": [
           "visitor_id",
-          "time"
+          "time",
+          "log_id"
         ],
         "properties": {
           "visitor_id": {
@@ -60866,6 +61160,10 @@
             "default": 0
           },
           "time": {
+            "type": "integer",
+            "default": 0
+          },
+          "log_id": {
             "type": "integer",
             "default": 0
           }
