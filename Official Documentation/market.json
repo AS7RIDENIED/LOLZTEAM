@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.79"
+    "version": "1.1.80"
   },
   "servers": [
     {
@@ -51861,6 +51861,284 @@
         ]
       }
     },
+    "/custom-discounts": {
+      "get": {
+        "tags": [
+          "Custom Discounts"
+        ],
+        "summary": "Get Custom Discounts",
+        "description": "Get a list of custom discounts.",
+        "operationId": "CustomDiscounts.Get",
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "discounts",
+                    "total",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "discounts": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DiscountModel"
+                      }
+                    },
+                    "total": {
+                      "title": "Total",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Custom Discounts"
+        ],
+        "summary": "Create Custom Discount",
+        "description": "Creates a new custom discount.",
+        "operationId": "CustomDiscounts.Create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "user_id",
+                  "category_id",
+                  "discount_percent",
+                  "min_price"
+                ],
+                "properties": {
+                  "user_id": {
+                    "title": "User Id",
+                    "type": "integer",
+                    "description": "User ID."
+                  },
+                  "category_id": {
+                    "$ref": "#/components/schemas/CategoryIDModel"
+                  },
+                  "discount_percent": {
+                    "title": "Discount Percent",
+                    "type": "number",
+                    "description": "Discount percent to apply.",
+                    "minimum": 1,
+                    "maximum": 99
+                  },
+                  "min_price": {
+                    "title": "Min Price",
+                    "type": "number",
+                    "description": "Minimum accounts price for which the discount applies.",
+                    "minimum": 0
+                  },
+                  "max_price": {
+                    "title": "Max Price",
+                    "type": "number",
+                    "description": "Maximum accounts price for which the discount applies.",
+                    "minimum": 0
+                  },
+                  "currency": {
+                    "$ref": "#/components/schemas/CurrencyModel"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "discount",
+                    "total",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "discount": {
+                      "$ref": "#/components/schemas/DiscountModel"
+                    },
+                    "total": {
+                      "title": "Total",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Custom Discounts"
+        ],
+        "summary": "Edit Custom Discount",
+        "description": "Edit an existing custom discount.",
+        "operationId": "CustomDiscounts.Edit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "discount_id",
+                  "discount_percent",
+                  "min_price",
+                  "max_price"
+                ],
+                "properties": {
+                  "discount_id": {
+                    "title": "Discount Id",
+                    "type": "integer",
+                    "description": "ID of the discount to edit."
+                  },
+                  "discount_percent": {
+                    "title": "Discount Percent",
+                    "type": "number",
+                    "description": "Discount percent to apply.",
+                    "minimum": 1
+                  },
+                  "min_price": {
+                    "title": "Min Price",
+                    "type": "number",
+                    "description": "Minimum price for which the discount applies.",
+                    "minimum": 0
+                  },
+                  "max_price": {
+                    "title": "Max Price",
+                    "type": "number",
+                    "description": "Maximum price for which the discount applies.",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "discounts",
+                    "total",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "discounts": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DiscountModel"
+                      }
+                    },
+                    "total": {
+                      "title": "Total",
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Custom Discounts"
+        ],
+        "summary": "Delete Custom Discount",
+        "description": "Delete an existing custom discount rule.",
+        "operationId": "CustomDiscounts.Delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "discount_id"
+                ],
+                "properties": {
+                  "discount_id": {
+                    "title": "Discount Id",
+                    "type": "integer",
+                    "description": "ID of the discount to delete."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/item/fast-sell": {
       "post": {
         "tags": [
@@ -58842,6 +59120,105 @@
   },
   "components": {
     "schemas": {
+      "DiscountModel": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "title": "Category",
+            "type": "integer"
+          },
+          "discount_id": {
+            "title": "Discount",
+            "type": "integer"
+          },
+          "discount_percent": {
+            "title": "Discount",
+            "type": "integer"
+          },
+          "discount_user_id": {
+            "title": "Discount",
+            "type": "integer"
+          },
+          "max_price": {
+            "title": "Max",
+            "type": "integer"
+          },
+          "min_price": {
+            "title": "Min",
+            "type": "integer"
+          },
+          "user_id": {
+            "title": "User",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "category_id",
+          "discount_id",
+          "discount_percent",
+          "discount_user_id",
+          "max_price",
+          "min_price",
+          "user_id"
+        ]
+      },
+      "CategoryIDModel": {
+        "title": "Category Id",
+        "type": "integer",
+        "description": "Accounts category.",
+        "x-enumDescriptions": {
+          "1": "Steam",
+          "3": "EA (Origin)",
+          "4": "Warface",
+          "5": "Uplay",
+          "6": "ChatGPT",
+          "7": "Social Club",
+          "8": "Hytale",
+          "9": "Fortnite",
+          "10": "Instagram",
+          "11": "Battlenet",
+          "12": "Epic Games",
+          "13": "Riot",
+          "14": "World Of Tanks",
+          "15": "Supercell",
+          "16": "WOT Blitz",
+          "17": "miHoYo",
+          "18": "Escape From Tarkov",
+          "19": "VPN",
+          "20": "Tiktok",
+          "22": "Discord",
+          "24": "Telegram",
+          "28": "Minecraft",
+          "30": "Gifts",
+          "31": "Roblox"
+        },
+        "enum": [
+          1,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          22,
+          24,
+          28,
+          30,
+          31
+        ]
+      },
       "UserModel": {
         "type": "object",
         "required": [
@@ -63446,61 +63823,7 @@
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Category Id",
-          "type": "integer",
-          "description": "Accounts category.",
-          "x-enumDescriptions": {
-            "1": "Steam",
-            "3": "EA (Origin)",
-            "4": "Warface",
-            "5": "Uplay",
-            "6": "ChatGPT",
-            "7": "Social Club",
-            "8": "Hytale",
-            "9": "Fortnite",
-            "10": "Instagram",
-            "11": "Battlenet",
-            "12": "Epic Games",
-            "13": "Riot",
-            "14": "World Of Tanks",
-            "15": "Supercell",
-            "16": "WOT Blitz",
-            "17": "miHoYo",
-            "18": "Escape From Tarkov",
-            "19": "VPN",
-            "20": "Tiktok",
-            "22": "Discord",
-            "24": "Telegram",
-            "28": "Minecraft",
-            "30": "Gifts",
-            "31": "Roblox"
-          },
-          "enum": [
-            1,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            22,
-            24,
-            28,
-            30,
-            31
-          ]
+          "$ref": "#/components/schemas/CategoryIDModel"
         }
       },
       "delete_reason": {
