@@ -1189,6 +1189,27 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
+        async def hide(self, thread_id: int) -> Response:
+            """
+            POST https://prod-api.lolz.live/threads/{thread_id}/hide
+
+            *Hide a thread from your feed.*
+
+            **Parameters:**
+
+            - thread_id (int): Thread ID.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.hide(thread_id=5523020)
+            print(response.json())
+            ```
+            """
+            return await self.core.request("POST", f"/threads/{thread_id}/hide")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
         async def move(self, thread_id: int, forum_id: int, title: str = NONE, title_en: str = NONE, prefix_ids: builtins.list[int] = NONE, send_alert: bool = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/threads/{thread_id}/move

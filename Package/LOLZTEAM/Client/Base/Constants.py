@@ -114,6 +114,7 @@ class Market:
             "refilled_balance",
             "internal_purchase",
             "money_transfer",
+            "receiving_money",
             "claim_hold",
             "insurance_deposit",
             "paid_mail",
@@ -129,6 +130,7 @@ class Market:
         refilled_balance = "refilled_balance"
         internal_purchase = "internal_purchase"
         money_transfer = "money_transfer"
+        receiving_money = "receiving_money"
         claim_hold = "claim_hold"
         insurance_deposit = "insurance_deposit"
         paid_mail = "paid_mail"
@@ -280,18 +282,22 @@ class Forum:
             photo_leaks_6m = 17           # Слив фотографий 18+ – 6 месяцев - 1 200 ₽
 
     class ThreadOrder:
-        _Literal = Literal["natural",
-                           "thread_create_date",
-                           "thread_update_date",
-                           "thread_view_count",
-                           "first_post_likes",
-                           "reply_count"]
+        _Literal = Literal[
+            "natural",
+            "post_date",
+            "last_post_date",
+            "reply_count",
+            "reply_count_asc",
+            "first_post_likes",
+            "vote_count"
+        ]
         default = "natural"
-        create_date = "thread_create_date"
-        bump_date = "thread_update_date"
-        views = "thread_view_count"
+        post_date = "post_date"
+        last_post_date = "last_post_date"
         posts = "reply_count"
+        posts_asc = "reply_count_asc"
         likes = "first_post_likes"
+        votes = "vote_count"
 
     class PostOrder:
         _Literal = Literal["natural", "natural_reverse", "post_likes", "post_likes_reverse"]

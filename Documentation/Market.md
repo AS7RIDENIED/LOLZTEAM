@@ -118,6 +118,7 @@
   * [Purchased](#purchased)
   * [Favorite](#favorite)
   * [Viewed](#viewed)
+  * [Download](#download)
 * [Managing](#managing)
   * [Steam](#steam-1)
     * [Item Value](#item-value)
@@ -138,10 +139,15 @@
   * [Discount](#discount)
     * [Request](#request)
     * [Cancel](#cancel-1)
-  * [Get](#get-26)
+  * [Custom Discount](#custom-discount)
+    * [Get](#get-26)
+    * [Create](#create)
+    * [Edit](#edit)
+    * [Delete](#delete)
+  * [Get](#get-27)
   * [Bulk](#bulk)
-  * [Edit](#edit)
-  * [Delete](#delete)
+  * [Edit](#edit-1)
+  * [Delete](#delete-1)
   * [Bump](#bump)
   * [Auto Bump](#auto-bump)
   * [Open](#open)
@@ -165,9 +171,9 @@
   * [Decline Video Recording](#decline-video-recording)
 * [Purchasing](#purchasing)
   * [Cart](#cart)
-    * [Get](#get-27)
+    * [Get](#get-28)
     * [Add](#add)
-    * [Delete](#delete-1)
+    * [Delete](#delete-2)
   * [Fast](#fast)
   * [Check](#check-1)
   * [Buy](#buy)
@@ -175,25 +181,26 @@
   * [Fast](#fast-1)
   * [Add](#add-1)
   * [Check](#check-2)
+  * [Add External Account](#add-external-account)
 * [Profile](#profile)
-  * [Get](#get-28)
-  * [Edit](#edit-1)
+  * [Get](#get-29)
+  * [Edit](#edit-2)
   * [Claims](#claims)
   * [Create Claim](#create-claim)
 * [Payments](#payments)
   * [Auto](#auto)
     * [List](#list-2)
-    * [Create](#create)
-    * [Delete](#delete-2)
+    * [Create](#create-1)
+    * [Delete](#delete-3)
   * [Invoice](#invoice)
     * [List](#list-3)
-    * [Get](#get-29)
-    * [Create](#create-1)
+    * [Get](#get-30)
+    * [Create](#create-2)
   * [Payout](#payout)
     * [Services](#services)
-    * [Create](#create-2)
+    * [Create](#create-3)
   * [Balance](#balance)
-    * [Get](#get-30)
+    * [Get](#get-31)
     * [Exchange](#exchange)
   * [Currency](#currency)
   * [Transfer](#transfer-1)
@@ -202,12 +209,12 @@
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-31)
+  * [Get](#get-32)
   * [Add](#add-2)
-  * [Delete](#delete-3)
+  * [Delete](#delete-4)
 * [Imap](#imap)
   * [Add](#add-3)
-  * [Delete](#delete-4)
+  * [Delete](#delete-5)
 * [Batch Requests](#batch-requests)
   * [Batch](#batch)
   * [Executor](#executor)
@@ -1859,6 +1866,34 @@ print(response.json())
 ```
 
 
+## Download
+
+GET https://api.lzt.market/user/{type}/download
+
+*Download accounts data in the specified format.*
+
+**Parameters:**
+
+- type (str): The type of account list to download.
+- format (str): Format of the downloaded accounts.
+- custom_format (str): Custom format string for download.
+- category_id (int): Category ID.
+- kwargs: Any additional parameters.
+
+**Example:**
+
+```python
+response = market.list.download(
+    type="items",
+    format="short",
+    category_id=6,
+    pmin=10,
+    pmax=1000
+)
+print(response.text())
+```
+
+
 # Managing
 
 ## Steamman
@@ -2143,6 +2178,84 @@ DELETE https://api.lzt.market/{item_id}/discount
 
 ```python
 response = market.managing.discount.cancel(item_id=1234567890)
+print(response.json())
+```
+
+
+## Discount
+
+### Get
+
+GET https://api.lzt.market/custom-discounts
+
+*Get a list of custom discounts.*
+
+**Example:**
+
+```python
+response = await market.managing.custom_discount.get()
+print(response.json())
+```
+
+
+### Create
+
+POST https://api.lzt.market/custom-discounts
+
+*Create a new custom discount.*
+
+**Parameters:**
+
+- user_id (int): User ID.
+- category_id (int): Category ID.
+- discount_percent (float): Discount percent to apply (1-99).
+- min_price (float): Minimum price for discount to apply.
+- max_price (float): Maximum price for discount to apply.
+- currency (str): Currency.
+
+**Example:**
+
+```python
+response = await market.managing.custom_discount.create(user_id=2410024, category_id=1, discount_percent=10, min_price=100, max_price=1000)
+print(response.json())
+```
+
+
+### Edit
+
+PUT https://api.lzt.market/custom-discounts
+
+*Edit an existing custom discount.*
+
+**Parameters:**
+
+- discount_id (int): Discount ID.
+- discount_percent (float): Discount percent to apply (1-99).
+- min_price (float): Minimum price for discount to apply.
+- max_price (float): Maximum price for discount to apply.
+
+**Example:**
+
+```python
+response = await market.managing.custom_discount.edit(discount_id=12345, discount_percent=15, min_price=150, max_price=1200)
+print(response.json())
+```
+
+
+### Delete
+
+DELETE https://api.lzt.market/custom-discounts
+
+*Delete an existing custom discount.*
+
+**Parameters:**
+
+- discount_id (int): Discount ID.
+
+**Example:**
+
+```python
+response = await market.managing.custom_discount.delete(discount_id=12345)
 print(response.json())
 ```
 
@@ -2492,12 +2605,15 @@ print(response.json())
 
 POST https://api.lzt.market/{item_id}/tag
 
+POST https://api.lzt.market/{item_id}/public-tag
+
 *Tags the item.*
 
 **Parameters:**
 
 - item_id (int): Item ID.
 - tag_id (int): Tag ID.
+- is_public (bool): Whether the tag is public.
 
 **Example:**
 
@@ -2890,6 +3006,35 @@ response = market.publishing.check(
     item_id=1234567890,
     login="auth_key",
     password="dc_id"
+)
+print(response.json())
+```
+
+
+## Add External Account
+
+POST https://api.lzt.market/{item_id}/external-account
+
+*Check and add an external account to your item.*
+
+Please note that if you're linking a Social Club account to Steam, it will update the last activity on your account (This is a limitation of Steam). If Social Club Games does not have a linked account, do not enter any data.
+
+**Parameters:**
+
+- item_id (int): Item ID.
+- type (str): External account type.
+- login (str): Account login data (login:password format).
+- email (str): Email login data (email:password format).
+- cookies (str): Cookies.
+
+**Example:**
+
+```python
+response = market.publishing.add_external_account(
+    item_id=1234567890,
+    type="socialclub",
+    login="login:password",
+    email="email:password"
 )
 print(response.json())
 ```

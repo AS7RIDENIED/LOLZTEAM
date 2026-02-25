@@ -344,7 +344,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def owned(self, category_id: Constants.Market.CategoryID._Literal,
+        async def owned(self, category_id: Constants.Market.CategoryID._Literal = NONE,
                         status: Constants.Market.ItemStatus._Literal = NONE,
                         **kwargs) -> Response:
             """
@@ -374,7 +374,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def purchased(self, category_id: Constants.Market.CategoryID._Literal, **kwargs) -> Response:
+        async def purchased(self, category_id: Constants.Market.CategoryID._Literal = NONE, **kwargs) -> Response:
             """
             GET https://api.lzt.market/user/orders
 
@@ -400,7 +400,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def favorite(self, category_id: Constants.Market.CategoryID._Literal, **kwargs) -> Response:
+        async def favorite(self, category_id: Constants.Market.CategoryID._Literal = NONE, **kwargs) -> Response:
             """
             GET https://api.lzt.market/fave
 
@@ -426,7 +426,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def viewed(self, category_id: Constants.Market.CategoryID._Literal, **kwargs) -> Response:
+        async def viewed(self, category_id: Constants.Market.CategoryID._Literal = NONE, **kwargs) -> Response:
             """
             GET https://api.lzt.market/viewed
 
@@ -449,6 +449,53 @@ class Market(APIClient):
             }
             params.update(kwargs)
             return await self.core.request("GET", "/viewed", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def download(
+            self,
+            type: Literal["items", "order"],
+            format: Literal["short",
+                            "custom",
+                            "mfa_file_steam_id",
+                            "mfa_file_login"],
+            custom_format: str = NONE,
+            category_id: Constants.Market.CategoryID._Literal = NONE,
+            **kwargs
+        ) -> Response:
+            """
+            GET https://api.lzt.market/user/{type}/download
+
+            *Download accounts data in the specified format.*
+
+            **Parameters:**
+
+            - type (str): The type of account list to download.
+            - format (str): Format of the downloaded accounts.
+            - custom_format (str): Custom format string for download.
+            - category_id (int): Category ID.
+            - kwargs: Any additional parameters.
+
+            **Example:**
+
+            ```python
+            response = market.list.download(
+                type="items",
+                format="short",
+                category_id=6,
+                pmin=10,
+                pmax=1000
+            )
+            print(response.text())
+            ```
+            """
+            params = {
+                "format": format,
+                "custom_format": custom_format,
+                "category_id": category_id
+            }
+            params.update(kwargs)
+            return await self.core.request("GET", f"/user/{type}/download", params=params)
 
     class __Managing:
         class __SteamMan:
@@ -820,12 +867,136 @@ class Market(APIClient):
                 """
                 return await self.core.request("DELETE", f"/{item_id}/discount")
 
+        class __Custom_Discount:
+            def __init__(self, core: "Market"):
+                self.core = core
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def get(self) -> Response:
+                """
+                GET https://api.lzt.market/custom-discounts
+
+                *Get a list of custom discounts.*
+
+                **Example:**
+
+                ```python
+                response = await market.managing.custom_discount.get()
+                print(response.json())
+                ```
+                """
+                return await self.core.request("GET", "/custom-discounts")
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def create(
+                self,
+                user_id: int,
+                category_id: Constants.Market.CategoryID._Literal,
+                discount_percent: float,
+                min_price: float,
+                max_price: float = NONE,
+                currency: Constants.Market.Currency._Literal = NONE,
+            ) -> Response:
+                """
+                POST https://api.lzt.market/custom-discounts
+
+                *Create a new custom discount.*
+
+                **Parameters:**
+
+                - user_id (int): User ID.
+                - category_id (int): Category ID.
+                - discount_percent (float): Discount percent to apply (1-99).
+                - min_price (float): Minimum price for discount to apply.
+                - max_price (float): Maximum price for discount to apply.
+                - currency (str): Currency.
+
+                **Example:**
+
+                ```python
+                response = await market.managing.custom_discount.create(user_id=2410024, category_id=1, discount_percent=10, min_price=100, max_price=1000)
+                print(response.json())
+                ```
+                """
+                json = {
+                    "user_id": user_id,
+                    "category_id": category_id,
+                    "discount_percent": discount_percent,
+                    "min_price": min_price,
+                    "max_price": max_price,
+                    "currency": currency
+                }
+                return await self.core.request("POST", "/custom-discounts", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def edit(
+                self,
+                discount_id: int,
+                discount_percent: float = NONE,
+                min_price: float = NONE,
+                max_price: float = NONE,
+            ) -> Response:
+                """
+                PUT https://api.lzt.market/custom-discounts
+
+                *Edit an existing custom discount.*
+
+                **Parameters:**
+
+                - discount_id (int): Discount ID.
+                - discount_percent (float): Discount percent to apply (1-99).
+                - min_price (float): Minimum price for discount to apply.
+                - max_price (float): Maximum price for discount to apply.
+
+                **Example:**
+
+                ```python
+                response = await market.managing.custom_discount.edit(discount_id=12345, discount_percent=15, min_price=150, max_price=1200)
+                print(response.json())
+                ```
+                """
+                json = {
+                    "discount_id": discount_id,
+                    "discount_percent": discount_percent,
+                    "min_price": min_price,
+                    "max_price": max_price
+                }
+                return await self.core.request("PUT", "/custom-discounts", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def delete(self, discount_id: int) -> Response:
+                """
+                DELETE https://api.lzt.market/custom-discounts
+
+                *Delete an existing custom discount.*
+
+                **Parameters:**
+
+                - discount_id (int): Discount ID.
+
+                **Example:**
+
+                ```python
+                response = await market.managing.custom_discount.delete(discount_id=12345)
+                print(response.json())
+                ```
+                """
+                json = {
+                    "discount_id": discount_id
+                }
+                return await self.core.request("DELETE", "/custom-discounts", json=json)
+
         def __init__(self, core: "Market"):
             self.core = core
             self.steam = self.__SteamMan(self.core)
             self.telegram = self.__TelegramMan(self.core)
             self.guarantee = self.__Guarantee(self.core)
             self.discount = self.__Discount(self.core)
+            self.discount_custom = self.__Custom_Discount(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -1272,9 +1443,11 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def tag(self, item_id: int, tag_id: int) -> Response:
+        async def tag(self, item_id: int, tag_id: int, is_public: bool = False) -> Response:
             """
             POST https://api.lzt.market/{item_id}/tag
+
+            POST https://api.lzt.market/{item_id}/public-tag
 
             *Tags the item.*
 
@@ -1282,6 +1455,7 @@ class Market(APIClient):
 
             - item_id (int): Item ID.
             - tag_id (int): Tag ID.
+            - is_public (bool): Whether the tag is public.
 
             **Example:**
 
@@ -1293,7 +1467,7 @@ class Market(APIClient):
             json = {
                 "tag_id": tag_id
             }
-            return await self.core.request("POST", f"/{item_id}/tag", json=json)
+            return await self.core.request("POST", f"/{item_id}/{'public-' if is_public else ""}tag", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -1877,6 +2051,51 @@ class Market(APIClient):
             if kwargs:
                 json.update(kwargs)
             return await self.core.request("POST", f"/{item_id}/goods/check", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def external(
+            self,
+            item_id: int,
+            type: Literal["socialclub"],
+            login: str = NONE,
+            email: str = NONE,
+            cookies: str = NONE
+        ) -> Response:
+            """
+            POST https://api.lzt.market/{item_id}/external-account
+
+            *Check and add an external account to your item.*
+
+            Please note that if you're linking a Social Club account to Steam, it will update the last activity on your account (This is a limitation of Steam). If Social Club Games does not have a linked account, do not enter any data.
+
+            **Parameters:**
+
+            - item_id (int): Item ID.
+            - type (str): External account type.
+            - login (str): Account login data (login:password format).
+            - email (str): Email login data (email:password format).
+            - cookies (str): Cookies.
+
+            **Example:**
+
+            ```python
+            response = market.publishing.add_external_account(
+                item_id=1234567890,
+                type="socialclub",
+                login="login:password",
+                email="email:password"
+            )
+            print(response.json())
+            ```
+            """
+            json = {
+                "type": type,
+                "login": login,
+                "email_login_data": email,
+                "cookies": cookies
+            }
+            return await self.core.request("POST", f"/{item_id}/external-account", json=json)
 
     class __Profile:
         def __init__(self, core: "Market"):
@@ -2600,10 +2819,8 @@ class Market(APIClient):
                 "hold_length_value": hold,
                 "hold_length_option": hold_option,
             }
-            url = URL("https://lzt.market/balance/transfer")
             params = _NONE.TrimNONE(params)
-            url = url.copy_with(params=params)
-            return str(url)
+            return str(URL("https://lzt.market/balance/transfer").copy_with(params=params))
 
     class __Proxy:
         def __init__(self, core: "Market"):

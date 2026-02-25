@@ -49,6 +49,7 @@
   * [Edit](#edit-1)
   * [Delete](#delete)
   * [Bump](#bump)
+  * [Hide](#hide)
   * [Move](#move)
   * [Followers](#followers-1)
   * [Followed](#followed-1)
@@ -957,6 +958,24 @@ POST https://prod-api.lolz.live/threads/{thread_id}/bump
 
 ```python
 response = forum.threads.bump(thread_id=5523020)
+print(response.json())
+```
+
+
+## Hide
+
+POST https://prod-api.lolz.live/threads/{thread_id}/hide
+
+*Hide a thread from your feed.*
+
+**Parameters:**
+
+- thread_id (int): Thread ID.
+
+**Example:**
+
+```python
+response = forum.threads.hide(thread_id=5523020)
 print(response.json())
 ```
 
