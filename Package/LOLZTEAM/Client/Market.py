@@ -1467,7 +1467,7 @@ class Market(APIClient):
             json = {
                 "tag_id": tag_id
             }
-            return await self.core.request("POST", f"/{item_id}/{'public-' if is_public else ""}tag", json=json)
+            return await self.core.request("POST", f"/{item_id}/{'public-' if is_public else ''}tag", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
