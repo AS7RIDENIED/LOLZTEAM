@@ -181,7 +181,7 @@
   * [Fast](#fast-1)
   * [Add](#add-1)
   * [Check](#check-2)
-  * [Add External Account](#add-external-account)
+  * [External](#external)
 * [Profile](#profile)
   * [Get](#get-29)
   * [Edit](#edit-2)
@@ -2840,6 +2840,7 @@ POST https://api.lzt.market/{item_id}/fast-buy
 
 - item_id (int): Item ID.
 - price (float): Price.
+- balance_id (int): Balance ID that will be used to purchase specified item.
 
 **Example:**
 
@@ -2878,6 +2879,7 @@ POST https://api.lzt.market/{item_id}/confirm-buy
 
 - item_id (int): Item ID.
 - price (float): Price.
+- balance_id (int): Balance ID that will be used to purchase specified item.
 
 **Example:**
 
@@ -3011,7 +3013,7 @@ print(response.json())
 ```
 
 
-## Add External Account
+## External
 
 POST https://api.lzt.market/{item_id}/external-account
 
@@ -3030,7 +3032,7 @@ Please note that if you're linking a Social Club account to Steam, it will updat
 **Example:**
 
 ```python
-response = market.publishing.add_external_account(
+response = market.publishing.external(
     item_id=1234567890,
     type="socialclub",
     login="login:password",
@@ -3251,9 +3253,11 @@ POST https://api.lzt.market/invoice
 - amount (float): Invoice amount (≥ 0).
 - payment_id (str): Payment ID in your system (must be unique within the merchant / invoices).
 - comment (str): Comment to the invoice.
-- url_success (str): URL to redirect to after successful payment.
 - merchant_id (int): Merchant ID.
+- url_success (str): URL to redirect to after successful payment.
 - url_callback (str): Callback url.
+- telegram_id (int): Telegram ID of the account for which the invoice was issued. Required for **quasi-cash** operations which processes through telegram bot via Lolzteam merchant.
+- telegram_username (str): Telegram username (including "@") of the account for which the invoice was issued. Required for **quasi-cash** operations which processes through telegram bot via Lolzteam merchant.
 - lifetime (int): Invoice lifetime (300 to 43200, defaults to 3600).
 - additional_data (str): Additional information for you.
 - is_test (bool): Create a test invoice.

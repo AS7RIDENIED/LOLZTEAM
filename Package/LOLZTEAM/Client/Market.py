@@ -1736,7 +1736,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def fast(self, item_id: int, price: float = NONE) -> Response:
+        async def fast(self, item_id: int, price: float = NONE, balance_id: int = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/fast-buy
 
@@ -1746,6 +1746,7 @@ class Market(APIClient):
 
             - item_id (int): Item ID.
             - price (float): Price.
+            - balance_id (int): Balance ID that will be used to purchase specified item.
 
             **Example:**
 
@@ -1755,7 +1756,8 @@ class Market(APIClient):
             ```
             """
             json = {
-                "price": price
+                "price": price,
+                "balance_id": balance_id
             }
             return await self.core.request("POST", f"/{item_id}/fast-buy", json=json)
 
@@ -1782,7 +1784,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def buy(self, item_id: int, price: float = NONE) -> Response:
+        async def buy(self, item_id: int, price: float = NONE, balance_id: int = NONE) -> Response:
             """
             POST https://api.lzt.market/{item_id}/confirm-buy
 
@@ -1793,6 +1795,7 @@ class Market(APIClient):
 
             - item_id (int): Item ID.
             - price (float): Price.
+            - balance_id (int): Balance ID that will be used to purchase specified item.
 
             **Example:**
 
@@ -1802,7 +1805,8 @@ class Market(APIClient):
             ```
             """
             json = {
-                "price": price
+                "price": price,
+                "balance_id": balance_id
             }
             return await self.core.request("POST", f"/{item_id}/confirm-buy", json=json)
 
@@ -2080,7 +2084,7 @@ class Market(APIClient):
             **Example:**
 
             ```python
-            response = market.publishing.add_external_account(
+            response = market.publishing.external(
                 item_id=1234567890,
                 type="socialclub",
                 login="login:password",
@@ -2413,9 +2417,11 @@ class Market(APIClient):
                     currency: Constants.Market.Currency._Literal,
                     payment_id: str,
                     comment: str,
-                    url_success: str,
                     merchant_id: int,
+                    url_success: str,
                     url_callback: str = NONE,
+                    telegram_id: int = NONE,
+                    telegram_username: int = NONE,
                     lifetime: int = NONE,
                     additional_data: str = NONE,
                     is_test: bool = NONE
@@ -2431,9 +2437,11 @@ class Market(APIClient):
                 - amount (float): Invoice amount (≥ 0).
                 - payment_id (str): Payment ID in your system (must be unique within the merchant / invoices).
                 - comment (str): Comment to the invoice.
-                - url_success (str): URL to redirect to after successful payment.
                 - merchant_id (int): Merchant ID.
+                - url_success (str): URL to redirect to after successful payment.
                 - url_callback (str): Callback url.
+                - telegram_id (int): Telegram ID of the account for which the invoice was issued. Required for **quasi-cash** operations which processes through telegram bot via Lolzteam merchant.
+                - telegram_username (str): Telegram username (including "@") of the account for which the invoice was issued. Required for **quasi-cash** operations which processes through telegram bot via Lolzteam merchant.
                 - lifetime (int): Invoice lifetime (300 to 43200, defaults to 3600).
                 - additional_data (str): Additional information for you.
                 - is_test (bool): Create a test invoice.
@@ -2462,6 +2470,8 @@ class Market(APIClient):
                     "url_success": url_success,
                     "url_callback": url_callback,
                     "merchant_id": merchant_id,
+                    "required_telegram_id": telegram_id,
+                    "required_telegram_username": telegram_username,
                     "lifetime": lifetime,
                     "additional_data": additional_data,
                     "is_test": is_test
