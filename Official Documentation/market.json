@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.84"
+    "version": "1.1.85"
   },
   "servers": [
     {
@@ -48999,6 +48999,386 @@
           },
           "403": {
             "$ref": "#/components/responses/NoPermission"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/user/item-states": {
+      "get": {
+        "tags": [
+          "Accounts list"
+        ],
+        "summary": "Get User Items States",
+        "description": "Returns the states of user items.",
+        "operationId": "List.States",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "User ID.",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "userItemStates",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "userItemStates": {
+                      "title": "User Item States",
+                      "type": "object",
+                      "properties": {
+                        "stickied": {
+                          "title": "Stickied",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            },
+                            "stickyLimit": {
+                              "title": "Sticky Limit",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title",
+                            "stickyLimit"
+                          ]
+                        },
+                        "discount_request": {
+                          "title": "Discount",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title"
+                          ]
+                        },
+                        "in_buyers_favorites": {
+                          "title": "In",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title"
+                          ]
+                        },
+                        "active": {
+                          "title": "Active",
+                          "type": "object",
+                          "properties": {
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_count",
+                            "item_state",
+                            "title"
+                          ]
+                        },
+                        "paid": {
+                          "title": "Paid",
+                          "type": "object",
+                          "properties": {
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_count",
+                            "item_state",
+                            "title"
+                          ]
+                        },
+                        "closed": {
+                          "title": "Closed",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title"
+                          ]
+                        },
+                        "deleted": {
+                          "title": "Deleted",
+                          "type": "object",
+                          "properties": {
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_count",
+                            "item_state",
+                            "title"
+                          ]
+                        },
+                        "awaiting": {
+                          "title": "Awaiting",
+                          "type": "object",
+                          "properties": {
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_count",
+                            "item_state",
+                            "title"
+                          ]
+                        },
+                        "pre_active": {
+                          "title": "Pre",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title"
+                          ]
+                        },
+                        "pre_upload": {
+                          "title": "Pre",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title"
+                          ]
+                        },
+                        "pending_deletion": {
+                          "title": "Pending",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title"
+                          ]
+                        },
+                        "closed_inactive": {
+                          "title": "Closed",
+                          "type": "object",
+                          "properties": {
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_count",
+                            "item_state",
+                            "title"
+                          ]
+                        },
+                        "auto_bump": {
+                          "title": "Auto",
+                          "type": "object",
+                          "properties": {
+                            "item_state": {
+                              "title": "Item",
+                              "type": "string"
+                            },
+                            "item_count": {
+                              "title": "Item",
+                              "type": "integer"
+                            },
+                            "title": {
+                              "title": "Title",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "item_state",
+                            "item_count",
+                            "title"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "stickied",
+                        "discount_request",
+                        "in_buyers_favorites",
+                        "active",
+                        "paid",
+                        "closed",
+                        "deleted",
+                        "awaiting",
+                        "pre_active",
+                        "pre_upload",
+                        "pending_deletion",
+                        "closed_inactive",
+                        "auto_bump"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         },
         "security": [
