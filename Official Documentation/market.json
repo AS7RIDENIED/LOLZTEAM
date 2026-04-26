@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.87"
+    "version": "1.1.88"
   },
   "servers": [
     {
@@ -870,6 +870,7 @@
                   "99 Levels to Hell Soundtrack_cis",
                   "A Druid's Duel",
                   "A Game About Digging A Hole",
+                  "A Game About Digging A Hole™",
                   "A Game of Dwarves",
                   "A Gay Love Story About Gay Love",
                   "A New Beginning - Final Cut",
@@ -887,6 +888,7 @@
                   "ARC Raiders",
                   "ARK: Genesis Season Pass",
                   "ARK: Scorched Earth - Expansion Pack",
+                  "ARK: Scorched Earth - Expansion Pack_cis",
                   "ARK: Survival Ascended",
                   "ARK: Survival Evolved",
                   "ARK: Survival Evolved_cis",
@@ -992,6 +994,7 @@
                   "Arma 2: Operation Arrowhead",
                   "Arma 2: Operation Arrowhead_cis",
                   "Arma 2: Private Military Company",
+                  "Arma 2_cis",
                   "Arma 3",
                   "Arma 3 Alpha Lite - Gift Copy - Expired",
                   "Arma 3 Alpha Lite Gift Copy - Expired",
@@ -1002,6 +1005,7 @@
                   "Arma Reforger",
                   "Arma Tactics",
                   "Arma X Gift Copy",
+                  "Armed with Wings: Rearmed",
                   "Artemis Spaceship Bridge Simulator",
                   "As We Descend",
                   "As We Descend_cis",
@@ -1039,6 +1043,7 @@
                   "Avernum Bundle",
                   "Avernum: Escape From the Pit",
                   "Awesomenauts - Ahrpl Skin",
+                  "Awesomenauts - Cap'n Vinnie & Seadog Spike Skin",
                   "Awesomenauts - Cynical Vinnie & Total Spike Skin",
                   "Awesomenauts - Desperado Penny Skin",
                   "Awesomenauts Gift",
@@ -1210,6 +1215,7 @@
                   "Borderlands 3",
                   "Borderlands GOTY",
                   "Borderlands: Mad Moxxi's Underdome Riot",
+                  "Borderlands: The Pre-Sequel",
                   "Borderlands: The Pre-Sequel + Season Pass",
                   "Borderlands: The Pre-Sequel Season Pass_cis",
                   "Borderlands: The Zombie Island of Dr. Ned",
@@ -1440,10 +1446,12 @@
                   "Content Warning",
                   "Contraption Maker",
                   "Contraption Maker_cis",
+                  "Contrast",
                   "Control Ultimate Edition",
                   "Core Keeper",
                   "Coreborn",
                   "Corgi Warlock_cis",
+                  "Corpse Party",
                   "Cosmic Star Heroine",
                   "Cossacks II: Battle for Europe",
                   "Cossacks II: Napoleonic Wars",
@@ -1563,6 +1571,7 @@
                   "Dead Island (JP)",
                   "Dead Island (NA)",
                   "Dead Island (RoW)",
+                  "Dead Island 2 Ultimate Edition",
                   "Dead Island GOTY Gift",
                   "Dead Island: Epidemic",
                   "Dead Island: Epidemic Beta Gift",
@@ -1576,6 +1585,7 @@
                   "Dead Space Pack",
                   "Dead by Daylight",
                   "Dead by Daylight - Dungeons & Dragons",
+                  "Dead by Daylight - Resident Evil Chapter",
                   "Dead by Daylight - Resident Evil: PROJECT W Chapter",
                   "Dead by Daylight - Sadako Rising Chapter",
                   "Dead by Daylight - The 80's Suitcase",
@@ -1698,6 +1708,7 @@
                   "Drift86",
                   "Drifting Lands",
                   "Drive Beyond Horizons",
+                  "Drive Megapolis",
                   "Driver® Parallel Lines",
                   "Droid Assault",
                   "Dropsy",
@@ -1790,6 +1801,7 @@
                   "ENDLESS™ Space - Definitive Edition",
                   "ENDLESS™ Space - Definitive Edition_cis",
                   "EVE Online",
+                  "EVERSPACE™ 2",
                   "Earth 2140",
                   "Earth 2150 Trilogy",
                   "Eaten Alive",
@@ -1857,6 +1869,7 @@
                   "Europa Universalis III: Revolution SpritePack",
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack",
                   "Europa Universalis IV: Guns, Drums and Steel Music Pack_cis",
+                  "Evil Genius_cis",
                   "Evil Pumpkin: The Lost Halloween_cis",
                   "Executive Assault",
                   "Exodus from the Earth",
@@ -1882,6 +1895,7 @@
                   "FORCED 2 Test Access Gift",
                   "FORCED Deluxe Content",
                   "FORCED: Slightly Better Edition",
+                  "FORCED: Slightly Better Edition_cis",
                   "FTL: Faster Than Light",
                   "FTL: Faster Than Light_cis",
                   "FURRY BACKROOMS",
@@ -1902,6 +1916,7 @@
                   "Fallout 4 - Wasteland Workshop",
                   "Fallout 4 Far Harbor",
                   "Fallout 4 Season Pass",
+                  "Fallout 4_cis",
                   "Fallout Classic Collection",
                   "Fallout New Vegas Courier's Stash",
                   "Fallout New Vegas Courier's Stash_cis",
@@ -2029,6 +2044,7 @@
                   "Futanari Sex - The Fertility Doctor",
                   "Future Wars",
                   "GRAV",
+                  "GRID 2",
                   "GRID Autosport",
                   "GRIS",
                   "GTFO Alpha Gift",
@@ -2081,6 +2097,7 @@
                   "Gomo",
                   "Goofy Gorillas",
                   "Gorky 17",
+                  "Gorky 17_cis",
                   "Gothic 3: Forsaken Gods Enhanced Edition",
                   "Gothic II: Gold Edition",
                   "Gothic Universe Edition",
@@ -2181,6 +2198,7 @@
                   "Hamilton's Great Adventure - Retro Fever DLC_cis",
                   "Hammerwatch",
                   "Hand Simulator",
+                  "Handsome Jack Doppelganger Pack",
                   "Hard Reset Extended Edition_cis",
                   "Hard Reset Redux",
                   "Hard Truck Apocalypse: Rise Of Clans / Ex Machina: Meridian 113_cis",
@@ -2431,6 +2449,7 @@
                   "Labyronia RPG",
                   "Labyronia RPG 2",
                   "Labyronia RPG 2_cis",
+                  "Lady Hammerlock the Baroness Pack",
                   "Landmark - Trailblazer Buddy Gift",
                   "Lara Croft GoL: Raziel and Kain Character Pack",
                   "Lara Croft and the Guardian of Light",
@@ -2469,6 +2488,7 @@
                   "Little Nightmares II",
                   "Little Racers STREET",
                   "Little Racers STREET_cis",
+                  "Look Outside",
                   "Lords of the Fallen - The Arcane Boost",
                   "Lost Bros",
                   "Lost Castle / 失落城堡",
@@ -2786,6 +2806,7 @@
                   "Orcs Must Die! 2 - Family Ties Booster Pack",
                   "Orcs Must Die! 2 - Fire and Water Booster Pack",
                   "Orcs Must Die! 2 - Soundtrack",
+                  "Orcs Must Die! 2_cis",
                   "Orcs Must Die! 3",
                   "Orcs Must Die! Complete Pack",
                   "Orcs Must Die! Unchained - Starter Bundle",
@@ -2887,11 +2908,13 @@
                   "POSTAL",
                   "POSTAL 2",
                   "POSTAL 2: Paradise Lost",
+                  "POSTAL_cis",
                   "PUBG: BATTLEGROUNDS",
                   "PULSAR: Lost Colony",
                   "Pacific Drive",
                   "Pacify",
                   "Painkiller Hell & Damnation",
+                  "Painkiller Hell & Damnation_cis",
                   "Painkiller Redemption",
                   "Painkiller: Black Edition",
                   "Paintball 707",
@@ -2920,6 +2943,7 @@
                   "Penny Arcade's On the Rain-Slick Precipice of Darkness 3_cis",
                   "People Playground",
                   "Phasmophobia",
+                  "Phoenix Force",
                   "Pianistic",
                   "Pinball Arcade: Season Four Pack",
                   "Pixel Piracy",
@@ -3208,8 +3232,11 @@
                   "SURVIVAL: Postapocalypse Now",
                   "Sable",
                   "Sacred Citadel",
+                  "Sacred Citadel_cis",
+                  "Sacred Gold",
                   "Saints Row 2",
                   "Saints Row IV - GAT V Pack_cis",
+                  "Saints Row IV: Brady Games Pack",
                   "Saints Row IV: Commander-In-Chief Pack",
                   "Saints Row IV: Re-Elected",
                   "Saints Row: Gat out of Hell - Devil’s Workshop pack",
@@ -3247,10 +3274,12 @@
                   "Scourge: Outbreak Gift",
                   "Scrap Mechanic_cis",
                   "Screencheat",
+                  "Screencheat_cis",
                   "Scribblenauts Unlimited",
                   "Scribblenauts Unmasked: A DC Comics Adventure",
                   "Sea of Thieves: 2024 Edition",
                   "Sea of Thieves: 2025 Edition",
+                  "Sea of Thieves: 2026 Edition",
                   "Season 2 Battlefield Pro - Battlefield™ 6 and REDSEC",
                   "Secret Neighbor: Hello Neighbor Multiplayer",
                   "Secret Of Magia",
@@ -3265,6 +3294,7 @@
                   "See No Evil_cis",
                   "Seed of Evil",
                   "Seen",
+                  "Senpai Puzzle: Waifu Summer - Yuri Waifus",
                   "Sentinels of the Multiverse",
                   "Septerra Core",
                   "Serious Sam 2",
@@ -3325,6 +3355,7 @@
                   "ShellShock Live_cis",
                   "Shelter 2 Mountains",
                   "Shenmue I & II",
+                  "Sherlock Holmes: Crimes and Punishments",
                   "Shift Happens",
                   "Ship Graveyard Simulator",
                   "Ship Simulator Extremes: Cargo Vessel",
@@ -3332,6 +3363,7 @@
                   "Ship of Fools",
                   "ShipLord",
                   "ShipLord_cis",
+                  "Shock Drop Slaughter Pit",
                   "Shoot Many Robots",
                   "Shoot Many Robots Pre-order",
                   "ShootMania Storm",
@@ -3375,6 +3407,7 @@
                   "SkyDrift: Extreme Fighters Premium Airplane Pack",
                   "Slain: Back from Hell",
                   "Slain: Back from Hell_cis",
+                  "SlamIt Pinball Big Score",
                   "Slash It",
                   "Slash It_cis",
                   "Sleeping Dogs",
@@ -3440,6 +3473,7 @@
                   "Space Hulk",
                   "Space Pilgrim Episode I: Alpha Centauri",
                   "Space Pilgrim Episode II: Epsilon Indi",
+                  "Space Pilgrim Episode IV: Sol",
                   "Space Pirates and Zombies",
                   "Space Ribbon - Slipstream to the Extreme",
                   "Space Siege",
@@ -3495,12 +3529,14 @@
                   "State of Decay - Lifeline",
                   "State of Decay 2: Juggernaut Edition",
                   "State of Decay: YOSE",
+                  "State of Decay: YOSE_cis",
                   "State of Decay_cis",
                   "Stealth Inc 2: A Game of Clones",
                   "Steam Community Beta Access",
                   "Steam Mobile Access",
                   "Steam Trading Card Beta Access - Extra Copy",
                   "SteamWorld Heist_cis",
+                  "Steel Storm: Burning Retribution",
                   "Steel Storm: Burning Retribution_cis",
                   "Steep™",
                   "Stellar 2D",
@@ -3531,6 +3567,7 @@
                   "Stronghold Crusader HD_cis",
                   "Stronghold HD (2012)",
                   "Styx: Shards of Darkness_cis",
+                  "Subnautica",
                   "Subnautica: Below Zero",
                   "Sultan's Game",
                   "Summer Memories",
@@ -3605,6 +3642,7 @@
                   "Tactical Breach Wizards",
                   "Take On Mars",
                   "Takedown: Red Sabre",
+                  "Tales from the Borderlands",
                   "Tales of Maj'Eyal",
                   "Tales of Zestiria",
                   "Tales of Zestiria - School Costume Set",
@@ -3846,6 +3884,7 @@
                   "Tomb Raider",
                   "Tomb Raider Game of the Year",
                   "Tomb Raider Gift",
+                  "Tomb Raider Gift_cis",
                   "Tomb Raider VI: The Angel of Darkness",
                   "Tomb Raider: 1939 Multiplayer Map Pack",
                   "Tomb Raider: Adventure Pack",
@@ -3861,6 +3900,7 @@
                   "Tomb Raider_cis",
                   "Torchlight",
                   "Torchlight II",
+                  "Toren",
                   "Total Annihilation",
                   "Total War Saga: FALL OF THE SAMURAI – The Obama Faction Pack",
                   "Total War Saga: FALL OF THE SAMURAI – The Saga Faction Pack",
@@ -3973,6 +4013,7 @@
                   "Unknown package 100725_cis",
                   "Unknown package 101060",
                   "Unknown package 101060_cis",
+                  "Unknown package 101619",
                   "Unknown package 102446",
                   "Unknown package 1036",
                   "Unknown package 105713",
@@ -4190,6 +4231,7 @@
                   "Unknown package 36990",
                   "Unknown package 370167",
                   "Unknown package 370168",
+                  "Unknown package 37223",
                   "Unknown package 37360",
                   "Unknown package 38003",
                   "Unknown package 38476_cis",
@@ -4307,6 +4349,7 @@
                   "Unknown package 63681",
                   "Unknown package 6381",
                   "Unknown package 6447",
+                  "Unknown package 64738",
                   "Unknown package 6487",
                   "Unknown package 64902",
                   "Unknown package 64902_cis",
@@ -4326,6 +4369,7 @@
                   "Unknown package 67613_cis",
                   "Unknown package 67652_cis",
                   "Unknown package 68063_cis",
+                  "Unknown package 68153",
                   "Unknown package 68154",
                   "Unknown package 683",
                   "Unknown package 68608",
@@ -4416,6 +4460,7 @@
                   "VRC PRO Deluxe Off-road tracks 2",
                   "VVVVVV",
                   "Valheim",
+                  "Valiant Hearts: The Great War™ / Soldats Inconnus : Mémoires de la Grande Guerre™",
                   "Valiant Hearts: The Great War™ / Soldats Inconnus : Mémoires de la Grande Guerre™_cis",
                   "Valkyria Chronicles™",
                   "Vampire Survivors",
@@ -4465,6 +4510,7 @@
                   "Warhammer 40,000: Space Marine - Chaos Unleashed Map Pack",
                   "Warhammer 40,000: Space Marine - Emperor’s Elite Pack",
                   "Warhammer 40,000: Space Marine 2",
+                  "Warhammer: Chaosbane",
                   "Warhammer: Vermintide 2",
                   "Warlock 2: The Exiled",
                   "Warlocks vs Shadows",
@@ -4494,6 +4540,7 @@
                   "Windborne",
                   "Windward",
                   "Windward_cis",
+                  "Winter Voices Episode 3: Like a Crow on a Wire",
                   "Witch It",
                   "Wolfpack",
                   "Wonky Pigeon!",
@@ -4505,6 +4552,7 @@
                   "World of Goo",
                   "Worlds Adrift - Standard Edition GIFT",
                   "Worms Armageddon",
+                  "Worms Armageddon_cis",
                   "Worms Clan Wars",
                   "Worms Crazy Golf",
                   "Worms Reloaded",
@@ -8105,6 +8153,7 @@
                   "character_agilerug",
                   "character_airkringle",
                   "character_akimboenvoy",
+                  "character_alderoptic",
                   "character_alien_robot",
                   "character_allknowing",
                   "character_almondsplash",
@@ -8166,6 +8215,7 @@
                   "character_billy",
                   "character_billygold",
                   "character_bingrass",
+                  "character_biomehose",
                   "character_bionickitty",
                   "character_bionicsmoke",
                   "character_birchpalace",
@@ -8332,6 +8382,7 @@
                   "character_crisprover",
                   "character_crispseason",
                   "character_critterbran",
+                  "character_crosswiper",
                   "character_crowcall",
                   "character_crowcallswim",
                   "character_crownorder",
@@ -8353,6 +8404,7 @@
                   "character_daffodilsong",
                   "character_dairystring_wade",
                   "character_dameregent",
+                  "character_dandyflare",
                   "character_dangermojo",
                   "character_dapperpunch",
                   "character_darkazalea",
@@ -8366,6 +8418,7 @@
                   "character_defectglitch",
                   "character_degreeproper",
                   "character_democrook",
+                  "character_demureigloo",
                   "character_denimequip_stock",
                   "character_densefog",
                   "character_derangedmile_side",
@@ -8415,6 +8468,7 @@
                   "character_dustybun",
                   "character_dyedduelist",
                   "character_eagertrapper",
+                  "character_eagerunify",
                   "character_earthlane",
                   "character_ebony",
                   "character_echoangel",
@@ -8431,6 +8485,7 @@
                   "character_elegantlilycharm",
                   "character_elevate",
                   "character_emberrae",
+                  "character_emberyearn",
                   "character_emeraldglassgreen",
                   "character_emeraldglasspink",
                   "character_emeraldglassrebel",
@@ -8460,6 +8515,7 @@
                   "character_farespore",
                   "character_fashionfeline",
                   "character_fastcheetah",
+                  "character_fastrabbit",
                   "character_fauxvenom",
                   "character_fearcatch",
                   "character_fearlessflighthero",
@@ -8548,6 +8604,7 @@
                   "character_garlicwhisk",
                   "character_gatehound_spectral",
                   "character_gatemouse",
+                  "character_gatherbelt",
                   "character_gatorceladon",
                   "character_gelatingummi",
                   "character_geminilink",
@@ -8670,6 +8727,8 @@
                   "character_impulsespring_e",
                   "character_inchescape",
                   "character_indiebucket",
+                  "character_indoorlacebeat",
+                  "character_indoorlacescore",
                   "character_infernaltrooper",
                   "character_inferno",
                   "character_infernofncs",
@@ -9024,11 +9083,13 @@
                   "character_radiantmove",
                   "character_radiopaca",
                   "character_radiumfox_flame",
+                  "character_radrat",
                   "character_ragedebris",
                   "character_raggedrebel",
                   "character_raiderpink_sherbert",
                   "character_rainbowsplash",
                   "character_rainbowstraps",
+                  "character_rampagediva_jade",
                   "character_rampcanal",
                   "character_rangegawker",
                   "character_rankedbayonet",
@@ -9065,6 +9126,7 @@
                   "character_rhombcamo_npc",
                   "character_rhombguard_npc",
                   "character_rhombpatrol_npc",
+                  "character_rimeskate_plow",
                   "character_rinkhat_trick",
                   "character_rippedharvester",
                   "character_robedmentor_cross_npc",
@@ -9092,6 +9154,7 @@
                   "character_royalwonk",
                   "character_rubysnapper",
                   "character_ruins",
+                  "character_rumblebeat_beach",
                   "character_rushrustle",
                   "character_sablehorizon",
                   "character_sacredcuddle",
@@ -9310,6 +9373,7 @@
                   "character_tameeagle",
                   "character_tangyradishflame",
                   "character_tangyradishmagma",
+                  "character_taperslink",
                   "character_taskforce",
                   "character_tattoon",
                   "character_tealmink_pelt",
@@ -9359,6 +9423,7 @@
                   "character_toadleaf",
                   "character_tofuresort",
                   "character_tollbridge",
+                  "character_toothgreek",
                   "character_topicproud",
                   "character_totalflock",
                   "character_toughpack",
@@ -9470,6 +9535,7 @@
                   "character_wonderhill_ruby_f",
                   "character_wonderhill_ruby_g",
                   "character_woolexpo",
+                  "character_wordunity",
                   "character_wormchalk",
                   "character_wrenchpeel",
                   "character_yampowder",
@@ -9620,6 +9686,7 @@
                   "pickaxe_alchemy_guitar",
                   "pickaxe_alchemy_keytar",
                   "pickaxe_alchemy_mic",
+                  "pickaxe_alderoptic",
                   "pickaxe_allknowing",
                   "pickaxe_almondsplash",
                   "pickaxe_almondsplash_bass",
@@ -9681,6 +9748,7 @@
                   "pickaxe_bikemold_bass",
                   "pickaxe_billygold",
                   "pickaxe_bingrass",
+                  "pickaxe_biomehose",
                   "pickaxe_bionickitty",
                   "pickaxe_bionicsmoke",
                   "pickaxe_birchpalace",
@@ -9831,6 +9899,7 @@
                   "pickaxe_crisprover",
                   "pickaxe_crispseason",
                   "pickaxe_crispseason_drumstick",
+                  "pickaxe_crosswiper",
                   "pickaxe_crowbarsleek",
                   "pickaxe_crowcall_drum",
                   "pickaxe_crownorder",
@@ -9853,6 +9922,7 @@
                   "pickaxe_daffodilsong",
                   "pickaxe_dairystring_wade",
                   "pickaxe_dameregent",
+                  "pickaxe_dandyflare",
                   "pickaxe_dangermojo",
                   "pickaxe_dapperpunch",
                   "pickaxe_darkazalea",
@@ -9911,6 +9981,7 @@
                   "pickaxe_dustybun",
                   "pickaxe_dyedduelist",
                   "pickaxe_eagertrapper",
+                  "pickaxe_eagerunify",
                   "pickaxe_earthlane",
                   "pickaxe_ebony",
                   "pickaxe_ectocat",
@@ -9926,6 +9997,7 @@
                   "pickaxe_elegantlily_plush_mic",
                   "pickaxe_elevate",
                   "pickaxe_emberrae",
+                  "pickaxe_emberyearn",
                   "pickaxe_emeraldglassgreen",
                   "pickaxe_emeraldglasspink",
                   "pickaxe_emeraldglassrebel",
@@ -10046,6 +10118,7 @@
                   "pickaxe_goldaccomplishment",
                   "pickaxe_goldcat",
                   "pickaxe_goldcat_bass",
+                  "pickaxe_goldenflash_keytar",
                   "pickaxe_goldenguard",
                   "pickaxe_goldenguardantler",
                   "pickaxe_goldenpleats",
@@ -10100,6 +10173,9 @@
                   "pickaxe_highmotion",
                   "pickaxe_hiptripper",
                   "pickaxe_hitman",
+                  "pickaxe_hollowsignal_guitar",
+                  "pickaxe_hollowsignal_keytar",
+                  "pickaxe_hollowsignal_mic",
                   "pickaxe_hollydessert",
                   "pickaxe_homerange",
                   "pickaxe_honeybear_drum",
@@ -10972,6 +11048,8 @@
                   "pickaxe_impulse",
                   "pickaxe_inchescape",
                   "pickaxe_indiebucket",
+                  "pickaxe_indoorlace_guitar",
+                  "pickaxe_indoorlace_mic",
                   "pickaxe_inferno",
                   "pickaxe_inflatemate_guitar",
                   "pickaxe_inflatemate_keytar",
@@ -11326,6 +11404,7 @@
                   "pickaxe_rainbowsplash",
                   "pickaxe_rainbowstraps",
                   "pickaxe_rainfncs",
+                  "pickaxe_rampagediva",
                   "pickaxe_rampcanal",
                   "pickaxe_random",
                   "pickaxe_rankedaurum",
@@ -11366,6 +11445,7 @@
                   "pickaxe_rhombcamo",
                   "pickaxe_ribbonshapes_bass",
                   "pickaxe_ribbonshapes_guitar",
+                  "pickaxe_rimeskate",
                   "pickaxe_rinkhat",
                   "pickaxe_rippedharvester",
                   "pickaxe_robusttorn",
@@ -11385,6 +11465,7 @@
                   "pickaxe_royaldusk",
                   "pickaxe_rubysnapper",
                   "pickaxe_ruins",
+                  "pickaxe_rumblebeat",
                   "pickaxe_rushrustle",
                   "pickaxe_sablehorizon",
                   "pickaxe_sacredcuddle",
@@ -11413,6 +11494,7 @@
                   "pickaxe_seaflake",
                   "pickaxe_searedscurf",
                   "pickaxe_season_40",
+                  "pickaxe_season_40reload",
                   "pickaxe_selenecobra",
                   "pickaxe_selenedonna",
                   "pickaxe_sequinpie",
@@ -11577,6 +11659,8 @@
                   "pickaxe_tameeagle",
                   "pickaxe_tangyradish_mic",
                   "pickaxe_tangyradishmagma",
+                  "pickaxe_taperslink",
+                  "pickaxe_taperslink_mic",
                   "pickaxe_taskforce",
                   "pickaxe_tattoon",
                   "pickaxe_taxiupgraded_vista",
@@ -11607,6 +11691,7 @@
                   "pickaxe_toadleaf",
                   "pickaxe_tofuresort",
                   "pickaxe_tollbridge",
+                  "pickaxe_toothgreek",
                   "pickaxe_topbend_bass",
                   "pickaxe_topicproud",
                   "pickaxe_totalflock",
@@ -11697,6 +11782,7 @@
                   "pickaxe_wiryperk",
                   "pickaxe_wisebarn",
                   "pickaxe_wolfhunter",
+                  "pickaxe_wordunity",
                   "pickaxe_wormchalk",
                   "pickaxe_wrench_bass",
                   "pickaxe_wrenchpeel",
@@ -12346,6 +12432,7 @@
                   "glider_surgeraven",
                   "glider_synthcontact",
                   "glider_talonpane",
+                  "glider_taperslink",
                   "glider_taxiupgradedwhitefemale",
                   "glider_teststaticparts",
                   "glider_tideking",
@@ -12443,6 +12530,7 @@
                   "umbrella_season_34",
                   "umbrella_season_37",
                   "umbrella_season_40",
+                  "umbrella_season_40_reload",
                   "umbrella_shinglestole",
                   "umbrella_silver",
                   "umbrella_snowflake",
@@ -12478,6 +12566,7 @@
                   "affection",
                   "affluent",
                   "afrohouse",
+                  "afterhours",
                   "afterparty",
                   "afterparty_sync",
                   "afterparty_sync_follower",
@@ -12486,6 +12575,11 @@
                   "airhorn",
                   "airhornraisin",
                   "alchemy_bzws8",
+                  "alderoptic",
+                  "alderoptic_joiner1",
+                  "alderoptic_joiner2",
+                  "alderoptic_joiner3",
+                  "alderoptic_old",
                   "alfredo",
                   "alien",
                   "aliennation",
@@ -12634,6 +12728,7 @@
                   "bigstepper",
                   "billybounce",
                   "bingrass",
+                  "biomehose",
                   "birchpalace",
                   "birdsnestblue",
                   "bisondrain",
@@ -12862,6 +12957,7 @@
                   "crisprover",
                   "crisscross",
                   "crosswalk",
+                  "crosswiper",
                   "crowdsurfing",
                   "cruising",
                   "crumbviolin",
@@ -12898,6 +12994,7 @@
                   "dailydose",
                   "dairystring",
                   "dancemoves",
+                  "dandyflare",
                   "darkfirelegends",
                   "darkstance",
                   "darling",
@@ -12953,6 +13050,7 @@
                   "doubleduty",
                   "doublesnap",
                   "doubletake",
+                  "downtimeload",
                   "downward_8gzua",
                   "dragrace",
                   "drapeultra",
@@ -13208,6 +13306,9 @@
                   "golfclap",
                   "goodbye",
                   "goodbye_upbeat",
+                  "goodgravy",
+                  "goodgravy_joiner",
+                  "goodgravy_leader",
                   "goodvibes",
                   "gothdance",
                   "goudawheel",
@@ -13407,6 +13508,7 @@
                   "indiebucket",
                   "indigo",
                   "indigoapple",
+                  "indoorlacebeat",
                   "inferno",
                   "infinitedab",
                   "infinitedabraisin",
@@ -13571,6 +13673,7 @@
                   "loudphoenix",
                   "lounging",
                   "loveaflare",
+                  "lovelycurse",
                   "lowrider",
                   "luckycase",
                   "lunchbox",
@@ -13897,6 +14000,7 @@
                   "quantity_39x5d",
                   "quarrelfemale_4abl0",
                   "quarrelmale_sgvne",
+                  "quatroair",
                   "queentruth",
                   "quichelorrainecrisp",
                   "quichelorrainelime",
@@ -13921,6 +14025,10 @@
                   "radiopaca",
                   "radiumfox",
                   "ragequit",
+                  "rainbowraid",
+                  "rainbowraid_follower1",
+                  "rainbowraid_follower2",
+                  "rainbowraid_follower3",
                   "raisetheroof",
                   "rampcanal",
                   "rankedprogression",
@@ -14276,6 +14384,7 @@
                   "swatch_sync",
                   "swatch_sync_follower",
                   "sweepingclean",
+                  "sweetangel",
                   "sweettoss",
                   "swimdance",
                   "swingdance",
@@ -14302,6 +14411,7 @@
                   "tangle",
                   "tangyradishflame",
                   "tangyradishmagma",
+                  "taperslink",
                   "tapestry",
                   "tapshuffle",
                   "tar_s9yve",
@@ -14484,6 +14594,7 @@
                   "wishingstar",
                   "wizard",
                   "wolfhowl",
+                  "wordunity",
                   "worm",
                   "wormchalk",
                   "wristflick",
@@ -14539,7 +14650,6 @@
                   "GooglePlay",
                   "IOSAppStore",
                   "Live",
-                  "LivePCKorea",
                   "Nintendo",
                   "OneStoreKorea",
                   "PSN",
@@ -16201,7 +16311,8 @@
                   10000125,
                   10000126,
                   10000127,
-                  10000128
+                  10000128,
+                  10000130
                 ]
               }
             }
@@ -16483,7 +16594,8 @@
                   15512,
                   15513,
                   15514,
-                  15515
+                  15515,
+                  15516
                 ]
               }
             }
@@ -16777,6 +16889,7 @@
                   1501,
                   1502,
                   1504,
+                  1506,
                   8001,
                   8002,
                   8003,
@@ -16784,7 +16897,8 @@
                   8005,
                   8006,
                   8007,
-                  8008
+                  8008,
+                  8010
                 ]
               }
             }
@@ -16931,6 +17045,7 @@
                   22004,
                   22005,
                   22006,
+                  22007,
                   23000,
                   23001,
                   23002,
@@ -16986,12 +17101,15 @@
                   23052,
                   23053,
                   23054,
+                  23056,
+                  23057,
                   24000,
                   24001,
                   24002,
                   24003,
                   24004,
-                  24005
+                  24005,
+                  24006
                 ]
               }
             }
@@ -17255,7 +17373,8 @@
                   1481,
                   1491,
                   1501,
-                  1511
+                  1511,
+                  1521
                 ]
               }
             }
@@ -17392,7 +17511,8 @@
                   14148,
                   14149,
                   14150,
-                  14151
+                  14151,
+                  14152
                 ]
               }
             }
@@ -22205,6 +22325,7 @@
                   "BERRY",
                   "BIBI",
                   "BO",
+                  "BOLT",
                   "BONNIE",
                   "BROCK",
                   "BULL",
@@ -22221,6 +22342,7 @@
                   "COLT",
                   "CORDELIUS",
                   "CROW",
+                  "DAMIAN",
                   "DARRYL",
                   "DOUG",
                   "DRACO",
@@ -22235,7 +22357,7 @@
                   "GALE",
                   "GENE",
                   "GIGI",
-                  "GLOWBERT",
+                  "GLOWY",
                   "GRAY",
                   "GRIFF",
                   "GROM",
@@ -22289,6 +22411,7 @@
                   "SPIKE",
                   "SPROUT",
                   "SQUEAK",
+                  "STARR NOVA",
                   "STU",
                   "SURGE",
                   "TARA",
@@ -36560,6 +36683,9 @@
               "type": "string",
               "description": "Name of subscription.",
               "enum": [
+                "claude_max_20x",
+                "claude_max_5x",
+                "claude_pro",
                 "discord_nitro",
                 "discord_nitro_basic",
                 "discord_nitro_trial",
@@ -49111,6 +49237,581 @@
         ]
       }
     },
+    "/cursor": {
+      "get": {
+        "tags": [
+          "Category Search"
+        ],
+        "summary": "Cursor",
+        "description": "Displays a list of accounts in a specific category according to your parameters.",
+        "operationId": "Category.Cursor",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/pmin"
+          },
+          {
+            "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/public_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_public_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/origin"
+          },
+          {
+            "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
+          },
+          {
+            "name": "plan[]",
+            "in": "query",
+            "description": "Subscription plan.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Subscription plan.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "has_payment_method",
+            "in": "query",
+            "description": "Has linked payment method.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Has linked payment method.",
+              "$ref": "#/components/schemas/YesNoNoMatterScheme"
+            }
+          },
+          {
+            "name": "usage_percent_min",
+            "in": "query",
+            "description": "Minimum usage percent.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum usage percent.",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "usage_percent_max",
+            "in": "query",
+            "description": "Maximum usage percent.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum usage percent.",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "items",
+                    "totalItems",
+                    "totalItemsPrice",
+                    "hasNextPage",
+                    "perPage",
+                    "page",
+                    "wasCached",
+                    "cacheTTL",
+                    "lastModified",
+                    "serverTime",
+                    "searchUrl",
+                    "stickyItems",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "item_id": {
+                            "type": "integer"
+                          },
+                          "item_state": {
+                            "type": "string"
+                          },
+                          "category_id": {
+                            "type": "integer"
+                          },
+                          "published_date": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "integer"
+                          },
+                          "update_stat_date": {
+                            "type": "integer"
+                          },
+                          "refreshed_date": {
+                            "type": "integer"
+                          },
+                          "edit_date": {
+                            "type": "integer"
+                          },
+                          "pending_deletion_date": {
+                            "type": "integer"
+                          },
+                          "view_count": {
+                            "type": "integer"
+                          },
+                          "is_sticky": {
+                            "type": "integer"
+                          },
+                          "item_origin": {
+                            "type": "string"
+                          },
+                          "extended_guarantee": {
+                            "type": "integer"
+                          },
+                          "nsb": {
+                            "type": "integer"
+                          },
+                          "allow_ask_discount": {
+                            "type": "integer"
+                          },
+                          "title_en": {
+                            "type": "string"
+                          },
+                          "description_en": {
+                            "type": "string"
+                          },
+                          "email_type": {
+                            "type": "string"
+                          },
+                          "email_provider": {},
+                          "item_domain": {
+                            "type": "string"
+                          },
+                          "resale_item_origin": {
+                            "type": "string"
+                          },
+                          "auto_bump_period": {
+                            "type": "integer"
+                          },
+                          "guarantee_duration": {
+                            "type": "integer"
+                          },
+                          "rub_price": {
+                            "type": "integer"
+                          },
+                          "discount": {
+                            "type": "boolean"
+                          },
+                          "cursor_item_id": {
+                            "type": "integer"
+                          },
+                          "cursor_plan": {
+                            "type": "string"
+                          },
+                          "cursor_has_payment_method": {
+                            "type": "integer"
+                          },
+                          "cursor_usage_percent": {
+                            "type": "integer"
+                          },
+                          "feedback_data": {
+                            "type": "string"
+                          },
+                          "max_discount_percent": {
+                            "type": "integer"
+                          },
+                          "priceWithSellerFee": {
+                            "type": "number"
+                          },
+                          "category": {
+                            "type": "object",
+                            "properties": {
+                              "category_id": {
+                                "type": "integer"
+                              },
+                              "category_title": {
+                                "type": "string"
+                              },
+                              "category_name": {
+                                "type": "string"
+                              },
+                              "category_url": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "category_id",
+                              "category_title",
+                              "category_name",
+                              "category_url"
+                            ]
+                          },
+                          "guarantee": {},
+                          "canViewLoginData": {
+                            "type": "boolean"
+                          },
+                          "canViewTempEmail": {
+                            "type": "boolean"
+                          },
+                          "canUpdateItemStats": {
+                            "type": "boolean"
+                          },
+                          "canReportItem": {
+                            "type": "boolean"
+                          },
+                          "canViewItemViews": {
+                            "type": "boolean"
+                          },
+                          "canManagePublicTag": {
+                            "type": "boolean"
+                          },
+                          "canViewEmailLoginData": {
+                            "type": "boolean"
+                          },
+                          "copyFormatData": {
+                            "type": "object",
+                            "properties": {
+                              "title_link": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "title_link"
+                            ]
+                          },
+                          "showGetEmailCodeButton": {
+                            "type": "boolean"
+                          },
+                          "canOpenItem": {
+                            "type": "boolean"
+                          },
+                          "canCloseItem": {
+                            "type": "boolean"
+                          },
+                          "canEditItem": {
+                            "type": "boolean"
+                          },
+                          "canDeleteItem": {
+                            "type": "boolean"
+                          },
+                          "canStickItem": {
+                            "type": "boolean"
+                          },
+                          "canUnstickItem": {
+                            "type": "boolean"
+                          },
+                          "canBumpItem": {
+                            "type": "boolean"
+                          },
+                          "canNotBumpItemReason": {
+                            "type": "string"
+                          },
+                          "canAutoBump": {
+                            "type": "boolean"
+                          },
+                          "buyer": {},
+                          "isPersonalAccount": {
+                            "type": "boolean"
+                          },
+                          "canBuyItem": {
+                            "type": "boolean"
+                          },
+                          "price_currency": {
+                            "type": "string"
+                          },
+                          "priceWithSellerFeeLabel": {
+                            "type": "string"
+                          },
+                          "canValidateAccount": {
+                            "type": "boolean"
+                          },
+                          "canResellItem": {
+                            "type": "boolean"
+                          },
+                          "canViewAccountLink": {
+                            "type": "boolean"
+                          },
+                          "accountLinks": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "accountLink": {},
+                          "imagePreviewLinks": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canChangePassword": {
+                            "type": "boolean"
+                          },
+                          "canChangeEmailPassword": {
+                            "type": "boolean"
+                          },
+                          "uniqueKeyExists": {
+                            "type": "boolean"
+                          },
+                          "itemOriginPhrase": {
+                            "type": "string"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "public_tag": {},
+                          "note_text": {},
+                          "descriptionHtml": {
+                            "type": "string"
+                          },
+                          "descriptionEnHtml": {
+                            "type": "string"
+                          },
+                          "descriptionPlain": {
+                            "type": "string"
+                          },
+                          "descriptionEnPlain": {
+                            "type": "string"
+                          },
+                          "seller": {
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "type": "integer"
+                              },
+                              "sold_items_count": {
+                                "type": "integer"
+                              },
+                              "active_items_count": {
+                                "type": "integer"
+                              },
+                              "restore_data": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "avatar_date": {
+                                "type": "integer"
+                              },
+                              "is_banned": {
+                                "type": "integer"
+                              },
+                              "display_style_group_id": {
+                                "type": "integer"
+                              },
+                              "restore_percents": {}
+                            },
+                            "required": [
+                              "user_id",
+                              "sold_items_count",
+                              "active_items_count",
+                              "restore_data",
+                              "username",
+                              "avatar_date",
+                              "is_banned",
+                              "display_style_group_id",
+                              "restore_percents"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "item_id",
+                          "item_state",
+                          "category_id",
+                          "published_date",
+                          "title",
+                          "description",
+                          "price",
+                          "update_stat_date",
+                          "refreshed_date",
+                          "edit_date",
+                          "pending_deletion_date",
+                          "view_count",
+                          "is_sticky",
+                          "item_origin",
+                          "extended_guarantee",
+                          "nsb",
+                          "allow_ask_discount",
+                          "title_en",
+                          "description_en",
+                          "email_type",
+                          "email_provider",
+                          "item_domain",
+                          "resale_item_origin",
+                          "auto_bump_period",
+                          "guarantee_duration",
+                          "rub_price",
+                          "discount",
+                          "cursor_item_id",
+                          "cursor_plan",
+                          "cursor_has_payment_method",
+                          "cursor_usage_percent",
+                          "feedback_data",
+                          "max_discount_percent",
+                          "priceWithSellerFee",
+                          "category",
+                          "guarantee",
+                          "canViewLoginData",
+                          "canViewTempEmail",
+                          "canUpdateItemStats",
+                          "canReportItem",
+                          "canViewItemViews",
+                          "canManagePublicTag",
+                          "canViewEmailLoginData",
+                          "copyFormatData",
+                          "showGetEmailCodeButton",
+                          "canOpenItem",
+                          "canCloseItem",
+                          "canEditItem",
+                          "canDeleteItem",
+                          "canStickItem",
+                          "canUnstickItem",
+                          "canBumpItem",
+                          "canNotBumpItemReason",
+                          "canAutoBump",
+                          "buyer",
+                          "isPersonalAccount",
+                          "canBuyItem",
+                          "price_currency",
+                          "priceWithSellerFeeLabel",
+                          "canValidateAccount",
+                          "canResellItem",
+                          "canViewAccountLink",
+                          "accountLinks",
+                          "accountLink",
+                          "imagePreviewLinks",
+                          "canChangePassword",
+                          "canChangeEmailPassword",
+                          "uniqueKeyExists",
+                          "itemOriginPhrase",
+                          "tags",
+                          "public_tag",
+                          "note_text",
+                          "descriptionHtml",
+                          "descriptionEnHtml",
+                          "descriptionPlain",
+                          "descriptionEnPlain",
+                          "seller"
+                        ]
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalItemsPrice": {},
+                    "hasNextPage": {
+                      "type": "boolean"
+                    },
+                    "perPage": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "wasCached": {
+                      "type": "boolean"
+                    },
+                    "cacheTTL": {
+                      "type": "integer"
+                    },
+                    "lastModified": {
+                      "type": "integer"
+                    },
+                    "serverTime": {
+                      "type": "integer"
+                    },
+                    "searchUrl": {
+                      "type": "string"
+                    },
+                    "stickyItems": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
     "/category": {
       "get": {
         "tags": [
@@ -54125,64 +54826,9 @@
                     "minimum": 1
                   },
                   "category_id": {
-                    "description": "Accounts category.",
-                    "title": "Category Id",
-                    "type": "integer",
-                    "enum": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      16,
-                      17,
-                      18,
-                      19,
-                      20,
-                      22,
-                      24,
-                      28,
-                      30,
-                      31
-                    ],
-                    "x-enumDescriptions": {
-                      "1": "Steam",
-                      "3": "EA (Origin)",
-                      "4": "Warface",
-                      "5": "Uplay",
-                      "6": "ChatGPT",
-                      "7": "Social Club",
-                      "8": "Hytale",
-                      "9": "Fortnite",
-                      "10": "Instagram",
-                      "11": "Battlenet",
-                      "12": "Epic Games",
-                      "13": "Riot",
-                      "14": "World Of Tanks",
-                      "15": "Supercell",
-                      "16": "WOT Blitz",
-                      "17": "miHoYo",
-                      "18": "Escape From Tarkov",
-                      "19": "VPN",
-                      "20": "Tiktok",
-                      "22": "Discord",
-                      "24": "Telegram",
-                      "28": "Minecraft",
-                      "30": "Gifts",
-                      "31": "Roblox"
-                    }
+                    "$ref": "#/components/schemas/CategoryIDModel"
                   },
                   "currency": {
-                    "description": "Using currency.",
                     "$ref": "#/components/schemas/CurrencyModel"
                   },
                   "item_origin": {
@@ -54370,61 +55016,7 @@
                     "minimum": 1
                   },
                   "category_id": {
-                    "description": "Accounts category.",
-                    "title": "Category Id",
-                    "type": "integer",
-                    "x-enumDescriptions": {
-                      "1": "Steam",
-                      "3": "EA (Origin)",
-                      "4": "Warface",
-                      "5": "Uplay",
-                      "6": "ChatGPT",
-                      "7": "Social Club",
-                      "8": "Hytale",
-                      "9": "Fortnite",
-                      "10": "Instagram",
-                      "11": "Battlenet",
-                      "12": "Epic Games",
-                      "13": "Riot",
-                      "14": "World Of Tanks",
-                      "15": "Supercell",
-                      "16": "WOT Blitz",
-                      "17": "miHoYo",
-                      "18": "Escape From Tarkov",
-                      "19": "VPN",
-                      "20": "Tiktok",
-                      "22": "Discord",
-                      "24": "Telegram",
-                      "28": "Minecraft",
-                      "30": "Gifts",
-                      "31": "Roblox"
-                    },
-                    "enum": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      16,
-                      17,
-                      18,
-                      19,
-                      20,
-                      22,
-                      24,
-                      28,
-                      30,
-                      31
-                    ]
+                    "$ref": "#/components/schemas/CategoryIDModel"
                   },
                   "currency": {
                     "$ref": "#/components/schemas/CurrencyModel"
@@ -61133,7 +61725,8 @@
           "24": "Telegram",
           "28": "Minecraft",
           "30": "Gifts",
-          "31": "Roblox"
+          "31": "Roblox",
+          "33": "Cursor"
         },
         "enum": [
           1,
@@ -61159,7 +61752,8 @@
           24,
           28,
           30,
-          31
+          31,
+          33
         ]
       },
       "UserModel": {
@@ -65431,7 +66025,31 @@
         "style": "form",
         "explode": true,
         "schema": {
-          "$ref": "#/components/schemas/ItemOriginModel"
+          "title": "Item Origin",
+          "type": "string",
+          "description": "Account origin.",
+          "x-enumDescriptions": {
+            "brute": "Account received using Bruteforce",
+            "phishing": "Account received from phishing page",
+            "stealer": "Account received from stealer logs",
+            "autoreg": "Account is automatically registered by a tool",
+            "personal": "Account is yours. You created it yourself",
+            "resale": "Account received from another seller",
+            "dummy": "Dummy (empty) account (Only for *Steam* category)",
+            "self_registration": "Self registered account (Only for *Telegram* category)",
+            "retrieve_via_support": "Account was retrieved via support (Only for *Steam*, *Fortnite* categories)"
+          },
+          "enum": [
+            "brute",
+            "phishing",
+            "stealer",
+            "autoreg",
+            "personal",
+            "resale",
+            "dummy",
+            "self_registration",
+            "retrieve_via_support"
+          ]
         }
       },
       "not_origin": {
