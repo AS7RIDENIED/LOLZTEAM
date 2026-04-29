@@ -9,3 +9,7 @@ class BAD_TOKEN(Exception):
 
 class BAD_ENDPOINT(Exception):
     pass
+
+
+class EXPIRED_TOKEN(Exception):
+    pass

@@ -11,7 +11,7 @@ class Forum(APIClient):
     """
     ### LOLZTEAM Forum API Client.
 
-    You can view full class documentation here [click](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Forum.md)
+    You can view full class documentation here [click](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md)
 
     And also official documentation for LOLZTEAM Forum API is here [click](https://lolzteam.readme.io)
 
@@ -1358,27 +1358,39 @@ class Forum(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
-            async def list(self, post_id: int, before_comment: int = NONE, before: int = NONE) -> Response:
+            async def list(
+                self,
+                post_id: int = NONE,
+                post_comment_id: int = NONE,
+                before_comment: int = NONE,
+                before: int = NONE
+            ) -> Response:
                 """
-                GET https://prod-api.lolz.live/posts/{post_id}/comments
+                GET https://prod-api.lolz.live/posts/comments
 
                 *Get comments of a post.*
 
                 **Parameters:**
 
                 - post_id (int): Post ID.
+                - post_comment_id (int): Comment ID.
                 - before_comment (int): Parse comments before this comment.
                 - before (int): Parse comments before this timestamp.
 
                 **Example:**
 
                 ```python
-                response = forum.posts.comments.list(post_id=5523020, before_comment=100)
+                response = forum.posts.comments.list(post_id=5523020)
                 print(response.json())
                 ```
                 """
-                params = {"before_comment": before_comment, "before": before}
-                return await self.core.request("GET", f"/posts/{post_id}/comments", params=params)
+                params = {
+                    "post_id": post_id,
+                    "post_comment_id": post_comment_id,
+                    "before_comment": before_comment,
+                    "before": before,
+                }
+                return await self.core.request("GET", "/posts/comments", params=params)
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
@@ -1447,6 +1459,28 @@ class Forum(APIClient):
                 """
                 params = {"post_comment_id": post_comment_id}
                 return await self.core.request("DELETE", "/posts/comments", params=params)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
+            async def reasons(self, post_comment_id: int) -> Response:
+                """
+                GET https://prod-api.lolz.live/posts/comments/report
+
+                *Get a post comment report reasons.*
+
+                **Parameters:**
+
+                - post_comment_id (int): Id of the post comment to report.
+
+                **Example:**
+
+                ```python
+                response = forum.posts.comments.reasons(post_comment_id=123456)
+                print(response.json())
+                ```
+                """
+                params = {"post_comment_id": post_comment_id}
+                return await self.core.request("GET", "/posts/comments/report", params=params)
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
@@ -1862,27 +1896,39 @@ class Forum(APIClient):
 
                 @UNIVERSAL(batchable=True)
                 @AutoDelay.WrapperSet(0.2)
-                async def list(self, post_id: int, before: int = NONE, limit: int = NONE) -> Response:
+                async def list(
+                    self,
+                    post_id: int = NONE,
+                    page_of_comment_id: int = NONE,
+                    before: int = NONE,
+                    limit: int = NONE
+                ) -> Response:
                     """
-                    GET https://prod-api.lolz.live/profile-posts/{post_id}/comments
+                    GET https://prod-api.lolz.live/profile-posts/comments
 
                     *Get comments of a profile post.*
 
                     **Parameters:**
 
                     - post_id (int): Profile post ID.
+                    - page_of_comment_id (int): ID of a profile post comment, comments that are in the same page with the specified comment will be returned.
                     - before (int): Parse comments before this timestamp.
                     - limit (int): Comments limit per page.
 
                     **Example:**
 
                     ```python
-                    response = forum.users.profile_posts.comments.list(post_id=5523020, before=100, limit=10)
+                    response = forum.users.profile_posts.comments.list(post_id=5523020)
                     print(response.json())
                     ```
                     """
-                    params = {"before": before, "limit": limit}
-                    return await self.core.request("GET", f"/profile-posts/{post_id}/comments", params=params)
+                    params = {
+                        "profile_post_id": post_id,
+                        "page_of_comment_id": page_of_comment_id,
+                        "before": before,
+                        "limit": limit
+                    }
+                    return await self.core.request("GET", "/profile-posts/comments", params=params)
 
                 @UNIVERSAL(batchable=True)
                 @AutoDelay.WrapperSet(0.2)
@@ -1949,9 +1995,8 @@ class Forum(APIClient):
                     print(response.json())
                     ```
                     """
-                    json = {"comment_body": comment_body}
-                    params = {"comment_id": comment_id}
-                    return await self.core.request("PUT", "/profile-posts/comments", json=json, params=params)
+                    json = {"comment_body": comment_body, "comment_id": comment_id}
+                    return await self.core.request("PUT", "/profile-posts/comments", json=json)
 
                 @UNIVERSAL(batchable=True)
                 @AutoDelay.WrapperSet(0.2)
@@ -1977,9 +2022,31 @@ class Forum(APIClient):
 
                 @UNIVERSAL(batchable=True)
                 @AutoDelay.WrapperSet(0.2)
+                async def reasons(self, comment_id: int) -> Response:
+                    """
+                    GET https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+
+                    *GET a profile post comment report reasons.*
+
+                    **Parameters:**
+
+                    - comment_id (int): Id of profile post comment.
+
+                    **Example:**
+
+                    ```python
+                    response = forum.users.profile_posts.comments.reasons(comment_id=123456)
+                    print(response.json())
+                    ```
+                    """
+                    params = {"comment_id": comment_id}
+                    return await self.core.request("GET", "/profile-posts/comments/report", params=params)
+
+                @UNIVERSAL(batchable=True)
+                @AutoDelay.WrapperSet(0.2)
                 async def report(self, comment_id: int, reason: str) -> Response:
                     """
-                    POST https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+                    POST https://prod-api.lolz.live/profile-posts/comments/report
 
                     *Report a profile post comment.*
 
@@ -1995,8 +2062,8 @@ class Forum(APIClient):
                     print(response.json())
                     ```
                     """
-                    json = {"message": reason}
-                    return await self.core.request("POST", f"/profile-posts/comments/{comment_id}/report", json=json)
+                    json = {"comment_id": comment_id, "message": reason}
+                    return await self.core.request("POST", "/profile-posts/comments/report", json=json)
 
             def __init__(self, core: "Forum"):
                 self.core = core
@@ -3462,8 +3529,10 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def read(self, conversation_id: int) -> Response:
+        async def read(self, conversation_id: int = NONE) -> Response:
             """
+            POST https://prod-api.lolz.live/conversations/read
+
             POST https://prod-api.lolz.live/conversations/read-all
 
             **Read a specific conversation.**
@@ -3475,24 +3544,8 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            return await self.core.request("POST", "/conversations/read-all")
-
-        @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
-        async def read_all(self) -> Response:
-            """
-            POST https://prod-api.lolz.live/conversations/read-all
-
-            **Mark all conversations as read.**
-
-            **Example:**
-
-            ```python
-            response = forum.conversations.read_all()
-            print(response.json())
-            ```
-            """
-            return await self.core.request("POST", "/conversations/read-all")
+            params = {"conversation_id": conversation_id}
+            return await self.core.request("POST", "/conversations/read-all" if isinstance(conversation_id, _NONE) else "/conversations/read", params=params)
 
     class __Notifications:
         def __init__(self, core: "Forum"):
@@ -3687,12 +3740,21 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            json = {"page": page, "limit": limit}
-            return await self.core.request("GET", f"/search/{search_id}/results", json=json)
+            params = {"page": page, "limit": limit}
+            return await self.core.request("GET", f"/search/{search_id}/results", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def all(self, query: str = NONE, user_id: int = NONE, tag: str = NONE, forum_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
+        async def all(
+            self,
+            query: str = NONE,
+            user_id: int = NONE,
+            tag: str = NONE,
+            forum_id: int = NONE,
+            page: int = NONE,
+            limit: int = NONE,
+            before: int = NONE
+        ) -> Response:
             """
             POST https://prod-api.lolz.live/search
 
@@ -3706,6 +3768,7 @@ class Forum(APIClient):
             - forum_id (int): Forum ID.
             - page (int): Page.
             - limit (int): Limit.
+            - before (int): Search only for content created before this timestamp.
 
             **Example:**
 
@@ -3714,12 +3777,20 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            params = {"q": query, "user_id": user_id, "tag": tag, "forum_id": forum_id, "page": page, "limit": limit}
+            params = {
+                "q": query,
+                "user_id": user_id,
+                "tag": tag,
+                "forum_id": forum_id,
+                "page": page,
+                "limit": limit,
+                "before": before
+            }
             return await self.core.request("POST", "/search", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def users(self, query: str = NONE) -> Response:
+        async def users(self, query: str = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/users
 
@@ -3728,6 +3799,7 @@ class Forum(APIClient):
             **Parameters:**
 
             - query (str): Search query.
+            - before (int): Search only for content created before this timestamp.
 
             **Returns:** Response containing matched users.
 
@@ -3738,12 +3810,12 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            json = {"q": query}
+            json = {"q": query, "before": before}
             return await self.core.request("POST", "/search/users", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def threads(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
+        async def threads(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/threads
 
@@ -3755,6 +3827,7 @@ class Forum(APIClient):
             - user_id (int): User ID.
             - page (int): Page.
             - limit (int): Limit.
+            - before (int): Search only for content created before this timestamp.
 
             **Example:**
 
@@ -3763,12 +3836,12 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            params = {"q": query, "user_id": user_id, "page": page, "limit": limit}
+            params = {"q": query, "user_id": user_id, "page": page, "limit": limit, "before": before}
             return await self.core.request("POST", "/search/threads", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
+        async def posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/posts
 
@@ -3780,6 +3853,7 @@ class Forum(APIClient):
             - user_id (int): User ID.
             - page (int): Page.
             - limit (int): Limit.
+            - before (int): Search only for content created before this timestamp.
 
             **Example:**
 
@@ -3788,12 +3862,12 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            params = {"q": query, "user_id": user_id, "page": page, "limit": limit}
+            params = {"q": query, "user_id": user_id, "page": page, "limit": limit, "before": before}
             return await self.core.request("POST", "/search/posts", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def profile_posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE) -> Response:
+        async def profile_posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/profile-posts
 
@@ -3805,6 +3879,7 @@ class Forum(APIClient):
             - user_id (int): User ID.
             - page (int): Page.
             - limit (int): Limit.
+            - before (int): Search only for content created before this timestamp.
 
             **Example:**
 
@@ -3813,7 +3888,7 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            params = {"q": query, "user_id": user_id, "page": page, "limit": limit}
+            params = {"q": query, "user_id": user_id, "page": page, "limit": limit, "before": before}
             return await self.core.request("POST", "/search/profile-posts", params=params)
 
         @UNIVERSAL(batchable=True)
@@ -3919,9 +3994,8 @@ class Forum(APIClient):
                 print(response.json())
                 ```
                 """
-                params = {"message_id": message_id}
-                json = {"message": message}
-                return await self.core.request("PUT", "/chatbox/messages", params=params, json=json)
+                json = {"message_id": message_id, "message": message}
+                return await self.core.request("PUT", "/chatbox/messages", json=json)
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
@@ -4176,9 +4250,8 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            params = {"form_id": form_id}
-            json = {"fields": fields}
-            return await self.core.request("GET", "/forms/save", params=params, json=json)
+            json = {"form_id": form_id, "fields": fields}
+            return await self.core.request("POST", "/forms/save", json=json)
 
     @UNIVERSAL(batchable=True)
     @AutoDelay.WrapperSet(0.2)

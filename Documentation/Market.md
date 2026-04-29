@@ -111,14 +111,19 @@
     * [Get](#get-24)
     * [Params](#params-24)
     * [Games](#games-24)
+  * [Cursor](#cursor)
+    * [Get](#get-25)
+    * [Params](#params-25)
+    * [Games](#games-25)
   * [List](#list)
-  * [Get](#get-25)
+  * [Get](#get-26)
 * [List](#list-1)
   * [Owned](#owned)
   * [Purchased](#purchased)
   * [Favorite](#favorite)
   * [Viewed](#viewed)
   * [Download](#download)
+  * [States](#states)
 * [Managing](#managing)
   * [Steam](#steam-1)
     * [Item Value](#item-value)
@@ -140,11 +145,11 @@
     * [Request](#request)
     * [Cancel](#cancel-1)
   * [Custom Discount](#custom-discount)
-    * [Get](#get-26)
+    * [Get](#get-27)
     * [Create](#create)
     * [Edit](#edit)
     * [Delete](#delete)
-  * [Get](#get-27)
+  * [Get](#get-28)
   * [Bulk](#bulk)
   * [Edit](#edit-1)
   * [Delete](#delete-1)
@@ -171,7 +176,7 @@
   * [Decline Video Recording](#decline-video-recording)
 * [Purchasing](#purchasing)
   * [Cart](#cart)
-    * [Get](#get-28)
+    * [Get](#get-29)
     * [Add](#add)
     * [Delete](#delete-2)
   * [Fast](#fast)
@@ -183,7 +188,7 @@
   * [Check](#check-2)
   * [External](#external)
 * [Profile](#profile)
-  * [Get](#get-29)
+  * [Get](#get-30)
   * [Edit](#edit-2)
   * [Claims](#claims)
   * [Create Claim](#create-claim)
@@ -194,13 +199,13 @@
     * [Delete](#delete-3)
   * [Invoice](#invoice)
     * [List](#list-3)
-    * [Get](#get-30)
+    * [Get](#get-31)
     * [Create](#create-2)
   * [Payout](#payout)
     * [Services](#services)
     * [Create](#create-3)
   * [Balance](#balance)
-    * [Get](#get-31)
+    * [Get](#get-32)
     * [Exchange](#exchange)
   * [Currency](#currency)
   * [Transfer](#transfer-1)
@@ -209,7 +214,7 @@
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-32)
+  * [Get](#get-33)
   * [Add](#add-2)
   * [Delete](#delete-4)
 * [Imap](#imap)
@@ -1750,6 +1755,65 @@ print(response.json())
 ```
 
 
+## Cursor
+
+### Get
+
+GET https://api.lzt.market/CATEGORY_NAME
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- page (int): The number of the page to display results from
+- title (str): The word or words contained in the account title.
+- pmin (float): Minimal price of account (Inclusive).
+- pmax (float): Maximum price of account (Inclusive).
+- origin (list): List of account origins.
+- not_origin (list): List of account origins that won't be included.
+- order_by (str): Item order.
+- sb (bool): Sold before.
+- sb_by_me (bool): Sold before by me.
+- nsb (bool): Not sold before.
+- nsb_by_me (bool): Not sold before by me.
+- kwargs (any): Any additional search parameters.
+
+**Example:**
+
+```python
+response = market.categories.cursor.get(pmin=100, pmax=500)
+print(response.json())
+```
+
+
+### Params
+
+GET https://api.lzt.market/CATEGORY_NAME/params
+
+*Displays a list of parameters for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.cursor.params()
+print(response.json())
+```
+
+
+### Games
+
+GET https://api.lzt.market/CATEGORY_NAME/games
+
+*Displays a list of games for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.cursor.games()
+print(response.json())
+```
+
+
 ## List
 
 GET https://api.lzt.market/category
@@ -1891,6 +1955,24 @@ response = market.list.download(
     pmax=1000
 )
 print(response.text())
+```
+
+
+## States
+
+GET https://api.lzt.market/user/item-states
+
+*Returns the states of user items.*
+
+**Parameters:**
+
+- user_id (int): User ID.
+
+**Example:**
+
+```python
+response = market.list.states()
+print(response.json())
 ```
 
 

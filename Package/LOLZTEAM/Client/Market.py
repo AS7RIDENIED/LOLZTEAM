@@ -11,7 +11,7 @@ class Market(APIClient):
     """
     ### LOLZTEAM Market API Client.
 
-    You can view full class documentation here [click](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Market.md)
+    You can view full class documentation here [click](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)
 
     And also official documentation for Market API is here [click](https://lzt-market.readme.io)
 
@@ -78,7 +78,7 @@ class Market(APIClient):
             timeout=timeout,
             verify=verify
         )
-        self.categories = self.__Categories(self)
+        self.categories = self.__Categories(self) 
         self.list = self.__List(self)
         self.managing = self.__Managing(self)
         self.purchasing = self.__Purchasing(self)
@@ -261,6 +261,10 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/hytale")
 
+        class __Cursor(__BaseCategory):
+            def __init__(self, core: "Market"):
+                super().__init__(core, "/cursor")
+
         def __init__(self, core: "Market"):
             self.core = core
             self.latest = self.__Latest(self.core)
@@ -288,6 +292,7 @@ class Market(APIClient):
             self.warface = self.__Warface(self.core)
             self.minecraft = self.__Minecraft(self.core)
             self.hytale = self.__Hytale(self.core)
+            self.cursor = self.__Cursor(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -496,6 +501,28 @@ class Market(APIClient):
             }
             params.update(kwargs)
             return await self.core.request("GET", f"/user/{type}/download", params=params)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def states(self, user_id: int = NONE) -> Response:
+            """
+            GET https://api.lzt.market/user/item-states
+
+            *Returns the states of user items.*
+
+            **Parameters:**
+
+            - user_id (int): User ID.
+
+            **Example:**
+
+            ```python
+            response = market.list.states()
+            print(response.json())
+            ```
+            """
+            params = {"user_id": user_id}
+            return await self.core.request("GET", "/user/item-states", params=params)
 
     class __Managing:
         class __SteamMan:

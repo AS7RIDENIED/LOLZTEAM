@@ -26,7 +26,8 @@ class Market:
             "battlenet",
             "vpn",
             "roblox",
-            "warface"
+            "warface",
+            "cursor"
         ]
         steam = "steam"
         fortnite = "fortnite"
@@ -51,6 +52,7 @@ class Market:
         vpn = "vpn"
         roblox = "roblox"
         warface = "warface"
+        cursor = "cursor"
 
     class CategoryID:
         _Literal = Literal[
@@ -77,7 +79,8 @@ class Market:
             "24",
             "28",
             "30",
-            "31"
+            "31",
+            "33"
         ]
         steam = 1
         origin = 3
@@ -103,6 +106,7 @@ class Market:
         minecraft = 28
         gifts = 30
         roblox = 31
+        cursor = 33
 
     class OperationTypes:
         _Literal = Literal[
@@ -221,7 +225,14 @@ class Market:
         oldest_edited = "edate_to_up"
 
     class Extra:
-        _Literal = Literal["proxy", "close_item", "region", "service", "system", "confirmationCode", "cookies", "login_without_cookies", "cookie_login", "mfa_file", "dota2_mmr", "ea_games", "uplay_games", "the_quarry", "warframe", "ark", "ark_ascended", "genshin_currency", "honkai_currency", "zenless_currency", "telegramClient", "telegramJson", "checkChannels", "checkSpam", "checkHypixelBan"]
+        _Literal = Literal[
+            "proxy", "close_item", "region", "service", "system", "confirmationCode",
+            "cookies", "login_without_cookies", "cookie_login", "mfa_file", "dota2_mmr",
+            "uplay_games", "ea_games", "ark", "ark_ascended", "warframe", "the_quarry",
+            "brawlhalla", "genshin_currency", "honkai_currency", "zenless_currency",
+            "password", "telegramClient", "telegramJson", "checkChannels", "checkSpam",
+            "checkHypixelBan"
+        ]
         proxy = "proxy"
         close_item = "close_item"
         region = "region"
@@ -233,15 +244,17 @@ class Market:
         cookie_login = "cookie_login"
         mfa_file = "mfa_file"
         dota2_mmr = "dota2_mmr"
-        ea_games = "ea_games"
         uplay_games = "uplay_games"
-        the_quarry = "the_quarry"
-        warframe = "warframe"
+        ea_games = "ea_games"
         ark = "ark"
         ark_ascended = "ark_ascended"
+        warframe = "warframe"
+        the_quarry = "the_quarry"
+        brawlhalla = "brawlhalla"
         genshin_currency = "genshin_currency"
         honkai_currency = "honkai_currency"
         zenless_currency = "zenless_currency"
+        password = "password"
         telegramClient = "telegramClient"
         telegramJson = "telegramJson"
         checkChannels = "checkChannels"
@@ -283,7 +296,6 @@ class Forum:
 
     class ThreadOrder:
         _Literal = Literal[
-            "natural",
             "post_date",
             "last_post_date",
             "reply_count",
@@ -291,7 +303,6 @@ class Forum:
             "first_post_likes",
             "vote_count"
         ]
-        default = "natural"
         post_date = "post_date"
         last_post_date = "last_post_date"
         posts = "reply_count"
@@ -300,9 +311,8 @@ class Forum:
         votes = "vote_count"
 
     class PostOrder:
-        _Literal = Literal["natural", "natural_reverse", "post_likes", "post_likes_reverse"]
-        default = "natural"
-        default_reverse = "natural_reverse"
+        _Literal = Literal["natural_reverse", "post_likes", "post_likes_reverse"]
+        reversed = "natural_reverse"
         max_likes = "post_likes"
         min_likes = "post_likes_reverse"
 
@@ -498,12 +508,11 @@ class Forum:
             oldest = "follow_date_reverse"
 
     class ChatRoomIDs:
-        _Literal = Literal["1", "2", "3", "4", "13"]
+        _Literal = Literal["1", "2", "3", "4"]
         general_ru = 1             # [Russian] General chat
         general_en = 2             # [English] General hat
         market_ru = 3              # [Russian] Market chat
         market_en = 4              # [English] Market chat
-        no_whiners = 13            # No whiners chat
 
 
 class Antipublic:

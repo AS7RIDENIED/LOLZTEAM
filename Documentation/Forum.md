@@ -62,6 +62,7 @@
     * [Create](#create-1)
     * [Edit](#edit-2)
     * [Delete](#delete-1)
+    * [Reasons](#reasons)
     * [Report](#report)
   * [List](#list-6)
   * [Get](#get-6)
@@ -72,7 +73,7 @@
   * [Like](#like)
   * [Unlike](#unlike)
   * [Report](#report-1)
-  * [Reasons](#reasons)
+  * [Reasons](#reasons-1)
 * [Users](#users)
   * [Avatar](#avatar)
     * [Upload](#upload)
@@ -89,6 +90,7 @@
       * [Create](#create-3)
       * [Edit](#edit-4)
       * [Delete](#delete-5)
+      * [Reasons](#reasons-2)
       * [Report](#report-2)
     * [List](#list-8)
     * [Get](#get-8)
@@ -99,7 +101,7 @@
     * [Like](#like-1)
     * [Unlike](#unlike-1)
     * [Report](#report-3)
-    * [Reasons](#reasons-1)
+    * [Reasons](#reasons-3)
     * [Stick](#stick)
     * [Unstick](#unstick)
   * [Secret Answer](#secret-answer)
@@ -149,7 +151,6 @@
   * [Kick](#kick)
   * [Unstar](#unstar)
   * [Read](#read)
-  * [Read All](#read-all)
 * [Notifications](#notifications)
   * [List](#list-12)
   * [Get](#get-12)
@@ -174,7 +175,7 @@
     * [Edit](#edit-9)
     * [Delete](#delete-8)
     * [Report](#report-4)
-    * [Reasons](#reasons-2)
+    * [Reasons](#reasons-4)
   * [Get](#get-14)
   * [Ignored](#ignored-1)
   * [Ignore](#ignore-1)
@@ -1101,20 +1102,21 @@ print(response.json())
 
 ### List
 
-GET https://prod-api.lolz.live/posts/{post_id}/comments
+GET https://prod-api.lolz.live/posts/comments
 
 *Get comments of a post.*
 
 **Parameters:**
 
 - post_id (int): Post ID.
+- post_comment_id (int): Comment ID.
 - before_comment (int): Parse comments before this comment.
 - before (int): Parse comments before this timestamp.
 
 **Example:**
 
 ```python
-response = forum.posts.comments.list(post_id=5523020, before_comment=100)
+response = forum.posts.comments.list(post_id=5523020)
 print(response.json())
 ```
 
@@ -1171,6 +1173,24 @@ DELETE https://prod-api.lolz.live/posts/comments
 
 ```python
 response = forum.posts.comments.delete(post_comment_id=123456)
+print(response.json())
+```
+
+
+### Reasons
+
+GET https://prod-api.lolz.live/posts/comments/report
+
+*Get a post comment report reasons.*
+
+**Parameters:**
+
+- post_comment_id (int): Id of the post comment to report.
+
+**Example:**
+
+```python
+response = forum.posts.comments.report(post_comment_id=123456)
 print(response.json())
 ```
 
@@ -1524,13 +1544,14 @@ GET https://prod-api.lolz.live/profile-posts/{post_id}/comments
 **Parameters:**
 
 - post_id (int): Profile post ID.
+- page_of_comment_id (int): ID of a profile post comment, comments that are in the same page with the specified comment will be returned.
 - before (int): Parse comments before this timestamp.
 - limit (int): Comments limit per page.
 
 **Example:**
 
 ```python
-response = forum.users.profile_posts.comments.list(post_id=5523020, before=100, limit=10)
+response = forum.users.profile_posts.comments.list(post_id=5523020)
 print(response.json())
 ```
 
@@ -1610,9 +1631,27 @@ print(response.json())
 ```
 
 
+#### Reasons
+
+GET https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+
+*GET a profile post comment report reasons.*
+
+**Parameters:**
+
+- comment_id (int): Id of profile post comment.
+
+**Example:**
+
+```python
+response = forum.users.profile_posts.comments.report(comment_id=123456)
+print(response.json())
+```
+
+
 #### Report
 
-POST https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+POST https://prod-api.lolz.live/profile-posts/comments/report
 
 *Report a profile post comment.*
 
@@ -2704,6 +2743,8 @@ print(response.json())
 
 ## Read
 
+POST https://prod-api.lolz.live/conversations/read
+
 POST https://prod-api.lolz.live/conversations/read-all
 
 **Read a specific conversation.**
@@ -2712,20 +2753,6 @@ POST https://prod-api.lolz.live/conversations/read-all
 
 ```python
 response = forum.conversations.read(conversation_id=1234567890)
-print(response.json())
-```
-
-
-## Read All
-
-POST https://prod-api.lolz.live/conversations/read-all
-
-**Mark all conversations as read.**
-
-**Example:**
-
-```python
-response = forum.conversations.read_all()
 print(response.json())
 ```
 
@@ -2899,6 +2926,7 @@ POST https://prod-api.lolz.live/search
 - forum_id (int): Forum ID.
 - page (int): Page.
 - limit (int): Limit.
+- before (int): Search only for content created before this timestamp.
 
 **Example:**
 
@@ -2917,6 +2945,7 @@ POST https://prod-api.lolz.live/search/users
 **Parameters:**
 
 - query (str): Search query.
+- before (int): Search only for content created before this timestamp.
 
 **Returns:** Response containing matched users.
 
@@ -2940,6 +2969,7 @@ POST https://prod-api.lolz.live/search/threads
 - user_id (int): User ID.
 - page (int): Page.
 - limit (int): Limit.
+- before (int): Search only for content created before this timestamp.
 
 **Example:**
 
@@ -2961,6 +2991,7 @@ POST https://prod-api.lolz.live/search/posts
 - user_id (int): User ID.
 - page (int): Page.
 - limit (int): Limit.
+- before (int): Search only for content created before this timestamp.
 
 **Example:**
 
@@ -2982,6 +3013,7 @@ POST https://prod-api.lolz.live/search/profile-posts
 - user_id (int): User ID.
 - page (int): Page.
 - limit (int): Limit.
+- before (int): Search only for content created before this timestamp.
 
 **Example:**
 

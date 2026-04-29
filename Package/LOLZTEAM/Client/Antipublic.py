@@ -9,7 +9,7 @@ class Antipublic(APIClient):
     """
     ### Antipublic API Client.
 
-    You can view full class documentation here [click](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/LOLZTEAM/Documentation/Antipublic.md)
+    You can view full class documentation here [click](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Antipublic.md)
 
     And also official documentation for Antipublic API is here [click](https://antipublic.readme.io)
 

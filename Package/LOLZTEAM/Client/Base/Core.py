@@ -1,23 +1,21 @@
 """
 API Client core
 """
-# TODO: curl_cffi / tls_requests
+import time
 import json
-import httpx
 import base64
 import logging
 import asyncio
 
-from httpx import Response
 from functools import wraps
 from typing import Union, Literal
 from dataclasses import dataclass
-from httpx._utils import URLPattern
 from binascii import Error as binasciiError
 from urllib.parse import parse_qs, urlparse
+from curl_cffi import AsyncSession, Response
 from ..Base.Wrappers import RETRY, UNIVERSAL
-from ..Base.Exceptions import BAD_TOKEN, BAD_ENDPOINT
 from importlib.metadata import version, PackageNotFoundError
+from ..Base.Exceptions import BAD_TOKEN, BAD_ENDPOINT, EXPIRED_TOKEN
 
 
 class APIClient:
@@ -30,7 +28,7 @@ class APIClient:
         from ..__init__ import Antipublic  # Circular import issue
         self.settings = Settings(core=self)
         self.settings._isAntipublic = isinstance(self, Antipublic)
-        self.settings.async_client = httpx.AsyncClient(timeout=timeout, verify=verify)
+        self.settings.async_client = AsyncSession(timeout=timeout, verify=verify)  # TODO: Maybe replace my autoretry with this one from curl_cffi
         self.settings.delay = AutoDelay(delay_min=delay_min)
         self.settings.logger = Logger(core=self, logger_name=logger_name)
         self.settings.current_loop = asyncio.get_event_loop()
@@ -42,27 +40,28 @@ class APIClient:
         try:
             self.settings.version = version("LOLZTEAM")
         except PackageNotFoundError:
-            self.settings.version = "2.0.x.Local"
+            self.settings.version = "2.1.0"
         if self.settings._isAntipublic:
             self.settings.async_client.headers.update({"x-antipublic-version": f"{self.settings.version} (API Client) pypi.org/project/LOLZTEAM/"})
 
         self.settings.async_client.headers.update({"User-Agent": f"Python (API Client) pypi.org/project/LOLZTEAM/ v{self.settings.version}"})
 
-    async def __get_async_client(self: "APIClient") -> httpx.AsyncClient:
+    async def __get_async_client(self: "APIClient") -> AsyncSession:
         current_loop = asyncio.get_event_loop()
         if current_loop != self.settings.current_loop:
             try:
-                await self.settings.async_client.aclose()
+                await self.settings.async_client.close()
             except RuntimeError:
                 pass
             client_params = {
-                'headers': self.settings.async_client.headers,
-                'timeout': self.settings.async_client.timeout,
-                'base_url': self.settings.async_client.base_url,
-                "verify": bool(self.settings.async_client._transport._pool._ssl_context.verify_mode),  # TODO: Add verify as changeable parameter to settings?
-                "proxy": self.settings.proxy,  # Maybe copy mounts instead?
+                "headers": self.settings.async_client.headers,
+                "timeout": self.settings.async_client.timeout,
+                "base_url": self.settings.async_client.base_url,
+                "verify": self.settings.async_client.verify,  # TODO: Add verify as changeable parameter to settings?
+                "proxy": self.settings.proxy
             }
-            self.settings.async_client = httpx.AsyncClient(**client_params)
+            self.settings.async_client = AsyncSession(**client_params)
+            self.settings.proxy = self.settings.proxy
             self.settings.current_loop = current_loop
         return self.settings.async_client
 
@@ -91,7 +90,7 @@ class APIClient:
         print(response.json())
         ```
         """
-        if delay is not None:
+        if delay:
             self.settings.delay._delay = delay  # Set delay
         await self.settings.delay.asleep()  # Sleep if needed
 
@@ -142,6 +141,7 @@ class APIClient:
                         obj[k] = v
             return obj
 
+        # TODO 2.1.1: Add option to log only errors
         self.settings.logger.info(
             "\n".join(
                 filter(None,
@@ -196,6 +196,7 @@ class AutoDelay:
         """
         Decorator for setting delay on method
         """
+        # TODO: Maybe delete this. There is only one method in the entire API that has a different delay.
         def decorator(func):
             @wraps(func)
             async def wrapper(self, *args, **kwargs):
@@ -257,12 +258,7 @@ class Logger:
         self.logger_name = logger_name
         self.core = core
 
-        # TODO: Maybe add setting user_id to Antipublic?
-        # This will require sending request, so that's not good
-        # Maybe sending that request only when logger is enabled and user_id is not set?
         # TODO: Also may add parsing user_id from response when endpoints is /checkAccess
-        # Also should add printing antipublic user_id (on jti place) to first message when logger is enabled
-        # Fuck scopes, instead just put subscription type to it's place
         if not self.core.settings._isAntipublic:
             self.file_name = f"{self.core.settings.user_id}.{self.logger_name}.log"
         else:
@@ -330,10 +326,10 @@ class Settings:
     """
     _isAntipublic: str
 
-    async_client: httpx.AsyncClient
+    async_client: AsyncSession
 
     """
-    Async httpx client.
+    Async curl_cffi client.
     """
     language: Literal["ru", "en"]
     """
@@ -359,7 +355,7 @@ class Settings:
 
     user_id: int = None
     """
-    Your LZT user ID.
+    Your LZT/Antipublic user ID.
     """
     scopes: list[str] = None
     """
@@ -367,7 +363,7 @@ class Settings:
     """
     jti: int = None
     """
-    Your token ID
+    Your token ID.
     """
     _token: str = None
     _base_url: str = None
@@ -404,12 +400,10 @@ class Settings:
         client.proxy = "socks5://proxy_name:proxy_password@proxy_ip:proxy_port"
         ```
         """
-        if proxy and not any(proxy.startswith(p) for p in ['http://', 'https://', 'socks5://']):
-            raise ValueError("Proxy must start with http://, https:// or socks5://")
+        if proxy and not any(proxy.startswith(p) for p in ["http://", "https://", "socks5://", "socks5://"]):
+            raise ValueError("Proxy must start with http://, https://, socks5:// or socks5h://")
         self._proxy = proxy
-        self.async_client._mounts = {
-            URLPattern("all://"): httpx.AsyncHTTPTransport(proxy=proxy),
-        }
+        self.async_client.proxies = {"all": proxy}
 
     @property
     def token(self) -> str:
@@ -426,29 +420,23 @@ class Settings:
             self.user_id = None
             # TODO: Unify this shit when legacy tokens will gone. Also don't forget to edit logger stuff.
             # Legacy tokens are gone but `sub` in jwt doesn't match with lzt user_id, so ig ignore this for now. Putting random antipublic subject id will confuse users
-            self.scopes = None
-            self.jti = None
-        else:
-            self.async_client.headers.update({"authorization": f"Bearer {self._token}"})
-            try:
-                if "." not in self._token:
-                    raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead")
-                payload = token.split(".")[1]
-                decoded_payload: dict = json.loads(base64.b64decode(payload + "==" if payload[-2:] != "==" else payload).decode("utf-8"))
-                user_id = decoded_payload.get("sub", 0)
-                if hasattr(self, "user_id"):
-                    if self.user_id != user_id:
-                        if not self._isAntipublic:
-                            self.logger.file_name = f"{user_id}.{self.logger.logger_name}.log"
-                        else:
-                            self.logger.file_name = f"{self.logger.logger_name}.log"
-
-                self.user_id = user_id
-                self.scopes = decoded_payload.get("scope", "basic read post conversate market").split(" ")
-                self.jti = decoded_payload.get("jti", 0)
-                self.logger.info(f"Updated Token | User ID: {self.user_id} | JTI: {self.core.settings.jti} | Scopes: {self.core.settings.scopes}")
-            except (binasciiError, json.JSONDecodeError) as e:
-                raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead") from e
+        self.scopes = None
+        self.jti = None
+        self.async_client.headers.update({"authorization": f"Bearer {self._token}"})
+        try:
+            if "." not in self._token:
+                raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead (https://lolz.live/account/api).")
+            payload = token.split(".")[1]
+            decoded_payload: dict = json.loads(base64.b64decode(payload + "==" if payload[-2:] != "==" else payload).decode("utf-8"))
+            if decoded_payload.get("exp", 9999999999) < time.time():
+                raise EXPIRED_TOKEN("Your token has expired. Please get a new token here -> https://lolz.live/account/api")
+            self.user_id = decoded_payload.get("sub", 0)
+            self.logger.file_name = f"{self.user_id}.{self.logger.logger_name}.log"
+            self.jti = decoded_payload.get("jti", 0)
+            self.scopes = decoded_payload.get("scope", "").split(" ")
+            self.logger.info(f"Updated Token | User ID: {self.user_id} | JTI: {self.core.settings.jti}" + (f"| Scopes: {self.core.settings.scopes}" if not self._isAntipublic else ""))
+        except (binasciiError, json.JSONDecodeError) as e:
+            raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead (https://lolz.live/account/api).") from e
 
 
 class _NONE:
