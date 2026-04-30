@@ -237,9 +237,9 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/battlenet")
 
-        class __ChatGPT(__BaseCategory):
+        class __LLM(__BaseCategory):
             def __init__(self, core: "Market"):
-                super().__init__(core, "/chatgpt")
+                super().__init__(core, "/llm")
 
         class __VPN(__BaseCategory):
             def __init__(self, core: "Market"):
@@ -286,7 +286,7 @@ class Market(APIClient):
             self.tiktok = self.__Tiktok(self.core)
             self.instagram = self.__Instagram(self.core)
             self.battlenet = self.__BattleNet(self.core)
-            self.chatgpt = self.__ChatGPT(self.core)
+            self.llm = self.__LLM(self.core)
             self.vpn = self.__VPN(self.core)
             self.roblox = self.__Roblox(self.core)
             self.warface = self.__Warface(self.core)

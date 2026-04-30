@@ -87,7 +87,7 @@
     * [Get](#get-18)
     * [Params](#params-18)
     * [Games](#games-18)
-  * [Chatgpt](#chatgpt)
+  * [Llm](#llm)
     * [Get](#get-19)
     * [Params](#params-19)
     * [Games](#games-19)
@@ -1401,7 +1401,7 @@ print(response.json())
 ```
 
 
-## Chatgpt
+## Llm
 
 ### Get
 
@@ -1427,7 +1427,7 @@ GET https://api.lzt.market/CATEGORY_NAME
 **Example:**
 
 ```python
-response = market.categories.chatgpt.get(pmin=100, pmax=500)
+response = market.categories.llm.get(pmin=100, pmax=500)
 print(response.json())
 ```
 
@@ -1441,7 +1441,7 @@ GET https://api.lzt.market/CATEGORY_NAME/params
 **Example:**
 
 ```python
-response = market.categories.chatgpt.params()
+response = market.categories.llm.params()
 print(response.json())
 ```
 
@@ -1455,7 +1455,7 @@ GET https://api.lzt.market/CATEGORY_NAME/games
 **Example:**
 
 ```python
-response = market.categories.chatgpt.games()
+response = market.categories.llm.games()
 print(response.json())
 ```
 

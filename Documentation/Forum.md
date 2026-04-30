@@ -1190,7 +1190,7 @@ GET https://prod-api.lolz.live/posts/comments/report
 **Example:**
 
 ```python
-response = forum.posts.comments.report(post_comment_id=123456)
+response = forum.posts.comments.reasons(post_comment_id=123456)
 print(response.json())
 ```
 
@@ -1537,7 +1537,7 @@ print(response.json())
 
 #### List
 
-GET https://prod-api.lolz.live/profile-posts/{post_id}/comments
+GET https://prod-api.lolz.live/profile-posts/comments
 
 *Get comments of a profile post.*
 
@@ -1644,7 +1644,7 @@ GET https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
 **Example:**
 
 ```python
-response = forum.users.profile_posts.comments.report(comment_id=123456)
+response = forum.users.profile_posts.comments.reasons(comment_id=123456)
 print(response.json())
 ```
 

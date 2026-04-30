@@ -225,6 +225,37 @@ class Market:
         oldest_edited = "edate_to_up"
 
     class Extra:
+        class Service:
+            _Literal = Literal[
+                "windscribeVPN", "tunnelbearVPN", "vanishVPN", "mullvadVPN", "PIAVPN", "AdguardVPN",
+                "pureVPN", "ultraVPN", "cyberghostVPN", "vyprVPN", "hotspotShieldVPN", "planetVPN",
+                "telegram", "discord", "discord_trial", "chatgpt", "claude", "cursor"
+            ]
+            windscribeVPN = "windscribeVPN"
+            tunnelbearVPN = "tunnelbearVPN"
+            vanishVPN = "vanishVPN"
+            mullvadVPN = "mullvadVPN"
+            PIAVPN = "PIAVPN"
+            AdguardVPN = "AdguardVPN"
+            pureVPN = "pureVPN"
+            ultraVPN = "ultraVPN"
+            cyberghostVPN = "cyberghostVPN"
+            vyprVPN = "vyprVPN"
+            hotspotShieldVPN = "hotspotShieldVPN"
+            planetVPN = "planetVPN"
+            telegram = "telegram"
+            discord = "discord"
+            discord_trial = "discord_trial"
+            chatgpt = "chatgpt"
+            claude = "claude"
+            cursor = "cursor"
+
+        class System:
+            _Literal = Literal["laser", "scroll", "magic"]
+            laser = "laser"      # Brawl Stars
+            scroll = "scroll"    # Clash Royale
+            magic = "magic"      # Clash of Clans
+
         _Literal = Literal[
             "proxy", "close_item", "region", "service", "system", "confirmationCode",
             "cookies", "login_without_cookies", "cookie_login", "mfa_file", "dota2_mmr",
