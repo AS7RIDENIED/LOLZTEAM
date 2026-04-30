@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.88a"
+    "version": "1.1.89"
   },
   "servers": [
     {
@@ -873,6 +873,7 @@
                   "A Game About Digging A Hole™",
                   "A Game of Dwarves",
                   "A Gay Love Story About Gay Love",
+                  "A Mass of Dead",
                   "A New Beginning - Final Cut",
                   "A New Beginning - Final Cut_cis",
                   "A Short Hike",
@@ -943,6 +944,7 @@
                   "Alan Wake Franchise",
                   "Alan Wake Origins Bundle",
                   "Alan Wake's American Nightmare",
+                  "Alan Wake_cis",
                   "Alice: Madness Returns",
                   "Alien Breed 2: Assault",
                   "Alien Breed 3: Descent",
@@ -1244,6 +1246,7 @@
                   "Broken Sword 4 - the Angel of Death (2006)",
                   "Broken Sword 5 - the Serpent's Curse",
                   "Brothers - A Tale of Two Sons",
+                  "Brothers - A Tale of Two Sons_cis",
                   "Brumm",
                   "Brutal Force",
                   "Brutal Legend",
@@ -1279,6 +1282,7 @@
                   "Call of Duty®: Black Ops First Strike Content Pack_cis",
                   "Call of Duty®: Black Ops II - African Flags of the World Calling Card Pack",
                   "Call of Duty®: Black Ops II - Afterlife Personalization Pack",
+                  "Call of Duty®: Black Ops II - European Flags of the World Calling Card Pack",
                   "Call of Duty®: Black Ops II - Kawaii Personalization Pack",
                   "Call of Duty®: Black Ops II - Nuketown Zombies Map",
                   "Call of Duty®: Black Ops II - Octane Personalization Pack",
@@ -1524,6 +1528,7 @@
                   "DLC - Crusader Kings II: Europa Universalis IV Converter",
                   "DLC Quest",
                   "DOOM",
+                  "DOOM 3 Resurrection of Evil",
                   "DOOM Eternal Standard Edition",
                   "DRAGON BALL XENOVERSE Season Pass",
                   "DRAGON BALL XENOVERSE_cis",
@@ -1562,6 +1567,7 @@
                   "Day of the Tentacle Remastered",
                   "DayZ",
                   "Dead Bits",
+                  "Dead Bits (Soundtrack)",
                   "Dead Bits_cis",
                   "Dead Cells",
                   "Dead Cells: Fatal Falls",
@@ -1748,6 +1754,7 @@
                   "Dungeon Defenders: Summoner Hero DLC",
                   "Dungeon Defenders: Summoner Hero DLC_cis",
                   "Dungeon Defenders: Talay Mining Complex Mission Pack",
+                  "Dungeon Defenders_cis",
                   "Dungeon Siege",
                   "Dungeon Siege Collection",
                   "Dungeon Siege II",
@@ -2129,6 +2136,7 @@
                   "Grim Dawn_cis",
                   "Grim Fandango Remastered",
                   "Grotesque Tactics: Evil Heroes",
+                  "Grounded",
                   "Grounded 2",
                   "Guacamelee! Gold Edition",
                   "Guardians of Middle-earth",
@@ -2393,6 +2401,7 @@
                   "King's Guard TD_cis",
                   "Kingdom Come: Deliverance",
                   "Kingdom Come: Deliverance II",
+                  "Kingdom Tales: Dragons & Us",
                   "Kingdom Wars - All Access",
                   "Kingdom Wars - Starter Pack",
                   "Kingdoms Rise",
@@ -3002,6 +3011,7 @@
                   "Prince of Persia®: The Sands of Time_cis",
                   "Prison Architect",
                   "Prison Escape Simulator: Dig Out",
+                  "Pro Cycling Manager 2014_cis",
                   "Project CARS - Limited Edition Upgrade",
                   "Project CARS - Pagani Nürburgring Combined Track Expansion",
                   "Project Zomboid",
@@ -3410,6 +3420,7 @@
                   "SlamIt Pinball Big Score",
                   "Slash It",
                   "Slash It_cis",
+                  "Slash it 2 - Chinese Edition Pack",
                   "Sleeping Dogs",
                   "Sleeping Dogs: Law Enforcer Pack",
                   "Sleeping Dogs: Retro Triad Pack",
@@ -4155,6 +4166,7 @@
                   "Unknown package 2105",
                   "Unknown package 210_cis",
                   "Unknown package 219",
+                  "Unknown package 2356",
                   "Unknown package 2377",
                   "Unknown package 2487",
                   "Unknown package 2536",
@@ -4258,6 +4270,7 @@
                   "Unknown package 42480_cis",
                   "Unknown package 426",
                   "Unknown package 42657",
+                  "Unknown package 4274_cis",
                   "Unknown package 42883",
                   "Unknown package 4338",
                   "Unknown package 43381",
@@ -4422,6 +4435,7 @@
                   "Unknown package 86905",
                   "Unknown package 86905_cis",
                   "Unknown package 8796",
+                  "Unknown package 88801",
                   "Unknown package 89583",
                   "Unknown package 89834",
                   "Unknown package 90034",
@@ -16898,6 +16912,7 @@
                   8006,
                   8007,
                   8008,
+                  8009,
                   8010
                 ]
               }
@@ -44269,14 +44284,14 @@
         ]
       }
     },
-    "/chatgpt": {
+    "/llm": {
       "get": {
         "tags": [
           "Category Search"
         ],
-        "summary": "ChatGPT",
+        "summary": "LLM",
         "description": "Displays a list of accounts in a specific category according to your parameters.",
-        "operationId": "Category.ChatGPT",
+        "operationId": "Category.LLM",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -44379,12 +44394,21 @@
               "items": {
                 "type": "string",
                 "enum": [
+                  "chatgpteduplan",
+                  "chatgptenterpriseplan",
+                  "chatgptgoplan",
                   "chatgptplusplan",
                   "chatgptpro",
-                  "chatgptenterpriseplan",
-                  "chatgptteamplan",
-                  "chatgpteduplan",
-                  "chatgptquorumplan"
+                  "chatgptprolite",
+                  "chatgptquorumplan",
+                  "claude_max_20x",
+                  "claude_max_5x",
+                  "claude_pro",
+                  "claude_raven",
+                  "cursor_enterprise",
+                  "cursor_pro",
+                  "cursor_pro_plus",
+                  "cursor_ultra"
                 ]
               }
             }
@@ -44397,9 +44421,6 @@
           },
           {
             "$ref": "#/components/parameters/autorenewal"
-          },
-          {
-            "$ref": "#/components/parameters/tel"
           },
           {
             "name": "transactions",
@@ -44418,6 +44439,46 @@
           },
           {
             "$ref": "#/components/parameters/reg_period"
+          },
+          {
+            "name": "service[]",
+            "in": "query",
+            "description": "List of allowed LLM services.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "List of allowed LLM services.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "chatgpt",
+                  "claude",
+                  "cursor"
+                ]
+              }
+            }
+          },
+          {
+            "name": "not_service[]",
+            "in": "query",
+            "description": "List of excluded LLM services.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "List of excluded LLM services.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "chatgpt",
+                  "claude",
+                  "cursor"
+                ]
+              }
+            }
           }
         ],
         "responses": {
@@ -61706,7 +61767,7 @@
           "3": "EA (Origin)",
           "4": "Warface",
           "5": "Uplay",
-          "6": "ChatGPT",
+          "6": "LLM",
           "7": "Social Club",
           "8": "Hytale",
           "9": "Fortnite",
@@ -62538,27 +62599,28 @@
             "type": "string"
           },
           "service": {
-            "description": "Service. Required if you want to upload VPN, Cinema account or gift.",
+            "description": "Service. Required if you want to upload VPN, gift or LLM.",
             "title": "Service",
             "type": "string",
             "enum": [
-              "AdguardVPN",
-              "PIAVPN",
-              "cyberghostVPN",
-              "hotspotShieldVPN",
-              "mullvadVPN",
-              "pureVPN",
-              "tunnelbearVPN",
-              "ultraVPN",
-              "vanishVPN",
-              "vyprVPN",
               "windscribeVPN",
+              "tunnelbearVPN",
+              "vanishVPN",
+              "mullvadVPN",
+              "PIAVPN",
+              "AdguardVPN",
+              "pureVPN",
+              "ultraVPN",
+              "cyberghostVPN",
+              "vyprVPN",
+              "hotspotShieldVPN",
               "planetVPN",
-              "start",
-              "ivi",
               "telegram",
               "discord",
-              "discord_trial"
+              "discord_trial",
+              "chatgpt",
+              "claude",
+              "cursor"
             ]
           },
           "system": {
@@ -66326,7 +66388,7 @@
             "discord",
             "tiktok",
             "instagram",
-            "chatgpt",
+            "llm",
             "battlenet",
             "vpn",
             "roblox",
