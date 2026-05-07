@@ -22,12 +22,11 @@ class Market:
             "discord",
             "tiktok",
             "instagram",
-            "chatgpt",
+            "llm",
             "battlenet",
             "vpn",
             "roblox",
             "warface",
-            "cursor"
         ]
         steam = "steam"
         fortnite = "fortnite"
@@ -47,7 +46,7 @@ class Market:
         discord = "discord"
         tiktok = "tiktok"
         instagram = "instagram"
-        chatgpt = "chatgpt"
+        llm = "llm"
         battlenet = "battlenet"
         vpn = "vpn"
         roblox = "roblox"
@@ -79,14 +78,13 @@ class Market:
             "24",
             "28",
             "30",
-            "31",
-            "33"
+            "31"
         ]
         steam = 1
         origin = 3
         warface = 4
         uplay = 5
-        chatgpt = 6
+        llm = 6
         socialclub = 7
         hytale = 8
         fortnite = 9
@@ -106,7 +104,6 @@ class Market:
         minecraft = 28
         gifts = 30
         roblox = 31
-        cursor = 33
 
     class OperationTypes:
         _Literal = Literal[
@@ -176,10 +173,11 @@ class Market:
         self_reg = "self_registration"
 
     class Guarantee:
-        _Literal = Literal["-1", "0", "1"]
-        half_day = -1
-        day = 0
-        three_days = 1
+        _Literal = Literal["0", "43200", "86400", "259200"]
+        no_guarantee = 0
+        half_day = 86400 / 2
+        day = 86400
+        three_days = 86400 * 3
 
     class ItemStatus:
         _Literal = Literal[

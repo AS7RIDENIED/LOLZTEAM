@@ -78,7 +78,7 @@ class Market(APIClient):
             timeout=timeout,
             verify=verify
         )
-        self.categories = self.__Categories(self) 
+        self.categories = self.__Categories(self)
         self.list = self.__List(self)
         self.managing = self.__Managing(self)
         self.purchasing = self.__Purchasing(self)
@@ -261,10 +261,6 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/hytale")
 
-        class __Cursor(__BaseCategory):
-            def __init__(self, core: "Market"):
-                super().__init__(core, "/cursor")
-
         def __init__(self, core: "Market"):
             self.core = core
             self.latest = self.__Latest(self.core)
@@ -292,7 +288,6 @@ class Market(APIClient):
             self.warface = self.__Warface(self.core)
             self.minecraft = self.__Minecraft(self.core)
             self.hytale = self.__Hytale(self.core)
-            self.cursor = self.__Cursor(self.core)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -1841,7 +1836,7 @@ class Market(APIClient):
         def __init__(self, core: "Market"):
             self.core = core
 
-        @UNIVERSAL(batchable=True)
+        @UNIVERSAL(batchable=False)
         @AutoDelay.WrapperSet(0.2)
         async def fast(
             self,
@@ -1919,7 +1914,7 @@ class Market(APIClient):
                 "category_id": category_id,
                 "item_origin": origin,
                 "currency": currency,
-                "guarantee": guarantee,
+                "guarantee_duration": guarantee,
                 # Item
                 "title": title,
                 "title_en": title_en,
@@ -2010,7 +2005,7 @@ class Market(APIClient):
                 "category_id": category_id,
                 "item_origin": origin,
                 "currency": currency,
-                "guarantee": guarantee,
+                "guarantee_duration": guarantee,
                 # Item
                 "title": title,
                 "title_en": title_en,
