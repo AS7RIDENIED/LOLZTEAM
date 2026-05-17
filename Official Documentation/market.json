@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.91"
+    "version": "1.1.92"
   },
   "servers": [
     {
@@ -50008,7 +50008,171 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ItemListModel"
+                  "type": "object",
+                  "required": [
+                    "items",
+                    "totalItems",
+                    "totalItemsPrice",
+                    "hasNextPage",
+                    "perPage",
+                    "page",
+                    "wasCached",
+                    "cacheTTL",
+                    "lastModified",
+                    "serverTime",
+                    "totalItemsPriceWithSellerFee",
+                    "searchUrl",
+                    "search",
+                    "stickyItems",
+                    "user",
+                    "publishedPeriodLabelPhrase",
+                    "filterDatesDefault",
+                    "published_startDate",
+                    "published_endDate",
+                    "filter_by_published_date",
+                    "published_period_label",
+                    "paidPeriodLabelPhrase",
+                    "paid_startDate",
+                    "paid_endDate",
+                    "filter_by_buyer_operation_date",
+                    "paid_period_label",
+                    "deletePeriodLabelPhrase",
+                    "delete_startDate",
+                    "delete_endDate",
+                    "filter_by_delete_date",
+                    "delete_period_label",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemModel"
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalItemsPrice": {
+                      "type": "integer"
+                    },
+                    "hasNextPage": {
+                      "type": "boolean"
+                    },
+                    "perPage": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "wasCached": {
+                      "type": "boolean"
+                    },
+                    "cacheTTL": {
+                      "type": "integer"
+                    },
+                    "lastModified": {
+                      "type": "integer"
+                    },
+                    "serverTime": {
+                      "type": "integer"
+                    },
+                    "totalItemsPriceWithSellerFee": {
+                      "type": "number"
+                    },
+                    "searchUrl": {
+                      "type": "string"
+                    },
+                    "search": {
+                      "type": "string"
+                    },
+                    "stickyItems": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "display_style_group_id": {
+                          "type": "integer"
+                        },
+                        "avatar_date": {
+                          "type": "integer"
+                        },
+                        "is_banned": {
+                          "type": "boolean"
+                        },
+                        "uniq_username_css": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "username",
+                        "display_style_group_id",
+                        "avatar_date",
+                        "is_banned",
+                        "uniq_username_css"
+                      ]
+                    },
+                    "publishedPeriodLabelPhrase": {
+                      "type": "string"
+                    },
+                    "filterDatesDefault": {
+                      "type": "boolean"
+                    },
+                    "published_startDate": {
+                      "type": "string"
+                    },
+                    "published_endDate": {
+                      "type": "string"
+                    },
+                    "filter_by_published_date": {
+                      "type": "boolean"
+                    },
+                    "published_period_label": {
+                      "type": "string"
+                    },
+                    "paidPeriodLabelPhrase": {
+                      "type": "string"
+                    },
+                    "paid_startDate": {
+                      "type": "string"
+                    },
+                    "paid_endDate": {
+                      "type": "string"
+                    },
+                    "filter_by_buyer_operation_date": {
+                      "type": "boolean"
+                    },
+                    "paid_period_label": {
+                      "type": "string"
+                    },
+                    "deletePeriodLabelPhrase": {
+                      "type": "string"
+                    },
+                    "delete_startDate": {
+                      "type": "string"
+                    },
+                    "delete_endDate": {
+                      "type": "string"
+                    },
+                    "filter_by_delete_date": {
+                      "type": "boolean"
+                    },
+                    "delete_period_label": {
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
                 }
               }
             }
@@ -50878,7 +51042,69 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ItemListModel"
+                  "type": "object",
+                  "required": [
+                    "items",
+                    "totalItems",
+                    "totalItemsPrice",
+                    "hasNextPage",
+                    "perPage",
+                    "page",
+                    "wasCached",
+                    "cacheTTL",
+                    "lastModified",
+                    "serverTime",
+                    "searchUrl",
+                    "search",
+                    "stickyItems",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemModel"
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalItemsPrice": {},
+                    "hasNextPage": {
+                      "type": "boolean"
+                    },
+                    "perPage": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "wasCached": {
+                      "type": "boolean"
+                    },
+                    "cacheTTL": {
+                      "type": "integer"
+                    },
+                    "lastModified": {
+                      "type": "integer"
+                    },
+                    "serverTime": {
+                      "type": "integer"
+                    },
+                    "searchUrl": {
+                      "type": "string"
+                    },
+                    "search": {
+                      "type": "string"
+                    },
+                    "stickyItems": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
                 }
               }
             }
@@ -52157,6 +52383,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/ItemIDNotSpecified"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -52196,7 +52425,9 @@
                     "type": "array",
                     "items": {
                       "$ref": "#/components/schemas/ItemIDModel"
-                    }
+                    },
+                    "minItems": 1,
+                    "maxItems": 250
                   },
                   "parse_same_item_ids": {
                     "description": "Parse same item ids.",
@@ -53597,6 +53828,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/ItemIDNotSpecified"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -53660,6 +53894,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/ItemIDNotSpecified"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -54305,6 +54542,10 @@
                     "title": "Title En",
                     "type": "string"
                   },
+                  "auto_generate_title": {
+                    "description": "Generate the title by using AI.",
+                    "type": "boolean"
+                  },
                   "price": {
                     "title": "Price",
                     "type": "number",
@@ -54495,6 +54736,10 @@
                     "description": "English title of account. If **title_en** specified and **title** is empty, **title** will be automatically translated to Russian language.",
                     "title": "Title En",
                     "type": "string"
+                  },
+                  "auto_generate_title": {
+                    "description": "Generate the title by using AI.",
+                    "type": "boolean"
                   },
                   "price": {
                     "title": "Price",
@@ -58645,8 +58890,7 @@
                     "minimum": 1
                   },
                   "currency": {
-                    "$ref": "#/components/schemas/CurrencyModel",
-                    "description": "Using currency for amount."
+                    "$ref": "#/components/schemas/CurrencyModel"
                   },
                   "comment": {
                     "title": "Comment",
@@ -58777,6 +59021,17 @@
               "description": "Amount you want to send in your currency.",
               "minimum": 1
             }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currencн.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyModel"
+            }
           }
         ],
         "responses": {
@@ -58794,27 +59049,21 @@
                   ],
                   "properties": {
                     "commission_percentage": {
-                      "title": "Commission",
                       "type": "integer"
                     },
                     "spentCurrentMonth": {
-                      "title": "Spent Current Month",
-                      "type": "integer"
+                      "type": "number"
                     },
                     "calculator": {
-                      "title": "Calculator",
                       "type": "object",
                       "properties": {
                         "inputAmount": {
-                          "title": "Input Amount",
                           "type": "integer"
                         },
                         "commissionAmount": {
-                          "title": "Commission Amount",
                           "type": "integer"
                         },
                         "totalOutputAmount": {
-                          "title": "Total Output Amount",
                           "type": "integer"
                         }
                       },
@@ -58883,7 +59132,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/PaymentNotFound"
           }
         },
         "security": [
@@ -59110,315 +59359,309 @@
                     "payments": {
                       "title": "Payments",
                       "type": "object",
-                      "properties": {
-                        "1234567890": {
-                          "title": "",
-                          "type": "object",
-                          "properties": {
-                            "operation_id": {
-                              "title": "Operation",
-                              "type": "integer"
-                            },
-                            "operation_date": {
-                              "title": "Operation",
-                              "type": "integer"
-                            },
-                            "operation_type": {
-                              "title": "Operation",
-                              "type": "string"
-                            },
-                            "outgoing_sum": {
-                              "title": "Outgoing",
-                              "type": "string"
-                            },
-                            "incoming_sum": {
-                              "title": "Incoming",
-                              "type": "string"
-                            },
-                            "item_id": {
-                              "title": "Item",
-                              "type": "integer"
-                            },
-                            "wallet": {
-                              "title": "Wallet",
-                              "type": "string"
-                            },
-                            "is_finished": {
-                              "title": "Is",
-                              "type": "integer"
-                            },
-                            "is_hold": {
-                              "title": "Is",
-                              "type": "integer"
-                            },
-                            "payment_system": {
-                              "title": "Payment",
-                              "type": "string"
-                            },
-                            "data": {
-                              "title": "Data",
-                              "type": "object",
-                              "properties": {
-                                "user_id": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "username": {
-                                  "title": "Username",
-                                  "type": "string"
-                                },
-                                "comment": {
-                                  "title": "Comment",
-                                  "type": "string"
-                                },
-                                "fee": {
-                                  "title": "Fee",
-                                  "type": "integer"
-                                },
-                                "invoice_id": {
-                                  "title": "Invoice",
-                                  "type": "integer"
-                                },
-                                "is_test": {
-                                  "title": "Is",
-                                  "type": "boolean"
-                                },
-                                "payment_id": {
-                                  "title": "Payment",
-                                  "type": "string"
-                                },
-                                "commentPlain": {
-                                  "title": "Comment Plain",
-                                  "type": "string"
-                                },
-                                "is_banned": {
-                                  "title": "Is",
-                                  "type": "integer"
-                                },
-                                "display_style_group_id": {
-                                  "title": "Display",
-                                  "type": "integer"
-                                },
-                                "uniq_username_css": {
-                                  "title": "Uniq",
-                                  "type": "string"
-                                },
-                                "uniq_banner": {
-                                  "title": "Uniq",
-                                  "type": "string"
-                                },
-                                "avatar_date": {
-                                  "title": "Avatar",
-                                  "type": "integer"
-                                },
-                                "user_group_id": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "username_html": {
-                                  "title": "Username",
-                                  "type": "string"
-                                },
-                                "avatar": {
-                                  "title": "Avatar",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "user_id",
-                                "username",
-                                "comment",
-                                "fee",
-                                "invoice_id",
-                                "is_test",
-                                "payment_id",
-                                "commentPlain",
-                                "is_banned",
-                                "display_style_group_id",
-                                "uniq_username_css",
-                                "uniq_banner",
-                                "avatar_date",
-                                "user_group_id",
-                                "username_html",
-                                "avatar"
-                              ]
-                            },
-                            "hold_end_date": {
-                              "title": "Hold",
-                              "type": "integer"
-                            },
-                            "operation_end_date": {
-                              "title": "Operation",
-                              "type": "integer"
-                            },
-                            "api": {
-                              "title": "Api",
-                              "type": "integer"
-                            },
-                            "sum": {
-                              "title": "Sum",
-                              "type": "string"
-                            },
-                            "payment_status": {
-                              "title": "Payment",
-                              "type": "string"
-                            },
-                            "supportLink": {
-                              "title": "Support Link"
-                            },
-                            "paymentSystemIcons": {
-                              "title": "Payment System Icons",
-                              "type": "array",
-                              "items": {}
-                            },
-                            "canCancelPaidMailPayment": {
-                              "title": "Can Cancel Paid Mail Payment",
-                              "type": "boolean"
-                            },
-                            "canCancelBalanceTransfer": {
-                              "title": "Can Cancel Balance Transfer",
-                              "type": "boolean"
-                            },
-                            "canCancelBalancePayout": {
-                              "title": "Can Cancel Balance Payout",
-                              "type": "boolean"
-                            },
-                            "canCancelBalanceHold": {
-                              "title": "Can Cancel Balance Hold",
-                              "type": "boolean"
-                            },
-                            "canFinishBalanceTransfer": {
-                              "title": "Can Finish Balance Transfer",
-                              "type": "boolean"
-                            },
-                            "canFinishBalancePayout": {
-                              "title": "Can Finish Balance Payout",
-                              "type": "boolean"
-                            },
-                            "canFinishBalanceHold": {
-                              "title": "Can Finish Balance Hold",
-                              "type": "boolean"
-                            },
-                            "label": {
-                              "title": "Label",
-                              "type": "object",
-                              "properties": {
-                                "title": {
-                                  "title": "Title",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "title"
-                              ]
-                            },
-                            "merchant": {
-                              "title": "Merchant",
-                              "type": "object",
-                              "properties": {
-                                "merchant_id": {
-                                  "title": "Merchant",
-                                  "type": "integer"
-                                },
-                                "name": {
-                                  "title": "Name",
-                                  "type": "string"
-                                },
-                                "user_id": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "created_date": {
-                                  "title": "Created",
-                                  "type": "integer"
-                                },
-                                "secret_key": {
-                                  "title": "Secret",
-                                  "type": "string"
-                                },
-                                "avatar_data": {
-                                  "title": "Avatar",
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "title": "Url",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "merchant_id",
-                                "name",
-                                "user_id",
-                                "created_date",
-                                "secret_key",
-                                "avatar_data",
-                                "url"
-                              ]
-                            },
-                            "user": {
-                              "title": "User",
-                              "type": "object",
-                              "properties": {
-                                "user_id": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "user_balance": {
-                                  "title": "User",
-                                  "type": "string"
-                                },
-                                "user_hold": {
-                                  "title": "User",
-                                  "type": "string"
-                                },
-                                "user_balance_with_hold": {
-                                  "title": "User",
-                                  "type": "number"
-                                }
-                              },
-                              "required": [
-                                "user_id",
-                                "user_balance",
-                                "user_hold",
-                                "user_balance_with_hold"
-                              ]
-                            }
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "operation_id": {
+                            "title": "Operation",
+                            "type": "integer"
                           },
-                          "required": [
-                            "operation_id",
-                            "operation_date",
-                            "operation_type",
-                            "outgoing_sum",
-                            "incoming_sum",
-                            "item_id",
-                            "wallet",
-                            "is_finished",
-                            "is_hold",
-                            "payment_system",
-                            "data",
-                            "hold_end_date",
-                            "operation_end_date",
-                            "api",
-                            "sum",
-                            "payment_status",
-                            "supportLink",
-                            "paymentSystemIcons",
-                            "canCancelPaidMailPayment",
-                            "canCancelBalanceTransfer",
-                            "canCancelBalancePayout",
-                            "canCancelBalanceHold",
-                            "canFinishBalanceTransfer",
-                            "canFinishBalancePayout",
-                            "canFinishBalanceHold",
-                            "label",
-                            "merchant",
-                            "user"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "1234567890"
-                      ]
+                          "operation_date": {
+                            "title": "Operation",
+                            "type": "integer"
+                          },
+                          "operation_type": {
+                            "title": "Operation",
+                            "type": "string"
+                          },
+                          "outgoing_sum": {
+                            "title": "Outgoing",
+                            "type": "string"
+                          },
+                          "incoming_sum": {
+                            "title": "Incoming",
+                            "type": "string"
+                          },
+                          "item_id": {
+                            "title": "Item",
+                            "type": "integer"
+                          },
+                          "wallet": {
+                            "title": "Wallet",
+                            "type": "string"
+                          },
+                          "is_finished": {
+                            "title": "Is",
+                            "type": "integer"
+                          },
+                          "is_hold": {
+                            "title": "Is",
+                            "type": "integer"
+                          },
+                          "payment_system": {
+                            "title": "Payment",
+                            "type": "string"
+                          },
+                          "data": {
+                            "title": "Data",
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "comment": {
+                                "title": "Comment",
+                                "type": "string"
+                              },
+                              "fee": {
+                                "title": "Fee",
+                                "type": "integer"
+                              },
+                              "invoice_id": {
+                                "title": "Invoice",
+                                "type": "integer"
+                              },
+                              "is_test": {
+                                "title": "Is",
+                                "type": "boolean"
+                              },
+                              "payment_id": {
+                                "title": "Payment",
+                                "type": "string"
+                              },
+                              "commentPlain": {
+                                "title": "Comment Plain",
+                                "type": "string"
+                              },
+                              "is_banned": {
+                                "title": "Is",
+                                "type": "integer"
+                              },
+                              "display_style_group_id": {
+                                "title": "Display",
+                                "type": "integer"
+                              },
+                              "uniq_username_css": {
+                                "title": "Uniq",
+                                "type": "string"
+                              },
+                              "uniq_banner": {
+                                "title": "Uniq",
+                                "type": "string"
+                              },
+                              "avatar_date": {
+                                "title": "Avatar",
+                                "type": "integer"
+                              },
+                              "user_group_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username_html": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "avatar": {
+                                "title": "Avatar",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "username",
+                              "comment",
+                              "fee",
+                              "invoice_id",
+                              "is_test",
+                              "payment_id",
+                              "commentPlain",
+                              "is_banned",
+                              "display_style_group_id",
+                              "uniq_username_css",
+                              "uniq_banner",
+                              "avatar_date",
+                              "user_group_id",
+                              "username_html",
+                              "avatar"
+                            ]
+                          },
+                          "hold_end_date": {
+                            "title": "Hold",
+                            "type": "integer"
+                          },
+                          "operation_end_date": {
+                            "title": "Operation",
+                            "type": "integer"
+                          },
+                          "api": {
+                            "title": "Api",
+                            "type": "integer"
+                          },
+                          "sum": {
+                            "title": "Sum",
+                            "type": "string"
+                          },
+                          "payment_status": {
+                            "title": "Payment",
+                            "type": "string"
+                          },
+                          "supportLink": {
+                            "title": "Support Link"
+                          },
+                          "paymentSystemIcons": {
+                            "title": "Payment System Icons",
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canCancelPaidMailPayment": {
+                            "title": "Can Cancel Paid Mail Payment",
+                            "type": "boolean"
+                          },
+                          "canCancelBalanceTransfer": {
+                            "title": "Can Cancel Balance Transfer",
+                            "type": "boolean"
+                          },
+                          "canCancelBalancePayout": {
+                            "title": "Can Cancel Balance Payout",
+                            "type": "boolean"
+                          },
+                          "canCancelBalanceHold": {
+                            "title": "Can Cancel Balance Hold",
+                            "type": "boolean"
+                          },
+                          "canFinishBalanceTransfer": {
+                            "title": "Can Finish Balance Transfer",
+                            "type": "boolean"
+                          },
+                          "canFinishBalancePayout": {
+                            "title": "Can Finish Balance Payout",
+                            "type": "boolean"
+                          },
+                          "canFinishBalanceHold": {
+                            "title": "Can Finish Balance Hold",
+                            "type": "boolean"
+                          },
+                          "label": {
+                            "title": "Label",
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "title": "Title",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "title"
+                            ]
+                          },
+                          "merchant": {
+                            "title": "Merchant",
+                            "type": "object",
+                            "properties": {
+                              "merchant_id": {
+                                "title": "Merchant",
+                                "type": "integer"
+                              },
+                              "name": {
+                                "title": "Name",
+                                "type": "string"
+                              },
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "created_date": {
+                                "title": "Created",
+                                "type": "integer"
+                              },
+                              "secret_key": {
+                                "title": "Secret",
+                                "type": "string"
+                              },
+                              "avatar_data": {
+                                "title": "Avatar",
+                                "type": "string"
+                              },
+                              "url": {
+                                "title": "Url",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "merchant_id",
+                              "name",
+                              "user_id",
+                              "created_date",
+                              "secret_key",
+                              "avatar_data",
+                              "url"
+                            ]
+                          },
+                          "user": {
+                            "title": "User",
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_balance": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_hold": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_balance_with_hold": {
+                                "title": "User",
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "user_balance",
+                              "user_hold",
+                              "user_balance_with_hold"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "operation_id",
+                          "operation_date",
+                          "operation_type",
+                          "outgoing_sum",
+                          "incoming_sum",
+                          "item_id",
+                          "wallet",
+                          "is_finished",
+                          "is_hold",
+                          "payment_system",
+                          "data",
+                          "hold_end_date",
+                          "operation_end_date",
+                          "api",
+                          "sum",
+                          "payment_status",
+                          "supportLink",
+                          "paymentSystemIcons",
+                          "canCancelPaidMailPayment",
+                          "canCancelBalanceTransfer",
+                          "canCancelBalancePayout",
+                          "canCancelBalanceHold",
+                          "canFinishBalanceTransfer",
+                          "canFinishBalancePayout",
+                          "canFinishBalanceHold",
+                          "label",
+                          "merchant",
+                          "user"
+                        ]
+                      }
                     },
                     "perPage": {
                       "title": "Per Page",
@@ -59617,298 +59860,293 @@
                     "payments": {
                       "title": "Payments",
                       "type": "object",
-                      "properties": {
-                        "1234567890": {
-                          "title": "",
-                          "type": "object",
-                          "properties": {
-                            "user_id": {
-                              "title": "User",
-                              "type": "integer"
-                            },
-                            "receiver_id": {
-                              "title": "Receiver",
-                              "type": "integer"
-                            },
-                            "amount": {
-                              "title": "Amount",
-                              "type": "string"
-                            },
-                            "description": {
-                              "title": "Description",
-                              "type": "string"
-                            },
-                            "next_payment": {
-                              "title": "Next",
-                              "type": "integer"
-                            },
-                            "next_alert_date": {
-                              "title": "Next",
-                              "type": "integer"
-                            },
-                            "auto_payment_id": {
-                              "title": "Auto",
-                              "type": "integer"
-                            },
-                            "day": {
-                              "title": "Day",
-                              "type": "string"
-                            },
-                            "receiver": {
-                              "title": "Receiver",
-                              "type": "object",
-                              "properties": {
-                                "user_id": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "username": {
-                                  "title": "Username",
-                                  "type": "string"
-                                },
-                                "username_html": {
-                                  "title": "Username",
-                                  "type": "string"
-                                },
-                                "user_message_count": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "user_register_date": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "user_like_count": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "user_like2_count": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "contest_count": {
-                                  "title": "Contest",
-                                  "type": "integer"
-                                },
-                                "trophy_count": {
-                                  "title": "Trophy",
-                                  "type": "integer"
-                                },
-                                "custom_title": {
-                                  "title": "Custom",
-                                  "type": "string"
-                                },
-                                "is_banned": {
-                                  "title": "Is",
-                                  "type": "integer"
-                                },
-                                "user_title": {
-                                  "title": "User",
-                                  "type": "string"
-                                },
-                                "user_is_valid": {
-                                  "title": "User",
-                                  "type": "boolean"
-                                },
-                                "user_is_verified": {
-                                  "title": "User",
-                                  "type": "boolean"
-                                },
-                                "user_is_followed": {
-                                  "title": "User",
-                                  "type": "boolean"
-                                },
-                                "user_last_seen_date": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "user_following_count": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "user_followers_count": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "links": {
-                                  "title": "Links",
-                                  "type": "object",
-                                  "properties": {
-                                    "permalink": {
-                                      "title": "Permalink",
-                                      "type": "string"
-                                    },
-                                    "detail": {
-                                      "title": "Detail",
-                                      "type": "string"
-                                    },
-                                    "avatar": {
-                                      "title": "Avatar",
-                                      "type": "string"
-                                    },
-                                    "avatar_big": {
-                                      "title": "Avatar",
-                                      "type": "string"
-                                    },
-                                    "avatar_small": {
-                                      "title": "Avatar",
-                                      "type": "string"
-                                    },
-                                    "followers": {
-                                      "title": "Followers",
-                                      "type": "string"
-                                    },
-                                    "followings": {
-                                      "title": "Followings",
-                                      "type": "string"
-                                    },
-                                    "ignore": {
-                                      "title": "Ignore",
-                                      "type": "string"
-                                    },
-                                    "timeline": {
-                                      "title": "Timeline",
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "permalink",
-                                    "detail",
-                                    "avatar",
-                                    "avatar_big",
-                                    "avatar_small",
-                                    "followers",
-                                    "followings",
-                                    "ignore",
-                                    "timeline"
-                                  ]
-                                },
-                                "permissions": {
-                                  "title": "Permissions",
-                                  "type": "object",
-                                  "properties": {
-                                    "edit": {
-                                      "title": "Edit",
-                                      "type": "boolean"
-                                    },
-                                    "follow": {
-                                      "title": "Follow",
-                                      "type": "boolean"
-                                    },
-                                    "ignore": {
-                                      "title": "Ignore",
-                                      "type": "boolean"
-                                    },
-                                    "profile_post": {
-                                      "title": "Profile",
-                                      "type": "boolean"
-                                    }
-                                  },
-                                  "required": [
-                                    "edit",
-                                    "follow",
-                                    "ignore",
-                                    "profile_post"
-                                  ]
-                                },
-                                "user_is_ignored": {
-                                  "title": "User",
-                                  "type": "boolean"
-                                },
-                                "user_is_visitor": {
-                                  "title": "User",
-                                  "type": "boolean"
-                                },
-                                "user_group_id": {
-                                  "title": "User",
-                                  "type": "integer"
-                                },
-                                "fields": {
-                                  "title": "Fields",
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "id": {
-                                        "title": "Id",
-                                        "type": "string"
-                                      },
-                                      "title": {
-                                        "title": "Title",
-                                        "type": "string"
-                                      },
-                                      "description": {
-                                        "title": "Description",
-                                        "type": "string"
-                                      },
-                                      "position": {
-                                        "title": "Position",
-                                        "type": "string"
-                                      },
-                                      "is_required": {
-                                        "title": "Is",
-                                        "type": "boolean"
-                                      },
-                                      "value": {
-                                        "title": "Value",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "id",
-                                      "title",
-                                      "description",
-                                      "position",
-                                      "is_required",
-                                      "value"
-                                    ]
-                                  }
-                                }
-                              },
-                              "required": [
-                                "user_id",
-                                "username",
-                                "username_html",
-                                "user_message_count",
-                                "user_register_date",
-                                "user_like_count",
-                                "user_like2_count",
-                                "contest_count",
-                                "trophy_count",
-                                "custom_title",
-                                "is_banned",
-                                "user_title",
-                                "user_is_valid",
-                                "user_is_verified",
-                                "user_is_followed",
-                                "user_last_seen_date",
-                                "user_following_count",
-                                "user_followers_count",
-                                "links",
-                                "permissions",
-                                "user_is_ignored",
-                                "user_is_visitor",
-                                "user_group_id",
-                                "fields"
-                              ]
-                            }
+                      "additionalProperties": {
+                        "title": "",
+                        "type": "object",
+                        "properties": {
+                          "user_id": {
+                            "title": "User",
+                            "type": "integer"
                           },
-                          "required": [
-                            "user_id",
-                            "receiver_id",
-                            "amount",
-                            "description",
-                            "next_payment",
-                            "next_alert_date",
-                            "auto_payment_id",
-                            "day",
-                            "receiver"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "1234567890"
-                      ]
+                          "receiver_id": {
+                            "title": "Receiver",
+                            "type": "integer"
+                          },
+                          "amount": {
+                            "title": "Amount",
+                            "type": "string"
+                          },
+                          "description": {
+                            "title": "Description",
+                            "type": "string"
+                          },
+                          "next_payment": {
+                            "title": "Next",
+                            "type": "integer"
+                          },
+                          "next_alert_date": {
+                            "title": "Next",
+                            "type": "integer"
+                          },
+                          "auto_payment_id": {
+                            "title": "Auto",
+                            "type": "integer"
+                          },
+                          "day": {
+                            "title": "Day",
+                            "type": "string"
+                          },
+                          "receiver": {
+                            "title": "Receiver",
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "username": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "username_html": {
+                                "title": "Username",
+                                "type": "string"
+                              },
+                              "user_message_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_register_date": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_like_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_like2_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "contest_count": {
+                                "title": "Contest",
+                                "type": "integer"
+                              },
+                              "trophy_count": {
+                                "title": "Trophy",
+                                "type": "integer"
+                              },
+                              "custom_title": {
+                                "title": "Custom",
+                                "type": "string"
+                              },
+                              "is_banned": {
+                                "title": "Is",
+                                "type": "integer"
+                              },
+                              "user_title": {
+                                "title": "User",
+                                "type": "string"
+                              },
+                              "user_is_valid": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_verified": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_followed": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_last_seen_date": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_following_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "user_followers_count": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "links": {
+                                "title": "Links",
+                                "type": "object",
+                                "properties": {
+                                  "permalink": {
+                                    "title": "Permalink",
+                                    "type": "string"
+                                  },
+                                  "detail": {
+                                    "title": "Detail",
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "avatar_big": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "avatar_small": {
+                                    "title": "Avatar",
+                                    "type": "string"
+                                  },
+                                  "followers": {
+                                    "title": "Followers",
+                                    "type": "string"
+                                  },
+                                  "followings": {
+                                    "title": "Followings",
+                                    "type": "string"
+                                  },
+                                  "ignore": {
+                                    "title": "Ignore",
+                                    "type": "string"
+                                  },
+                                  "timeline": {
+                                    "title": "Timeline",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "permalink",
+                                  "detail",
+                                  "avatar",
+                                  "avatar_big",
+                                  "avatar_small",
+                                  "followers",
+                                  "followings",
+                                  "ignore",
+                                  "timeline"
+                                ]
+                              },
+                              "permissions": {
+                                "title": "Permissions",
+                                "type": "object",
+                                "properties": {
+                                  "edit": {
+                                    "title": "Edit",
+                                    "type": "boolean"
+                                  },
+                                  "follow": {
+                                    "title": "Follow",
+                                    "type": "boolean"
+                                  },
+                                  "ignore": {
+                                    "title": "Ignore",
+                                    "type": "boolean"
+                                  },
+                                  "profile_post": {
+                                    "title": "Profile",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "edit",
+                                  "follow",
+                                  "ignore",
+                                  "profile_post"
+                                ]
+                              },
+                              "user_is_ignored": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_is_visitor": {
+                                "title": "User",
+                                "type": "boolean"
+                              },
+                              "user_group_id": {
+                                "title": "User",
+                                "type": "integer"
+                              },
+                              "fields": {
+                                "title": "Fields",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "title": "Id",
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "title": "Title",
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "title": "Description",
+                                      "type": "string"
+                                    },
+                                    "position": {
+                                      "title": "Position",
+                                      "type": "string"
+                                    },
+                                    "is_required": {
+                                      "title": "Is",
+                                      "type": "boolean"
+                                    },
+                                    "value": {
+                                      "title": "Value",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "description",
+                                    "position",
+                                    "is_required",
+                                    "value"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "user_id",
+                              "username",
+                              "username_html",
+                              "user_message_count",
+                              "user_register_date",
+                              "user_like_count",
+                              "user_like2_count",
+                              "contest_count",
+                              "trophy_count",
+                              "custom_title",
+                              "is_banned",
+                              "user_title",
+                              "user_is_valid",
+                              "user_is_verified",
+                              "user_is_followed",
+                              "user_last_seen_date",
+                              "user_following_count",
+                              "user_followers_count",
+                              "links",
+                              "permissions",
+                              "user_is_ignored",
+                              "user_is_visitor",
+                              "user_group_id",
+                              "fields"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "user_id",
+                          "receiver_id",
+                          "amount",
+                          "description",
+                          "next_payment",
+                          "next_alert_date",
+                          "auto_payment_id",
+                          "day",
+                          "receiver"
+                        ]
+                      }
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/Resp_SystemInfo"
@@ -61592,29 +61830,24 @@
           "feedback_data": {
             "title": "Feedback",
             "type": "object",
-            "properties": {
-              "12345": {
-                "title": "",
-                "type": "object",
-                "properties": {
-                  "positive": {
-                    "title": "Positive",
-                    "type": "integer"
-                  },
-                  "negative": {
-                    "title": "Negative",
-                    "type": "integer"
-                  }
+            "additionalProperties": {
+              "title": "",
+              "type": "object",
+              "properties": {
+                "positive": {
+                  "title": "Positive",
+                  "type": "integer"
                 },
-                "required": [
-                  "positive",
-                  "negative"
-                ]
-              }
-            },
-            "required": [
-              "12345"
-            ]
+                "negative": {
+                  "title": "Negative",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "positive",
+                "negative"
+              ]
+            }
           },
           "hold": {
             "title": "Hold",
@@ -61822,15 +62055,9 @@
           "restore_data": {
             "title": "Restore",
             "type": "object",
-            "properties": {
-              "12345": {
-                "title": "",
-                "type": "integer"
-              }
-            },
-            "required": [
-              "12345"
-            ]
+            "additionalProperties": {
+              "type": "integer"
+            }
           },
           "short_link": {
             "title": "Short",
@@ -62206,7 +62433,7 @@
         }
       },
       "CurrencyModel": {
-        "title": "Currency",
+        "title": "Currency code",
         "type": "string",
         "enum": [
           "rub",
@@ -63170,14 +63397,13 @@
                           "type": "string"
                         }
                       }
-                    },
-                    "12345": {
-                      "$ref": "#/components/schemas/BalanceModel"
                     }
                   },
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/BalanceModel"
+                  },
                   "required": [
-                    "balance",
-                    "12345"
+                    "balance"
                   ]
                 },
                 "to": {
@@ -64564,58 +64790,48 @@
         "content": {
           "application/json": {
             "schema": {
+              "type": "object",
               "required": [
+                "itemId",
+                "tag",
                 "addedTagId",
                 "deleteTags",
-                "itemId",
-                "system_info",
-                "tag"
+                "system_info"
               ],
-              "type": "object",
               "properties": {
                 "itemId": {
-                  "title": "Itemid",
                   "type": "integer"
                 },
                 "tag": {
-                  "title": "Tag",
-                  "required": [
-                    "bc",
-                    "forOwnedAccountsOnly",
-                    "isDefault",
-                    "tag_id",
-                    "title"
+                  "type": [
+                    "object",
+                    "null"
                   ],
-                  "type": "object",
                   "properties": {
-                    "tag_id": {
-                      "title": "Tag Id",
-                      "type": "integer"
-                    },
                     "title": {
-                      "title": "Title",
                       "type": "string"
-                    },
-                    "isDefault": {
-                      "title": "Isdefault",
-                      "type": "boolean"
-                    },
-                    "forOwnedAccountsOnly": {
-                      "title": "Forownedaccountsonly",
-                      "type": "boolean"
                     },
                     "bc": {
-                      "title": "Bc",
                       "type": "string"
+                    },
+                    "tag_id": {
+                      "type": "integer"
+                    },
+                    "forOwnedAccountsOnly": {
+                      "type": "boolean"
                     }
-                  }
+                  },
+                  "required": [
+                    "title",
+                    "bc",
+                    "tag_id",
+                    "forOwnedAccountsOnly"
+                  ]
                 },
                 "addedTagId": {
-                  "title": "Addedtagid",
                   "type": "integer"
                 },
                 "deleteTags": {
-                  "title": "Deletetags",
                   "type": "array",
                   "items": {
                     "type": "integer"
@@ -64763,14 +64979,14 @@
         "content": {
           "application/json": {
             "schema": {
-              "title": "Ad Not Found",
+              "title": "Item Not Found Error",
               "type": "object",
               "properties": {
                 "errors": {
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "default": "Ad not found."
+                    "default": "Item not found eror."
                   }
                 },
                 "system_info": {
@@ -64780,16 +64996,79 @@
             },
             "examples": {
               "ItemNotFound": {
-                "summary": "Ad not found error",
+                "summary": "Item not found eror.",
                 "value": {
                   "errors": [
-                    "Ad not found."
+                    "Requested item not found"
                   ],
                   "system_info": {
                     "visitor_id": 0,
-                    "time": 0
+                    "time": 0,
+                    "log_id": 0
                   }
                 }
+              }
+            }
+          }
+        }
+      },
+      "PaymentNotFound": {
+        "description": "Error Response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "system_info": {
+                  "$ref": "#/components/schemas/Resp_SystemInfo"
+                }
+              }
+            },
+            "examples": {
+              "ItemNotFound": {
+                "summary": "Item not found eror.",
+                "value": {
+                  "errors": [
+                    "Requested payment not found"
+                  ],
+                  "system_info": {
+                    "visitor_id": 0,
+                    "time": 0,
+                    "log_id": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ItemIDNotSpecified": {
+        "description": "Error Response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "system_info": {
+                  "$ref": "#/components/schemas/Resp_SystemInfo"
+                }
+              }
+            },
+            "examples": {
+              "ItemIDNotSpecified": {
+                "$ref": "#/components/examples/ItemIDNotSpecified"
               }
             }
           }
@@ -64824,7 +65103,21 @@
                   ],
                   "system_info": {
                     "visitor_id": 0,
-                    "time": 0
+                    "time": 0,
+                    "log_id": 0
+                  }
+                }
+              },
+              "BumpsLimitExceed": {
+                "summary": "Bumps limit exceed",
+                "value": {
+                  "errors": [
+                    "You don't have available bumps. You can purchase more bumps in the <a href=\"/account/market\">Market settings</a>."
+                  ],
+                  "system_info": {
+                    "visitor_id": 0,
+                    "time": 0,
+                    "log_id": 0
                   }
                 }
               }
@@ -64861,7 +65154,8 @@
                   ],
                   "system_info": {
                     "visitor_id": 0,
-                    "time": 0
+                    "time": 0,
+                    "log_id": 0
                   }
                 }
               },
@@ -64873,7 +65167,8 @@
                   ],
                   "system_info": {
                     "visitor_id": 0,
-                    "time": 0
+                    "time": 0,
+                    "log_id": 0
                   }
                 }
               }
@@ -65187,21 +65482,7 @@
         "style": "form",
         "explode": true,
         "schema": {
-          "title": "Currency",
-          "type": "string",
-          "enum": [
-            "rub",
-            "uah",
-            "kzt",
-            "byn",
-            "usd",
-            "eur",
-            "gbp",
-            "cny",
-            "try",
-            "jpy",
-            "brl"
-          ]
+          "$ref": "#/components/schemas/CurrencyModel"
         }
       },
       "email_login_data": {
@@ -66368,7 +66649,21 @@
         }
       }
     },
-    "examples": {},
+    "examples": {
+      "ItemIDNotSpecified": {
+        "summary": "Item ID not specified.",
+        "value": {
+          "errors": [
+            "Please enter a value for the required field 'item_id'."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      }
+    },
     "requestBodies": {},
     "securitySchemes": {
       "HTTPBearer": {
