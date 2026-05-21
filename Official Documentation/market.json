@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.92"
+    "version": "1.1.93"
   },
   "servers": [
     {
@@ -50907,6 +50907,44 @@
               }
             }
           },
+          "400": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "TgFormatRestriction": {
+                    "summary": "Can't download Telegram formats.",
+                    "value": {
+                      "error": [
+                        "Downloading TData / .session via API is not supported."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "InvalidFormat": {
+                    "summary": "Invalid format",
+                    "value": {
+                      "error": [
+                        "Please enter valid custom download format."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           }
@@ -51266,7 +51304,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -51316,10 +51354,35 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "ReasonNotSpecified": {
+                    "summary": "No permission",
+                    "value": {
+                      "errors": [
+                        "Enter the correct reason for deleting the ad"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -52393,7 +52456,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -52480,8 +52543,630 @@
               }
             }
           },
+          "400": {
+            "description": "Limit for 1 request exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "AccountLimitExceeded": {
+                    "summary": "Limit for 1 request exceeded",
+                    "value": {
+                      "errors": [
+                        "Limit for 1 request - {x} accounts"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/items/bulk-action": {
+      "post": {
+        "tags": [
+          "Account Managing"
+        ],
+        "summary": "Execute bulk actions on items",
+        "description": "Executes bulk actions on items.",
+        "operationId": "Managing.BulkAction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "Delete items",
+                    "description": "Delete items",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "reason"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "delete"
+                      },
+                      "reason": {
+                        "type": "string",
+                        "description": "Reason for deletion."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Close items",
+                    "description": "Close items",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "close"
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Open items",
+                    "description": "Open items",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "open"
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Bump items",
+                    "description": "Bump items",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "bump"
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Change owner",
+                    "description": "Change owner",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "username"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "change-owner"
+                      },
+                      "username": {
+                        "type": "string",
+                        "description": "New owner's username."
+                      },
+                      "open": {
+                        "type": "boolean",
+                        "description": "Open items after transfer."
+                      },
+                      "close": {
+                        "type": "boolean",
+                        "description": "Close items after transfer."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Stick items",
+                    "description": "Stick items",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "stick"
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Unstick items",
+                    "description": "Unstick items",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "unstick"
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Set login data visibility",
+                    "description": "Set login data visibility",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "visibility"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "login-data-visibility"
+                      },
+                      "visibility": {
+                        "type": "boolean",
+                        "description": "Enable or disable login data visibility."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Set auto bump hour",
+                    "description": "Set auto bump hour",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "hour"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "auto-bump"
+                      },
+                      "hour": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "Hour for auto bump."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit title",
+                    "description": "Edit title",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "title"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-title"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "New title."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit price (by value or by percent)",
+                    "description": "Edit price (by value or by percent)",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-price"
+                      },
+                      "price": {
+                        "type": "string",
+                        "description": "New price."
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency code."
+                      },
+                      "change_price_in_percents": {
+                        "type": "boolean",
+                        "description": "Change by percent."
+                      },
+                      "percents_price": {
+                        "type": "number",
+                        "description": "Percent value."
+                      },
+                      "auto_buy_price": {
+                        "type": "boolean",
+                        "description": "Auto buy price."
+                      },
+                      "delete_notes": {
+                        "type": "boolean",
+                        "description": "Delete notes."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit description (BB code)",
+                    "description": "Edit description (BB code)",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "description"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-description"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Item description in BB code."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit information (BB code)",
+                    "description": "Edit information (BB code)",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "information"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-information"
+                      },
+                      "information": {
+                        "type": "string",
+                        "description": "Item information in BB code."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit proxy",
+                    "description": "Edit proxy",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-proxy-id"
+                      },
+                      "proxy_id": {
+                        "type": "string",
+                        "description": "Proxy ID."
+                      },
+                      "random_proxy": {
+                        "type": "boolean",
+                        "description": "Randomize proxy."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit tags",
+                    "description": "Edit tags",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-tags"
+                      },
+                      "add_tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "description": "Tags to add."
+                      },
+                      "remove_tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "description": "Tags to remove."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit guarantee duration",
+                    "description": "Edit guarantee duration",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "guarantee_duration"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-guarantee-duration"
+                      },
+                      "guarantee_duration": {
+                        "type": "string",
+                        "description": "Duration string."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit item origin",
+                    "description": "Edit item origin",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "item_origin"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-item-origin"
+                      },
+                      "item_origin": {
+                        "type": "string",
+                        "description": "Item origin."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit allow ask discount",
+                    "description": "Edit allow ask discount",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "allow_ask_discount"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-allow-ask-discount"
+                      },
+                      "allow_ask_discount": {
+                        "type": "string",
+                        "description": "Allow asking for discounts."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit email type",
+                    "description": "Edit email type",
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "email_type"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-email-type"
+                      },
+                      "email_type": {
+                        "type": "string",
+                        "description": "Email type."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Edit notes",
+                    "description": "Edit notes",
+                    "type": "object",
+                    "required": [
+                      "action"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "const": "edit-notes"
+                      },
+                      "notes": {
+                        "type": "string",
+                        "description": "Notes content."
+                      },
+                      "delete_notes": {
+                        "type": "boolean",
+                        "description": "Delete notes."
+                      }
+                    },
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/BulkSelection"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "queued",
+                    "action",
+                    "items_count",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "queued": {
+                      "type": "boolean"
+                    },
+                    "action": {
+                      "type": "string"
+                    },
+                    "items_count": {
+                      "type": "integer"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ActionNotSpecified": {
+                    "summary": "Category not found.",
+                    "value": {
+                      "errors": [
+                        "No action selected"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "NoItemsSelected": {
+                    "summary": "Category not found.",
+                    "value": {
+                      "errors": [
+                        "No items selected"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -53020,7 +53705,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53123,10 +53808,48 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "PriceChangeDiff": {
+                    "summary": "No permission",
+                    "value": {
+                      "errors": [
+                        "You are trying to reduce the account price by more than half. If you are confident in this action, try again."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "CannotChangeEmailState": {
+                    "summary": "Cannot change email state",
+                    "value": {
+                      "errors": [
+                        "You cannot change the email in the current state of item, delete item to change the email."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53182,7 +53905,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53238,7 +53961,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53290,7 +54013,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53399,7 +54122,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53426,7 +54149,66 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Status"
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusModel"
+                },
+                "examples": {
+                  "SuccessfulBump": {
+                    "summary": "Successful bump",
+                    "value": {
+                      "status": "ok",
+                      "message": "The account was raised in the search",
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not enough bumps available or other errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoAvailableBumps": {
+                    "summary": "No available bumps",
+                    "value": {
+                      "errors": [
+                        "You don't have available bumps. You can purchase more bumps in the <a href=\"/account/market\">Market settings</a>."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "WaitBeforeBump": {
+                    "summary": "Need to wait before next bump",
+                    "value": {
+                      "errors": [
+                        "You need to wait {x} minutes."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -53435,7 +54217,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53484,7 +54266,29 @@
             "$ref": "#/components/responses/Status"
           },
           "400": {
-            "$ref": "#/components/responses/ErrorModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "InvalidBumpPeriod": {
+                    "summary": "Invalid bump period",
+                    "value": {
+                      "errors": [
+                        "Invalid automatic bump period (hour should be >=1.)"
+                      ],
+                      "system_info": {
+                        "visitor_id": 1,
+                        "time": 1,
+                        "log_id": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -53493,7 +54297,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53527,7 +54331,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53563,7 +54367,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53599,7 +54403,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53675,7 +54479,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53835,10 +54639,28 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/ErrorModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "CantBuyOwnItem": {
+                    "$ref": "#/components/examples/CantBuyOwnItem"
+                  },
+                  "ItemSold": {
+                    "$ref": "#/components/examples/ItemSold"
+                  },
+                  "ItemDeleted": {
+                    "$ref": "#/components/examples/ItemDeleted"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53902,10 +54724,39 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/ErrorModel"
+            "$ref": "#/components/responses/ItemNotFound"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemNotFound": {
+                    "$ref": "#/components/examples/ItemIDNotSpecified"
+                  },
+                  "ItemNotFoundInCart": {
+                    "summary": "Item not found in your cart.",
+                    "value": {
+                      "errors": [
+                        "The account not found in your cart"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "server": "web-2",
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "ItemDeleted": {
+                    "$ref": "#/components/examples/ItemDeleted"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -53955,14 +54806,35 @@
           "200": {
             "$ref": "#/components/responses/BuyItem"
           },
+          "400": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NotEnoughBalanceBuy": {
+                    "$ref": "#/components/examples/NotEnoughBalanceBuy"
+                  },
+                  "Blacklisted": {
+                    "$ref": "#/components/examples/Blacklisted"
+                  },
+                  "CheckLimit": {
+                    "$ref": "#/components/examples/CheckLimit"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/ErrorModel"
+            "$ref": "#/components/responses/CheckBuyError"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -53991,14 +54863,35 @@
           "200": {
             "$ref": "#/components/responses/CheckAccount"
           },
+          "400": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NotEnoughBalanceBuy": {
+                    "$ref": "#/components/examples/NotEnoughBalanceBuy"
+                  },
+                  "Blacklisted": {
+                    "$ref": "#/components/examples/Blacklisted"
+                  },
+                  "CheckLimit": {
+                    "$ref": "#/components/examples/CheckLimit"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/ErrorModel"
+            "$ref": "#/components/responses/CheckBuyError"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -54127,14 +55020,47 @@
               }
             }
           },
+          "400": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NotEnoughBalance": {
+                    "$ref": "#/components/examples/NotEnoughBalanceBuy"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/ErrorModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "CantBuyOwnItem": {
+                    "$ref": "#/components/examples/CantBuyOwnItem"
+                  },
+                  "ItemSold": {
+                    "$ref": "#/components/examples/ItemSold"
+                  },
+                  "ItemDeleted": {
+                    "$ref": "#/components/examples/ItemDeleted"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -54187,6 +55113,21 @@
           "200": {
             "$ref": "#/components/responses/SaveChanges"
           },
+          "400": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "Blacklisted": {
+                    "$ref": "#/components/examples/Blacklisted"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -54194,7 +55135,145 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Account purchasing"
+        ],
+        "summary": "Approve/Decline Discount Request",
+        "description": "Approve/Decline a discount request.",
+        "operationId": "Purchasing.DiscountReview",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/item_id_path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "description": "User ID."
+                  },
+                  "action": {
+                    "type": "string",
+                    "description": "Approve/Reject requested discount.",
+                    "enum": [
+                      "approve",
+                      "reject"
+                    ]
+                  },
+                  "discount_price": {
+                    "type": "number",
+                    "description": "Offer a different discount for an amount other than what the user requested. Uses your default currency."
+                  },
+                  "message": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "This message will be shown in buyer discount review notification."
+                  }
+                },
+                "required": [
+                  "user_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SaveChanges"
+          },
+          "400": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemIDNotSpecified": {
+                    "$ref": "#/components/examples/ItemIDNotSpecified"
+                  },
+                  "PriceBelowZero": {
+                    "summary": "Price below zero.",
+                    "value": {
+                      "errors": [
+                        "Please enter a number greater than zero"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "MessageCharLimitExceed": {
+                    "summary": "Message char limit.",
+                    "value": {
+                      "errors": [
+                        "Please enter a message with no more than 255 characters."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "PriceAboveInitial": {
+                    "summary": "Offered price above than initial.",
+                    "value": {
+                      "errors": [
+                        "Final account price cannot be higher than {price} ₽. Change the discount or cancel action."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
+          },
+          "404": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemIDNotFound": {
+                    "$ref": "#/components/examples/ItemIDNotFound"
+                  },
+                  "DiscountNotFound": {
+                    "$ref": "#/components/examples/DiscountNotFound"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -54225,7 +55304,7 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -54671,6 +55750,30 @@
               }
             }
           },
+          "400": {
+            "description": "Bad Request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "FieldNotSpecified": {
+                    "$ref": "#/components/examples/FieldNotSpecified"
+                  },
+                  "NoAvailableTempMails": {
+                    "$ref": "#/components/examples/NoAvailableTempMails"
+                  },
+                  "RetryRequest": {
+                    "$ref": "#/components/examples/RetryRequest"
+                  },
+                  "LoginDataRequired": {
+                    "$ref": "#/components/examples/EmailLoginDataNotSpecified"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -54692,6 +55795,21 @@
                     "system_info": {
                       "$ref": "#/components/schemas/Resp_SystemInfo"
                     }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "CategoryNotFound": {
+                    "$ref": "#/components/examples/CategoryNotFound"
                   }
                 }
               }
@@ -54859,11 +55977,72 @@
               }
             }
           },
+          "400": {
+            "description": "Bad Request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "FieldNotSpecified": {
+                    "$ref": "#/components/examples/FieldNotSpecified"
+                  },
+                  "NoAvailableTempMails": {
+                    "$ref": "#/components/examples/NoAvailableTempMails"
+                  },
+                  "LoginDataRequired": {
+                    "$ref": "#/components/examples/EmailLoginDataNotSpecified"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "NoAvailableTempMails": {
+                    "summary": "Temporary mails on the market have run out. Please try again later.",
+                    "value": {
+                      "errors": [
+                        "Temporary mails on the market have run out. Please try again later."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "CategoryNotFound": {
+                    "$ref": "#/components/examples/CategoryNotFound"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -54949,6 +56128,21 @@
           "200": {
             "$ref": "#/components/responses/BuyItem"
           },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "RetryRequest": {
+                    "$ref": "#/components/examples/RetryRequest"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -54956,7 +56150,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55020,6 +56214,60 @@
           "200": {
             "$ref": "#/components/responses/SaveChanges"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "EmailDetailsNotSpecified": {
+                    "summary": "Email details was not specified.",
+                    "value": {
+                      "errors": [
+                        "You have specified mail details, but have not specified account details. Please enter your account information."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "InvalidCredentials": {
+                    "summary": "Invalid login credentials.",
+                    "value": {
+                      "errors": [
+                        "Invalid username or password for this account"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "RetryRequest": {
+                    "$ref": "#/components/examples/RetryRequest"
+                  },
+                  "SteamIncorrectAccountInformation": {
+                    "summary": "Steam incorrect account information.",
+                    "value": {
+                      "errors": [
+                        "Incorrect account information"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -55027,7 +56275,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55067,10 +56315,28 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/ErrorModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "LetterNotFound": {
+                    "$ref": "#/components/examples/LetterNotFound"
+                  },
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "CodeNotFound": {
+                    "$ref": "#/components/examples/CodeNotFound"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55203,14 +56469,90 @@
               }
             }
           },
+          "400": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "EmailNotSpecified": {
+                    "summary": "Email not specified.",
+                    "value": {
+                      "errors": [
+                        "Please enter a value for the required field 'email'."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "PasswordNotSpecified": {
+                    "summary": "Password not specified.",
+                    "value": {
+                      "errors": [
+                        "Please enter a value for the required field 'password'."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/ErrorModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "LetterNotFound": {
+                    "$ref": "#/components/examples/LetterNotFound"
+                  },
+                  "CheckingError": {
+                    "summary": "Error when checking mail.",
+                    "value": {
+                      "errors": [
+                        "Error when checking mail. If the error is repeated and you are sure that the data from the mail is correct, write to the thread https://lolz.live/threads/6305141/."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "EmailNotSupported": {
+                    "summary": "Email not supported.",
+                    "value": {
+                      "errors": [
+                        "{email_domain} domain is not supported by Market yet"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55354,7 +56696,19 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "MafileNotFound": {
+                    "$ref": "#/components/examples/MafileNotFound"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -55388,7 +56742,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55422,7 +56776,29 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "MafileNotFound": {
+                    "summary": "Authenticator not found.",
+                    "value": {
+                      "errors": [
+                        "Authenticator is not added, deletion is not possible."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -55465,7 +56841,19 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "MafileNotFound": {
+                    "$ref": "#/components/examples/MafileNotFound"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -55513,6 +56901,31 @@
           "200": {
             "$ref": "#/components/responses/Status"
           },
+          "400": {
+            "description": "Failed to confirm SDA.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ConfirmSdaFailed": {
+                    "summary": "Failed to confirm SDA.",
+                    "value": {
+                      "errors": [
+                        "Failed to confirm SDA."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -55520,7 +56933,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55587,7 +57000,32 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemNotFound": {
+                    "$ref": "#/components/examples/ItemIDNotSpecified"
+                  },
+                  "TelegramCodeNotFound": {
+                    "summary": "Telegram login code not found",
+                    "value": {
+                      "errors": [
+                        "Telegram login code not found. Please resend code."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -55620,10 +57058,35 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "TelegramFreshAuthorization": {
+                    "summary": "Too new authorization",
+                    "value": {
+                      "errors": [
+                        "Too new authorization. Wait at least 24 hours after authorization (Telegram limitation)"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55659,7 +57122,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55713,7 +57176,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55763,6 +57226,31 @@
               }
             }
           },
+          "400": {
+            "description": "There is no reason to cancel the warranty for this account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoReasonToCancelWarranty": {
+                    "summary": "No reason to cancel the warranty.",
+                    "value": {
+                      "errors": [
+                        "There is no reason to cancel the warranty for this account"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -55770,7 +57258,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55852,7 +57340,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55914,7 +57402,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -55966,26 +57454,36 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "TheMaximumNumberOfTags": {
+                    "$ref": "#/components/examples/TagLimitExceed"
+                  }
+                }
+              }
+            }
           },
           "404": {
             "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Tag Not Found",
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "default": "The requested tag could not be found."
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
-                    }
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemNotFound": {
+                    "$ref": "#/components/examples/ItemIDNotSpecified"
+                  },
+                  "RequestedTagNotFound": {
+                    "$ref": "#/components/examples/TagNotFound"
                   }
                 }
               }
@@ -56046,19 +57544,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Tag Not Found",
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "default": "The requested tag could not be found."
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
-                    }
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemNotFound": {
+                    "$ref": "#/components/examples/ItemIDNotSpecified"
+                  },
+                  "RequestedTagNotFound": {
+                    "$ref": "#/components/examples/TagNotFound"
                   }
                 }
               }
@@ -56114,26 +57607,36 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "TheMaximumNumberOfTags": {
+                    "$ref": "#/components/examples/TagLimitExceed"
+                  }
+                }
+              }
+            }
           },
           "404": {
             "description": "Error Response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Tag Not Found",
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "default": "The requested tag could not be found."
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
-                    }
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemNotFound": {
+                    "$ref": "#/components/examples/ItemIDNotSpecified"
+                  },
+                  "RequestedTagNotFound": {
+                    "$ref": "#/components/examples/TagNotFound"
                   }
                 }
               }
@@ -56194,19 +57697,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Tag Not Found",
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "default": "The requested tag could not be found."
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
-                    }
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "ItemNotFound": {
+                    "$ref": "#/components/examples/ItemIDNotSpecified"
+                  },
+                  "RequestedTagNotFound": {
+                    "$ref": "#/components/examples/TagNotFound"
                   }
                 }
               }
@@ -56246,7 +57744,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -56280,7 +57778,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -56316,7 +57814,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -56350,7 +57848,7 @@
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -56408,10 +57906,28 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "SATooManyAttempts": {
+                    "$ref": "#/components/examples/SATooManyAttempts"
+                  },
+                  "SAInvalid": {
+                    "$ref": "#/components/examples/SAInvalid"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/ItemNotFoundModel"
+            "$ref": "#/components/responses/ItemNotFound"
           }
         },
         "security": [
@@ -56693,21 +58209,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "errors",
-                    "system_info"
-                  ],
-                  "properties": {
-                    "errors": {
-                      "title": "Errors",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "InvoiceNotFound": {
+                    "summary": "Invoice not found",
+                    "value": {
+                      "errors": [
+                        "Invoice not found"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
                       }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
                     }
                   }
                 }
@@ -56831,6 +58346,45 @@
                     },
                     "system_info": {
                       "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "FieldNotSpecified": {
+                    "$ref": "#/components/examples/FieldNotSpecified"
+                  },
+                  "MerchantRequired": {
+                    "summary": "Merchant is required",
+                    "value": {
+                      "errors": [
+                        "To issue an invoice you will need a merchant. You can create one here – {link}."
+                      ]
+                    }
+                  },
+                  "AmountOutOfRange": {
+                    "summary": "Amount is out of range",
+                    "value": {
+                      "errors": [
+                        "Please enter the invoice amount from {min} to {max}"
+                      ]
+                    }
+                  },
+                  "LifetimeOutOfRange": {
+                    "summary": "Invoice lifetime is out of range",
+                    "value": {
+                      "errors": [
+                        "Invoice expiration date must be between {min} and {max}"
+                      ]
                     }
                   }
                 }
@@ -58839,6 +60393,31 @@
           "200": {
             "$ref": "#/components/responses/BalanceExchange"
           },
+          "400": {
+            "description": "Please enter a valid wallet for withdrawal",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "InvalidWallet": {
+                    "summary": "Invalid wallet",
+                    "value": {
+                      "errors": [
+                        "Please enter a valid wallet for withdrawal"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -58940,26 +60519,81 @@
           "200": {
             "$ref": "#/components/responses/Status"
           },
+          "400": {
+            "description": "Bad Request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "FieldNotSpecified": {
+                    "$ref": "#/components/examples/FieldNotSpecified"
+                  },
+                  "NotEnoughBalance": {
+                    "$ref": "#/components/examples/NotEnoughBalance"
+                  },
+                  "HoldDurationExceedMax": {
+                    "summary": "The hold duration exceeds the allowed maximum",
+                    "value": {
+                      "errors": [
+                        "The duration of the hold cannot be more than one month."
+                      ]
+                    }
+                  },
+                  "SelfTransfer": {
+                    "summary": "Cannot send money to yourself",
+                    "value": {
+                      "errors": [
+                        "You can't send money to yourself."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "AmountBelowMinimum": {
+                    "summary": "The specified amount is less than the minimum allowed",
+                    "value": {
+                      "errors": [
+                        "The specified amount for the transfer is less than the minimum."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "description": "Error Response.",
+            "description": "Forbidden.",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Invalid Secret Answer",
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "default": "You entered invalid secret answer."
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "CommentTooLong": {
+                    "summary": "Comment too long",
+                    "value": {
+                      "errors": [
+                        "Please enter a message with no more than {count} characters."
+                      ]
+                    }
+                  },
+                  "HoldBelowMin": {
+                    "summary": "Transfer with hold is possible only for amounts greater than {amount}",
+                    "value": {
+                      "errors": [
+                        "Transfer of funds with a hold is possible only for amounts greater than {amount}"
+                      ]
                     }
                   }
                 }
@@ -58967,22 +60601,19 @@
             }
           },
           "404": {
-            "description": "Error Response.",
+            "description": "Not Found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "User Not Found",
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "default": "The requested user could not be found."
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "RequestedUserNotFound": {
+                    "summary": "Recipient not found",
+                    "value": {
+                      "errors": [
+                        "The requested user could not be found."
+                      ]
                     }
                   }
                 }
@@ -59128,11 +60759,43 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
+          "400": {
+            "description": "Bad Request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "FieldNotSpecified": {
+                    "$ref": "#/components/examples/FieldNotSpecified"
+                  }
+                }
+              }
+            }
+          },
           "403": {
             "$ref": "#/components/responses/NoPermission"
           },
           "404": {
-            "$ref": "#/components/responses/PaymentNotFound"
+            "description": "Requested payment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "PaymentNotFound": {
+                    "summary": "Requested payment not found",
+                    "value": {
+                      "errors": [
+                        "Requested payment not found"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -60292,29 +61955,37 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/NoPermission"
-          },
-          "404": {
-            "description": "Not Found",
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "errors",
-                    "system_info"
-                  ],
-                  "properties": {
-                    "errors": {
-                      "title": "Errors",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "SATooManyAttempts": {
+                    "$ref": "#/components/examples/SATooManyAttempts"
+                  },
+                  "SAInvalid": {
+                    "$ref": "#/components/examples/SAInvalid"
+                  },
+                  "CantAddSelf": {
+                    "summary": "Cannot add self as auto payment",
+                    "value": {
+                      "errors": [
+                        "You cannot set up automatic payments for yourself"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
                       }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
                     }
+                  },
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "NotEnoughBalance": {
+                    "$ref": "#/components/examples/NotEnoughBalance"
                   }
                 }
               }
@@ -60370,16 +62041,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "NotFoundError",
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "title": "Error",
-                      "type": "string",
-                      "default": "Auto payment not found"
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "AutoPaymentNotFound": {
+                    "summary": "Auto payment not found",
+                    "value": {
+                      "errors": [
+                        "Auto payment not found."
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
                     }
                   }
                 }
@@ -60827,6 +62502,85 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "IncorrectProvider": {
+                    "summary": "Incorrect payout provider specified",
+                    "value": {
+                      "errors": [
+                        "Choose correct provider for payout"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "FeePredictionImpossible": {
+                    "summary": "Impossible to calculate fee for this payout method",
+                    "value": {
+                      "errors": [
+                        "It is not possible to calculate the amount with fee for this method"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  },
+                  "FeeCalculationFailed": {
+                    "summary": "Commission calculation error or it is impossible to withdraw such amount",
+                    "value": {
+                      "errors": [
+                        "Commission calculation error or it is impossible to withdraw such amount"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "NoPermission": {
+                    "$ref": "#/components/examples/NoPermission"
+                  },
+                  "PaymentServiceNotAvailable": {
+                    "summary": "Selected payment is not available now",
+                    "value": {
+                      "errors": [
+                        "Selected payment is not available now"
+                      ],
+                      "system_info": {
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -61060,19 +62814,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Proxy Not Found",
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "default": "Requested proxy server not found."
-                      }
-                    },
-                    "system_info": {
-                      "$ref": "#/components/schemas/Resp_SystemInfo"
-                    }
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "proxyNotFound": {
+                    "$ref": "#/components/examples/ProxyNotFound"
                   }
                 }
               }
@@ -63347,6 +65093,89 @@
             "default": 0
           }
         }
+      },
+      "ErrorModel": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "system_info": {
+            "$ref": "#/components/schemas/Resp_SystemInfo"
+          }
+        }
+      },
+      "StatusModel": {
+        "title": "OkModel",
+        "required": [
+          "status",
+          "message",
+          "system_info"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string",
+            "default": "ok"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "system_info": {
+            "$ref": "#/components/schemas/Resp_SystemInfo"
+          }
+        }
+      },
+      "BulkSelection": {
+        "oneOf": [
+          {
+            "title": "BulkSelection by item_ids",
+            "required": [
+              "item_ids"
+            ],
+            "properties": {
+              "item_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 5000,
+                "items": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "description": "Array of item IDs."
+              }
+            }
+          },
+          {
+            "title": "BulkSelection by search and destination",
+            "required": [
+              "search",
+              "destination"
+            ],
+            "properties": {
+              "search": {
+                "title": "Search string",
+                "type": "string",
+                "description": "Search string."
+              },
+              "destination": {
+                "type": "string",
+                "enum": [
+                  "",
+                  "cart",
+                  "fave",
+                  "orders"
+                ],
+                "description": "Destination context."
+              }
+            }
+          }
+        ]
       }
     },
     "responses": {
@@ -64974,75 +66803,16 @@
           }
         }
       },
-      "ItemNotFoundModel": {
+      "ItemNotFound": {
         "description": "Error Response.",
         "content": {
           "application/json": {
             "schema": {
-              "title": "Item Not Found Error",
-              "type": "object",
-              "properties": {
-                "errors": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "default": "Item not found eror."
-                  }
-                },
-                "system_info": {
-                  "$ref": "#/components/schemas/Resp_SystemInfo"
-                }
-              }
+              "$ref": "#/components/schemas/ErrorModel"
             },
             "examples": {
               "ItemNotFound": {
-                "summary": "Item not found eror.",
-                "value": {
-                  "errors": [
-                    "Requested item not found"
-                  ],
-                  "system_info": {
-                    "visitor_id": 0,
-                    "time": 0,
-                    "log_id": 0
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "PaymentNotFound": {
-        "description": "Error Response.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "errors": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "system_info": {
-                  "$ref": "#/components/schemas/Resp_SystemInfo"
-                }
-              }
-            },
-            "examples": {
-              "ItemNotFound": {
-                "summary": "Item not found eror.",
-                "value": {
-                  "errors": [
-                    "Requested payment not found"
-                  ],
-                  "system_info": {
-                    "visitor_id": 0,
-                    "time": 0,
-                    "log_id": 0
-                  }
-                }
+                "$ref": "#/components/examples/ItemIDNotSpecified"
               }
             }
           }
@@ -65079,53 +66849,17 @@
         "content": {
           "application/json": {
             "schema": {
-              "title": "No Permission Error",
-              "type": "object",
-              "properties": {
-                "errors": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "default": "You do not have permission to view this page or perform this action."
-                  }
-                },
-                "system_info": {
-                  "$ref": "#/components/schemas/Resp_SystemInfo"
-                }
-              }
+              "$ref": "#/components/schemas/ErrorModel"
             },
             "examples": {
               "NoPermission": {
-                "summary": "No permission",
-                "value": {
-                  "errors": [
-                    "You do not have permission to view this page or perform this action."
-                  ],
-                  "system_info": {
-                    "visitor_id": 0,
-                    "time": 0,
-                    "log_id": 0
-                  }
-                }
-              },
-              "BumpsLimitExceed": {
-                "summary": "Bumps limit exceed",
-                "value": {
-                  "errors": [
-                    "You don't have available bumps. You can purchase more bumps in the <a href=\"/account/market\">Market settings</a>."
-                  ],
-                  "system_info": {
-                    "visitor_id": 0,
-                    "time": 0,
-                    "log_id": 0
-                  }
-                }
+                "$ref": "#/components/examples/NoPermission"
               }
             }
           }
         }
       },
-      "ErrorModel": {
+      "CheckBuyError": {
         "description": "Error Response.",
         "content": {
           "application/json": {
@@ -65147,30 +66881,13 @@
             },
             "examples": {
               "RetryRequest": {
-                "summary": "Retry request error",
-                "value": {
-                  "errors": [
-                    "retry_request"
-                  ],
-                  "system_info": {
-                    "visitor_id": 0,
-                    "time": 0,
-                    "log_id": 0
-                  }
-                }
+                "$ref": "#/components/examples/RetryRequest"
               },
-              "Sold": {
-                "summary": "Item is sold error",
-                "value": {
-                  "errors": [
-                    "This item is sold."
-                  ],
-                  "system_info": {
-                    "visitor_id": 0,
-                    "time": 0,
-                    "log_id": 0
-                  }
-                }
+              "ItemSold": {
+                "$ref": "#/components/examples/ItemSold"
+              },
+              "ItemDeleted": {
+                "$ref": "#/components/examples/ItemDeleted"
               }
             }
           }
@@ -65201,8 +66918,8 @@
         "explode": true,
         "schema": {
           "title": "Pmin",
-          "type": "integer",
-          "minimum": 1,
+          "type": "number",
+          "minimum": 0.01,
           "description": "Minimal price of account (Inclusive)."
         }
       },
@@ -65215,8 +66932,8 @@
         "explode": true,
         "schema": {
           "title": "Pmax",
-          "type": "integer",
-          "minimum": 1,
+          "type": "number",
+          "minimum": 0.01,
           "description": "Maximum price of account (Inclusive)."
         }
       },
@@ -66650,11 +68367,336 @@
       }
     },
     "examples": {
+      "ItemIDNotFound": {
+        "summary": "Item ID not found.",
+        "value": {
+          "errors": [
+            "Requested item not found"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
       "ItemIDNotSpecified": {
-        "summary": "Item ID not specified.",
+        "summary": "Field not specified.",
         "value": {
           "errors": [
             "Please enter a value for the required field 'item_id'."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "FieldNotSpecified": {
+        "summary": "Field not specified.",
+        "value": {
+          "errors": [
+            "Please enter a value for the required field 'field'."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "ItemDeleted": {
+        "summary": "Item deleted.",
+        "value": {
+          "errors": [
+            "The ad was removed by the site administration and isn't visible in the search"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "UserIDNotSpecified": {
+        "summary": "Parameter \"user_id\" is not specified.",
+        "value": {
+          "errors": [
+            "Please enter a value for the required field 'user_id'."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "DiscountNotFound": {
+        "summary": "Discount not found.",
+        "value": {
+          "errors": [
+            "Requested personal discount not found"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "BumpsLimitExceed": {
+        "summary": "Bumps limit exceed",
+        "value": {
+          "errors": [
+            "You don't have available bumps. You can purchase more bumps in the <a href=\"/account/market\">Market settings</a>."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "NoPermission": {
+        "summary": "No permission",
+        "value": {
+          "errors": [
+            "You do not have permission to view this page or perform this action."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "CantBuyOwnItem": {
+        "summary": "No permission",
+        "value": {
+          "errors": [
+            "You can't buy your own product"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "ItemSold": {
+        "summary": "Item is sold error",
+        "value": {
+          "errors": [
+            "This item is sold."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "RetryRequest": {
+        "summary": "Retry request error",
+        "value": {
+          "errors": [
+            "retry_request"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "LetterNotFound": {
+        "summary": "Letter not found.",
+        "value": {
+          "errors": [
+            "No letter was found in the {email} mail.\n1. Try sending the code again.\n2. Make sure you have linked this E-mail to your account.\n3. If you are trying to change your e-mail via the account recovery form, try to change your e-mail by logging in to your account."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "CodeNotFound": {
+        "summary": "Confirmation code not found in email.",
+        "value": {
+          "errors": [
+            "The confirmation code was not found on {email}. Try to send the code again and check that the mail is linked to this account through the account recovery form."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "CategoryNotFound": {
+        "summary": "Category not found.",
+        "value": {
+          "errors": [
+            "The requested category was not found."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "NoAvailableTempMails": {
+        "summary": "No available temp mails.",
+        "value": {
+          "errors": [
+            "No available temp mails."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "NotEnoughBalanceBuy": {
+        "summary": "Not enough balance to buy.",
+        "value": {
+          "errors": [
+            "You do not have enough money to buy this product. <b><a href=\"market/balance/deposit?amount={amount}\" target=\"_blank\">Add credit</a></b>"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "NotEnoughBalance": {
+        "summary": "Not enough balance to buy.",
+        "value": {
+          "errors": [
+            "You do not have enough money to do this."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "Blacklisted": {
+        "summary": "Seller have added you in buyers blacklist.",
+        "value": {
+          "errors": [
+            "Seller have added you in buyers blacklist."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "CheckLimit": {
+        "summary": "Daily check limit exceed",
+        "value": {
+          "errors": [
+            "You have reached your daily limit of checks. Purchase accounts to reset your limit, or try again tomorrow."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "SATooManyAttempts": {
+        "summary": "Secret answer too many attempts",
+        "value": {
+          "errors": [
+            "You have entered too many incorrect answers. Please try again later."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "SAInvalid": {
+        "summary": "Secret asnwer is invalid",
+        "value": {
+          "errors": [
+            "You entered invalid secret answer"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "EmailLoginDataNotSpecified": {
+        "summary": "Login Data Required",
+        "value": {
+          "errors": [
+            "You must provide login data from your first mail, because this is a \"personal account\""
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "MafileNotFound": {
+        "summary": "Authenticator not found.",
+        "value": {
+          "errors": [
+            "Authenticator is not added"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "TagNotFound": {
+        "summary": "The requested tag could not be found.",
+        "value": {
+          "errors": [
+            "The requested tag could not be found."
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "TagLimitExceed": {
+        "summary": "Tag limit exceed",
+        "value": {
+          "errors": [
+            "The maximum number of tags for an account is {x}"
+          ],
+          "system_info": {
+            "visitor_id": 0,
+            "time": 0,
+            "log_id": 0
+          }
+        }
+      },
+      "ProxyNotFound": {
+        "summary": "Requested proxy server not found",
+        "value": {
+          "errors": [
+            "Requested proxy server not found"
           ],
           "system_info": {
             "visitor_id": 0,
