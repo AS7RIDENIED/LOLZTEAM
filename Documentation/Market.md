@@ -139,6 +139,7 @@
     * [Check](#check)
   * [Discount](#discount)
     * [Request](#request)
+    * [Review](#review)
     * [Cancel](#cancel-1)
   * [Custom Discount](#custom-discount)
     * [Get](#get-26)
@@ -148,6 +149,7 @@
   * [Get](#get-27)
   * [Bulk](#bulk)
   * [Edit](#edit-1)
+  * [Bulk Action](#bulk-action)
   * [Delete](#delete-1)
   * [Bump](#bump)
   * [Auto Bump](#auto-bump)
@@ -2183,6 +2185,33 @@ print(response.json())
 ```
 
 
+### Review
+
+PUT https://api.lzt.market/{item_id}/discount
+
+*Approve or reject a discount request for a specified item.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+- user_id (int): User ID who requested the discount.
+- action (str): Discount action. Approve, reject or leave it as it is.
+- discount_price (float): Offer a different discount price (in your default currency).
+- message (str): Message to show in buyer's discount review notification (max 255 chars).
+
+**Example:**
+
+```python
+response = await market.managing.discount.review(
+    item_id=1234567890,
+    user_id=987654,
+    action="approve",
+    discount_price=90
+)
+print(response.json())
+```
+
+
 ### Cancel
 
 DELETE https://api.lzt.market/{item_id}/discount
@@ -2353,6 +2382,31 @@ response = market.managing.edit(
     email_type="native",
     allow_ask_discount=True,
     proxy_id=1234567890
+)
+print(response.json())
+```
+
+
+## Bulk Action
+
+POST https://api.lzt.market/items/bulk-action
+
+*Executes bulk actions on items.*
+
+**Parameters:**
+
+- action (str): Key of the action to perform.
+- item_ids (list[int]): List of item IDs to act on (max 5000).
+- search (str): Search query to select items.
+- destination (str): Destination context.
+- kwargs: Additional parameters for the selected action.
+
+**Example:**
+```python
+response = await market.managing.bulk_action(
+    action="edit-notes",
+    item_ids=[1234567890, 1234567891],
+    notes="Worth buying."
 )
 print(response.json())
 ```
@@ -2926,6 +2980,7 @@ POST https://api.lzt.market/item/fast-sell
 - guarantee (str): Guarantee.
 - title (str): Title.
 - title_en (str): Title in English.
+- title_ai (bool): Automatically generate title by AI after account upload.
 - description (str): Description.
 - information (str): Information.
 - login (str): Login.
@@ -2976,6 +3031,7 @@ POST https://api.lzt.market/item/add
 - guarantee (str): Guarantee.
 - title (str): Title.
 - title_en (str): Title in English.
+- title_ai (bool): Automatically generate title by AI after account upload.
 - description (str): Description.
 - information (str): Information.
 - tag_id (list): Tag IDs.
@@ -3432,6 +3488,7 @@ GET https://api.lzt.market/balance/transfer/fee
 **Parameters:**
 
 - amount (float): Amount you want to send in your currency.
+- currency (str): Using currency for amount.
 
 **Example:**
 

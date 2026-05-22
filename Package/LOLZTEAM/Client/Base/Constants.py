@@ -304,6 +304,11 @@ class Market:
 
 
 class Forum:
+    class ContentStates:
+        _Literal = Literal["visible", "deleted"]
+        visible = "visible"
+        deleted = "deleted"
+
     class Contests:
         class Length:
             _Literal = Literal["minutes", "hours", "days"]

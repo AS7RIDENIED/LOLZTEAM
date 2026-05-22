@@ -870,6 +870,37 @@ class Market(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
+            async def review(self, item_id: int, user_id: int, action: Literal["approve", "reject"] = NONE, discount_price: float = NONE, message: str = NONE) -> Response:
+                """
+                PUT https://api.lzt.market/{item_id}/discount
+
+                *Approve or reject a discount request for a specified item.*
+
+                **Parameters:**
+
+                - item_id (int): Item ID.
+                - user_id (int): User ID who requested the discount.
+                - action (str): Discount action. Approve, reject or leave it as it is.
+                - discount_price (float): Offer a different discount price (in your default currency).
+                - message (str): Message to show in buyer's discount review notification (max 255 chars).
+
+                **Example:**
+
+                ```python
+                response = await market.managing.discount.review(
+                    item_id=1234567890,
+                    user_id=987654,
+                    action="approve",
+                    discount_price=90
+                )
+                print(response.json())
+                ```
+                """
+                json = {"user_id": user_id, "action": action, "discount_price": discount_price, "message": message}
+                return await self.core.request("PUT", f"/{item_id}/discount", json=json)
+
+            @UNIVERSAL(batchable=True)
+            @AutoDelay.WrapperSet(0.2)
             async def cancel(self, item_id: int) -> Response:
                 """
                 DELETE https://api.lzt.market/{item_id}/discount
@@ -1135,6 +1166,70 @@ class Market(APIClient):
                 "proxy_id": proxy_id
             }
             return await self.core.request("PUT", f"/{item_id}/edit", json=json)
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def bulk_action(
+            self,
+            action: Literal[
+                "delete",
+                "close",
+                "open",
+                "bump",
+                "change-owner",
+                "stick",
+                "unstick",
+                "login-data-visibility",
+                "auto-bump",
+                "edit-title",
+                "edit-price",
+                "edit-description",
+                "edit-information",
+                "edit-proxy-id",
+                "edit-tags",
+                "edit-guarantee-duration",
+                "edit-item-origin",
+                "edit-allow-ask-discount",
+                "edit-email-type",
+                "edit-notes"
+            ],
+            item_ids: list[int] = NONE,
+            search: str = NONE,
+            destination: Literal["", "cart", "fave", "orders"] = NONE,
+            **kwargs,
+        ) -> Response:
+            """
+            POST https://api.lzt.market/items/bulk-action
+
+            *Executes bulk actions on items.*
+
+            **Parameters:**
+
+            - action (str): Key of the action to perform.
+            - item_ids (list[int]): List of item IDs to act on (max 5000).
+            - search (str): Search query to select items.
+            - destination (str): Destination context.
+            - kwargs: Additional parameters for the selected action.
+
+            **Example:**
+            ```python
+            response = await market.managing.bulk_action(
+                action="edit-notes",
+                item_ids=[1234567890, 1234567891],
+                notes="Worth buying."
+            )
+            print(response.json())
+            ```
+            """
+            json = {
+                "action": action,
+                "item_ids": item_ids,
+                "search": search,
+                "destination": destination
+            }
+            json.update(kwargs)
+
+            return await self.core.request("POST", "/items/bulk-action", json=json)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -1847,6 +1942,7 @@ class Market(APIClient):
             guarantee: Constants.Market.Guarantee._Literal = NONE,
             title: str = NONE,
             title_en: str = NONE,
+            title_ai: bool = NONE,
             description: str = NONE,
             information: str = NONE,
             login: str = NONE,
@@ -1875,6 +1971,7 @@ class Market(APIClient):
             - guarantee (str): Guarantee.
             - title (str): Title.
             - title_en (str): Title in English.
+            - title_ai (bool): Automatically generate title by AI after account upload.
             - description (str): Description.
             - information (str): Information.
             - login (str): Login.
@@ -1918,6 +2015,7 @@ class Market(APIClient):
                 # Item
                 "title": title,
                 "title_en": title_en,
+                "auto_generate_title": title_ai,
                 "description": description,
                 "information": information,
                 "login": login,
@@ -1947,6 +2045,7 @@ class Market(APIClient):
             guarantee: Constants.Market.Guarantee._Literal = NONE,
             title: str = NONE,
             title_en: str = NONE,
+            title_ai: bool = NONE,
             description: str = NONE,
             information: str = NONE,
             tag_id: list = NONE,
@@ -1973,6 +2072,7 @@ class Market(APIClient):
             - guarantee (str): Guarantee.
             - title (str): Title.
             - title_en (str): Title in English.
+            - title_ai (bool): Automatically generate title by AI after account upload.
             - description (str): Description.
             - information (str): Information.
             - tag_id (list): Tag IDs.
@@ -2009,6 +2109,7 @@ class Market(APIClient):
                 # Item
                 "title": title,
                 "title_en": title_en,
+                "auto_generate_title": title_ai,
                 "description": description,
                 "information": information,
                 "tag_id": tag_id,
@@ -2692,7 +2793,7 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def fee(self, amount: float) -> Response:
+        async def fee(self, amount: float, currency: Constants.Market.Currency._Literal) -> Response:
             """
             GET https://api.lzt.market/balance/transfer/fee
 
@@ -2701,6 +2802,7 @@ class Market(APIClient):
             **Parameters:**
 
             - amount (float): Amount you want to send in your currency.
+            - currency (str): Using currency for amount.
 
             **Example:**
 
@@ -2710,7 +2812,8 @@ class Market(APIClient):
             ```
             """
             params = {
-                "amount": amount
+                "amount": amount,
+                "curency": currency
             }
             return await self.core.request("GET", "/balance/transfer/fee", params=params)
 

@@ -1,6 +1,6 @@
 [project]
 name = "lolzteam"
-version = "2.1.2"
+version = "2.1.3"
 description = "Python API Client for https://lolz.live/ & https://lzt.market/ & https://antipublic.one/"
 authors = [
     {name = "AS7RID", email = "lolzteam@furrygaysex.anonaddy.com"}

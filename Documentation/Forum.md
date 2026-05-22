@@ -42,9 +42,9 @@
     * [Vote](#vote)
   * [List Unread](#list-unread)
   * [List Recent](#list-recent)
-  * [Literal](#literal)
   * [List](#list-4)
   * [Get](#get-5)
+  * [Share](#share)
   * [Create](#create)
   * [Edit](#edit-1)
   * [Delete](#delete)
@@ -770,28 +770,6 @@ print(response.json())
 ```
 
 
-## Literal
-Special typing form to define literal types (a.k.a. value types).
-
-This form can be used to indicate to type checkers that the corresponding
-variable or function parameter has a value equivalent to the provided
-literal (or one of several literals)::
-
-    def validate_simple(data: Any) -> Literal[True]:  # always returns True
-        ...
-
-    MODE = Literal['r', 'rb', 'w', 'wb']
-    def open_helper(file: str, mode: MODE) -> str:
-        ...
-
-    open_helper('/some/path', 'r')  # Passes type check
-    open_helper('/other/path', 'typo')  # Error in type checker
-
-Literal[...] cannot be subclassed. At runtime, an arbitrary value
-is allowed as type argument to Literal[...], but type checkers may
-impose restrictions.
-
-
 ## List
 
 GET https://prod-api.lolz.live/threads
@@ -834,6 +812,24 @@ GET https://prod-api.lolz.live/threads/{thread_id}
 
 ```python
 response = forum.threads.get(thread_id=5523020)
+print(response.json())
+```
+
+
+## Share
+
+GET https://prod-api.lolz.live/conversations/share-content
+
+*Get a shareable thread content (hides).*
+
+**Parameters:**
+
+- thread_id (int): Id of thread.
+
+**Example:**
+
+```python
+response = forum.threads.share(thread_id=5523020)
 print(response.json())
 ```
 
@@ -1150,6 +1146,7 @@ PUT https://prod-api.lolz.live/posts/comments
 
 - comment_id (int): Comment ID.
 - comment_body (str): Comment body.
+- state (str): State of the comment.
 
 **Example:**
 
@@ -1284,6 +1281,7 @@ PUT https://prod-api.lolz.live/posts/{post_id}
 
 - post_id (int): Post ID.
 - post_body (str): Post body.
+- state (str): State of the post.
 
 **Example:**
 
@@ -1604,6 +1602,7 @@ PUT https://prod-api.lolz.live/profile-posts/comments
 
 - comment_id (int): Id of profile post comment.
 - comment_body (str): New content for the profile post comment.
+- state (str): Profile post comment state.
 
 **Example:**
 
@@ -1737,6 +1736,7 @@ PUT https://prod-api.lolz.live/profile-posts/{post_id}
 - post_id (int): Profile post ID.
 - post_body (str): Post body.
 - disable_comments (bool): Disable comments.
+- state (str): Profile post state.
 
 **Example:**
 

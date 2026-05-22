@@ -895,8 +895,6 @@ class Forum(APIClient):
             params = {"days": days, "forum_id": forum_id, "limit": limit, "data_limit": data_limit}
             return await self.core.request("GET", "/threads/recent", params=params)
 
-        from typing import Literal
-
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
         async def list(
@@ -994,6 +992,30 @@ class Forum(APIClient):
             ```
             """
             return await self.core.request("GET", f"/threads/{thread_id}")
+
+        @UNIVERSAL(batchable=True)
+        @AutoDelay.WrapperSet(0.2)
+        async def share(self, thread_id: int) -> Response:
+            """
+            GET https://prod-api.lolz.live/conversations/share-content
+
+            *Get a shareable thread content (hides).*
+
+            **Parameters:**
+
+            - thread_id (int): Id of thread.
+
+            **Example:**
+
+            ```python
+            response = forum.threads.share(thread_id=5523020)
+            print(response.json())
+            ```
+            """
+            params = {
+                "thread_id": thread_id
+            }
+            return await self.core.request("GET", "/conversations/share-content", params=params)
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
@@ -1417,7 +1439,7 @@ class Forum(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
-            async def edit(self, comment_id: int, comment_body: str) -> Response:
+            async def edit(self, comment_id: int, comment_body: str, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                 """
                 PUT https://prod-api.lolz.live/posts/comments
 
@@ -1427,6 +1449,7 @@ class Forum(APIClient):
 
                 - comment_id (int): Comment ID.
                 - comment_body (str): Comment body.
+                - state (str): State of the comment.
 
                 **Example:**
 
@@ -1435,7 +1458,7 @@ class Forum(APIClient):
                 print(response.json())
                 ```
                 """
-                json = {"comment_body": comment_body, "post_comment_id": comment_id}
+                json = {"comment_body": comment_body, "post_comment_id": comment_id, "message_state": state}
                 return await self.core.request("PUT", "/posts/comments", json=json)
 
             @UNIVERSAL(batchable=True)
@@ -1582,7 +1605,7 @@ class Forum(APIClient):
 
         @UNIVERSAL(batchable=True)
         @AutoDelay.WrapperSet(0.2)
-        async def edit(self, post_id: int, post_body: str = NONE) -> Response:
+        async def edit(self, post_id: int, post_body: str = NONE, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
             """
             PUT https://prod-api.lolz.live/posts/{post_id}
 
@@ -1592,6 +1615,7 @@ class Forum(APIClient):
 
             - post_id (int): Post ID.
             - post_body (str): Post body.
+            - state (str): State of the post.
 
             **Example:**
 
@@ -1600,7 +1624,7 @@ class Forum(APIClient):
             print(response.json())
             ```
             """
-            json = {"post_body": post_body}
+            json = {"post_body": post_body, "message_state": state}
             return await self.core.request("PUT", f"/posts/{post_id}", json=json)
 
         @UNIVERSAL(batchable=True)
@@ -1977,7 +2001,7 @@ class Forum(APIClient):
 
                 @UNIVERSAL(batchable=True)
                 @AutoDelay.WrapperSet(0.2)
-                async def edit(self, comment_id: int, comment_body: str) -> Response:
+                async def edit(self, comment_id: int, comment_body: str, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                     """
                     PUT https://prod-api.lolz.live/profile-posts/comments
 
@@ -1987,6 +2011,7 @@ class Forum(APIClient):
 
                     - comment_id (int): Id of profile post comment.
                     - comment_body (str): New content for the profile post comment.
+                    - state (str): Profile post comment state.
 
                     **Example:**
 
@@ -1995,7 +2020,7 @@ class Forum(APIClient):
                     print(response.json())
                     ```
                     """
-                    json = {"comment_body": comment_body, "comment_id": comment_id}
+                    json = {"comment_body": comment_body, "comment_id": comment_id, "message_state": state}
                     return await self.core.request("PUT", "/profile-posts/comments", json=json)
 
                 @UNIVERSAL(batchable=True)
@@ -2150,7 +2175,7 @@ class Forum(APIClient):
 
             @UNIVERSAL(batchable=True)
             @AutoDelay.WrapperSet(0.2)
-            async def edit(self, post_id: int, post_body: str = NONE, disable_comments: bool = NONE) -> Response:
+            async def edit(self, post_id: int, post_body: str = NONE, disable_comments: bool = NONE, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                 """
                 PUT https://prod-api.lolz.live/profile-posts/{post_id}
 
@@ -2161,6 +2186,7 @@ class Forum(APIClient):
                 - post_id (int): Profile post ID.
                 - post_body (str): Post body.
                 - disable_comments (bool): Disable comments.
+                - state (str): Profile post state.
 
                 **Example:**
 
@@ -2171,7 +2197,8 @@ class Forum(APIClient):
                 """
                 json = {
                     "post_body": post_body,
-                    "disable_comments": disable_comments
+                    "disable_comments": disable_comments,
+                    "message_state": state
                 }
                 return await self.core.request("PUT", f"/profile-posts/{post_id}", json=json)
 
