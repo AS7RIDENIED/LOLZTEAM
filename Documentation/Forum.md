@@ -55,7 +55,6 @@
   * [Followed](#followed-1)
   * [Follow](#follow-1)
   * [Unfollow](#unfollow-1)
-  * [Navigation](#navigation)
 * [Posts](#posts)
   * [Comments](#comments)
     * [List](#list-5)
@@ -185,7 +184,6 @@
 * [Forms](#forms)
   * [List](#list-15)
   * [Create](#create-8)
-* [Navigation](#navigation-1)
 * [Css](#css)
 * [Batch Requests](#batch-requests)
   * [Batch](#batch)
@@ -203,7 +201,6 @@ LOLZTEAM Forum API Client
 - token (str): Your token.
   > You can get it [there](https://lolz.live/account/api)
 - language (Literal["ru", "en"]): Language of the API responses.
-- delay_min (float): Minimal delay between requests.
   > This parameter sets a strict minimal delay between your requests.
 - proxy (str): Proxy string.
   > protocol://ip:port or protocol://login:password@ip:port (socks5://login:password@192.168.1.1:8080 or http://login:password@192.168.1.1:8080)
@@ -240,7 +237,6 @@ asyncio.run(async_example())
 forum.settings.token = "token"                                        # Change token
 forum.settings.language = "en"                                        # Change language
 forum.settings.proxy = "http://login:password@192.168.1.1:8080"       # Change proxy
-forum.settings.delay.min = 1                                          # Change minimal delay
 forum.settings.delay.disable()                                        # Disable delay
 forum.settings.logger.disable()                                       # <- Stop logging
 ```
@@ -1070,24 +1066,6 @@ DELETE https://prod-api.lolz.live/threads/{thread_id}/followers
 
 ```python
 response = forum.threads.unfollow(thread_id=5523020)
-print(response.json())
-```
-
-
-## Navigation
-
-GET https://prod-api.lolz.live/threads/{thread_id}/navigation
-
-*Get navigation of a thread.*
-
-**Parameters:**
-
-- thread_id (int): Thread ID.
-
-**Example:**
-
-```python
-response = forum.threads.navigation(thread_id=5523020)
 print(response.json())
 ```
 
@@ -3309,24 +3287,6 @@ response = forum.forms.create(form_id=1, fields={
     "18": "rub",
     "14": "Note to the exchange"
 })
-print(response.json())
-```
-
-
-# Navigation
-
-GET https://prod-api.lolz.live/navigation
-
-*Get navigation.*
-
-**Parameters:**
-
-- parent (int): Parent ID.
-
-**Example:**
-
-```python
-response = forum.navigation()
 print(response.json())
 ```
 

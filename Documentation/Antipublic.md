@@ -48,7 +48,6 @@ token = "your_antipublic_key"
 antipublic = Antipublic(token=token)
 
 antipublic.settings.logger.enable()                                    # -> Start logging
-antipublic.settings.delay.enable()                                     # Enable delay. Idk why you would ever need to enable delay for antipublic, but there it is
 response = antipublic.info.lines()                                     # Sync request
 response = antipublic.request("GET", "/countLines")                    # Custom sync request
 
@@ -60,8 +59,6 @@ asyncio.run(async_example())
 
 antipublic.settings.token = "token"                                    # Change token
 antipublic.settings.proxy = "http://login:password@192.168.1.1:8080"   # Change proxy
-antipublic.settings.delay.min = 2410024                                # Change minimal delay
-antipublic.settings.delay.disable()                                    # Disable delay
 antipublic.settings.logger.disable()                                   # <- Stop logging
 ```
 

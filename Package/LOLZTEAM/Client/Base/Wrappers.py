@@ -5,10 +5,10 @@ Some useful wrappers
 from concurrent.futures import ThreadPoolExecutor
 from typing import Callable, TypeVar
 from functools import wraps
+import curl_cffi
 import asyncio
 import random
-import httpx
-import anyio
+
 
 T = TypeVar('T', bound=Callable)
 
@@ -22,21 +22,20 @@ def RETRY(count: int = 10):
         async def wrapper(*args, **kwargs):
             for _ in range(count):
                 try:
-                    return await func(*args, **kwargs)
-                except (httpx.ConnectTimeout,
-                        httpx.ReadTimeout,
-                        httpx.NetworkError,
-                        httpx.RemoteProtocolError,
-                        anyio.EndOfStream):
+                    resp = await func(*args, **kwargs)
+                    if 500 <= resp.status_code < 600:
+                        continue
+                    return resp
+                except (curl_cffi.exceptions.RequestException):
                     # TODO: Add error logging here somehow -> e.__class__.__name__
-                    await asyncio.sleep(0.5)  # Not changing to prevent requests spam
+                    await asyncio.sleep(0.5)
                     continue
             return await func(*args, **kwargs)
         return wrapper
     return decorator
 
 
-def UNIVERSAL(batchable=False) -> httpx.Response:
+def UNIVERSAL(batchable=False) -> curl_cffi.Response:
     """
     Universal wrapper to run async function in sync context and create batch jobs
     """
@@ -128,18 +127,11 @@ def UNIVERSAL(batchable=False) -> httpx.Response:
                     return None
 
                 def wrapper(*args, **kwargs):
-                    async def run():
-                        return await self.func(instance, *args, **kwargs)
                     try:
-                        loop = asyncio.get_event_loop()
+                        asyncio.get_running_loop()
+                        return self.func(instance, *args, **kwargs)
                     except RuntimeError:
-                        loop = asyncio.new_event_loop()
-                        asyncio.set_event_loop(loop)
-
-                    if loop.is_running():
-                        return run()
-                    else:
-                        return loop.run_until_complete(run())
+                        return asyncio.run(self.func(instance, *args, **kwargs))
 
                 if self.batchable:
                     if self.func.__qualname__ == "APIClient.request":

@@ -1,13 +1,13 @@
 """
 API Client core
 """
+import re
 import time
 import json
 import base64
 import logging
 import asyncio
 
-from functools import wraps
 from typing import Union, Literal
 from dataclasses import dataclass
 from binascii import Error as binasciiError
@@ -23,13 +23,13 @@ class APIClient:
     Base API Client class
     """
 
-    def __init__(self, base_url: str, token: str, language: str = None, delay_min: float = 0, logger_name: str = "APIClient", proxy: str = None, timeout: float = 90, verify: bool = True):
+    def __init__(self, base_url: str, token: str, language: str = None, logger_name: str = "APIClient", proxy: str = None, timeout: float = 90, verify: bool = True):
         self.core = self
         from ..__init__ import Antipublic  # Circular import issue
         self.settings = Settings(core=self)
         self.settings._isAntipublic = isinstance(self, Antipublic)
-        self.settings.async_client = AsyncSession(timeout=timeout, verify=verify)  # TODO: Maybe replace my autoretry with this one from curl_cffi
-        self.settings.delay = AutoDelay(delay_min=delay_min)
+        self.settings.async_client = AsyncSession(timeout=timeout, verify=verify)
+        self.settings.delay = AutoDelay()
         self.settings.logger = Logger(core=self, logger_name=logger_name)
         self.settings.current_loop = asyncio.get_event_loop()
         self.settings.token = token
@@ -40,7 +40,7 @@ class APIClient:
         try:
             self.settings.version = version("LOLZTEAM")
         except PackageNotFoundError:
-            self.settings.version = "2.1.0"
+            self.settings.version = "2.2.x"
         if self.settings._isAntipublic:
             self.settings.async_client.headers.update({"x-antipublic-version": f"{self.settings.version} (API Client) pypi.org/project/LOLZTEAM/"})
 
@@ -49,16 +49,12 @@ class APIClient:
     async def __get_async_client(self: "APIClient") -> AsyncSession:
         current_loop = asyncio.get_event_loop()
         if current_loop != self.settings.current_loop:
-            try:
-                await self.settings.async_client.close()
-            except RuntimeError:
-                pass
             client_params = {
                 "headers": self.settings.async_client.headers,
                 "timeout": self.settings.async_client.timeout,
                 "base_url": self.settings.async_client.base_url,
                 "verify": self.settings.async_client.verify,  # TODO: Add verify as changeable parameter to settings?
-                "proxy": self.settings.proxy
+                "proxies": self.settings.async_client.proxies
             }
             self.settings.async_client = AsyncSession(**client_params)
             self.settings.proxy = self.settings.proxy
@@ -71,14 +67,12 @@ class APIClient:
         self,
         method: str,
         endpoint: str,
-        delay: float = None,
         **kwargs
     ) -> Response:
         """
         Send request
 
         **Parameters:**
-        - `delay`: Delay in seconds.
         - `method`: Request method. Example: `GET`, `POST`, `PUT`, `DELETE`
         - `endpoint`: Request endpoint. Example: `/users/items/`
         - `**kwargs`: Request parameters.
@@ -90,24 +84,25 @@ class APIClient:
         print(response.json())
         ```
         """
-        if delay:
-            self.settings.delay._delay = delay  # Set delay
-        await self.settings.delay.asleep()  # Sleep if needed
+        if not (endpoint.startswith('/') or endpoint.startswith(f"{self.settings.base_url}/")):  # Check for valid endpoint to prevent token leaks and other shit
+            raise BAD_ENDPOINT(f"You can't send request to \"{endpoint}\" because it's domain is different from \"{self.settings.base_url}\"")
+        parsed_url = urlparse(endpoint)
+        endpoint = parsed_url.path or "/"
+        bucket = None
+        for _bucket in self.settings.delay.buckets._list:
+            if method.upper() in _bucket.methods and re.search(_bucket.url_pattern, endpoint):
+                bucket = _bucket
+                break
+        await self.settings.delay.asleep(bucket)  # Sleep if needed
 
         if not kwargs.get("params"):
             kwargs["params"] = {}
-        if endpoint.startswith(self.settings.base_url.replace("prod-api.", "").replace("api.", "")):  # Remove baseurl from endpoint path
-            endpoint = endpoint.replace(self.settings.base_url.replace("prod-api.", "").replace("api.", ""), "")
-        if not (endpoint.startswith('/') or endpoint.startswith(f"{self.settings.base_url}/")):  # Check for valid endpoint to prevent token leaks and other shit
-            raise BAD_ENDPOINT(f"You can't send request to \"{endpoint}\" because it's domain is different from \"{self.settings.base_url}\"")
-
         kwargs["params"] = _NONE.TrimNONE(kwargs["params"])
         if kwargs.get("data"):
             kwargs["data"] = _NONE.TrimNONE(kwargs["data"])
         if kwargs.get("json"):
             kwargs["json"] = _NONE.TrimNONE(kwargs["json"])
 
-        parsed_url = urlparse(endpoint)
         if parsed_url.query:  # Fix params collision
             parsed_params = {
                 k: v[0] if len(v) == 1 and not k.endswith('[]') else v
@@ -159,8 +154,68 @@ class APIClient:
 
         response = await client.request(method, endpoint, **kwargs)
         self.settings.logger.info(f"Response: {method} {endpoint} -> {response.status_code}:\n{response.text}")
-        self.settings.delay._last_request_time = asyncio.get_event_loop().time()
+        async with bucket.lock:
+            new_rl = response.json().get("system_info", {}).get("rate_limit", {}).get("remaining")
+            bucket.requests_remaining = new_rl if new_rl is not None else bucket.requests_remaining
+        if endpoint == "/batch":
+            jobs = kwargs.get("json", [])
+            for job in jobs[:10]:
+                job_endpoint = job.get("uri")
+                job_method = job.get("method", "GET")
+                if not job_endpoint:
+                    continue
+
+                parsed_job_url = urlparse(job_endpoint)
+                job_path = parsed_job_url.path if parsed_job_url.path else job_endpoint
+                job_bucket = None
+                for bucket in self.settings.delay.buckets._list:
+                    if re.search(bucket.url_pattern, job_path) and job_method in bucket.methods:
+                        job_bucket = bucket
+                        break
+                async with job_bucket.lock:
+                    if job_bucket and job_bucket.requests_remaining > 0:
+                        bucket.requests_remaining -= 1
         return response
+
+
+class Buckets:
+    @dataclass
+    class Bucket:
+        requests_limit: int
+        requests_remaining: int
+        reset_time: int
+        name: Union[str, None]
+        url_pattern: Union[str, None] = None
+        methods: tuple[str, ...] = ("GET", "POST", "PUT", "DELETE")
+        lock: asyncio.Lock = None
+
+    _first_reset_time = ((time.time() // 60) + 1) * 60
+
+    # Market
+    LETTERS = Bucket(requests_limit=5, requests_remaining=5, reset_time=_first_reset_time, name="letters", url_pattern=r"/letters2?$", methods=("GET"), lock=asyncio.Lock())
+    EDIT = Bucket(requests_limit=1000, requests_remaining=1000, reset_time=_first_reset_time, name=None, url_pattern=r"/edit$", methods=("PUT"), lock=asyncio.Lock())
+    CONFIRM_BUY = Bucket(requests_limit=1000, requests_remaining=1000, reset_time=_first_reset_time, name=None, url_pattern=r"/confirm-buy$", methods=("POST"), lock=asyncio.Lock())
+    CHECK_ACCOUNT = Bucket(requests_limit=300, requests_remaining=300, reset_time=_first_reset_time, name="check-account", url_pattern=r"/(?:fast-sell|fast-buy|check-account|goods-check)$", methods=("POST"), lock=asyncio.Lock())
+    SEARCH = Bucket(requests_limit=120, requests_remaining=120, reset_time=_first_reset_time, name="search", url_pattern=r"^/(?:steam|fortnite|mihoyo|riot|telegram|supercell|ea|world-of-tanks|wot-blitz|gifts|epicgames|escape-from-tarkov|socialclub|uplay|discord|tiktok|instagram|battlenet|llm|vpn|roblox|warface|minecraft|hytale)(?:/(?:params|games))?$|^/user/items$|^/[0-9]+$", methods=("GET"), lock=asyncio.Lock())
+    DELETE = Bucket(requests_limit=300, requests_remaining=300, reset_time=_first_reset_time, name=None, url_pattern=r"/delete$", methods=("DELETE"), lock=asyncio.Lock())
+    EMAIL_CODE = Bucket(requests_limit=300, requests_remaining=300, reset_time=_first_reset_time, name=None, url_pattern=r"/email-code$", methods=("POST"), lock=asyncio.Lock())
+
+    # Shared Forum/market
+    BATCH = Bucket(requests_limit=20, requests_remaining=20, reset_time=_first_reset_time, name="batch", url_pattern=r"^/batch$", methods=("POST",), lock=asyncio.Lock())
+    GET = Bucket(requests_limit=300, requests_remaining=300, reset_time=_first_reset_time, name=None, url_pattern=r".*", methods=("GET",), lock=asyncio.Lock())
+    NONGET = Bucket(requests_limit=30, requests_remaining=30, reset_time=_first_reset_time, name=None, url_pattern=r".*", methods=("POST", "PUT", "DELETE"), lock=asyncio.Lock())
+    _list = [
+        LETTERS,
+        EDIT,
+        CONFIRM_BUY,
+        CHECK_ACCOUNT,
+        SEARCH,
+        DELETE,
+        EMAIL_CODE,
+        BATCH,
+        GET,
+        NONGET,
+    ]
 
 
 class AutoDelay:
@@ -168,72 +223,28 @@ class AutoDelay:
     Auto delay
     """
 
-    def __init__(self, delay_min: float = 0, enabled: bool = True):
+    def __init__(self, enabled: bool = True):
         self._enabled = enabled
-        self._delay = 0.2
-        self._delay_min = delay_min
-        self._last_request_time = 0
+        self.buckets = Buckets
+        self.synced = False
 
-    @UNIVERSAL()
-    async def asleep(self):
+    async def asleep(self, bucket: Buckets.Bucket):
         """
         Sleep if delay is needed
         """
         if not self._enabled:
             return
-        loop = asyncio.get_event_loop()
-        current_time = loop.time()
-        time_passed = current_time - self._last_request_time
-        if time_passed >= self._delay:
-            return
-        calculated_delay = min(self._delay - time_passed, self._delay)
-        if calculated_delay < self._delay_min:
-            calculated_delay = self._delay_min
-        await asyncio.sleep(calculated_delay)
-
-    @staticmethod
-    def WrapperSet(seconds: float):
-        """
-        Decorator for setting delay on method
-        """
-        # TODO: Maybe delete this. There is only one method in the entire API that has a different delay.
-        def decorator(func):
-            @wraps(func)
-            async def wrapper(self, *args, **kwargs):
-                self.core.settings.delay._delay = seconds
-                return await func(self, *args, **kwargs)
-            return wrapper
-        return decorator
-
-    def get(self) -> float:
-        """
-        Get delay
-        """
-        return self._delay
-
-    def set(self, delay: float) -> None:
-        """
-        Set custom delay
-
-        P.s This delay will be overwrited when you run any function from API Client.
-        """
-        self._delay = delay
-
-    @property
-    def min(self) -> float:
-        """
-        Get minimal delay
-        """
-        return self._delay_min
-
-    @min.setter
-    def min(self, delay: float):
-        """
-        Set minimal delay
-
-        P.s This delay will NOT be overwrited when you run any function from API Client BUT that's a minimal delay, so performance can be downgraded.
-        """
-        self._delay_min = delay
+        current_time = time.time()
+        
+        if bucket.requests_remaining == 0:
+            async with bucket.lock:
+                await asyncio.sleep(bucket.reset_time - current_time)
+                bucket.reset_time = ((current_time // 60) + 2) * 60
+        elif current_time >= bucket.reset_time:
+            async with bucket.lock:
+                bucket.reset_time = ((current_time // 60) + 1) * 60
+                bucket.requests_remaining = bucket.requests_limit
+        return
 
     def enable(self) -> None:
         self._enabled = True
@@ -244,6 +255,17 @@ class AutoDelay:
     @property
     def enabled(self) -> bool:
         return self._enabled
+
+    def sync(self, client: Union["APIClient", "AutoDelay"]):
+        if isinstance(client, AutoDelay):
+            autodelay = client
+        elif isinstance(client, APIClient):
+            autodelay = client.settings.delay
+        else:
+            raise TypeError("Invalid client type: expected APIClient or AutoDelay")
+        autodelay.buckets = self.buckets
+        if not self.synced:
+            self.synced = True
 
 
 class Logger:

@@ -16,7 +16,7 @@ class Antipublic(APIClient):
     ## 💛Made with love💛
     """
 
-    def __init__(self, token: str, delay_min: float = 0, timeout: float = 90, proxy: str = None):
+    def __init__(self, token: str, timeout: float = 90, proxy: str = None):
         """
         Antipublic API Client
 
@@ -41,7 +41,6 @@ class Antipublic(APIClient):
         antipublic = Antipublic(token=token)
 
         antipublic.settings.logger.enable()                                    # -> Start logging
-        antipublic.settings.delay.enable()                                     # Enable delay. Idk why you would ever need to enable delay for antipublic, but there it is
         response = antipublic.info.lines()                                     # Sync request
         response = antipublic.request("GET", "/countLines")                    # Custom sync request
 
@@ -53,8 +52,6 @@ class Antipublic(APIClient):
 
         antipublic.settings.token = "token"                                    # Change token
         antipublic.settings.proxy = "http://login:password@192.168.1.1:8080"   # Change proxy
-        antipublic.settings.delay.min = 2410024                                # Change minimal delay
-        antipublic.settings.delay.disable()                                    # Disable delay
         antipublic.settings.logger.disable()                                   # <- Stop logging
         ```
         """
@@ -62,12 +59,10 @@ class Antipublic(APIClient):
             base_url="https://antipublic.one/api/v2",
             token=token,
             language=None,
-            delay_min=delay_min,
             logger_name=Antipublic.__qualname__,
             proxy=proxy,
             timeout=timeout
         )
-        self.settings.delay.set(0)
         self.settings.delay.disable()  # No delay for antipublic hmm
         self.core = self
         self.info = self.__Info(core=self)

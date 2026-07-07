@@ -146,11 +146,17 @@
     * [Create](#create)
     * [Edit](#edit)
     * [Delete](#delete)
+  * [Tags](#tags)
+    * [List](#list-2)
+    * [Create](#create-1)
+    * [Edit](#edit-1)
+    * [Delete](#delete-1)
+    * [Reorder](#reorder)
   * [Get](#get-27)
   * [Bulk](#bulk)
-  * [Edit](#edit-1)
+  * [Edit](#edit-2)
   * [Bulk Action](#bulk-action)
-  * [Delete](#delete-1)
+  * [Delete](#delete-2)
   * [Bump](#bump)
   * [Auto Bump](#auto-bump)
   * [Open](#open)
@@ -176,7 +182,7 @@
   * [Cart](#cart)
     * [Get](#get-28)
     * [Add](#add)
-    * [Delete](#delete-2)
+    * [Delete](#delete-3)
   * [Fast](#fast)
   * [Check](#check-1)
   * [Buy](#buy)
@@ -187,21 +193,21 @@
   * [External](#external)
 * [Profile](#profile)
   * [Get](#get-29)
-  * [Edit](#edit-2)
+  * [Edit](#edit-3)
   * [Claims](#claims)
   * [Create Claim](#create-claim)
 * [Payments](#payments)
   * [Auto](#auto)
-    * [List](#list-2)
-    * [Create](#create-1)
-    * [Delete](#delete-3)
-  * [Invoice](#invoice)
     * [List](#list-3)
-    * [Get](#get-30)
     * [Create](#create-2)
+    * [Delete](#delete-4)
+  * [Invoice](#invoice)
+    * [List](#list-4)
+    * [Get](#get-30)
+    * [Create](#create-3)
   * [Payout](#payout)
     * [Services](#services)
-    * [Create](#create-3)
+    * [Create](#create-4)
   * [Balance](#balance)
     * [Get](#get-31)
     * [Exchange](#exchange)
@@ -214,10 +220,10 @@
 * [Proxy](#proxy)
   * [Get](#get-32)
   * [Add](#add-2)
-  * [Delete](#delete-4)
+  * [Delete](#delete-5)
 * [Imap](#imap)
   * [Add](#add-3)
-  * [Delete](#delete-5)
+  * [Delete](#delete-6)
 * [Batch Requests](#batch-requests)
   * [Batch](#batch)
   * [Executor](#executor)
@@ -270,7 +276,6 @@ asyncio.run(async_example())
 market.settings.token = "token"                                        # Change token
 market.settings.language = "en"                                        # Change language
 market.settings.proxy = "http://login:password@192.168.1.1:8080"       # Change proxy
-market.settings.delay.min = 1                                          # Change minimal delay
 market.settings.delay.disable()                                        # Disable delay
 market.settings.logger.disable()                                       # <- Stop logging
 ```
@@ -2308,6 +2313,99 @@ print(response.json())
 ```
 
 
+## Tags
+
+### List
+
+GET https://api.lzt.market/user/tags
+
+*Returns a list of your tags.*
+
+**Example:**
+
+```python
+response = await market.managing.tags.list()
+print(response.json())
+```
+
+
+### Create
+
+POST https://api.lzt.market/user/tags
+
+*Creates a tag.*
+
+**Parameters:**
+
+- title (str): Title of the tag (max 16 characters).
+- bc (str): Background color (e.g., "#RGB", "#RRGGBB", "rgb(R,G,B)").
+
+**Example:**
+
+```python
+response = await market.managing.tags.create(title="source1", bc="#2bad72")
+print(response.json())
+```
+
+
+### Edit
+
+PUT https://api.lzt.market/user/tags
+
+*Updates a specified tag.*
+
+**Parameters:**
+
+- tag_id (int): Tag ID.
+- title (str): Title of the tag (max 16 characters).
+- bc (str): Background color.
+
+**Example:**
+
+```python
+response = await market.managing.tags.edit(tag_id=123, title="Source2", bc="#2bad72")
+print(response.json())
+```
+
+
+### Delete
+
+DELETE https://api.lzt.market/user/tags
+
+*Deletes a tag.*
+
+**Parameters:**
+
+- tag_id (int): Tag ID.
+
+**Example:**
+
+```python
+response = await market.managing.tags.delete(tag_id=123)
+print(response.json())
+```
+
+
+### Reorder
+
+POST https://api.lzt.market/user/tags/order
+
+*Reorder your tags.*
+
+> ❗️ Tags missing from `tag_order` will be deleted (even from the items).
+
+**Parameters:**
+
+- tag_order (list[int]): Array of tag IDs in the desired order.
+
+**Example:**
+
+```python
+response = await market.managing.tags.reorder(tag_order=[1, 2, 3])
+print(response.json())
+```
+
+
 ## Get
 
 GET https://api.lzt.market/{item_id}
@@ -2541,9 +2639,9 @@ print(response.json())
 
 ## Note
 
-POST https://api.lzt.market/{item_id}/note-save
+PUT/DELETE https://api.lzt.market/{item_id}/note
 
-*Edits the note.*
+*Edits or deletes the note.*
 
 **Parameters:**
 
@@ -2798,6 +2896,8 @@ POST https://api.lzt.market/{item_id}/change-owner
 - item_id (int): Item ID.
 - username (str): Username.
 - secret_answer (str): Secret answer.
+- open (bool): Open item after transfer.
+- close (bool): Close item after transfer.
 
 **Example:**
 
@@ -2992,6 +3092,8 @@ POST https://api.lzt.market/item/fast-sell
 - allow_ask_discount (bool): Allow ask discount.
 - proxy_id (int): Proxy ID.
 - proxy_random (bool): Proxy random.
+- tfa_secret (str): 2FA secret code. Available for `Instagram` and `Roblox` categories.
+- resell_item_id (int): Put item id if you are trying to resell item.
 - kwargs (dict[str, Any]): Kwargs.
 
 **Example:**
@@ -3042,6 +3144,7 @@ POST https://api.lzt.market/item/add
 - proxy_random (bool): Proxy random.
 - resell_item_id (int): Put item id if you are trying to resell item. This is useful to pass temporary email from reselling item to new item.
 - force_mail (bool): Get temporary email if not required by category. Available for Supercell, Fortnite and Epic Games categories.
+- tfa_secret (str): 2FA secret code. Available for `Instagram` and `Roblox` categories.
 - kwargs (dict[str, Any]): Kwargs.
 
 **Example:**

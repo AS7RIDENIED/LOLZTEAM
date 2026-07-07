@@ -1,5 +1,5 @@
 from .Base import Constants
-from .Base.Core import APIClient, AutoDelay, Response, _NONE, NONE
+from .Base.Core import APIClient, Response, _NONE, NONE
 from .Base.Wrappers import UNIVERSAL
 
 from functools import cached_property
@@ -18,7 +18,7 @@ class Forum(APIClient):
     ## 💛Made with love💛
     """
 
-    def __init__(self, token: str, language: Literal["ru", "en"] = None, delay_min: float = 0, proxy: str = None, timeout: float = 90, verify: bool = True):
+    def __init__(self, token: str, language: Literal["ru", "en"] = None, proxy: str = None, timeout: float = 90, verify: bool = True):
         """
         LOLZTEAM Forum API Client
 
@@ -27,7 +27,6 @@ class Forum(APIClient):
         - token (str): Your token.
           > You can get it [there](https://lolz.live/account/api)
         - language (Literal["ru", "en"]): Language of the API responses.
-        - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests.
         - proxy (str): Proxy string.
           > protocol://ip:port or protocol://login:password@ip:port (socks5://login:password@192.168.1.1:8080 or http://login:password@192.168.1.1:8080)
@@ -64,7 +63,6 @@ class Forum(APIClient):
         forum.settings.token = "token"                                        # Change token
         forum.settings.language = "en"                                        # Change language
         forum.settings.proxy = "http://login:password@192.168.1.1:8080"       # Change proxy
-        forum.settings.delay.min = 1                                          # Change minimal delay
         forum.settings.delay.disable()                                        # Disable delay
         forum.settings.logger.disable()                                       # <- Stop logging
         ```
@@ -73,7 +71,6 @@ class Forum(APIClient):
             base_url="https://prod-api.lolz.live",
             token=token,
             language=language,
-            delay_min=delay_min,
             logger_name=Forum.__qualname__,
             proxy=proxy,
             timeout=timeout,
@@ -97,7 +94,6 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/categories
@@ -121,7 +117,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/categories", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, category_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/categories/{category_id}
@@ -152,7 +147,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def options(self) -> Response:
                 """
                 GET https://prod-api.lolz.live/forums/feed/options
@@ -169,7 +163,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/forums/feed/options")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def edit(self, node_ids: list[int] = NONE, keywords: list[str] = NONE) -> Response:
                 """
                 PUT https://prod-api.lolz.live/forums/feed/options
@@ -198,7 +191,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def list(self) -> Response:
                 """
                 GET https://prod-api.lolz.live/link-forums
@@ -215,7 +207,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/link-forums")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def get(self, link_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/link-forums/{link_id}
@@ -236,7 +227,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/link-forums/{link_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def grouped(self) -> Response:
             """
             GET https://prod-api.lolz.live/forums/grouped
@@ -253,7 +243,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forums/grouped")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/forums
@@ -277,7 +266,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forums", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, forum_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/forums/{forum_id}
@@ -298,7 +286,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/forums/{forum_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def followers(self, forum_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/forums/{forum_id}/followers
@@ -319,7 +306,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/forums/{forum_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def followed(self, total: bool = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/forums/followed
@@ -341,7 +327,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forums/followed", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def follow(self, forum_id: int,
                          post: bool = NONE,
                          alert: bool = NONE,
@@ -372,7 +357,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/forums/{forum_id}/followers", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def unfollow(self, forum_id: int) -> Response:
             """
             DELETE https://prod-api.lolz.live/forums/{forum_id}/followers
@@ -397,7 +381,6 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(self) -> Response:
             """
             GET https://prod-api.lolz.live/pages
@@ -414,7 +397,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/pages")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, page_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/pages/{page_id}
@@ -441,7 +423,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def money(
                 self,
                 post_body: str,
@@ -548,7 +529,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/contests", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def upgrade(
                 self,
                 post_body: str,
@@ -648,7 +628,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def market(
                 self,
                 responder: str,
@@ -712,7 +691,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/claims", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def non_market(
                 self,
                 responder: str,
@@ -792,7 +770,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def get(self, thread_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/threads/{thread_id}/poll
@@ -813,7 +790,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/threads/{thread_id}/poll")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def vote(self, thread_id: int, option_ids: Union[builtins.list[int], int]) -> Response:
                 """
                 POST https://prod-api.lolz.live/threads/{thread_id}/poll/votes
@@ -842,7 +818,6 @@ class Forum(APIClient):
             self.arbitrage = self.__Arbitrage(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list_unread(self, forum_id: int = NONE,
                               limit: int = NONE,
                               data_limit: int = NONE) -> Response:
@@ -868,7 +843,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/threads/new", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list_recent(self, days: int = NONE,
                               forum_id: int = NONE,
                               limit: int = NONE,
@@ -896,7 +870,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/threads/recent", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(
             self,
             forum_id: int = NONE,
@@ -973,7 +946,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/threads", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, thread_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/threads/{thread_id}
@@ -994,7 +966,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/threads/{thread_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def share(self, thread_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/conversations/share-content
@@ -1018,7 +989,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/conversations/share-content", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def create(self, forum_id: int,
                          post_body: str,
                          title: str = NONE,
@@ -1104,7 +1074,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/threads", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def edit(self, thread_id: int,
                        title: str = NONE,
                        title_en: str = NONE,
@@ -1166,7 +1135,6 @@ class Forum(APIClient):
             return await self.core.request("PUT", f"/threads/{thread_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def delete(self, thread_id: int, reason: str = NONE) -> Response:
             """
             DELETE https://prod-api.lolz.live/threads/{thread_id}
@@ -1189,7 +1157,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/threads/{thread_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def bump(self, thread_id: int) -> Response:
             """
             POST https://prod-api.lolz.live/threads/{thread_id}/bump
@@ -1210,7 +1177,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/threads/{thread_id}/bump")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def hide(self, thread_id: int) -> Response:
             """
             POST https://prod-api.lolz.live/threads/{thread_id}/hide
@@ -1231,7 +1197,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/threads/{thread_id}/hide")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def move(self, thread_id: int, forum_id: int, title: str = NONE, title_en: str = NONE, prefix_ids: builtins.list[int] = NONE, send_alert: bool = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/threads/{thread_id}/move
@@ -1265,7 +1230,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/threads/{thread_id}/move", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def followers(self, thread_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/threads/{thread_id}/followers
@@ -1286,7 +1250,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/threads/{thread_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def followed(self, thread_id: int, total: bool = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/threads/{thread_id}/followed
@@ -1309,7 +1272,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/threads/{thread_id}/followed", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def follow(self, thread_id: int, email: bool = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/threads/{thread_id}/followers
@@ -1332,7 +1294,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/threads/{thread_id}/followers", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def unfollow(self, thread_id: int) -> Response:
             """
             DELETE https://prod-api.lolz.live/threads/{thread_id}/followers
@@ -1352,34 +1313,12 @@ class Forum(APIClient):
             """
             return await self.core.request("DELETE", f"/threads/{thread_id}/followers")
 
-        @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
-        async def navigation(self, thread_id: int) -> Response:
-            """
-            GET https://prod-api.lolz.live/threads/{thread_id}/navigation
-
-            *Get navigation of a thread.*
-
-            **Parameters:**
-
-            - thread_id (int): Thread ID.
-
-            **Example:**
-
-            ```python
-            response = forum.threads.navigation(thread_id=5523020)
-            print(response.json())
-            ```
-            """
-            return await self.core.request("GET", f"/threads/{thread_id}/navigation")
-
     class __Posts:
         class __Comments:
             def __init__(self, core: "Forum"):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def list(
                 self,
                 post_id: int = NONE,
@@ -1415,7 +1354,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/posts/comments", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def create(self, post_id: int, comment_body: str) -> Response:
                 """
                 POST https://prod-api.lolz.live/posts/{post_id}/comments
@@ -1438,7 +1376,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/posts/{post_id}/comments", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def edit(self, comment_id: int, comment_body: str, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                 """
                 PUT https://prod-api.lolz.live/posts/comments
@@ -1462,7 +1399,6 @@ class Forum(APIClient):
                 return await self.core.request("PUT", "/posts/comments", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def delete(self, post_comment_id: int) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/posts/comments
@@ -1484,7 +1420,6 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", "/posts/comments", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def reasons(self, post_comment_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/posts/comments/report
@@ -1506,7 +1441,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/posts/comments/report", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def report(self, post_comment_id: int, reason: str) -> Response:
                 """
                 POST https://prod-api.lolz.live/posts/comments/report
@@ -1533,7 +1467,6 @@ class Forum(APIClient):
             self.comments = self.__Comments(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(self, thread_id: int = NONE, post_id: int = NONE, page: int = NONE, limit: int = NONE, order: Constants.Forum.PostOrder._Literal = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/posts
@@ -1559,7 +1492,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/posts", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, post_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/posts/{post_id}
@@ -1580,7 +1512,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/posts/{post_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def create(self, post_body: str, thread_id: int = NONE, quote_post_id: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/posts
@@ -1604,7 +1535,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/posts", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def edit(self, post_id: int, post_body: str = NONE, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
             """
             PUT https://prod-api.lolz.live/posts/{post_id}
@@ -1628,7 +1558,6 @@ class Forum(APIClient):
             return await self.core.request("PUT", f"/posts/{post_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def delete(self, post_id: int, reason: str = NONE) -> Response:
             """
             DELETE https://prod-api.lolz.live/posts/{post_id}
@@ -1651,7 +1580,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/posts/{post_id}", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def likes(self, post_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/posts/{post_id}/likes
@@ -1675,7 +1603,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/posts/{post_id}/likes", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def like(self, post_id: int) -> Response:
             """
             POST https://prod-api.lolz.live/posts/{post_id}/likes
@@ -1696,7 +1623,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/posts/{post_id}/likes")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def unlike(self, post_id: int) -> Response:
             """
             DELETE https://prod-api.lolz.live/posts/{post_id}/likes
@@ -1717,7 +1643,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/posts/{post_id}/likes")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def report(self, post_id: int, reason: str = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/posts/{post_id}/report
@@ -1740,7 +1665,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/posts/{post_id}/report", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def reasons(self, post_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/posts/{post_id}/report
@@ -1768,7 +1692,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=False)
-            @AutoDelay.WrapperSet(0.2)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
                 POST https://prod-api.lolz.live/users/me/avatar
@@ -1797,7 +1720,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/users/me/avatar", files=files, json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def delete(self) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/users/me/avatar
@@ -1814,7 +1736,6 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", "/users/me/avatar")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
                 POST https://prod-api.lolz.live/users/me/avatar/crop
@@ -1843,7 +1764,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=False)
-            @AutoDelay.WrapperSet(0.2)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
                 POST https://prod-api.lolz.live/users/me/background
@@ -1872,7 +1792,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/users/me/background", files=files, json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def delete(self) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/users/me/background
@@ -1889,7 +1808,6 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", "/users/me/background")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
                 POST https://prod-api.lolz.live/users/me/background/crop
@@ -1919,7 +1837,6 @@ class Forum(APIClient):
                     self.core = core
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
                 async def list(
                     self,
                     post_id: int = NONE,
@@ -1955,7 +1872,6 @@ class Forum(APIClient):
                     return await self.core.request("GET", "/profile-posts/comments", params=params)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
                 async def get(self, post_id: int, comment_id: int) -> Response:
                     """
                     GET https://prod-api.lolz.live/profile-posts/{post_id}/comments/{comment_id}
@@ -1977,7 +1893,6 @@ class Forum(APIClient):
                     return await self.core.request("GET", f"/profile-posts/{post_id}/comments/{comment_id}")
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
                 async def create(self, post_id: int, post_body: str) -> Response:
                     """
                     POST https://prod-api.lolz.live/profile-posts/{post_id}/comments
@@ -2000,7 +1915,6 @@ class Forum(APIClient):
                     return await self.core.request("POST", f"/profile-posts/{post_id}/comments", json=json)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
                 async def edit(self, comment_id: int, comment_body: str, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                     """
                     PUT https://prod-api.lolz.live/profile-posts/comments
@@ -2024,7 +1938,6 @@ class Forum(APIClient):
                     return await self.core.request("PUT", "/profile-posts/comments", json=json)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
                 async def delete(self, comment_id: int) -> Response:
                     """
                     DELETE https://prod-api.lolz.live/profile-posts/comments
@@ -2046,7 +1959,6 @@ class Forum(APIClient):
                     return await self.core.request("DELETE", "/profile-posts/comments", params=params)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
                 async def reasons(self, comment_id: int) -> Response:
                     """
                     GET https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
@@ -2068,7 +1980,6 @@ class Forum(APIClient):
                     return await self.core.request("GET", "/profile-posts/comments/report", params=params)
 
                 @UNIVERSAL(batchable=True)
-                @AutoDelay.WrapperSet(0.2)
                 async def report(self, comment_id: int, reason: str) -> Response:
                     """
                     POST https://prod-api.lolz.live/profile-posts/comments/report
@@ -2095,7 +2006,6 @@ class Forum(APIClient):
                 self.comments = self.__Comments(self.core)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def list(
                 self,
                 user_id: Union[int, str],
@@ -2130,7 +2040,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/users/{user_id}/profile-posts", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def get(self, post_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/profile-posts/{post_id}
@@ -2151,7 +2060,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/profile-posts/{post_id}")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def create(self, user_id: Union[int, str], post_body: str) -> Response:
                 """
                 POST https://prod-api.lolz.live/users/{user_id}/profile-posts
@@ -2174,7 +2082,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/users/{user_id}/profile-posts", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def edit(self, post_id: int, post_body: str = NONE, disable_comments: bool = NONE, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                 """
                 PUT https://prod-api.lolz.live/profile-posts/{post_id}
@@ -2203,7 +2110,6 @@ class Forum(APIClient):
                 return await self.core.request("PUT", f"/profile-posts/{post_id}", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def delete(self, post_id: int, reason: str = NONE) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/profile-posts/{post_id}
@@ -2226,7 +2132,6 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", f"/profile-posts/{post_id}", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def likes(self, post_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/profile-posts/{post_id}/likes
@@ -2247,7 +2152,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/profile-posts/{post_id}/likes")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def like(self, post_id: int) -> Response:
                 """
                 POST https://prod-api.lolz.live/profile-posts/{post_id}/likes
@@ -2264,7 +2168,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/profile-posts/{post_id}/likes")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def unlike(self, post_id: int) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/profile-posts/{post_id}/likes
@@ -2281,7 +2184,6 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", f"/profile-posts/{post_id}/likes")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def report(self, profile_post_id: int, reason: str = NONE) -> Response:
                 """
                 POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
@@ -2304,7 +2206,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/profile-posts/{profile_post_id}/report", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def reasons(self, profile_post_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
@@ -2325,7 +2226,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/profile-posts/{profile_post_id}/report")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def stick(self, profile_post_id: int) -> Response:
                 """
                 POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
@@ -2346,7 +2246,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/profile-posts/{profile_post_id}/stick")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def unstick(self, profile_post_id: int) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
@@ -2371,7 +2270,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def types(self) -> Response:
                 """
                 GET https://prod-api.lolz.live/users/secret-answer/types
@@ -2388,7 +2286,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/users/secret-answer-types")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def reset(self) -> Response:
                 """
                 POST https://prod-api.lolz.live/account/secret-answer/reset
@@ -2405,7 +2302,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/account/secret-answer/reset")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def cancel_reset(self) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/account/secret-answer/reset
@@ -2429,7 +2325,6 @@ class Forum(APIClient):
             self.secret_answer = self.__Secret_Answer(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/users
@@ -2452,7 +2347,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def search(self, username: str = NONE, fields: dict[str, str] = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/users/find
@@ -2478,7 +2372,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users/find", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, user_id: Union[int, str] = "me") -> Response:
             """
             GET https://prod-api.lolz.live/users/{user_id}
@@ -2499,7 +2392,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def edit(
             self,
             title: str = NONE,
@@ -2611,7 +2503,6 @@ class Forum(APIClient):
             return await self.core.request("PUT", "/users/me", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def fields(self) -> Response:
             """
             GET https://prod-api.lolz.live/users/fields
@@ -2628,7 +2519,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users/fields")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def trophies(self, user_id: Union[int, str] = "me") -> Response:
             """
             GET https://prod-api.lolz.live/users/{user_id}/trophies
@@ -2649,7 +2539,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}/trophies")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def claims(
             self,
             user_id: Union[int, str] = "me",
@@ -2682,7 +2571,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}/claims", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def likes(
             self,
             user_id: Union[int, str] = "me",
@@ -2732,7 +2620,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}/likes", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def followers(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/users/{user_id}/followers
@@ -2757,7 +2644,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}/followers", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def followed(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/users/{user_id}/followings
@@ -2782,7 +2668,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/users/{user_id}/followings", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def follow(self, user_id: Union[int, str]) -> Response:
             """
             POST https://prod-api.lolz.live/users/{user_id}/followers
@@ -2803,7 +2688,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/users/{user_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def unfollow(self, user_id: Union[int, str]) -> Response:
             """
             DELETE https://prod-api.lolz.live/users/{user_id}/followers
@@ -2824,7 +2708,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/users/{user_id}/followers")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def ignored(self) -> Response:
             """
             GET https://prod-api.lolz.live/users/ignored
@@ -2841,7 +2724,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/users/ignored")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def ignore(self, user_id: Union[int, str]) -> Response:
             """
             POST https://prod-api.lolz.live/users/{user_id}/ignore
@@ -2862,7 +2744,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/users/{user_id}/ignore")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def ignore_edit(
             self,
             user_id: Union[int, str],
@@ -2902,7 +2783,6 @@ class Forum(APIClient):
             return await self.core.request("PUT", f"/users/{user_id}/ignore", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def unignore(self, user_id: Union[int, str]) -> Response:
             """
             DELETE https://prod-api.lolz.live/users/{user_id}/ignore
@@ -2923,7 +2803,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/users/{user_id}/ignore")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def content(self, user_id: Union[int, str] = "me", page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/users/{user_id}/timeline
@@ -2952,7 +2831,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def list(self,
                            conversation_id: int,
                            page: int = NONE,
@@ -2992,7 +2870,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/conversations/messages", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def get(self, message_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/conversations/messages/{message_id}
@@ -3013,7 +2890,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", f"/conversations/messages/{message_id}")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def create(self, conversation_id: int, message: str) -> Response:
                 """
                 POST https://prod-api.lolz.live/conversations/messages
@@ -3036,7 +2912,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/conversations/messages", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def edit(self, conversation_id: int, message_id: int, message: str) -> Response:
                 """
                 PUT https://prod-api.lolz.live/conversations/messages/{message_id}
@@ -3060,7 +2935,6 @@ class Forum(APIClient):
                 return await self.core.request("PUT", f"/conversations/messages/{message_id}", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def delete(self, conversation_id: int, message_id: int) -> Response:
                 """
                 POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}
@@ -3082,7 +2956,6 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", f"/conversations/{conversation_id}/messages/{message_id}")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def stick(self, conversation_id: int, message_id: int) -> Response:
                 """
                 POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
@@ -3104,7 +2977,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/conversations/{conversation_id}/messages/{message_id}/stick")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def unstick(self, conversation_id: int, message_id: int) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
@@ -3130,7 +3002,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def enable(self, conversation_id: int) -> Response:
                 """
                 POST https://prod-api.lolz.live/conversations/{conversation_id}/alerts
@@ -3151,7 +3022,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", f"/conversations/{conversation_id}/alerts")
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def disable(self, conversation_id: int) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/conversations/{conversation_id}/alerts
@@ -3177,7 +3047,6 @@ class Forum(APIClient):
             self.alerts = self.__Alerts(self.core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def save(self, text: str) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/save
@@ -3201,7 +3070,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/conversations/save", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(
             self,
             page: int = NONE,
@@ -3239,7 +3107,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/conversations", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, conversation_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/conversations/{conversation_id}
@@ -3260,7 +3127,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/conversations/{conversation_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def start(self, user_id: int) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/start
@@ -3282,7 +3148,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/conversations/start", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def create(self, user_id: int, message: str) -> Response:
             """
             POST https://prod-api.lolz.live/conversations
@@ -3305,7 +3170,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/conversations", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def create_group(self,
                                usernames: builtins.list[str],
                                message: str,
@@ -3358,7 +3222,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/conversations", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def edit(self,
                        conversation_id: int,
                        title: str = NONE,
@@ -3406,7 +3269,6 @@ class Forum(APIClient):
             return await self.core.request("PUT", "/conversations", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def leave(self, conversation_id: int, leave_type: Literal["delete", "delete_ignore"] = "delete") -> Response:
             """
             DELETE https://prod-api.lolz.live/conversations/{conversation_id}
@@ -3429,7 +3291,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/conversations/{conversation_id}", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def search(
             self,
             q: str = NONE,
@@ -3467,7 +3328,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/conversations/search", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def star(self, conversation_id: int) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/{conversation_id}/star
@@ -3488,7 +3348,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/conversations/{conversation_id}/star")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def invite(self, conversation_id: int, recipients: builtins.list[str]) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/{conversation_id}/invite
@@ -3511,7 +3370,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/conversations/{conversation_id}/invite", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def kick(self, conversation_id: int, user_id: int) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/{conversation_id}/kick
@@ -3534,7 +3392,6 @@ class Forum(APIClient):
             return await self.core.request("POST", f"/conversations/{conversation_id}/kick", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def unstar(self, conversation_id: int) -> Response:
             """
             DELETE https://prod-api.lolz.live/conversations/{conversation_id}/star
@@ -3555,7 +3412,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", f"/conversations/{conversation_id}/star")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def read(self, conversation_id: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/conversations/read
@@ -3579,7 +3435,6 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(
             self,
             notification_type: Literal["market", "nomarket"] = NONE,
@@ -3608,7 +3463,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/notifications", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, notification_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/notifications/{notification_id}
@@ -3629,7 +3483,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/notifications/{notification_id}")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def read(self, notification_id: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/notifications/read
@@ -3655,7 +3508,6 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/tags/list
@@ -3678,7 +3530,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/tags/list", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, tag_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/tags/{tag_id}
@@ -3702,7 +3553,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/tags/{tag_id}", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def popular(self) -> Response:
             """
             GET https://prod-api.lolz.live/tags/popular
@@ -3719,7 +3569,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/tags/popular")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def search(self, tag: str) -> Response:
             """
             GET https://prod-api.lolz.live/tags/find
@@ -3745,7 +3594,6 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def results(self, search_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/search/{search_id}/results
@@ -3771,7 +3619,6 @@ class Forum(APIClient):
             return await self.core.request("GET", f"/search/{search_id}/results", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def all(
             self,
             query: str = NONE,
@@ -3816,7 +3663,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def users(self, query: str = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/users
@@ -3841,7 +3687,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search/users", json=json)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def threads(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/threads
@@ -3867,7 +3712,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search/threads", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/posts
@@ -3893,7 +3737,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search/posts", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def profile_posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/profile-posts
@@ -3919,7 +3762,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/search/profile-posts", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def tagged(self, tag: str = NONE, tags: list[str] = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/search/tagged
@@ -3949,7 +3791,6 @@ class Forum(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def list(self, room_id: Constants.Forum.ChatRoomIDs._Literal, before_message_id: int = NONE) -> Response:
                 """
                 GET https://prod-api.lolz.live/chatbox/messages
@@ -3973,7 +3814,6 @@ class Forum(APIClient):
                 return await self.core.request("GET", "/chatbox/messages", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def create(
                 self,
                 room_id: Constants.Forum.ChatRoomIDs._Literal,
@@ -4002,7 +3842,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/chatbox/messages", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def edit(self, message_id: int, message: str) -> Response:
                 """
                 PUT https://prod-api.lolz.live/chatbox/messages
@@ -4025,7 +3864,6 @@ class Forum(APIClient):
                 return await self.core.request("PUT", "/chatbox/messages", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def delete(self, message_id: int) -> Response:
                 """
                 DELETE https://prod-api.lolz.live/chatbox/messages
@@ -4047,7 +3885,6 @@ class Forum(APIClient):
                 return await self.core.request("DELETE", "/chatbox/messages", params=params)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def report(self, message_id: int, reason: str) -> Response:
                 """
                 POST https://prod-api.lolz.live/chatbox/messages/report
@@ -4070,7 +3907,6 @@ class Forum(APIClient):
                 return await self.core.request("POST", "/chatbox/messages/report", json=json)
 
             @UNIVERSAL(batchable=True)
-            @AutoDelay.WrapperSet(0.2)
             async def reasons(self, message_id: int) -> Response:
                 """
                 GET https://prod-api.lolz.live/chatbox/messages/report
@@ -4096,7 +3932,6 @@ class Forum(APIClient):
             self.messages = self.__Messages(core)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def get(self, room_id: Constants.Forum.ChatRoomIDs._Literal = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/chatbox
@@ -4118,7 +3953,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/chatbox", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def ignored(self) -> Response:
             """
             GET https://prod-api.lolz.live/chatbox/ignore
@@ -4135,7 +3969,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/chatbox/ignore")
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def ignore(self, user_id: int = NONE) -> Response:
             """
             POST https://prod-api.lolz.live/chatbox/ignore
@@ -4157,7 +3990,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/chatbox/ignore", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def unignore(self, user_id: int = NONE) -> Response:
             """
             DELETE https://prod-api.lolz.live/chatbox/ignore
@@ -4179,7 +4011,6 @@ class Forum(APIClient):
             return await self.core.request("DELETE", "/chatbox/ignore", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def leaderboard(self, duration: Literal["day", "week", "month"] = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/chatbox/messages/leaderboard
@@ -4201,7 +4032,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/chatbox/messages/leaderboard", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def online(self, room_id: int) -> Response:
             """
             GET https://prod-api.lolz.live/chatbox/messages/online
@@ -4227,7 +4057,6 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def list(self, page: int = NONE) -> Response:
             """
             GET https://prod-api.lolz.live/forms
@@ -4249,7 +4078,6 @@ class Forum(APIClient):
             return await self.core.request("GET", "/forms", params=params)
 
         @UNIVERSAL(batchable=True)
-        @AutoDelay.WrapperSet(0.2)
         async def create(self, form_id: int, fields: dict[str, str]) -> Response:
             """
             GET https://prod-api.lolz.live/forms/save
@@ -4281,29 +4109,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/forms/save", json=json)
 
     @UNIVERSAL(batchable=True)
-    @AutoDelay.WrapperSet(0.2)
-    async def navigation(self, parent: int = NONE) -> Response:
-        """
-        GET https://prod-api.lolz.live/navigation
-
-        *Get navigation.*
-
-        **Parameters:**
-
-        - parent (int): Parent ID.
-
-        **Example:**
-
-        ```python
-        response = forum.navigation()
-        print(response.json())
-        ```
-        """
-        params = {"parent": parent}
-        return await self.core.request("GET", "/navigation", params=params)
-
-    @UNIVERSAL(batchable=True)
-    @AutoDelay.WrapperSet(0.2)
     async def css(self, query: Union[str, list], **kwargs) -> Response:
         """
         GET https://prod-api.lolz.live/css
@@ -4332,7 +4137,6 @@ class Forum(APIClient):
             self.core = core
 
         @UNIVERSAL(batchable=False)
-        @AutoDelay.WrapperSet(0.2)
         async def __call__(self, jobs: list):
             """
             POST https://prod-api.lolz.live/batch
@@ -4355,7 +4159,6 @@ class Forum(APIClient):
             return await self.core.request("POST", "/batch", json=jobs)
 
         @UNIVERSAL(batchable=False)
-        @AutoDelay.WrapperSet(0.2)
         async def executor(self, jobs):
             """
             *Executes batch requests until all jobs are executed.*
