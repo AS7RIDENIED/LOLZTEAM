@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\n\n## [Telegram chat](https://t.me/lztmarket_api)\n\n## Free API Client packages\n\n* [Node.js](https://github.com/NztForum/node-lzt) - [Documentation](https://github.com/NztForum/node-lzt/blob/master/docs-ru.md)\n* [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md)\n* [C#](https://github.com/fanidamn/LolzMarketAPI) - [Documentation](https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md)\n\n## About Market API\n\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods.[https://lzt.market/113509951/tag/add?tag_id=10](https://lzt.market/113509951/tag/add?tag_id=10)\nFor example, a request to reserve an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\n\n## Rate limit\n\n120 requests per minute (0.5 seconds delay between requests)\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Search limit\n\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request).\nIf you exceed the limit, you will receive an error message and response code 429.\n\n## Authorization & Token configuration\n\nFor using this API you need to create API Client and get Access Token with **market** scope.\n\nYou can pass the token as a query parameter or in the request headers\n\n* Query parameter: **oauth_token=*token***\n* Header: **Authorization**: \"**Bearer *token***\"\n\n## Content-Type\n\nAPI always returns the response as application/json (With few exceptions).\nYou should send requests to API with application/json or application/x-www-form-urlencoded content type.\n\n## Is for free access?\n\nTo use the market api, you need to have 200 sympathies, or you can purchase monthly subscription [here](https://zelenka.guru/account/upgrades).\n\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.97"
+    "version": "1.1.98"
   },
   "servers": [
     {
@@ -51206,7 +51206,7 @@
                   "TgFormatRestriction": {
                     "summary": "Can't download Telegram formats.",
                     "value": {
-                      "error": [
+                      "errors": [
                         "Downloading TData / .session via API is not supported."
                       ],
                       "system_info": {
@@ -51224,7 +51224,7 @@
                   "InvalidFormat": {
                     "summary": "Invalid format",
                     "value": {
-                      "error": [
+                      "errors": [
                         "Please enter valid custom download format."
                       ],
                       "system_info": {
@@ -51348,7 +51348,7 @@
                     }
                   },
                   "required": [
-                    "tags",
+                    "tag",
                     "system_info"
                   ]
                 }
@@ -51462,7 +51462,7 @@
                     }
                   },
                   "required": [
-                    "tags",
+                    "tag",
                     "system_info"
                   ]
                 }
@@ -55820,6 +55820,16 @@
                     "title": "Message",
                     "type": "string",
                     "description": "Message to the seller."
+                  },
+                  "autobuy": {
+                    "title": "Autobuy",
+                    "type": "boolean",
+                    "description": "Automatically buy the item once the discount is accepted."
+                  },
+                  "balance_id": {
+                    "title": "Balance ID",
+                    "type": "integer",
+                    "description": "Balance ID that will be used to purchase specified item."
                   }
                 },
                 "required": [
@@ -68389,20 +68399,6 @@
           "description": "Set this parameter to **true** so that the Market will take a random proxy from its pool for each of your requests.\nOtherwise, if this parameter is set to **false** or not set, the Market will take a specific proxy from its pool, which is predefined for each item.\n> This parameter only works with proxies from the Market pool. If you want to use your own proxies, use the proxy_id or extra[proxy] parameter."
         }
       },
-      "price": {
-        "name": "price",
-        "in": "query",
-        "description": "Current price of account in your currency.",
-        "required": true,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "title": "Price",
-          "type": "number",
-          "description": "Current price of account in your currency.",
-          "minimum": 1
-        }
-      },
       "app_id": {
         "name": "app_id",
         "in": "query",
@@ -69238,32 +69234,6 @@
           "type": "integer"
         }
       },
-      "wargaming_clan_credits_min": {
-        "name": "clan_credits_min",
-        "in": "query",
-        "description": "Minimum number of credits in clan treasure.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "description": "Minimum number of credits in clan treasure.",
-          "title": "Clan Credits Min",
-          "type": "integer"
-        }
-      },
-      "wargaming_clan_credits_max": {
-        "name": "clan_credits_max",
-        "in": "query",
-        "description": "Maximum number of credits in clan treasure.",
-        "required": false,
-        "style": "form",
-        "explode": true,
-        "schema": {
-          "description": "Maximum number of credits in clan treasure.",
-          "title": "Clan Credits Max",
-          "type": "integer"
-        }
-      },
       "wargaming_clan_crystal_min": {
         "name": "clan_crystal_min",
         "in": "query",
@@ -69542,47 +69512,12 @@
           }
         }
       },
-      "UserIDNotSpecified": {
-        "summary": "Parameter \"user_id\" is not specified.",
-        "value": {
-          "errors": [
-            "Please enter a value for the required field 'user_id'."
-          ],
-          "system_info": {
-            "rate_limit": {
-              "limit": 0,
-              "remaining": 0,
-              "reset": 0
-            },
-            "visitor_id": 0,
-            "time": 0,
-            "log_id": 0
-          }
-        }
-      },
+
       "DiscountNotFound": {
         "summary": "Discount not found.",
         "value": {
           "errors": [
             "Requested personal discount not found"
-          ],
-          "system_info": {
-            "rate_limit": {
-              "limit": 0,
-              "remaining": 0,
-              "reset": 0
-            },
-            "visitor_id": 0,
-            "time": 0,
-            "log_id": 0
-          }
-        }
-      },
-      "BumpsLimitExceed": {
-        "summary": "Bumps limit exceed",
-        "value": {
-          "errors": [
-            "You don't have available bumps. You can purchase more bumps in the <a href=\"/account/market\">Market settings</a>."
           ],
           "system_info": {
             "rate_limit": {
