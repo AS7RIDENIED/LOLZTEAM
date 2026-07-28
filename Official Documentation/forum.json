@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Lolzteam Public API: Forum",
-    "description": "## [Market API](https://lzt-market.readme.io) ## [Telegram chat](https://t.me/lztmarket_api) ## Free API Client packages * [Node.js](https://github.com/NztForum/node-lzt) * [Python](https://github.com/AS7RIDENIED/LOLZTEAM) - [Documentation](https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Forum.md) ## Rate limit 300 requests per minute (0.2 second delay between requests). If you exceed the limit, the response code 429 will be returned to you. ## Token configuration You can pass the token as a query parameter or in the request headers * Query parameter: **oauth_token=_token_** * Header: **Authorization**: \"**Bearer _token_**\" ## Discoverability System information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection. ## Status codes | Code | Name | Description | | ---- | --------------------- | ------------------------------------------------------------------------------------------------------- | | 200 | OK | The request was successfully completed. | | 400 | Bad Request | The request is invalid due to client error. | | 401 | Unauthorized | [Authentication is required.](/reference/information#/token-configuration) | | 403 | Forbidden | You do not have permission to view this page or perform this action. | | 429 | Too Many Requests | [Too many requests in a short period.](/reference/information#/rate-limit) | | 500 | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). | | 502 | Bad Gateway | The gateway encountered an error while processing the request, try again later. | | 503 | Service Unavailable | The server is temporarily unavailable, try again later. | | 504 | Gateway Timeout | The gateway timed out waiting for a response, try again later. | ## Common Parameters ### i18n All API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used. Since api-2015100401. ### Fields filtering For API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones. * **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (*****) to include all default fields before specifying additional ones. * **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. Since r2016062001, it is possible to use wildcard as a prefix (e.g. \"*.key\") to exclude the field everywhere. ### Resource ordering For API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource id for example). ### Encryption For sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key. List of supported encryptions: * **aes128**: AES 128 bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself. ### Headers * **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bbcode html with **tools/chr** link. Since forum-2018100301. * **Api-Username-Inline-Style**: Return rich username for **username** fields. Since forum-2018052101. ### Content-Type API always returns the response as application/json (With few exceptions). You should send requests to API with application/json or application/x-www-form-urlencoded content type. You can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/refs/heads/main/Official%20Documentation/forum.json) file.",
-    "version": "1.1.43"
+    "description": "## [Market API](https://lzt-market.readme.io)\r\n\r\n## [Telegram chat](https://t.me/lztmarket_api)\r\n\r\n## Free API Client packages\r\n\r\n| Language             | GitHub                                                                                                       | Documentation                                                                                                               |\r\n| -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |\r\n| Python (AS7RIDENIED) | <Anchor target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM\">AS7RIDENIED/LOLZTEAM</Anchor>         | <Anchor target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md\">Market.md</Anchor> |\r\n| Python (medovi40k)   | <Anchor target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py\">medovi40k/lolzteam-py</Anchor>       | <Anchor target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py/blob/master/README.md\">README.md</Anchor>            |\r\n| TypeScript           | <Anchor target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts\">liwidale/lolzteam-api-ts</Anchor> | <Anchor target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts/blob/master/README.md\">README.md</Anchor>         |\r\n| PHP                  | <Anchor target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php\">kyo-lzt/lolzteam-php</Anchor>         | <Anchor target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php/blob/master/README.md\">README.md</Anchor>             |\r\n| Go (fantolla123)     | <Anchor target=\"_blank\" href=\"https://github.com/fantolla123/lzt-api-go\">fantolla123/lzt-api-go</Anchor>     | —                                                                                                                           |\r\n| Rust                 | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs\">Mlinec/lolzteam-api-rs</Anchor>     | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs/blob/master/README.md\">README.md</Anchor>           |\r\n| Java                 | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java\">Mlinec/lolzteam-api-java</Anchor> | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java/blob/master/README.md\">README.md</Anchor>         |\r\n| Dart                 | <Anchor target=\"_blank\" href=\"https://github.com/recate-rat237/lzt-dart\">recate-rat237/lzt-dart</Anchor>     | —                                                                                                                           |\r\n| C#                   | <Anchor target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api\">dexsper/Lolzteam.Api</Anchor>         | <Anchor target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api/blob/master/README.md\">README.md</Anchor>             |\r\n\r\n## API Rate Limits\r\n\r\nThe API enforces rate limits to protect the service. Every response includes headers that tell you your current limit status, and exceeding any limit returns a `429 Too Many Requests` error.\r\n\r\n### Base Limits\r\n\r\n**Base limits** apply to all requests unless an endpoint has its own counter:\r\n\r\n- **GET** – 300r/60s\r\n- **non-GET** – 30r/60s\r\n\r\n### Endpoints With Independent Limits\r\n\r\nThese endpoints have their own counters and are **not** counted toward the base limits:\r\n\r\n| Endpoint(s)                                          | Limit  | Bucket name |\r\n| ---------------------------------------------------- | :----- | ----------- |\r\n| [/batch](https://lolzteam.readme.io/reference/batch) | 20/min | `batch`     |\r\n\r\n**Note on&#x20;**`/batch`**:** each nested request still counts against its own endpoint's limit independently. For example, batching 10 calls to `GET /threads` consumes 10 from the `GET` limit **and** 1 from the `/batch` limit.\r\n\r\nExceeding any limit returns a `429` error.\r\n\r\n### Get Current Rate Limit Info\r\n\r\nEach response carries rate-limit metadata in its headers and response body:\r\n\r\n| Header                  | Example      | Meaning                                                              |\r\n| ----------------------- | ------------ | -------------------------------------------------------------------- |\r\n| `X-RateLimit-Limit`     | `300`        | Maximum number of requests allowed in the current window.            |\r\n| `X-RateLimit-Remaining` | `300`        | Amount of requests still available in the current rate-limit window. |\r\n| `X-RateLimit-Reset`     | `1234567890` | When the limit resets, as a **Unix timestamp**.                      |\r\n\r\n```\r\n{\r\n    \"system_info\": {\r\n        \"rate_limit\": {\r\n            \"limit\": 300,\r\n            \"remaining\": 300,\r\n            \"reset\": 1234567890,\r\n            \"bucket\": \"bucket_name\"\r\n        },\r\n        \"visitor_id\": 1234567890,\r\n        \"time\": 1234567890,\r\n        \"log_id\": 1234567890\r\n    }\r\n}\r\n```\r\n\r\n## Token configuration\r\n\r\nYou must pass the token in the request headers\r\n\r\n- Header: \"**Authorization**: **Bearer _token_**\"\r\n\r\n## Discoverability\r\n\r\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\r\n\r\n## Status codes\r\n\r\n| Code | Name                  | Description                                                                                             |\r\n| ---- | --------------------- | ------------------------------------------------------------------------------------------------------- |\r\n| 200  | OK                    | The request was successfully completed.                                                                 |\r\n| 400  | Bad Request           | The request is invalid due to client error.                                                             |\r\n| 401  | Unauthorized          | [Authentication is required.](/reference/information#/token-configuration)                              |\r\n| 403  | Forbidden             | You do not have permission to view this page or perform this action.                                    |\r\n| 429  | Too Many Requests     | [Too many requests in a short period.](/reference/information#/rate-limit)                              |\r\n| 500  | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). |\r\n| 502  | Bad Gateway           | The gateway encountered an error while processing the request, try again later.                         |\r\n| 503  | Service Unavailable   | The server is temporarily unavailable, try again later.                                                 |\r\n| 504  | Gateway Timeout       | The gateway timed out waiting for a response, try again later.                                          |\r\n\r\n## SSL Verification Errors\r\n\r\nIf you encounter an SSL verification error, disable SSL/TLS certificate verification in your http client.\r\n\r\n## Common Parameters\r\n\r\n### i18n\r\n\r\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used.\r\n\r\n### Fields filtering\r\n\r\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\r\n\r\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (\\*\\*\\*\\*\\*) to include all default fields before specifying additional ones.\r\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. It is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\r\n\r\n### Resource ordering\r\n\r\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource ID for example).\r\n\r\n### Encryption\r\n\r\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key.\r\n\r\nList of supported encryptions:\r\n\r\n- **aes128**: AES 128-bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\r\n\r\n### Headers\r\n\r\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bbcode html with **tools/chr** link.\r\n- **Api-Username-Inline-Style**: Return rich username for **username** fields.\r\n\r\n### Content-Type\r\n\r\nAPI always returns the response as application/json (With few exceptions). You should send requests to API with application/json or application/x-www-form-urlencoded content type.\r\n\r\n## OpenAPI JSON\r\n\r\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/refs/heads/main/Official%20Documentation/forum.json) file.",
+    "version": "1.1.44"
   },
   "servers": [
     {
@@ -14103,7 +14103,7 @@
     "/batch": {
       "post": {
         "tags": [
-          "Batch requests"
+          "Batch Requests"
         ],
         "summary": "Batch",
         "description": "Execute multiple API requests at once (Separated by comma). Maximum batch jobs is 10.\n\nRequired scopes:\n+ Same as called API requests.",
@@ -16422,6 +16422,338 @@
             }
           }
         }
+      }
+    },
+    "/api/status-page/lzt": {
+      "get": {
+        "tags": [
+          "Uptime Monitor"
+        ],
+        "summary": "Get Status Page Info",
+        "description": "Provide data for published public status pages.",
+        "operationId": "Uptime.Info",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "config",
+                    "incidents",
+                    "publicGroupList",
+                    "maintenanceList"
+                  ],
+                  "properties": {
+                    "config": {
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "icon": {
+                          "type": "string"
+                        },
+                        "autoRefreshInterval": {
+                          "type": "integer"
+                        },
+                        "theme": {
+                          "type": "string"
+                        },
+                        "published": {
+                          "type": "boolean"
+                        },
+                        "showTags": {
+                          "type": "boolean"
+                        },
+                        "customCSS": {
+                          "type": "string"
+                        },
+                        "footerText": {
+                          "type": "string"
+                        },
+                        "showPoweredBy": {
+                          "type": "boolean"
+                        },
+                        "analyticsId": {
+                          "type": "integer"
+                        },
+                        "analyticsScriptUrl": {
+                          "type": "string"
+                        },
+                        "analyticsType": {
+                          "type": "string"
+                        },
+                        "showCertificateExpiry": {
+                          "type": "boolean"
+                        },
+                        "showOnlyLastHeartbeat": {
+                          "type": "boolean"
+                        },
+                        "rssTitle": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "slug",
+                        "title",
+                        "description",
+                        "icon",
+                        "autoRefreshInterval",
+                        "theme",
+                        "published",
+                        "showTags",
+                        "customCSS",
+                        "footerText",
+                        "showPoweredBy",
+                        "analyticsId",
+                        "analyticsScriptUrl",
+                        "analyticsType",
+                        "showCertificateExpiry",
+                        "showOnlyLastHeartbeat",
+                        "rssTitle"
+                      ]
+                    },
+                    "incidents": {
+                      "type": [
+                        "null",
+                        "array"
+                      ],
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "title",
+                          "content",
+                          "style",
+                          "createdDate",
+                          "lastUpdatedDate",
+                          "pin"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "type": "string"
+                          },
+                          "style": {
+                            "type": "string"
+                          },
+                          "createdDate": {
+                            "type": "string"
+                          },
+                          "lastUpdatedDate": {
+                            "type": "string"
+                          },
+                          "pin": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    "publicGroupList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": "integer"
+                          },
+                          "monitorList": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "sendUrl": {
+                                  "type": "integer"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "sendUrl",
+                                "type"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "weight",
+                          "monitorList"
+                        ]
+                      }
+                    },
+                    "maintenanceList": {
+                      "type": [
+                        "null",
+                        "array"
+                      ],
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "title",
+                          "description",
+                          "strategy",
+                          "active",
+                          "status",
+                          "timeslotList"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "strategy": {
+                            "type": "string"
+                          },
+                          "active": {
+                            "type": "boolean"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "timeslotList": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "startDate": {
+                                  "type": "string"
+                                },
+                                "endDate": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "startDate",
+                                "endDate"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://status.lolz.live",
+            "description": "Uptime server."
+          }
+        ]
+      }
+    },
+    "/api/status-page/heartbeat/lzt": {
+      "get": {
+        "tags": [
+          "Uptime Monitor"
+        ],
+        "summary": "Get Status Page Heartbeats & Uptime",
+        "description": "Get heartbeat and uptime.",
+        "operationId": "Uptime.Heartbeat",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "heartbeatList",
+                    "uptimeList"
+                  ],
+                  "properties": {
+                    "heartbeatList": {
+                      "type": "object",
+                      "propertyNames": {
+                        "pattern": "^[0-9]+$"
+                      },
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "status",
+                            "time",
+                            "msg",
+                            "ping"
+                          ],
+                          "properties": {
+                            "status": {
+                              "type": "integer"
+                            },
+                            "time": {
+                              "type": "string"
+                            },
+                            "msg": {
+                              "type": "string"
+                            },
+                            "ping": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "uptimeList": {
+                      "type": "object",
+                      "propertyNames": {
+                        "pattern": "^[0-9]+_[0-9]+$"
+                      },
+                      "additionalProperties": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://status.lolz.live",
+            "description": "Uptime server."
+          }
+        ]
       }
     }
   },
