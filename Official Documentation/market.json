@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\r\n\r\n## [Telegram chat](https://t.me/lztmarket_api)\r\n\r\n## Free API Client packages\r\n\r\n| Language             | GitHub                                                                                                                                        | Documentation                                                                                                                                 |\r\n| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| Python (AS7RIDENIED) | <Anchor label=\"AS7RIDENIED/LOLZTEAM\" target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM\">AS7RIDENIED/LOLZTEAM</Anchor>             | <Anchor label=\"Market.md\" target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md\">Market.md</Anchor> |\r\n| Python (medovi40k)   | <Anchor label=\"medovi40k/lolzteam-py\" target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py\">medovi40k/lolzteam-py</Anchor>          | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py/blob/master/README.md\">README.md</Anchor>            |\r\n| TypeScript           | <Anchor label=\"liwidale/lolzteam-api-ts\" target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts/\">liwidale/lolzteam-api-ts</Anchor> | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts/blob/master/README.md\">README.md</Anchor>         |\r\n| PHP                  | <Anchor label=\"kyo-lzt/lolzteam-php\" target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php\">kyo-lzt/lolzteam-php</Anchor>             | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php/blob/master/README.md\">README.md</Anchor>             |\r\n| Go (lztapi)          | <Anchor label=\"ppdoew/lztapi\" target=\"_blank\" href=\"https://github.com/ppdoew/lztapi\">ppdoew/lztapi</Anchor>                                  | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/ppdoew/lztapi/blob/main/README.md\">README.md</Anchor>                      |\r\n| Go (fantolla123)     | <Anchor label=\"fantolla123/lzt-api-go\" target=\"_blank\" href=\"https://github.com/fantolla123/lzt-api-go\">fantolla123/lzt-api-go</Anchor>       | —                                                                                                                                             |\r\n| Rust                 | <Anchor label=\"Mlinec/lolzteam-api-rs\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs\">Mlinec/lolzteam-api-rs</Anchor>       | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs/blob/master/README.md\">README.md</Anchor>           |\r\n| Java                 | <Anchor label=\"Mlinec/lolzteam-api-java\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java\">Mlinec/lolzteam-api-java</Anchor> | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java/blob/master/README.md\">README.md</Anchor>         |\r\n| Dart                 | <Anchor label=\"recate-rat237/lzt-dart\" target=\"_blank\" href=\"https://github.com/recate-rat237/lzt-dart\">recate-rat237/lzt-dart</Anchor>       | —                                                                                                                                             |\r\n| C# (dexsper)         | <Anchor label=\"dexsper/Lolzteam.Api\" target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api\">dexsper/Lolzteam.Api</Anchor>             | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api/blob/master/README.md\">README.md</Anchor>             |\r\n| C# (fanidamn)        | <Anchor label=\"fanidamn/LolzMarketAPI\" target=\"_blank\" href=\"https://github.com/fanidamn/LolzMarketAPI\">fanidamn/LolzMarketAPI</Anchor>       | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md\">README.md</Anchor>             |\r\n\r\n## About Market API\r\n\r\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods. For example, a request to add a tag to an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `prod-api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\r\n\r\n## API Rate Limits\r\n\r\nThe API enforces rate limits to protect the service. Every response includes headers that tell you your current limit status, and exceeding any limit returns a `429 Too Many Requests` error.\r\n\r\n### Base Limits\r\n\r\n**Base limits** apply to all requests unless an endpoint has its own counter:\r\n\r\n* **GET** – 300r/60s\r\n* **non-GET** – 30r/60s\r\n\r\n### Endpoints With Independent Limits\r\n\r\nThese endpoints have their own counters and are **not** counted toward the base limits:\r\n\r\n| Endpoint(s)                                                                                                                                                                                                                                                                                                                       | Limit            | Bucket name     |\r\n| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------- | --------------- |\r\n| <Anchor label=\"/letters\" target=\"_blank\" href=\"https://lzt-market.readme.io/reference/managinggetletters\">/letters</Anchor>, [/letters2](https://lzt-market.readme.io/reference/managinggetletters2)                                                                                                                              | 5/min (shared)   | `letters`       |\r\n| [/\\{item_id}/edit](https://lzt-market.readme.io/reference/managingedit)                                                                                                                                                                                                                                                           | 1000/min         | –               |\r\n| [/\\{item_id}/confirm-buy](https://lzt-market.readme.io/reference/purchasingconfirm)                                                                                                                                                                                                                                               | 1000/min         | –               |\r\n| [/fast-sell](https://lzt-market.readme.io/reference/publishingfastsell), [/\\{item_id}/fast-buy](https://lzt-market.readme.io/reference/purchasingfastbuy), [/\\{item_id}/check-account](https://lzt-market.readme.io/reference/purchasingcheck), [/\\{item_id}/goods-check](https://lzt-market.readme.io/reference/publishingcheck) | 300/min (shared) | `check-account` |\r\n| [GET /\\{item_id}](https://lzt-market.readme.io/reference/managingget), [/user/\\{user_id}/items](https://lzt-market.readme.io/reference/listuser), [search requests](https://lzt-market.readme.io/reference/category-search)                                                                                                       | 120/min (shared) | `search`        |\r\n| [DELETE /\\{item_id}](https://lzt-market.readme.io/reference/mangingdelete)                                                                                                                                                                                                                                                        | 300/min          | –               |\r\n| <Anchor label=\"/email-code\" target=\"_blank\" href=\"https://lzt-market.readme.io/reference/managingemailcode\">/email-code</Anchor>                                                                                                                                                                                                  | 300/min          | –               |\r\n| [/batch](https://lzt-market.readme.io/reference/batch)                                                                                                                                                                                                                                                                            | 20/min           | `batch`               |\r\n\r\n**Note on `/batch`:** each nested request still counts against its own endpoint's limit independently. For example, batching 10 calls to `/{item_id}/edit` consumes 10 from the `/{item_id}/edit` limit **and** 1 from the `/batch` limit.\r\n\r\nExceeding any limit returns a `429` error.\r\n\r\n### Get Current Rate Limit Info\r\n\r\nEach response carries rate-limit metadata in its headers and response body:\r\n\r\n| Header                  | Example      | Meaning                                                              |\r\n| ----------------------- | ------------ | -------------------------------------------------------------------- |\r\n| `X-RateLimit-Limit`     | `300`        | Maximum number of requests allowed in the current window.            |\r\n| `X-RateLimit-Remaining` | `300`        | Amount of requests still available in the current rate-limit window. |\r\n| `X-RateLimit-Reset`     | `1234567890` | When the limit resets, as a **Unix timestamp**.                      |\r\n\r\n```\r\n{\r\n    \"system_info\": {\r\n        \"rate_limit\": {\r\n            \"limit\": 300,\r\n            \"remaining\": 300,\r\n            \"reset\": 1234567890,\r\n            \"bucket\": \"bucket_name\"\r\n        },\r\n        \"visitor_id\": 1234567890,\r\n        \"time\": 1234567890,\r\n        \"log_id\": 1234567890\r\n    }\r\n}\r\n```\r\n\r\n## Search limit\r\n\r\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request). If you exceed the limit, you will receive an error message and response code 429.\r\n\r\n## Requests timeout\r\n\r\nIt's highly recommended to set the request timeout to 300+ seconds, because certain methods can take a long time to be processed.\r\n\r\n## Authorization & Token configuration\r\n\r\nFor using this API you need to create [API Client](https://lolz.live/account/api/client-add) and [get Access Token](https://lolz.live/account/api/get-token) with **market** scope.\r\n\r\nYou must pass the token in the request headers\r\n\r\n* Header: \"**Authorization**: **Bearer _token_**\"\r\n\r\n## Status codes\r\n\r\n| Code | Name                  | Description                                                                                             |\r\n| ---- | --------------------- | ------------------------------------------------------------------------------------------------------- |\r\n| 200  | OK                    | The request was successfully completed.                                                                 |\r\n| 400  | Bad Request           | The request is invalid due to client error.                                                             |\r\n| 401  | Unauthorized          | [Authentication is required.](/reference/information#/authorization--token-configuration)               |\r\n| 403  | Forbidden             | You do not have permission to view this page or perform this action.                                    |\r\n| 429  | Too Many Requests     | [Too many requests in a short period.](/reference/information#/rate-limit)                              |\r\n| 500  | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). |\r\n| 502  | Bad Gateway           | The gateway encountered an error while processing the request, try again later.                         |\r\n| 503  | Service Unavailable   | The server is temporarily unavailable, try again later.                                                 |\r\n| 504  | Gateway Timeout       | The gateway timed out waiting for a response, try again later.                                          |\r\n\r\n## SSL Verification Errors\r\n\r\nIf you encounter an SSL verification error, disable SSL/TLS certificate verification in your http client.\r\n\r\n## Common Parameters\r\n\r\n### i18n\r\n\r\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used.\r\n\r\n### Fields filtering\r\n\r\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\r\n\r\n* **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (*****) to include all default fields before specifying additional ones.\r\n* **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. It is possible to use wildcard as a prefix (e.g. \"*.key\") to exclude the field everywhere.\r\n\r\n## Content-Type\r\n\r\nAPI always returns the response as `application/json` (With few exceptions). You should send requests to API with `application/json` or `application/x-www-form-urlencoded` content type.\r\n\r\n## Is for free access?\r\n\r\nTo use the Market API, you need to have 200 sympathies, or you can purchase a monthly subscription [here](https://lolz.live/payment/method?service_id=8\\&service_type=user_upgrade).\r\n\r\n## OpenAPI JSON\r\n\r\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.99a"
+    "version": "1.1.100"
   },
   "servers": [
     {
@@ -75197,6 +75197,138 @@
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/ItemNotFound"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/{item_id}/qr-login": {
+      "post": {
+        "tags": [
+          "Accounts managing"
+        ],
+        "summary": "QR-Code Authentication",
+        "description": "Authorize to Telegram/Steam by providing qr-code challenge.",
+        "operationId": "Managing.QRLogin",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/item_id_path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "challenge"
+                ],
+                "properties": {
+                  "challenge": {
+                    "description": "QR code challenge string. For Steam, provide the Steam QR URL. For Telegram, provide the Telegram QR code link.",
+                    "type": "string",
+                    "examples": [
+                      "https://s.team/q/<id>/<clientId>",
+                      "tg:\/\/login?token=<base64url>"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "item",
+                    "result",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "item": {
+                      "$ref": "#/components/schemas/ItemModel"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "ip": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "country": {
+                          "type": "string"
+                        },
+                        "device": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "ip",
+                        "city",
+                        "country",
+                        "device"
+                      ]
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Could not confirm the login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                },
+                "examples": {
+                  "CouldNotConfirmLogin": {
+                    "summary": "Could not confirm the login.",
+                    "value": {
+                      "errors": [
+                        "Could not confirm the login. Refresh the QR code in Steam and scan it again"
+                      ],
+                      "system_info": {
+                        "rate_limit": {
+                          "limit": 0,
+                          "remaining": 0,
+                          "reset": 0
+                        },
+                        "visitor_id": 0,
+                        "time": 0,
+                        "log_id": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/NoPermission"
           },
           "404": {
             "$ref": "#/components/responses/ItemNotFound"
