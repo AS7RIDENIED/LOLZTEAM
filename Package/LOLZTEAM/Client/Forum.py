@@ -25,7 +25,7 @@ class Forum(APIClient):
         **Parameters:**
 
         - token (str): Your token.
-          > You can get it [there](https://lolz.live/account/api)
+          > You can get it [there](https://lolz.team/account/api)
         - language (Literal["ru", "en"]): Language of the API responses.
           > This parameter sets a strict minimal delay between your requests.
         - proxy (str): Proxy string.
@@ -68,7 +68,7 @@ class Forum(APIClient):
         ```
         """
         super().__init__(
-            base_url="https://prod-api.lolz.live",
+            base_url="https://api.lolz.team",
             token=token,
             language=language,
             logger_name=Forum.__qualname__,
@@ -96,7 +96,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/categories
+            GET https://api.lolz.team/categories
 
             *Get categories.*
 
@@ -119,7 +119,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, category_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/categories/{category_id}
+            GET https://api.lolz.team/categories/{category_id}
 
             *Get category.*
 
@@ -149,7 +149,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def options(self) -> Response:
                 """
-                GET https://prod-api.lolz.live/forums/feed/options
+                GET https://api.lolz.team/forums/feed/options
 
                 *Returns available options for the forums feed.*
 
@@ -165,7 +165,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def edit(self, node_ids: list[int] = NONE, keywords: list[str] = NONE) -> Response:
                 """
-                PUT https://prod-api.lolz.live/forums/feed/options
+                PUT https://api.lolz.team/forums/feed/options
 
                 *Edit feed options.*
 
@@ -193,7 +193,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def list(self) -> Response:
                 """
-                GET https://prod-api.lolz.live/link-forums
+                GET https://api.lolz.team/link-forums
 
                 *List of all link forums.*
 
@@ -209,7 +209,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def get(self, link_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/link-forums/{link_id}
+                GET https://api.lolz.team/link-forums/{link_id}
 
                 *Detail information of a link forum.*
 
@@ -229,7 +229,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def grouped(self) -> Response:
             """
-            GET https://prod-api.lolz.live/forums/grouped
+            GET https://api.lolz.team/forums/grouped
 
             *Returns grouped forums (forums tree).*
 
@@ -245,7 +245,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def list(self, parent_category_id: int = NONE, parent_forum_id: int = NONE, order: Literal["natural", "list"] = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/forums
+            GET https://api.lolz.team/forums
 
             *Get forums.*
 
@@ -268,7 +268,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, forum_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/forums/{forum_id}
+            GET https://api.lolz.team/forums/{forum_id}
 
             *Get forum.*
 
@@ -288,7 +288,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def followers(self, forum_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/forums/{forum_id}/followers
+            GET https://api.lolz.team/forums/{forum_id}/followers
 
             *Get forum followers.*
 
@@ -308,7 +308,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def followed(self, total: bool = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/forums/followed
+            GET https://api.lolz.team/forums/followed
 
             *Get followed forums.*
 
@@ -334,7 +334,7 @@ class Forum(APIClient):
                          prefix_ids: builtins.list[int] = NONE,
                          minimal_contest_amount: float = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/forums/{forum_id}/followers
+            POST https://api.lolz.team/forums/{forum_id}/followers
 
             *Follow forum.*
 
@@ -359,7 +359,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def unfollow(self, forum_id: int) -> Response:
             """
-            DELETE https://prod-api.lolz.live/forums/{forum_id}/followers
+            DELETE https://api.lolz.team/forums/{forum_id}/followers
 
             *Unfollow forum.*
 
@@ -383,7 +383,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def list(self) -> Response:
             """
-            GET https://prod-api.lolz.live/pages
+            GET https://api.lolz.team/pages
 
             *Get pages.*
 
@@ -399,7 +399,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, page_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/pages/{page_id}
+            GET https://api.lolz.team/pages/{page_id}
 
             *Get page.*
 
@@ -448,7 +448,7 @@ class Forum(APIClient):
                 schedule_time: str = NONE,
             ) -> Response:
                 """
-                POST https://prod-api.lolz.live/contests
+                POST https://api.lolz.team/contests
 
                 *Create a money contest.*
 
@@ -553,7 +553,7 @@ class Forum(APIClient):
                 schedule_time: str = NONE,
             ) -> Response:
                 """
-                POST https://prod-api.lolz.live/contests
+                POST https://api.lolz.team/contests
 
                 *Create a new contest.*
 
@@ -644,7 +644,7 @@ class Forum(APIClient):
                 email_notifications: bool = NONE,
             ) -> Response:
                 """
-                POST https://prod-api.lolz.live/claims
+                POST https://api.lolz.team/claims
 
                 *Create a Arbitrage.*
 
@@ -710,7 +710,7 @@ class Forum(APIClient):
                 email_notifications: bool = NONE,
             ) -> Response:
                 """
-                POST https://prod-api.lolz.live/claims
+                POST https://api.lolz.team/claims
 
                 *Create a Arbitrage.*
 
@@ -772,7 +772,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def get(self, thread_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/threads/{thread_id}/poll
+                GET https://api.lolz.team/threads/{thread_id}/poll
 
                 *Get poll.*
 
@@ -792,7 +792,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def vote(self, thread_id: int, option_ids: Union[builtins.list[int], int]) -> Response:
                 """
-                POST https://prod-api.lolz.live/threads/{thread_id}/poll/votes
+                POST https://api.lolz.team/threads/{thread_id}/poll/votes
 
                 *Vote in poll.*
 
@@ -822,7 +822,7 @@ class Forum(APIClient):
                               limit: int = NONE,
                               data_limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/threads/new
+            GET https://api.lolz.team/threads/new
 
             *Get unread threads.*
 
@@ -848,7 +848,7 @@ class Forum(APIClient):
                               limit: int = NONE,
                               data_limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/threads/recent
+            GET https://api.lolz.team/threads/recent
 
             *Get recent threads.*
 
@@ -899,7 +899,7 @@ class Forum(APIClient):
             thread_update_date: int = NONE
         ) -> Response:
             """
-            GET https://prod-api.lolz.live/threads
+            GET https://api.lolz.team/threads
 
             *Get threads.*
 
@@ -948,7 +948,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, thread_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/threads/{thread_id}
+            GET https://api.lolz.team/threads/{thread_id}
 
             *Get thread.*
 
@@ -968,7 +968,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def share(self, thread_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/conversations/share-content
+            GET https://api.lolz.team/conversations/share-content
 
             *Get a shareable thread content (hides).*
 
@@ -1005,7 +1005,7 @@ class Forum(APIClient):
                          schedule_date: str = NONE,
                          schedule_time: str = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/threads
+            POST https://api.lolz.team/threads
 
             *Create a thread.*
 
@@ -1077,15 +1077,15 @@ class Forum(APIClient):
         async def edit(self, thread_id: int,
                        title: str = NONE,
                        title_en: str = NONE,
-                       post_body: str = NONE,
                        prefix_ids: builtins.list[int] = NONE,
                        tags: builtins.list[int] = NONE,
-                       discussion_state: bool = NONE, hide_contacts: bool = NONE,
+                       discussion_open: bool = NONE,
+                       hide_contacts: bool = NONE,
                        allow_ask_hidden_content: bool = NONE,
                        reply_group: Constants.Forum.ReplyGroups._Literal = 2,
                        comment_ignore_group: bool = NONE) -> Response:
             """
-            PUT https://prod-api.lolz.live/threads/{thread_id}
+            PUT https://api.lolz.team/threads/{thread_id}
 
             *Edit a thread.*
 
@@ -1094,10 +1094,9 @@ class Forum(APIClient):
             - thread_id (int): Thread ID.
             - title (str): Title.
             - title_en (str): Title in English.
-            - post_body (str): Post body.
             - prefix_ids (list[int]): Prefix IDs.
             - tags (list[int]): Tags.
-            - discussion_state (bool): Discussion state.
+            - discussion_open (bool): Discussion state.
             - hide_contacts (bool): Hide contacts.
             - allow_ask_hidden_content (bool): Allow ask hidden content.
             - reply_group (int): Reply group.
@@ -1110,10 +1109,9 @@ class Forum(APIClient):
                 thread_id=5523020,
                 title="Test thread",
                 title_en="Test thread",
-                post_body="Test thread",
                 prefix_ids=[1, 2, 3],
                 tags=["tag1", "tag2", "tag3"],
-                discussion_state=True,
+                discussion_open=True,
                 hide_contacts=False,
                 allow_ask_hidden_content=False,
                 reply_group=2,
@@ -1124,10 +1122,9 @@ class Forum(APIClient):
             """
             json = {"title": title,
                     "title_en": title_en,
-                    "post_body": post_body,
                     "prefix_id": prefix_ids,
                     "tags": ",".join(tags) if not isinstance(tags, _NONE) else tags,
-                    "discussion_state": discussion_state,
+                    "discussion_open": discussion_open,
                     "hide_contacts": hide_contacts,
                     "allow_ask_hidden_content": allow_ask_hidden_content,
                     "reply_group": reply_group,
@@ -1137,7 +1134,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def delete(self, thread_id: int, reason: str = NONE) -> Response:
             """
-            DELETE https://prod-api.lolz.live/threads/{thread_id}
+            DELETE https://api.lolz.team/threads/{thread_id}
 
             *Delete a thread.*
 
@@ -1159,7 +1156,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def bump(self, thread_id: int) -> Response:
             """
-            POST https://prod-api.lolz.live/threads/{thread_id}/bump
+            POST https://api.lolz.team/threads/{thread_id}/bump
 
             *Bump a thread.*
 
@@ -1179,7 +1176,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def hide(self, thread_id: int) -> Response:
             """
-            POST https://prod-api.lolz.live/threads/{thread_id}/hide
+            POST https://api.lolz.team/threads/{thread_id}/hide
 
             *Hide a thread from your feed.*
 
@@ -1199,7 +1196,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def move(self, thread_id: int, forum_id: int, title: str = NONE, title_en: str = NONE, prefix_ids: builtins.list[int] = NONE, send_alert: bool = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/threads/{thread_id}/move
+            POST https://api.lolz.team/threads/{thread_id}/move
 
             *Move a thread.*
 
@@ -1232,7 +1229,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def followers(self, thread_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/threads/{thread_id}/followers
+            GET https://api.lolz.team/threads/{thread_id}/followers
 
             *Get followers of a thread.*
 
@@ -1252,7 +1249,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def followed(self, thread_id: int, total: bool = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/threads/{thread_id}/followed
+            GET https://api.lolz.team/threads/{thread_id}/followed
 
             *Get followed users of a thread.*
 
@@ -1274,7 +1271,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def follow(self, thread_id: int, email: bool = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/threads/{thread_id}/followers
+            POST https://api.lolz.team/threads/{thread_id}/followers
 
             *Follow a thread.*
 
@@ -1296,7 +1293,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def unfollow(self, thread_id: int) -> Response:
             """
-            DELETE https://prod-api.lolz.live/threads/{thread_id}/followers
+            DELETE https://api.lolz.team/threads/{thread_id}/followers
 
             *Unfollow a thread.*
 
@@ -1327,7 +1324,7 @@ class Forum(APIClient):
                 before: int = NONE
             ) -> Response:
                 """
-                GET https://prod-api.lolz.live/posts/comments
+                GET https://api.lolz.team/posts/comments
 
                 *Get comments of a post.*
 
@@ -1356,7 +1353,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def create(self, post_id: int, comment_body: str) -> Response:
                 """
-                POST https://prod-api.lolz.live/posts/{post_id}/comments
+                POST https://api.lolz.team/posts/{post_id}/comments
 
                 *Create a comment.*
 
@@ -1378,7 +1375,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def edit(self, comment_id: int, comment_body: str, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                 """
-                PUT https://prod-api.lolz.live/posts/comments
+                PUT https://api.lolz.team/posts/comments
 
                 *Edit a comment.*
 
@@ -1401,7 +1398,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def delete(self, post_comment_id: int) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/posts/comments
+                DELETE https://api.lolz.team/posts/comments
 
                 *Delete a post comment.*
 
@@ -1422,7 +1419,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def reasons(self, post_comment_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/posts/comments/report
+                GET https://api.lolz.team/posts/comments/report
 
                 *Get a post comment report reasons.*
 
@@ -1443,7 +1440,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def report(self, post_comment_id: int, reason: str) -> Response:
                 """
-                POST https://prod-api.lolz.live/posts/comments/report
+                POST https://api.lolz.team/posts/comments/report
 
                 *Report a post comment.*
 
@@ -1469,7 +1466,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def list(self, thread_id: int = NONE, post_id: int = NONE, page: int = NONE, limit: int = NONE, order: Constants.Forum.PostOrder._Literal = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/posts
+            GET https://api.lolz.team/posts
 
             *Get posts.*
 
@@ -1494,7 +1491,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, post_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/posts/{post_id}
+            GET https://api.lolz.team/posts/{post_id}
 
             *Get a post.*
 
@@ -1514,7 +1511,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def create(self, post_body: str, thread_id: int = NONE, quote_post_id: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/posts
+            POST https://api.lolz.team/posts
 
             *Create a post.*
 
@@ -1537,7 +1534,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def edit(self, post_id: int, post_body: str = NONE, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
             """
-            PUT https://prod-api.lolz.live/posts/{post_id}
+            PUT https://api.lolz.team/posts/{post_id}
 
             *Edit a post.*
 
@@ -1560,7 +1557,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def delete(self, post_id: int, reason: str = NONE) -> Response:
             """
-            DELETE https://prod-api.lolz.live/posts/{post_id}
+            DELETE https://api.lolz.team/posts/{post_id}
 
             *Delete a post.*
 
@@ -1582,7 +1579,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def likes(self, post_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/posts/{post_id}/likes
+            GET https://api.lolz.team/posts/{post_id}/likes
 
             *Get likes of a post.*
 
@@ -1605,7 +1602,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def like(self, post_id: int) -> Response:
             """
-            POST https://prod-api.lolz.live/posts/{post_id}/likes
+            POST https://api.lolz.team/posts/{post_id}/likes
 
             *Like a post.*
 
@@ -1625,7 +1622,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def unlike(self, post_id: int) -> Response:
             """
-            DELETE https://prod-api.lolz.live/posts/{post_id}/likes
+            DELETE https://api.lolz.team/posts/{post_id}/likes
 
             *Unlike a post.*
 
@@ -1645,7 +1642,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def report(self, post_id: int, reason: str = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/posts/{post_id}/report
+            POST https://api.lolz.team/posts/{post_id}/report
 
             *Report a post.*
 
@@ -1667,7 +1664,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def reasons(self, post_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/posts/{post_id}/report
+            GET https://api.lolz.team/posts/{post_id}/report
 
             *Get post report reasons.*
 
@@ -1694,7 +1691,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=False)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
-                POST https://prod-api.lolz.live/users/me/avatar
+                POST https://api.lolz.team/users/me/avatar
 
                 *Upload an avatar.*
                 > You can't create batch job for this method
@@ -1722,7 +1719,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def delete(self) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/users/me/avatar
+                DELETE https://api.lolz.team/users/me/avatar
 
                 **Delete an avatar.**
 
@@ -1738,7 +1735,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
-                POST https://prod-api.lolz.live/users/me/avatar/crop
+                POST https://api.lolz.team/users/me/avatar/crop
 
                 *Crop an avatar.*
 
@@ -1766,7 +1763,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=False)
             async def upload(self, file: bytes, x: int = NONE, y: int = NONE, size: int = NONE) -> Response:
                 """
-                POST https://prod-api.lolz.live/users/me/background
+                POST https://api.lolz.team/users/me/background
 
                 *Upload a background.*
                 > You can't create batch job for this method
@@ -1794,7 +1791,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def delete(self) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/users/me/background
+                DELETE https://api.lolz.team/users/me/background
 
                 **Delete a background.**
 
@@ -1810,7 +1807,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def crop(self, x: int, y: int, size: int) -> Response:
                 """
-                POST https://prod-api.lolz.live/users/me/background/crop
+                POST https://api.lolz.team/users/me/background/crop
 
                 *Crop a background.*
 
@@ -1845,7 +1842,7 @@ class Forum(APIClient):
                     limit: int = NONE
                 ) -> Response:
                     """
-                    GET https://prod-api.lolz.live/profile-posts/comments
+                    GET https://api.lolz.team/profile-posts/comments
 
                     *Get comments of a profile post.*
 
@@ -1874,7 +1871,7 @@ class Forum(APIClient):
                 @UNIVERSAL(batchable=True)
                 async def get(self, post_id: int, comment_id: int) -> Response:
                     """
-                    GET https://prod-api.lolz.live/profile-posts/{post_id}/comments/{comment_id}
+                    GET https://api.lolz.team/profile-posts/{post_id}/comments/{comment_id}
 
                     *Get a comment of a profile post.*
 
@@ -1895,7 +1892,7 @@ class Forum(APIClient):
                 @UNIVERSAL(batchable=True)
                 async def create(self, post_id: int, post_body: str) -> Response:
                     """
-                    POST https://prod-api.lolz.live/profile-posts/{post_id}/comments
+                    POST https://api.lolz.team/profile-posts/{post_id}/comments
 
                     *Create a comment of a profile post.*
 
@@ -1917,7 +1914,7 @@ class Forum(APIClient):
                 @UNIVERSAL(batchable=True)
                 async def edit(self, comment_id: int, comment_body: str, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                     """
-                    PUT https://prod-api.lolz.live/profile-posts/comments
+                    PUT https://api.lolz.team/profile-posts/comments
 
                     *Edit a profile post comment.*
 
@@ -1940,7 +1937,7 @@ class Forum(APIClient):
                 @UNIVERSAL(batchable=True)
                 async def delete(self, comment_id: int) -> Response:
                     """
-                    DELETE https://prod-api.lolz.live/profile-posts/comments
+                    DELETE https://api.lolz.team/profile-posts/comments
 
                     *Delete a profile post comment.*
 
@@ -1961,7 +1958,7 @@ class Forum(APIClient):
                 @UNIVERSAL(batchable=True)
                 async def reasons(self, comment_id: int) -> Response:
                     """
-                    GET https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+                    GET https://api.lolz.team/profile-posts/comments/{comment_id}/report
 
                     *GET a profile post comment report reasons.*
 
@@ -1982,7 +1979,7 @@ class Forum(APIClient):
                 @UNIVERSAL(batchable=True)
                 async def report(self, comment_id: int, reason: str) -> Response:
                     """
-                    POST https://prod-api.lolz.live/profile-posts/comments/report
+                    POST https://api.lolz.team/profile-posts/comments/report
 
                     *Report a profile post comment.*
 
@@ -2014,7 +2011,7 @@ class Forum(APIClient):
                 limit: int = NONE,
             ) -> Response:
                 """
-                GET https://prod-api.lolz.live/users/{user_id}/profile-posts
+                GET https://api.lolz.team/users/{user_id}/profile-posts
 
                 *Get profile posts of a user.*
 
@@ -2042,7 +2039,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def get(self, post_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/profile-posts/{post_id}
+                GET https://api.lolz.team/profile-posts/{post_id}
 
                 *Get a profile post.*
 
@@ -2062,7 +2059,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def create(self, user_id: Union[int, str], post_body: str) -> Response:
                 """
-                POST https://prod-api.lolz.live/users/{user_id}/profile-posts
+                POST https://api.lolz.team/users/{user_id}/profile-posts
 
                 *Create a profile post.*
 
@@ -2084,7 +2081,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def edit(self, post_id: int, post_body: str = NONE, disable_comments: bool = NONE, state: Constants.Forum.ContentStates._Literal = NONE) -> Response:
                 """
-                PUT https://prod-api.lolz.live/profile-posts/{post_id}
+                PUT https://api.lolz.team/profile-posts/{post_id}
 
                 *Edit a profile post.*
 
@@ -2112,7 +2109,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def delete(self, post_id: int, reason: str = NONE) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/profile-posts/{post_id}
+                DELETE https://api.lolz.team/profile-posts/{post_id}
 
                 **Delete a profile post.**
 
@@ -2134,7 +2131,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def likes(self, post_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/profile-posts/{post_id}/likes
+                GET https://api.lolz.team/profile-posts/{post_id}/likes
 
                 *Get likes of a profile post.*
 
@@ -2154,7 +2151,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def like(self, post_id: int) -> Response:
                 """
-                POST https://prod-api.lolz.live/profile-posts/{post_id}/likes
+                POST https://api.lolz.team/profile-posts/{post_id}/likes
 
                 **Like a profile post.**
 
@@ -2170,7 +2167,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def unlike(self, post_id: int) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/profile-posts/{post_id}/likes
+                DELETE https://api.lolz.team/profile-posts/{post_id}/likes
 
                 **Unlike a profile post.**
 
@@ -2186,7 +2183,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def report(self, profile_post_id: int, reason: str = NONE) -> Response:
                 """
-                POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+                POST https://api.lolz.team/profile-posts/{profile_post_id}/report
 
                 *Report a profile post.*
 
@@ -2208,7 +2205,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def reasons(self, profile_post_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+                GET https://api.lolz.team/profile-posts/{profile_post_id}/report
 
                 *Get profile post report reasons.*
 
@@ -2228,7 +2225,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def stick(self, profile_post_id: int) -> Response:
                 """
-                POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+                POST https://api.lolz.team/profile-posts/{profile_post_id}/stick
 
                 *Stick a profile post.*
 
@@ -2248,7 +2245,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def unstick(self, profile_post_id: int) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+                DELETE https://api.lolz.team/profile-posts/{profile_post_id}/stick
 
                 *Unstick a profile post.*
 
@@ -2272,7 +2269,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def types(self) -> Response:
                 """
-                GET https://prod-api.lolz.live/users/secret-answer/types
+                GET https://api.lolz.team/users/secret-answer/types
 
                 *Get available secret answer types.*
 
@@ -2288,7 +2285,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def reset(self) -> Response:
                 """
-                POST https://prod-api.lolz.live/account/secret-answer/reset
+                POST https://api.lolz.team/account/secret-answer/reset
 
                 *Request a reset of the secret answer for the account.*
 
@@ -2304,7 +2301,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def cancel_reset(self) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/account/secret-answer/reset
+                DELETE https://api.lolz.team/account/secret-answer/reset
 
                 *Cancel a pending secret answer reset request for the account.*
 
@@ -2327,7 +2324,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/users
+            GET https://api.lolz.team/users
 
             *Get users.*
 
@@ -2349,7 +2346,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def search(self, username: str = NONE, fields: dict[str, str] = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/users/find
+            GET https://api.lolz.team/users/find
 
             *Search users.*
 
@@ -2374,7 +2371,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, user_id: Union[int, str] = "me") -> Response:
             """
-            GET https://prod-api.lolz.live/users/{user_id}
+            GET https://api.lolz.team/users/{user_id}
 
             *Get a user.*
 
@@ -2421,7 +2418,7 @@ class Forum(APIClient):
             alert: dict = NONE
         ) -> Response:
             """
-            PUT https://prod-api.lolz.live/users/me
+            PUT https://api.lolz.team/users/me
 
             *Edit a user.*
 
@@ -2505,7 +2502,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def fields(self) -> Response:
             """
-            GET https://prod-api.lolz.live/users/fields
+            GET https://api.lolz.team/users/fields
 
             *Get your fields.*
 
@@ -2521,7 +2518,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def trophies(self, user_id: Union[int, str] = "me") -> Response:
             """
-            GET https://prod-api.lolz.live/users/{user_id}/trophies
+            GET https://api.lolz.team/users/{user_id}/trophies
 
             *Get user trophies.*
 
@@ -2550,7 +2547,7 @@ class Forum(APIClient):
                                  "settled"] = NONE
         ) -> Response:
             """
-            GET https://prod-api.lolz.live/users/{user_id}/claims
+            GET https://api.lolz.team/users/{user_id}/claims
 
             *Get user claims.*
 
@@ -2583,7 +2580,7 @@ class Forum(APIClient):
             stats: bool = NONE
         ) -> Response:
             """
-            GET https://prod-api.lolz.live/users/{user_id}/likes
+            GET https://api.lolz.team/users/{user_id}/likes
 
             *Get information about user likes.*
 
@@ -2622,7 +2619,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def followers(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/users/{user_id}/followers
+            GET https://api.lolz.team/users/{user_id}/followers
 
             *Get followers of a user.*
 
@@ -2646,7 +2643,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def followed(self, user_id: Union[int, str] = "me", order: Constants.Forum.User.FollowOrder._Literal = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/users/{user_id}/followings
+            GET https://api.lolz.team/users/{user_id}/followings
 
             *Get followed users of a user.*
 
@@ -2670,7 +2667,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def follow(self, user_id: Union[int, str]) -> Response:
             """
-            POST https://prod-api.lolz.live/users/{user_id}/followers
+            POST https://api.lolz.team/users/{user_id}/followers
 
             **Follow a user.**
 
@@ -2690,7 +2687,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def unfollow(self, user_id: Union[int, str]) -> Response:
             """
-            DELETE https://prod-api.lolz.live/users/{user_id}/followers
+            DELETE https://api.lolz.team/users/{user_id}/followers
 
             **Unfollow a user.**
 
@@ -2710,7 +2707,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def ignored(self) -> Response:
             """
-            GET https://prod-api.lolz.live/users/ignored
+            GET https://api.lolz.team/users/ignored
 
             *Get ignored users.*
 
@@ -2726,7 +2723,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def ignore(self, user_id: Union[int, str]) -> Response:
             """
-            POST https://prod-api.lolz.live/users/{user_id}/ignore
+            POST https://api.lolz.team/users/{user_id}/ignore
 
             **Ignore a user.**
 
@@ -2752,7 +2749,7 @@ class Forum(APIClient):
             restrict_view_profile: bool = NONE,
         ) -> Response:
             """
-            PUT https://prod-api.lolz.live/users/{user_id}/ignore
+            PUT https://api.lolz.team/users/{user_id}/ignore
 
             **Edit ignoring options for a user.**
 
@@ -2785,7 +2782,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def unignore(self, user_id: Union[int, str]) -> Response:
             """
-            DELETE https://prod-api.lolz.live/users/{user_id}/ignore
+            DELETE https://api.lolz.team/users/{user_id}/ignore
 
             **Unignore a user.**
 
@@ -2805,7 +2802,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def content(self, user_id: Union[int, str] = "me", page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/users/{user_id}/timeline
+            GET https://api.lolz.team/users/{user_id}/timeline
 
             *Get timeline of a user.*
 
@@ -2839,7 +2836,7 @@ class Forum(APIClient):
                            before: int = NONE,
                            after: int = NONE) -> Response:
                 """
-                GET https://prod-api.lolz.live/conversations/messages
+                GET https://api.lolz.team/conversations/messages
 
                 **Get messages from a conversation.**
 
@@ -2872,7 +2869,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def get(self, message_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/conversations/messages/{message_id}
+                GET https://api.lolz.team/conversations/messages/{message_id}
 
                 *Get a message.*
 
@@ -2892,7 +2889,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def create(self, conversation_id: int, message: str) -> Response:
                 """
-                POST https://prod-api.lolz.live/conversations/messages
+                POST https://api.lolz.team/conversations/messages
 
                 **Create a message.**
 
@@ -2914,7 +2911,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def edit(self, conversation_id: int, message_id: int, message: str) -> Response:
                 """
-                PUT https://prod-api.lolz.live/conversations/messages/{message_id}
+                PUT https://api.lolz.team/conversations/messages/{message_id}
 
                 **Edit a message.**
 
@@ -2937,7 +2934,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def delete(self, conversation_id: int, message_id: int) -> Response:
                 """
-                POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}
+                POST https://api.lolz.team/conversations/{conversation_id}/messages/{message_id}
 
                 **Deletes a message.**
 
@@ -2958,7 +2955,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def stick(self, conversation_id: int, message_id: int) -> Response:
                 """
-                POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+                POST https://api.lolz.team/conversations/{conversation_id}/messages/{message_id}/stick
 
                 **Stick a message in a conversation.**
 
@@ -2979,7 +2976,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def unstick(self, conversation_id: int, message_id: int) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+                DELETE https://api.lolz.team/conversations/{conversation_id}/messages/{message_id}/stick
 
                 **Unstick a message in a conversation.**
 
@@ -3004,7 +3001,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def enable(self, conversation_id: int) -> Response:
                 """
-                POST https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+                POST https://api.lolz.team/conversations/{conversation_id}/alerts
 
                 **Enable alerts for a conversation.**
 
@@ -3024,7 +3021,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def disable(self, conversation_id: int) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+                DELETE https://api.lolz.team/conversations/{conversation_id}/alerts
 
                 **Disable alerts for a conversation.**
 
@@ -3049,7 +3046,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def save(self, text: str) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations/save
+            POST https://api.lolz.team/conversations/save
 
             *Send content to Saved Messages.*
 
@@ -3086,7 +3083,7 @@ class Forum(APIClient):
             ] = NONE
         ) -> Response:
             """
-            GET https://prod-api.lolz.live/conversations
+            GET https://api.lolz.team/conversations
 
             *Get conversations.*
 
@@ -3109,7 +3106,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, conversation_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/conversations/{conversation_id}
+            GET https://api.lolz.team/conversations/{conversation_id}
 
             *Get a conversation.*
 
@@ -3129,7 +3126,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def start(self, user_id: int) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations/start
+            POST https://api.lolz.team/conversations/start
 
             *Start a new conversation with a user.*
 
@@ -3150,7 +3147,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def create(self, user_id: int, message: str) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations
+            POST https://api.lolz.team/conversations
 
             **Create a conversation.**
 
@@ -3180,7 +3177,7 @@ class Forum(APIClient):
                                allow_delete_own_messages: bool = NONE,
                                ) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations
+            POST https://api.lolz.team/conversations
 
             **Create a group conversation.**
 
@@ -3232,7 +3229,7 @@ class Forum(APIClient):
                        allow_delete_own_messages: bool = NONE
                        ) -> Response:
             """
-            PUT https://prod-api.lolz.live/conversations
+            PUT https://api.lolz.team/conversations
 
             **Edit conversation settings.**
 
@@ -3271,7 +3268,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def leave(self, conversation_id: int, leave_type: Literal["delete", "delete_ignore"] = "delete") -> Response:
             """
-            DELETE https://prod-api.lolz.live/conversations/{conversation_id}
+            DELETE https://api.lolz.team/conversations/{conversation_id}
 
             **Leave from a conversation.**
 
@@ -3298,7 +3295,7 @@ class Forum(APIClient):
             search_recipients: bool = NONE
         ) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations/search
+            POST https://api.lolz.team/conversations/search
 
             **Search for conversations messages or recipients.**
 
@@ -3330,7 +3327,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def star(self, conversation_id: int) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations/{conversation_id}/star
+            POST https://api.lolz.team/conversations/{conversation_id}/star
 
             **Star a conversation.**
 
@@ -3350,7 +3347,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def invite(self, conversation_id: int, recipients: builtins.list[str]) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations/{conversation_id}/invite
+            POST https://api.lolz.team/conversations/{conversation_id}/invite
 
             **Invite one or more users to an existing conversation.**
 
@@ -3372,7 +3369,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def kick(self, conversation_id: int, user_id: int) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations/{conversation_id}/kick
+            POST https://api.lolz.team/conversations/{conversation_id}/kick
 
             **Kick a user from a conversation.**
 
@@ -3394,7 +3391,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def unstar(self, conversation_id: int) -> Response:
             """
-            DELETE https://prod-api.lolz.live/conversations/{conversation_id}/star
+            DELETE https://api.lolz.team/conversations/{conversation_id}/star
 
             **Unstar a conversation.**
 
@@ -3414,9 +3411,9 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def read(self, conversation_id: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/conversations/read
+            POST https://api.lolz.team/conversations/read
 
-            POST https://prod-api.lolz.live/conversations/read-all
+            POST https://api.lolz.team/conversations/read-all
 
             **Read a specific conversation.**
 
@@ -3442,7 +3439,7 @@ class Forum(APIClient):
             limit: int = NONE,
         ) -> Response:
             """
-            GET https://prod-api.lolz.live/notifications
+            GET https://api.lolz.team/notifications
 
             *Get notifications.*
 
@@ -3465,7 +3462,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, notification_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/notifications/{notification_id}
+            GET https://api.lolz.team/notifications/{notification_id}
 
             *Get a notification.*
 
@@ -3485,7 +3482,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def read(self, notification_id: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/notifications/read
+            POST https://api.lolz.team/notifications/read
 
             **Read a notification.**
 
@@ -3510,7 +3507,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def list(self, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/tags/list
+            GET https://api.lolz.team/tags/list
 
             *Get tags.*
 
@@ -3532,7 +3529,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, tag_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/tags/{tag_id}
+            GET https://api.lolz.team/tags/{tag_id}
 
             *Get a tag.*
 
@@ -3555,7 +3552,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def popular(self) -> Response:
             """
-            GET https://prod-api.lolz.live/tags/popular
+            GET https://api.lolz.team/tags/popular
 
             *Get popular tags.*
 
@@ -3571,7 +3568,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def search(self, tag: str) -> Response:
             """
-            GET https://prod-api.lolz.live/tags/find
+            GET https://api.lolz.team/tags/find
 
             **Search for a tag.**
 
@@ -3596,7 +3593,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def results(self, search_id: int, page: int = NONE, limit: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/search/{search_id}/results
+            GET https://api.lolz.team/search/{search_id}/results
 
             **Get Search Results.**
 
@@ -3630,7 +3627,7 @@ class Forum(APIClient):
             before: int = NONE
         ) -> Response:
             """
-            POST https://prod-api.lolz.live/search
+            POST https://api.lolz.team/search
 
             **Search for all types of content.**
 
@@ -3665,7 +3662,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def users(self, query: str = NONE, before: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/search/users
+            POST https://api.lolz.team/search/users
 
             **Search for users.**
 
@@ -3689,7 +3686,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def threads(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/search/threads
+            POST https://api.lolz.team/search/threads
 
             **Search for threads.**
 
@@ -3714,7 +3711,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/search/posts
+            POST https://api.lolz.team/search/posts
 
             **Search for posts.**
 
@@ -3739,7 +3736,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def profile_posts(self, query: str = NONE, user_id: int = NONE, page: int = NONE, limit: int = NONE, before: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/search/profile-posts
+            POST https://api.lolz.team/search/profile-posts
 
             **Search for profile posts.**
 
@@ -3764,7 +3761,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def tagged(self, tag: str = NONE, tags: list[str] = NONE, page: int = NONE, limit: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/search/tagged
+            POST https://api.lolz.team/search/tagged
 
             **Search for tagged content.**
 
@@ -3793,7 +3790,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def list(self, room_id: Constants.Forum.ChatRoomIDs._Literal, before_message_id: int = NONE) -> Response:
                 """
-                GET https://prod-api.lolz.live/chatbox/messages
+                GET https://api.lolz.team/chatbox/messages
 
                 *Get chat messages.*
 
@@ -3821,7 +3818,7 @@ class Forum(APIClient):
                 reply_message_id: int = NONE
             ) -> Response:
                 """
-                POST https://prod-api.lolz.live/chatbox/messages
+                POST https://api.lolz.team/chatbox/messages
 
                 *Create a chat message.*
 
@@ -3844,7 +3841,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def edit(self, message_id: int, message: str) -> Response:
                 """
-                PUT https://prod-api.lolz.live/chatbox/messages
+                PUT https://api.lolz.team/chatbox/messages
 
                 *Edit a chat message.*
 
@@ -3866,7 +3863,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def delete(self, message_id: int) -> Response:
                 """
-                DELETE https://prod-api.lolz.live/chatbox/messages
+                DELETE https://api.lolz.team/chatbox/messages
 
                 *Delete a chat message.*
 
@@ -3887,7 +3884,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def report(self, message_id: int, reason: str) -> Response:
                 """
-                POST https://prod-api.lolz.live/chatbox/messages/report
+                POST https://api.lolz.team/chatbox/messages/report
 
                 *Report a chat message.*
 
@@ -3909,7 +3906,7 @@ class Forum(APIClient):
             @UNIVERSAL(batchable=True)
             async def reasons(self, message_id: int) -> Response:
                 """
-                GET https://prod-api.lolz.live/chatbox/messages/report
+                GET https://api.lolz.team/chatbox/messages/report
 
                 *Get chat message report reasons.*
 
@@ -3934,7 +3931,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def get(self, room_id: Constants.Forum.ChatRoomIDs._Literal = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/chatbox
+            GET https://api.lolz.team/chatbox
 
             *Get Chats.*
 
@@ -3955,7 +3952,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def ignored(self) -> Response:
             """
-            GET https://prod-api.lolz.live/chatbox/ignore
+            GET https://api.lolz.team/chatbox/ignore
 
             *Get ignored users.*
 
@@ -3971,7 +3968,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def ignore(self, user_id: int = NONE) -> Response:
             """
-            POST https://prod-api.lolz.live/chatbox/ignore
+            POST https://api.lolz.team/chatbox/ignore
 
             *Ignore chat user.*
 
@@ -3992,7 +3989,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def unignore(self, user_id: int = NONE) -> Response:
             """
-            DELETE https://prod-api.lolz.live/chatbox/ignore
+            DELETE https://api.lolz.team/chatbox/ignore
 
             *Unignore chat user.*
 
@@ -4013,7 +4010,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def leaderboard(self, duration: Literal["day", "week", "month"] = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/chatbox/messages/leaderboard
+            GET https://api.lolz.team/chatbox/messages/leaderboard
 
             *Get chat leaderboard.*
 
@@ -4034,7 +4031,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def online(self, room_id: int) -> Response:
             """
-            GET https://prod-api.lolz.live/chatbox/messages/online
+            GET https://api.lolz.team/chatbox/messages/online
 
             *Get chat online users.*
 
@@ -4059,7 +4056,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def list(self, page: int = NONE) -> Response:
             """
-            GET https://prod-api.lolz.live/forms
+            GET https://api.lolz.team/forms
 
             *Get Forms list.*
 
@@ -4080,7 +4077,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=True)
         async def create(self, form_id: int, fields: dict[str, str]) -> Response:
             """
-            GET https://prod-api.lolz.live/forms/save
+            GET https://api.lolz.team/forms/save
 
             *Create thread by form.*
 
@@ -4111,7 +4108,7 @@ class Forum(APIClient):
     @UNIVERSAL(batchable=True)
     async def css(self, query: Union[str, list], **kwargs) -> Response:
         """
-        GET https://prod-api.lolz.live/css
+        GET https://api.lolz.team/css
 
         *Get navigation.*
 
@@ -4139,7 +4136,7 @@ class Forum(APIClient):
         @UNIVERSAL(batchable=False)
         async def __call__(self, jobs: list):
             """
-            POST https://prod-api.lolz.live/batch
+            POST https://api.lolz.team/batch
 
             *Batch requests.*
 
@@ -4183,7 +4180,7 @@ class Forum(APIClient):
     @cached_property
     def batch(self) -> __Batch:
         """
-        POST https://prod-api.lolz.live/batch
+        POST https://api.lolz.team/batch
 
         *Batch requests.*
 

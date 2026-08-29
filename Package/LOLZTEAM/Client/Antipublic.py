@@ -23,7 +23,7 @@ class Antipublic(APIClient):
         **Parameters:**
 
         - token (str): Your token.
-          > You can get it [there](https://zelenka.guru/account/antipublic) or in antipublic app
+          > You can get it [there](https://lolz.team/account/antipublic) or in antipublic app
         - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests
         - timeout (float): Request timeout.

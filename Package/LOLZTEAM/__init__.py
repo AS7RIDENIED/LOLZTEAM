@@ -1,5 +1,5 @@
 """
-API Client for https://lolz.live & https://lzt.market & https://antipublic.one
+API Client for https://lolz.team & https://lzt.market & https://antipublic.one
 https://pypi.org/project/LOLZTEAM/
 https://github.com/AS7RIDENIED/LOLZTEAM
 """

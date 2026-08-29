@@ -26,7 +26,7 @@ class Market(APIClient):
         **Parameters:**
 
         - token (str): Your token.
-          > You can get it [there](https://lolz.live/account/api)
+          > You can get it [there](https://lolz.team/account/api)
         - language (Literal["ru", "en"]): Language of the API responses.
         - delay_min (float): Minimal delay between requests.
           > This parameter sets a strict minimal delay between your requests.
@@ -69,7 +69,7 @@ class Market(APIClient):
         ```
         """
         super().__init__(
-            base_url="https://prod-api.lzt.market",
+            base_url="https://api.lzt.market",
             token=token,
             language=language,
             logger_name=Market.__qualname__,
@@ -257,6 +257,10 @@ class Market(APIClient):
             def __init__(self, core: "Market"):
                 super().__init__(core, "/hytale")
 
+        class __Onlyfans(__BaseCategory):
+            def __init__(self, core: "Market"):
+                super().__init__(core, "/onlyfans")
+
         def __init__(self, core: "Market"):
             self.core = core
             self.latest = self.__Latest(self.core)
@@ -284,6 +288,7 @@ class Market(APIClient):
             self.warface = self.__Warface(self.core)
             self.minecraft = self.__Minecraft(self.core)
             self.hytale = self.__Hytale(self.core)
+            self.onlyfans = self.__Onlyfans(self.core)
 
         @UNIVERSAL(batchable=True)
         async def list(self, top_queries: bool = False) -> Response:
@@ -820,7 +825,14 @@ class Market(APIClient):
                 self.core = core
 
             @UNIVERSAL(batchable=True)
-            async def request(self, item_id: int, discount_price: float, message: str = NONE) -> Response:
+            async def request(
+                self,
+                item_id: int,
+                discount_price: float,
+                message: str = NONE,
+                auto_buy: bool = NONE,
+                balance_id: int = NONE,
+            ) -> Response:
                 """
                 POST https://api.lzt.market/{item_id}/discount
 
@@ -830,16 +842,28 @@ class Market(APIClient):
 
                 - item_id (int): Item ID.
                 - discount_price (float): Requested discounted price.
-                - message (str, optional): Message to the seller.
+                - message (str): Message to the seller.
+                - auto_buy (bool): Automatically buy the item once the discount is accepted.
+                - balance_id (int): Balance ID to be used for purchase.
 
                 **Example:**
 
                 ```python
-                response = market.managing.discount.request(item_id=1234567890, discount_price=100, message="Please give a discount")
+                response = await market.managing.discount.request(
+                    item_id=1234567890, 
+                    discount_price=100, 
+                    auto_buy=True,
+                    balance_id=128
+                )
                 print(response.json())
                 ```
                 """
-                json = {"discount_price": discount_price, "message": message}
+                json = {
+                    "discount_price": discount_price,
+                    "message": message,
+                    "auto_buy": auto_buy,
+                    "balance_id": balance_id,
+                }
                 return await self.core.request("POST", f"/{item_id}/discount", json=json)
 
             @UNIVERSAL(batchable=True)
@@ -1761,11 +1785,11 @@ class Market(APIClient):
 
         @UNIVERSAL(batchable=True)
         async def transfer(
-            self, 
-            item_id: int, 
-            username: str, 
-            secret_answer: str, 
-            open: bool = NONE, 
+            self,
+            item_id: int,
+            username: str,
+            secret_answer: str,
+            open: bool = NONE,
             close: bool = NONE
         ) -> Response:
             """
@@ -1795,7 +1819,6 @@ class Market(APIClient):
                 "close": close
             }
             return await self.core.request("POST", f"/{item_id}/change-owner", json=json)
-       
 
         @UNIVERSAL(batchable=True)
         async def decline_video_recording(self, item_id: int, waive_claims: bool) -> Response:
@@ -1820,6 +1843,31 @@ class Market(APIClient):
                 "i_voluntarily_and_with_full_awareness_of_my_actions_waive_any_claims_regarding_this_item": waive_claims
             }
             return await self.core.request("POST", f"/{item_id}/decline-video-recording", json=json)
+
+        @UNIVERSAL(batchable=True)
+        async def qr_login(self, item_id: int, challenge: str) -> Response:
+            """
+            POST https://api.lzt.market/{item_id}/qr-login
+
+            *Authorize to Telegram/Steam by providing QR code challenge.*
+
+            **Parameters:**
+
+            - item_id (int): Item ID.
+            - challenge (str): Decoded QR-code string.
+
+            **Example:**
+
+            ```python
+            response = await market.managing.qr_login(
+                item_id=1234567890,
+                challenge="tg://login?token=<base64url>"
+            )
+            print(response.json())
+            ```
+            """
+            json = {"challenge": challenge}
+            return await self.core.request("POST", f"/{item_id}/qr-login", json=json)
 
     class __Purchasing:
         class __Cart:
@@ -2091,6 +2139,7 @@ class Market(APIClient):
                 "information": information,
                 "login": login,
                 "password": password,
+                "tfa_secret": tfa_secret,
                 "tag_id": tag_id,
                 "has_email_login_data": bool(email) if email and not isinstance(email, _NONE) else email,
                 "email_login_data": email,
@@ -2639,7 +2688,7 @@ class Market(APIClient):
                     amount=150,
                     payment_id="0000001",
                     comment="10x amount of some goods | #0000001",
-                    url_success="https://lolz.live/account/ban",
+                    url_success="https://lolz.team/account/ban",
                     url_callback="https://yourweb.site/callback/0000001",
                     lifetime=300,
                     merchant_id=1

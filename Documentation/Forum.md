@@ -199,7 +199,7 @@ LOLZTEAM Forum API Client
 **Parameters:**
 
 - token (str): Your token.
-  > You can get it [there](https://lolz.live/account/api)
+  > You can get it [there](https://lolz.team/account/api)
 - language (Literal["ru", "en"]): Language of the API responses.
   > This parameter sets a strict minimal delay between your requests.
 - proxy (str): Proxy string.
@@ -246,7 +246,7 @@ forum.settings.logger.disable()                                       # <- Stop 
 
 ## List
 
-GET https://prod-api.lolz.live/categories
+GET https://api.lolz.team/categories
 
 *Get categories.*
 
@@ -266,7 +266,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/categories/{category_id}
+GET https://api.lolz.team/categories/{category_id}
 
 *Get category.*
 
@@ -288,7 +288,7 @@ print(response.json())
 
 ### Options
 
-GET https://prod-api.lolz.live/forums/feed/options
+GET https://api.lolz.team/forums/feed/options
 
 *Returns available options for the forums feed.*
 
@@ -302,7 +302,7 @@ print(response.json())
 
 ### Edit
 
-PUT https://prod-api.lolz.live/forums/feed/options
+PUT https://api.lolz.team/forums/feed/options
 
 *Edit feed options.*
 
@@ -322,7 +322,7 @@ print(response.json())
 
 ### List
 
-GET https://prod-api.lolz.live/link-forums
+GET https://api.lolz.team/link-forums
 
 *List of all link forums.*
 
@@ -336,7 +336,7 @@ print(response.json())
 
 ### Get
 
-GET https://prod-api.lolz.live/link-forums/{link_id}
+GET https://api.lolz.team/link-forums/{link_id}
 
 *Detail information of a link forum.*
 
@@ -354,7 +354,7 @@ print(response.json())
 
 ## Grouped
 
-GET https://prod-api.lolz.live/forums/grouped
+GET https://api.lolz.team/forums/grouped
 
 *Returns grouped forums (forums tree).*
 
@@ -368,7 +368,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/forums
+GET https://api.lolz.team/forums
 
 *Get forums.*
 
@@ -388,7 +388,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/forums/{forum_id}
+GET https://api.lolz.team/forums/{forum_id}
 
 *Get forum.*
 
@@ -406,7 +406,7 @@ print(response.json())
 
 ## Followers
 
-GET https://prod-api.lolz.live/forums/{forum_id}/followers
+GET https://api.lolz.team/forums/{forum_id}/followers
 
 *Get forum followers.*
 
@@ -424,7 +424,7 @@ print(response.json())
 
 ## Followed
 
-GET https://prod-api.lolz.live/forums/followed
+GET https://api.lolz.team/forums/followed
 
 *Get followed forums.*
 
@@ -442,7 +442,7 @@ print(response.json())
 
 ## Follow
 
-POST https://prod-api.lolz.live/forums/{forum_id}/followers
+POST https://api.lolz.team/forums/{forum_id}/followers
 
 *Follow forum.*
 
@@ -464,7 +464,7 @@ print(response.json())
 
 ## Unfollow
 
-DELETE https://prod-api.lolz.live/forums/{forum_id}/followers
+DELETE https://api.lolz.team/forums/{forum_id}/followers
 
 *Unfollow forum.*
 
@@ -484,7 +484,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/pages
+GET https://api.lolz.team/pages
 
 *Get pages.*
 
@@ -498,7 +498,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/pages/{page_id}
+GET https://api.lolz.team/pages/{page_id}
 
 *Get page.*
 
@@ -520,7 +520,7 @@ print(response.json())
 
 ### Money
 
-POST https://prod-api.lolz.live/contests
+POST https://api.lolz.team/contests
 
 *Create a money contest.*
 
@@ -574,7 +574,7 @@ print(response.json())
 
 ### Upgrade
 
-POST https://prod-api.lolz.live/contests
+POST https://api.lolz.team/contests
 
 *Create a new contest.*
 
@@ -621,7 +621,7 @@ print(response.json())
 
 ### Market
 
-POST https://prod-api.lolz.live/claims
+POST https://api.lolz.team/claims
 
 *Create a Arbitrage.*
 
@@ -651,7 +651,7 @@ print(response.json())
 
 ### Non Market
 
-POST https://prod-api.lolz.live/claims
+POST https://api.lolz.team/claims
 
 *Create a Arbitrage.*
 
@@ -690,7 +690,7 @@ print(response.json())
 
 ### Get
 
-GET https://prod-api.lolz.live/threads/{thread_id}/poll
+GET https://api.lolz.team/threads/{thread_id}/poll
 
 *Get poll.*
 
@@ -708,7 +708,7 @@ print(response.json())
 
 ### Vote
 
-POST https://prod-api.lolz.live/threads/{thread_id}/poll/votes
+POST https://api.lolz.team/threads/{thread_id}/poll/votes
 
 *Vote in poll.*
 
@@ -727,7 +727,7 @@ print(response.json())
 
 ## List Unread
 
-GET https://prod-api.lolz.live/threads/new
+GET https://api.lolz.team/threads/new
 
 *Get unread threads.*
 
@@ -747,7 +747,7 @@ print(response.json())
 
 ## List Recent
 
-GET https://prod-api.lolz.live/threads/recent
+GET https://api.lolz.team/threads/recent
 
 *Get recent threads.*
 
@@ -768,7 +768,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/threads
+GET https://api.lolz.team/threads
 
 *Get threads.*
 
@@ -796,7 +796,7 @@ GET https://prod-api.lolz.live/threads
 
 ## Get
 
-GET https://prod-api.lolz.live/threads/{thread_id}
+GET https://api.lolz.team/threads/{thread_id}
 
 *Get thread.*
 
@@ -814,7 +814,7 @@ print(response.json())
 
 ## Share
 
-GET https://prod-api.lolz.live/conversations/share-content
+GET https://api.lolz.team/conversations/share-content
 
 *Get a shareable thread content (hides).*
 
@@ -832,7 +832,7 @@ print(response.json())
 
 ## Create
 
-POST https://prod-api.lolz.live/threads
+POST https://api.lolz.team/threads
 
 *Create a thread.*
 
@@ -880,7 +880,7 @@ print(response.json())
 
 ## Edit
 
-PUT https://prod-api.lolz.live/threads/{thread_id}
+PUT https://api.lolz.team/threads/{thread_id}
 
 *Edit a thread.*
 
@@ -889,10 +889,9 @@ PUT https://prod-api.lolz.live/threads/{thread_id}
 - thread_id (int): Thread ID.
 - title (str): Title.
 - title_en (str): Title in English.
-- post_body (str): Post body.
 - prefix_ids (list[int]): Prefix IDs.
 - tags (list[int]): Tags.
-- discussion_state (bool): Discussion state.
+- discussion_open (bool): Discussion state.
 - hide_contacts (bool): Hide contacts.
 - allow_ask_hidden_content (bool): Allow ask hidden content.
 - reply_group (int): Reply group.
@@ -905,10 +904,9 @@ response = forum.threads.edit(
     thread_id=5523020,
     title="Test thread",
     title_en="Test thread",
-    post_body="Test thread",
     prefix_ids=[1, 2, 3],
     tags=["tag1", "tag2", "tag3"],
-    discussion_state=True,
+    discussion_open=True,
     hide_contacts=False,
     allow_ask_hidden_content=False,
     reply_group=2,
@@ -920,7 +918,7 @@ print(response.json())
 
 ## Delete
 
-DELETE https://prod-api.lolz.live/threads/{thread_id}
+DELETE https://api.lolz.team/threads/{thread_id}
 
 *Delete a thread.*
 
@@ -939,7 +937,7 @@ print(response.json())
 
 ## Bump
 
-POST https://prod-api.lolz.live/threads/{thread_id}/bump
+POST https://api.lolz.team/threads/{thread_id}/bump
 
 *Bump a thread.*
 
@@ -957,7 +955,7 @@ print(response.json())
 
 ## Hide
 
-POST https://prod-api.lolz.live/threads/{thread_id}/hide
+POST https://api.lolz.team/threads/{thread_id}/hide
 
 *Hide a thread from your feed.*
 
@@ -975,7 +973,7 @@ print(response.json())
 
 ## Move
 
-POST https://prod-api.lolz.live/threads/{thread_id}/move
+POST https://api.lolz.team/threads/{thread_id}/move
 
 *Move a thread.*
 
@@ -998,7 +996,7 @@ print(response.json())
 
 ## Followers
 
-GET https://prod-api.lolz.live/threads/{thread_id}/followers
+GET https://api.lolz.team/threads/{thread_id}/followers
 
 *Get followers of a thread.*
 
@@ -1016,7 +1014,7 @@ print(response.json())
 
 ## Followed
 
-GET https://prod-api.lolz.live/threads/{thread_id}/followed
+GET https://api.lolz.team/threads/{thread_id}/followed
 
 *Get followed users of a thread.*
 
@@ -1035,7 +1033,7 @@ print(response.json())
 
 ## Follow
 
-POST https://prod-api.lolz.live/threads/{thread_id}/followers
+POST https://api.lolz.team/threads/{thread_id}/followers
 
 *Follow a thread.*
 
@@ -1054,7 +1052,7 @@ print(response.json())
 
 ## Unfollow
 
-DELETE https://prod-api.lolz.live/threads/{thread_id}/followers
+DELETE https://api.lolz.team/threads/{thread_id}/followers
 
 *Unfollow a thread.*
 
@@ -1076,7 +1074,7 @@ print(response.json())
 
 ### List
 
-GET https://prod-api.lolz.live/posts/comments
+GET https://api.lolz.team/posts/comments
 
 *Get comments of a post.*
 
@@ -1097,7 +1095,7 @@ print(response.json())
 
 ### Create
 
-POST https://prod-api.lolz.live/posts/{post_id}/comments
+POST https://api.lolz.team/posts/{post_id}/comments
 
 *Create a comment.*
 
@@ -1116,7 +1114,7 @@ print(response.json())
 
 ### Edit
 
-PUT https://prod-api.lolz.live/posts/comments
+PUT https://api.lolz.team/posts/comments
 
 *Edit a comment.*
 
@@ -1136,7 +1134,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://prod-api.lolz.live/posts/comments
+DELETE https://api.lolz.team/posts/comments
 
 *Delete a post comment.*
 
@@ -1154,7 +1152,7 @@ print(response.json())
 
 ### Reasons
 
-GET https://prod-api.lolz.live/posts/comments/report
+GET https://api.lolz.team/posts/comments/report
 
 *Get a post comment report reasons.*
 
@@ -1172,7 +1170,7 @@ print(response.json())
 
 ### Report
 
-POST https://prod-api.lolz.live/posts/comments/report
+POST https://api.lolz.team/posts/comments/report
 
 *Report a post comment.*
 
@@ -1191,7 +1189,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/posts
+GET https://api.lolz.team/posts
 
 *Get posts.*
 
@@ -1213,7 +1211,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/posts/{post_id}
+GET https://api.lolz.team/posts/{post_id}
 
 *Get a post.*
 
@@ -1231,7 +1229,7 @@ print(response.json())
 
 ## Create
 
-POST https://prod-api.lolz.live/posts
+POST https://api.lolz.team/posts
 
 *Create a post.*
 
@@ -1251,7 +1249,7 @@ print(response.json())
 
 ## Edit
 
-PUT https://prod-api.lolz.live/posts/{post_id}
+PUT https://api.lolz.team/posts/{post_id}
 
 *Edit a post.*
 
@@ -1271,7 +1269,7 @@ print(response.json())
 
 ## Delete
 
-DELETE https://prod-api.lolz.live/posts/{post_id}
+DELETE https://api.lolz.team/posts/{post_id}
 
 *Delete a post.*
 
@@ -1290,7 +1288,7 @@ print(response.json())
 
 ## Likes
 
-GET https://prod-api.lolz.live/posts/{post_id}/likes
+GET https://api.lolz.team/posts/{post_id}/likes
 
 *Get likes of a post.*
 
@@ -1310,7 +1308,7 @@ print(response.json())
 
 ## Like
 
-POST https://prod-api.lolz.live/posts/{post_id}/likes
+POST https://api.lolz.team/posts/{post_id}/likes
 
 *Like a post.*
 
@@ -1328,7 +1326,7 @@ print(response.json())
 
 ## Unlike
 
-DELETE https://prod-api.lolz.live/posts/{post_id}/likes
+DELETE https://api.lolz.team/posts/{post_id}/likes
 
 *Unlike a post.*
 
@@ -1346,7 +1344,7 @@ print(response.json())
 
 ## Report
 
-POST https://prod-api.lolz.live/posts/{post_id}/report
+POST https://api.lolz.team/posts/{post_id}/report
 
 *Report a post.*
 
@@ -1365,7 +1363,7 @@ print(response.json())
 
 ## Reasons
 
-GET https://prod-api.lolz.live/posts/{post_id}/report
+GET https://api.lolz.team/posts/{post_id}/report
 
 *Get post report reasons.*
 
@@ -1389,7 +1387,7 @@ print(response.json())
 
 ### Upload
 
-POST https://prod-api.lolz.live/users/me/avatar
+POST https://api.lolz.team/users/me/avatar
 
 *Upload an avatar.*
 > You can't create batch job for this method
@@ -1413,7 +1411,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://prod-api.lolz.live/users/me/avatar
+DELETE https://api.lolz.team/users/me/avatar
 
 **Delete an avatar.**
 
@@ -1427,7 +1425,7 @@ print(response.json())
 
 ### Crop
 
-POST https://prod-api.lolz.live/users/me/avatar/crop
+POST https://api.lolz.team/users/me/avatar/crop
 
 *Crop an avatar.*
 
@@ -1450,7 +1448,7 @@ print(response.json())
 
 ### Upload
 
-POST https://prod-api.lolz.live/users/me/background
+POST https://api.lolz.team/users/me/background
 
 *Upload a background.*
 > You can't create batch job for this method
@@ -1474,7 +1472,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://prod-api.lolz.live/users/me/background
+DELETE https://api.lolz.team/users/me/background
 
 **Delete a background.**
 
@@ -1488,7 +1486,7 @@ print(response.json())
 
 ### Crop
 
-POST https://prod-api.lolz.live/users/me/background/crop
+POST https://api.lolz.team/users/me/background/crop
 
 *Crop a background.*
 
@@ -1513,7 +1511,7 @@ print(response.json())
 
 #### List
 
-GET https://prod-api.lolz.live/profile-posts/comments
+GET https://api.lolz.team/profile-posts/comments
 
 *Get comments of a profile post.*
 
@@ -1534,7 +1532,7 @@ print(response.json())
 
 #### Get
 
-GET https://prod-api.lolz.live/profile-posts/{post_id}/comments/{comment_id}
+GET https://api.lolz.team/profile-posts/{post_id}/comments/{comment_id}
 
 *Get a comment of a profile post.*
 
@@ -1553,7 +1551,7 @@ print(response.json())
 
 #### Create
 
-POST https://prod-api.lolz.live/profile-posts/{post_id}/comments
+POST https://api.lolz.team/profile-posts/{post_id}/comments
 
 *Create a comment of a profile post.*
 
@@ -1572,7 +1570,7 @@ print(response.json())
 
 #### Edit
 
-PUT https://prod-api.lolz.live/profile-posts/comments
+PUT https://api.lolz.team/profile-posts/comments
 
 *Edit a profile post comment.*
 
@@ -1592,7 +1590,7 @@ print(response.json())
 
 #### Delete
 
-DELETE https://prod-api.lolz.live/profile-posts/comments
+DELETE https://api.lolz.team/profile-posts/comments
 
 *Delete a profile post comment.*
 
@@ -1610,7 +1608,7 @@ print(response.json())
 
 #### Reasons
 
-GET https://prod-api.lolz.live/profile-posts/comments/{comment_id}/report
+GET https://api.lolz.team/profile-posts/comments/{comment_id}/report
 
 *GET a profile post comment report reasons.*
 
@@ -1628,7 +1626,7 @@ print(response.json())
 
 #### Report
 
-POST https://prod-api.lolz.live/profile-posts/comments/report
+POST https://api.lolz.team/profile-posts/comments/report
 
 *Report a profile post comment.*
 
@@ -1647,7 +1645,7 @@ print(response.json())
 
 ### List
 
-GET https://prod-api.lolz.live/users/{user_id}/profile-posts
+GET https://api.lolz.team/users/{user_id}/profile-posts
 
 *Get profile posts of a user.*
 
@@ -1668,7 +1666,7 @@ print(response.json())
 
 ### Get
 
-GET https://prod-api.lolz.live/profile-posts/{post_id}
+GET https://api.lolz.team/profile-posts/{post_id}
 
 *Get a profile post.*
 
@@ -1686,7 +1684,7 @@ print(response.json())
 
 ### Create
 
-POST https://prod-api.lolz.live/users/{user_id}/profile-posts
+POST https://api.lolz.team/users/{user_id}/profile-posts
 
 *Create a profile post.*
 
@@ -1705,7 +1703,7 @@ print(response.json())
 
 ### Edit
 
-PUT https://prod-api.lolz.live/profile-posts/{post_id}
+PUT https://api.lolz.team/profile-posts/{post_id}
 
 *Edit a profile post.*
 
@@ -1726,7 +1724,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://prod-api.lolz.live/profile-posts/{post_id}
+DELETE https://api.lolz.team/profile-posts/{post_id}
 
 **Delete a profile post.**
 
@@ -1745,7 +1743,7 @@ print(response.json())
 
 ### Likes
 
-GET https://prod-api.lolz.live/profile-posts/{post_id}/likes
+GET https://api.lolz.team/profile-posts/{post_id}/likes
 
 *Get likes of a profile post.*
 
@@ -1763,7 +1761,7 @@ print(response.json())
 
 ### Like
 
-POST https://prod-api.lolz.live/profile-posts/{post_id}/likes
+POST https://api.lolz.team/profile-posts/{post_id}/likes
 
 **Like a profile post.**
 
@@ -1777,7 +1775,7 @@ print(response.json())
 
 ### Unlike
 
-DELETE https://prod-api.lolz.live/profile-posts/{post_id}/likes
+DELETE https://api.lolz.team/profile-posts/{post_id}/likes
 
 **Unlike a profile post.**
 
@@ -1791,7 +1789,7 @@ print(response.json())
 
 ### Report
 
-POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+POST https://api.lolz.team/profile-posts/{profile_post_id}/report
 
 *Report a profile post.*
 
@@ -1810,7 +1808,7 @@ print(response.json())
 
 ### Reasons
 
-GET https://prod-api.lolz.live/profile-posts/{profile_post_id}/report
+GET https://api.lolz.team/profile-posts/{profile_post_id}/report
 
 *Get profile post report reasons.*
 
@@ -1828,7 +1826,7 @@ print(response.json())
 
 ### Stick
 
-POST https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+POST https://api.lolz.team/profile-posts/{profile_post_id}/stick
 
 *Stick a profile post.*
 
@@ -1846,7 +1844,7 @@ print(response.json())
 
 ### Unstick
 
-DELETE https://prod-api.lolz.live/profile-posts/{profile_post_id}/stick
+DELETE https://api.lolz.team/profile-posts/{profile_post_id}/stick
 
 *Unstick a profile post.*
 
@@ -1866,7 +1864,7 @@ print(response.json())
 
 ### Types
 
-GET https://prod-api.lolz.live/users/secret-answer/types
+GET https://api.lolz.team/users/secret-answer/types
 
 *Get available secret answer types.*
 
@@ -1880,7 +1878,7 @@ print(response.json())
 
 ### Reset
 
-POST https://prod-api.lolz.live/account/secret-answer/reset
+POST https://api.lolz.team/account/secret-answer/reset
 
 *Request a reset of the secret answer for the account.*
 
@@ -1894,7 +1892,7 @@ print(response.json())
 
 ### Cancel Reset
 
-DELETE https://prod-api.lolz.live/account/secret-answer/reset
+DELETE https://api.lolz.team/account/secret-answer/reset
 
 *Cancel a pending secret answer reset request for the account.*
 
@@ -1908,7 +1906,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/users
+GET https://api.lolz.team/users
 
 *Get users.*
 
@@ -1927,7 +1925,7 @@ print(response.json())
 
 ## Search
 
-GET https://prod-api.lolz.live/users/find
+GET https://api.lolz.team/users/find
 
 *Search users.*
 
@@ -1946,7 +1944,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/users/{user_id}
+GET https://api.lolz.team/users/{user_id}
 
 *Get a user.*
 
@@ -1964,7 +1962,7 @@ print(response.json())
 
 ## Edit
 
-PUT https://prod-api.lolz.live/users/me
+PUT https://api.lolz.team/users/me
 
 *Edit a user.*
 
@@ -2015,7 +2013,7 @@ print(response.json())
 
 ## Fields
 
-GET https://prod-api.lolz.live/users/fields
+GET https://api.lolz.team/users/fields
 
 *Get your fields.*
 
@@ -2029,7 +2027,7 @@ print(response.json())
 
 ## Trophies
 
-GET https://prod-api.lolz.live/users/{user_id}/trophies
+GET https://api.lolz.team/users/{user_id}/trophies
 
 *Get user trophies.*
 
@@ -2047,7 +2045,7 @@ print(response.json())
 
 ## Claims
 
-GET https://prod-api.lolz.live/users/{user_id}/claims
+GET https://api.lolz.team/users/{user_id}/claims
 
 *Get user claims.*
 
@@ -2067,7 +2065,7 @@ print(response.json())
 
 ## Likes
 
-GET https://prod-api.lolz.live/users/{user_id}/likes
+GET https://api.lolz.team/users/{user_id}/likes
 
 *Get information about user likes.*
 
@@ -2095,7 +2093,7 @@ print(response.json())
 
 ## Followers
 
-GET https://prod-api.lolz.live/users/{user_id}/followers
+GET https://api.lolz.team/users/{user_id}/followers
 
 *Get followers of a user.*
 
@@ -2116,7 +2114,7 @@ print(response.json())
 
 ## Followed
 
-GET https://prod-api.lolz.live/users/{user_id}/followings
+GET https://api.lolz.team/users/{user_id}/followings
 
 *Get followed users of a user.*
 
@@ -2137,7 +2135,7 @@ print(response.json())
 
 ## Follow
 
-POST https://prod-api.lolz.live/users/{user_id}/followers
+POST https://api.lolz.team/users/{user_id}/followers
 
 **Follow a user.**
 
@@ -2155,7 +2153,7 @@ print(response.json())
 
 ## Unfollow
 
-DELETE https://prod-api.lolz.live/users/{user_id}/followers
+DELETE https://api.lolz.team/users/{user_id}/followers
 
 **Unfollow a user.**
 
@@ -2173,7 +2171,7 @@ print(response.json())
 
 ## Ignored
 
-GET https://prod-api.lolz.live/users/ignored
+GET https://api.lolz.team/users/ignored
 
 *Get ignored users.*
 
@@ -2187,7 +2185,7 @@ print(response.json())
 
 ## Ignore
 
-POST https://prod-api.lolz.live/users/{user_id}/ignore
+POST https://api.lolz.team/users/{user_id}/ignore
 
 **Ignore a user.**
 
@@ -2205,7 +2203,7 @@ print(response.json())
 
 ## Ignore Edit
 
-PUT https://prod-api.lolz.live/users/{user_id}/ignore
+PUT https://api.lolz.team/users/{user_id}/ignore
 
 **Edit ignoring options for a user.**
 
@@ -2231,7 +2229,7 @@ print(response.json())
 
 ## Unignore
 
-DELETE https://prod-api.lolz.live/users/{user_id}/ignore
+DELETE https://api.lolz.team/users/{user_id}/ignore
 
 **Unignore a user.**
 
@@ -2249,7 +2247,7 @@ print(response.json())
 
 ## Content
 
-GET https://prod-api.lolz.live/users/{user_id}/timeline
+GET https://api.lolz.team/users/{user_id}/timeline
 
 *Get timeline of a user.*
 
@@ -2273,7 +2271,7 @@ print(response.json())
 
 ### List
 
-GET https://prod-api.lolz.live/conversations/messages
+GET https://api.lolz.team/conversations/messages
 
 **Get messages from a conversation.**
 
@@ -2296,7 +2294,7 @@ print(response.json())
 
 ### Get
 
-GET https://prod-api.lolz.live/conversations/messages/{message_id}
+GET https://api.lolz.team/conversations/messages/{message_id}
 
 *Get a message.*
 
@@ -2314,7 +2312,7 @@ print(response.json())
 
 ### Create
 
-POST https://prod-api.lolz.live/conversations/messages
+POST https://api.lolz.team/conversations/messages
 
 **Create a message.**
 
@@ -2333,7 +2331,7 @@ print(response.json())
 
 ### Edit
 
-PUT https://prod-api.lolz.live/conversations/messages/{message_id}
+PUT https://api.lolz.team/conversations/messages/{message_id}
 
 **Edit a message.**
 
@@ -2353,7 +2351,7 @@ print(response.json())
 
 ### Delete
 
-POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}
+POST https://api.lolz.team/conversations/{conversation_id}/messages/{message_id}
 
 **Deletes a message.**
 
@@ -2372,7 +2370,7 @@ print(response.json())
 
 ### Stick
 
-POST https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+POST https://api.lolz.team/conversations/{conversation_id}/messages/{message_id}/stick
 
 **Stick a message in a conversation.**
 
@@ -2391,7 +2389,7 @@ print(response.json())
 
 ### Unstick
 
-DELETE https://prod-api.lolz.live/conversations/{conversation_id}/messages/{message_id}/stick
+DELETE https://api.lolz.team/conversations/{conversation_id}/messages/{message_id}/stick
 
 **Unstick a message in a conversation.**
 
@@ -2412,7 +2410,7 @@ print(response.json())
 
 ### Enable
 
-POST https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+POST https://api.lolz.team/conversations/{conversation_id}/alerts
 
 **Enable alerts for a conversation.**
 
@@ -2430,7 +2428,7 @@ print(response.json())
 
 ### Disable
 
-DELETE https://prod-api.lolz.live/conversations/{conversation_id}/alerts
+DELETE https://api.lolz.team/conversations/{conversation_id}/alerts
 
 **Disable alerts for a conversation.**
 
@@ -2448,7 +2446,7 @@ print(response.json())
 
 ## Save
 
-POST https://prod-api.lolz.live/conversations/save
+POST https://api.lolz.team/conversations/save
 
 *Send content to Saved Messages.*
 
@@ -2468,7 +2466,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/conversations
+GET https://api.lolz.team/conversations
 
 *Get conversations.*
 
@@ -2488,7 +2486,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/conversations/{conversation_id}
+GET https://api.lolz.team/conversations/{conversation_id}
 
 *Get a conversation.*
 
@@ -2506,7 +2504,7 @@ print(response.json())
 
 ## Start
 
-POST https://prod-api.lolz.live/conversations/start
+POST https://api.lolz.team/conversations/start
 
 *Start a new conversation with a user.*
 
@@ -2524,7 +2522,7 @@ print(response.json())
 
 ## Create
 
-POST https://prod-api.lolz.live/conversations
+POST https://api.lolz.team/conversations
 
 **Create a conversation.**
 
@@ -2543,7 +2541,7 @@ print(response.json())
 
 ## Create Group
 
-POST https://prod-api.lolz.live/conversations
+POST https://api.lolz.team/conversations
 
 **Create a group conversation.**
 
@@ -2575,7 +2573,7 @@ print(response.json())
 
 ## Edit
 
-PUT https://prod-api.lolz.live/conversations
+PUT https://api.lolz.team/conversations
 
 **Edit conversation settings.**
 
@@ -2603,7 +2601,7 @@ print(response.json())
 
 ## Leave
 
-DELETE https://prod-api.lolz.live/conversations/{conversation_id}
+DELETE https://api.lolz.team/conversations/{conversation_id}
 
 **Leave from a conversation.**
 
@@ -2622,7 +2620,7 @@ print(response.json())
 
 ## Search
 
-POST https://prod-api.lolz.live/conversations/search
+POST https://api.lolz.team/conversations/search
 
 **Search for conversations messages or recipients.**
 
@@ -2647,7 +2645,7 @@ print(response.json())
 
 ## Star
 
-POST https://prod-api.lolz.live/conversations/{conversation_id}/star
+POST https://api.lolz.team/conversations/{conversation_id}/star
 
 **Star a conversation.**
 
@@ -2665,7 +2663,7 @@ print(response.json())
 
 ## Invite
 
-POST https://prod-api.lolz.live/conversations/{conversation_id}/invite
+POST https://api.lolz.team/conversations/{conversation_id}/invite
 
 **Invite one or more users to an existing conversation.**
 
@@ -2684,7 +2682,7 @@ print(response.json())
 
 ## Kick
 
-POST https://prod-api.lolz.live/conversations/{conversation_id}/kick
+POST https://api.lolz.team/conversations/{conversation_id}/kick
 
 **Kick a user from a conversation.**
 
@@ -2703,7 +2701,7 @@ print(response.json())
 
 ## Unstar
 
-DELETE https://prod-api.lolz.live/conversations/{conversation_id}/star
+DELETE https://api.lolz.team/conversations/{conversation_id}/star
 
 **Unstar a conversation.**
 
@@ -2721,9 +2719,9 @@ print(response.json())
 
 ## Read
 
-POST https://prod-api.lolz.live/conversations/read
+POST https://api.lolz.team/conversations/read
 
-POST https://prod-api.lolz.live/conversations/read-all
+POST https://api.lolz.team/conversations/read-all
 
 **Read a specific conversation.**
 
@@ -2739,7 +2737,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/notifications
+GET https://api.lolz.team/notifications
 
 *Get notifications.*
 
@@ -2759,7 +2757,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/notifications/{notification_id}
+GET https://api.lolz.team/notifications/{notification_id}
 
 *Get a notification.*
 
@@ -2777,7 +2775,7 @@ print(response.json())
 
 ## Read
 
-POST https://prod-api.lolz.live/notifications/read
+POST https://api.lolz.team/notifications/read
 
 **Read a notification.**
 
@@ -2797,7 +2795,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/tags/list
+GET https://api.lolz.team/tags/list
 
 *Get tags.*
 
@@ -2816,7 +2814,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/tags/{tag_id}
+GET https://api.lolz.team/tags/{tag_id}
 
 *Get a tag.*
 
@@ -2836,7 +2834,7 @@ print(response.json())
 
 ## Popular
 
-GET https://prod-api.lolz.live/tags/popular
+GET https://api.lolz.team/tags/popular
 
 *Get popular tags.*
 
@@ -2850,7 +2848,7 @@ print(response.json())
 
 ## Search
 
-GET https://prod-api.lolz.live/tags/find
+GET https://api.lolz.team/tags/find
 
 **Search for a tag.**
 
@@ -2870,7 +2868,7 @@ print(response.json())
 
 ## Results
 
-GET https://prod-api.lolz.live/search/{search_id}/results
+GET https://api.lolz.team/search/{search_id}/results
 
 **Get Search Results.**
 
@@ -2892,7 +2890,7 @@ print(response.json())
 
 ## All
 
-POST https://prod-api.lolz.live/search
+POST https://api.lolz.team/search
 
 **Search for all types of content.**
 
@@ -2916,7 +2914,7 @@ print(response.json())
 
 ## Users
 
-POST https://prod-api.lolz.live/search/users
+POST https://api.lolz.team/search/users
 
 **Search for users.**
 
@@ -2937,7 +2935,7 @@ print(response.json())
 
 ## Threads
 
-POST https://prod-api.lolz.live/search/threads
+POST https://api.lolz.team/search/threads
 
 **Search for threads.**
 
@@ -2959,7 +2957,7 @@ print(response.json())
 
 ## Posts
 
-POST https://prod-api.lolz.live/search/posts
+POST https://api.lolz.team/search/posts
 
 **Search for posts.**
 
@@ -2981,7 +2979,7 @@ print(response.json())
 
 ## Profile Posts
 
-POST https://prod-api.lolz.live/search/profile-posts
+POST https://api.lolz.team/search/profile-posts
 
 **Search for profile posts.**
 
@@ -3003,7 +3001,7 @@ print(response.json())
 
 ## Tagged
 
-POST https://prod-api.lolz.live/search/tagged
+POST https://api.lolz.team/search/tagged
 
 **Search for tagged content.**
 
@@ -3028,7 +3026,7 @@ print(response.json())
 
 ### List
 
-GET https://prod-api.lolz.live/chatbox/messages
+GET https://api.lolz.team/chatbox/messages
 
 *Get chat messages.*
 
@@ -3047,7 +3045,7 @@ print(response.json())
 
 ### Create
 
-POST https://prod-api.lolz.live/chatbox/messages
+POST https://api.lolz.team/chatbox/messages
 
 *Create a chat message.*
 
@@ -3067,7 +3065,7 @@ print(response.json())
 
 ### Edit
 
-PUT https://prod-api.lolz.live/chatbox/messages
+PUT https://api.lolz.team/chatbox/messages
 
 *Edit a chat message.*
 
@@ -3086,7 +3084,7 @@ print(response.json())
 
 ### Delete
 
-DELETE https://prod-api.lolz.live/chatbox/messages
+DELETE https://api.lolz.team/chatbox/messages
 
 *Delete a chat message.*
 
@@ -3104,7 +3102,7 @@ print(response.json())
 
 ### Report
 
-POST https://prod-api.lolz.live/chatbox/messages/report
+POST https://api.lolz.team/chatbox/messages/report
 
 *Report a chat message.*
 
@@ -3123,7 +3121,7 @@ print(response.json())
 
 ### Reasons
 
-GET https://prod-api.lolz.live/chatbox/messages/report
+GET https://api.lolz.team/chatbox/messages/report
 
 *Get chat message report reasons.*
 
@@ -3141,7 +3139,7 @@ print(response.json())
 
 ## Get
 
-GET https://prod-api.lolz.live/chatbox
+GET https://api.lolz.team/chatbox
 
 *Get Chats.*
 
@@ -3159,7 +3157,7 @@ print(response.json())
 
 ## Ignored
 
-GET https://prod-api.lolz.live/chatbox/ignore
+GET https://api.lolz.team/chatbox/ignore
 
 *Get ignored users.*
 
@@ -3173,7 +3171,7 @@ print(response.json())
 
 ## Ignore
 
-POST https://prod-api.lolz.live/chatbox/ignore
+POST https://api.lolz.team/chatbox/ignore
 
 *Ignore chat user.*
 
@@ -3191,7 +3189,7 @@ print(response.json())
 
 ## Unignore
 
-DELETE https://prod-api.lolz.live/chatbox/ignore
+DELETE https://api.lolz.team/chatbox/ignore
 
 *Unignore chat user.*
 
@@ -3209,7 +3207,7 @@ print(response.json())
 
 ## Leaderboard
 
-GET https://prod-api.lolz.live/chatbox/messages/leaderboard
+GET https://api.lolz.team/chatbox/messages/leaderboard
 
 *Get chat leaderboard.*
 
@@ -3227,7 +3225,7 @@ print(response.json())
 
 ## Online
 
-GET https://prod-api.lolz.live/chatbox/messages/online
+GET https://api.lolz.team/chatbox/messages/online
 
 *Get chat online users.*
 
@@ -3247,7 +3245,7 @@ print(response.json())
 
 ## List
 
-GET https://prod-api.lolz.live/forms
+GET https://api.lolz.team/forms
 
 *Get Forms list.*
 
@@ -3265,7 +3263,7 @@ print(response.json())
 
 ## Create
 
-GET https://prod-api.lolz.live/forms/save
+GET https://api.lolz.team/forms/save
 
 *Create thread by form.*
 
@@ -3293,7 +3291,7 @@ print(response.json())
 
 # Css
 
-GET https://prod-api.lolz.live/css
+GET https://api.lolz.team/css
 
 *Get navigation.*
 
@@ -3314,7 +3312,7 @@ print(response.json())
 
 ## Batch
 
-POST https://prod-api.lolz.live/batch
+POST https://api.lolz.team/batch
 
 *Batch requests.*
 

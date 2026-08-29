@@ -111,8 +111,12 @@
     * [Get](#get-24)
     * [Params](#params-24)
     * [Games](#games-24)
+  * [Onlyfans](#onlyfans)
+    * [Get](#get-25)
+    * [Params](#params-25)
+    * [Games](#games-25)
   * [List](#list)
-  * [Get](#get-25)
+  * [Get](#get-26)
 * [List](#list-1)
   * [Owned](#owned)
   * [Purchased](#purchased)
@@ -142,7 +146,7 @@
     * [Review](#review)
     * [Cancel](#cancel-1)
   * [Custom Discount](#custom-discount)
-    * [Get](#get-26)
+    * [Get](#get-27)
     * [Create](#create)
     * [Edit](#edit)
     * [Delete](#delete)
@@ -152,7 +156,7 @@
     * [Edit](#edit-1)
     * [Delete](#delete-1)
     * [Reorder](#reorder)
-  * [Get](#get-27)
+  * [Get](#get-28)
   * [Bulk](#bulk)
   * [Edit](#edit-2)
   * [Bulk Action](#bulk-action)
@@ -178,9 +182,10 @@
   * [Unstick](#unstick)
   * [Transfer](#transfer)
   * [Decline Video Recording](#decline-video-recording)
+  * [Qr Login](#qr-login)
 * [Purchasing](#purchasing)
   * [Cart](#cart)
-    * [Get](#get-28)
+    * [Get](#get-29)
     * [Add](#add)
     * [Delete](#delete-3)
   * [Fast](#fast)
@@ -192,7 +197,7 @@
   * [Check](#check-2)
   * [External](#external)
 * [Profile](#profile)
-  * [Get](#get-29)
+  * [Get](#get-30)
   * [Edit](#edit-3)
   * [Claims](#claims)
   * [Create Claim](#create-claim)
@@ -203,13 +208,13 @@
     * [Delete](#delete-4)
   * [Invoice](#invoice)
     * [List](#list-4)
-    * [Get](#get-30)
+    * [Get](#get-31)
     * [Create](#create-3)
   * [Payout](#payout)
     * [Services](#services)
     * [Create](#create-4)
   * [Balance](#balance)
-    * [Get](#get-31)
+    * [Get](#get-32)
     * [Exchange](#exchange)
   * [Currency](#currency)
   * [Transfer](#transfer-1)
@@ -218,7 +223,7 @@
   * [History](#history)
   * [Create Link](#create-link)
 * [Proxy](#proxy)
-  * [Get](#get-32)
+  * [Get](#get-33)
   * [Add](#add-2)
   * [Delete](#delete-5)
 * [Imap](#imap)
@@ -238,7 +243,7 @@ LOLZTEAM Market API Client
 **Parameters:**
 
 - token (str): Your token.
-  > You can get it [there](https://lolz.live/account/api)
+  > You can get it [there](https://lolz.team/account/api)
 - language (Literal["ru", "en"]): Language of the API responses.
 - delay_min (float): Minimal delay between requests.
   > This parameter sets a strict minimal delay between your requests.
@@ -1758,6 +1763,65 @@ print(response.json())
 ```
 
 
+## Onlyfans
+
+### Get
+
+GET https://api.lzt.market/CATEGORY_NAME
+
+*Displays a list of accounts in a specific category according to your parameters.*
+
+**Parameters:**
+
+- page (int): The number of the page to display results from
+- title (str): The word or words contained in the account title.
+- pmin (float): Minimal price of account (Inclusive).
+- pmax (float): Maximum price of account (Inclusive).
+- origin (list): List of account origins.
+- not_origin (list): List of account origins that won't be included.
+- order_by (str): Item order.
+- sb (bool): Sold before.
+- sb_by_me (bool): Sold before by me.
+- nsb (bool): Not sold before.
+- nsb_by_me (bool): Not sold before by me.
+- kwargs (any): Any additional search parameters.
+
+**Example:**
+
+```python
+response = market.categories.onlyfans.get(pmin=100, pmax=500)
+print(response.json())
+```
+
+
+### Params
+
+GET https://api.lzt.market/CATEGORY_NAME/params
+
+*Displays a list of parameters for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.onlyfans.params()
+print(response.json())
+```
+
+
+### Games
+
+GET https://api.lzt.market/CATEGORY_NAME/games
+
+*Displays a list of games for a specific category.*
+
+**Example:**
+
+```python
+response = market.categories.onlyfans.games()
+print(response.json())
+```
+
+
 ## List
 
 GET https://api.lzt.market/category
@@ -2180,12 +2244,19 @@ POST https://api.lzt.market/{item_id}/discount
 
 - item_id (int): Item ID.
 - discount_price (float): Requested discounted price.
-- message (str, optional): Message to the seller.
+- message (str): Message to the seller.
+- auto_buy (bool): Automatically buy the item once the discount is accepted.
+- balance_id (int): Balance ID to be used for purchase.
 
 **Example:**
 
 ```python
-response = market.managing.discount.request(item_id=1234567890, discount_price=100, message="Please give a discount")
+response = await market.managing.discount.request(
+    item_id=1234567890, 
+    discount_price=100, 
+    auto_buy=True,
+    balance_id=128
+)
 print(response.json())
 ```
 
@@ -2926,6 +2997,28 @@ print(response.json())
 ```
 
 
+## Qr Login
+
+POST https://api.lzt.market/{item_id}/qr-login
+
+*Authorize to Telegram/Steam by providing QR code challenge.*
+
+**Parameters:**
+
+- item_id (int): Item ID.
+- challenge (str): Decoded QR-code string.
+
+**Example:**
+
+```python
+response = await market.managing.qr_login(
+    item_id=1234567890,
+    challenge="tg://login?token=<base64url>"
+)
+print(response.json())
+```
+
+
 # Purchasing
 
 ## Cart
@@ -3448,7 +3541,7 @@ response = market.payments.invoice.create(
     amount=150,
     payment_id="0000001",
     comment="10x amount of some goods | #0000001",
-    url_success="https://lolz.live/account/ban",
+    url_success="https://lolz.team/account/ban",
     url_callback="https://yourweb.site/callback/0000001",
     lifetime=300,
     merchant_id=1

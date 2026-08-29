@@ -447,18 +447,18 @@ class Settings:
         self.async_client.headers.update({"authorization": f"Bearer {self._token}"})
         try:
             if "." not in self._token:
-                raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead (https://lolz.live/account/api).")
+                raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead (https://lolz.team/account/api).")
             payload = token.split(".")[1]
             decoded_payload: dict = json.loads(base64.b64decode(payload + "==" if payload[-2:] != "==" else payload).decode("utf-8"))
             if decoded_payload.get("exp", 9999999999) < time.time():
-                raise EXPIRED_TOKEN("Your token has expired. Please get a new token here -> https://lolz.live/account/api")
+                raise EXPIRED_TOKEN("Your token has expired. Please get a new token here -> https://lolz.team/account/api")
             self.user_id = decoded_payload.get("sub", 0)
             self.logger.file_name = f"{self.user_id}.{self.logger.logger_name}.log"
             self.jti = decoded_payload.get("jti", 0)
             self.scopes = decoded_payload.get("scope", "").split(" ")
             self.logger.info(f"Updated Token | User ID: {self.user_id} | JTI: {self.core.settings.jti}" + (f"| Scopes: {self.core.settings.scopes}" if not self._isAntipublic else ""))
         except (binasciiError, json.JSONDecodeError) as e:
-            raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead (https://lolz.live/account/api).") from e
+            raise BAD_TOKEN("Your token is invalid. You must check if you have pasted your token fully or create new token and use it instead (https://lolz.team/account/api).") from e
 
 
 class _NONE:
