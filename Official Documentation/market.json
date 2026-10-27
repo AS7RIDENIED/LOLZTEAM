@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Market",
     "description": "## [Forum API](https://lolzteam.readme.io/)\r\n\r\n## [Telegram chat](https://t.me/lztmarket_api)\r\n\r\n## Free API Client packages\r\n\r\n| Language             | GitHub                                                                                                                                        | Documentation                                                                                                                                 |\r\n| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| Python (AS7RIDENIED) | <Anchor label=\"AS7RIDENIED/LOLZTEAM\" target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM\">AS7RIDENIED/LOLZTEAM</Anchor>             | <Anchor label=\"Market.md\" target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md\">Market.md</Anchor> |\r\n| Python (medovi40k)   | <Anchor label=\"medovi40k/lolzteam-py\" target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py\">medovi40k/lolzteam-py</Anchor>          | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py/blob/master/README.md\">README.md</Anchor>            |\r\n| TypeScript           | <Anchor label=\"liwidale/lolzteam-api-ts\" target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts/\">liwidale/lolzteam-api-ts</Anchor> | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts/blob/master/README.md\">README.md</Anchor>         |\r\n| PHP                  | <Anchor label=\"kyo-lzt/lolzteam-php\" target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php\">kyo-lzt/lolzteam-php</Anchor>             | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php/blob/master/README.md\">README.md</Anchor>             |\r\n| Go (lztapi)          | <Anchor label=\"ppdoew/lztapi\" target=\"_blank\" href=\"https://github.com/ppdoew/lztapi\">ppdoew/lztapi</Anchor>                                  | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/ppdoew/lztapi/blob/main/README.md\">README.md</Anchor>                      |\r\n| Go (fantolla123)     | <Anchor label=\"fantolla123/lzt-api-go\" target=\"_blank\" href=\"https://github.com/fantolla123/lzt-api-go\">fantolla123/lzt-api-go</Anchor>       | —                                                                                                                                             |\r\n| Rust                 | <Anchor label=\"Mlinec/lolzteam-api-rs\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs\">Mlinec/lolzteam-api-rs</Anchor>       | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs/blob/master/README.md\">README.md</Anchor>           |\r\n| Java                 | <Anchor label=\"Mlinec/lolzteam-api-java\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java\">Mlinec/lolzteam-api-java</Anchor> | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java/blob/master/README.md\">README.md</Anchor>         |\r\n| Dart                 | <Anchor label=\"recate-rat237/lzt-dart\" target=\"_blank\" href=\"https://github.com/recate-rat237/lzt-dart\">recate-rat237/lzt-dart</Anchor>       | —                                                                                                                                             |\r\n| C# (dexsper)         | <Anchor label=\"dexsper/Lolzteam.Api\" target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api\">dexsper/Lolzteam.Api</Anchor>             | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api/blob/master/README.md\">README.md</Anchor>             |\r\n| C# (fanidamn)        | <Anchor label=\"fanidamn/LolzMarketAPI\" target=\"_blank\" href=\"https://github.com/fanidamn/LolzMarketAPI\">fanidamn/LolzMarketAPI</Anchor>       | <Anchor label=\"README.md\" target=\"_blank\" href=\"https://github.com/fanidamn/LolzMarketAPI/blob/main/README.md\">README.md</Anchor>             |\r\n\r\n## About Market API\r\n\r\nMarket API almost completely repeats WEB requests. Query parameters match. The only differences are the presence of PUT and DELETE methods. For example, a request to add a tag to an account on the WEB looks like this: `lzt.market/market/{item_id}/tag/add?tag_id={tag_id}`, and an API request looks like this: `api.lzt.market/{item_id}/tag/add?tag_id={tag_id}`.\r\n\r\n## API Rate Limits\r\n\r\nThe API enforces rate limits to protect the service. Every response includes headers that tell you your current limit status, and exceeding any limit returns a `429 Too Many Requests` error.\r\n\r\n### Base Limits\r\n\r\n**Base limits** apply to all requests unless an endpoint has its own counter:\r\n\r\n* **GET** – 300r/60s\r\n* **non-GET** – 30r/60s\r\n\r\n### Endpoints With Independent Limits\r\n\r\nThese endpoints have their own counters and are **not** counted toward the base limits:\r\n\r\n| Endpoint(s)                                                                                                                                                                                                                                                                                                                       | Limit            | Bucket name     |\r\n| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------- | --------------- |\r\n| <Anchor label=\"/letters\" target=\"_blank\" href=\"https://lzt-market.readme.io/reference/managinggetletters\">/letters</Anchor>, [/letters2](https://lzt-market.readme.io/reference/managinggetletters2)                                                                                                                              | 5/min (shared)   | `letters`       |\r\n| [/\\{item_id}/edit](https://lzt-market.readme.io/reference/managingedit)                                                                                                                                                                                                                                                           | 1000/min         | –               |\r\n| [/\\{item_id}/confirm-buy](https://lzt-market.readme.io/reference/purchasingconfirm)                                                                                                                                                                                                                                               | 1000/min         | –               |\r\n| [/fast-sell](https://lzt-market.readme.io/reference/publishingfastsell), [/\\{item_id}/fast-buy](https://lzt-market.readme.io/reference/purchasingfastbuy), [/\\{item_id}/check-account](https://lzt-market.readme.io/reference/purchasingcheck), [/\\{item_id}/goods-check](https://lzt-market.readme.io/reference/publishingcheck) | 300/min (shared) | `check-account` |\r\n| [GET /\\{item_id}](https://lzt-market.readme.io/reference/managingget), [/user/\\{user_id}/items](https://lzt-market.readme.io/reference/listuser), [search requests](https://lzt-market.readme.io/reference/category-search)                                                                                                       | 120/min (shared) | `search`        |\r\n| [DELETE /\\{item_id}](https://lzt-market.readme.io/reference/mangingdelete)                                                                                                                                                                                                                                                        | 300/min          | –               |\r\n| <Anchor label=\"/email-code\" target=\"_blank\" href=\"https://lzt-market.readme.io/reference/managingemailcode\">/email-code</Anchor>                                                                                                                                                                                                  | 300/min          | –               |\r\n| [/batch](https://lzt-market.readme.io/reference/batch)                                                                                                                                                                                                                                                                            | 20/min           | `batch`               |\r\n\r\n**Note on `/batch`:** each nested request still counts against its own endpoint's limit independently. For example, batching 10 calls to `/{item_id}/edit` consumes 10 from the `/{item_id}/edit` limit **and** 1 from the `/batch` limit.\r\n\r\nExceeding any limit returns a `429` error.\r\n\r\n### Get Current Rate Limit Info\r\n\r\nEach response carries rate-limit metadata in its headers and response body:\r\n\r\n| Header                  | Example      | Meaning                                                              |\r\n| ----------------------- | ------------ | -------------------------------------------------------------------- |\r\n| `X-RateLimit-Limit`     | `300`        | Maximum number of requests allowed in the current window.            |\r\n| `X-RateLimit-Remaining` | `300`        | Amount of requests still available in the current rate-limit window. |\r\n| `X-RateLimit-Reset`     | `1234567890` | When the limit resets, as a **Unix timestamp**.                      |\r\n\r\n```\r\n{\r\n    \"system_info\": {\r\n        \"rate_limit\": {\r\n            \"limit\": 300,\r\n            \"remaining\": 300,\r\n            \"reset\": 1234567890,\r\n            \"bucket\": \"bucket_name\"\r\n        },\r\n        \"visitor_id\": 1234567890,\r\n        \"time\": 1234567890,\r\n        \"log_id\": 1234567890\r\n    }\r\n}\r\n```\r\n\r\n## Search limit\r\n\r\n20 requests per minute for only **Category Search** methods (3 seconds delay between per request). If you exceed the limit, you will receive an error message and response code 429.\r\n\r\n## Requests timeout\r\n\r\nIt's highly recommended to set the request timeout to 300+ seconds, because certain methods can take a long time to be processed.\r\n\r\n## Authorization & Token configuration\r\n\r\nFor using this API you need to create [API Client](https://lolz.live/account/api/client-add) and [get Access Token](https://lolz.live/account/api/get-token) with **market** scope.\r\n\r\nYou must pass the token in the request headers\r\n\r\n* Header: \"**Authorization**: **Bearer _token_**\"\r\n\r\n## Status codes\r\n\r\n| Code | Name                  | Description                                                                                             |\r\n| ---- | --------------------- | ------------------------------------------------------------------------------------------------------- |\r\n| 200  | OK                    | The request was successfully completed.                                                                 |\r\n| 400  | Bad Request           | The request is invalid due to client error.                                                             |\r\n| 401  | Unauthorized          | [Authentication is required.](/reference/information#/authorization--token-configuration)               |\r\n| 403  | Forbidden             | You do not have permission to view this page or perform this action.                                    |\r\n| 429  | Too Many Requests     | [Too many requests in a short period.](/reference/information#/rate-limit)                              |\r\n| 500  | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). |\r\n| 502  | Bad Gateway           | The gateway encountered an error while processing the request, try again later.                         |\r\n| 503  | Service Unavailable   | The server is temporarily unavailable, try again later.                                                 |\r\n| 504  | Gateway Timeout       | The gateway timed out waiting for a response, try again later.                                          |\r\n\r\n## SSL Verification Errors\r\n\r\nIf you encounter an SSL verification error, disable SSL/TLS certificate verification in your http client.\r\n\r\n## Common Parameters\r\n\r\n### i18n\r\n\r\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used.\r\n\r\n### Fields filtering\r\n\r\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\r\n\r\n* **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (*****) to include all default fields before specifying additional ones.\r\n* **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. It is possible to use wildcard as a prefix (e.g. \"*.key\") to exclude the field everywhere.\r\n\r\n## Content-Type\r\n\r\nAPI always returns the response as `application/json` (With few exceptions). You should send requests to API with `application/json` or `application/x-www-form-urlencoded` content type.\r\n\r\n## Is for free access?\r\n\r\nTo use the Market API, you need to have 200 sympathies, or you can purchase a monthly subscription [here](https://lolz.live/payment/method?service_id=8\\&service_type=user_upgrade).\r\n\r\n## OpenAPI JSON\r\n\r\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/main/Official%20Documentation/market.json) file.",
-    "version": "1.1.105"
+    "version": "1.1.106"
   },
   "servers": [
     {
@@ -4988,6 +4988,7 @@
                 "Aliens: Colonial Marines Limited Edition Pack",
                 "Alpha Prime",
                 "Alter World_cis",
+                "Altitude",
                 "Amazing Frog?",
                 "American Conquest",
                 "American Conquest: Fight Back",
@@ -5105,6 +5106,7 @@
                 "BRINK",
                 "Back 4 Blood",
                 "Backgammon Blitz",
+                "Backrooms Bodycam",
                 "Backrooms: Escape Together",
                 "Backyard Baseball '97",
                 "Bad Bots",
@@ -5170,6 +5172,7 @@
                 "Battlepillars Gold Edition_cis",
                 "Battlestations: Midway",
                 "BeamNG.drive",
+                "BeamNG.drive_cis",
                 "Bean Battles",
                 "Beasts of Prey",
                 "Beasts of Prey_cis",
@@ -5204,6 +5207,7 @@
                 "Black & Blue",
                 "Black Desert",
                 "Black Ice",
+                "Black Ink_cis",
                 "Black Mesa",
                 "Black Myth: Wukong",
                 "Blackguards: Untold Legends_cis",
@@ -5215,6 +5219,7 @@
                 "Blasphemous 2",
                 "Blaster Shooter GunGuy!",
                 "BlazBlue Entropy Effect",
+                "BlazBlue: Calamity Trigger",
                 "BlazeRush",
                 "BlazeRush_cis",
                 "Bless Online",
@@ -5323,7 +5328,6 @@
                 "Burnout Paradise: The Ultimate Box",
                 "Burnout Paradise: The Ultimate Box_cis",
                 "Bus World",
-                "Butsbal",
                 "Bytebond",
                 "CARRION",
                 "CASE: Animatronics",
@@ -5426,6 +5430,7 @@
                 "Celebrat10n TrackMania Complete Pack",
                 "Celeste",
                 "Chained Together",
+                "Chains",
                 "Chair F*cking Simulator",
                 "Changed",
                 "Chantelise - A Tale of Two Sisters",
@@ -5531,6 +5536,7 @@
                 "Company of Heroes: Tales of Valor (DE)",
                 "Complete Naval Combat Pack",
                 "Conan Exiles Enhanced",
+                "Conan Exiles Enhanced: Isle of Siptah",
                 "Concord™ Beta",
                 "Condition Zero",
                 "Congo",
@@ -5639,6 +5645,7 @@
                 "DRAGON: A Game About a Dragon_cis",
                 "DRAGONBALL XENOVERSE Bundle Edition",
                 "DREDGE",
+                "DREDGE - Digital Deluxe Edition",
                 "DYNASTY WARRIORS 8: Xtreme Legends Complete Edition",
                 "Daedalic Adventure Bundle",
                 "Daedalus - No Escape",
@@ -5699,6 +5706,7 @@
                 "Dead Space (2008)",
                 "Dead Space Pack",
                 "Dead by Daylight",
+                "Dead by Daylight - A Nightmare on Elm Street™",
                 "Dead by Daylight - Dungeons & Dragons",
                 "Dead by Daylight - Resident Evil: PROJECT W Chapter",
                 "Dead by Daylight - Sadako Rising Chapter",
@@ -5843,6 +5851,7 @@
                 "Dropsy",
                 "Drug Dealer Simulator",
                 "Drunken Robot Pornography",
+                "Dub Together",
                 "Ducati World Championship",
                 "Duck Game",
                 "Duck Game_cis",
@@ -6011,6 +6020,7 @@
                 "Euro Truck Simulator 2 - Scandinavia",
                 "Euro Truck Simulator 2 - Scandinavia_cis",
                 "Euro Truck Simulator 2 - Scottish Paint Jobs Pack",
+                "Euro Truck Simulator 2 - Space Paint Jobs Pack",
                 "Euro Truck Simulator 2 - Special Transport",
                 "Euro Truck Simulator 2 - Turkish Paint Jobs Pack",
                 "Euro Truck Simulator 2 - UK Paint Jobs Pack",
@@ -6271,6 +6281,7 @@
                 "Ghostrunner 2",
                 "GiAnt - A GiAnt Soundtrack",
                 "GiAnt - A GiAnt Soundtrack_cis",
+                "Giana Sisters: Twisted Bundle",
                 "Giana Sisters: Twisted Dreams",
                 "Giana Sisters: Twisted Dreams - Rise of the Owlverlord",
                 "Gigantus DCC-Gogo. Marking",
@@ -6424,6 +6435,7 @@
                 "Heavy Rain",
                 "Heileen 3: New Horizons",
                 "Hell Let Loose",
+                "Hello Kitty Island Adventure",
                 "Hentai Furry",
                 "Hentai Furry 2",
                 "Hentai Furry 3",
@@ -6475,6 +6487,7 @@
                 "Homeworld 1 Remastered Soundtrack",
                 "Homeworld 2 Remastered Soundtrack",
                 "Homeworld Remastered Collection_cis",
+                "Hood Warfare 2",
                 "Horror Squad",
                 "Horror inside the forest",
                 "Hot Hentai",
@@ -6574,6 +6587,10 @@
                 "It Takes Two",
                 "JRPG Bundle",
                 "Jagged Alliance 2 - Wildfire",
+                "Jagged Alliance Online: Reloaded - Echo_cis",
+                "Jagged Alliance Online: Reloaded - Ivan_cis",
+                "Jagged Alliance Online: Reloaded - Raven_cis",
+                "Jagged Alliance Online: Reloaded - Shadow_cis",
                 "Jagged Alliance: Back in Action DLC: Urban Specialist Kit",
                 "Jane's Advanced Strike Fighters",
                 "Jetdogs Adventure Pack - Volume 1",
@@ -6771,6 +6788,7 @@
                 "METAL SLUG_cis",
                 "MIMESIS",
                 "MONOPOLY® PLUS",
+                "MONSTER HUNTER RISE",
                 "MQEL Founders Pack Gift",
                 "MX Bikes",
                 "MX vs. ATV Unleashed",
@@ -6983,6 +7001,7 @@
                 "NBA 2K25",
                 "NBA 2K25 MyCAREER Bonus Offer: Season 5",
                 "NBA 2K25 MyTEAM Bonus Offer: Season 5",
+                "NBA 2K27",
                 "NEKOPARA Vol. 0",
                 "NEKOPARA Vol. 1",
                 "NEKOPARA Vol. 2",
@@ -7007,6 +7026,7 @@
                 "Need for Speed™ Heat",
                 "Need for Speed™ Hot Pursuit Remastered",
                 "Need for Speed™ Most Wanted",
+                "Needle In A Haystack",
                 "Neighbors: Suburban Warfare",
                 "Neon Abyss 2",
                 "Neon Space 2",
@@ -7046,6 +7066,7 @@
                 "Nuclear Throne",
                 "NukGames Pack",
                 "Nyakori's Rabbit Doll Full Collection",
+                "NyxQuest: Kindred Spirits",
                 "OBEY",
                 "OCEAN CITY RACING",
                 "OMORI",
@@ -7083,6 +7104,7 @@
                 "Operation Flashpoint: Dragon Rising",
                 "Operation Flashpoint: Red River",
                 "Orbital Gear",
+                "Orbital Gear Gift",
                 "Orbital Gear_cis",
                 "Orc Attack: Flatulent Rebellion",
                 "Orcs Must Die 2 - Complete Pack 2 Gift",
@@ -7119,6 +7141,7 @@
                 "Outland",
                 "Outlast",
                 "Outlast 2",
+                "Outlast Franchise Bundle",
                 "Outlast: Whistleblower DLC",
                 "Outlast: Whistleblower DLC_cis",
                 "Outlast_cis",
@@ -7362,6 +7385,7 @@
                 "RPG Maker VX Ace",
                 "RPG Maker VX Ace - High Fantasy Main Party Pack II",
                 "RPG Maker VX Ace_cis",
+                "RPG Maker XP",
                 "RUNNING WITH RIFLES",
                 "RUSH",
                 "RUSH_cis",
@@ -7433,6 +7457,7 @@
                 "Restaurats",
                 "Retro City Rampage™ DX",
                 "Retro Game Crunch",
+                "Retro/Grade",
                 "Retrovirus",
                 "Retrovirus_cis",
                 "Return to Castle Wolfenstein",
@@ -7696,6 +7721,7 @@
                 "Shadowgate",
                 "Shadowgrounds",
                 "Shadowgrounds Pack",
+                "Shadowgrounds Survivor",
                 "Shadowgrounds_cis",
                 "Shadowrun Chronicles - Boston Lockdown",
                 "Shadowrun Returns",
@@ -7804,6 +7830,7 @@
                 "Sniper Elite V2 - Kill Hitler + 2 Rifles",
                 "Sniper Elite: Nazi Zombie Army",
                 "Sniper Elite: Nazi Zombie Army 2",
+                "Sniper Elite: Zombie Army 2",
                 "Sniper Ghost Warrior (LV) + 2 DLC Gift",
                 "Sniper Ghost Warrior 2: Siberian Strike",
                 "Sniper Ghost Warrior 2: World Hunter Pack",
@@ -8010,6 +8037,7 @@
                 "THE FINALS - Season 9 Starter Pack",
                 "THE GAME OF LIFE",
                 "THE KING OF FIGHTERS '98 ULTIMATE MATCH FINAL EDITION",
+                "THE KING OF FIGHTERS '98 ULTIMATE MATCH FINAL EDITION_cis",
                 "THE KING OF FIGHTERS 2002 UNLIMITED MATCH",
                 "THE KING OF FIGHTERS XIII STEAM EDITION",
                 "THIEF DLC: Booster Pack - Opportunist",
@@ -8084,6 +8112,7 @@
                 "The Chaos Engine",
                 "The Chosen RPG",
                 "The Chosen RPG_cis",
+                "The Clans - Saga of the Twins - Deluxe Edition",
                 "The Coffin of Andy and Leyley",
                 "The Collider",
                 "The Crew Wild Run - Beta Gift Copy",
@@ -8117,7 +8146,6 @@
                 "The Escapists - Duct Tapes are Forever",
                 "The Escapists - Escape Team",
                 "The Escapists 2",
-                "The Evil Within",
                 "The Evil Within_cis",
                 "The Executive - Movie Industry Tycoon",
                 "The First Templar - Steam Special Edition",
@@ -8186,6 +8214,7 @@
                 "The Sims 3: Supernatural",
                 "The Sims™ 3",
                 "The Sims™ 3 Generations",
+                "The Sims™ 3 Late Night",
                 "The Sims™ 3 Master Suite Stuff",
                 "The Sims™ 3 Pets",
                 "The Sims™ 3 Showtime",
@@ -8195,6 +8224,7 @@
                 "The Stanley Parable_cis",
                 "The Stronghold Collection",
                 "The Survivalists",
+                "The Talos Principle",
                 "The Talos Principle_cis",
                 "The Technomancer",
                 "The Testament of Sherlock Holmes",
@@ -8386,6 +8416,7 @@
                 "Train Simulator: West Coast Main Line Over Shap Route Add-On",
                 "Trainz™ Simulator 12",
                 "Transistor",
+                "Transport Fever 3",
                 "Trapped Dead",
                 "Trapped Dead: Lockdown",
                 "Trash TV_cis",
@@ -8464,6 +8495,7 @@
                 "Unknown package 11464",
                 "Unknown package 11469",
                 "Unknown package 115225_cis",
+                "Unknown package 116088",
                 "Unknown package 116091",
                 "Unknown package 116474",
                 "Unknown package 11664",
@@ -8585,6 +8617,7 @@
                 "Unknown package 1732",
                 "Unknown package 1741",
                 "Unknown package 17410",
+                "Unknown package 17410_cis",
                 "Unknown package 17674",
                 "Unknown package 17728",
                 "Unknown package 17736",
@@ -8608,6 +8641,7 @@
                 "Unknown package 1884",
                 "Unknown package 18844",
                 "Unknown package 18845",
+                "Unknown package 19002",
                 "Unknown package 2097",
                 "Unknown package 2103",
                 "Unknown package 2105",
@@ -8617,6 +8651,7 @@
                 "Unknown package 2377",
                 "Unknown package 2487",
                 "Unknown package 2536",
+                "Unknown package 2554",
                 "Unknown package 25543",
                 "Unknown package 25544",
                 "Unknown package 25569",
@@ -8669,6 +8704,7 @@
                 "Unknown package 30186_cis",
                 "Unknown package 30274",
                 "Unknown package 30307",
+                "Unknown package 30399",
                 "Unknown package 30560",
                 "Unknown package 30582",
                 "Unknown package 30657",
@@ -8686,6 +8722,7 @@
                 "Unknown package 31982_cis",
                 "Unknown package 32159",
                 "Unknown package 33205",
+                "Unknown package 333",
                 "Unknown package 33318",
                 "Unknown package 33495",
                 "Unknown package 33961",
@@ -8754,6 +8791,7 @@
                 "Unknown package 45320",
                 "Unknown package 459",
                 "Unknown package 46028",
+                "Unknown package 463",
                 "Unknown package 4638",
                 "Unknown package 46384",
                 "Unknown package 46441",
@@ -8832,6 +8870,7 @@
                 "Unknown package 6208",
                 "Unknown package 6219",
                 "Unknown package 62267_cis",
+                "Unknown package 62412",
                 "Unknown package 62412_cis",
                 "Unknown package 6249",
                 "Unknown package 6250",
@@ -8860,6 +8899,7 @@
                 "Unknown package 6685",
                 "Unknown package 66904",
                 "Unknown package 66904_cis",
+                "Unknown package 66986_cis",
                 "Unknown package 67071",
                 "Unknown package 67071_cis",
                 "Unknown package 67613",
@@ -8871,6 +8911,7 @@
                 "Unknown package 683",
                 "Unknown package 68608",
                 "Unknown package 68616",
+                "Unknown package 6882",
                 "Unknown package 68943",
                 "Unknown package 69654",
                 "Unknown package 6970",
@@ -8883,7 +8924,6 @@
                 "Unknown package 72161",
                 "Unknown package 72593",
                 "Unknown package 72593_cis",
-                "Unknown package 7351",
                 "Unknown package 73586",
                 "Unknown package 73706",
                 "Unknown package 73706_cis",
@@ -8941,6 +8981,7 @@
                 "Unknown package 90463_cis",
                 "Unknown package 91065",
                 "Unknown package 91065_cis",
+                "Unknown package 91143",
                 "Unknown package 93107",
                 "Unknown package 93107_cis",
                 "Unknown package 949",
@@ -8950,6 +8991,7 @@
                 "Unknown package 96012_cis",
                 "Unknown package 96126_cis",
                 "Unknown package 96788",
+                "Unknown package 972",
                 "Unknown package 98343_cis",
                 "Unknown package 99222",
                 "Unknown package 99309",
@@ -8970,6 +9012,7 @@
                 "Urbek City Builder",
                 "VEGAS Pro 14 Edit Steam Edition",
                 "VERGE:Lost chapter",
+                "VHOLUME",
                 "VRC PRO Deluxe Off-road tracks 2",
                 "VVVVVV",
                 "Valheim",
@@ -9011,6 +9054,7 @@
                 "War Dust VR: 32v32 Battlefields",
                 "War of the Roses Gift Sub",
                 "War of the Roses Gift Sub Pre-Order",
+                "War of the Vikings Early Access Gift",
                 "War of the Vikings: Bonus Coins",
                 "Warface Sniper Starter Pack",
                 "Warframe: Fulmin Battlekit",
@@ -9098,6 +9142,7 @@
                 "Wurm Unlimited",
                 "Wyv and Keep: The Temple of the Lost Idol",
                 "X Rebirth: The Teladi Outpost",
+                "X-Blades",
                 "X-COM: Apocalypse",
                 "X-COM: Complete Pack",
                 "X-COM: Enforcer",
@@ -9129,6 +9174,7 @@
                 "Youtubers Life",
                 "Ys Origin",
                 "Ys: The Oath in Felghana",
+                "Yu-Gi-Oh! Legacy of the Duelist : Link Evolution",
                 "Z_cis",
                 "Zeno Clash",
                 "Zeno Clash 2",
@@ -11619,7 +11665,7 @@
                       "type": "boolean"
                     },
                     "nextCursor": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "perPage": {
                       "type": "integer"
@@ -13762,7 +13808,8 @@
                 1581,
                 1591,
                 1611,
-                1621
+                1621,
+                1641
               ]
             }
           },
@@ -16195,7 +16242,7 @@
                       "type": "boolean"
                     },
                     "nextCursor": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "perPage": {
                       "type": "integer"
@@ -16872,7 +16919,6 @@
                 "are",
                 "arg",
                 "arm",
-                "atg",
                 "aus",
                 "aut",
                 "aze",
@@ -16884,6 +16930,7 @@
                 "bgr",
                 "bhr",
                 "bih",
+                "blm",
                 "blr",
                 "blz",
                 "bol",
@@ -16896,9 +16943,11 @@
                 "chl",
                 "chn",
                 "civ",
+                "cog",
                 "col",
                 "cri",
                 "cub",
+                "cuw",
                 "cyp",
                 "cze",
                 "deu",
@@ -16936,6 +16985,7 @@
                 "isr",
                 "ita",
                 "jam",
+                "jey",
                 "jor",
                 "jpn",
                 "kaz",
@@ -16947,13 +16997,13 @@
                 "lao",
                 "lbn",
                 "lby",
+                "lca",
                 "lka",
                 "ltu",
                 "lux",
                 "lva",
                 "mac",
                 "mar",
-                "mco",
                 "mda",
                 "mdg",
                 "mdv",
@@ -16967,7 +17017,9 @@
                 "moz",
                 "mus",
                 "mys",
+                "myt",
                 "nam",
+                "nan",
                 "nga",
                 "nic",
                 "nld",
@@ -17040,7 +17092,6 @@
                 "are",
                 "arg",
                 "arm",
-                "atg",
                 "aus",
                 "aut",
                 "aze",
@@ -17052,6 +17103,7 @@
                 "bgr",
                 "bhr",
                 "bih",
+                "blm",
                 "blr",
                 "blz",
                 "bol",
@@ -17064,9 +17116,11 @@
                 "chl",
                 "chn",
                 "civ",
+                "cog",
                 "col",
                 "cri",
                 "cub",
+                "cuw",
                 "cyp",
                 "cze",
                 "deu",
@@ -17104,6 +17158,7 @@
                 "isr",
                 "ita",
                 "jam",
+                "jey",
                 "jor",
                 "jpn",
                 "kaz",
@@ -17115,13 +17170,13 @@
                 "lao",
                 "lbn",
                 "lby",
+                "lca",
                 "lka",
                 "ltu",
                 "lux",
                 "lva",
                 "mac",
                 "mar",
-                "mco",
                 "mda",
                 "mdg",
                 "mdv",
@@ -17135,7 +17190,9 @@
                 "moz",
                 "mus",
                 "mys",
+                "myt",
                 "nam",
+                "nan",
                 "nga",
                 "nic",
                 "nld",
@@ -18731,7 +18788,7 @@
                       "type": "boolean"
                     },
                     "nextCursor": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "perPage": {
                       "type": "integer"
@@ -20406,7 +20463,7 @@
                       "type": "boolean"
                     },
                     "nextCursor": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "perPage": {
                       "type": "integer"
@@ -22826,7 +22883,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -23994,7 +24053,7 @@
                       "type": "boolean"
                     },
                     "nextCursor": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "perPage": {
                       "type": "integer"
@@ -25542,7 +25601,7 @@
                       "type": "boolean"
                     },
                     "nextCursor": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "perPage": {
                       "type": "integer"
@@ -26294,7 +26353,7 @@
                       "type": "boolean"
                     },
                     "nextCursor": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "perPage": {
                       "type": "integer"
@@ -31436,6 +31495,7 @@
                 "bentbaton_temp",
                 "character_abstractmirror_rogue",
                 "character_accentwall",
+                "character_acidwhale",
                 "character_acrylicstitch",
                 "character_agarbelly",
                 "character_agedchasm",
@@ -31468,6 +31528,7 @@
                 "character_arcticicetalus",
                 "character_armyflour",
                 "character_ashenmagnusslant",
+                "character_asidedepot",
                 "character_asterorder",
                 "character_astrallilac",
                 "character_auracop_bullet",
@@ -31550,6 +31611,7 @@
                 "character_bountypond",
                 "character_brainmatter",
                 "character_brakepedal",
+                "character_brassspar",
                 "character_bravebuild",
                 "character_bravebuild_cine",
                 "character_bravebuildsuper",
@@ -31602,9 +31664,11 @@
                 "character_canyonvale",
                 "character_carbideweld",
                 "character_cardboardcrew_holiday",
+                "character_cargolying",
                 "character_carminefae",
                 "character_carolinachili",
                 "character_carrotcake",
+                "character_carrymazeflap",
                 "character_cashewroll",
                 "character_cashmerescarf",
                 "character_casinoreaper_die",
@@ -31906,6 +31970,7 @@
                 "character_folkevening",
                 "character_fondaim",
                 "character_fondbreak",
+                "character_fonduepaper",
                 "character_forestbath",
                 "character_forestjeangrowl",
                 "character_forestjeanwink",
@@ -32106,6 +32171,7 @@
                 "character_ironclash",
                 "character_ironlilac_sly",
                 "character_ivorybrite",
+                "character_ivorydwell",
                 "character_ivycross",
                 "character_ivystub",
                 "character_jadedhare",
@@ -32225,6 +32291,7 @@
                 "character_medievalsheath",
                 "character_meekcrow",
                 "character_megatoof_valve",
+                "character_melodicpull",
                 "character_melodyurchin",
                 "character_meltediron_footclan_npc",
                 "character_meowknaw",
@@ -32479,6 +32546,8 @@
                 "character_quickburst_plains",
                 "character_quietpeanuts",
                 "character_quirkluster",
+                "character_radardigitgloom",
+                "character_radardigitortho",
                 "character_radiantmove",
                 "character_radiopaca",
                 "character_radiumfox_flame",
@@ -32662,6 +32731,7 @@
                 "character_smarthyena",
                 "character_smokeyalias",
                 "character_smoothbeanie",
+                "character_smoothgriffin",
                 "character_smoothsuede",
                 "character_snailaisle",
                 "character_snakecrest",
@@ -32762,6 +32832,7 @@
                 "character_stunningmountain_armor",
                 "character_stylusfluff",
                 "character_subtlesilly",
+                "character_sugarbrain",
                 "character_sugarbubble",
                 "character_sulfurdean",
                 "character_summerdummy",
@@ -32780,6 +32851,7 @@
                 "character_surgeraven_drysquash_pack",
                 "character_surgeraven_pack",
                 "character_sushiaware",
+                "character_suturehalo",
                 "character_swampfish",
                 "character_swampknight",
                 "character_sweetcuddle",
@@ -32974,6 +33046,7 @@
                 "character_weepingwoodsfestive",
                 "character_wickedmindfncs",
                 "character_wideplane",
+                "character_widowfoam",
                 "character_wingbath",
                 "character_wingedeye",
                 "character_wiryperk_seed",
@@ -33008,6 +33081,7 @@
                 "character_zebrascramble_bacon",
                 "character_zebrascramble_npc",
                 "character_zencrash",
+                "character_zenithpair",
                 "character_zirconsweep",
                 "creative_mannequin_m_default",
                 "defaultoutfit",
@@ -35447,6 +35521,8 @@
                 "pickaxe_abstractmirror",
                 "pickaxe_accentwall",
                 "pickaxe_accumulateretro",
+                "pickaxe_acidwhale",
+                "pickaxe_acidwhale_keytar",
                 "pickaxe_agarbelly",
                 "pickaxe_agarbelly_guitar",
                 "pickaxe_agedchasm",
@@ -35492,6 +35568,8 @@
                 "pickaxe_arcticicetalus",
                 "pickaxe_armyflour",
                 "pickaxe_ashenmagnus",
+                "pickaxe_asidedepot",
+                "pickaxe_asidedepot_guitar",
                 "pickaxe_asterorder",
                 "pickaxe_asterorder_guitar",
                 "pickaxe_asterorder_mic",
@@ -35580,6 +35658,7 @@
                 "pickaxe_bountypond",
                 "pickaxe_brainmatter",
                 "pickaxe_brakepedal",
+                "pickaxe_brassspar",
                 "pickaxe_bravebuild",
                 "pickaxe_brawngraze",
                 "pickaxe_brawngraze_guitar",
@@ -35622,8 +35701,10 @@
                 "pickaxe_captainshine_guitar",
                 "pickaxe_carbideweld",
                 "pickaxe_cardboard_drum",
+                "pickaxe_cargolying",
                 "pickaxe_carolinachili",
                 "pickaxe_carrotcake",
+                "pickaxe_carrymazeflap",
                 "pickaxe_cashmerescarf",
                 "pickaxe_casinoreaper",
                 "pickaxe_cataclysmcity",
@@ -35891,6 +35972,7 @@
                 "pickaxe_flinttwirl",
                 "pickaxe_flinttwirl_mic",
                 "pickaxe_floralmane",
+                "pickaxe_flossguava",
                 "pickaxe_flossyawn_guitar",
                 "pickaxe_flowervase",
                 "pickaxe_fluffwoof",
@@ -35907,6 +35989,7 @@
                 "pickaxe_folkevening",
                 "pickaxe_fondaim",
                 "pickaxe_fondbreak",
+                "pickaxe_fonduepaper",
                 "pickaxe_forestbath",
                 "pickaxe_forestjeangrowl",
                 "pickaxe_forestjeanwink_drumstick",
@@ -36935,6 +37018,7 @@
                 "pickaxe_ironclash",
                 "pickaxe_ironlilac",
                 "pickaxe_ivorybrite",
+                "pickaxe_ivorydwell",
                 "pickaxe_ivycross",
                 "pickaxe_ivystub",
                 "pickaxe_ivystub_mic",
@@ -37055,6 +37139,7 @@
                 "pickaxe_medievalsheath",
                 "pickaxe_meekcrow",
                 "pickaxe_megatoof",
+                "pickaxe_melodicpull",
                 "pickaxe_melodyurchin",
                 "pickaxe_meowknaw",
                 "pickaxe_mercurialstorm",
@@ -37298,6 +37383,8 @@
                 "pickaxe_quietpeanuts",
                 "pickaxe_quietpeanuts_guitar",
                 "pickaxe_quirkluster",
+                "pickaxe_radardigit_mic",
+                "pickaxe_radardigitortho",
                 "pickaxe_radiantmove",
                 "pickaxe_radiopaca",
                 "pickaxe_radiumfox",
@@ -37484,6 +37571,8 @@
                 "pickaxe_smarthyena",
                 "pickaxe_smokeyalias",
                 "pickaxe_smoothbeanie",
+                "pickaxe_smoothgriffin",
+                "pickaxe_smoothgriffin_mic",
                 "pickaxe_smoothsuede",
                 "pickaxe_snailaisle",
                 "pickaxe_snakecrest",
@@ -37575,6 +37664,7 @@
                 "pickaxe_stunningmountain_guitar",
                 "pickaxe_stylusfluff",
                 "pickaxe_subtlesilly",
+                "pickaxe_sugarbrain",
                 "pickaxe_sugarbubble",
                 "pickaxe_sulfurdean",
                 "pickaxe_summertide",
@@ -37591,6 +37681,7 @@
                 "pickaxe_surfsup_guitar",
                 "pickaxe_surgeraven_pack",
                 "pickaxe_sushiaware",
+                "pickaxe_suturehalo",
                 "pickaxe_swamprate",
                 "pickaxe_sweetcuddle",
                 "pickaxe_sweetletter",
@@ -37645,6 +37736,7 @@
                 "pickaxe_timesquare_drum",
                 "pickaxe_timesquare_guitar",
                 "pickaxe_timetrotter",
+                "pickaxe_tinylively",
                 "pickaxe_tireswing",
                 "pickaxe_titanium",
                 "pickaxe_toadleaf",
@@ -37746,6 +37838,7 @@
                 "pickaxe_wideplane_drum",
                 "pickaxe_wideplane_guitar",
                 "pickaxe_wideplane_keytar",
+                "pickaxe_widowfoam",
                 "pickaxe_wingbath",
                 "pickaxe_wingedeye",
                 "pickaxe_wingedmedieval",
@@ -37769,6 +37862,7 @@
                 "pickaxe_yuzucranktide",
                 "pickaxe_zebrascramble_bacon",
                 "pickaxe_zencrash",
+                "pickaxe_zenithpair",
                 "pickaxe_zirconsweep",
                 "sicklebatpickaxe",
                 "skiicepickaxe",
@@ -40004,6 +40098,7 @@
                 "abstractmirror",
                 "accentwall",
                 "accolades",
+                "acidwhale",
                 "acrobaticsuperhero",
                 "adapter",
                 "adoration",
@@ -40075,6 +40170,8 @@
                 "ashes_myq8o",
                 "ashtonboardwalk",
                 "ashtonsaltlake",
+                "asidedepot",
+                "asidedepotstair",
                 "aspire",
                 "assassinsalute",
                 "assassinvest",
@@ -40297,7 +40394,9 @@
                 "capoeira",
                 "carbideweld",
                 "carcrash",
+                "cargolying",
                 "carrotcake",
+                "carrymazeflap",
                 "cartwheel",
                 "cashier_hgq8x",
                 "casinoreaper",
@@ -41055,6 +41154,7 @@
                 "ironlilac",
                 "irons",
                 "isolate",
+                "ivorydwell",
                 "ivystub",
                 "jadetowel",
                 "jadetowel_gloss",
@@ -41196,6 +41296,7 @@
                 "logarithmkick_njvd8",
                 "logarithmwhoa_t3pf9",
                 "lonely",
+                "lonestar",
                 "lonewolf",
                 "longweekend",
                 "loofah",
@@ -41583,6 +41684,10 @@
                 "quirkluster",
                 "racestart",
                 "racestart_argon",
+                "radardigitgloom",
+                "radardigitortho",
+                "radardigitortho_joiner",
+                "radardigitortho_leader",
                 "radiopaca",
                 "radiumfox",
                 "ragequit",
@@ -41818,6 +41923,7 @@
                 "smarthyena",
                 "smokebombfail",
                 "smokecleanse",
+                "smoothgriffin",
                 "snap",
                 "snap_deploypartyrift",
                 "snapfreeze",
@@ -41971,6 +42077,7 @@
                 "surroundsound",
                 "survivorsault_nj7wc",
                 "suspenders",
+                "suturehalo",
                 "swatch",
                 "swatch_owned",
                 "swatch_owned_follower",
@@ -45381,7 +45488,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -46773,7 +46882,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -47623,7 +47734,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -48969,7 +49082,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -49444,7 +49559,6 @@
                 "es-es",
                 "fi",
                 "fr",
-                "he",
                 "hi",
                 "hr",
                 "hu",
@@ -49496,7 +49610,6 @@
                 "es-es",
                 "fi",
                 "fr",
-                "he",
                 "hi",
                 "hr",
                 "hu",
@@ -49538,7 +49651,6 @@
               "enum": [
                 "ae",
                 "af",
-                "al",
                 "am",
                 "ao",
                 "ar",
@@ -49560,6 +49672,7 @@
                 "by",
                 "ca",
                 "cd",
+                "cg",
                 "ch",
                 "ci",
                 "cl",
@@ -49586,9 +49699,8 @@
                 "ga",
                 "gb",
                 "ge",
-                "gg",
                 "gh",
-                "gq",
+                "gm",
                 "gr",
                 "gt",
                 "gu",
@@ -49596,7 +49708,6 @@
                 "hk",
                 "hn",
                 "hr",
-                "ht",
                 "hu",
                 "id",
                 "ie",
@@ -49615,22 +49726,23 @@
                 "kr",
                 "kw",
                 "kz",
+                "la",
                 "lb",
+                "lc",
                 "li",
                 "lk",
                 "lt",
+                "lu",
                 "lv",
                 "ly",
                 "ma",
                 "md",
-                "me",
                 "mg",
                 "mk",
                 "ml",
                 "mm",
                 "mn",
-                "mp",
-                "mt",
+                "mq",
                 "mu",
                 "mv",
                 "mw",
@@ -49638,8 +49750,8 @@
                 "my",
                 "mz",
                 "na",
-                "ne",
                 "ng",
+                "ni",
                 "nl",
                 "no",
                 "np",
@@ -49659,14 +49771,14 @@
                 "ro",
                 "rs",
                 "ru",
+                "rw",
                 "sa",
-                "sd",
                 "se",
                 "sg",
                 "si",
                 "sk",
-                "sl",
                 "sn",
+                "so",
                 "sr",
                 "sv",
                 "td",
@@ -49710,7 +49822,6 @@
               "enum": [
                 "ae",
                 "af",
-                "al",
                 "am",
                 "ao",
                 "ar",
@@ -49732,6 +49843,7 @@
                 "by",
                 "ca",
                 "cd",
+                "cg",
                 "ch",
                 "ci",
                 "cl",
@@ -49758,9 +49870,8 @@
                 "ga",
                 "gb",
                 "ge",
-                "gg",
                 "gh",
-                "gq",
+                "gm",
                 "gr",
                 "gt",
                 "gu",
@@ -49768,7 +49879,6 @@
                 "hk",
                 "hn",
                 "hr",
-                "ht",
                 "hu",
                 "id",
                 "ie",
@@ -49787,22 +49897,23 @@
                 "kr",
                 "kw",
                 "kz",
+                "la",
                 "lb",
+                "lc",
                 "li",
                 "lk",
                 "lt",
+                "lu",
                 "lv",
                 "ly",
                 "ma",
                 "md",
-                "me",
                 "mg",
                 "mk",
                 "ml",
                 "mm",
                 "mn",
-                "mp",
-                "mt",
+                "mq",
                 "mu",
                 "mv",
                 "mw",
@@ -49810,8 +49921,8 @@
                 "my",
                 "mz",
                 "na",
-                "ne",
                 "ng",
+                "ni",
                 "nl",
                 "no",
                 "np",
@@ -49831,14 +49942,14 @@
                 "ro",
                 "rs",
                 "ru",
+                "rw",
                 "sa",
-                "sd",
                 "se",
                 "sg",
                 "si",
                 "sk",
-                "sl",
                 "sn",
+                "so",
                 "sr",
                 "sv",
                 "td",
@@ -51036,7 +51147,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -51991,7 +52104,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -52825,7 +52940,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -53853,7 +53970,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -54970,7 +55089,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -55737,7 +55858,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -55980,17 +56103,14 @@
                 "BN",
                 "BO",
                 "BR",
-                "BT",
                 "BY",
                 "BZ",
                 "CA",
                 "CH",
                 "CL",
-                "CM",
                 "CN",
                 "CO",
                 "CR",
-                "CU",
                 "CY",
                 "DE",
                 "DK",
@@ -56001,13 +56121,11 @@
                 "EE",
                 "EG",
                 "ES",
-                "ET",
                 "FI",
                 "FJ",
                 "FR",
                 "GA",
                 "GB",
-                "GD",
                 "GE",
                 "GF",
                 "GH",
@@ -56027,7 +56145,6 @@
                 "IN",
                 "IQ",
                 "IR",
-                "IS",
                 "IT",
                 "JM",
                 "JO",
@@ -56042,8 +56159,6 @@
                 "KZ",
                 "LA",
                 "LB",
-                "LC",
-                "LK",
                 "LT",
                 "LU",
                 "LV",
@@ -56057,10 +56172,8 @@
                 "MU",
                 "MX",
                 "MY",
-                "MZ",
                 "NA",
                 "NC",
-                "NE",
                 "NG",
                 "NI",
                 "NL",
@@ -56144,17 +56257,14 @@
                 "BN",
                 "BO",
                 "BR",
-                "BT",
                 "BY",
                 "BZ",
                 "CA",
                 "CH",
                 "CL",
-                "CM",
                 "CN",
                 "CO",
                 "CR",
-                "CU",
                 "CY",
                 "DE",
                 "DK",
@@ -56165,13 +56275,11 @@
                 "EE",
                 "EG",
                 "ES",
-                "ET",
                 "FI",
                 "FJ",
                 "FR",
                 "GA",
                 "GB",
-                "GD",
                 "GE",
                 "GF",
                 "GH",
@@ -56191,7 +56299,6 @@
                 "IN",
                 "IQ",
                 "IR",
-                "IS",
                 "IT",
                 "JM",
                 "JO",
@@ -56206,8 +56313,6 @@
                 "KZ",
                 "LA",
                 "LB",
-                "LC",
-                "LK",
                 "LT",
                 "LU",
                 "LV",
@@ -56221,10 +56326,8 @@
                 "MU",
                 "MX",
                 "MY",
-                "MZ",
                 "NA",
                 "NC",
-                "NE",
                 "NG",
                 "NI",
                 "NL",
@@ -57535,7 +57638,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -58425,7 +58530,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -58709,37 +58816,43 @@
                 "Albania",
                 "Algeria",
                 "Algérie",
-                "Almanya",
-                "American Samoa",
+                "Angola",
                 "Antarctica",
                 "Argentina",
+                "Aruba",
                 "Australia",
                 "Austria",
-                "BD",
+                "Azerbaijão",
+                "BE",
                 "BH",
+                "BO",
                 "BR",
                 "Bahrain",
-                "Belgia",
+                "Bangladesh",
+                "Belarus",
                 "Belgique",
                 "Belgium",
+                "België",
                 "Bolivia",
-                "Bosna i Hercegovina",
-                "Bosnia and Herzegovina",
                 "Brasil",
                 "Brazil",
+                "British Virgin Islands",
                 "Bulgaria",
+                "Burkina Faso",
                 "CA",
                 "CH",
                 "CL",
                 "CO",
+                "CR",
                 "CZ",
+                "Cabo Verde",
                 "Canada",
                 "Chile",
                 "China",
                 "Colombia",
                 "Costa Rica",
                 "Crna Gora",
-                "Croatia",
+                "Cyprus",
                 "Czechia",
                 "DE",
                 "DK",
@@ -58747,143 +58860,181 @@
                 "Denmark",
                 "Deutschland",
                 "Dominican Republic",
+                "EC",
                 "EG",
                 "ES",
+                "Ecuador",
                 "Eesti",
                 "Egypt",
+                "Eritrea",
                 "Espanha",
                 "España",
                 "Estados Unidos",
+                "Estonia",
+                "FI",
                 "FR",
                 "Finland",
                 "France",
                 "GB",
-                "GM",
                 "GR",
-                "Georgia",
-                "Germania",
+                "Gabon",
                 "Germany",
                 "Greece",
-                "HR",
+                "Grenada",
+                "Guam",
+                "Guatemala",
+                "HK",
+                "HU",
+                "Haiti",
                 "Hiszpania",
+                "Honduras",
                 "Hong Kong SAR",
                 "Hrvatska",
                 "Hungary",
+                "ID",
                 "IL",
                 "IN",
                 "IT",
                 "India",
                 "Indonesia",
-                "Iraq",
                 "Ireland",
                 "Israel",
                 "Italia",
+                "Italien",
                 "Italy",
+                "JP",
                 "Jamaica",
                 "Japan",
+                "Jordan",
                 "KR",
+                "KW",
                 "Kazakhstan",
+                "Kenya",
                 "Korea",
                 "Kuwait",
-                "LB",
-                "LT",
                 "LV",
+                "La Réunion",
                 "Latvia",
                 "Latvija",
                 "Liechtenstein",
+                "Lietuva",
                 "Lithuania",
+                "MK",
                 "MX",
                 "MY",
                 "Magyarország",
                 "Malaysia",
-                "Maldives",
                 "Malta",
-                "Maroc",
+                "Mongolia",
                 "Morocco",
                 "México",
+                "NI",
                 "NL",
+                "NP",
                 "NZ",
                 "Nederland",
-                "Nepal",
                 "Netherlands",
-                "New Caledonia",
                 "New Zealand",
-                "Northern Mariana Islands",
+                "Nicaragua",
+                "Niemcy",
+                "Norge",
                 "Norway",
-                "Nouvelle-Calédonie",
+                "Nouvelle-Zélande",
+                "PE",
                 "PH",
+                "PK",
+                "PL",
+                "PT",
+                "PY",
                 "Pakistan",
+                "Palestinian Authority",
                 "Panama",
                 "Paraguay",
                 "Peru",
                 "Philippines",
                 "Poland",
-                "Polonia",
                 "Polska",
                 "Portugal",
+                "Portugalia",
+                "Puerto Rico",
                 "Qatar",
                 "RO",
                 "RU",
+                "República Dominicana",
                 "Romania",
-                "Rusia",
-                "Rusland",
                 "Russia",
-                "Russie",
                 "Ryssland",
                 "SA",
                 "SE",
+                "SI",
+                "SK",
                 "Saudi Arabia",
                 "Schweiz",
                 "Serbia",
                 "Singapore",
                 "Slovakia",
                 "Slovenia",
+                "Slovenija",
                 "Slovensko",
                 "South Africa",
                 "Spain",
-                "Stany Zjednoczone",
+                "Spojené kráľovstvo",
+                "Sudan",
+                "Suisse",
                 "Suomi",
                 "Sverige",
                 "Sweden",
                 "Switzerland",
+                "Sénégal",
                 "TH",
                 "TR",
-                "TT",
                 "TW",
                 "Taiwan",
                 "Thailand",
                 "Turcja",
+                "Turkmenistan",
+                "Turks and Caicos Islands",
                 "Türkiye",
                 "U.S. Virgin Islands",
                 "US",
+                "Ucraina",
+                "Ukraine",
                 "United Arab Emirates",
                 "United Kingdom",
                 "United States",
                 "Uruguay",
-                "Uzbekistan",
+                "VE",
+                "VN",
                 "Venezuela",
                 "Vietnam",
                 "Việt Nam",
                 "ZA",
-                "Zjednoczone Królestwo",
+                "Zimbabwe",
+                "États-Unis",
                 "Österreich",
                 "Česko",
                 "Ελλάδα",
-                "Ινδία",
+                "Ηνωμένες Πολιτείες",
+                "Аргентина",
                 "България",
-                "Казахстан",
-                "Мексика",
+                "Виргинские о-ва (Великобритания)",
+                "Германия",
+                "Нідерланди",
+                "Польша",
                 "Россия",
+                "Соединенные Штаты",
                 "Србија",
                 "Турция",
                 "Украина",
+                "Україна",
+                "Эстония",
                 "ישראל",
+                "السعودية",
                 "ไทย",
-                "ロシア",
+                "中国",
                 "俄罗斯",
                 "台灣",
                 "日本",
-                "荷蘭",
                 "香港特別行政區",
                 "대한민국",
                 "러시아",
@@ -58912,37 +59063,43 @@
                 "Albania",
                 "Algeria",
                 "Algérie",
-                "Almanya",
-                "American Samoa",
+                "Angola",
                 "Antarctica",
                 "Argentina",
+                "Aruba",
                 "Australia",
                 "Austria",
-                "BD",
+                "Azerbaijão",
+                "BE",
                 "BH",
+                "BO",
                 "BR",
                 "Bahrain",
-                "Belgia",
+                "Bangladesh",
+                "Belarus",
                 "Belgique",
                 "Belgium",
+                "België",
                 "Bolivia",
-                "Bosna i Hercegovina",
-                "Bosnia and Herzegovina",
                 "Brasil",
                 "Brazil",
+                "British Virgin Islands",
                 "Bulgaria",
+                "Burkina Faso",
                 "CA",
                 "CH",
                 "CL",
                 "CO",
+                "CR",
                 "CZ",
+                "Cabo Verde",
                 "Canada",
                 "Chile",
                 "China",
                 "Colombia",
                 "Costa Rica",
                 "Crna Gora",
-                "Croatia",
+                "Cyprus",
                 "Czechia",
                 "DE",
                 "DK",
@@ -58950,143 +59107,181 @@
                 "Denmark",
                 "Deutschland",
                 "Dominican Republic",
+                "EC",
                 "EG",
                 "ES",
+                "Ecuador",
                 "Eesti",
                 "Egypt",
+                "Eritrea",
                 "Espanha",
                 "España",
                 "Estados Unidos",
+                "Estonia",
+                "FI",
                 "FR",
                 "Finland",
                 "France",
                 "GB",
-                "GM",
                 "GR",
-                "Georgia",
-                "Germania",
+                "Gabon",
                 "Germany",
                 "Greece",
-                "HR",
+                "Grenada",
+                "Guam",
+                "Guatemala",
+                "HK",
+                "HU",
+                "Haiti",
                 "Hiszpania",
+                "Honduras",
                 "Hong Kong SAR",
                 "Hrvatska",
                 "Hungary",
+                "ID",
                 "IL",
                 "IN",
                 "IT",
                 "India",
                 "Indonesia",
-                "Iraq",
                 "Ireland",
                 "Israel",
                 "Italia",
+                "Italien",
                 "Italy",
+                "JP",
                 "Jamaica",
                 "Japan",
+                "Jordan",
                 "KR",
+                "KW",
                 "Kazakhstan",
+                "Kenya",
                 "Korea",
                 "Kuwait",
-                "LB",
-                "LT",
                 "LV",
+                "La Réunion",
                 "Latvia",
                 "Latvija",
                 "Liechtenstein",
+                "Lietuva",
                 "Lithuania",
+                "MK",
                 "MX",
                 "MY",
                 "Magyarország",
                 "Malaysia",
-                "Maldives",
                 "Malta",
-                "Maroc",
+                "Mongolia",
                 "Morocco",
                 "México",
+                "NI",
                 "NL",
+                "NP",
                 "NZ",
                 "Nederland",
-                "Nepal",
                 "Netherlands",
-                "New Caledonia",
                 "New Zealand",
-                "Northern Mariana Islands",
+                "Nicaragua",
+                "Niemcy",
+                "Norge",
                 "Norway",
-                "Nouvelle-Calédonie",
+                "Nouvelle-Zélande",
+                "PE",
                 "PH",
+                "PK",
+                "PL",
+                "PT",
+                "PY",
                 "Pakistan",
+                "Palestinian Authority",
                 "Panama",
                 "Paraguay",
                 "Peru",
                 "Philippines",
                 "Poland",
-                "Polonia",
                 "Polska",
                 "Portugal",
+                "Portugalia",
+                "Puerto Rico",
                 "Qatar",
                 "RO",
                 "RU",
+                "República Dominicana",
                 "Romania",
-                "Rusia",
-                "Rusland",
                 "Russia",
-                "Russie",
                 "Ryssland",
                 "SA",
                 "SE",
+                "SI",
+                "SK",
                 "Saudi Arabia",
                 "Schweiz",
                 "Serbia",
                 "Singapore",
                 "Slovakia",
                 "Slovenia",
+                "Slovenija",
                 "Slovensko",
                 "South Africa",
                 "Spain",
-                "Stany Zjednoczone",
+                "Spojené kráľovstvo",
+                "Sudan",
+                "Suisse",
                 "Suomi",
                 "Sverige",
                 "Sweden",
                 "Switzerland",
+                "Sénégal",
                 "TH",
                 "TR",
-                "TT",
                 "TW",
                 "Taiwan",
                 "Thailand",
                 "Turcja",
+                "Turkmenistan",
+                "Turks and Caicos Islands",
                 "Türkiye",
                 "U.S. Virgin Islands",
                 "US",
+                "Ucraina",
+                "Ukraine",
                 "United Arab Emirates",
                 "United Kingdom",
                 "United States",
                 "Uruguay",
-                "Uzbekistan",
+                "VE",
+                "VN",
                 "Venezuela",
                 "Vietnam",
                 "Việt Nam",
                 "ZA",
-                "Zjednoczone Królestwo",
+                "Zimbabwe",
+                "États-Unis",
                 "Österreich",
                 "Česko",
                 "Ελλάδα",
-                "Ινδία",
+                "Ηνωμένες Πολιτείες",
+                "Аргентина",
                 "България",
-                "Казахстан",
-                "Мексика",
+                "Виргинские о-ва (Великобритания)",
+                "Германия",
+                "Нідерланди",
+                "Польша",
                 "Россия",
+                "Соединенные Штаты",
                 "Србија",
                 "Турция",
                 "Украина",
+                "Україна",
+                "Эстония",
                 "ישראל",
+                "السعودية",
                 "ไทย",
-                "ロシア",
+                "中国",
                 "俄罗斯",
                 "台灣",
                 "日本",
-                "荷蘭",
                 "香港特別行政區",
                 "대한민국",
                 "러시아",
@@ -60082,7 +60277,9 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -61822,7 +62019,910 @@
                     "hasNextPage": {
                       "type": "boolean"
                     },
-                    "nextCursor": {},
+                    "nextCursor": {
+                      "type": "string"
+                    },
+                    "perPage": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "wasCached": {
+                      "type": "boolean"
+                    },
+                    "cacheTTL": {
+                      "type": "integer"
+                    },
+                    "lastModified": {
+                      "type": "integer"
+                    },
+                    "serverTime": {
+                      "type": "integer"
+                    },
+                    "searchUrl": {
+                      "type": "string"
+                    },
+                    "search": {
+                      "type": "string"
+                    },
+                    "stickyItems": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "publishedPeriodLabelPhrase": {
+                      "type": "string"
+                    },
+                    "filterDatesDefault": {
+                      "type": "boolean"
+                    },
+                    "published_startDate": {
+                      "type": "string"
+                    },
+                    "published_endDate": {
+                      "type": "string"
+                    },
+                    "filter_by_published_date": {
+                      "type": "boolean"
+                    },
+                    "published_period_label": {
+                      "type": "string"
+                    },
+                    "system_info": {
+                      "$ref": "#/components/schemas/Resp_SystemInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": [
+              "market"
+            ]
+          }
+        ]
+      }
+    },
+    "/capcut": {
+      "get": {
+        "tags": [
+          "Category Search"
+        ],
+        "summary": "CapCut",
+        "description": "Displays a list of accounts in a specific category according to your parameters.",
+        "operationId": "Category.CapCut",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/after"
+          },
+          {
+            "$ref": "#/components/parameters/pmin"
+          },
+          {
+            "$ref": "#/components/parameters/pmax"
+          },
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/public_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/not_public_tag_id"
+          },
+          {
+            "$ref": "#/components/parameters/origin"
+          },
+          {
+            "$ref": "#/components/parameters/not_origin"
+          },
+          {
+            "$ref": "#/components/parameters/user_id"
+          },
+          {
+            "$ref": "#/components/parameters/nsb"
+          },
+          {
+            "$ref": "#/components/parameters/sb"
+          },
+          {
+            "$ref": "#/components/parameters/nsb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/sb_by_me"
+          },
+          {
+            "$ref": "#/components/parameters/currency"
+          },
+          {
+            "$ref": "#/components/parameters/email_login_data"
+          },
+          {
+            "$ref": "#/components/parameters/email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/not_email_provider"
+          },
+          {
+            "$ref": "#/components/parameters/parse_same_item_ids"
+          },
+          {
+            "name": "subscription[]",
+            "in": "query",
+            "description": "List of allowed CapCut subscriptions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "List of allowed CapCut subscriptions.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "pro",
+                  "ultra"
+                ]
+              }
+            }
+          },
+          {
+            "name": "subscription_length",
+            "in": "query",
+            "description": "Length of CapCut subscription.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Length of CapCut subscription.",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "subscription_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "In what notation is time measured.",
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "credits_min",
+            "in": "query",
+            "description": "Minimum number of CapCut credits.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum number of CapCut credits.",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "credits_max",
+            "in": "query",
+            "description": "Maximum number of CapCut credits.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum number of CapCut credits.",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "dreamina_subscription[]",
+            "in": "query",
+            "description": "List of allowed Dreamina subscriptions.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "List of allowed Dreamina subscriptions.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "advanced",
+                  "basic",
+                  "none",
+                  "standard",
+                  "ultra"
+                ]
+              }
+            }
+          },
+          {
+            "name": "dreamina_subscription_length",
+            "in": "query",
+            "description": "Length of Dreamina subscription.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Length of Dreamina subscription.",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "dreamina_subscription_period",
+            "in": "query",
+            "description": "In what notation is time measured.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "In what notation is time measured.",
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "dreamina_credits_min",
+            "in": "query",
+            "description": "Minimum number of Dreamina credits.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Minimum number of Dreamina credits.",
+              "type": "integer"
+            }
+          },
+          {
+            "name": "dreamina_credits_max",
+            "in": "query",
+            "description": "Maximum number of Dreamina credits.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "description": "Maximum number of Dreamina credits.",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "items",
+                    "totalItems",
+                    "totalItemsPrice",
+                    "hasNextPage",
+                    "nextCursor",
+                    "perPage",
+                    "page",
+                    "wasCached",
+                    "cacheTTL",
+                    "lastModified",
+                    "serverTime",
+                    "searchUrl",
+                    "search",
+                    "stickyItems",
+                    "publishedPeriodLabelPhrase",
+                    "filterDatesDefault",
+                    "published_startDate",
+                    "published_endDate",
+                    "filter_by_published_date",
+                    "published_period_label",
+                    "system_info"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "item_id",
+                          "item_state",
+                          "category_id",
+                          "published_date",
+                          "title",
+                          "description",
+                          "price",
+                          "update_stat_date",
+                          "refreshed_date",
+                          "edit_date",
+                          "pending_deletion_date",
+                          "view_count",
+                          "is_sticky",
+                          "item_origin",
+                          "nsb",
+                          "allow_ask_discount",
+                          "title_en",
+                          "description_en",
+                          "email_type",
+                          "email_provider",
+                          "item_domain",
+                          "resale_item_origin",
+                          "auto_bump_period",
+                          "guarantee_duration",
+                          "rub_price",
+                          "discount",
+                          "capcut_item_id",
+                          "capcut_id",
+                          "capcut_subscription",
+                          "capcut_subscription_end",
+                          "capcut_credits",
+                          "capcut_dreamina_subscription",
+                          "capcut_dreamina_subscription_end",
+                          "capcut_dreamina_credits",
+                          "feedback_data",
+                          "max_discount_percent",
+                          "user_allow_ask_discount",
+                          "priceWithSellerFee",
+                          "category",
+                          "guarantee",
+                          "canViewLoginData",
+                          "canViewTempEmail",
+                          "canUpdateItemStats",
+                          "canReportItem",
+                          "canViewItemViews",
+                          "canManagePublicTag",
+                          "canViewEmailLoginData",
+                          "copyFormatData",
+                          "showGetEmailCodeButton",
+                          "canOpenItem",
+                          "canCloseItem",
+                          "canEditItem",
+                          "canDeleteItem",
+                          "canStickItem",
+                          "canUnstickItem",
+                          "canBumpItem",
+                          "canNotBumpItemReason",
+                          "canAutoBump",
+                          "buyer",
+                          "isPersonalAccount",
+                          "canBuyItem",
+                          "price_currency",
+                          "priceWithSellerFeeLabel",
+                          "canValidateAccount",
+                          "canChangeOwner",
+                          "canResellItem",
+                          "capcutSubscriptionTitle",
+                          "capcutDreaminaSubscriptionTitle",
+                          "canViewAccountLink",
+                          "accountLinks",
+                          "accountLink",
+                          "imagePreviewLinks",
+                          "canChangePassword",
+                          "canChangeEmailPassword",
+                          "uniqueKeyExists",
+                          "itemOriginPhrase",
+                          "tags",
+                          "public_tag",
+                          "note_text",
+                          "descriptionHtml",
+                          "descriptionEnHtml",
+                          "descriptionPlain",
+                          "descriptionEnPlain",
+                          "seller"
+                        ],
+                        "properties": {
+                          "item_id": {
+                            "type": "integer"
+                          },
+                          "item_state": {
+                            "type": "string"
+                          },
+                          "category_id": {
+                            "type": "integer"
+                          },
+                          "published_date": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "integer"
+                          },
+                          "update_stat_date": {
+                            "type": "integer"
+                          },
+                          "refreshed_date": {
+                            "type": "integer"
+                          },
+                          "edit_date": {
+                            "type": "integer"
+                          },
+                          "pending_deletion_date": {
+                            "type": "integer"
+                          },
+                          "view_count": {
+                            "type": "integer"
+                          },
+                          "is_sticky": {
+                            "type": "integer"
+                          },
+                          "item_origin": {
+                            "type": "string"
+                          },
+                          "nsb": {
+                            "type": "integer"
+                          },
+                          "allow_ask_discount": {
+                            "type": "integer"
+                          },
+                          "title_en": {
+                            "type": "string"
+                          },
+                          "description_en": {
+                            "type": "string"
+                          },
+                          "email_type": {
+                            "type": "string"
+                          },
+                          "email_provider": {
+                            "type": "string"
+                          },
+                          "item_domain": {
+                            "type": "string"
+                          },
+                          "resale_item_origin": {
+                            "type": "string"
+                          },
+                          "auto_bump_period": {
+                            "type": "integer"
+                          },
+                          "guarantee_duration": {
+                            "type": "integer"
+                          },
+                          "rub_price": {
+                            "type": "integer"
+                          },
+                          "discount": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "required": [
+                              "ask_date",
+                              "ask_item_id",
+                              "ask_user_id",
+                              "auto_buy",
+                              "auto_buy_max_price",
+                              "balance_id",
+                              "discount_accepted",
+                              "discount_price",
+                              "message"
+                            ],
+                            "properties": {
+                              "ask_date": {
+                                "type": "integer"
+                              },
+                              "ask_item_id": {
+                                "type": "integer"
+                              },
+                              "ask_user_id": {
+                                "type": "integer"
+                              },
+                              "auto_buy": {
+                                "type": "boolean"
+                              },
+                              "auto_buy_max_price": {
+                                "type": "integer"
+                              },
+                              "balance_id": {
+                                "type": "string"
+                              },
+                              "discount_accepted": {
+                                "type": "boolean"
+                              },
+                              "discount_price": {
+                                "type": "integer"
+                              },
+                              "message": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "capcut_item_id": {
+                            "type": "integer"
+                          },
+                          "capcut_id": {
+                            "type": "string"
+                          },
+                          "capcut_subscription": {
+                            "type": "string"
+                          },
+                          "capcut_subscription_end": {
+                            "type": "integer"
+                          },
+                          "capcut_credits": {
+                            "type": "integer"
+                          },
+                          "capcut_dreamina_subscription": {
+                            "type": "string"
+                          },
+                          "capcut_dreamina_subscription_end": {
+                            "type": "integer"
+                          },
+                          "capcut_dreamina_credits": {
+                            "type": "integer"
+                          },
+                          "feedback_data": {
+                            "type": "string"
+                          },
+                          "max_discount_percent": {
+                            "type": "integer"
+                          },
+                          "user_allow_ask_discount": {
+                            "type": "integer"
+                          },
+                          "priceWithSellerFee": {
+                            "type": "number"
+                          },
+                          "category": {
+                            "type": "object",
+                            "properties": {
+                              "category_id": {
+                                "type": "integer"
+                              },
+                              "category_title": {
+                                "type": "string"
+                              },
+                              "category_name": {
+                                "type": "string"
+                              },
+                              "category_url": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "category_id",
+                              "category_title",
+                              "category_name",
+                              "category_url"
+                            ]
+                          },
+                          "guarantee": {
+                            "type": "object",
+                            "properties": {
+                              "duration": {
+                                "type": "integer"
+                              },
+                              "class": {
+                                "type": "string"
+                              },
+                              "durationPhrase": {
+                                "type": "string"
+                              },
+                              "endDate": {
+                                "type": [
+                                  "null",
+                                  "integer"
+                                ]
+                              },
+                              "active": {
+                                "type": [
+                                  "null",
+                                  "integer"
+                                ]
+                              },
+                              "cancelled": {
+                                "type": [
+                                  "null",
+                                  "integer"
+                                ]
+                              },
+                              "remainingTime": {
+                                "type": [
+                                  "null",
+                                  "integer"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "duration",
+                              "class",
+                              "durationPhrase",
+                              "endDate",
+                              "active",
+                              "cancelled",
+                              "remainingTime"
+                            ]
+                          },
+                          "canViewLoginData": {
+                            "type": "boolean"
+                          },
+                          "canViewTempEmail": {
+                            "type": "boolean"
+                          },
+                          "canUpdateItemStats": {
+                            "type": "boolean"
+                          },
+                          "canReportItem": {
+                            "type": "boolean"
+                          },
+                          "canViewItemViews": {
+                            "type": "boolean"
+                          },
+                          "canManagePublicTag": {
+                            "type": "boolean"
+                          },
+                          "canViewEmailLoginData": {
+                            "type": "boolean"
+                          },
+                          "copyFormatData": {
+                            "type": "object",
+                            "properties": {
+                              "title_link": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "title_link"
+                            ]
+                          },
+                          "showGetEmailCodeButton": {
+                            "type": "boolean"
+                          },
+                          "canOpenItem": {
+                            "type": "boolean"
+                          },
+                          "canCloseItem": {
+                            "type": "boolean"
+                          },
+                          "canEditItem": {
+                            "type": "boolean"
+                          },
+                          "canDeleteItem": {
+                            "type": "boolean"
+                          },
+                          "canStickItem": {
+                            "type": "boolean"
+                          },
+                          "canUnstickItem": {
+                            "type": "boolean"
+                          },
+                          "canBumpItem": {
+                            "type": "boolean"
+                          },
+                          "canNotBumpItemReason": {
+                            "type": "string"
+                          },
+                          "canAutoBump": {
+                            "type": "boolean"
+                          },
+                          "buyer": {},
+                          "isPersonalAccount": {
+                            "type": "boolean"
+                          },
+                          "canBuyItem": {
+                            "type": "boolean"
+                          },
+                          "price_currency": {
+                            "type": "string"
+                          },
+                          "priceWithSellerFeeLabel": {
+                            "type": "string"
+                          },
+                          "canValidateAccount": {
+                            "type": "boolean"
+                          },
+                          "canChangeOwner": {
+                            "type": "boolean"
+                          },
+                          "canResellItem": {
+                            "type": "boolean"
+                          },
+                          "capcutSubscriptionTitle": {
+                            "type": "string"
+                          },
+                          "capcutDreaminaSubscriptionTitle": {
+                            "type": "string"
+                          },
+                          "canViewAccountLink": {
+                            "type": "boolean"
+                          },
+                          "accountLinks": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "link": {
+                                  "type": "string"
+                                },
+                                "text": {
+                                  "type": "string"
+                                },
+                                "iconClass": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "link",
+                                "text",
+                                "iconClass"
+                              ]
+                            }
+                          },
+                          "accountLink": {
+                            "type": "string"
+                          },
+                          "imagePreviewLinks": {
+                            "type": "array",
+                            "items": {}
+                          },
+                          "canChangePassword": {
+                            "type": "boolean"
+                          },
+                          "canChangeEmailPassword": {
+                            "type": "boolean"
+                          },
+                          "uniqueKeyExists": {
+                            "type": "boolean"
+                          },
+                          "itemOriginPhrase": {
+                            "type": "string"
+                          },
+                          "tags": {
+                            "type": [
+                              "array",
+                              "null"
+                            ],
+                            "items": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "object",
+                                "properties": {
+                                  "tag_id": {
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "isDefault": {
+                                    "type": "boolean"
+                                  },
+                                  "forOwnedAccountsOnly": {
+                                    "type": "boolean"
+                                  },
+                                  "bc": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "tag_id",
+                                  "title",
+                                  "isDefault",
+                                  "forOwnedAccountsOnly",
+                                  "bc"
+                                ]
+                              }
+                            }
+                          },
+                          "public_tag": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "required": [
+                              "background_color",
+                              "tag_id",
+                              "title"
+                            ],
+                            "properties": {
+                              "background_color": {
+                                "type": "string"
+                              },
+                              "tag_id": {
+                                "type": "integer"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "note_text": {
+                            "type": [
+                              "null",
+                              "string"
+                            ]
+                          },
+                          "descriptionHtml": {
+                            "type": "string"
+                          },
+                          "descriptionEnHtml": {
+                            "type": "string"
+                          },
+                          "descriptionPlain": {
+                            "type": "string"
+                          },
+                          "descriptionEnPlain": {
+                            "type": "string"
+                          },
+                          "seller": {
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "type": "integer"
+                              },
+                              "sold_items_count": {
+                                "type": "integer"
+                              },
+                              "active_items_count": {
+                                "type": "integer"
+                              },
+                              "restore_data": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "avatar_date": {
+                                "type": "integer"
+                              },
+                              "is_banned": {
+                                "type": "integer"
+                              },
+                              "display_style_group_id": {
+                                "type": "integer"
+                              },
+                              "restore_percents": {}
+                            },
+                            "required": [
+                              "user_id",
+                              "sold_items_count",
+                              "active_items_count",
+                              "restore_data",
+                              "username",
+                              "avatar_date",
+                              "is_banned",
+                              "display_style_group_id",
+                              "restore_percents"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalItemsPrice": {},
+                    "hasNextPage": {
+                      "type": "boolean"
+                    },
+                    "nextCursor": {
+                      "type": "string"
+                    },
                     "perPage": {
                       "type": "integer"
                     },
@@ -83879,10 +84979,10 @@
             "ANT",
             "ARE",
             "ARG",
+            "ARM",
             "ATA",
             "AUS",
             "AUT",
-            "BDI",
             "BEL",
             "BFA",
             "BGD",
@@ -83898,19 +84998,21 @@
             "BRN",
             "BTN",
             "BWA",
+            "CAF",
             "CAN",
             "CHE",
             "CHL",
             "CIV",
             "CMR",
             "COD",
-            "COG",
             "COL",
             "CRI",
             "CUB",
+            "CYM",
             "CYP",
             "CZE",
             "DEU",
+            "DMA",
             "DNK",
             "DOM",
             "DZA",
@@ -83925,9 +85027,11 @@
             "GAB",
             "GBR",
             "GEO",
+            "GGY",
             "GHA",
             "GIB",
             "GLP",
+            "GMB",
             "GRC",
             "GRD",
             "GTM",
@@ -83959,6 +85063,7 @@
             "LAO",
             "LBN",
             "LBY",
+            "LCA",
             "LKA",
             "LTU",
             "LUX",
@@ -83966,6 +85071,7 @@
             "MAC",
             "MAR",
             "MCO",
+            "MDA",
             "MDG",
             "MDV",
             "MEX",
@@ -83998,11 +85104,13 @@
             "PRT",
             "PRY",
             "PSE",
+            "PYF",
             "QAT",
             "REU",
             "ROU",
             "RUS",
             "SAU",
+            "SDN",
             "SEN",
             "SGP",
             "SLV",
@@ -84013,6 +85121,8 @@
             "SWE",
             "TGO",
             "THA",
+            "TKM",
+            "TLS",
             "TTO",
             "TUN",
             "TUR",
@@ -84024,6 +85134,7 @@
             "VEN",
             "VIR",
             "VNM",
+            "YEM",
             "ZAF",
             "ZMB",
             "ZWE"
@@ -84052,10 +85163,10 @@
             "ANT",
             "ARE",
             "ARG",
+            "ARM",
             "ATA",
             "AUS",
             "AUT",
-            "BDI",
             "BEL",
             "BFA",
             "BGD",
@@ -84071,19 +85182,21 @@
             "BRN",
             "BTN",
             "BWA",
+            "CAF",
             "CAN",
             "CHE",
             "CHL",
             "CIV",
             "CMR",
             "COD",
-            "COG",
             "COL",
             "CRI",
             "CUB",
+            "CYM",
             "CYP",
             "CZE",
             "DEU",
+            "DMA",
             "DNK",
             "DOM",
             "DZA",
@@ -84098,9 +85211,11 @@
             "GAB",
             "GBR",
             "GEO",
+            "GGY",
             "GHA",
             "GIB",
             "GLP",
+            "GMB",
             "GRC",
             "GRD",
             "GTM",
@@ -84132,6 +85247,7 @@
             "LAO",
             "LBN",
             "LBY",
+            "LCA",
             "LKA",
             "LTU",
             "LUX",
@@ -84139,6 +85255,7 @@
             "MAC",
             "MAR",
             "MCO",
+            "MDA",
             "MDG",
             "MDV",
             "MEX",
@@ -84171,11 +85288,13 @@
             "PRT",
             "PRY",
             "PSE",
+            "PYF",
             "QAT",
             "REU",
             "ROU",
             "RUS",
             "SAU",
+            "SDN",
             "SEN",
             "SGP",
             "SLV",
@@ -84186,6 +85305,8 @@
             "SWE",
             "TGO",
             "THA",
+            "TKM",
+            "TLS",
             "TTO",
             "TUN",
             "TUR",
@@ -84197,6 +85318,7 @@
             "VEN",
             "VIR",
             "VNM",
+            "YEM",
             "ZAF",
             "ZMB",
             "ZWE"
