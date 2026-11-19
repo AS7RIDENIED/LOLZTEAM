@@ -3,7 +3,7 @@
   "info": {
     "title": "Lolzteam Public API: Forum",
     "description": "## [Market API](https://lzt-market.readme.io)\r\n\r\n## [Telegram chat](https://t.me/lztmarket_api)\r\n\r\n## Free API Client packages\r\n\r\n| Language             | GitHub                                                                                                       | Documentation                                                                                                               |\r\n| -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |\r\n| Python (AS7RIDENIED) | <Anchor target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM\">AS7RIDENIED/LOLZTEAM</Anchor>         | <Anchor target=\"_blank\" href=\"https://github.com/AS7RIDENIED/LOLZTEAM/blob/main/Documentation/Market.md\">Market.md</Anchor> |\r\n| Python (medovi40k)   | <Anchor target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py\">medovi40k/lolzteam-py</Anchor>       | <Anchor target=\"_blank\" href=\"https://github.com/medovi40k/lolzteam-py/blob/master/README.md\">README.md</Anchor>            |\r\n| TypeScript           | <Anchor target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts\">liwidale/lolzteam-api-ts</Anchor> | <Anchor target=\"_blank\" href=\"https://github.com/liwidale/lolzteam-api-ts/blob/master/README.md\">README.md</Anchor>         |\r\n| PHP                  | <Anchor target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php\">kyo-lzt/lolzteam-php</Anchor>         | <Anchor target=\"_blank\" href=\"https://github.com/kyo-lzt/lolzteam-php/blob/master/README.md\">README.md</Anchor>             |\r\n| Go (fantolla123)     | <Anchor target=\"_blank\" href=\"https://github.com/fantolla123/lzt-api-go\">fantolla123/lzt-api-go</Anchor>     | —                                                                                                                           |\r\n| Rust                 | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs\">Mlinec/lolzteam-api-rs</Anchor>     | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-rs/blob/master/README.md\">README.md</Anchor>           |\r\n| Java                 | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java\">Mlinec/lolzteam-api-java</Anchor> | <Anchor target=\"_blank\" href=\"https://github.com/Mlinec/lolzteam-api-java/blob/master/README.md\">README.md</Anchor>         |\r\n| Dart                 | <Anchor target=\"_blank\" href=\"https://github.com/recate-rat237/lzt-dart\">recate-rat237/lzt-dart</Anchor>     | —                                                                                                                           |\r\n| C#                   | <Anchor target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api\">dexsper/Lolzteam.Api</Anchor>         | <Anchor target=\"_blank\" href=\"https://github.com/dexsper/Lolzteam.Api/blob/master/README.md\">README.md</Anchor>             |\r\n\r\n## API Rate Limits\r\n\r\nThe API enforces rate limits to protect the service. Every response includes headers that tell you your current limit status, and exceeding any limit returns a `429 Too Many Requests` error.\r\n\r\n### Base Limits\r\n\r\n**Base limits** apply to all requests unless an endpoint has its own counter:\r\n\r\n- **GET** – 300r/60s\r\n- **non-GET** – 30r/60s\r\n\r\n### Endpoints With Independent Limits\r\n\r\nThese endpoints have their own counters and are **not** counted toward the base limits:\r\n\r\n| Endpoint(s)                                          | Limit  | Bucket name |\r\n| ---------------------------------------------------- | :----- | ----------- |\r\n| [/batch](https://lolzteam.readme.io/reference/batch) | 20/min | `batch`     |\r\n\r\n**Note on&#x20;**`/batch`**:** each nested request still counts against its own endpoint's limit independently. For example, batching 10 calls to `GET /threads` consumes 10 from the `GET` limit **and** 1 from the `/batch` limit.\r\n\r\nExceeding any limit returns a `429` error.\r\n\r\n### Get Current Rate Limit Info\r\n\r\nEach response carries rate-limit metadata in its headers and response body:\r\n\r\n| Header                  | Example      | Meaning                                                              |\r\n| ----------------------- | ------------ | -------------------------------------------------------------------- |\r\n| `X-RateLimit-Limit`     | `300`        | Maximum number of requests allowed in the current window.            |\r\n| `X-RateLimit-Remaining` | `300`        | Amount of requests still available in the current rate-limit window. |\r\n| `X-RateLimit-Reset`     | `1234567890` | When the limit resets, as a **Unix timestamp**.                      |\r\n\r\n```\r\n{\r\n    \"system_info\": {\r\n        \"rate_limit\": {\r\n            \"limit\": 300,\r\n            \"remaining\": 300,\r\n            \"reset\": 1234567890,\r\n            \"bucket\": \"bucket_name\"\r\n        },\r\n        \"visitor_id\": 1234567890,\r\n        \"time\": 1234567890,\r\n        \"log_id\": 1234567890\r\n    }\r\n}\r\n```\r\n\r\n## Token configuration\r\n\r\nYou must pass the token in the request headers\r\n\r\n- Header: \"**Authorization**: **Bearer _token_**\"\r\n\r\n## Discoverability\r\n\r\nSystem information and availability can be determined by sending a GET request to **/** (index route). A list of resources will be returned. If the request is authenticated, the revisions of API system and installed modules will also made available for further inspection.\r\n\r\n## Status codes\r\n\r\n| Code | Name                  | Description                                                                                             |\r\n| ---- | --------------------- | ------------------------------------------------------------------------------------------------------- |\r\n| 200  | OK                    | The request was successfully completed.                                                                 |\r\n| 400  | Bad Request           | The request is invalid due to client error.                                                             |\r\n| 401  | Unauthorized          | [Authentication is required.](/reference/information#/token-configuration)                              |\r\n| 403  | Forbidden             | You do not have permission to view this page or perform this action.                                    |\r\n| 429  | Too Many Requests     | [Too many requests in a short period.](/reference/information#/rate-limit)                              |\r\n| 500  | Internal Server Error | An internal server error occurred, try again later or report it [here](https://lolz.live/forums/bugs/). |\r\n| 502  | Bad Gateway           | The gateway encountered an error while processing the request, try again later.                         |\r\n| 503  | Service Unavailable   | The server is temporarily unavailable, try again later.                                                 |\r\n| 504  | Gateway Timeout       | The gateway timed out waiting for a response, try again later.                                          |\r\n\r\n## SSL Verification Errors\r\n\r\nIf you encounter an SSL verification error, disable SSL/TLS certificate verification in your http client.\r\n\r\n## Common Parameters\r\n\r\n### i18n\r\n\r\nAll API requests accept **locale** parameter to switch user facing messages to specified language. The value must be a valid language code (ISO 639-1) with optional inclusion of a valid country code (ISO 3166-1 alpha 2) separated by a hyphen (\"-\"). If no complete match can be found, a language with the same language code (even with different country code) will be used. In the worst case that there are no installed languages of requested language code, the default language will be used.\r\n\r\n### Fields filtering\r\n\r\nFor API method with resource data like a forum or a thread, the data can be filtered to get interested fields only. The general format is \"key.sub_key.deep_key\" if you want to include/exclude a specific field. The including rules take precedence over excluding ones.\r\n\r\n- **fields_include**: comma-separated list of fields of a resource. For additional fields, it is possible to use wildcard (\\*\\*\\*\\*\\*) to include all default fields before specifying additional ones.\r\n- **fields_exclude**: comma-separated list of fields of a resource to exclude in the response. It is possible to use wildcard as a prefix (e.g. \"\\*.key\") to exclude the field everywhere.\r\n\r\n### Resource ordering\r\n\r\nFor API method with list of resources, the resources can be ordered differently with the parameter **order**. List of supported orders will be specified for each method. The default order will always be **natural**. Most of the time, the natural order is the order of which each resource is added to the system (resource ID for example).\r\n\r\n### Encryption\r\n\r\nFor sensitive information like password, encryption can be used to increase data security. For all encryption with key support, the **client_secret** will be used as the key.\r\n\r\nList of supported encryptions:\r\n\r\n- **aes128**: AES 128-bit encryption (mode: ECB, padding: PKCS#7). Because of algorithm limitation, the binary md5 hash of key will be used instead of the key itself.\r\n\r\n### Headers\r\n\r\n- **Api-Bb-Code-Chr: !youtube**: Replace multimedia tags (except youtube) in bbcode html with **tools/chr** link.\r\n- **Api-Username-Inline-Style**: Return rich username for **username** fields.\r\n\r\n### Content-Type\r\n\r\nAPI always returns the response as application/json (With few exceptions). You should send requests to API with application/json or application/x-www-form-urlencoded content type.\r\n\r\n## OpenAPI JSON\r\n\r\nYou can import the API into Postman using [this](https://raw.githubusercontent.com/AS7RIDENIED/LOLZTEAM/refs/heads/main/Official%20Documentation/forum.json) file.",
-    "version": "1.1.46a"
+    "version": "1.1.46b"
   },
   "servers": [
     {
@@ -6309,7 +6309,7 @@
                       },
                       "required": [
                         "market",
-                        "noMarket"
+                        "nomarket"
                       ]
                     },
                     "system_info": {
@@ -13452,7 +13452,6 @@
                   "required": [
                     "data",
                     "data_total",
-                    "search_tags",
                     "system_info"
                   ]
                 }
@@ -14176,7 +14175,6 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "message_id",
                   "message"
                 ],
                 "properties": {
@@ -14593,7 +14591,6 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "message_id",
                   "reason"
                 ],
                 "properties": {
@@ -16869,7 +16866,7 @@
             "type": "string"
           },
           "is_banned": {
-            "type": "integer"
+            "type": "boolean"
           },
           "display_banner_id": {
             "type": "integer"
@@ -16899,6 +16896,9 @@
             "type": "string"
           },
           "show_dob_dateshow_dob_date": {
+            "type": "integer"
+          },
+          "show_dob_date": {
             "type": "integer"
           },
           "show_dob_year": {
@@ -17346,230 +17346,263 @@
             ]
           },
           "profile_threads": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "thread_id": {
-                  "type": "integer"
-                },
-                "forum_id": {
-                  "type": "integer"
-                },
-                "thread_title": {
-                  "type": "string"
-                },
-                "thread_view_count": {
-                  "type": "integer"
-                },
-                "creator_user_id": {
-                  "type": "integer"
-                },
-                "creator_username": {
-                  "type": "string"
-                },
-                "creator_username_html": {
-                  "type": "string"
-                },
-                "thread_create_date": {
-                  "type": "integer"
-                },
-                "thread_update_date": {
-                  "type": "integer"
-                },
-                "thread_reply_group_id": {
-                  "type": "integer"
-                },
-                "thread_comment_ignore_group": {
-                  "type": "integer"
-                },
-                "thread_last_bump_date": {
-                  "type": "integer"
-                },
-                "thread_hide_contacts": {
-                  "type": "integer"
-                },
-                "thread_allow_ask_hidden_content": {
-                  "type": "integer"
-                },
-                "user_is_ignored": {
-                  "type": "boolean"
-                },
-                "thread_post_count": {
-                  "type": "integer"
-                },
-                "thread_is_bumped": {
-                  "type": "boolean"
-                },
-                "thread_is_published": {
-                  "type": "boolean"
-                },
-                "thread_is_deleted": {
-                  "type": "boolean"
-                },
-                "thread_is_sticky": {
-                  "type": "boolean"
-                },
-                "thread_is_closed": {
-                  "type": "boolean"
-                },
-                "thread_is_followed": {
-                  "type": "boolean"
-                },
-                "thread_is_starred": {
-                  "type": "boolean"
-                },
-                "thread_prefixes": {
-                  "type": "array",
-                  "items": {}
-                },
-                "thread_tags": {
-                  "type": "object",
-                  "properties": {
-                    "1403": {
-                      "type": "string"
-                    },
-                    "8176": {
-                      "type": "string"
-                    },
-                    "38": {
-                      "type": "string"
-                    },
-                    "1953": {
-                      "type": "string"
-                    },
-                    "523": {
-                      "type": "string"
-                    }
+            "type": "object",
+            "required": [
+              "avatar_url",
+              "bump",
+              "can_hard_delete",
+              "can_reply",
+              "can_reply_anonymously",
+              "can_soft_delete",
+              "can_view",
+              "can_view_moderator_actions",
+              "can_view_user_actions",
+              "can_watch",
+              "comment_ignore_group",
+              "discussion_open",
+              "discussion_state",
+              "discussion_type",
+              "first_post_id",
+              "first_post_likes",
+              "is_bumped",
+              "is_hidden",
+              "is_hot",
+              "is_ignored",
+              "is_like2_node",
+              "is_liked",
+              "is_starred",
+              "is_unread",
+              "is_watched",
+              "last_bump_date",
+              "last_post_date",
+              "last_post_id",
+              "last_post_user_id",
+              "last_post_username",
+              "node_id",
+              "node_title",
+              "post_count",
+              "post_date",
+              "prefix_id",
+              "prefix_ids",
+              "reply_count",
+              "reply_group_id",
+              "review_negative_count",
+              "review_paid_count",
+              "review_positive_count",
+              "review_score",
+              "review_share",
+              "review_total_count",
+              "review_unproven_count",
+              "sticky",
+              "tags",
+              "thread_id",
+              "title",
+              "title_en",
+              "user_id",
+              "username",
+              "username_html",
+              "view_count",
+              "view_url",
+              "visitor_post_count"
+            ],
+            "properties": {
+              "avatar_url": {
+                "type": "string"
+              },
+              "bump": {
+                "type": "object",
+                "properties": {
+                  "can": {
+                    "type": "boolean"
                   },
-                  "required": [
-                    "1403",
-                    "8176",
-                    "38",
-                    "1953",
-                    "523"
-                  ]
-                },
-                "links": {
-                  "type": "object",
-                  "properties": {
-                    "permalink": {
-                      "type": "string"
-                    },
-                    "detail": {
-                      "type": "string"
-                    },
-                    "followers": {
-                      "type": "string"
-                    },
-                    "forum": {
-                      "type": "string"
-                    },
-                    "posts": {
-                      "type": "string"
-                    },
-                    "first_poster": {
-                      "type": "string"
-                    },
-                    "first_poster_avatar": {
-                      "type": "string"
-                    },
-                    "first_post": {
-                      "type": "string"
-                    },
-                    "last_post": {
-                      "type": "string"
-                    }
+                  "available_count": {
+                    "type": "integer"
                   },
-                  "required": [
-                    "permalink",
-                    "detail",
-                    "followers",
-                    "forum",
-                    "posts",
-                    "first_poster",
-                    "first_poster_avatar",
-                    "first_post",
-                    "last_post"
-                  ]
-                },
-                "permissions": {
-                  "type": "object",
-                  "properties": {
-                    "view": {
-                      "type": "boolean"
-                    },
-                    "delete": {
-                      "type": "boolean"
-                    },
-                    "follow": {
-                      "type": "boolean"
-                    },
-                    "post": {
-                      "type": "boolean"
-                    },
-                    "bump": {
-                      "type": "object",
-                      "properties": {
-                        "can": {
-                          "type": "boolean"
-                        },
-                        "available_count": {
-                          "type": "integer"
-                        },
-                        "error": {},
-                        "next_available_time": {}
-                      },
-                      "required": [
-                        "can",
-                        "available_count",
-                        "error",
-                        "next_available_time"
-                      ]
-                    }
+                  "error": {
+                    "type": "string"
                   },
-                  "required": [
-                    "view",
-                    "delete",
-                    "follow",
-                    "post",
-                    "bump"
-                  ]
+                  "next_available_time": {
+                    "type": "integer"
+                  }
                 },
-                "node_title": {
+                "required": [
+                  "can",
+                  "available_count",
+                  "error",
+                  "next_available_time"
+                ]
+              },
+              "can_hard_delete": {
+                "type": "boolean"
+              },
+              "can_reply": {
+                "type": "boolean"
+              },
+              "can_reply_anonymously": {
+                "type": "boolean"
+              },
+              "can_soft_delete": {
+                "type": "boolean"
+              },
+              "can_view": {
+                "type": "boolean"
+              },
+              "can_view_moderator_actions": {
+                "type": "boolean"
+              },
+              "can_view_user_actions": {
+                "type": "boolean"
+              },
+              "can_watch": {
+                "type": "boolean"
+              },
+              "comment_ignore_group": {
+                "type": "boolean"
+              },
+              "discussion_open": {
+                "type": "boolean"
+              },
+              "discussion_state": {
+                "type": "string"
+              },
+              "discussion_type": {
+                "type": "string"
+              },
+              "first_post_id": {
+                "type": "integer"
+              },
+              "first_post_likes": {
+                "type": "integer"
+              },
+              "is_bumped": {
+                "type": "boolean"
+              },
+              "is_hidden": {
+                "type": "boolean"
+              },
+              "is_hot": {
+                "type": "boolean"
+              },
+              "is_ignored": {
+                "type": "boolean"
+              },
+              "is_like2_node": {
+                "type": "boolean"
+              },
+              "is_liked": {
+                "type": "boolean"
+              },
+              "is_starred": {
+                "type": "boolean"
+              },
+              "is_unread": {
+                "type": "boolean"
+              },
+              "is_watched": {
+                "type": "boolean"
+              },
+              "last_bump_date": {
+                "type": "integer"
+              },
+              "last_post_date": {
+                "type": "integer"
+              },
+              "last_post_id": {
+                "type": "integer"
+              },
+              "last_post_user_id": {
+                "type": "integer"
+              },
+              "last_post_username": {
+                "type": "string"
+              },
+              "node_id": {
+                "type": "integer"
+              },
+              "node_title": {
+                "type": "string"
+              },
+              "post_count": {
+                "type": "integer"
+              },
+              "post_date": {
+                "type": "integer"
+              },
+              "prefix_id": {
+                "type": "integer"
+              },
+              "prefix_ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "reply_count": {
+                "type": "integer"
+              },
+              "reply_group_id": {
+                "type": "integer"
+              },
+              "review_negative_count": {
+                "type": "integer"
+              },
+              "review_paid_count": {
+                "type": "integer"
+              },
+              "review_positive_count": {
+                "type": "integer"
+              },
+              "review_score": {
+                "type": "integer"
+              },
+              "review_share": {
+                "type": [
+                  "null",
+                  "number"
+                ]
+              },
+              "review_total_count": {
+                "type": "integer"
+              },
+              "review_unproven_count": {
+                "type": "integer"
+              },
+              "sticky": {
+                "type": "boolean"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
                   "type": "string"
                 }
               },
-              "required": [
-                "thread_id",
-                "forum_id",
-                "thread_title",
-                "thread_view_count",
-                "creator_user_id",
-                "creator_username",
-                "creator_username_html",
-                "thread_create_date",
-                "thread_update_date",
-                "thread_reply_group_id",
-                "thread_comment_ignore_group",
-                "thread_last_bump_date",
-                "thread_hide_contacts",
-                "thread_allow_ask_hidden_content",
-                "user_is_ignored",
-                "thread_post_count",
-                "thread_is_bumped",
-                "thread_is_published",
-                "thread_is_deleted",
-                "thread_is_sticky",
-                "thread_is_closed",
-                "thread_is_followed",
-                "thread_is_starred",
-                "thread_prefixes",
-                "thread_tags",
-                "links",
-                "permissions",
-                "node_title"
-              ]
+              "thread_id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              },
+              "title_en": {
+                "type": "string"
+              },
+              "user_id": {
+                "type": "integer"
+              },
+              "username": {
+                "type": "string"
+              },
+              "username_html": {
+                "type": "string"
+              },
+              "view_count": {
+                "type": "integer"
+              },
+              "view_url": {
+                "type": "string"
+              },
+              "visitor_post_count": {
+                "type": "integer"
+              }
             }
           },
           "banner": {
@@ -17580,16 +17613,16 @@
       "Resp_ThreadModel": {
         "type": "object",
         "required": [
-          "allow_ask_hidden_content",
           "avatar_url",
           "bump",
           "can_edit",
-          "can_edit_tags",
-          "can_edit_title",
           "can_hard_delete",
           "can_reply",
+          "can_reply_anonymously",
           "can_soft_delete",
           "can_view",
+          "can_view_moderator_actions",
+          "can_view_user_actions",
           "can_watch",
           "comment_ignore_group",
           "discussion_open",
@@ -17598,7 +17631,6 @@
           "first_post",
           "first_post_id",
           "first_post_likes",
-          "hide_contacts",
           "is_bumped",
           "is_hidden",
           "is_hot",
@@ -17638,13 +17670,9 @@
           "username_html",
           "view_count",
           "view_url",
-          "visitor_post_count",
-          "contest"
+          "visitor_post_count"
         ],
         "properties": {
-          "allow_ask_hidden_content": {
-            "type": "boolean"
-          },
           "avatar_url": {
             "type": "string"
           },
@@ -17674,22 +17702,25 @@
           "can_edit": {
             "type": "boolean"
           },
-          "can_edit_tags": {
-            "type": "boolean"
-          },
-          "can_edit_title": {
-            "type": "boolean"
-          },
           "can_hard_delete": {
             "type": "boolean"
           },
           "can_reply": {
             "type": "boolean"
           },
+          "can_reply_anonymously": {
+            "type": "boolean"
+          },
           "can_soft_delete": {
             "type": "boolean"
           },
           "can_view": {
+            "type": "boolean"
+          },
+          "can_view_moderator_actions": {
+            "type": "boolean"
+          },
+          "can_view_user_actions": {
             "type": "boolean"
           },
           "can_watch": {
@@ -17708,16 +17739,205 @@
             "type": "string"
           },
           "first_post": {
-            "$ref": "#/components/schemas/Resp_PostModel"
+            "type": "object",
+            "required": [
+              "avatar_url",
+              "can_edit",
+              "can_hard_delete",
+              "can_like",
+              "can_reply",
+              "can_report",
+              "can_soft_delete",
+              "can_stick",
+              "can_undelete",
+              "can_unstick",
+              "can_view",
+              "edit_count",
+              "is_banned",
+              "is_first_post",
+              "is_ignored",
+              "is_last_post",
+              "is_like2_node",
+              "is_liked",
+              "is_staff",
+              "is_sticked",
+              "is_unread",
+              "last_edit_date",
+              "last_edit_user_id",
+              "like_date",
+              "likes",
+              "message",
+              "message_html",
+              "message_plain_text",
+              "message_state",
+              "node_id",
+              "position",
+              "post_date",
+              "post_id",
+              "signature",
+              "signature_html",
+              "signature_plain_text",
+              "sticky_user_id",
+              "thread_id",
+              "thread_is_closed",
+              "thread_is_deleted",
+              "update_date",
+              "user_id",
+              "username",
+              "username_html",
+              "view_url",
+              "warning_id",
+              "warning_message"
+            ],
+            "properties": {
+              "avatar_url": {
+                "type": "string"
+              },
+              "can_edit": {
+                "type": "boolean"
+              },
+              "can_hard_delete": {
+                "type": "boolean"
+              },
+              "can_like": {
+                "type": "boolean"
+              },
+              "can_reply": {
+                "type": "boolean"
+              },
+              "can_report": {
+                "type": "boolean"
+              },
+              "can_soft_delete": {
+                "type": "boolean"
+              },
+              "can_stick": {
+                "type": "boolean"
+              },
+              "can_undelete": {
+                "type": "boolean"
+              },
+              "can_unstick": {
+                "type": "boolean"
+              },
+              "can_view": {
+                "type": "boolean"
+              },
+              "edit_count": {
+                "type": "integer"
+              },
+              "is_banned": {
+                "type": "boolean"
+              },
+              "is_first_post": {
+                "type": "boolean"
+              },
+              "is_ignored": {
+                "type": "boolean"
+              },
+              "is_last_post": {
+                "type": "boolean"
+              },
+              "is_like2_node": {
+                "type": "boolean"
+              },
+              "is_liked": {
+                "type": "boolean"
+              },
+              "is_staff": {
+                "type": "boolean"
+              },
+              "is_sticked": {
+                "type": "boolean"
+              },
+              "is_unread": {
+                "type": "boolean"
+              },
+              "last_edit_date": {
+                "type": "integer"
+              },
+              "last_edit_user_id": {
+                "type": "integer"
+              },
+              "like_date": {
+                "type": "integer"
+              },
+              "likes": {
+                "type": "integer"
+              },
+              "message": {
+                "type": "string"
+              },
+              "message_html": {
+                "type": "string"
+              },
+              "message_plain_text": {
+                "type": "string"
+              },
+              "message_state": {
+                "type": "string"
+              },
+              "node_id": {
+                "type": "integer"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "post_date": {
+                "type": "integer"
+              },
+              "post_id": {
+                "type": "integer"
+              },
+              "signature": {
+                "type": "string"
+              },
+              "signature_html": {
+                "type": "string"
+              },
+              "signature_plain_text": {
+                "type": "string"
+              },
+              "sticky_user_id": {
+                "type": "integer"
+              },
+              "thread_id": {
+                "type": "integer"
+              },
+              "thread_is_closed": {
+                "type": "boolean"
+              },
+              "thread_is_deleted": {
+                "type": "boolean"
+              },
+              "update_date": {
+                "type": "integer"
+              },
+              "user_id": {
+                "type": "integer"
+              },
+              "username": {
+                "type": "string"
+              },
+              "username_html": {
+                "type": "string"
+              },
+              "view_url": {
+                "type": "string"
+              },
+              "warning_id": {
+                "type": "integer"
+              },
+              "warning_message": {
+                "type": "string"
+              }
+            }
           },
           "first_post_id": {
             "type": "integer"
           },
           "first_post_likes": {
             "type": "integer"
-          },
-          "hide_contacts": {
-            "type": "boolean"
           },
           "is_bumped": {
             "type": "boolean"
@@ -17845,6 +18065,9 @@
           "visitor_post_count": {
             "type": "integer"
           },
+          "forum": {
+            "$ref": "#/components/schemas/Resp_ForumModel"
+          },
           "contest": {
             "type": "object",
             "properties": {
@@ -17967,6 +18190,201 @@
               "already_participate",
               "permissions"
             ]
+          },
+          "last_post": {
+            "type": "object",
+            "required": [
+              "avatar_url",
+              "can_edit",
+              "can_hard_delete",
+              "can_like",
+              "can_reply",
+              "can_report",
+              "can_soft_delete",
+              "can_stick",
+              "can_undelete",
+              "can_unstick",
+              "can_view",
+              "edit_count",
+              "is_banned",
+              "is_first_post",
+              "is_ignored",
+              "is_last_post",
+              "is_like2_node",
+              "is_liked",
+              "is_staff",
+              "is_sticked",
+              "is_unread",
+              "last_edit_date",
+              "last_edit_user_id",
+              "like_date",
+              "likes",
+              "message",
+              "message_html",
+              "message_plain_text",
+              "message_state",
+              "node_id",
+              "position",
+              "post_date",
+              "post_id",
+              "signature",
+              "signature_html",
+              "signature_plain_text",
+              "sticky_user_id",
+              "thread_id",
+              "thread_is_closed",
+              "thread_is_deleted",
+              "update_date",
+              "user_id",
+              "username",
+              "username_html",
+              "view_url",
+              "warning_id",
+              "warning_message"
+            ],
+            "properties": {
+              "avatar_url": {
+                "type": "string"
+              },
+              "can_edit": {
+                "type": "boolean"
+              },
+              "can_hard_delete": {
+                "type": "boolean"
+              },
+              "can_like": {
+                "type": "boolean"
+              },
+              "can_reply": {
+                "type": "boolean"
+              },
+              "can_report": {
+                "type": "boolean"
+              },
+              "can_soft_delete": {
+                "type": "boolean"
+              },
+              "can_stick": {
+                "type": "boolean"
+              },
+              "can_undelete": {
+                "type": "boolean"
+              },
+              "can_unstick": {
+                "type": "boolean"
+              },
+              "can_view": {
+                "type": "boolean"
+              },
+              "edit_count": {
+                "type": "integer"
+              },
+              "is_banned": {
+                "type": "boolean"
+              },
+              "is_first_post": {
+                "type": "boolean"
+              },
+              "is_ignored": {
+                "type": "boolean"
+              },
+              "is_last_post": {
+                "type": "boolean"
+              },
+              "is_like2_node": {
+                "type": "boolean"
+              },
+              "is_liked": {
+                "type": "boolean"
+              },
+              "is_staff": {
+                "type": "boolean"
+              },
+              "is_sticked": {
+                "type": "boolean"
+              },
+              "is_unread": {
+                "type": "boolean"
+              },
+              "last_edit_date": {
+                "type": "integer"
+              },
+              "last_edit_user_id": {
+                "type": "integer"
+              },
+              "like_date": {
+                "type": "integer"
+              },
+              "likes": {
+                "type": "integer"
+              },
+              "message": {
+                "type": "string"
+              },
+              "message_html": {
+                "type": "string"
+              },
+              "message_plain_text": {
+                "type": "string"
+              },
+              "message_state": {
+                "type": "string"
+              },
+              "node_id": {
+                "type": "integer"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "post_date": {
+                "type": "integer"
+              },
+              "post_id": {
+                "type": "integer"
+              },
+              "signature": {
+                "type": "string"
+              },
+              "signature_html": {
+                "type": "string"
+              },
+              "signature_plain_text": {
+                "type": "string"
+              },
+              "sticky_user_id": {
+                "type": "integer"
+              },
+              "thread_id": {
+                "type": "integer"
+              },
+              "thread_is_closed": {
+                "type": "boolean"
+              },
+              "thread_is_deleted": {
+                "type": "boolean"
+              },
+              "update_date": {
+                "type": "integer"
+              },
+              "user_id": {
+                "type": "integer"
+              },
+              "username": {
+                "type": "string"
+              },
+              "username_html": {
+                "type": "string"
+              },
+              "view_url": {
+                "type": "string"
+              },
+              "warning_id": {
+                "type": "integer"
+              },
+              "warning_message": {
+                "type": "string"
+              }
+            }
           }
         }
       },
@@ -18431,7 +18849,7 @@
             "type": "integer"
           },
           "profile_user": {
-            "$ref": "#/components/schemas/Resp_UserModel"
+            "$ref": "#/components/schemas/Resp_ProfilePostUserModel"
           },
           "profile_user_id": {
             "type": "integer"
@@ -18440,7 +18858,7 @@
             "type": "integer"
           },
           "user": {
-            "$ref": "#/components/schemas/Resp_UserModel"
+            "$ref": "#/components/schemas/Resp_ProfilePostUserModel"
           },
           "user_id": {
             "type": "integer"
@@ -18456,6 +18874,349 @@
           },
           "warning_message": {
             "type": "string"
+          }
+        }
+      },
+      "Resp_ProfilePostUserModel": {
+        "type": "object",
+        "required": [
+          "age",
+          "can_edit",
+          "can_follow",
+          "can_ignore",
+          "can_post_profile",
+          "can_view_profile",
+          "can_view_profile_posts",
+          "can_warn",
+          "contest_count",
+          "conv_auto_reply_message",
+          "conv_welcome_message",
+          "convertedDeposit",
+          "custom_fields",
+          "deposit",
+          "display_banner_id",
+          "display_icon_group_id",
+          "dob",
+          "gender",
+          "has_advertisement",
+          "homepage",
+          "is_admin",
+          "is_banned",
+          "is_followed",
+          "is_ignored",
+          "is_moderator",
+          "is_staff",
+          "last_activity",
+          "like2_count",
+          "like_count",
+          "location",
+          "message_count",
+          "occupation",
+          "register_date",
+          "rendered",
+          "short_link",
+          "trophy_points",
+          "user_id",
+          "user_title",
+          "username",
+          "view_url",
+          "warning_points"
+        ],
+        "properties": {
+          "age": {
+            "type": "integer"
+          },
+          "can_edit": {
+            "type": "boolean"
+          },
+          "can_follow": {
+            "type": "boolean"
+          },
+          "can_ignore": {
+            "type": "boolean"
+          },
+          "can_post_profile": {
+            "type": "boolean"
+          },
+          "can_view_profile": {
+            "type": "boolean"
+          },
+          "can_view_profile_posts": {
+            "type": "boolean"
+          },
+          "can_warn": {
+            "type": "boolean"
+          },
+          "contest_count": {
+            "type": "integer"
+          },
+          "conv_auto_reply_message": {
+            "type": "string"
+          },
+          "conv_welcome_message": {
+            "type": "string"
+          },
+          "convertedDeposit": {
+            "type": "integer"
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {
+              "_4": {
+                "type": "string"
+              },
+              "scamURL": {
+                "type": "string"
+              },
+              "favoritePorn": {
+                "type": "string"
+              },
+              "favoriteVape": {
+                "type": "string"
+              },
+              "favoriteAnime": {
+                "type": "string"
+              },
+              "lztLikesZeroing": {
+                "type": "string"
+              },
+              "lztLikesIncreasing": {
+                "type": "string"
+              },
+              "lztSympathyZeroing": {
+                "type": "string"
+              },
+              "lztSympathyIncreasing": {
+                "type": "string"
+              },
+              "telegram": {
+                "type": "string"
+              },
+              "vk": {
+                "type": "string"
+              },
+              "discord": {
+                "type": "string"
+              },
+              "steam": {
+                "type": "string"
+              },
+              "matrix": {
+                "type": "string"
+              },
+              "jabber": {
+                "type": "string"
+              },
+              "github": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "_4",
+              "scamURL",
+              "favoritePorn",
+              "favoriteVape",
+              "favoriteAnime",
+              "lztLikesZeroing",
+              "lztLikesIncreasing",
+              "lztSympathyZeroing",
+              "lztSympathyIncreasing",
+              "telegram",
+              "vk",
+              "discord",
+              "steam",
+              "matrix",
+              "jabber",
+              "github"
+            ]
+          },
+          "deposit": {
+            "type": "integer"
+          },
+          "display_banner_id": {
+            "type": "integer"
+          },
+          "display_icon_group_id": {
+            "type": "integer"
+          },
+          "dob": {
+            "type": "object",
+            "properties": {
+              "year": {
+                "type": "integer"
+              },
+              "month": {
+                "type": "integer"
+              },
+              "day": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "year",
+              "month",
+              "day"
+            ]
+          },
+          "gender": {
+            "type": "string"
+          },
+          "has_advertisement": {
+            "type": "boolean"
+          },
+          "homepage": {
+            "type": "string"
+          },
+          "is_admin": {
+            "type": "boolean"
+          },
+          "is_banned": {
+            "type": "boolean"
+          },
+          "is_followed": {
+            "type": "boolean"
+          },
+          "is_ignored": {
+            "type": "boolean"
+          },
+          "is_moderator": {
+            "type": "boolean"
+          },
+          "is_staff": {
+            "type": "boolean"
+          },
+          "last_activity": {
+            "type": "integer"
+          },
+          "like2_count": {
+            "type": "integer"
+          },
+          "like_count": {
+            "type": "integer"
+          },
+          "location": {
+            "type": "string"
+          },
+          "message_count": {
+            "type": "integer"
+          },
+          "occupation": {
+            "type": "string"
+          },
+          "register_date": {
+            "type": "integer"
+          },
+          "rendered": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "avatars": {
+                "type": "object",
+                "properties": {
+                  "l": {
+                    "type": "string"
+                  },
+                  "m": {
+                    "type": "string"
+                  },
+                  "s": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "l",
+                  "m",
+                  "s"
+                ]
+              },
+              "backgrounds": {
+                "type": "object",
+                "properties": {
+                  "l": {
+                    "type": "string"
+                  },
+                  "m": {
+                    "type": "string"
+                  }
+                }
+              },
+              "link": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "editor": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  },
+                  "profile": {
+                    "type": "object",
+                    "properties": {
+                      "conv_auto_reply_message": {
+                        "type": "string"
+                      },
+                      "conv_welcome_message": {
+                        "type": "string"
+                      },
+                      "homepage": {
+                        "type": "string"
+                      },
+                      "location": {
+                        "type": "string"
+                      },
+                      "occupation": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "conv_auto_reply_message",
+                      "conv_welcome_message",
+                      "homepage",
+                      "location",
+                      "occupation"
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "profile"
+                ]
+              }
+            },
+            "required": [
+              "username",
+              "avatars",
+              "backgrounds",
+              "link",
+              "status",
+              "editor"
+            ]
+          },
+          "short_link": {
+            "type": "string"
+          },
+          "trophy_points": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "user_title": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "view_url": {
+            "type": "string"
+          },
+          "warning_points": {
+            "type": "integer"
           }
         }
       },
@@ -18965,173 +19726,336 @@
       },
       "Resp_ForumModel": {
         "type": "object",
+        "required": [
+          "forums",
+          "forums_total",
+          "system_info",
+          "tabs"
+        ],
         "properties": {
-          "forum_id": {
-            "type": "integer"
-          },
-          "forum_title": {
-            "type": "string"
-          },
-          "forum_description": {
-            "type": "string"
-          },
-          "forum_thread_count": {
-            "type": "integer"
-          },
-          "forum_post_count": {
-            "type": "integer"
-          },
-          "parent_node_id": {
-            "type": "integer"
-          },
-          "node_type_id": {
-            "type": "string"
-          },
-          "icon_content": {
-            "type": "string"
-          },
-          "active_icon_content": {
-            "type": "string"
-          },
-          "forum_rules_thread_id": {
-            "type": "integer"
-          },
-          "isLike2Node": {
-            "type": "boolean"
-          },
-          "forum_prefixes": {
+          "forums": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "group_title": {
+                "active_icon_content": {
                   "type": "string"
                 },
-                "group_prefixes": {
+                "breadcrumbs": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "prefix_id": {
+                      "node_id": {
                         "type": "integer"
                       },
-                      "css_class": {
+                      "title": {
                         "type": "string"
                       },
-                      "prefix_title": {
+                      "node_type_id": {
                         "type": "string"
                       }
                     },
                     "required": [
-                      "prefix_id",
-                      "css_class",
-                      "prefix_title"
+                      "node_id",
+                      "title",
+                      "node_type_id"
                     ]
                   }
+                },
+                "description": {
+                  "type": "string"
+                },
+                "description_en": {
+                  "type": "string"
+                },
+                "display_in_list": {
+                  "type": "boolean"
+                },
+                "display_order": {
+                  "type": "integer"
+                },
+                "has_children": {
+                  "type": "boolean"
+                },
+                "icon_content": {
+                  "type": "string"
+                },
+                "node_id": {
+                  "type": "integer"
+                },
+                "node_name": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "node_type_id": {
+                  "type": "string"
+                },
+                "parent_node_id": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_en": {
+                  "type": "string"
+                },
+                "type_data": {
+                  "type": "object",
+                  "properties": {
+                    "allow_poll": {
+                      "type": "boolean"
+                    },
+                    "allow_posting": {
+                      "type": "boolean"
+                    },
+                    "can_create_thread": {
+                      "type": "boolean"
+                    },
+                    "can_delete": {
+                      "type": "boolean"
+                    },
+                    "can_edit": {
+                      "type": "boolean"
+                    },
+                    "can_edit_tags": {
+                      "type": "boolean"
+                    },
+                    "can_view": {
+                      "type": "boolean"
+                    },
+                    "can_watch": {
+                      "type": "boolean"
+                    },
+                    "default_prefix_id": {
+                      "type": "integer"
+                    },
+                    "discussion_count": {
+                      "type": "integer"
+                    },
+                    "find_new": {
+                      "type": "boolean"
+                    },
+                    "is_like2_node": {
+                      "type": "boolean"
+                    },
+                    "is_unread": {
+                      "type": "boolean"
+                    },
+                    "is_watched": {
+                      "type": "boolean"
+                    },
+                    "last_post_date": {
+                      "type": "integer"
+                    },
+                    "last_post_id": {
+                      "type": "integer"
+                    },
+                    "last_post_user_id": {
+                      "type": "integer"
+                    },
+                    "last_post_username": {
+                      "type": "string"
+                    },
+                    "last_thread_title": {
+                      "type": "string"
+                    },
+                    "message_count": {
+                      "type": "integer"
+                    },
+                    "min_deposit": {
+                      "type": "integer"
+                    },
+                    "min_tags": {
+                      "type": "integer"
+                    },
+                    "moderators": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "prefixes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "group_title": {
+                            "type": "string"
+                          },
+                          "group_prefixes": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "prefix_id": {
+                                  "type": "integer"
+                                },
+                                "css_class": {
+                                  "type": "string"
+                                },
+                                "prefix_title": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "prefix_id",
+                                "css_class",
+                                "prefix_title"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "group_title",
+                          "group_prefixes"
+                        ]
+                      }
+                    },
+                    "require_prefix": {
+                      "type": "boolean"
+                    },
+                    "rules_thread_id": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "allow_poll",
+                    "allow_posting",
+                    "can_create_thread",
+                    "can_delete",
+                    "can_edit",
+                    "can_edit_tags",
+                    "can_view",
+                    "can_watch",
+                    "default_prefix_id",
+                    "discussion_count",
+                    "find_new",
+                    "is_like2_node",
+                    "is_unread",
+                    "is_watched",
+                    "last_post_date",
+                    "last_post_id",
+                    "last_post_user_id",
+                    "last_post_username",
+                    "last_thread_title",
+                    "message_count",
+                    "min_deposit",
+                    "min_tags",
+                    "moderators",
+                    "prefixes",
+                    "require_prefix",
+                    "rules_thread_id"
+                  ]
+                },
+                "view_url": {
+                  "type": "string"
                 }
               },
               "required": [
-                "group_title",
-                "group_prefixes"
+                "active_icon_content",
+                "breadcrumbs",
+                "description",
+                "description_en",
+                "display_in_list",
+                "display_order",
+                "has_children",
+                "icon_content",
+                "node_id",
+                "node_name",
+                "node_type_id",
+                "parent_node_id",
+                "title",
+                "title_en",
+                "type_data",
+                "view_url"
               ]
             }
           },
-          "thread_default_prefix_id": {
+          "forums_total": {
             "type": "integer"
           },
-          "thread_prefix_is_required": {
-            "type": "boolean"
+          "system_info": {
+            "$ref": "#/components/schemas/Resp_SystemInfo"
           },
-          "links": {
-            "type": "object",
-            "properties": {
-              "permalink": {
-                "type": "string"
-              },
-              "detail": {
-                "type": "string"
-              },
-              "sub-categories": {
-                "type": "string"
-              },
-              "sub-forums": {
-                "type": "string"
-              },
-              "threads": {
-                "type": "string"
-              },
-              "followers": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "permalink",
-              "detail",
-              "sub-categories",
-              "sub-forums",
-              "threads",
-              "followers"
-            ]
-          },
-          "permissions": {
-            "type": "object",
-            "properties": {
-              "view": {
-                "type": "boolean"
-              },
-              "edit": {
-                "type": "boolean"
-              },
-              "delete": {
-                "type": "boolean"
-              },
-              "create_thread": {
-                "type": "boolean"
-              },
-              "tag_thread": {
-                "type": "boolean"
-              },
-              "follow": {
-                "type": "boolean"
-              }
-            },
-            "required": [
-              "view",
-              "edit",
-              "delete",
-              "create_thread",
-              "tag_thread",
-              "follow"
-            ]
-          },
-          "forum_is_followed": {
-            "type": "boolean"
-          },
-          "forum_moderators": {
+          "tabs": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "link_title": {
+                  "type": "string"
+                },
+                "isDefault": {
+                  "type": "boolean"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "isHidden": {
+                  "type": "boolean"
+                },
+                "tabLink": {
+                  "type": "string"
+                },
+                "isDynamicTitle": {
+                  "type": "boolean"
+                },
+                "node_ids": {
+                  "type": "string"
+                },
+                "isExtendedTab": {
+                  "type": "boolean"
+                },
+                "prefixes": {
+                  "type": "array",
+                  "items": {}
+                },
+                "prefixes_not": {
+                  "type": "array",
+                  "items": {}
+                },
+                "order": {
+                  "type": "string"
+                },
+                "direction": {
+                  "type": "string"
+                },
+                "period": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "q": {
+                  "type": "string"
+                },
+                "post_date_from": {
+                  "type": "string"
+                },
+                "post_date_to": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "node_ids",
+                "title",
+                "link_title",
+                "isExtendedTab",
+                "prefixes",
+                "prefixes_not",
+                "order",
+                "direction",
+                "period",
+                "state",
+                "q",
+                "post_date_from",
+                "post_date_to",
+                "tabLink"
+              ]
+            }
           }
-        },
-        "required": [
-          "forum_id",
-          "forum_title",
-          "forum_description",
-          "forum_thread_count",
-          "forum_post_count",
-          "parent_node_id",
-          "node_type_id",
-          "icon_content",
-          "active_icon_content",
-          "forum_rules_thread_id",
-          "isLike2Node",
-          "forum_prefixes",
-          "thread_default_prefix_id",
-          "thread_prefix_is_required",
-          "links",
-          "permissions",
-          "forum_is_followed",
-          "forum_moderators"
-        ]
+        }
       },
       "_SearchContentThread": {
         "type": "object",
